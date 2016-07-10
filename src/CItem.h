@@ -2,8 +2,8 @@
 #define _CITEM_H_
 
 #include <vector>
-// #include "CSurface.h"
-#include "Font.h"
+#include "CSurface.h"
+//#include "Font.h"
 #include "Define_Items.h"
 
 class CItem

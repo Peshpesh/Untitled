@@ -24,6 +24,8 @@ CInventory::CInventory()
 	MENU_W = 540;
 	INV_MENU_H = 260;
 	DETAIL_MENU_H = 120;
+	DETAIL_TEXT_W = 500;
+	DETAIL_TEXT_H = 100;
 }
 
 bool CInventory::OnInit(SDL_Renderer* renderer)
@@ -41,7 +43,7 @@ bool CInventory::OnInit(SDL_Renderer* renderer)
 	// TESTING
 	for (int i = 0; i < 5; i++)
 	{
-		CItem::Inventory.push_back(new IHPDW());
+		CItem::Inventory.push_back(new IHPUP());
 		CItem::Inventory.push_back(new IHPDW());
 	}
 	return true;
@@ -117,6 +119,7 @@ void CInventory::OnLoop()
     }
     else if (query->Submit)
     {
+			int highlight = col + (row * maxcol);
       switch (query->GetResponse())
       {
         case USE:
@@ -127,7 +130,7 @@ void CInventory::OnLoop()
           // step3 : perform necessary tasks (defined in CItemProcess class)
           // step4 : update the Inventory (e.g., subtract item from vector)
         //  CItemProcess::OnLoop(CItem::Inventory[col+row*maxcol]->ename); // ???
-					CItemProcess::OnLoop(CItem::Inventory[0]->ename);
+					CItemProcess::OnLoop(CItem::Inventory[highlight]->ename);
           break;
         }
         case DROP:
@@ -166,6 +169,11 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 	// what is the spacing between icons?
 	unsigned int xS = (MENU_W - (maxcol * ICON_SIZE)) / (maxcol + 1);
 	unsigned int yS = (INV_MENU_H - (maxrow * ICON_SIZE)) / (maxrow + 1);
+
+	// what is the currently highlighted item?
+	int highlight = col + (row * maxcol);
+
+	// render all inventory item icons & highlight box
 	for (int i = 0; i < CItem::Inventory.size(); i++)
 	{
 		int xT = i % maxcol;
@@ -173,20 +181,17 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 		int xO = ((xT + 1) * xS) + (xT * ICON_SIZE) + xB;
 		int yO = ((yT + 1) * yS) + (yT * ICON_SIZE) + iyB;
 		CItem::Inventory[i]->OnRender(renderer, Tex_Item, xO, yO, TEX_WIDTH, TEX_HEIGHT);
-		if (i == col + (row * maxcol))
+		if (i == highlight)
 		{
 			CSurface::OnDraw(renderer, Tex_Item, xO, yO, 0, 0, ICON_SIZE, ICON_SIZE);
 		}
 	}
-	//	xI, yI are coordinates for the top-left corner of the describing window
-	//	beneath the inventory frame. We need to render the name of the highlighted
-	//	item and its description.
-	// int spacing = 20;
-	// int aX = xI + spacing;
-	// int title_Y = yI + spacing;
-	// int aY = title_Y + spacing;
-	// Font::TextBox(renderer, name, aX, title_Y, )
-	// Font::TextBox(renderer, about, aX, aY, );
+	// render highlighted item's information
+	int tX = xB + ((MENU_W - DETAIL_TEXT_W) / 2);
+	int tY = dyB + ((DETAIL_MENU_H - DETAIL_TEXT_H) / 2);
+	Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->name, tX, tY, DETAIL_TEXT_W, DETAIL_TEXT_H);
+	int spacing = 20;
+	Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->about, tX, tY + spacing, DETAIL_TEXT_W, DETAIL_TEXT_H);
 }
 
 void CInventory::OnCleanup()

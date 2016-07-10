@@ -31,6 +31,8 @@ private:
  	unsigned int MENU_W;
 	unsigned int INV_MENU_H;
 	unsigned int DETAIL_MENU_H;
+	unsigned int DETAIL_TEXT_W;
+	unsigned int DETAIL_TEXT_H;
 
 private:
   CMenu* query;

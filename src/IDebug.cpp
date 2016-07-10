@@ -2,9 +2,9 @@
 
 IHPUP::IHPUP()
 {
-//	name = NULL;
+	name = "HP UP";
 	ename = HPUP;
-//	about = NULL;
+	about = "INCREASES HEALTH BY 5";
 
 //	Xo = Yo = 0;
 
@@ -60,9 +60,9 @@ void IHPUP::OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
 
 IHPDW::IHPDW()
 {
-//	name = NULL;
+	name = "HP DOWN";
 	ename = HPDW;
-//	about = NULL;
+	about = "ONLY FOR DEBUGGING\nREDUCES HEALTH BY 5";
 
 //	Xo = Yo = 0;
 

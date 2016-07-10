@@ -52,7 +52,11 @@ bool CItemProcess::UseHPDW()
   bool retval = true;
   if (Player->Health > 0)
   {
-    Player->Health -= 1;
+    Player->Health -= 5;
+    if (Player->Health < 0)
+    {
+      Player->Health = 0;
+    }
   }
   else
   {
