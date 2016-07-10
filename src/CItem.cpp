@@ -6,11 +6,9 @@ std::vector<CItem*> CItem::Inventory;
 
 CItem::CItem()
 {
-//	name = NULL;
-//	about = NULL;
+	name = NULL;
+	about = NULL;
 	ename = EMPTY;
-
-//	Xo = Yo = 0;
 
 	quant = 0;
 	m_quant = 1;
@@ -36,7 +34,7 @@ CItem::~CItem()
 // }
 
 void CItem::OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
-	const int &xO, const int& yO, const int& tW, const int& tH)
+	const int& xO, const int& yO, const int& tW, const int& tH)
 {
 	if (texture == NULL || renderer == NULL)
 	{
@@ -49,7 +47,6 @@ void CItem::OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
 	// the order of icons in the texture, the position of the icons is determined.
 	int xI = ICON_SIZE * (ename % tW); // xposition of icon in texture
 	int yI = ICON_SIZE * (ename / tW); // yposition of ...
-
 	CSurface::OnDraw(renderer, texture, xO, yO, xI, yI, ICON_SIZE, ICON_SIZE);
 }
 

@@ -2,7 +2,8 @@
 #define _CITEM_H_
 
 #include <vector>
-#include "CSurface.h"
+// #include "CSurface.h"
+#include "Font.h"
 #include "Define_Items.h"
 
 class CItem
@@ -14,14 +15,11 @@ public:
 	// static SDL_Texture*			Tex_Item;				// Item texture
 
 public:
-//	char*			name;		// item name
+	char*			name;		// item name
 	unsigned int	ename;		// item name (enum)
-//	char*			about;		// item description
+	char*			about;		// item description
 
 public:
-	// int				Xo;			// X position on item texture
-	// int				Yo;			// Y position on item texture
-
 	int				quant;		// quantity of the item
 	int				m_quant;	// maximum possible quantity of the item
 

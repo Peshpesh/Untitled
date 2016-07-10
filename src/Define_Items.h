@@ -3,7 +3,7 @@
 
 enum dyn_items
 {
-	EMPTY = 0,   // no item
+	EMPTY = 0,   // no item (highlight box when rendered)
 	HPUP,        // restores HP
 	HPDW,        // reduces HP (debug)
 	BOMB,        // places a live bomb

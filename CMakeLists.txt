@@ -126,5 +126,8 @@ ${SRCDIR}/IDebug.h
 ${SRCDIR}/Notes.h
 )
 
+set(GCC_COVERAGE_LINK_FLAGS	"-mwindows")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+
 add_executable(Untitled ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(Untitled ${SDL2_MAIN} ${SDL2_LIBRARY} ${SDLIMG_LIBRARY})

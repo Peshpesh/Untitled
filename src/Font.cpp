@@ -271,6 +271,50 @@ char Font::BoxWrite(SDL_Renderer* renderer, SDL_Texture* font, char* message,
 	return message[i];
 }
 
+bool Font::TextBox(SDL_Renderer* renderer, char* message,
+	int tX, int tY, int tW, int tH)
+{
+	int i = 0;
+	int Xo, Yo, W, H;
+	int curr_tX = tX;
+	int curr_tY = tY;
+
+	// Run through the message until it's null-terminated
+	while (message[i] != '\0')
+	{
+		if (message[i] == '\t' || message[i] == '\f' || message[i] == '\r')
+		{
+			//
+		}
+		else if (message[i] == '\n')
+		{
+			curr_tX = tX;
+			curr_tY += 20;
+		}
+		else
+		{
+			// Gather info for the current character being printed
+			GetXY(message[i], Xo, Yo, W, H);
+			// Can the character fit on the line?
+			if (curr_tX + W > tX + tW)
+			{	// no
+				curr_tX = tX;
+				curr_tY += 20;
+			}
+			// Draw the current character
+			if (!CSurface::OnDraw(renderer, FontControl.Tex_Font, curr_tX, curr_tY, Xo, Yo, W, H))
+				return false;
+			if (message[i] == ' ' && curr_tX == tX)
+			{
+				// Do nothing if the first character in a line is a space
+			}
+			else curr_tX += W + 2;	// Move the position for the upcoming character
+		}
+		i++;
+	}
+	return true;
+}
+
 int Font::CenterWrite(SDL_Renderer* renderer, SDL_Texture* font, char* message, int Mx, int My)
 {
 	int i = 0;

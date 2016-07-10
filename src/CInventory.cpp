@@ -49,6 +49,9 @@ bool CInventory::OnInit(SDL_Renderer* renderer)
 
 bool CInventory::OnEvent(SDL_Keycode sym)
 {
+	int Ncol = (int)(CItem::Inventory.size());
+	if (Ncol > maxcol) Ncol = maxcol;
+	int Nrow = 1 + ((int)(CItem::Inventory.size() - 1) / maxcol);
   if (sym == Config::ConfControl.confirm)
   {
     query = new CMenu;
@@ -66,12 +69,12 @@ bool CInventory::OnEvent(SDL_Keycode sym)
     if (col != 0)
       col--;
     else
-      col = maxcol - 1;
+      col = Ncol - 1;
     // return;
   }
   if (sym == Config::ConfControl.right)
   {
-    if (col != maxcol - 1)
+    if (col != Ncol - 1)
       col++;
     else
       col = 0;
@@ -79,7 +82,7 @@ bool CInventory::OnEvent(SDL_Keycode sym)
   }
   if (sym == Config::ConfControl.down)
   {
-    if (row != maxrow - 1)
+    if (row != Nrow - 1)
       row++;
     else
       row = 0;
@@ -90,7 +93,7 @@ bool CInventory::OnEvent(SDL_Keycode sym)
     if (row != 0)
       row--;
     else
-      row = maxrow - 1;
+      row = Nrow - 1;
     // return;
   }
   if (sym == SDLK_ESCAPE)
@@ -170,7 +173,20 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 		int xO = ((xT + 1) * xS) + (xT * ICON_SIZE) + xB;
 		int yO = ((yT + 1) * yS) + (yT * ICON_SIZE) + iyB;
 		CItem::Inventory[i]->OnRender(renderer, Tex_Item, xO, yO, TEX_WIDTH, TEX_HEIGHT);
+		if (i == col + (row * maxcol))
+		{
+			CSurface::OnDraw(renderer, Tex_Item, xO, yO, 0, 0, ICON_SIZE, ICON_SIZE);
+		}
 	}
+	//	xI, yI are coordinates for the top-left corner of the describing window
+	//	beneath the inventory frame. We need to render the name of the highlighted
+	//	item and its description.
+	// int spacing = 20;
+	// int aX = xI + spacing;
+	// int title_Y = yI + spacing;
+	// int aY = title_Y + spacing;
+	// Font::TextBox(renderer, name, aX, title_Y, )
+	// Font::TextBox(renderer, about, aX, aY, );
 }
 
 void CInventory::OnCleanup()
