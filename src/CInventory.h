@@ -24,12 +24,13 @@ private:
 	int TEX_HEIGHT;		// in number of ICON_SIZE
 
 private:
-  const short maxrow = 4;
-  const short maxcol = 5;
-  unsigned short	row;
-  unsigned short  col;
- 	const unsigned int MENU_WIDTH = 540;
-	const unsigned int MENU_HEIGHT = 380;
+  unsigned short maxrow;
+  unsigned short maxcol;
+  unsigned short row;
+  unsigned short col;
+ 	unsigned int MENU_W;
+	unsigned int INV_MENU_H;
+	unsigned int DETAIL_MENU_H;
 
 private:
   CMenu* query;

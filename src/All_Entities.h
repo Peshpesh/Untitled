@@ -13,6 +13,5 @@
 #include "EDoor.h"
 #include "ESavepoint.h"
 #include "ESign.h"
-// test
 
 #endif

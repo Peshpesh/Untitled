@@ -14,10 +14,16 @@ CInventory::CInventory()
 {
   active = false;
 	TEX_WIDTH = TEX_HEIGHT = 0;
-  row = 0;
-  col = 0;
+	row = col = 0;
   Tex_Item = NULL;
   query = NULL;
+	maxrow = 4;
+	maxcol = 5;
+	// MENU_WIDTH = 540;
+	// MENU_HEIGHT = 380;
+	MENU_W = 540;
+	INV_MENU_H = 260;
+	DETAIL_MENU_H = 120;
 }
 
 bool CInventory::OnInit(SDL_Renderer* renderer)
@@ -148,19 +154,21 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 	{
 		return;
 	}
-	unsigned int xB = (WWIDTH - MENU_WIDTH) / 2;
-	unsigned int yB = (WHEIGHT - MENU_HEIGHT) / 2;
-	Font::FontControl.DrawContainer(renderer, xB, yB, MENU_WIDTH, MENU_HEIGHT, 'b');
+	unsigned int xB = (WWIDTH - MENU_W) / 2;
+	unsigned int iyB = (WHEIGHT - (INV_MENU_H + DETAIL_MENU_H)) / 2;
+	unsigned int dyB = iyB + INV_MENU_H;
+	Font::FontControl.DrawContainer(renderer, xB, iyB, MENU_W, INV_MENU_H, 'b');
+	Font::FontControl.DrawContainer(renderer, xB, dyB, MENU_W, DETAIL_MENU_H, 'b');
 
 	// what is the spacing between icons?
-	unsigned int xS = (MENU_WIDTH - (maxcol * ICON_SIZE)) / (maxcol + 1);
-	unsigned int yS = (MENU_HEIGHT - (maxrow * ICON_SIZE)) / (maxrow + 1);
+	unsigned int xS = (MENU_W - (maxcol * ICON_SIZE)) / (maxcol + 1);
+	unsigned int yS = (INV_MENU_H - (maxrow * ICON_SIZE)) / (maxrow + 1);
 	for (int i = 0; i < CItem::Inventory.size(); i++)
 	{
 		int xT = i % maxcol;
 		int yT = i / maxcol;
 		int xO = ((xT + 1) * xS) + (xT * ICON_SIZE) + xB;
-		int yO = ((yT + 1) * yS) + (yT * ICON_SIZE) + yB;
+		int yO = ((yT + 1) * yS) + (yT * ICON_SIZE) + iyB;
 		CItem::Inventory[i]->OnRender(renderer, Tex_Item, xO, yO, TEX_WIDTH, TEX_HEIGHT);
 	}
 }
