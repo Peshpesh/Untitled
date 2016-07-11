@@ -82,7 +82,7 @@ void CApp::OnLoop()
 				// IDEA: Onloop functions from CInventory & PauseMenu
 				// can return bool, where return true means the menu is still active,
 				// and return false means the menu has just been terminated.
-				CInventory::InvControl.OnLoop(); // OR: OnEvent returns bool
+				Suspend = CInventory::InvControl.OnLoop(); // OR: OnEvent returns bool
 			}
 		}
 

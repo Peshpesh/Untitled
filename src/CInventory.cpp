@@ -21,10 +21,10 @@ CInventory::CInventory()
 	maxcol = 5;
 	// MENU_WIDTH = 540;
 	// MENU_HEIGHT = 380;
-	MENU_W = 540;
+	MENU_W = 440;
 	INV_MENU_H = 260;
 	DETAIL_MENU_H = 120;
-	DETAIL_TEXT_W = 500;
+	DETAIL_TEXT_W = 400;
 	DETAIL_TEXT_H = 100;
 }
 
@@ -41,72 +41,105 @@ bool CInventory::OnInit(SDL_Renderer* renderer)
 	TEX_HEIGHT = tH / ICON_SIZE;
 
 	// TESTING
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		CItem::Inventory.push_back(new IHPUP());
 		CItem::Inventory.push_back(new IHPDW());
+	}
+	for (int i = 0; i < CItem::Inventory.size(); i++)
+	{
+		if (CItem::Inventory[i]->ename == HPUP)
+		{
+			CItem::Inventory[i]->quant++;
+			CItem::Inventory[i]->quant++;
+		}
+	}
+	for (int i = 0; i < CItem::Inventory.size(); i++)
+	{
+		if (CItem::Inventory[i]->quant > CItem::Inventory[i]->m_quant)
+		{
+			CItem::Inventory[i]->quant = CItem::Inventory[i]->m_quant;
+		}
 	}
 	return true;
 }
 
 bool CInventory::OnEvent(SDL_Keycode sym)
 {
-	int Ncol = (int)(CItem::Inventory.size());
-	if (Ncol > maxcol) Ncol = maxcol;
-	int Nrow = 1 + ((int)(CItem::Inventory.size() - 1) / maxcol);
-  if (sym == Config::ConfControl.confirm)
-  {
-    query = new CMenu;
-    query->Active = query->Breakable = true;
-    query->OnInit("\
-             %USE\
-            \n%DROP\
-            \n%CANCEL");
+	if (CItem::Inventory.size() > 0)
+	{
+		int Ncol = (int)(CItem::Inventory.size());
+		if (Ncol > maxcol) Ncol = maxcol;
+		int Nrow = 1 + ((int)(CItem::Inventory.size() - 1) / maxcol);
+	  if (sym == Config::ConfControl.confirm)
+	  {
+	    query = new CMenu;
+	    query->Active = query->Breakable = true;
+	    query->OnInit("\
+	             %USE\
+	            \n%DROP\
+	            \n%CANCEL");
 
-    CMenu::MenuList.push_back(query);
-    // return;
-  }
-  if (sym == Config::ConfControl.left)
-  {
-    if (col != 0)
-      col--;
-    else
-      col = Ncol - 1;
-    // return;
-  }
-  if (sym == Config::ConfControl.right)
-  {
-    if (col != Ncol - 1)
-      col++;
-    else
-      col = 0;
-    // return;
-  }
-  if (sym == Config::ConfControl.down)
-  {
-    if (row != Nrow - 1)
-      row++;
-    else
-      row = 0;
-    // return;
-  }
-  if (sym == Config::ConfControl.up)
-  {
-    if (row != 0)
-      row--;
-    else
-      row = Nrow - 1;
-    // return;
-  }
+	    CMenu::MenuList.push_back(query);
+	  }
+	  if (sym == Config::ConfControl.left && Ncol > 1)
+	  {
+	    if (col != 0)
+	      col--;
+	    else
+			{
+				if ((row * maxcol) + Ncol > CItem::Inventory.size())
+					col = (CItem::Inventory.size() % maxcol) - 1;
+				else
+					col = Ncol - 1;
+			}
+	  }
+	  if (sym == Config::ConfControl.right && Ncol > 1)
+	  {
+			if (row != Nrow - 1 || Nrow == 1)
+			{
+		    if (col != Ncol - 1)
+		      col++;
+		    else
+		      col = 0;
+			}
+			else
+			{
+				if (col != (CItem::Inventory.size() % maxcol) - 1)
+					col++;
+				else
+					col = 0;
+			}
+	  }
+	  if (sym == Config::ConfControl.down && Nrow > 1)
+	  {
+			if (row == Nrow - 1 || CItem::Inventory.size() <= (col + (row + 1) * maxcol))
+				row = 0;
+			else
+				row++;
+	  }
+	  if (sym == Config::ConfControl.up && Nrow > 1)
+	  {
+	    if (row != 0)
+	      row--;
+	    else
+			{
+				if (CItem::Inventory.size() <= (col + (Nrow - 1) * maxcol))
+					row = Nrow - 2;
+				else
+					row = Nrow - 1;
+			}
+	  }
+	}
   if (sym == SDLK_ESCAPE)
   {
 	 	active = false;
-    // return;
+		row = col = 0;
   }
 	return active;
 }
 
-void CInventory::OnLoop()
+bool CInventory::OnLoop()
 {
   if (query)
   {
@@ -129,8 +162,15 @@ void CInventory::OnLoop()
           // step2 : use item index to find out what kind of item is highlighted
           // step3 : perform necessary tasks (defined in CItemProcess class)
           // step4 : update the Inventory (e.g., subtract item from vector)
-        //  CItemProcess::OnLoop(CItem::Inventory[col+row*maxcol]->ename); // ???
 					CItemProcess::OnLoop(CItem::Inventory[highlight]->ename);
+					CItem::Inventory[highlight]->quant--;
+					if (CItem::Inventory[highlight]->quant <= 0)
+					{
+						delete CItem::Inventory[highlight];
+						CItem::Inventory.erase(CItem::Inventory.begin() + highlight);
+					}
+					active = false;
+					row = col = 0;
           break;
         }
         case DROP:
@@ -151,7 +191,7 @@ void CInventory::OnLoop()
       query = NULL;
     }
   }
-//  return active;
+	return active;
 }
 
 void CInventory::OnRender(SDL_Renderer* renderer)
@@ -184,14 +224,14 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 		if (i == highlight)
 		{
 			CSurface::OnDraw(renderer, Tex_Item, xO, yO, 0, 0, ICON_SIZE, ICON_SIZE);
+			// render highlighted item's information
+			int tX = xB + ((MENU_W - DETAIL_TEXT_W) / 2);
+			int tY = dyB + ((DETAIL_MENU_H - DETAIL_TEXT_H) / 2);
+			Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->name, tX, tY, DETAIL_TEXT_W, DETAIL_TEXT_H);
+			int spacing = 20;
+			Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->about, tX, tY + spacing, DETAIL_TEXT_W, DETAIL_TEXT_H);
 		}
 	}
-	// render highlighted item's information
-	int tX = xB + ((MENU_W - DETAIL_TEXT_W) / 2);
-	int tY = dyB + ((DETAIL_MENU_H - DETAIL_TEXT_H) / 2);
-	Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->name, tX, tY, DETAIL_TEXT_W, DETAIL_TEXT_H);
-	int spacing = 20;
-	Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->about, tX, tY + spacing, DETAIL_TEXT_W, DETAIL_TEXT_H);
 }
 
 void CInventory::OnCleanup()
