@@ -200,6 +200,7 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 	{
 		return;
 	}
+	int spacing = 20;	// padding between text and border of box
 	unsigned int xB = (WWIDTH - MENU_W) / 2;
 	unsigned int iyB = (WHEIGHT - (INV_MENU_H + DETAIL_MENU_H)) / 2;
 	unsigned int dyB = iyB + INV_MENU_H;
@@ -228,7 +229,6 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 			int tX = xB + ((MENU_W - DETAIL_TEXT_W) / 2);
 			int tY = dyB + ((DETAIL_MENU_H - DETAIL_TEXT_H) / 2);
 			Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->name, tX, tY, DETAIL_TEXT_W, DETAIL_TEXT_H);
-			int spacing = 20;
 			Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->about, tX, tY + spacing, DETAIL_TEXT_W, DETAIL_TEXT_H);
 		}
 	}
