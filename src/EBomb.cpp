@@ -23,15 +23,15 @@ void CBomb::OnLoop()
 {
   if (FuseTime > 0.0f)
   {
-    FuseTime -= CFPS::GetSpeedFactor;
+    FuseTime -= CFPS::FPSControl.GetSpeedFactor();
     if (!(FuseTime > 0.0f))
     {
-      
+
     }
   }
   else if (ExplodeTime > 0.0f)
   {
-    ExplodeTime -= CFPS::GetSpeedFactor;
+    ExplodeTime -= CFPS::FPSControl.GetSpeedFactor();
   }
   else
   {
@@ -53,6 +53,7 @@ void CBomb::OnCleanup()
 
 void CBomb::OnAnimate()
 {
+
 	CEntity::OnAnimate();
 }
 

@@ -9,6 +9,7 @@
 #include "EItems.h"
 #include "ESpikefall.h"
 #include "EBullet.h"
+#include "EBomb.h"
 #include "EShop.h"
 #include "EDoor.h"
 #include "ESavepoint.h"

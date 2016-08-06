@@ -61,6 +61,7 @@ ${SRCDIR}/CTransport.cpp
 ${SRCDIR}/EAcidball.cpp
 ${SRCDIR}/EBars.cpp
 ${SRCDIR}/EBloodspikes.cpp
+${SRCDIR}/EBomb.cpp
 ${SRCDIR}/EBox.cpp
 ${SRCDIR}/EBullet.cpp
 ${SRCDIR}/EDoor.cpp
@@ -112,6 +113,7 @@ ${SRCDIR}/Define_Items.h
 ${SRCDIR}/EAcidball.h
 ${SRCDIR}/EBars.h
 ${SRCDIR}/EBloodspikes.h
+${SRCDIR}/EBomb.h
 ${SRCDIR}/EBox.h
 ${SRCDIR}/EBullet.h
 ${SRCDIR}/EDoor.h

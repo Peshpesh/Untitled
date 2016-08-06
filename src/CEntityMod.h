@@ -16,12 +16,14 @@ private:
 	{
 		YOSHI = 0,
 		MAINCHAR,
-		EVILMAIN
+		EVILMAIN,
+		BOMB,
+		EXPLODE
 	};
 	// Note: NPCS after common must start in ID# after where common ends
 	enum Debug_NPC // NPC_ID's from the Debug NPC table
 	{
-		WSTAR = 3,
+		WSTAR = 5,
 		BSTAR,
 		BARS, BOX, SPIKEFALL, BLDSPK_UP,
 		HEART, AMYTHYST, ACIDBALL, DOOR, SVPT, SIGN
