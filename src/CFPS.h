@@ -13,6 +13,7 @@ private:
 	int		LastTime;
 
 	float	SpeedFactor;
+	float TargetFPS;
 
 	int		NumFrames;
 	int		Frames;
@@ -26,5 +27,7 @@ public:
 	int		GetFPS();
 
 	float	GetSpeedFactor();
+
+	float GetTargetFPS();
 };
 #endif

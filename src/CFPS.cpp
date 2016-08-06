@@ -9,6 +9,7 @@ CFPS::CFPS()
 	SpeedFactor = 0;
 	Frames = 0;
 	NumFrames = 0;
+	TargetFPS = 32.0f;
 }
 
 void CFPS::OnLoop()
@@ -16,7 +17,7 @@ void CFPS::OnLoop()
 	// This statement checks if a second (1000 ms) has passed
 	// since the last FPS tally. If a second has passed, we give
 	// our frame-per-second counter (Frames) to NumFrames for
-	// our use elsewhere. NumFrame is essentially our "FPS on
+	// our use elsewhere. NumFrames is essentially our "FPS on
 	// record", while Frames is a running total of frames passed
 	// in the immediate 1000 ms.
 	if (OldTime + 1000 < SDL_GetTicks())
@@ -30,7 +31,7 @@ void CFPS::OnLoop()
 	// in seconds. We multiply that by a target FPS value.
 	// Ideally, the first term will be 1/32 or less, meaning the
 	// computer is running at a rate faster than our targeted FPS.
-	SpeedFactor = ((SDL_GetTicks() - LastTime) / 1000.0f) * 32.0f;
+	SpeedFactor = ((SDL_GetTicks() - LastTime) / 1000.0f) * TargetFPS;
 
 	// It's possible that with very bad performance, a glitch,
 	// or "freezing" the program loop, the SpeedFactor will
@@ -41,7 +42,7 @@ void CFPS::OnLoop()
 	// unlikely event that FPS is 1 or less, we force the SpeedFactor
 	// to a smaller number to prevent serious glitches in gameplay.
 	// Glitches can involve entities translating through walls and floors.
-	if (SpeedFactor > 32) SpeedFactor = 32;
+	if (SpeedFactor > TargetFPS) SpeedFactor = TargetFPS;
 
 	// We get a new "LastTime" to set up for calc'ing SF next
 	// loop, and add one to our running total of frames in the
@@ -58,4 +59,9 @@ int CFPS::GetFPS()
 float CFPS::GetSpeedFactor()
 {
 	return SpeedFactor;
+}
+
+float CFPS::GetTargetFPS()
+{
+	return TargetFPS;
 }
