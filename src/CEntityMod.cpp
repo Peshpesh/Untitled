@@ -65,7 +65,8 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 				case YOSHI:	CEntity::EntityList.push_back(new CYoshi); break;
 				case MAINCHAR: break;
 				case EVILMAIN: CEntity::EntityList.push_back(new CShop); break;
-				case BOMB: CEntity::EntityList.push_back(new CBomb); break;
+				case BOMB: CEntity::EntityList.push_back(new CBomb); MaxFrames = 2; break;
+				case EXPLODE: CEntity::EntityList.push_back(new CExplode); MaxFrames = 2; break;
 				default:	break;
 			} // end of common switch
 			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Com_Texture, renderer, CEntityInfo::EntityInfoList[ID].Xo,

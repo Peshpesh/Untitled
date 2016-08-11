@@ -1,17 +1,16 @@
-#include "EBomb.h"
+#include "EExplode.h"
 
-CBomb::CBomb()
+CExplode::CExplode()
 {
   MaxSpeedX = 0.0f;
-	MaxSpeedY = 9.0f;
-	Flags = ENTITY_FLAG_HOLLOW | ENTITY_FLAG_GRAVITY;
+	MaxSpeedY = 0.0f;
+	Flags = ENTITY_FLAG_HOLLOW;
 
   // timers are in number of FRAMES at the desired FPS.
-  FuseTime = 3.0f * CFPS::FPSControl.GetTargetFPS();
-  // ExplodeTime = 1.0f * CFPS::FPSControl.GetTargetFPS();
+  ExplodeTime = 1.0f * CFPS::FPSControl.GetTargetFPS();
 }
 
-bool CBomb::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
+bool CExplode::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
 {
 	if (CEntity::OnLoad(entityset, renderer, Xo, Yo, Width, Height, MaxFrames) == false)
 		return false;
@@ -19,7 +18,7 @@ bool CBomb::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Y
 	return true;
 }
 
-void CBomb::OnLoop()
+void CExplode::OnLoop()
 {
   if (FuseTime > 0.0f)
   {
@@ -41,17 +40,17 @@ void CBomb::OnLoop()
 	CEntity::OnLoop();
 }
 
-void CBomb::OnRender(SDL_Renderer* renderer)
+void CExplode::OnRender(SDL_Renderer* renderer)
 {
 	CEntity::OnRender(renderer);
 }
 
-void CBomb::OnCleanup()
+void CExplode::OnCleanup()
 {
 	CEntity::OnCleanup();
 }
 
-void CBomb::OnAnimate()
+void CExplode::OnAnimate()
 {
 	CEntity::OnAnimate();
 }

@@ -10,6 +10,7 @@
 #include "ESpikefall.h"
 #include "EBullet.h"
 #include "EBomb.h"
+#include "EExplode.h"
 #include "EShop.h"
 #include "EDoor.h"
 #include "ESavepoint.h"
