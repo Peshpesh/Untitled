@@ -18,7 +18,7 @@ bool CME_NPC::CWrite_Name(SDL_Renderer* renderer, SDL_Texture* font, int X, int 
 
 	if (CEntityInfo::EntityInfoList[NPC_ID].Common)
 		CWrite_Common(renderer, font, X, Y);
-	else 
+	else
 	{
 		switch (Table_ID)
 		{
@@ -43,11 +43,11 @@ void CME_NPC::SaveList(char* filename)
 	if (FileHandle == NULL)
 		return;
 
-	// The very start of the file will be a number that 
+	// The very start of the file will be a number that
 	// indicates which table of entities we're using.
 	fprintf(FileHandle, "%d\n", Table_ID);
 
-	// We need NPC_IDs, and the location of 
+	// We need NPC_IDs, and the location of
 	// all normal entities on the map.
 	for (int i = 0; i < EntityList.size(); i++)
 	{
@@ -99,7 +99,7 @@ bool CME_NPC::LoadList(char* filename, SDL_Renderer* renderer)
 	{
 		EntityList.resize(EntityList.size() + 1);
 		ID_List.resize(ID_List.size() + 1);
-		if (!EntityList[EntityList.size() - 1].OnLoad(ForwardSet(ID), renderer,
+		if (!EntityList[EntityList.size() - 1].OnLoad(ForwardSet(ID),
 			CEntityInfo::EntityInfoList[ID].Xo, CEntityInfo::EntityInfoList[ID].Yo,
 			CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, ID)) return false;
 		EntityList[EntityList.size() - 1].X = Xo; EntityList[EntityList.size() - 1].Y = Yo;
@@ -123,7 +123,7 @@ bool CME_NPC::LoadTable(int ID, char* &entitypath)
 	EntityList.clear();
 	ID_List.clear();
 	NPC_ID = 0;
-	
+
 	return true;
 }
 
@@ -131,7 +131,7 @@ SDL_Texture* CME_NPC::ForwardSet()
 {
 	if (CEntityInfo::EntityInfoList[NPC_ID].Common)
 		return NPC_Common;
-	
+
 	return NPC_Tileset;
 }
 

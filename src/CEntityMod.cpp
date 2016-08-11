@@ -69,7 +69,7 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 				case EXPLODE: CEntity::EntityList.push_back(new CExplode); MaxFrames = 2; break;
 				default:	break;
 			} // end of common switch
-			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Com_Texture, renderer, CEntityInfo::EntityInfoList[ID].Xo,
+			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Com_Texture, CEntityInfo::EntityInfoList[ID].Xo,
 				CEntityInfo::EntityInfoList[ID].Yo, CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, MaxFrames);
 		}
 		else
@@ -98,7 +98,7 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 				}
 				default: break;
 			} // end of non-common switch
-			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Unq_Texture, renderer, CEntityInfo::EntityInfoList[ID].Xo,
+			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Unq_Texture, CEntityInfo::EntityInfoList[ID].Xo,
 				CEntityInfo::EntityInfoList[ID].Yo, CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, MaxFrames);
 		}
 		CEntity::EntityList[CEntity::EntityList.size() - 1]->X = X_loc;

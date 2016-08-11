@@ -37,7 +37,7 @@ public:
 	CPlayer();
 	void Reset();
 
-	bool OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames);
+	bool OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames);
 
 	void OnLoop();
 
@@ -53,7 +53,7 @@ public:
 	static Uint8 ConvertBinary(const int &Weapon);
 
 public:
-	void OnShoot(SDL_Renderer* renderer);
+	void OnShoot();
 
 	bool Interact();
 

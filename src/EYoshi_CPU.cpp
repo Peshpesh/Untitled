@@ -11,9 +11,9 @@ CYoshi::CYoshi()
 	Damage = 3;
 }
 
-bool CYoshi::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
+bool CYoshi::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames)
 {
-	if (CEntity::OnLoad(entityset, renderer, Xo, Yo, Width, Height, MaxFrames) == false)
+	if (CEntity::OnLoad(entityset, Xo, Yo, Width, Height, MaxFrames) == false)
 		return false;
 
 	return true;
@@ -25,7 +25,7 @@ void CYoshi::OnLoop()
 		Dead = true;
 
 	MoveRight = MoveLeft = false;
-	
+
 	// horizontal distance from player
 	float X_dist = (this->X - CEntity::EntityList[0]->X);
 	// vertical distance from player
@@ -42,7 +42,7 @@ void CYoshi::OnLoop()
 			CurrentFrameRow = 0;
 		if (X_dist < 0.0)
 			// Face Right
-			CurrentFrameRow = 1;	
+			CurrentFrameRow = 1;
 	}
 
 	// Move toward player if they are closer

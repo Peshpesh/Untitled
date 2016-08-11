@@ -40,7 +40,7 @@ bool CApp::InitGame()
 	PauseMenu.OnInit();
 
 	Player.Reset();
-	if (Player.OnLoad(CEntityMod::EntityControl.Com_Texture, Win_Renderer, 0, 128, 32, 32, 8) == false)
+	if (Player.OnLoad(CEntityMod::EntityControl.Com_Texture, 0, 128, 32, 32, 8) == false)
 		return false;
 
 	CEntity::EntityList.push_back(&Player);

@@ -8,7 +8,7 @@ class CHeart : public CEntity
 public:
 	CHeart();
 
-	bool OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames);
+	bool OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames);
 
 	void OnLoop();
 
@@ -29,7 +29,7 @@ class CAmythyst : public CEntity
 public:
 	CAmythyst();
 
-	bool OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames);
+	bool OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames);
 
 	void OnLoop();
 

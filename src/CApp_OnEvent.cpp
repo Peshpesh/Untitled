@@ -21,7 +21,7 @@ void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 				if (!Player.Shooting)
 				{
 					Player.Shooting = true;
-					Player.OnShoot(Win_Renderer);
+					Player.OnShoot();
 				}
 			}
 			return;

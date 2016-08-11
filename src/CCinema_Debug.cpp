@@ -15,7 +15,7 @@ bool CCinema_Debug::OnLoad(SDL_Renderer* renderer, int* prog)
 	//	CCinema::OnLoad(renderer, prog);
 	Progress = prog;
 	CEntity::EntityList.push_back(new CDoor(AREA_3, 100.0, 0.0));
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture, renderer,
+	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture,
 		CEntityInfo::EntityInfoList[12].Xo, CEntityInfo::EntityInfoList[12].Yo,
 		CEntityInfo::EntityInfoList[12].W, CEntityInfo::EntityInfoList[12].H, 0) == false)
 	{
@@ -39,16 +39,16 @@ void CCinema_Debug::OnLoop(float &pX, float &pY, SDL_Renderer* renderer)
 		BossID->Damage = 5;
 		BossID->X = 680;
 		BossID->Y = 540;
-		BossID->OnLoad(CEntityMod::EntityControl.Com_Texture, renderer, 0, 0, 64, 64, 8);
+		BossID->OnLoad(CEntityMod::EntityControl.Com_Texture, 0, 0, 64, 64, 8);
 		CEntity::EntityList.push_back(BossID);
 
 		Bars_A = new CBars;
 		Bars_B = new CBars;
 
-		Bars_A->OnLoad(CEntityMod::EntityControl.Unq_Texture, renderer,
+		Bars_A->OnLoad(CEntityMod::EntityControl.Unq_Texture,
 			CEntityInfo::EntityInfoList[5].Xo, CEntityInfo::EntityInfoList[5].Yo,
 			CEntityInfo::EntityInfoList[5].W, CEntityInfo::EntityInfoList[5].H, 1);
-		Bars_B->OnLoad(CEntityMod::EntityControl.Unq_Texture, renderer,
+		Bars_B->OnLoad(CEntityMod::EntityControl.Unq_Texture,
 			CEntityInfo::EntityInfoList[5].Xo, CEntityInfo::EntityInfoList[5].Yo,
 			CEntityInfo::EntityInfoList[5].W, CEntityInfo::EntityInfoList[5].H, 1);
 
@@ -131,7 +131,7 @@ bool CCinema_DebugB::OnLoad(SDL_Renderer* renderer, int* prog)
 	Progress = prog;
 	CEntity::EntityList.push_back(new CDoor(AREA_1, 100.0,1000.0));
 
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture, renderer,
+	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture,
 		CEntityInfo::EntityInfoList[12].Xo, CEntityInfo::EntityInfoList[12].Yo,
 		CEntityInfo::EntityInfoList[12].W, CEntityInfo::EntityInfoList[12].H, 0) == false)
 	{
@@ -141,7 +141,7 @@ bool CCinema_DebugB::OnLoad(SDL_Renderer* renderer, int* prog)
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 576.0;
 
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture, renderer,
+	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
 		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
 		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
 	{
@@ -150,7 +150,7 @@ bool CCinema_DebugB::OnLoad(SDL_Renderer* renderer, int* prog)
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 32.0;
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture, renderer,
+	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
 		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
 		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
 	{
@@ -159,7 +159,7 @@ bool CCinema_DebugB::OnLoad(SDL_Renderer* renderer, int* prog)
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 64.0;
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture, renderer,
+	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
 		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
 		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
 	{
@@ -168,7 +168,7 @@ bool CCinema_DebugB::OnLoad(SDL_Renderer* renderer, int* prog)
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 96.0;
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture, renderer,
+	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
 		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
 		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
 	{
@@ -177,7 +177,7 @@ bool CCinema_DebugB::OnLoad(SDL_Renderer* renderer, int* prog)
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 128.0;
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture, renderer,
+	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
 		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
 		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
 	{

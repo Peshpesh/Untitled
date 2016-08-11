@@ -101,7 +101,7 @@ public:
 	// NOTE:
 	// In the Map Editor, animation is nullified,
 	// and "MaxFrames" is used to store NPC_IDs.
-	virtual bool OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames);
+	virtual bool OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames);
 
 	virtual void OnLoop();
 

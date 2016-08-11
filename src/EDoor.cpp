@@ -21,9 +21,9 @@ CDoor::CDoor(int Enum_Dest, float dX, float dY)
 	this->dY = dY;
 }
 
-bool CDoor::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
+bool CDoor::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames)
 {
-	if (CEntity::OnLoad(entityset, renderer, Xo, Yo, Width, Height, MaxFrames) == false)
+	if (CEntity::OnLoad(entityset, Xo, Yo, Width, Height, MaxFrames) == false)
 		return false;
 
 	return true;

@@ -11,9 +11,9 @@ CBomb::CBomb()
   // ExplodeTime = 1.0f * CFPS::FPSControl.GetTargetFPS();
 }
 
-bool CBomb::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
+bool CBomb::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames)
 {
-	if (CEntity::OnLoad(entityset, renderer, Xo, Yo, Width, Height, MaxFrames) == false)
+	if (CEntity::OnLoad(entityset, Xo, Yo, Width, Height, MaxFrames) == false)
 		return false;
 
 	return true;
@@ -26,13 +26,24 @@ void CBomb::OnLoop()
     FuseTime -= CFPS::FPSControl.GetSpeedFactor();
     if (!(FuseTime > 0.0f))
     {
+      Dead = true;
+      // Add explosion entity?
+      CEntity::EntityList.push_back(new CExplode());
+      int ID = CEntity::EntityList.size() - 1;
+      CEntity::EntityList[ID]->X = this->X;
+      CEntity::EntityList[ID]->Y = this->Y;
+      int ex_Xo = CEntityInfo::EntityInfoList[4].Xo;
+      int ex_Yo = CEntityInfo::EntityInfoList[4].Yo;
+      int ex_W = CEntityInfo::EntityInfoList[4].W;
+      int ex_H = CEntityInfo::EntityInfoList[4].H;
 
+      CEntity::EntityList[ID]->OnLoad(Tex_Entity, ex_Xo, ex_Yo, ex_W, ex_H, 2);
     }
   }
-  else if (ExplodeTime > 0.0f)
+/*  else if (ExplodeTime > 0.0f)
   {
     ExplodeTime -= CFPS::FPSControl.GetSpeedFactor();
-  }
+  } */
   else
   {
     Dead = true;

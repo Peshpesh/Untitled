@@ -65,6 +65,7 @@ ${SRCDIR}/EBomb.cpp
 ${SRCDIR}/EBox.cpp
 ${SRCDIR}/EBullet.cpp
 ${SRCDIR}/EDoor.cpp
+${SRCDIR}/EExplode.cpp
 ${SRCDIR}/EItems.cpp
 ${SRCDIR}/ESavepoint.cpp
 ${SRCDIR}/EShop.cpp
@@ -117,6 +118,7 @@ ${SRCDIR}/EBomb.h
 ${SRCDIR}/EBox.h
 ${SRCDIR}/EBullet.h
 ${SRCDIR}/EDoor.h
+${SRCDIR}/EExplode.h
 ${SRCDIR}/EItems.h
 ${SRCDIR}/ESavepoint.h
 ${SRCDIR}/EShop.h

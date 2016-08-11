@@ -10,9 +10,9 @@ CExplode::CExplode()
   ExplodeTime = 1.0f * CFPS::FPSControl.GetTargetFPS();
 }
 
-bool CExplode::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
+bool CExplode::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames)
 {
-	if (CEntity::OnLoad(entityset, renderer, Xo, Yo, Width, Height, MaxFrames) == false)
+	if (CEntity::OnLoad(entityset, Xo, Yo, Width, Height, MaxFrames) == false)
 		return false;
 
 	return true;
@@ -20,23 +20,6 @@ bool CExplode::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, in
 
 void CExplode::OnLoop()
 {
-  if (FuseTime > 0.0f)
-  {
-    FuseTime -= CFPS::FPSControl.GetSpeedFactor();
-    if (!(FuseTime > 0.0f))
-    {
-
-    }
-  }
-  else if (ExplodeTime > 0.0f)
-  {
-    ExplodeTime -= CFPS::FPSControl.GetSpeedFactor();
-  }
-  else
-  {
-    Dead = true;
-  }
-
 	CEntity::OnLoop();
 }
 
@@ -55,7 +38,7 @@ void CExplode::OnAnimate()
 	CEntity::OnAnimate();
 }
 
-bool CBomb::OnCollision(CEntity* Entity)
+bool CExplode::OnCollision(CEntity* Entity)
 {
 	return true;
 }

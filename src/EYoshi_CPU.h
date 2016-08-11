@@ -8,7 +8,7 @@ class CYoshi : public CEntity
 public:
 	CYoshi();
 
-	bool OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames);
+	bool OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames);
 
 	void OnLoop();
 

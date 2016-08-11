@@ -55,9 +55,9 @@ void CPlayer::Reset()
 	Damage = 0;
 }
 
-bool CPlayer::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
+bool CPlayer::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames)
 {
-	if (CEntity::OnLoad(entityset, renderer, Xo, Yo, Width, Height, MaxFrames) == false)
+	if (CEntity::OnLoad(entityset, Xo, Yo, Width, Height, MaxFrames) == false)
 		return false;
 
 	return true;
@@ -162,7 +162,7 @@ bool CPlayer::OnCollision(CEntity* Entity)
 	return true;
 }
 
-void CPlayer::OnShoot(SDL_Renderer* renderer)
+void CPlayer::OnShoot()
 {
 	switch (Weapon)
 	{
@@ -179,7 +179,7 @@ void CPlayer::OnShoot(SDL_Renderer* renderer)
 			CEntity::EntityList[CEntity::EntityList.size() - 1]->X = this->X + 33.0;
 			CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = this->Y;
 		}
-		CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Tex_Bullets, renderer,
+		CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Tex_Bullets,
 			0, 0, 32, 32, 1);
 		break;
 	default: break;

@@ -41,7 +41,7 @@ CEntity::~CEntity()
 	//
 }
 
-bool CEntity::OnLoad(SDL_Texture* entityset, SDL_Renderer* renderer, int Xo, int Yo, int Width, int Height, int MaxFrames)
+bool CEntity::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames)
 {
 	Tex_Entity = entityset;
 	if (Tex_Entity == NULL) return false;

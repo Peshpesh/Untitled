@@ -9,21 +9,21 @@ void CMapEdit::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 {
 		switch (sym)
 		{
-		case SDLK_d:		
+		case SDLK_d:
 			CArea::AreaControl.OnExpandRight(); break;
-		case SDLK_a:		
+		case SDLK_a:
 			CArea::AreaControl.OnExpandLeft();
 			CCamera::CameraControl.OnMove(MAP_WIDTH*TILE_SIZE, 0);  // Keeps the area from jerking around
 			for (int i = 0; i < CME_NPC::NPCControl.EntityList.size(); i++)
 			{
 				if (&CME_NPC::NPCControl.EntityList[i] == NULL) continue;
 				CME_NPC::NPCControl.EntityList[i].X += MAP_WIDTH*TILE_SIZE;
-			}	// This loop updates the position of our entities 
+			}	// This loop updates the position of our entities
 			// to prevent unwanted repositioning over the changed area
 			break;
-		case SDLK_s:		
+		case SDLK_s:
 			CArea::AreaControl.OnExpandDown(); break;
-		case SDLK_w:		
+		case SDLK_w:
 			CArea::AreaControl.OnExpandUp();
 			CCamera::CameraControl.OnMove(0, MAP_HEIGHT*TILE_SIZE);
 			for (int i = 0; i < CME_NPC::NPCControl.EntityList.size(); i++)
@@ -33,9 +33,9 @@ void CMapEdit::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 			}
 			break;
 
-		case SDLK_l:		
+		case SDLK_l:
 			CArea::AreaControl.OnReduceRight(); break;
-		case SDLK_j:		
+		case SDLK_j:
 			if (CArea::AreaControl.OnReduceLeft())
 			{
 				CCamera::CameraControl.OnMove(-MAP_WIDTH*TILE_SIZE, 0);
@@ -46,9 +46,9 @@ void CMapEdit::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 				}
 			}
 			break;
-		case SDLK_k:		
+		case SDLK_k:
 			CArea::AreaControl.OnReduceDown(); break;
-		case SDLK_i:		
+		case SDLK_i:
 			if (CArea::AreaControl.OnReduceUp())
 			{
 				CCamera::CameraControl.OnMove(0, -MAP_HEIGHT*TILE_SIZE);
@@ -60,9 +60,9 @@ void CMapEdit::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 			}
 			break;
 
-		case SDLK_ESCAPE:	
+		case SDLK_ESCAPE:
 			OnExit(); break;
-		default:			
+		default:
 			break;
 		}
 }
@@ -80,7 +80,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 	}
 
 	// When the active mod is set to remove entities, we have to check if a click is over an entity.
-	// If there are multiple entities stacked in one spot, the first entity to be checked in the 
+	// If there are multiple entities stacked in one spot, the first entity to be checked in the
 	// loop will be erased. Others in the stack will remain unless clicked again. The entity list
 	// is searched from the last (most recently created) index to the first (oldest), which allows
 	// the entity "on top" of a stack to be deleted.
@@ -129,7 +129,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		}
 	}
 
-	// Click is on "NPC Tables". This displays a prompt to change entity tables, 
+	// Click is on "NPC Tables". This displays a prompt to change entity tables,
 	// and the function within the loop performs a change if requested.
 	if (mX >= 5 && mX <= 165)
 	{
@@ -144,7 +144,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		}
 	}
 
-	// Click is on "Set". This displays a prompt to change tilesets, 
+	// Click is on "Set". This displays a prompt to change tilesets,
 	// and the function within the loop performs a change if requested.
 	if (mX >= EWIDTH - 75 && mX <= EWIDTH - 25)
 	{
@@ -160,7 +160,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		}
 	}
 
-	// Click over "CHANGE TILE". A display of all tiles is rendered, 
+	// Click over "CHANGE TILE". A display of all tiles is rendered,
 	// and clicking a tile will update the active tile to use the clicked tile.
 	if (mX >= EWIDTH - 100 && mX < EWIDTH)
 	{
@@ -170,7 +170,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 			return;
 		}
 	}
-	
+
 	// Click is on left side of active tile type. Changes the tile type to that left type.
 	if (Current_Type != 0)
 	{
@@ -291,7 +291,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 			CME_NPC::NPCControl.SaveList(Filename);
 			return;
 		}
-		
+
 		// Load maps and entities; update the current tileset if area is loaded successfully.
 		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
 		if (mY >= WHEIGHT + 50)
@@ -313,7 +313,7 @@ void CMapEdit::OnRButtonDown(int mX, int mY)
 	if (mX < 0 || mY < 0 || mX > EWIDTH || mY > EHEIGHT)
 		return;
 
-	// If we're trying to do stuff with NPCs ... This places the NPC at the X, Y 
+	// If we're trying to do stuff with NPCs ... This places the NPC at the X, Y
 	// coordinates of the map tile clicked upon (good for doors, save points, etc.)
 	if (Active_Mod == MODIFY_NPC && mX < WWIDTH && mY < WHEIGHT)
 	{
@@ -344,7 +344,7 @@ void CMapEdit::OnRButtonDown(int mX, int mY)
 				Current_Fore += 1;
 			}
 		}
-	}	
+	}
 }
 
 void CMapEdit::OnExit()
@@ -354,10 +354,10 @@ void CMapEdit::OnExit()
 
 // Info: We take Xo and Yo as coords (Q2) to plot our current NPC.
 // Our current NPC has assigned to it a texture position (X and Y),
-// which can be used to reveal what entity we are using. 
-// However, for NPC image sets with variable NPC size and frame number, 
+// which can be used to reveal what entity we are using.
+// However, for NPC image sets with variable NPC size and frame number,
 // the determination of X and Y for each NPC is not formulaic. It is best to
-// instead store in memory an appropriate ID (perhaps as an enumerated value) 
+// instead store in memory an appropriate ID (perhaps as an enumerated value)
 // that represents the NPC we are working with in the NPC image set. That ID
 // can be used to look-up the appropriate X, Y, W, and H associated with the NPC.
 // That info along with the mX and mY are necessary info to report to an external
@@ -366,18 +366,18 @@ void CMapEdit::OnExit()
 // After all these are gathered, we feed them to an entity-like object that
 // contains all these integer values. That object is then pushed back into
 // a vector that contains all active entities in the workspace, which is used
-// to render all NPCs to the window. 
+// to render all NPCs to the window.
 bool CMapEdit::AddEntity(int Xo, int Yo)
 {
 	CME_NPC::NPCControl.EntityList.resize(CME_NPC::NPCControl.EntityList.size() + 1);
 	CME_NPC::NPCControl.ID_List.resize(CME_NPC::NPCControl.ID_List.size() + 1);
-	
+
 	// this will also fill the temp. entity's width and height values
 	if (CME_NPC::NPCControl.EntityList[CME_NPC::NPCControl.EntityList.size() - 1].OnLoad(CME_NPC::NPCControl.ForwardSet(),
-		Map_Renderer, CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].Xo,
+		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].Xo,
 		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].Yo,
-		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].W, 
-		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].H, 
+		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].W,
+		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].H,
 		CME_NPC::NPCControl.NPC_ID) == false)
 		return false;
 
@@ -395,7 +395,7 @@ bool CMapEdit::AddEntity(int Xo, int Yo)
 }
 
 void CMapEdit::QueryTileset()
-{ 
+{
 	int PixWidth, PixHeight;
 	SDL_QueryTexture(Main_Tileset, NULL, NULL, &PixWidth, &PixHeight);
 
