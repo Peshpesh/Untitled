@@ -20,6 +20,19 @@ bool CExplode::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Hei
 
 void CExplode::OnLoop()
 {
+  if (ExplodeTime > 0.0f)
+  {
+    ExplodeTime -= CFPS::FPSControl.GetSpeedFactor();
+    if (!(ExplodeTime > 0.0f))
+    {
+      Dead = true;
+    }
+  }
+  else
+  {
+    Dead = true;
+  }
+
 	CEntity::OnLoop();
 }
 

@@ -40,10 +40,6 @@ void CBomb::OnLoop()
       CEntity::EntityList[ID]->OnLoad(Tex_Entity, ex_Xo, ex_Yo, ex_W, ex_H, 2);
     }
   }
-/*  else if (ExplodeTime > 0.0f)
-  {
-    ExplodeTime -= CFPS::FPSControl.GetSpeedFactor();
-  } */
   else
   {
     Dead = true;
