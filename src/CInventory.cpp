@@ -45,6 +45,7 @@ bool CInventory::OnInit(SDL_Renderer* renderer)
 	{
 		CItem::Inventory.push_back(new IHPUP());
 		CItem::Inventory.push_back(new IHPDW());
+		CItem::Inventory.push_back(new IBOMB());
 	}
 	for (int i = 0; i < CItem::Inventory.size(); i++)
 	{

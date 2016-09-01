@@ -3,6 +3,7 @@
 
 #include "Define_Items.h"
 #include "CEntity.h"
+#include "EBomb.h"
 #include "CPlayer.h"
 #include "CArea.h"
 

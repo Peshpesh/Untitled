@@ -21,4 +21,13 @@ public:
 		const int& xO, const int& yO, const int& tW, const int& tH);
 };
 
+class IBOMB : public CItem
+{
+public:
+	IBOMB();
+
+	void OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
+		const int& xO, const int& yO, const int& tW, const int& tH);
+};
+
 #endif

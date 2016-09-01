@@ -102,3 +102,53 @@ void IHPDW::OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
 //
 // 	return true;
 // }
+
+
+///////////////////////////////
+
+
+
+IBOMB::IBOMB()
+{
+	name = "BOMB";
+	ename = BOMB;
+	about = "A BOMB";
+
+//	Xo = Yo = 0;
+
+	quant = 0;
+	m_quant = 1;
+}
+
+// int IHPDW::OnAdd(int& quantity)
+// {
+// 	for (int i = 0; i < MAX_INV_SIZE; i++)
+// 	{
+// 		if (Inventory[i] == NULL)
+// 		{
+// 			Inventory[i] = new IHPDW;
+// 			quantity = 0;
+// 		}
+// 	}
+// 	return 0;
+// }
+//
+// void IHPDW::OnLoop()
+// {
+//
+// }
+
+void IBOMB::OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
+	const int& xO, const int& yO, const int& tW, const int& tH)
+{
+	CItem::OnRender(renderer, texture, xO, yO, tW, tH);
+}
+
+// bool IHPDW::OnUse(int& hp)
+// {
+// 	int dec = 1;
+//
+// 	hp -= dec;
+//
+// 	return true;
+// }
