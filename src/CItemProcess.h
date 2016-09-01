@@ -6,6 +6,7 @@
 #include "EBomb.h"
 #include "CPlayer.h"
 #include "CArea.h"
+#include "CEntityRes.h"
 
 class CItemProcess
 {

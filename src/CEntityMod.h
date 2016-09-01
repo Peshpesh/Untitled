@@ -33,16 +33,18 @@ public:
 	CEntityMod();
 
 	static CEntityMod EntityControl;
-
 	SDL_Texture*	Com_Texture;	// Common (global) NPC Image pointer
 	SDL_Texture*	Unq_Texture;	// Unique (local) NPC Image pointer
 	SDL_Texture*	Arm_Texture;	// Arms Image pointer
 	SDL_Texture*	Tex_Bullets;	// Bullets Image pointer
 
 	bool OnInit(SDL_Renderer* renderer);
+	// static bool OnInit(SDL_Renderer* renderer);
 
 	bool LoadNPCs(char* NPC_List, SDL_Renderer* renderer);
+	// static bool LoadEntities(char* EntityFile, SDL_Renderer* renderer);
 
 	void OnCleanup();
+	// static void OnCleanup();
 };
 #endif

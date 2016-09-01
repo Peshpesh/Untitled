@@ -76,7 +76,7 @@ bool CItemProcess::UseBOMB()
   int ex_W = CEntityInfo::EntityInfoList[3].W;
   int ex_H = CEntityInfo::EntityInfoList[3].H;
 
-  CEntity::EntityList[ID]->OnLoad(Tex_Entity, ex_Xo, ex_Yo, ex_W, ex_H, 2);
+  CEntity::EntityList[ID]->OnLoad(CEntityRes::Com_Texture, ex_Xo, ex_Yo, ex_W, ex_H, 2);
   bool retval = true;
   return retval;
 }

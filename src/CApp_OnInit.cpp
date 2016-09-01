@@ -21,6 +21,8 @@ bool CApp::OnInit()
 		return false;
 	if (CEntityMod::EntityControl.OnInit(Win_Renderer) == false)
 		return false;
+	if (CEntityRes::OnInit(Win_Renderer) == false)
+		return false;
 	if (CGameData::GameControl.OnInit() == false)
 		return false;
 	if (Config::ConfControl.OnInit() == false)

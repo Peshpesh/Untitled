@@ -30,6 +30,7 @@ ${SRCDIR}/CEntity.cpp
 ${SRCDIR}/CEntityCol.cpp
 ${SRCDIR}/CEntityInfo.cpp
 ${SRCDIR}/CEntityMod.cpp
+${SRCDIR}/CEntityRes.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CGamedata.cpp
@@ -88,6 +89,7 @@ ${SRCDIR}/CCinema_Debug.h
 ${SRCDIR}/CDialogue.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityMod.h
+${SRCDIR}/CEntityRes.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFPS.h
 ${SRCDIR}/CGamedata.h

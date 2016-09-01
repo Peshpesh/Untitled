@@ -21,6 +21,7 @@
 #include "Config.h"
 #include "CInventory.h"
 #include "CPause.h"
+#include "CEntityRes.h"
 
 #include "CMapEdit.h"
 
