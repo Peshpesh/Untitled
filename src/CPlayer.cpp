@@ -86,13 +86,13 @@ void CPlayer::OnLoop()
 
 void CPlayer::OnRender(SDL_Renderer* renderer)
 {
-	if (CEntityMod::EntityControl.Arm_Texture == NULL) return;
-
+	// if (CEntityMod::EntityControl.Arm_Texture == NULL) return;
+	if (CEntityRes::Arm_Texture == NULL) return;
 	CEntity::OnRender(renderer);
 
 	// Draw the weapon
 	if (Weapon != UNARMED)
-	CSurface::OnDraw(renderer, CEntityMod::EntityControl.Arm_Texture, X - CCamera::CameraControl.GetX(),
+	CSurface::OnDraw(renderer, CEntityRes::Arm_Texture, X - CCamera::CameraControl.GetX(),
 		Y - CCamera::CameraControl.GetY(), (ConvertBinary(Weapon) - 1) * Width, CurrentFrameRow * Height, Width, Height);
 
 	if (!Dead) CHUD::HUDControl.OnRender(renderer, Health, MaxHealth, Purse, Weapon, Arsenal);
@@ -179,7 +179,7 @@ void CPlayer::OnShoot()
 			CEntity::EntityList[CEntity::EntityList.size() - 1]->X = this->X + 33.0;
 			CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = this->Y;
 		}
-		CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Tex_Bullets,
+		CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityRes::Bul_Texture,
 			0, 0, 32, 32, 1);
 		break;
 	default: break;

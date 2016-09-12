@@ -19,8 +19,8 @@ bool CApp::OnInit()
 		return false;
 	if (CHUD::HUDControl.OnInit(Win_Renderer) == false)
 		return false;
-	if (CEntityMod::EntityControl.OnInit(Win_Renderer) == false)
-		return false;
+	// if (CEntityMod::EntityControl.OnInit(Win_Renderer) == false)
+	// 	return false;
 	if (!CEntityInfo::LoadCommon())
 		return false;
 	if (CEntityRes::OnInit(Win_Renderer) == false)
@@ -44,7 +44,7 @@ bool CApp::InitGame()
 	PauseMenu.OnInit();
 
 	Player.Reset();
-	if (Player.OnLoad(CEntityMod::EntityControl.Com_Texture, 0, 128, 32, 32, 8) == false)
+	if (Player.OnLoad(CEntityRes::Com_Texture, 0, 128, 32, 32, 8) == false)
 		return false;
 
 	CEntity::EntityList.push_back(&Player);

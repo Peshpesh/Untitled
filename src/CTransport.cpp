@@ -43,7 +43,7 @@ void CTransport::OnTransport(float &pX, float &pY, SDL_Renderer* renderer)
 		case AREA_1:
 		{
 			CArea::AreaControl.OnLoad("../data/maps/1.area", renderer);
-			CEntityMod::EntityControl.LoadNPCs("../data/maps/1.ent", renderer);
+			CEntityMod::LoadEntities("../data/maps/1.ent", renderer);
 
 			delete CCinema::CinemaControl;
 			CCinema::CinemaControl = new CCinema_Debug;
@@ -52,7 +52,7 @@ void CTransport::OnTransport(float &pX, float &pY, SDL_Renderer* renderer)
 		case AREA_3:
 		{
 			CArea::AreaControl.OnLoad("../data/maps/3.area", renderer);
-			CEntityMod::EntityControl.LoadNPCs("../data/maps/3.ent", renderer);
+			CEntityMod::LoadEntities("../data/maps/3.ent", renderer);
 
 			delete CCinema::CinemaControl;
 			CCinema::CinemaControl = new CCinema_DebugB;
@@ -61,7 +61,7 @@ void CTransport::OnTransport(float &pX, float &pY, SDL_Renderer* renderer)
 		case ARENA:
 		{
 			CArea::AreaControl.OnLoad("../data/maps/ARENA.area", renderer);
-			CEntityMod::EntityControl.LoadNPCs("../data/maps/ARENA.ent", renderer);
+			CEntityMod::LoadEntities("../data/maps/ARENA.ent", renderer);
 
 			delete CCinema::CinemaControl;
 			CCinema::CinemaControl = new CCinema_Arena;

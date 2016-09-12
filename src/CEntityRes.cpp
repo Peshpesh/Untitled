@@ -20,14 +20,14 @@ bool CEntityRes::OnInit(SDL_Renderer* renderer)
 
 bool CEntityRes::OnLoad(SDL_Renderer* renderer, const int& SetID)
 {
-  char* EntityFile = new char[255];
+  char* SpriteFile = new char[255];
   switch(SetID)
   {
-    case SET_DEBUG: std::strcpy(EntityFile, "../res/npc/debug.png"); break;
+    case SET_DEBUG: std::strcpy(SpriteFile, "../res/npc/debug.png"); break;
     default: break;
   }
   // Load the texture of unique NPCs.
-  if ((Unq_Texture = CSurface::OnLoad(EntityFile, renderer)) == NULL)	return false;
+  if ((Unq_Texture = CSurface::OnLoad(SpriteFile, renderer)) == NULL)	return false;
 
   return true;
 }

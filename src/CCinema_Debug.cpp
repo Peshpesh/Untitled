@@ -47,7 +47,7 @@ void CCinema_Debug::OnLoop(float &pX, float &pY, SDL_Renderer* renderer)
 		BossID->Damage = 5;
 		BossID->X = 680;
 		BossID->Y = 540;
-		BossID->OnLoad(CEntityMod::EntityControl.Com_Texture, 0, 0, 64, 64, 8);
+		BossID->OnLoad(CEntityRes::Com_Texture, 0, 0, 64, 64, 8);
 		CEntity::EntityList.push_back(BossID);
 
 		Bars_A = new CBars;

@@ -92,7 +92,7 @@ void Font::GetXY(char symbol, int& X, int& Y, int& W, int& H)
 	}
 }
 
-int Font::Write(SDL_Renderer* renderer, SDL_Texture* font, char* message, int Mx, int My)
+int Font::Write(SDL_Renderer* renderer, SDL_Texture* font, char const* message, int Mx, int My)
 {
 	int i = 0;
 	int Xo, Yo, W, H;
@@ -116,7 +116,7 @@ int Font::Write(SDL_Renderer* renderer, SDL_Texture* font, char* message, int Mx
 	return Mx - FirstMx - 2;
 }
 
-int Font::Write(SDL_Renderer* renderer, SDL_Texture* font, char* message, int color, bool flicker, int Mx, int My)
+int Font::Write(SDL_Renderer* renderer, SDL_Texture* font, char const* message, int color, bool flicker, int Mx, int My)
 {
 	int i = 0;
 	int Xo, Yo, W, H;
@@ -213,7 +213,7 @@ int Font::Write(SDL_Renderer* renderer, SDL_Texture* font, int number, int Mx, i
 	return Mx - FirstMx;
 }
 
-char Font::BoxWrite(SDL_Renderer* renderer, SDL_Texture* font, char* message,
+char Font::BoxWrite(SDL_Renderer* renderer, SDL_Texture* font, char const* message,
 	int bX, int bY, int bW, int bH, int tX, int tY, int tW, int tH, int length, int page)
 {
 	// Draw the box (container)
@@ -271,7 +271,7 @@ char Font::BoxWrite(SDL_Renderer* renderer, SDL_Texture* font, char* message,
 	return message[i];
 }
 
-bool Font::TextBox(SDL_Renderer* renderer, char* message,
+bool Font::TextBox(SDL_Renderer* renderer, char const* message,
 	int tX, int tY, int tW, int tH)
 {
 	int i = 0;
@@ -315,7 +315,7 @@ bool Font::TextBox(SDL_Renderer* renderer, char* message,
 	return true;
 }
 
-int Font::CenterWrite(SDL_Renderer* renderer, SDL_Texture* font, char* message, int Mx, int My)
+int Font::CenterWrite(SDL_Renderer* renderer, SDL_Texture* font, char const* message, int Mx, int My)
 {
 	int i = 0;
 	int Xo, Yo, W, H;
@@ -345,7 +345,7 @@ int Font::CenterWrite(SDL_Renderer* renderer, SDL_Texture* font, char* message, 
 }
 
 
-char Font::CenterBoxWrite(SDL_Renderer* renderer, SDL_Texture* font, char* message,
+char Font::CenterBoxWrite(SDL_Renderer* renderer, SDL_Texture* font, char const* message,
 	int bX, int bY, int bW, int bH, int tX, int length, int page)
 {
 	// Draw the box (container)

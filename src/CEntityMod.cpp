@@ -1,24 +1,25 @@
 #include "CEntityMod.h"
 
-CEntityMod CEntityMod::EntityControl;
+// CEntityMod CEntityMod::EntityControl;
 
 CEntityMod::CEntityMod()
 {
-	Com_Texture = NULL;
-	Unq_Texture = NULL;
-	Arm_Texture = NULL;
-	Tex_Bullets = NULL;
+	// Com_Texture = NULL;
+	// Unq_Texture = NULL;
+	// Arm_Texture = NULL;
+	// Tex_Bullets = NULL;
 }
 
-bool CEntityMod::OnInit(SDL_Renderer* renderer)
-{
-	if ((Com_Texture = CSurface::OnLoad("../res/npc/common.png", renderer)) == NULL) return false;
-	if ((Arm_Texture = CSurface::OnLoad("../res/npc/arms.png", renderer)) == NULL) return false;
-	if ((Tex_Bullets = CSurface::OnLoad("../res/npc/bullet.png", renderer)) == NULL) return false;
-	return true;
-}
+// bool CEntityMod::OnInit(SDL_Renderer* renderer)
+// {
+// 	// if ((Com_Texture = CSurface::OnLoad("../res/npc/common.png", renderer)) == NULL) return false;
+// 	// if ((Arm_Texture = CSurface::OnLoad("../res/npc/arms.png", renderer)) == NULL) return false;
+// 	// if ((Tex_Bullets = CSurface::OnLoad("../res/npc/bullet.png", renderer)) == NULL) return false;
+// 	return true;
+// }
 
-bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
+// bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
+bool CEntityMod::LoadEntities(char* NPC_List, SDL_Renderer* renderer)
 {
 	// We will need to clear all the NPCs that already exist in the
 	// EntityList vector. This has to be done before loading a new
@@ -48,12 +49,13 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 	switch (Table_ID)
 	{
 		// case DEBUG: CEntityInfo::OnLoad("../res/npc/debug.tbl"); std::strcpy(EntityFile, "../res/npc/debug.png"); break;
-		case DEBUG: CEntityInfo::LoadUnique("../res/npc/debug.tbl"); std::strcpy(EntityFile, "../res/npc/debug.png"); break;
+		case SET_DEBUG: CEntityInfo::LoadUnique("../res/npc/debug.tbl"); std::strcpy(EntityFile, "../res/npc/debug.png"); break;
 		default: break;
 	}
 
 	// Load the texture of unique NPCs.
-	if ((Unq_Texture = CSurface::OnLoad(EntityFile, renderer)) == NULL)	return false;
+	// if ((Unq_Texture = CSurface::OnLoad(EntityFile, renderer)) == NULL)	return false;
+	if (!CEntityRes::OnLoad(renderer, Table_ID)) return false;
 
 	// Get the info about the NPCs in the area (which NPC and where they are)
 	//	while (fscanf(NFileHandle, "%d:%d:%d\n", &ID, &X_loc, &Y_loc) == 3)
@@ -78,13 +80,13 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 			int Yt = CEntityInfo::Com_EntityInfo[ID].Yo;
 			int W = CEntityInfo::Com_EntityInfo[ID].W;
 			int H = CEntityInfo::Com_EntityInfo[ID].H;
-			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Com_Texture, Xt, Yt, W, H, MaxFrames);
+			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityRes::Com_Texture, Xt, Yt, W, H, MaxFrames);
 		}
 		else
 		{ // start of non-common switch
 			switch (Table_ID)
 			{
-				case DEBUG:
+				case SET_DEBUG:
 				{
 					switch (ID)
 					{
@@ -112,7 +114,7 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 			int Yt = CEntityInfo::Unq_EntityInfo[ID].Yo;
 			int W = CEntityInfo::Unq_EntityInfo[ID].W;
 			int H = CEntityInfo::Unq_EntityInfo[ID].H;
-			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Unq_Texture, Xt, Yt, W, H, MaxFrames);
+			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityRes::Unq_Texture, Xt, Yt, W, H, MaxFrames);
 		}
 		// place the entity at the assigned position
 		CEntity::EntityList[CEntity::EntityList.size() - 1]->X = X_loc;
