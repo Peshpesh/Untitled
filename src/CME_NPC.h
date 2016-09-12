@@ -38,10 +38,10 @@ public:
 	void CWrite_Debug(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y);
 
 	// Write out a list of entity information for the working area.
-	void SaveList(char* filename);
+	void SaveList(char const* filename);
 
 	// Load an existing list of entities for an area.
-	bool LoadList(char* filename, SDL_Renderer* renderer);
+	bool LoadList(char const* filename, SDL_Renderer* renderer);
 
 	// Load a new table of entities to work with.
 	bool LoadTable(int ID, char* &entitypath);

@@ -30,7 +30,7 @@ bool CME_NPC::CWrite_Name(SDL_Renderer* renderer, SDL_Texture* font, int X, int 
 	return true;
 }
 
-void CME_NPC::SaveList(char* filename)
+void CME_NPC::SaveList(char const* filename)
 {
 	char pre[] = "../data/maps/";
 	char ext[] = ".ent";
@@ -63,7 +63,7 @@ void CME_NPC::SaveList(char* filename)
 	delete e_listname;
 }
 
-bool CME_NPC::LoadList(char* filename, SDL_Renderer* renderer)
+bool CME_NPC::LoadList(char const* filename, SDL_Renderer* renderer)
 {
 	char* EntityFile = new char[255];
 

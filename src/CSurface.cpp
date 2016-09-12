@@ -9,7 +9,7 @@ CSurface::CSurface()
 * param File     : character string of the file name
 * param renderer : renderer in use
 */
-SDL_Texture* CSurface::OnLoad(char* File, SDL_Renderer *renderer)
+SDL_Texture* CSurface::OnLoad(char const* File, SDL_Renderer *renderer)
 {
 	// Initialize texture and surface pointers to null
 	SDL_Texture* Surf_Text = NULL;
@@ -31,7 +31,7 @@ SDL_Texture* CSurface::OnLoad(char* File, SDL_Renderer *renderer)
 	return Surf_Text;
 }
 
-SDL_Texture* CSurface::OnLoad(char* File, SDL_Renderer *renderer, int R, int G, int B)
+SDL_Texture* CSurface::OnLoad(char const* File, SDL_Renderer *renderer, int R, int G, int B)
 {
 	// Initialize texture and surface pointers to null
 	SDL_Texture* Surf_Text = NULL;

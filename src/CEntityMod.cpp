@@ -19,7 +19,7 @@ CEntityMod::CEntityMod()
 // }
 
 // bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
-bool CEntityMod::LoadEntities(char* NPC_List, SDL_Renderer* renderer)
+bool CEntityMod::LoadEntities(char const* NPC_List, SDL_Renderer* renderer)
 {
 	// We will need to clear all the NPCs that already exist in the
 	// EntityList vector. This has to be done before loading a new

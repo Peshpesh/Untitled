@@ -18,7 +18,7 @@ CTile* CMap::GetTile(int X, int Y)
 	return &TileList[ID];
 }
 
-bool CMap::OnLoad(char* File)
+bool CMap::OnLoad(char const* File)
 {
 	TileList.clear();
 	FILE* FileHandle = fopen(File, "r");
@@ -207,7 +207,7 @@ void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int slope)
 	TileList[ID].Slope = slope;
 }
 
-void CMap::SaveMap(int ID, char* areaname)
+void CMap::SaveMap(int ID, char const* areaname)
 {
 	int TensDigit = ID / 10;
 	int OnesDigit = ID % 10;

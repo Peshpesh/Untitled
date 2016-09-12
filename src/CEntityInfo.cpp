@@ -53,7 +53,7 @@ bool CEntityInfo::LoadCommon()
 	return true;
 }
 
-int CEntityInfo::LoadUnique(char* File)
+int CEntityInfo::LoadUnique(char const* File)
 {
 	Unq_EntityInfo.clear();
 

@@ -14,7 +14,7 @@ CDialogue::CDialogue()
 	RecordFPS = 0;
 }
 
-int CDialogue::OnSpeech(SDL_Renderer* renderer, char* message)
+int CDialogue::OnSpeech(SDL_Renderer* renderer, char const* message)
 {
 	if (RecordFPS == 0) RecordFPS = CFPS::FPSControl.GetFPS();
 

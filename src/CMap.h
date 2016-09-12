@@ -21,7 +21,7 @@ public:
 
 
 public:
-	bool OnLoad(char* File);
+	bool OnLoad(char const* File);
 	void OnLoad();
 
 	void OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool depth);
@@ -31,6 +31,6 @@ public:
 
 	void ChangeTile(int X, int Y, int tile, int fore, int type, int slope);
 
-	void SaveMap(int ID, char* areaname);
+	void SaveMap(int ID, char const* areaname);
 };
 #endif

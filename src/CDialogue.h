@@ -10,7 +10,7 @@ public:
 	static CDialogue DiaControl;
 	CDialogue();
 
-	int	OnSpeech(SDL_Renderer* renderer, char* message);
+	int	OnSpeech(SDL_Renderer* renderer, char const* message);
 
 public:
 	int		Timer;			// How much time has passed since the start of typing current page

@@ -162,7 +162,7 @@ public:
 
 	// static bool LoadCommons();
 	static bool LoadCommon();
-	static int LoadUnique(char* File);
+	static int LoadUnique(char const* File);
 };
 
 class CEntityCol

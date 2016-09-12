@@ -43,7 +43,7 @@ public:
 	static bool OnInit(SDL_Renderer* renderer);
 
 	// bool LoadNPCs(char* NPC_List, SDL_Renderer* renderer);
-	static bool LoadEntities(char* EntityFile, SDL_Renderer* renderer);
+	static bool LoadEntities(char const* EntityFile, SDL_Renderer* renderer);
 
 	// void OnCleanup();
 	static void OnCleanup();

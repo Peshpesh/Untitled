@@ -28,7 +28,7 @@ public:
 			Renderer is used in a call to CSurface to load
 			a tileset, which needs the renderer in use.
 	*/
-	bool	OnLoad(char* File, SDL_Renderer* renderer);
+	bool	OnLoad(char const* File, SDL_Renderer* renderer);
 
 	/*	Loads an "empty" 1 x 1 map area.
 			param tileset : Tileset for the area.
@@ -67,7 +67,7 @@ public:
 
 	void	ChangeSet(SDL_Texture* newset);
 	void	ChangeTile(int X, int Y, int tile, int fore, int type, int slope);
-	void	SaveArea(char* areaname, char* setpath);
+	void	SaveArea(char const* areaname, char const* setpath);
 	void	OnCleanup();
 };
 #endif

@@ -35,7 +35,7 @@ CTile* CArea::GetTile(int X, int Y)
 	return Map->GetTile(X, Y);
 }
 
-bool CArea::OnLoad(char* File, SDL_Renderer* renderer)
+bool CArea::OnLoad(char const* File, SDL_Renderer* renderer)
 {
 	MapList.clear();
 
@@ -393,7 +393,7 @@ void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int slope)
 	MapList[ID].ChangeTile(X % MapWidth, Y % MapHeight, tile, fore, type, slope);
 }
 
-void CArea::SaveArea(char* areaname, char* setpath)
+void CArea::SaveArea(char const* areaname, char const* setpath)
 {
 	char pre[] = "../data/maps/";
 	char ext[] = ".area";
