@@ -1,22 +1,22 @@
 #include "CME_NPC.h"
 
-enum Common_NPC
-{
-	YOSHI = 0,
-	MAINCHAR,
-	EVILMAIN,
-	BOMB,
-	EXPLODE
-};
-
-// Note: NPCS after common must start in ID# after where common ends
-enum Debug_NPC
-{
-	WSTAR = 5,
-	BSTAR,
-	BARS, BOX, SPIKEFALL, BLDSPK_UP,
-	HEART, AMYTHYST, ACIDBALL, DOOR, SAVEPOINT, SIGN
-};
+// enum Common_NPC
+// {
+// 	YOSHI = 0,
+// 	MAINCHAR,
+// 	EVILMAIN,
+// 	BOMB,
+// 	EXPLODE
+// };
+//
+// // Note: NPCS after common must start in ID# after where common ends
+// enum Debug_NPC
+// {
+// 	WSTAR = 5,
+// 	BSTAR,
+// 	BARS, BOX, SPIKEFALL, BLDSPK_UP,
+// 	HEART, AMYTHYST, ACIDBALL, DOOR, SAVEPOINT, SIGN
+// };
 
 void CME_NPC::CWrite_Common(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y)
 {
@@ -47,7 +47,7 @@ void CME_NPC::CWrite_Debug(SDL_Renderer* renderer, SDL_Texture* font, int X, int
 	/*10*/ case AMYTHYST: Font::CenterWrite(renderer, font, "AMYTHYST", X, Y); break;
 	/*11*/ case ACIDBALL: Font::CenterWrite(renderer, font, "ACIDBALL", X, Y); break;
 	/*12*/ case DOOR: Font::CenterWrite(renderer, font, "DOOR", X, Y); break;
-	/*13*/ case SAVEPOINT: Font::CenterWrite(renderer, font, "SAVEPT", X, Y); break;
+	/*13*/ case SVPT: Font::CenterWrite(renderer, font, "SAVEPT", X, Y); break;
 	/*14*/ case SIGN: Font::CenterWrite(renderer, font, "SIGN", X, Y); break;
 	default: break;
 	}

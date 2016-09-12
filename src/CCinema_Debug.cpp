@@ -15,12 +15,20 @@ bool CCinema_Debug::OnLoad(SDL_Renderer* renderer, int* prog)
 	//	CCinema::OnLoad(renderer, prog);
 	Progress = prog;
 	CEntity::EntityList.push_back(new CDoor(AREA_3, 100.0, 0.0));
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture,
-		CEntityInfo::EntityInfoList[12].Xo, CEntityInfo::EntityInfoList[12].Yo,
-		CEntityInfo::EntityInfoList[12].W, CEntityInfo::EntityInfoList[12].H, 0) == false)
-	{
+	// if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture,
+	// 	CEntityInfo::EntityInfoList[12].Xo, CEntityInfo::EntityInfoList[12].Yo,
+	// 	CEntityInfo::EntityInfoList[12].W, CEntityInfo::EntityInfoList[12].H, 0) == false)
+	// {
+	// 	return false;
+	// }
+	int ID, Xo, Yo, W, H;
+	ID = CEntity::EntityList.size() - 1;
+	Xo = CEntityInfo::Unq_EntityInfo[DOOR].Xo;
+	Yo = CEntityInfo::Unq_EntityInfo[DOOR].Yo;
+	W = CEntityInfo::Unq_EntityInfo[DOOR].W;
+	H = CEntityInfo::Unq_EntityInfo[DOOR].H;
+	if (CEntity::EntityList[ID]->OnLoad(CEntityRes::Unq_Texture, Xo, Yo, W, H, 0) == false)
 		return false;
-	}
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 32.0;
 	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 1216.0;
 	return true;
@@ -45,12 +53,19 @@ void CCinema_Debug::OnLoop(float &pX, float &pY, SDL_Renderer* renderer)
 		Bars_A = new CBars;
 		Bars_B = new CBars;
 
-		Bars_A->OnLoad(CEntityMod::EntityControl.Unq_Texture,
-			CEntityInfo::EntityInfoList[5].Xo, CEntityInfo::EntityInfoList[5].Yo,
-			CEntityInfo::EntityInfoList[5].W, CEntityInfo::EntityInfoList[5].H, 1);
-		Bars_B->OnLoad(CEntityMod::EntityControl.Unq_Texture,
-			CEntityInfo::EntityInfoList[5].Xo, CEntityInfo::EntityInfoList[5].Yo,
-			CEntityInfo::EntityInfoList[5].W, CEntityInfo::EntityInfoList[5].H, 1);
+		int Xo, Yo, W, H;
+		Xo = CEntityInfo::Unq_EntityInfo[BARS].Xo;
+		Yo = CEntityInfo::Unq_EntityInfo[BARS].Yo;
+		W = CEntityInfo::Unq_EntityInfo[BARS].W;
+		H = CEntityInfo::Unq_EntityInfo[BARS].H;
+		// Bars_A->OnLoad(CEntityMod::EntityControl.Unq_Texture,
+		// 	CEntityInfo::EntityInfoList[5].Xo, CEntityInfo::EntityInfoList[5].Yo,
+		// 	CEntityInfo::EntityInfoList[5].W, CEntityInfo::EntityInfoList[5].H, 1);
+		// Bars_B->OnLoad(CEntityMod::EntityControl.Unq_Texture,
+		// 	CEntityInfo::EntityInfoList[5].Xo, CEntityInfo::EntityInfoList[5].Yo,
+		// 	CEntityInfo::EntityInfoList[5].W, CEntityInfo::EntityInfoList[5].H, 1);
+		Bars_A->OnLoad(CEntityRes::Unq_Texture, Xo, Yo, W, H, 1);
+		Bars_B->OnLoad(CEntityRes::Unq_Texture, Xo, Yo, W, H, 1);
 
 		Bars_A->X = Bars_B->X = 768;
 		Bars_A->Y = 576;
@@ -131,60 +146,87 @@ bool CCinema_DebugB::OnLoad(SDL_Renderer* renderer, int* prog)
 	Progress = prog;
 	CEntity::EntityList.push_back(new CDoor(AREA_1, 100.0,1000.0));
 
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture,
-		CEntityInfo::EntityInfoList[12].Xo, CEntityInfo::EntityInfoList[12].Yo,
-		CEntityInfo::EntityInfoList[12].W, CEntityInfo::EntityInfoList[12].H, 0) == false)
-	{
+	// if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Unq_Texture,
+	// 	CEntityInfo::EntityInfoList[12].Xo, CEntityInfo::EntityInfoList[12].Yo,
+	// 	CEntityInfo::EntityInfoList[12].W, CEntityInfo::EntityInfoList[12].H, 0) == false)
+	// {
+	// 	return false;
+	// }
+	int ID, Xo, Yo, W, H;
+	ID = CEntity::EntityList.size() - 1;
+	Xo = CEntityInfo::Unq_EntityInfo[DOOR].Xo;
+	Yo = CEntityInfo::Unq_EntityInfo[DOOR].Yo;
+	W = CEntityInfo::Unq_EntityInfo[DOOR].W;
+	H = CEntityInfo::Unq_EntityInfo[DOOR].H;
+	if (CEntity::EntityList[ID]->OnLoad(CEntityRes::Unq_Texture, Xo, Yo, W, H, 0) == false)
 		return false;
-	}
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 32.0;
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 576.0;
+	CEntity::EntityList[ID]->X = 32.0;
+	CEntity::EntityList[ID]->Y = 576.0;
 
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
-		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
-		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
-	{
+	// if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
+	// 	CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
+	// 	CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
+	// {
+	// 	return false;
+	// }
+	ID = CEntity::EntityList.size() - 1;
+	Xo = CEntityInfo::Com_EntityInfo[EVILMAIN].Xo;
+	Yo = CEntityInfo::Com_EntityInfo[EVILMAIN].Yo;
+	W = CEntityInfo::Com_EntityInfo[EVILMAIN].W;
+	H = CEntityInfo::Com_EntityInfo[EVILMAIN].H;
+	if (CEntity::EntityList[ID]->OnLoad(CEntityRes::Com_Texture, Xo, Yo, W, H, 0) == false)
 		return false;
-	}
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 32.0;
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
+	CEntity::EntityList[ID]->X = 32.0;
+	CEntity::EntityList[ID]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
-		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
-		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
-	{
+	// if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
+	// 	CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
+	// 	CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
+	// {
+	// 	return false;
+	// }
+	ID = CEntity::EntityList.size() - 1;
+	if (CEntity::EntityList[ID]->OnLoad(CEntityRes::Com_Texture, Xo, Yo, W, H, 0) == false)
 		return false;
-	}
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 64.0;
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
+	CEntity::EntityList[ID]->X = 64.0;
+	CEntity::EntityList[ID]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
-		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
-		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
-	{
+	// if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
+	// 	CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
+	// 	CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
+	// {
+	// 	return false;
+	// }
+	ID = CEntity::EntityList.size() - 1;
+	if (CEntity::EntityList[ID]->OnLoad(CEntityRes::Com_Texture, Xo, Yo, W, H, 0) == false)
 		return false;
-	}
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 96.0;
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
+	CEntity::EntityList[ID]->X = 96.0;
+	CEntity::EntityList[ID]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
-		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
-		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
-	{
+	// if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
+	// 	CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
+	// 	CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
+	// {
+	// 	return false;
+	// }
+	ID = CEntity::EntityList.size() - 1;
+	if (CEntity::EntityList[ID]->OnLoad(CEntityRes::Com_Texture, Xo, Yo, W, H, 0) == false)
 		return false;
-	}
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 128.0;
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
+	CEntity::EntityList[ID]->X = 128.0;
+	CEntity::EntityList[ID]->Y = 0.0;
 	CEntity::EntityList.push_back(new CShop);
-	if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
-		CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
-		CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
-	{
+	// if (CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(CEntityMod::EntityControl.Com_Texture,
+	// 	CEntityInfo::EntityInfoList[2].Xo, CEntityInfo::EntityInfoList[2].Yo,
+	// 	CEntityInfo::EntityInfoList[2].W, CEntityInfo::EntityInfoList[2].H, 0) == false)
+	// {
+	// 	return false;
+	// }
+	ID = CEntity::EntityList.size() - 1;
+	if (CEntity::EntityList[ID]->OnLoad(CEntityRes::Com_Texture, Xo, Yo, W, H, 0) == false)
 		return false;
-	}
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->X = 160.0;
-	CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = 0.0;
+	CEntity::EntityList[ID]->X = 160.0;
+	CEntity::EntityList[ID]->Y = 0.0;
 	return true;
 }
 

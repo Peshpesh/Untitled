@@ -49,7 +49,7 @@ bool CInventory::OnInit(SDL_Renderer* renderer)
 	}
 	for (int i = 0; i < CItem::Inventory.size(); i++)
 	{
-		if (CItem::Inventory[i]->ename == HPUP)
+		if (CItem::Inventory[i]->ename == ITEM_HPUP)
 		{
 			CItem::Inventory[i]->quant++;
 			CItem::Inventory[i]->quant++;

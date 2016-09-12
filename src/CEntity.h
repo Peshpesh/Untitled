@@ -144,7 +144,9 @@ private:
 class CEntityInfo
 {
 public:
-	static std::vector<CEntityInfo>	EntityInfoList;
+	// static std::vector<CEntityInfo>	EntityInfoList;
+	static std::vector<CEntityInfo> Com_EntityInfo;
+	static std::vector<CEntityInfo> Unq_EntityInfo;
 
 	int Xo;
 	int Yo;
@@ -152,13 +154,15 @@ public:
 	int H;
 	int NumRows;
 	int NumCols;
-	bool Common;
+	// bool Common;
 
 	CEntityInfo();
 
-	static int OnLoad(char* File);
+	// static int OnLoad(char* File);
 
-	static bool LoadCommons();
+	// static bool LoadCommons();
+	static bool LoadCommon();
+	static int LoadUnique(char* File);
 };
 
 class CEntityCol

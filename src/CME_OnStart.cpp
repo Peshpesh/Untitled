@@ -6,7 +6,7 @@ bool CMapEdit::OnStart()
 	CCamera::CameraControl.SetTarget(NULL, NULL);
 	CCamera::CameraControl.TargetMode = TARGET_MODE_NORMAL;
 	CCamera::CameraControl.SetPos(0, 0);
-	
+
 	if ((Map_Display = SDL_CreateWindow("Map Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		EWIDTH, EHEIGHT, SDL_WINDOW_SHOWN)) == NULL)
 	{
@@ -71,7 +71,13 @@ bool CMapEdit::OnStart()
 
 	CHUD::HUDControl.OnInit(Map_Renderer);
 
-	if ((CME_NPC::NPCControl.Table_ID = CEntityInfo::OnLoad("../res/npc/debug.tbl")) < 0)
+	// if ((CME_NPC::NPCControl.Table_ID = CEntityInfo::OnLoad("../res/npc/debug.tbl")) < 0)
+	// 	return false;
+
+	if (!CEntityInfo::LoadCommon())
+		return false;
+
+	if ((CME_NPC::NPCControl.Table_ID = CEntityInfo::LoadUnique("../res/npc/debug.tbl")) < 0)
 		return false;
 
 	if (CArea::AreaControl.OnLoad(Main_Tileset) == false)

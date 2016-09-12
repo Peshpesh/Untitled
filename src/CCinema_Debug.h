@@ -2,6 +2,7 @@
 #define _CCINEMA_DEBUG_H_
 
 #include "CCinema.h"
+#include "CEntityRes.h"
 
 enum
 {

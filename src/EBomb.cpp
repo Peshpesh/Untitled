@@ -32,10 +32,14 @@ void CBomb::OnLoop()
       int ID = CEntity::EntityList.size() - 1;
       CEntity::EntityList[ID]->X = this->X;
       CEntity::EntityList[ID]->Y = this->Y;
-      int ex_Xo = CEntityInfo::EntityInfoList[4].Xo;
-      int ex_Yo = CEntityInfo::EntityInfoList[4].Yo;
-      int ex_W = CEntityInfo::EntityInfoList[4].W;
-      int ex_H = CEntityInfo::EntityInfoList[4].H;
+      // int ex_Xo = CEntityInfo::EntityInfoList[4].Xo;
+      // int ex_Yo = CEntityInfo::EntityInfoList[4].Yo;
+      // int ex_W = CEntityInfo::EntityInfoList[4].W;
+      // int ex_H = CEntityInfo::EntityInfoList[4].H;
+      int ex_Xo = CEntityInfo::Com_EntityInfo[EXPLODE].Xo;
+      int ex_Yo = CEntityInfo::Com_EntityInfo[EXPLODE].Yo;
+      int ex_W = CEntityInfo::Com_EntityInfo[EXPLODE].W;
+      int ex_H = CEntityInfo::Com_EntityInfo[EXPLODE].H;
 
       CEntity::EntityList[ID]->OnLoad(Tex_Entity, ex_Xo, ex_Yo, ex_W, ex_H, 2);
     }

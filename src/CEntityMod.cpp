@@ -33,7 +33,7 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 		}
 	}
 	// Now, we begin to load the NPC information for the new area.
-	int ID, X_loc, Y_loc, Table_ID;
+	int Table_ID, com, ID, X_loc, Y_loc;
 	char* EntityFile = new char[255];
 
 	// Try to open the Entity data file.
@@ -47,7 +47,8 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 	// Get the necessary info describing all NPCs in the new area.
 	switch (Table_ID)
 	{
-		case DEBUG: CEntityInfo::OnLoad("../res/npc/debug.tbl"); std::strcpy(EntityFile, "../res/npc/debug.png"); break;
+		// case DEBUG: CEntityInfo::OnLoad("../res/npc/debug.tbl"); std::strcpy(EntityFile, "../res/npc/debug.png"); break;
+		case DEBUG: CEntityInfo::LoadUnique("../res/npc/debug.tbl"); std::strcpy(EntityFile, "../res/npc/debug.png"); break;
 		default: break;
 	}
 
@@ -55,10 +56,12 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 	if ((Unq_Texture = CSurface::OnLoad(EntityFile, renderer)) == NULL)	return false;
 
 	// Get the info about the NPCs in the area (which NPC and where they are)
-	while (fscanf(NFileHandle, "%d:%d:%d\n", &ID, &X_loc, &Y_loc) == 3)
+	//	while (fscanf(NFileHandle, "%d:%d:%d\n", &ID, &X_loc, &Y_loc) == 3)
+	while (fscanf(NFileHandle, "%d:%d:%d:%d\n", &com, &ID, &X_loc, &Y_loc) == 4)
 	{
 		int MaxFrames = 0;
-		if (CEntityInfo::EntityInfoList[ID].Common)
+		// if (CEntityInfo::EntityInfoList[ID].Common)
+		if (com)
 		{
 			switch (ID)
 			{
@@ -69,8 +72,13 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 				case EXPLODE: CEntity::EntityList.push_back(new CExplode); MaxFrames = 2; break;
 				default:	break;
 			} // end of common switch
-			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Com_Texture, CEntityInfo::EntityInfoList[ID].Xo,
-				CEntityInfo::EntityInfoList[ID].Yo, CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, MaxFrames);
+			// CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Com_Texture, CEntityInfo::EntityInfoList[ID].Xo,
+			// 	CEntityInfo::EntityInfoList[ID].Yo, CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, MaxFrames);
+			int Xt = CEntityInfo::Com_EntityInfo[ID].Xo;
+			int Yt = CEntityInfo::Com_EntityInfo[ID].Yo;
+			int W = CEntityInfo::Com_EntityInfo[ID].W;
+			int H = CEntityInfo::Com_EntityInfo[ID].H;
+			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Com_Texture, Xt, Yt, W, H, MaxFrames);
 		}
 		else
 		{ // start of non-common switch
@@ -98,9 +106,15 @@ bool CEntityMod::LoadNPCs(char* NPC_List, SDL_Renderer* renderer)
 				}
 				default: break;
 			} // end of non-common switch
-			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Unq_Texture, CEntityInfo::EntityInfoList[ID].Xo,
-				CEntityInfo::EntityInfoList[ID].Yo, CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, MaxFrames);
+			// CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Unq_Texture, CEntityInfo::EntityInfoList[ID].Xo,
+			// 	CEntityInfo::EntityInfoList[ID].Yo, CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, MaxFrames);
+			int Xt = CEntityInfo::Unq_EntityInfo[ID].Xo;
+			int Yt = CEntityInfo::Unq_EntityInfo[ID].Yo;
+			int W = CEntityInfo::Unq_EntityInfo[ID].W;
+			int H = CEntityInfo::Unq_EntityInfo[ID].H;
+			CEntity::EntityList[CEntity::EntityList.size() - 1]->OnLoad(Unq_Texture, Xt, Yt, W, H, MaxFrames);
 		}
+		// place the entity at the assigned position
 		CEntity::EntityList[CEntity::EntityList.size() - 1]->X = X_loc;
 		CEntity::EntityList[CEntity::EntityList.size() - 1]->Y = Y_loc;
 	}

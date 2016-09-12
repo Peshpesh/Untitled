@@ -140,14 +140,17 @@ void CMapEdit::OnRender()
 	default: break;
 	}
 
-	Font::CenterWrite(Map_Renderer, Font, "ENTITY", WWIDTH / 2, EHEIGHT - 85);
-	
+	if (CME_NPC::NPCControl.UseCommon)
+		Font::CenterWrite(Map_Renderer, Font, "COMMON", WWIDTH / 2, EHEIGHT - 85);
+	else
+		Font::CenterWrite(Map_Renderer, Font, "UNIQUE", WWIDTH / 2, EHEIGHT - 85);
+
 	// Draw working NPC name
 	if (!CME_NPC::NPCControl.CWrite_Name(Map_Renderer, Font, WWIDTH / 2, EHEIGHT - 65))
 		OnExit();
 
 	// Print # of NPCs in the area
-	Font::Write(Map_Renderer, Font, " NPCS", Font::Write(Map_Renderer, Font, 
+	Font::Write(Map_Renderer, Font, " NPCS", Font::Write(Map_Renderer, Font,
 		CME_NPC::NPCControl.EntityList.size(), 5, EHEIGHT - 20) + 5, EHEIGHT - 20);
 
 	// Print "NPC Tables" crap-button

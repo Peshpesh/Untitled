@@ -98,6 +98,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 					&& mY + CCamera::CameraControl.GetY() <= Yf)
 				{
 					CME_NPC::NPCControl.EntityList.erase(CME_NPC::NPCControl.EntityList.begin() + i);
+					CME_NPC::NPCControl.CommonList.erase(CME_NPC::NPCControl.CommonList.begin() + i);
 					CME_NPC::NPCControl.ID_List.erase(CME_NPC::NPCControl.ID_List.begin() + i);
 
 					return;
@@ -106,7 +107,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		}
 	}
 
-	// This region is over the leftward arrow next to "ENTITY."
+	// This region is over the leftward arrow next to "COMMON" or "UNIQUE"
 	// This changes the NPC_ID, which changes the active entity being placed.
 	if (mX >= 259 && mX <= 273)
 	{
@@ -117,14 +118,34 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 			return;
 		}
 	}
-
-	// This region is over the rightward arrow next to "ENTITY."
+	// This region is between the arrows enclosing "COMMON" or "UNIQUE"
+	if (mX >= 274 && mX <= 365)
+	{
+		if (mY >= 487 && mY <= 504)
+		{
+			if (CME_NPC::NPCControl.UseCommon) CME_NPC::NPCControl.UseCommon = false;
+			else CME_NPC::NPCControl.UseCommon = true;
+			CME_NPC::NPCControl.NPC_ID = 0;
+			return;
+		}
+	}
+	// This region is over the rightward arrow next to "COMMON" or "UNIQUE"
 	if (mX >= 366 && mX <= 380)
 	{
 		if (mY >= 487 && mY <= 504)
 		{
-			if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::EntityInfoList.size() - 1)
-				++CME_NPC::NPCControl.NPC_ID;
+			// if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::EntityInfoList.size() - 1)
+			// 	++CME_NPC::NPCControl.NPC_ID;
+			if (CME_NPC::NPCControl.UseCommon)
+			{
+				if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::Com_EntityInfo.size() - 1)
+					++CME_NPC::NPCControl.NPC_ID;
+			}
+			else
+			{
+				if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::Unq_EntityInfo.size() - 1)
+					++CME_NPC::NPCControl.NPC_ID;
+			}
 			return;
 		}
 	}
@@ -371,14 +392,28 @@ bool CMapEdit::AddEntity(int Xo, int Yo)
 {
 	CME_NPC::NPCControl.EntityList.resize(CME_NPC::NPCControl.EntityList.size() + 1);
 	CME_NPC::NPCControl.ID_List.resize(CME_NPC::NPCControl.ID_List.size() + 1);
+	CME_NPC::NPCControl.CommonList.resize(CME_NPC::NPCControl.CommonList.size() + 1);
 
 	// this will also fill the temp. entity's width and height values
-	if (CME_NPC::NPCControl.EntityList[CME_NPC::NPCControl.EntityList.size() - 1].OnLoad(CME_NPC::NPCControl.ForwardSet(),
-		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].Xo,
-		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].Yo,
-		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].W,
-		CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].H,
-		CME_NPC::NPCControl.NPC_ID) == false)
+	int ID, Xt, Yt, W, H;
+	ID = CME_NPC::NPCControl.NPC_ID;
+	if (CME_NPC::NPCControl.UseCommon)
+	{
+		Xt = CEntityInfo::Com_EntityInfo[ID].Xo;
+		Yt = CEntityInfo::Com_EntityInfo[ID].Yo;
+		W = CEntityInfo::Com_EntityInfo[ID].W;
+		H = CEntityInfo::Com_EntityInfo[ID].H;
+	}
+	else
+	{
+		Xt = CEntityInfo::Unq_EntityInfo[ID].Xo;
+		Yt = CEntityInfo::Unq_EntityInfo[ID].Yo;
+		W = CEntityInfo::Unq_EntityInfo[ID].W;
+		H = CEntityInfo::Unq_EntityInfo[ID].H;
+	}
+
+	if (CME_NPC::NPCControl.EntityList[CME_NPC::NPCControl.EntityList.size() - 1].OnLoad(
+		CME_NPC::NPCControl.ForwardSet(), Xt,	Yt,	W, H, CME_NPC::NPCControl.NPC_ID) == false)
 		return false;
 
 	CME_NPC::NPCControl.EntityList[CME_NPC::NPCControl.EntityList.size() - 1].X = Xo;
@@ -390,6 +425,7 @@ bool CMapEdit::AddEntity(int Xo, int Yo)
 	}*/
 
 	CME_NPC::NPCControl.ID_List[CME_NPC::NPCControl.EntityList.size() - 1] = CME_NPC::NPCControl.NPC_ID;
+	CME_NPC::NPCControl.CommonList[CME_NPC::NPCControl.EntityList.size() - 1] = CME_NPC::NPCControl.UseCommon;
 
 	return true;
 }

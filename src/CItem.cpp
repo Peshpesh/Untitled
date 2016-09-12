@@ -8,7 +8,7 @@ CItem::CItem()
 {
 	name = NULL;
 	about = NULL;
-	ename = EMPTY;
+	ename = ITEM_EMPTY;
 
 	quant = 0;
 	m_quant = 1;

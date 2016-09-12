@@ -3,7 +3,7 @@
 IHPUP::IHPUP()
 {
 	name = "HP UP";
-	ename = HPUP;
+	ename = ITEM_HPUP;
 	about = "INCREASES HEALTH BY 5";
 
 //	Xo = Yo = 0;
@@ -61,7 +61,7 @@ void IHPUP::OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
 IHPDW::IHPDW()
 {
 	name = "HP DOWN";
-	ename = HPDW;
+	ename = ITEM_HPDW;
 	about = "ONLY FOR DEBUGGING\nREDUCES HEALTH BY 5";
 
 //	Xo = Yo = 0;
@@ -111,7 +111,7 @@ void IHPDW::OnRender(SDL_Renderer* renderer, SDL_Texture* texture,
 IBOMB::IBOMB()
 {
 	name = "BOMB";
-	ename = BOMB;
+	ename = ITEM_BOMB;
 	about = "A BOMB";
 
 //	Xo = Yo = 0;

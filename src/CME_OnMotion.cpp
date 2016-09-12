@@ -11,5 +11,4 @@ void CMapEdit::OnMotion()
 			CCamera::CameraControl.OnMove(0, 6);
 		if (state[SDL_SCANCODE_RIGHT])
 			CCamera::CameraControl.OnMove(6, 0);
-
 }

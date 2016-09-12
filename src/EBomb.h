@@ -2,6 +2,7 @@
 #define _EBOMB_H_
 
 #include "CEntity.h"
+#include "CEntityRes.h"
 #include "EExplode.h"
 
 class CBomb : public CEntity
