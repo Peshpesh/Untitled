@@ -71,10 +71,6 @@ bool CItemProcess::UseBOMB()
   int ID = CEntity::EntityList.size() - 1;
   CEntity::EntityList[ID]->X = Player->X;
   CEntity::EntityList[ID]->Y = Player->Y;
-  // int ex_Xo = CEntityInfo::EntityInfoList[3].Xo;
-  // int ex_Yo = CEntityInfo::EntityInfoList[3].Yo;
-  // int ex_W = CEntityInfo::EntityInfoList[3].W;
-  // int ex_H = CEntityInfo::EntityInfoList[3].H;
   int ex_Xo = CEntityInfo::Com_EntityInfo[BOMB].Xo;
   int ex_Yo = CEntityInfo::Com_EntityInfo[BOMB].Yo;
   int ex_W = CEntityInfo::Com_EntityInfo[BOMB].W;

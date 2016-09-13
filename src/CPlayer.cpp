@@ -194,7 +194,6 @@ bool CPlayer::Interact()
 		TryInteract = true;
 		return true;	// They can interact
 	}
-
 	return false;
 }
 

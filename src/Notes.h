@@ -18,7 +18,10 @@
 //    g) Area data output (save) [100%]                             //
 //    h) Area data input (load) [100%]                              //
 //    i) Zoomed-out (full) map display [100%]                       //
-//    j) More/Finalize [---%]                                       //
+//    j) Background/foreground images [0%]                          //
+//    k) Parallaxing capability [0%]                                //
+//    l) Animated tiles [0%]                                        //
+//    m) More/Finalize [---%]                                       //
 //                                                                  //
 //  2. Add NPC Editor                                               //
 //    a) Click-based functions to place entities [100%]             //
@@ -29,7 +32,7 @@
 //    f) Function(s) to load entity tables [100%]                   //
 //    g) More/Finalize [---%]                                       //
 //                                                                  //
-//  3. gameplay                                                     //
+//  3. Gameplay                                                     //
 //    a) Update non-CME functions to load NPC info [100%]           //
 //    b) Create common/debug NPCs and update table [100%]           //
 //    c) Make classes for common/debug NPC [100%]                   //
@@ -44,7 +47,7 @@
 //    l) Load game feature(s) [100%]                                //
 //    m) Dynamic signs/text [100%]                                  //
 //    n) Prompts/game menus [100%]                                  //
-//    o) Item system [50%]                                          //
+//    o) Item system [70%]                                          //
 //                                                                  //
 //  4. External/Frame Programming                                   //
 //    a) Main Menu [100%]                                           //

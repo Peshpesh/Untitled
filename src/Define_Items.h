@@ -7,8 +7,8 @@ enum dyn_items
 	ITEM_HPUP,        // restores HP
 	ITEM_HPDW,        // reduces HP (debug)
 	ITEM_BOMB,        // places a live bomb
-	ITEM_CHARM,       // allows access to special event via interact
-	ITEM_KEY,         // implicit access to special event (without interact)
+	ITEM_CHARM,       // implicit access to special event without interact
+	ITEM_KEY,         // explicit access to special event with interact
 };
 
 #define ICON_SIZE 32	// pixels
