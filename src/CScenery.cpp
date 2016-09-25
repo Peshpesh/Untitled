@@ -16,6 +16,11 @@ CScenery::CScenery()
   permanent = false;
 }
 
+CScenery::~CScenery()
+{
+  //  Empty Destructor
+}
+
 bool CScenery::OnLoad(SDL_Texture* scenery,
   const unsigned int& Xo, const unsigned int& Yo,
   const unsigned int& Width, const unsigned int& Height,

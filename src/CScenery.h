@@ -1,47 +1,77 @@
 #ifndef _CSCENERY_H_
 #define _CSCENERY_H_
 
-#include <SDL.h>
 #include <vector>
-#include <stdio.h>
-#include <cstring>
 #include "CSurface.h"
 #include "CAnimation.h"
 
+	/*************************************************************************
+	*	This virtual base class is designed to provide a foundational
+	*	standard for non-interactive visuals on-screen ("scenery"), which
+	*	are subject to parallaxing effects. This is done to create
+	*	the illusion of depth.
+	*
+	*	By default, CScenery objects have a few simple functions outside
+	*	of construction and destruction:
+	*		1.	Loading, whereby the object receives its appropriate pointer
+	*				to a SDL_Texture, as well as information on texture position,
+	*				size, and number of frames.
+	*		2.	Movement and animation (gameloop functions); objects with
+	*				MaxFrames > 1 have CurrentFrame updated, and are repositioned
+	*				relative to camera motion. Repositioning is weighted by Z.
+	*		3.	Standard rendering.
+	*
+	*	In the application's rendering function, BG_SceneList is rendered
+	*	first (before map tiles, entities, etc.). FG_SceneList is rendered
+	*	only before HUD objects and menus.
+	*
+	*	Derivative classes may have additional looping functions. For example,
+	* a class may only be animated in certain situations and static in others.
+	* The base CScenery class cannot predict all possible evolutions of
+	*	scenery, so derivative classes can be made to handle special scenery.
+	* In this way, CScenery is structured and implemented similar to CEntity.
+	*
+	**************************************************************************/
+
 class CScenery {
+public:
+	static std::vector<CScenery*> FG_SceneList; // Foreground scenery (renders last)
+	static std::vector<CScenery*> BG_SceneList;	// Background scenery (renders first)
+
 public:
 	SDL_Texture*   Tex_Scenery;    // Scenery texture
   CAnimation     Anim_Control;
 
-public:
+public:	// texture attributes
   unsigned int Xo;             // X-position on texture
   unsigned int Yo;             // Y-position on texture
   unsigned int Width;          // width of scenery piece within texture
   unsigned int Height;         // height of scenery piece within texture
   unsigned int MaxFrames;      // number of frames for animated scenery
 
-public:
+public:	// dynamic attributes
   float X;            // X-position on screen
   float Y;            // Y-position on screen
   unsigned float Z;   /* "Depth" of scenery; 1.0f is at map-level,
                        * greater is farther, lesser is closer
+											 * see parallax concept .ai file for info
                        */
 
-public:
+public:	// placement attributes
   bool vert_repeat;   // texture repeats itself vertically
   bool hori_repeat;   // texture repeats itself horizontally
   bool permanent;     // texture does not move on the screen
 
 public:
 	CScenery();
+	virtual ~CScenery();
 
 public:
-	bool OnLoad(SDL_Texture* scenery,
+	virtual bool OnLoad(SDL_Texture* scenery,
     const unsigned int& Xo, const unsigned int& Yo, const unsigned int& Width, const unsigned int& Height, const unsigned int& MaxFrames);
 
-  void OnLoop();
+	virtual void OnLoop();
 
-	bool OnRender(SDL_Renderer* renderer);
+	virtual bool OnRender(SDL_Renderer* renderer);
 };
-
 #endif
