@@ -19,7 +19,8 @@
 	*		2.	Movement and animation (gameloop functions); objects with
 	*				MaxFrames > 1 have CurrentFrame updated, and are repositioned
 	*				relative to camera motion. Repositioning is weighted by Z.
-	*		3.	Standard rendering.
+	*		3.	Standard rendering. ..._repeat flags are checked, and additional
+	*				rendering is done if necessary.
 	*
 	*	In the application's rendering function, BG_SceneList is rendered
 	*	first (before map tiles, entities, etc.). FG_SceneList is rendered
@@ -31,12 +32,21 @@
 	*	scenery, so derivative classes can be made to handle special scenery.
 	* In this way, CScenery is structured and implemented similar to CEntity.
 	*
+	*	CScenery objects require pointers to SDL_Textures, which are often
+	*	shared across multiple CScenery objects. To prevent duplicates of
+	*	SDL_Texture, TexList contains all CScenery SDL_Texture*s for the active
+	*	area. TexList is populated by virtue of "CSceneryMod" functions, as are
+	*	FG_SceneList and BG_SceneList.
+	*
 	**************************************************************************/
 
 class CScenery {
 public:
 	static std::vector<CScenery*> FG_SceneList; // Foreground scenery (renders last)
 	static std::vector<CScenery*> BG_SceneList;	// Background scenery (renders first)
+
+protected:
+	static std::vector<SDL_Texture*> TexList;		// Container of necessary SDL_Textures
 
 public:
 	SDL_Texture*   Tex_Scenery;    // Scenery texture

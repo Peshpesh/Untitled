@@ -1,5 +1,9 @@
 #include "CScenery.h"
 
+std::vector<CScenery*> CScenery::FG_SceneList;
+std::vector<CScenery*> CScenery::BG_SceneList;
+std::vector<SDL_Texture*> CScenery::TexList;
+
 CScenery::CScenery()
 {
   Tex_Scenery = NULL;
