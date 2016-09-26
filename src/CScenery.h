@@ -1,5 +1,5 @@
-#ifndef _CSCENERY_H_
-#define _CSCENERY_H_
+#ifndef _C_SCENERY_H_
+#define _C_SCENERY_H_
 
 #include <vector>
 #include "CSurface.h"
@@ -38,6 +38,12 @@
 	*	area. TexList is populated by virtue of "CSceneryMod" functions, as are
 	*	FG_SceneList and BG_SceneList.
 	*
+	*	Positional values for CScenery objects are "true" values. Due to
+	* parallaxing effects, x and y positions recorded in .scn files are
+	*	true only if they coincide with the center of the camera.
+	*	When a set of scenery is loaded (as in an area change), the true
+	*	positions must be used to derive positions relative to the initial
+	*	camera location.
 	**************************************************************************/
 
 class CScenery {
@@ -79,6 +85,8 @@ public:
 public:
 	virtual bool OnLoad(SDL_Texture* scenery,
     const unsigned int& Xo, const unsigned int& Yo, const unsigned int& Width, const unsigned int& Height, const unsigned int& MaxFrames);
+
+	virtual void OnPlace(const int& X, const int& Y, const float& Z, const bool& v_rep, const bool& h_rep, const bool& perm);
 
 	virtual void OnLoop();
 

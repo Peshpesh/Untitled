@@ -1,5 +1,5 @@
-#ifndef _CENTITYMOD_H_
-#define _CENTITYMOD_H_
+#ifndef _C_ENTITYMOD_H_
+#define _C_ENTITYMOD_H_
 
 #include <vector>
 #include "CEntity.h"
@@ -40,7 +40,7 @@ public:
 	// SDL_Texture*	Tex_Bullets;	// Bullets Image pointer
 
 	// bool OnInit(SDL_Renderer* renderer);
-	static bool OnInit(SDL_Renderer* renderer);
+	// static bool OnInit(SDL_Renderer* renderer);
 
 	// bool LoadNPCs(char* NPC_List, SDL_Renderer* renderer);
 	static bool LoadEntities(char const* EntityFile, SDL_Renderer* renderer);

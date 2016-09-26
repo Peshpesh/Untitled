@@ -42,6 +42,16 @@ bool CScenery::OnLoad(SDL_Texture* scenery,
   return true;
 }
 
+void CScenery::OnPlace(const int& X, const int& Y, const float& Z, const bool& v_rep, const bool& h_rep, const bool& perm)
+{
+  this->X = X;
+  this->Y = Y;
+  this->Z = Z;
+  vert_repeat = v_rep;
+  hori_repeat = h_rep;
+  permanent = perm;
+}
+
 void CScenery::OnLoop()
 {
   // animation handling
@@ -50,8 +60,6 @@ void CScenery::OnLoop()
 bool CScenery::OnRender(SDL_Renderer* renderer)
 {
   if (renderer == NULL) return false;
-
-
 
   return true;
 }
