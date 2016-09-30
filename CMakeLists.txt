@@ -56,6 +56,8 @@ ${SRCDIR}/Config.cpp
 ${SRCDIR}/CPause.cpp
 ${SRCDIR}/CPlayer.cpp
 ${SRCDIR}/CSurface.cpp
+${SRCDIR}/CScenery.cpp
+${SRCDIR}/CSceneryMod.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTitle.cpp
 ${SRCDIR}/CTransport.cpp
@@ -108,6 +110,8 @@ ${SRCDIR}/Config.h
 ${SRCDIR}/CPause.h
 ${SRCDIR}/CPlayer.h
 ${SRCDIR}/CSurface.h
+${SRCDIR}/CScenery.h
+${SRCDIR}/CSceneryMod.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CTitle.h
 ${SRCDIR}/CTransport.h

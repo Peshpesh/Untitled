@@ -34,6 +34,11 @@ bool CApp::OnInit()
 	////
 	if ((TESTSFC = CSurface::OnLoad("../res/palette.png", Win_Renderer)) == NULL)	return false;
 	SDL_SetTextureBlendMode(TESTSFC, SDL_BLENDMODE_MOD);
+	////
+	if (!CSceneryMod::LoadScenery("../data/maps/ARENA.scn", Win_Renderer))
+		return false;
+	////
+
 	return true;
 }
 

@@ -51,7 +51,7 @@ public:
 	static std::vector<CScenery*> FG_SceneList; // Foreground scenery (renders last)
 	static std::vector<CScenery*> BG_SceneList;	// Background scenery (renders first)
 
-protected:
+public:
 	static std::vector<SDL_Texture*> TexList;		// Container of necessary SDL_Textures
 
 public:
@@ -68,7 +68,7 @@ public:	// texture attributes
 public:	// dynamic attributes
   float X;            // X-position on screen
   float Y;            // Y-position on screen
-  unsigned float Z;   /* "Depth" of scenery; 1.0f is at map-level,
+	float Z;   					/* "Depth" of scenery; 1.0f is at map-level,
                        * greater is farther, lesser is closer
 											 * see parallax concept .ai file for info
                        */

@@ -22,6 +22,7 @@
 #include "CInventory.h"
 #include "CPause.h"
 #include "CEntityRes.h"
+#include "CSceneryMod.h"
 
 #include "CMapEdit.h"
 

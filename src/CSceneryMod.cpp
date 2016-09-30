@@ -28,7 +28,7 @@ bool CSceneryMod::ClearAll()
     for (int i = (CScenery::TexList.size() - 1); i >= 0; i--)
     {
       SDL_DestroyTexture(CScenery::TexList[i]);
-      delete CScenery::TexList[i];
+      // delete CScenery::TexList[i];
       CScenery::TexList.erase(CScenery::TexList.begin() + i);
     }
   }
@@ -84,18 +84,22 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
     int W = 0; int H = 0;
     int MaxFrames = 0;
 
+    CScenery* tmp_scn;
+    tmp_scn = new CScenery;
     // the function returns false if a default scenery object is used
     if (!GetInfo(scn_ID, Xo, Yo, W, H, MaxFrames))
     {
       // default scenery object added to container
-      SDefault tmp_scn;
-      tmp_scn.OnLoad(CScenery::TexList[tex_ID], Xo, Yo, W, H, MaxFrames);
-      tmp_scn.OnPlace(X_loc, Y_loc, Z_loc, v_rep, h_rep, perm);
+      // SDefault tmp_scn;
+      tmp_scn->OnLoad(CScenery::TexList[tex_ID], Xo, Yo, W, H, MaxFrames);
+      tmp_scn->OnPlace(X_loc, Y_loc, Z_loc, v_rep, h_rep, perm);
     }
     else
     {
       // special scenery object added to container
     }
+    if (Z_loc < 1.0f) CScenery::FG_SceneList.push_back(tmp_scn);
+    else              CScenery::BG_SceneList.push_back(tmp_scn);
   }
   return true;
 }
@@ -105,6 +109,7 @@ bool CSceneryMod::GetInfo(const int& ID, int& X, int& Y, int& W, int& H, int& Ma
   bool special_scn = false;
   switch (ID)
   {
+    case TYPICAL: X = 0; Y = 0; W = 700; H = 275; MaxFrames = 1; break;
     default: X = 0; Y = 0; W = 0; H = 0; MaxFrames = 0; break;
   }
   return special_scn;

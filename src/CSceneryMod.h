@@ -2,6 +2,8 @@
 #define _C_SCENERYMOD_H_
 
 // #include "CScenery.h"
+#include <stdio.h>
+#include <cstring>
 #include "SDefault.h"
 
 enum SCN_NAME
