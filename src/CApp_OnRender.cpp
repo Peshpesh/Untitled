@@ -12,8 +12,15 @@ void CApp::OnRender()
 	}
 	else
 	{
-		CArea::AreaControl.OnRender(Win_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
+		int s_i = 0;
+		while (s_i < CScenery::SceneList.size())
+		{
+			if (CScenery::SceneList[s_i]->Z <= 1.0f) break;
 
+			CScenery::SceneList[s_i]->OnRender(Win_Renderer);
+			s_i++;
+		}
+		CArea::AreaControl.OnRender(Win_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
 		// Render non-player entities
 		for (int i = 1; i < CEntity::EntityList.size(); i++)
 		{
@@ -24,6 +31,12 @@ void CApp::OnRender()
 		CEntity::EntityList[0]->OnRender(Win_Renderer);
 
 		CArea::AreaControl.OnRender(Win_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+
+		while (s_i < CScenery::SceneList.size())
+		{
+			CScenery::SceneList[s_i]->OnRender(Win_Renderer);
+			s_i++;
+		}
 
 //	if (CCinema::CinemaControl->Scene)
 //		CCinema::CinemaControl->OnRender(Win_Renderer);

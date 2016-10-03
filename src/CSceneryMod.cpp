@@ -7,20 +7,12 @@ CSceneryMod::CSceneryMod()
 
 bool CSceneryMod::ClearAll()
 {
-  if (CScenery::FG_SceneList.size() > 0)
+  if (CScenery::SceneList.size() > 0)
   {
-    for (int i = (CScenery::FG_SceneList.size() - 1); i >= 0; i--)
+    for (int i = (CScenery::SceneList.size() - 1); i >= 0; i--)
     {
-      delete CScenery::FG_SceneList[i];
-      CScenery::FG_SceneList.erase(CScenery::FG_SceneList.begin() + i);
-    }
-  }
-  if (CScenery::BG_SceneList.size() > 0)
-  {
-    for (int i = (CScenery::BG_SceneList.size() - 1); i >= 0; i--)
-    {
-      delete CScenery::BG_SceneList[i];
-      CScenery::BG_SceneList.erase(CScenery::BG_SceneList.begin() + i);
+      delete CScenery::SceneList[i];
+      CScenery::SceneList.erase(CScenery::SceneList.begin() + i);
     }
   }
   if (CScenery::TexList.size() > 0)
@@ -38,7 +30,7 @@ bool CSceneryMod::ClearAll()
 bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
 {
 	int num_tex, tex_ID, scn_ID, X_loc, Y_loc;
-  float Z_loc;
+  double Z_loc;
   bool v_rep, h_rep, perm;
 
 	// Try to open the .scn file
@@ -74,7 +66,7 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
   * h_rep:  horizontal repetition flag
   * perm:   permanent position flag
   */
-	while (fscanf(FileHandle, "%d:%d:%d:%d:%f:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
+	while (fscanf(FileHandle, "%d:%d:%d:%d:%lf:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
   {
     if (tex_ID >= num_tex || tex_ID < 0) return false;
     if (scn_ID < 0) return false;
@@ -98,8 +90,26 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
     {
       // special scenery object added to container
     }
-    if (Z_loc < 1.0f) CScenery::FG_SceneList.push_back(tmp_scn);
-    else              CScenery::BG_SceneList.push_back(tmp_scn);
+    if (CScenery::SceneList.size() > 0)
+    {
+      for (int i = 0; i < CScenery::SceneList.size(); i++)
+      {
+        float tmpZ = CScenery::SceneList[i]->Z;
+        if (Z_loc >= tmpZ)
+        {
+          CScenery::SceneList.insert(CScenery::SceneList.begin() + i, tmp_scn);
+          break;
+        }
+        else if (i == CScenery::SceneList.size() - 1)
+        {
+          CScenery::SceneList.push_back(tmp_scn);
+        }
+      }
+    }
+    else
+    {
+      CScenery::SceneList.push_back(tmp_scn);
+    }
   }
   return true;
 }
@@ -109,7 +119,10 @@ bool CSceneryMod::GetInfo(const int& ID, int& X, int& Y, int& W, int& H, int& Ma
   bool special_scn = false;
   switch (ID)
   {
-    case TYPICAL: X = 0; Y = 0; W = 700; H = 275; MaxFrames = 1; break;
+    // case TYPICAL: X = 0; Y = 0; W = 700; H = 275; MaxFrames = 1; break;
+    case TEST_A: X = 0; Y = 0; W = 64; H = 64; MaxFrames = 1; break;
+    case TEST_B: X = 0; Y = 0; W = 256; H = 256; MaxFrames = 1; break;
+    case TEST_C: X = 0; Y = 0; W = 126; H = 126; MaxFrames = 1; break;
     default: X = 0; Y = 0; W = 0; H = 0; MaxFrames = 0; break;
   }
   return special_scn;

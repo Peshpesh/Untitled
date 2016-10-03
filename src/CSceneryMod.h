@@ -8,7 +8,8 @@
 
 enum SCN_NAME
 {
-  TYPICAL = 0,
+  TEST_A = 0,
+  TEST_B, TEST_C,
 };
 
 class CSceneryMod {

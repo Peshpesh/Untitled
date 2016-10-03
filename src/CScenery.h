@@ -4,6 +4,7 @@
 #include <vector>
 #include "CSurface.h"
 #include "CAnimation.h"
+#include "CCamera.h"
 
 	/*************************************************************************
 	*	This virtual base class is designed to provide a foundational
@@ -48,8 +49,9 @@
 
 class CScenery {
 public:
-	static std::vector<CScenery*> FG_SceneList; // Foreground scenery (renders last)
-	static std::vector<CScenery*> BG_SceneList;	// Background scenery (renders first)
+	// static std::vector<CScenery*> FG_SceneList; // Foreground scenery (renders last)
+	// static std::vector<CScenery*> BG_SceneList;	// Background scenery (renders first)
+	static std::vector<CScenery*> SceneList; // All Scenery (polymorphic)
 
 public:
 	static std::vector<SDL_Texture*> TexList;		// Container of necessary SDL_Textures

@@ -1,7 +1,6 @@
 #include "CScenery.h"
 
-std::vector<CScenery*> CScenery::FG_SceneList;
-std::vector<CScenery*> CScenery::BG_SceneList;
+std::vector<CScenery*> CScenery::SceneList;
 std::vector<SDL_Texture*> CScenery::TexList;
 
 CScenery::CScenery()
@@ -60,6 +59,20 @@ void CScenery::OnLoop()
 bool CScenery::OnRender(SDL_Renderer* renderer)
 {
   if (renderer == NULL) return false;
+
+  // float true_dx = CCamera::CameraControl.GetX() - X;
+  // float true_dy = CCamera::CameraControl.GetY() - Y;
+  // float x_distort = (true_dx / Z) * (Z - 1.0f);
+  // float y_distort = (true_dy / Z) * (Z - 1.0f);
+  // CSurface::OnDraw(renderer, Tex_Scenery, X - CCamera::CameraControl.GetX() + x_distort,
+	// 	Y - CCamera::CameraControl.GetY() + y_distort, Xo, Yo, Width, Height);
+  float X_win = (X - CCamera::CameraControl.GetX()) / Z;
+  float Y_win = (Y - CCamera::CameraControl.GetY()) / Z;
+  CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_win, Xo, Yo, Width, Height);
+
+  // CSurface::OnDraw(renderer, Tex_Scenery, X - CCamera::CameraControl.GetX(),
+	// 	Y - CCamera::CameraControl.GetY(), Xo + (CurrentFrameCol + Anim_Control.GetCurrentFrame()) * Width,
+	// 	Yo + CurrentFrameRow * Height, Width, Height);
 
   return true;
 }
