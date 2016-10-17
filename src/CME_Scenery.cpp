@@ -1,6 +1,12 @@
 #include "CME_Scenery.h"
 
-CME_Scenery::CME_Scenery()
+CMEScenery CMEScenery::ScnControl;
+
+std::vector<CScenery*> CMEScenery::SceneList;
+std::vector<SDL_Texture*> CMEScenery::TexList;
+std::vector<int> CMEScenery::TexID_List;
+
+CMEScenery::CMEScenery()
 {
   tex_ID = 0;
   scn_ID = 0;
@@ -13,22 +19,22 @@ CME_Scenery::CME_Scenery()
   permanent = false;
 }
 
-bool CME_Scenery::LoadScenery()
+bool CMEScenery::LoadScenery()
 {
   return true;
 }
 
-void CME_Scenery::SubObject(const int& Xc, const int& Yc)
+void CMEScenery::SubObject(const int& Xc, const int& Yc)
 {
 
 }
 
-void CME_Scenery::AddObject(const int& Xc, const int& Yc)
+void CMEScenery::AddObject(const int& Xc, const int& Yc)
 {
 
 }
 
-bool CME_Scenery::SaveScenery()
+bool CMEScenery::SaveScenery()
 {
   return true;
 }
