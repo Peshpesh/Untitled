@@ -18,8 +18,8 @@
 //    g) Area data output (save) [100%]                             //
 //    h) Area data input (load) [100%]                              //
 //    i) Zoomed-out (full) map display [100%]                       //
-//    j) Background/foreground images [0%]                          //
-//    k) Parallaxing capability [0%]                                //
+//    j) Parallaxing capability [100%]                              //
+//    k) Click-based functions to add scenery w/depth [0%]          //
 //    l) Animated tiles [0%]                                        //
 //    m) More/Finalize [---%]                                       //
 //                                                                  //
@@ -47,7 +47,7 @@
 //    l) Load game feature(s) [100%]                                //
 //    m) Dynamic signs/text [100%]                                  //
 //    n) Prompts/game menus [100%]                                  //
-//    o) Item system [70%]                                          //
+//    o) Item system [80%]                                          //
 //                                                                  //
 //  4. External/Frame Programming                                   //
 //    a) Main Menu [100%]                                           //

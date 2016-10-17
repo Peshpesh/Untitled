@@ -70,9 +70,5 @@ bool CScenery::OnRender(SDL_Renderer* renderer)
   float Y_win = (Y - CCamera::CameraControl.GetY()) / Z;
   CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_win, Xo, Yo, Width, Height);
 
-  // CSurface::OnDraw(renderer, Tex_Scenery, X - CCamera::CameraControl.GetX(),
-	// 	Y - CCamera::CameraControl.GetY(), Xo + (CurrentFrameCol + Anim_Control.GetCurrentFrame()) * Width,
-	// 	Yo + CurrentFrameRow * Height, Width, Height);
-
   return true;
 }

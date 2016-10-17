@@ -23,8 +23,8 @@
 	*		3.	Standard rendering. ..._repeat flags are checked, and additional
 	*				rendering is done if necessary.
 	*
-	*	In the application's rendering function, BG_SceneList is rendered
-	*	first (before map tiles, entities, etc.). FG_SceneList is rendered
+	*	In the application's rendering function, CScenery with Z >= 1.0 is rendered
+	*	first (before map tiles, entities, etc.). SceneList is rendered
 	*	only before HUD objects and menus.
 	*
 	*	Derivative classes may have additional looping functions. For example,
@@ -36,8 +36,8 @@
 	*	CScenery objects require pointers to SDL_Textures, which are often
 	*	shared across multiple CScenery objects. To prevent duplicates of
 	*	SDL_Texture, TexList contains all CScenery SDL_Texture*s for the active
-	*	area. TexList is populated by virtue of "CSceneryMod" functions, as are
-	*	FG_SceneList and BG_SceneList.
+	*	area. TexList is populated by virtue of "CSceneryMod" functions, as is
+	*	SceneList.
 	*
 	*	Positional values for CScenery objects are "true" values. Due to
 	* parallaxing effects, x and y positions recorded in .scn files are
@@ -49,8 +49,6 @@
 
 class CScenery {
 public:
-	// static std::vector<CScenery*> FG_SceneList; // Foreground scenery (renders last)
-	// static std::vector<CScenery*> BG_SceneList;	// Background scenery (renders first)
 	static std::vector<CScenery*> SceneList; // All Scenery (polymorphic)
 
 public:
