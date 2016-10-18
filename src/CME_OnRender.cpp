@@ -31,12 +31,12 @@ void CMapEdit::OnRender()
 	}
 	case MODIFY_NPC:
 	{
-	    CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 33, WWIDTH - 100 - 32, WHEIGHT - 67, 100, 33);
-	    break;
+	  CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 33, WWIDTH - 100 - 32, WHEIGHT - 67, 100, 33);
+	  break;
 	}
 	case REMOVE_NPC:
 	{
-	    CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 33, WWIDTH - 100 - 32, WHEIGHT - 134, 100, 33);
+	  CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 33, WWIDTH - 100 - 32, WHEIGHT - 134, 100, 33);
 		break;
 	}
 	case MODIFY_BG:
@@ -45,6 +45,28 @@ void CMapEdit::OnRender()
 		break;
 	}
 	default: break;
+	}
+
+	if (Active_Mod == MODIFY_NPC || Active_Mod == REMOVE_NPC)
+	{
+		if (CME_NPC::NPCControl.UseCommon)
+			tabl_name_W = Font::Write(Map_Renderer, Font, "COMMON", TABL_NAME_X, TABL_NAME_Y);
+		else
+			tabl_name_W = Font::Write(Map_Renderer, Font, "UNIQUE", TABL_NAME_X, TABL_NAME_Y);
+
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TABL_NAME_X - ARROW_SIZE - 5, TABL_NAME_Y, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TABL_NAME_X + tabl_name_W + 5, TABL_NAME_Y, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+
+		// Draw working NPC name
+		if (!CME_NPC::NPCControl.CWrite_Name(Map_Renderer, Font, ENT_NAME_X, ENT_NAME_Y))
+			OnExit();
+
+		// Print # of NPCs in the area
+		Font::Write(Map_Renderer, Font, " NPCS", Font::Write(Map_Renderer, Font,
+			CME_NPC::NPCControl.EntityList.size(), 5, EHEIGHT - 20) + 5, EHEIGHT - 20);
+
+		// Print "NPC Tables" crap-button
+		Font::Write(Map_Renderer, Font, "NPC TABLES", 5, EHEIGHT - 40);
 	}
 
 	// Write a button name for changing tiles within a tileset
@@ -97,14 +119,14 @@ void CMapEdit::OnRender()
 	// Writes out the active type
 	switch (Current_Type)
 	{
-	case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, Font, "NONE", EWIDTH - 50, 447); break;
-	case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, Font, "HOLLO", EWIDTH - 50, 447); break;
-	case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, Font, "NORM", EWIDTH - 50, 447); break;
-	case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, Font, "BLOCK", EWIDTH - 50, 447); break;
-	case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, Font, "WATER", EWIDTH - 50, 447); break;
-	case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, Font, "ICE", EWIDTH - 50, 447); break;
-	case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, Font, "FIRE", EWIDTH - 50, 447); break;
-	default: break;
+		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, Font, "NONE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, Font, "HOLLO", EWIDTH - 50, 447); break;
+		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, Font, "NORM", EWIDTH - 50, 447); break;
+		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, Font, "BLOCK", EWIDTH - 50, 447); break;
+		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, Font, "WATER", EWIDTH - 50, 447); break;
+		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, Font, "ICE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, Font, "FIRE", EWIDTH - 50, 447); break;
+		default: break;
 	}
 
 	// Draws active slope
@@ -140,21 +162,21 @@ void CMapEdit::OnRender()
 	default: break;
 	}
 
-	if (CME_NPC::NPCControl.UseCommon)
-		Font::CenterWrite(Map_Renderer, Font, "COMMON", WWIDTH / 2, EHEIGHT - 85);
-	else
-		Font::CenterWrite(Map_Renderer, Font, "UNIQUE", WWIDTH / 2, EHEIGHT - 85);
-
-	// Draw working NPC name
-	if (!CME_NPC::NPCControl.CWrite_Name(Map_Renderer, Font, WWIDTH / 2, EHEIGHT - 65))
-		OnExit();
-
-	// Print # of NPCs in the area
-	Font::Write(Map_Renderer, Font, " NPCS", Font::Write(Map_Renderer, Font,
-		CME_NPC::NPCControl.EntityList.size(), 5, EHEIGHT - 20) + 5, EHEIGHT - 20);
-
-	// Print "NPC Tables" crap-button
-	Font::Write(Map_Renderer, Font, "NPC TABLES", 5, EHEIGHT - 40);
+	// if (CME_NPC::NPCControl.UseCommon)
+	// 	Font::CenterWrite(Map_Renderer, Font, "COMMON", WWIDTH / 2, EHEIGHT - 85);
+	// else
+	// 	Font::CenterWrite(Map_Renderer, Font, "UNIQUE", WWIDTH / 2, EHEIGHT - 85);
+	//
+	// // Draw working NPC name
+	// if (!CME_NPC::NPCControl.CWrite_Name(Map_Renderer, Font, WWIDTH / 2, EHEIGHT - 65))
+	// 	OnExit();
+	//
+	// // Print # of NPCs in the area
+	// Font::Write(Map_Renderer, Font, " NPCS", Font::Write(Map_Renderer, Font,
+	// 	CME_NPC::NPCControl.EntityList.size(), 5, EHEIGHT - 20) + 5, EHEIGHT - 20);
+	//
+	// // Print "NPC Tables" crap-button
+	// Font::Write(Map_Renderer, Font, "NPC TABLES", 5, EHEIGHT - 40);
 
 	int tX = -CCamera::CameraControl.GetX() + (32 * (mouseX / 32));
 	int tY = -CCamera::CameraControl.GetY() + (32 * (mouseY / 32));

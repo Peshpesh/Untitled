@@ -11,8 +11,8 @@ CMEScenery::CMEScenery()
   tex_ID = 0;
   scn_ID = 0;
   Z = 1.0f;
-  Z_lbound = 0.00f;
-  Z_ubound = 2.00f;
+  Z_l = 0.00f;
+  Z_u = 2.00f;
 
   hori_repeat = false;
   vert_repeat = false;

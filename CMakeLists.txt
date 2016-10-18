@@ -104,6 +104,7 @@ ${SRCDIR}/CMapEdit.h
 ${SRCDIR}/CME_ChTile.h
 ${SRCDIR}/CME_IO.h
 ${SRCDIR}/CME_NPC.h
+${SRCDIR}/CME_Resource.h
 ${SRCDIR}/CMenu.h
 ${SRCDIR}/CMEUI.h
 ${SRCDIR}/Config.h

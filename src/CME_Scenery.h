@@ -17,8 +17,8 @@ public:
   int tex_ID; // ID for active texture
   int scn_ID; // ID for active scenery
   double Z;
-  double Z_lbound;
-  double Z_ubound;
+  double Z_l;
+  double Z_u;
 
   bool hori_repeat;
   bool vert_repeat;

@@ -107,46 +107,12 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		}
 	}
 
-	// This region is over the leftward arrow next to "COMMON" or "UNIQUE"
-	// This changes the NPC_ID, which changes the active entity being placed.
-	if (mX >= 259 && mX <= 273)
+	// Changing Entity (or Type)
+	if (mX >= TABL_NAME_X - ARROW_SIZE - SYM_SPACING && mX <= TABL_NAME_X + tabl_name_W + ARROW_SIZE + SYM_SPACING)
 	{
-		if (mY >= 487 && mY <= 504)
+		if (mY >= TABL_NAME_Y && mY <= ENT_NAME_Y + CHAR_HEIGHT)
 		{
-			if (CME_NPC::NPCControl.NPC_ID != 0)
-				--CME_NPC::NPCControl.NPC_ID;
-			return;
-		}
-	}
-	// This region is between the arrows enclosing "COMMON" or "UNIQUE"
-	if (mX >= 274 && mX <= 365)
-	{
-		if (mY >= 487 && mY <= 504)
-		{
-			if (CME_NPC::NPCControl.UseCommon) CME_NPC::NPCControl.UseCommon = false;
-			else CME_NPC::NPCControl.UseCommon = true;
-			CME_NPC::NPCControl.NPC_ID = 0;
-			return;
-		}
-	}
-	// This region is over the rightward arrow next to "COMMON" or "UNIQUE"
-	if (mX >= 366 && mX <= 380)
-	{
-		if (mY >= 487 && mY <= 504)
-		{
-			// if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::EntityInfoList.size() - 1)
-			// 	++CME_NPC::NPCControl.NPC_ID;
-			if (CME_NPC::NPCControl.UseCommon)
-			{
-				if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::Com_EntityInfo.size() - 1)
-					++CME_NPC::NPCControl.NPC_ID;
-			}
-			else
-			{
-				if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::Unq_EntityInfo.size() - 1)
-					++CME_NPC::NPCControl.NPC_ID;
-			}
-			return;
+			ModEntity(mX, mY);
 		}
 	}
 
@@ -371,6 +337,50 @@ void CMapEdit::OnRButtonDown(int mX, int mY)
 void CMapEdit::OnExit()
 {
 	Running = false;
+}
+
+void CMapEdit::ModEntity(int mX, int mY)
+{
+	// This region is over the leftward arrow next to "COMMON" or "UNIQUE"
+	// This changes the NPC_ID, which changes the active entity being placed.
+	if (mX >= TABL_NAME_X - ARROW_SIZE - SYM_SPACING && mX <= TABL_NAME_X - SYM_SPACING)
+	{
+		if (mY >= TABL_NAME_Y && mY <= TABL_NAME_Y + ARROW_SIZE)
+		{
+			if (CME_NPC::NPCControl.NPC_ID != 0)
+				--CME_NPC::NPCControl.NPC_ID;
+			return;
+		}
+	}
+	// This region is between the arrows enclosing "COMMON" or "UNIQUE"
+	if (mX >= TABL_NAME_X && mX <= TABL_NAME_X + tabl_name_W)
+	{
+		if (mY >= TABL_NAME_Y && mY <= TABL_NAME_Y + CHAR_HEIGHT)
+		{
+			if (CME_NPC::NPCControl.UseCommon) CME_NPC::NPCControl.UseCommon = false;
+			else CME_NPC::NPCControl.UseCommon = true;
+			CME_NPC::NPCControl.NPC_ID = 0;
+			return;
+		}
+	}
+	// This region is over the rightward arrow next to "COMMON" or "UNIQUE"
+	if (mX >= TABL_NAME_X + tabl_name_W + SYM_SPACING && mX <= TABL_NAME_X + tabl_name_W + SYM_SPACING + ARROW_SIZE)
+	{
+		if (mY >= TABL_NAME_Y && mY <= TABL_NAME_Y + CHAR_HEIGHT)
+		{
+			if (CME_NPC::NPCControl.UseCommon)
+			{
+				if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::Com_EntityInfo.size() - 1)
+					++CME_NPC::NPCControl.NPC_ID;
+			}
+			else
+			{
+				if (CME_NPC::NPCControl.NPC_ID != CEntityInfo::Unq_EntityInfo.size() - 1)
+					++CME_NPC::NPCControl.NPC_ID;
+			}
+			return;
+		}
+	}
 }
 
 // Info: We take Xo and Yo as coords (Q2) to plot our current NPC.

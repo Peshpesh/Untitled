@@ -14,6 +14,7 @@
 #include "CME_NPC.h"
 #include "CDialogue.h"
 #include "CHUD.h"
+#include "CME_Resource.h"
 
 class CMapEdit : public CEvent {
 private:
@@ -43,6 +44,7 @@ public:
 	char* Entity_Path;
 
 	int Active_Mod;
+	int tabl_name_W;
 
 	enum
 	{
@@ -77,6 +79,8 @@ public:
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnCleanup();
+
+	void ModEntity(int mX, int mY);
 
 	bool AddEntity(int Xo, int Yo);
 

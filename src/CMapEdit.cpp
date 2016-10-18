@@ -21,6 +21,7 @@ CMapEdit::CMapEdit()
 	Entity_Path = "../res/npc/debug.png";
 
 	Active_Mod = MODIFY_MAP;
+	tabl_name_W = 0;
 }
 
 /* This is the executable member that contains the editor's
@@ -46,7 +47,6 @@ void CMapEdit::OnExecute(const Uint8 *keystate)
 		{
 			OnEvent(&Event);
 		}
-
 		OnMotion();    // For repeating user input (i.e. holding directional button)
 		OnClick();     // For holding a mouse button down
 		OnLoop();      // Perform necessary manipulations
@@ -56,4 +56,3 @@ void CMapEdit::OnExecute(const Uint8 *keystate)
 	OnCleanup();       // Clean up the program before exiting
 	return;
 }
-
