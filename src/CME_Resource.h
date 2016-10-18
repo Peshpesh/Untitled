@@ -18,6 +18,20 @@
 #define ENT_NAME_X 250
 #define ENT_NAME_Y 510
 
+// Scenery Editor definitions
+#define SWITCH_XO 32
+#define ON_SWITCH_YO 365
+#define OFF_SWITCH_YO 350
+#define SWITCH_SIZE 15
+#define SWITCHLIST_X 20
+#define SWITCHLIST_Y 510
+#define SCN_NAME_X 250
+#define SCN_NAME_Y 490
+#define DEPTH_COMBO_X 250
+#define DEPTH_COMBO_Y 520
+#define DEPTH_LOWER_X 150
+#define DEPTH_UPPER_X 350
+
 // Other definitions
 #define CHAR_HEIGHT 14
 #define SYM_SPACING 5

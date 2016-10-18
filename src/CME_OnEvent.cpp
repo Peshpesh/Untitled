@@ -248,7 +248,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		}
 		if (mY >= WHEIGHT + 66 && mY < EHEIGHT)
 		{
-			Active_Mod = MODIFY_BG;
+			Active_Mod = MODIFY_SCENE;
 			return;
 		}
 	}

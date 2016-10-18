@@ -51,7 +51,7 @@ public:
 		MODIFY_MAP = 0,
 		MODIFY_NPC,
 		REMOVE_NPC,
-		MODIFY_BG
+		MODIFY_SCENE
 	};
 
 public:
@@ -76,6 +76,8 @@ public:
 
 	// Renders graphics
 	void OnRender();
+	bool RenderNPCedit();
+	bool RenderSCNedit();
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnCleanup();
