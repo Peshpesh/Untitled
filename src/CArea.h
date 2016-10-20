@@ -10,8 +10,6 @@ public:
 
 public:
 	std::vector<CMap>	MapList;
-//	std::vector<CScenery> BGList;
-//	std::vector<CScenery> FGList;
 
 private:
 	int	AreaWidth;		// Maps

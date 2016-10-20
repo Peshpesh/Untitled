@@ -3,6 +3,20 @@
 
 #include "CScenery.h"
 
+enum scn_texture
+{
+  SCN_COSMO = 0,
+  SCN_ARCH,
+  SCN_WATER,
+};
+
+enum scenery
+{
+  SUN = 0,
+  PILLAR,
+  WATERFALL,
+};
+
 class CMEScenery
 {
 public:
@@ -27,6 +41,14 @@ public:
   CMEScenery();
 
   bool LoadScenery();
+
+  void SwitchObj(int queryID);
+
+  bool GetObjInfo(int queryID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames);
+
+  void ConvertToTrue(const int& rX, const int& rY, int& tX, int& tY);
+
+  void ConvertToRel(const int& tX, const int& tY, int& rX, int& rY);
 
   void SubObject(const int& Xc, const int& Yc);
 
