@@ -28,11 +28,10 @@ public:
   static std::vector<int> TexID_List;
 
 public:
-  int tex_ID; // ID for active texture
   int scn_ID; // ID for active scenery
   double Z;
-  double Z_l;
-  double Z_u;
+  double Zl;
+  double Zu;
 
   bool hori_repeat;
   bool vert_repeat;
@@ -44,15 +43,17 @@ public:
 
   void SwitchObj(int queryID);
 
-  bool GetObjInfo(int queryID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames);
-
   void ConvertToTrue(const int& rX, const int& rY, int& tX, int& tY);
 
   void ConvertToRel(const int& tX, const int& tY, int& rX, int& rY);
 
   void SubObject(const int& Xc, const int& Yc);
 
-  void AddObject(const int& Xc, const int& Yc);
+  void AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc);
+
+  bool GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames);
+
+  bool AddTexture(SDL_Renderer* renderer, const int& tex_ID);
 
   bool SaveScenery();
 };

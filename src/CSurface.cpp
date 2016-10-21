@@ -24,33 +24,6 @@ SDL_Texture* CSurface::OnLoad(char const* File, SDL_Renderer *renderer)
 		return NULL;
 	}
 
-	//Surf_Text = SDL_CreateTextureFromSurface(renderer, Surf_Return);
-
-	// Get rid of our SDL_Surface
-	SDL_FreeSurface(Surf_Return);
-	return Surf_Text;
-}
-
-SDL_Texture* CSurface::OnLoad(char const* File, SDL_Renderer *renderer, int R, int G, int B)
-{
-	// Initialize texture and surface pointers to null
-	SDL_Texture* Surf_Text = NULL;
-	SDL_Surface* Surf_Return = NULL;
-
-	// Try loading image
-	if ((Surf_Return = IMG_Load(File)) == NULL)	return NULL;
-
-	// Add transparency
-	SDL_SetColorKey(Surf_Return, SDL_TRUE | SDL_RLEACCEL, SDL_MapRGB(Surf_Return->format, R, G, B));
-
-	// Load the image onto a SDL_Texture
-	if ((Surf_Text = SDL_CreateTextureFromSurface(renderer, Surf_Return)) == 0)
-	{
-		return NULL;
-	}
-
-	//Surf_Text = SDL_CreateTextureFromSurface(renderer, Surf_Return);
-
 	// Get rid of our SDL_Surface
 	SDL_FreeSurface(Surf_Return);
 	return Surf_Text;

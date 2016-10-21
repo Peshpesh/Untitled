@@ -20,7 +20,6 @@ bool CSceneryMod::ClearAll()
     for (int i = (CScenery::TexList.size() - 1); i >= 0; i--)
     {
       SDL_DestroyTexture(CScenery::TexList[i]);
-      // delete CScenery::TexList[i];
       CScenery::TexList.erase(CScenery::TexList.begin() + i);
     }
   }
@@ -29,8 +28,7 @@ bool CSceneryMod::ClearAll()
 
 bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
 {
-	int num_tex, tex_ID, scn_ID, X_loc, Y_loc;
-  double Z_loc;
+	int num_tex, tex_ID, scn_ID, X_loc, Y_loc, Z_loc;
   bool v_rep, h_rep, perm;
 
 	// Try to open the .scn file
@@ -61,17 +59,18 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
   * scn_ID: what kind of scenery
   * X_loc:  true x-position in the area
   * Y_loc:  true y-position in the area
-  * Z_loc:  depth of the scenery
+  * Z_loc:  depth of the scenery (multiplied by 10000)
   * v_rep:  vertical repetition flag
   * h_rep:  horizontal repetition flag
   * perm:   permanent position flag
   */
-	while (fscanf(FileHandle, "%d:%d:%d:%d:%lf:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
+	while (fscanf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
   {
     if (tex_ID >= num_tex || tex_ID < 0) return false;
     if (scn_ID < 0) return false;
-    if (Z_loc < 0.0f) return false;
+    if (Z_loc < 0) return false;
 
+    float Zo = float(Z_loc) / 10000.0f;
     int Xo = 0; int Yo = 0;
     int W = 0; int H = 0;
     int MaxFrames = 0;
@@ -84,32 +83,33 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
       // default scenery object added to container
       // SDefault tmp_scn;
       tmp_scn->OnLoad(CScenery::TexList[tex_ID], Xo, Yo, W, H, MaxFrames);
-      tmp_scn->OnPlace(X_loc, Y_loc, Z_loc, v_rep, h_rep, perm);
+      tmp_scn->OnPlace(X_loc, Y_loc, Zo, v_rep, h_rep, perm);
     }
     else
     {
       // special scenery object added to container
     }
-    if (CScenery::SceneList.size() > 0)
-    {
-      for (int i = 0; i < CScenery::SceneList.size(); i++)
-      {
-        float tmpZ = CScenery::SceneList[i]->Z;
-        if (Z_loc >= tmpZ)
-        {
-          CScenery::SceneList.insert(CScenery::SceneList.begin() + i, tmp_scn);
-          break;
-        }
-        else if (i == CScenery::SceneList.size() - 1)
-        {
-          CScenery::SceneList.push_back(tmp_scn);
-        }
-      }
-    }
-    else
-    {
-      CScenery::SceneList.push_back(tmp_scn);
-    }
+    CScenery::SceneList.push_back(tmp_scn);
+    // if (CScenery::SceneList.size() > 0)
+    // {
+    //   for (int i = 0; i < CScenery::SceneList.size(); i++)
+    //   {
+    //     float tmpZ = CScenery::SceneList[i]->Z;
+    //     if (Z_loc >= tmpZ)
+    //     {
+    //       CScenery::SceneList.insert(CScenery::SceneList.begin() + i, tmp_scn);
+    //       break;
+    //     }
+    //     else if (i == CScenery::SceneList.size() - 1)
+    //     {
+    //       CScenery::SceneList.push_back(tmp_scn);
+    //     }
+    //   }
+    // }
+    // else
+    // {
+    //   CScenery::SceneList.push_back(tmp_scn);
+    // }
   }
   return true;
 }

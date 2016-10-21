@@ -12,8 +12,6 @@ class CSurface
 	public:
 		static SDL_Texture* OnLoad(char const* File, SDL_Renderer *renderer);
 
-		static SDL_Texture* OnLoad(char const* File, SDL_Renderer *renderer, int R, int G, int B);
-
 		static bool OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, int X, int Y);
 
 		/* Draw from a loaded texture onto a renderer.
@@ -44,4 +42,4 @@ class CSurface
 
 };
 
-#endif 
+#endif

@@ -35,5 +35,6 @@
 // Other definitions
 #define CHAR_HEIGHT 14
 #define SYM_SPACING 5
+#define Z_MAGNIFIER 10000
 
 #endif
