@@ -43,7 +43,7 @@ public:
 
   void SwitchObj(int queryID);
 
-  void ConvertToTrue(const int& rX, const int& rY, int& tX, int& tY);
+  void ConvertToTrue(const int& rX, const int& rY, float& tX, float& tY);
 
   void ConvertToRel(const int& tX, const int& tY, int& rX, int& rY);
 

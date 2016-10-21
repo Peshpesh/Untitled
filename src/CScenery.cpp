@@ -41,7 +41,7 @@ bool CScenery::OnLoad(SDL_Texture* scenery,
   return true;
 }
 
-void CScenery::OnPlace(const int& X, const int& Y, const float& Z, const bool& v_rep, const bool& h_rep, const bool& perm)
+void CScenery::OnPlace(const float& X, const float& Y, const float& Z, const bool& v_rep, const bool& h_rep, const bool& perm)
 {
   this->X = X;
   this->Y = Y;

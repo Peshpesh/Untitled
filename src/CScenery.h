@@ -86,7 +86,7 @@ public:
 	virtual bool OnLoad(SDL_Texture* scenery,
     const unsigned int& Xo, const unsigned int& Yo, const unsigned int& Width, const unsigned int& Height, const unsigned int& MaxFrames);
 
-	virtual void OnPlace(const int& X, const int& Y, const float& Z, const bool& v_rep, const bool& h_rep, const bool& perm);
+	virtual void OnPlace(const float& X, const float& Y, const float& Z, const bool& v_rep, const bool& h_rep, const bool& perm);
 
 	virtual void OnLoop();
 
