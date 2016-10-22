@@ -87,6 +87,8 @@ void Font::GetXY(char symbol, int& X, int& Y, int& W, int& H)
 		case 'X': X = 15; Y = 120; W = 14; H = 14; break;
 		case 'Y': X = 30; Y = 120; W = 14; H = 14; break;
 		case 'Z': X = 45; Y = 120; W = 14; H = 14; break;
+		case '.': X = 0;  Y = 135; W = 4;  H = 14; break;
+		case '-': X = 5;  Y = 135; W = 9;  H = 14; break;
 		case ' ': X = 53; Y = 60;  W = 6;  H = 14; break;   // this one will probably have to change in the future
 		default:  X = 0;  Y = 0;   W = 0;  H = 0;  break;
 	}
@@ -210,6 +212,76 @@ int Font::Write(SDL_Renderer* renderer, SDL_Texture* font, int number, int Mx, i
 		Mx += W + 2;
 		magnitude /= 10;
 	}
+	return Mx - FirstMx;
+}
+
+int Font::Writef(SDL_Renderer* renderer, SDL_Texture* font, float number, unsigned int precision, int Mx, int My)
+{
+	int Xo, Yo, W, H;
+	int FirstMx = Mx;
+	int magnitude = 1;
+	bool negative = false;
+	float magnifier = pow(10.0, precision);
+
+	if (number < 0.0)
+	{
+		negative = true;
+		number = -number;
+	}
+
+	int truncated = ((magnifier)*(number - (int)(number)));
+
+	// if (truncated == 0) return Write(renderer, font, ((int)(number)) * (1 - (2*negative)), Mx, My);
+
+	// How big is this truncated, magnified number? (how many digits is key)
+	while (truncated / (magnitude * 10) != 0)
+	{
+		// if the loop condition is nonzero, then that means the denominator
+		// isn't large enough to reduce the fraction to zero...
+		// The fraction reduces to zero IF the denominator exceeds
+		// the numerator, which is what we're looking for.
+		// EX: First loop does N / 10. If zero, then abs(N) is less than 10 (Magnitude of 10^0, or 1).
+		//     Otherwise, next loop does N / 100. If zero, then abs(N) is less than 100. (Mag 10^1, or 10)
+		//     Next loop would be N / 1000... And on until the loop ends.
+		magnitude *= 10;
+	}
+
+	// while (true)
+	// {
+	// 	if (truncated % 10 != 0)
+	// 		break;
+	// 	else
+	// 		truncated /= 10;
+	// }
+
+	// Add a minus first if necessary
+	if (negative)
+	{
+		GetXY('-', Xo, Yo, W, H);
+		if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+			return 0;
+		Mx += W + 2;
+	}
+
+	// Write the integer part of the number, and then add a decimal point
+	Mx += Write(renderer, font, (int)(number), Mx, My);
+	GetXY('.', Xo, Yo, W, H);
+	if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+		return 0;
+	Mx += W + 2;
+
+	// Add any zeroes after the decimal point
+	while (magnitude * 10 < (int)(magnifier))
+	{
+		GetXY('0', Xo, Yo, W, H);
+		if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+			return 0;
+		Mx += W + 2;
+		magnitude *= 10;
+	}
+
+	Mx += Write(renderer, font, truncated, Mx, My);
+
 	return Mx - FirstMx;
 }
 

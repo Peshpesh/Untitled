@@ -50,6 +50,7 @@ ${SRCDIR}/CME_OnLoop.cpp
 ${SRCDIR}/CME_OnMotion.cpp
 ${SRCDIR}/CME_OnRender.cpp
 ${SRCDIR}/CME_OnStart.cpp
+${SRCDIR}/CME_Scenery.cpp
 ${SRCDIR}/CMenu.cpp
 ${SRCDIR}/CMEUI.cpp
 ${SRCDIR}/Config.cpp
@@ -104,6 +105,7 @@ ${SRCDIR}/CMapEdit.h
 ${SRCDIR}/CME_ChTile.h
 ${SRCDIR}/CME_IO.h
 ${SRCDIR}/CME_NPC.h
+${SRCDIR}/CME_Scenery.h
 ${SRCDIR}/CME_Resource.h
 ${SRCDIR}/CMenu.h
 ${SRCDIR}/CMEUI.h

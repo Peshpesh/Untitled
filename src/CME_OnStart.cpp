@@ -23,7 +23,8 @@ bool CMapEdit::OnStart()
 		return false;
 	}
 
-	if ((Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer, 155, 0, 255)) == NULL)
+	// if ((Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer, 155, 0, 255)) == NULL)
+	if ((Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer)) == NULL)
 	{
 		return false;
 	}
@@ -34,7 +35,7 @@ bool CMapEdit::OnStart()
 	TilesetWidth = PixWidth / TILE_SIZE;
 	TilesetHeight = PixHeight / TILE_SIZE;
 
-	if ((Type_Tileset = CSurface::OnLoad("../res/editor/types.png", Map_Renderer, 155, 0, 255)) == NULL)
+	if ((Type_Tileset = CSurface::OnLoad("../res/editor/types.png", Map_Renderer)) == NULL)
 	{
 		return false;
 	}
@@ -44,7 +45,7 @@ bool CMapEdit::OnStart()
 	TypesetWidth = PixWidth / TILE_SIZE;
 	TypesetHeight = PixHeight / TILE_SIZE;
 
-	if ((Slope_Tileset = CSurface::OnLoad("../res/editor/slopes.png", Map_Renderer, 155, 0, 255)) == NULL)
+	if ((Slope_Tileset = CSurface::OnLoad("../res/editor/slopes.png", Map_Renderer)) == NULL)
 	{
 		return false;
 	}

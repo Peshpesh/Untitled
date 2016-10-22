@@ -14,6 +14,7 @@
 #include "CME_NPC.h"
 #include "CDialogue.h"
 #include "CHUD.h"
+#include "CME_Scenery.h"
 #include "CME_Resource.h"
 
 class CMapEdit : public CEvent {
@@ -78,6 +79,8 @@ public:
 	void OnRender();
 	bool RenderNPCedit();
 	bool RenderSCNedit();
+	bool RenderSCNswitch();
+	bool RenderSCNdepth();
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnCleanup();

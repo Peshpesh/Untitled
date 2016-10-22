@@ -9,7 +9,7 @@ std::vector<int> CMEScenery::TexID_List;
 CMEScenery::CMEScenery()
 {
   scn_ID = 0;
-  Z = 1.0f;
+  Z = 1.00f;
   Zl = 0.00f;
   Zu = 2.00f;
   hori_repeat = false;
@@ -44,8 +44,8 @@ void CMEScenery::ConvertToTrue(const int& rX, const int& rY, float& tX, float& t
   float cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
   float cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
   // true X, Y positions
-  float tX = (cX * (1 - Z)) + (rX * Z);
-  float tY = (cY * (1 - Z)) + (rY * Z);
+  tX = (cX * (1 - Z)) + (rX * Z);
+  tY = (cY * (1 - Z)) + (rY * Z);
 }
 
 void CMEScenery::ConvertToRel(const int& tX, const int& tY, int& rX, int& rY)

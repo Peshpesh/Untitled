@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <vector>
+#include <math.h>
 #include "CSurface.h"
 #include "CFPS.h"
 //#include "CHUD.h"
@@ -52,6 +53,17 @@ public:
 	* param Mx : x-position of left edge of message
 	* param My : y-position of top edge of message */
 	static int Write(SDL_Renderer* renderer, SDL_Texture* font, int number, int Mx, int My);
+
+	/* BRIEF: Static function that writes a one-line float
+	***** using a loaded font as an SDL_Texture.
+	* returns: horizontal size of written message (px), or 0 if no message written
+	* param renderer : The renderer to draw a message upon
+	* param font : Texture containing the font used
+	* param number : Float to render
+	* param precision: number of decimal places to render
+	* param Mx : x-position of left edge of message
+	* param My : y-position of top edge of message */
+	static int Writef(SDL_Renderer* renderer, SDL_Texture* font, float number, unsigned int precision, int Mx, int My);
 
 	/* BRIEF: Static function that writes a message within a box
 	***** using a loaded font as an SDL_Texture.

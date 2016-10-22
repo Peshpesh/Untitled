@@ -186,14 +186,67 @@ bool CMapEdit::RenderSCNedit()
 {
 	CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, WHEIGHT - 34, 100, 34);
 
-	CSurface::OnDraw(Map_Renderer, Map_Interface, SWITCHLIST_X, SWITCHLIST_Y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	Font::Write(Map_Renderer, Font, "HREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y);
-	CSurface::OnDraw(Map_Renderer, Map_Interface,
-		SWITCHLIST_X, SWITCHLIST_Y + SWITCH_SIZE + SYM_SPACING, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	Font::Write(Map_Renderer, Font, "VREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + SWITCH_SIZE + SYM_SPACING);
-	CSurface::OnDraw(Map_Renderer, Map_Interface,
-		SWITCHLIST_X, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)), SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	Font::Write(Map_Renderer, Font, "PERM", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)));
+	if (!RenderSCNswitch()) return false;
+	if (!RenderSCNdepth()) return false;
 
+	return true;
+}
+
+bool CMapEdit::RenderSCNdepth()
+{
+	Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Z, 4, DEPTH_COMBO_X, DEPTH_COMBO_Y);
+	Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zl, 4, DEPTH_LOWER_X, DEPTH_COMBO_Y);
+	Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zu, 4, DEPTH_UPPER_X, DEPTH_COMBO_Y);
+
+	return true;
+}
+
+bool CMapEdit::RenderSCNswitch()
+{
+	if (!CMEScenery::ScnControl.hori_repeat)
+	{
+		if (!CSurface::OnDraw(Map_Renderer, Map_Interface, SWITCHLIST_X, SWITCHLIST_Y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE))
+			return false;
+	}
+	else
+	{
+		if (!CSurface::OnDraw(Map_Renderer, Map_Interface, SWITCHLIST_X, SWITCHLIST_Y, SWITCH_XO, ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE))
+			return false;
+	}
+	Font::Write(Map_Renderer, Font, "HREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y);
+	if (!CMEScenery::ScnControl.vert_repeat)
+	{
+		if (!CSurface::OnDraw(Map_Renderer, Map_Interface,
+			SWITCHLIST_X, SWITCHLIST_Y + SWITCH_SIZE + SYM_SPACING, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if (!CSurface::OnDraw(Map_Renderer, Map_Interface,
+			SWITCHLIST_X, SWITCHLIST_Y + SWITCH_SIZE + SYM_SPACING, SWITCH_XO, ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE))
+		{
+			return false;
+		}
+	}
+	Font::Write(Map_Renderer, Font, "VREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + SWITCH_SIZE + SYM_SPACING);
+	if (!CMEScenery::ScnControl.permanent)
+	{
+		if (!CSurface::OnDraw(Map_Renderer, Map_Interface,
+			SWITCHLIST_X, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)), SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if (!CSurface::OnDraw(Map_Renderer, Map_Interface,
+			SWITCHLIST_X, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)), SWITCH_XO, ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE))
+		{
+			return false;
+		}
+	}
+	Font::Write(Map_Renderer, Font, "PERM", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)));
 	return true;
 }
