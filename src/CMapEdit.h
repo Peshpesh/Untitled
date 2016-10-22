@@ -90,6 +90,7 @@ public:
 	bool AddEntity(int Xo, int Yo);
 
 	void QueryTileset();
+	int	GetIntBigO(const int& X);
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 

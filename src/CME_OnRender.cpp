@@ -194,9 +194,34 @@ bool CMapEdit::RenderSCNedit()
 
 bool CMapEdit::RenderSCNdepth()
 {
-	Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Z, 4, DEPTH_COMBO_X, DEPTH_COMBO_Y);
-	Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zl, 4, DEPTH_LOWER_X, DEPTH_COMBO_Y);
-	Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zu, 4, DEPTH_UPPER_X, DEPTH_COMBO_Y);
+	bool tmp = false; // this is only temporary
+	int precision = 4;
+	float Z = CMEScenery::ScnControl.Z;
+	int left_o_fp = (int)(Z);
+	int right_o_fp = Z_MAGNIFIER * (Z - (int)(Z));
+	int fp_order = GetIntBigO(right_o_fp);
+
+	// Add any zeroes after the decimal point
+	while (fp_order * 10 < (int)(Z_MAGNIFIER))
+	{
+		// LEAVING OFF HERE
+		Font::Write(Map_Renderer, Font, "0", , );
+		fp_order *= 10;
+	}
+
+	// Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Z, precision, DEPTH_COMBO_X, DEPTH_COMBO_Y);
+	for (int i = 0; i <= precision; i++)
+	{
+		int aX = DEPTH_COMBO_X + (i * (CHAR_HEIGHT + SYM_SPACING));
+		CSurface::OnDraw(Map_Renderer, Map_Interface, aX, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, aX, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	}
+
+	if (tmp)
+	{
+		Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zl, 4, DEPTH_LOWER_X, DEPTH_COMBO_Y);
+		Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zu, 4, DEPTH_UPPER_X, DEPTH_COMBO_Y);
+	}
 
 	return true;
 }

@@ -246,14 +246,6 @@ int Font::Writef(SDL_Renderer* renderer, SDL_Texture* font, float number, unsign
 		magnitude *= 10;
 	}
 
-	// while (true)
-	// {
-	// 	if (truncated % 10 != 0)
-	// 		break;
-	// 	else
-	// 		truncated /= 10;
-	// }
-
 	// Add a minus first if necessary
 	if (negative)
 	{
