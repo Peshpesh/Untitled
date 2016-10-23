@@ -17,12 +17,10 @@
 #define TABL_NAME_Y 490
 #define ENT_NAME_X 250
 #define ENT_NAME_Y 510
+#define TBL_CHG_BUTTON_X 5
+#define TBL_CHG_BUTTON_Y 540
 
 // Scenery Editor definitions
-#define SWITCH_XO 32
-#define ON_SWITCH_YO 365
-#define OFF_SWITCH_YO 350
-#define SWITCH_SIZE 15
 #define SWITCHLIST_X 20
 #define SWITCHLIST_Y 510
 #define SCN_NAME_X 250
@@ -33,8 +31,14 @@
 #define DEPTH_UPPER_X 350
 
 // Other definitions
+#define SWITCH_XO 32
+#define ON_SWITCH_YO 365
+#define OFF_SWITCH_YO 350
+#define SWITCH_SIZE 15
 #define CHAR_HEIGHT 14
+#define CHAR_WIDTH 16
 #define SYM_SPACING 5
 #define Z_MAGNIFIER 10000
+#define Z_PRECISION 4
 
 #endif

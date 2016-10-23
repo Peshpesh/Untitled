@@ -56,21 +56,3 @@ void CMapEdit::OnExecute(const Uint8 *keystate)
 	OnCleanup();       // Clean up the program before exiting
 	return;
 }
-
-int CMapEdit::GetIntBigO(const int& X)
-{
-	int order = 1;
-	// How big is the number (order)?
-	while (X / (order * 10) != 0)
-	{
-		// if the loop condition is nonzero, then that means the denominator
-		// isn't large enough to reduce the fraction to zero...
-		// The fraction reduces to zero IF the denominator exceeds
-		// the numerator, which is what we're looking for.
-		// EX: First loop does N / 10. If zero, then abs(N) is less than 10 (Magnitude of 10^0, or 1).
-		//     Otherwise, next loop does N / 100. If zero, then abs(N) is less than 100. (Mag 10^1, or 10)
-		//     Next loop would be N / 1000... And on until the loop ends.
-		order *= 10;
-	}
-	return order;
-}

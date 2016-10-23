@@ -62,6 +62,12 @@ public:
 
 	void OnEvent(SDL_Event* Event);
 
+	bool EventNPCedit(int mX, int mY);
+	void ModEntity(int mX, int mY);
+	bool AddEntity(int Xo, int Yo);
+	bool SubEntity(int Xo, int Yo);
+	bool EventSCNedit(int mX, int mY);
+
 	bool OnStart();
 
 	// Terminates the Map Editor loop
@@ -85,12 +91,7 @@ public:
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnCleanup();
 
-	void ModEntity(int mX, int mY);
-
-	bool AddEntity(int Xo, int Yo);
-
 	void QueryTileset();
-	int	GetIntBigO(const int& X);
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 

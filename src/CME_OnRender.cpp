@@ -177,7 +177,8 @@ bool CMapEdit::RenderNPCedit()
 		CME_NPC::NPCControl.EntityList.size(), 5, EHEIGHT - 20) + 5, EHEIGHT - 20);
 
 	// Print "NPC Tables" crap-button
-	Font::Write(Map_Renderer, Font, "NPC TABLES", 5, EHEIGHT - 40);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, TBL_CHG_BUTTON_X, TBL_CHG_BUTTON_Y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	Font::Write(Map_Renderer, Font, "NPC TABLES", TBL_CHG_BUTTON_X + SWITCH_SIZE + SYM_SPACING, TBL_CHG_BUTTON_Y);
 
 	return true;
 }
@@ -194,35 +195,41 @@ bool CMapEdit::RenderSCNedit()
 
 bool CMapEdit::RenderSCNdepth()
 {
-	bool tmp = false; // this is only temporary
-	int precision = 4;
-	float Z = CMEScenery::ScnControl.Z;
-	int left_o_fp = (int)(Z);
-	int right_o_fp = Z_MAGNIFIER * (Z - (int)(Z));
-	int fp_order = GetIntBigO(right_o_fp);
+	int Z_magnified = CMEScenery::ScnControl.Z * Z_MAGNIFIER;
+	int truncator = Z_MAGNIFIER;
+	int Xp = DEPTH_COMBO_X;
 
-	// Add any zeroes after the decimal point
-	while (fp_order * 10 < (int)(Z_MAGNIFIER))
+	// print each digit of the magnified Z value
+	while (truncator != 0)
 	{
-		// LEAVING OFF HERE
-		Font::Write(Map_Renderer, Font, "0", , );
-		fp_order *= 10;
+		int Z_display = (Z_magnified % (truncator * 10)) / truncator;
+		Font::Write(Map_Renderer, Font, Z_display, Xp, DEPTH_COMBO_Y);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		Xp += CHAR_WIDTH;
+		truncator /= 10;
 	}
-
-	// Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Z, precision, DEPTH_COMBO_X, DEPTH_COMBO_Y);
-	for (int i = 0; i <= precision; i++)
+	if (true)
 	{
-		int aX = DEPTH_COMBO_X + (i * (CHAR_HEIGHT + SYM_SPACING));
-		CSurface::OnDraw(Map_Renderer, Map_Interface, aX, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
-		CSurface::OnDraw(Map_Renderer, Map_Interface, aX, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		truncator = Z_MAGNIFIER;
+		int Zl_magnified = CMEScenery::ScnControl.Zl * Z_MAGNIFIER;
+		int Zu_magnified = CMEScenery::ScnControl.Zu * Z_MAGNIFIER;
+		int Xl = DEPTH_LOWER_X;
+		int Xu = DEPTH_UPPER_X;
+		while (truncator != 0)
+		{
+			int Zl_display = (Zl_magnified % (truncator * 10)) / truncator;
+			int Zu_display = (Zu_magnified % (truncator * 10)) / truncator;
+			Font::Write(Map_Renderer, Font, Zl_display, Xl, DEPTH_COMBO_Y);
+			Font::Write(Map_Renderer, Font, Zu_display, Xu, DEPTH_COMBO_Y);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xu, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xu, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			Xl += CHAR_WIDTH; Xu += CHAR_WIDTH;
+			truncator /= 10;
+		}
 	}
-
-	if (tmp)
-	{
-		Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zl, 4, DEPTH_LOWER_X, DEPTH_COMBO_Y);
-		Font::Writef(Map_Renderer, Font, CMEScenery::ScnControl.Zu, 4, DEPTH_UPPER_X, DEPTH_COMBO_Y);
-	}
-
 	return true;
 }
 

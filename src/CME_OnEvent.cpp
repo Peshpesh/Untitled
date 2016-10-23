@@ -72,63 +72,15 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT)
 		return;
 
-	// If we're allowing NPC additions, this function does that
-	if (Active_Mod == MODIFY_NPC && mX < WWIDTH && mY < WHEIGHT)
+	if (Active_Mod == MODIFY_NPC || Active_Mod == REMOVE_NPC)
 	{
-		if (!AddEntity(mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY()))
-			OnExit();
+		// returns false if error...
+		EventNPCedit(mX, mY);
 	}
-
-	// When the active mod is set to remove entities, we have to check if a click is over an entity.
-	// If there are multiple entities stacked in one spot, the first entity to be checked in the
-	// loop will be erased. Others in the stack will remain unless clicked again. The entity list
-	// is searched from the last (most recently created) index to the first (oldest), which allows
-	// the entity "on top" of a stack to be deleted.
-	if (Active_Mod == REMOVE_NPC && mX < WWIDTH && mY < WHEIGHT)
+	else if (Active_Mod == MODIFY_SCENE)
 	{
-		for (int i = CME_NPC::NPCControl.EntityList.size() - 1; i >= 0; i--)
-		{
-			if (&CME_NPC::NPCControl.EntityList[i] == NULL) continue;
-			int Xf = CME_NPC::NPCControl.EntityList[i].X + CME_NPC::NPCControl.EntityList[i].Width - 1;
-			int Yf = CME_NPC::NPCControl.EntityList[i].Y + CME_NPC::NPCControl.EntityList[i].Height - 1;
-			if (mX + CCamera::CameraControl.GetX() >= CME_NPC::NPCControl.EntityList[i].X
-				&& mX + CCamera::CameraControl.GetX() <= Xf)
-			{
-				if (mY + CCamera::CameraControl.GetY() >= CME_NPC::NPCControl.EntityList[i].Y
-					&& mY + CCamera::CameraControl.GetY() <= Yf)
-				{
-					CME_NPC::NPCControl.EntityList.erase(CME_NPC::NPCControl.EntityList.begin() + i);
-					CME_NPC::NPCControl.CommonList.erase(CME_NPC::NPCControl.CommonList.begin() + i);
-					CME_NPC::NPCControl.ID_List.erase(CME_NPC::NPCControl.ID_List.begin() + i);
-
-					return;
-				}
-			}
-		}
-	}
-
-	// Changing Entity (or Type)
-	if (mX >= TABL_NAME_X - ARROW_SIZE - SYM_SPACING && mX <= TABL_NAME_X + tabl_name_W + ARROW_SIZE + SYM_SPACING)
-	{
-		if (mY >= TABL_NAME_Y && mY <= ENT_NAME_Y + CHAR_HEIGHT)
-		{
-			ModEntity(mX, mY);
-		}
-	}
-
-	// Click is on "NPC Tables". This displays a prompt to change entity tables,
-	// and the function within the loop performs a change if requested.
-	if (mX >= 5 && mX <= 165)
-	{
-		if (mY >= EHEIGHT - 40 && mY <= EHEIGHT - 26)
-		{
-			int New_Table = CMEUI::UIControl.OnEntity(Map_Renderer, Map_Interface, Font);
-			if (New_Table >= 0)
-			{
-				CME_NPC::NPCControl.LoadTable(New_Table, Entity_Path);
-				return;
-			}
-		}
+		// returns false if error...
+		EventSCNedit(mX, mY);
 	}
 
 	// Click is on "Set". This displays a prompt to change tilesets,
@@ -334,9 +286,48 @@ void CMapEdit::OnRButtonDown(int mX, int mY)
 	}
 }
 
-void CMapEdit::OnExit()
+bool CMapEdit::EventNPCedit(int mX, int mY)
 {
-	Running = false;
+	if (mX < WWIDTH && mY < WHEIGHT)
+	{
+		// If we're allowing NPC additions, this function does that
+		if (Active_Mod == MODIFY_NPC)
+		{
+			if (!AddEntity(mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY()))
+				OnExit();
+		}
+		// Attempt to remove an entity
+		if (Active_Mod == REMOVE_NPC)
+		{
+			// returns true if an entity was removed successfully
+			SubEntity(mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY());
+		}
+	}
+
+	// Changing Entity (or Type)
+	if (mX >= TABL_NAME_X - ARROW_SIZE - SYM_SPACING && mX <= TABL_NAME_X + tabl_name_W + ARROW_SIZE + SYM_SPACING)
+	{
+		if (mY >= TABL_NAME_Y && mY <= ENT_NAME_Y + CHAR_HEIGHT)
+		{
+			ModEntity(mX, mY);
+		}
+	}
+
+	// Click is on "NPC Tables" button. This displays a prompt to change entity tables,
+	// and the function within the loop performs a change if requested.
+	if (mX >= TBL_CHG_BUTTON_X && mX <= TBL_CHG_BUTTON_X + SWITCH_SIZE)
+	{
+		if (mY >= TBL_CHG_BUTTON_Y && mY <= TBL_CHG_BUTTON_Y + SWITCH_SIZE)
+		{
+			int New_Table = CMEUI::UIControl.OnEntity(Map_Renderer, Map_Interface, Font);
+			if (New_Table >= 0)
+			{
+				CME_NPC::NPCControl.LoadTable(New_Table, Entity_Path);
+				return true;
+			}
+		}
+	}
+	return true;
 }
 
 void CMapEdit::ModEntity(int mX, int mY)
@@ -429,14 +420,105 @@ bool CMapEdit::AddEntity(int Xo, int Yo)
 	CME_NPC::NPCControl.EntityList[CME_NPC::NPCControl.EntityList.size() - 1].X = Xo;
 	CME_NPC::NPCControl.EntityList[CME_NPC::NPCControl.EntityList.size() - 1].Y = Yo;
 
-	/*if (CEntityInfo::EntityInfoList[CME_NPC::NPCControl.NPC_ID].Speak)
-	{
-		EnterText = true;
-	}*/
-
 	CME_NPC::NPCControl.ID_List[CME_NPC::NPCControl.EntityList.size() - 1] = CME_NPC::NPCControl.NPC_ID;
 	CME_NPC::NPCControl.CommonList[CME_NPC::NPCControl.EntityList.size() - 1] = CME_NPC::NPCControl.UseCommon;
 
+	return true;
+}
+
+bool CMapEdit::SubEntity(int Xo, int Yo)
+{
+	// When the active mod is set to remove entities, we have to check if a click is over an entity.
+	// If there are multiple entities stacked in one spot, the first entity to be checked in the
+	// loop will be erased. Others in the stack will remain unless clicked again. The entity list
+	// is searched from the last (most recently created) index to the first (oldest), which allows
+	// the entity "on top" of a stack to be deleted.
+	for (int i = CME_NPC::NPCControl.EntityList.size() - 1; i >= 0; i--)
+	{
+		if (&CME_NPC::NPCControl.EntityList[i] == NULL) continue;
+		int Xi = CME_NPC::NPCControl.EntityList[i].X;
+		int Yi = CME_NPC::NPCControl.EntityList[i].Y;
+		int Xf = CME_NPC::NPCControl.EntityList[i].X + CME_NPC::NPCControl.EntityList[i].Width - 1;
+		int Yf = CME_NPC::NPCControl.EntityList[i].Y + CME_NPC::NPCControl.EntityList[i].Height - 1;
+		if (Xo >= Xi && Xo <= Xf)
+		{
+			if (Yo >= Yi && Yo <= Yf)
+			{
+				CME_NPC::NPCControl.EntityList.erase(CME_NPC::NPCControl.EntityList.begin() + i);
+				CME_NPC::NPCControl.CommonList.erase(CME_NPC::NPCControl.CommonList.begin() + i);
+				CME_NPC::NPCControl.ID_List.erase(CME_NPC::NPCControl.ID_List.begin() + i);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool CMapEdit::EventSCNedit(int mX, int mY)
+{
+	if (mX < WWIDTH && mY < WHEIGHT)
+	{
+		// add or subtract scenery objects...
+	}
+	else
+	{
+		if (mY >= DEPTH_COMBO_Y - (ARROW_SIZE + SYM_SPACING) && mY < DEPTH_COMBO_Y - SYM_SPACING)
+		{
+			int ArrowID = (mX - DEPTH_COMBO_X) / CHAR_WIDTH;
+			if (ArrowID >= 0 && ArrowID <= Z_PRECISION)
+			{
+				// ... up arrows pressed
+				double Z_inc = 1.0;
+				for (int i = 0; i < ArrowID; i++)
+				{
+					Z_inc /= 10.0;
+				}
+				CMEScenery::ScnControl.Z += Z_inc;
+			}
+		}
+		if (mY >= DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING && mY < DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING + ARROW_SIZE)
+		{
+			int ArrowID = (mX - DEPTH_COMBO_X) / CHAR_WIDTH;
+			if (ArrowID >= 0 && ArrowID <= Z_PRECISION)
+			{
+				// ... dw arrows pressed
+				double Z_inc = 1.0;
+				for (int i = 0; i < ArrowID; i++)
+				{
+					Z_inc /= 10.0;
+				}
+				if (CMEScenery::ScnControl.Z > Z_inc) CMEScenery::ScnControl.Z -= Z_inc;
+			}
+		}
+		// check for clicks on scenery flags
+		if (mX >= SWITCHLIST_X && mX < SWITCHLIST_X + SWITCH_SIZE)
+		{
+			int Yi = SWITCHLIST_Y;
+			int Yf = SWITCHLIST_Y + SWITCH_SIZE;
+			if (mY >= Yi && mY < Yf)
+			{
+				if (!CMEScenery::ScnControl.hori_repeat) CMEScenery::ScnControl.hori_repeat = true;
+				else CMEScenery::ScnControl.hori_repeat = false;
+				return true;
+			}
+			Yi += SWITCH_SIZE + SYM_SPACING;
+			Yf += SWITCH_SIZE + SYM_SPACING;
+			if (mY >= Yi && mY < Yf)
+			{
+				if (!CMEScenery::ScnControl.vert_repeat) CMEScenery::ScnControl.vert_repeat = true;
+				else CMEScenery::ScnControl.vert_repeat = false;
+				return true;
+			}
+			Yi += SWITCH_SIZE + SYM_SPACING;
+			Yf += SWITCH_SIZE + SYM_SPACING;
+			if (mY >= Yi && mY < Yf)
+			{
+				if (!CMEScenery::ScnControl.permanent) CMEScenery::ScnControl.permanent = true;
+				else CMEScenery::ScnControl.permanent = false;
+				return true;
+			}
+		}
+	}
 	return true;
 }
 
@@ -447,4 +529,9 @@ void CMapEdit::QueryTileset()
 
 	TilesetWidth = PixWidth / TILE_SIZE;
 	TilesetHeight = PixHeight / TILE_SIZE;
+}
+
+void CMapEdit::OnExit()
+{
+	Running = false;
 }
