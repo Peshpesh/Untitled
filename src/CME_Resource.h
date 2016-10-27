@@ -39,6 +39,6 @@
 #define CHAR_WIDTH 16
 #define SYM_SPACING 5
 #define Z_MAGNIFIER 10000
-#define Z_PRECISION 4
+#define Z_PRECISION 5
 
 #endif

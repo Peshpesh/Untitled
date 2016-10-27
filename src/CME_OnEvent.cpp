@@ -464,62 +464,118 @@ bool CMapEdit::EventSCNedit(int mX, int mY)
 	{
 		if (mY >= DEPTH_COMBO_Y - (ARROW_SIZE + SYM_SPACING) && mY < DEPTH_COMBO_Y - SYM_SPACING)
 		{
-			int ArrowID = (mX - DEPTH_COMBO_X) / CHAR_WIDTH;
-			if (ArrowID >= 0 && ArrowID <= Z_PRECISION)
-			{
-				// ... up arrows pressed
-				double Z_inc = 1.0;
-				for (int i = 0; i < ArrowID; i++)
-				{
-					Z_inc /= 10.0;
-				}
-				CMEScenery::ScnControl.Z += Z_inc;
-			}
+			// The Y-range satisfied overlaps the up-arrow buttons.
+			// We check to see if any of those buttons were pressed.
+			if (CheckZup(mX)) return true;
 		}
 		if (mY >= DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING && mY < DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING + ARROW_SIZE)
 		{
-			int ArrowID = (mX - DEPTH_COMBO_X) / CHAR_WIDTH;
-			if (ArrowID >= 0 && ArrowID <= Z_PRECISION)
-			{
-				// ... dw arrows pressed
-				double Z_inc = 1.0;
-				for (int i = 0; i < ArrowID; i++)
-				{
-					Z_inc /= 10.0;
-				}
-				if (CMEScenery::ScnControl.Z > Z_inc) CMEScenery::ScnControl.Z -= Z_inc;
-			}
+			// The Y-range satisfied overlaps the down-arrow buttons.
+			// We check to see if any of those buttons were pressed.
+			if (CheckZdown(mX)) return true;
 		}
-		// check for clicks on scenery flags
 		if (mX >= SWITCHLIST_X && mX < SWITCHLIST_X + SWITCH_SIZE)
 		{
-			int Yi = SWITCHLIST_Y;
-			int Yf = SWITCHLIST_Y + SWITCH_SIZE;
-			if (mY >= Yi && mY < Yf)
-			{
-				if (!CMEScenery::ScnControl.hori_repeat) CMEScenery::ScnControl.hori_repeat = true;
-				else CMEScenery::ScnControl.hori_repeat = false;
-				return true;
-			}
-			Yi += SWITCH_SIZE + SYM_SPACING;
-			Yf += SWITCH_SIZE + SYM_SPACING;
-			if (mY >= Yi && mY < Yf)
-			{
-				if (!CMEScenery::ScnControl.vert_repeat) CMEScenery::ScnControl.vert_repeat = true;
-				else CMEScenery::ScnControl.vert_repeat = false;
-				return true;
-			}
-			Yi += SWITCH_SIZE + SYM_SPACING;
-			Yf += SWITCH_SIZE + SYM_SPACING;
-			if (mY >= Yi && mY < Yf)
-			{
-				if (!CMEScenery::ScnControl.permanent) CMEScenery::ScnControl.permanent = true;
-				else CMEScenery::ScnControl.permanent = false;
-				return true;
-			}
+			// The X-range satisfied overlaps the scenery switches.
+			// We check to see if any switches were flipped.
+			if (CheckSCNswitch(mY)) return true;
 		}
 	}
 	return true;
+}
+
+bool CMapEdit::CheckZup(const int& mX)
+{
+	if (mX >= DEPTH_COMBO_X && mX < DEPTH_COMBO_X + (Z_PRECISION * CHAR_WIDTH))
+	{
+		// ... middle up arrows pressed
+		float Z_inc = GetZincrement(mX, DEPTH_COMBO_X);
+		CMEScenery::ScnControl.Z += Z_inc;
+		return true;
+	}
+	if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+	{
+		// ... left up arrows pressed
+		float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
+		if (CMEScenery::ScnControl.Zl + Z_inc < CMEScenery::ScnControl.Zu)
+			CMEScenery::ScnControl.Zl += Z_inc;
+		return true;
+	}
+	if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
+	{
+		// ... right up arrows pressed
+		float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
+		CMEScenery::ScnControl.Zu += Z_inc;
+		return true;
+	}
+	return false;
+}
+
+bool CMapEdit::CheckZdown(const int& mX)
+{
+	if (mX >= DEPTH_COMBO_X && mX < DEPTH_COMBO_X + (Z_PRECISION * CHAR_WIDTH))
+	{
+		// ... middle dw arrows pressed
+		float Z_inc = GetZincrement(mX, DEPTH_COMBO_X);
+		if (CMEScenery::ScnControl.Z > Z_inc) CMEScenery::ScnControl.Z -= Z_inc;
+		return true;
+	}
+	if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+	{
+		// ... left dw arrows pressed
+		float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
+		if (CMEScenery::ScnControl.Zl > Z_inc) CMEScenery::ScnControl.Zl -= Z_inc;
+		return true;
+	}
+	if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
+	{
+		// ... right dw arrows pressed
+		float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
+		if (CMEScenery::ScnControl.Zu - Z_inc > CMEScenery::ScnControl.Zl)
+			CMEScenery::ScnControl.Zu -= Z_inc;
+		return true;
+	}
+	return false;
+}
+
+float CMapEdit::GetZincrement(const int& mX, const int& Xo)
+{
+	float val = 1.0f;
+	int ArrowID = (mX - Xo) / CHAR_WIDTH;
+	for (int i = 0; i < ArrowID; i++)
+	{
+		val /= 10.0;
+	}
+	return val;
+}
+
+bool CMapEdit::CheckSCNswitch(const int& mY)
+{
+	int Yi = SWITCHLIST_Y;
+	int Yf = SWITCHLIST_Y + SWITCH_SIZE;
+	if (mY >= Yi && mY < Yf)
+	{
+		if (!CMEScenery::ScnControl.hori_repeat) CMEScenery::ScnControl.hori_repeat = true;
+		else CMEScenery::ScnControl.hori_repeat = false;
+		return true;
+	}
+	Yi += SWITCH_SIZE + SYM_SPACING;
+	Yf += SWITCH_SIZE + SYM_SPACING;
+	if (mY >= Yi && mY < Yf)
+	{
+		if (!CMEScenery::ScnControl.vert_repeat) CMEScenery::ScnControl.vert_repeat = true;
+		else CMEScenery::ScnControl.vert_repeat = false;
+		return true;
+	}
+	Yi += SWITCH_SIZE + SYM_SPACING;
+	Yf += SWITCH_SIZE + SYM_SPACING;
+	if (mY >= Yi && mY < Yf)
+	{
+		if (!CMEScenery::ScnControl.permanent) CMEScenery::ScnControl.permanent = true;
+		else CMEScenery::ScnControl.permanent = false;
+		return true;
+	}
+	return false;
 }
 
 void CMapEdit::QueryTileset()

@@ -66,7 +66,12 @@ public:
 	void ModEntity(int mX, int mY);
 	bool AddEntity(int Xo, int Yo);
 	bool SubEntity(int Xo, int Yo);
+
 	bool EventSCNedit(int mX, int mY);
+	bool CheckZup(const int& mX);
+	bool CheckZdown(const int& mX);
+	float GetZincrement(const int& mX, const int& Xo);
+	bool CheckSCNswitch(const int& mY);
 
 	bool OnStart();
 
