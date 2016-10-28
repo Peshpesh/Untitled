@@ -77,7 +77,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		// returns false if error...
 		EventNPCedit(mX, mY);
 	}
-	else if (Active_Mod == MODIFY_SCENE)
+	else if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
 	{
 		// returns false if error...
 		EventSCNedit(mX, mY);
@@ -200,7 +200,8 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 		}
 		if (mY >= WHEIGHT + 66 && mY < EHEIGHT)
 		{
-			Active_Mod = MODIFY_SCENE;
+			if (Active_Mod == MODIFY_SCENE) Active_Mod = REMOVE_SCENE;
+			else Active_Mod = MODIFY_SCENE;
 			return;
 		}
 	}
@@ -459,6 +460,14 @@ bool CMapEdit::EventSCNedit(int mX, int mY)
 	if (mX < WWIDTH && mY < WHEIGHT)
 	{
 		// add or subtract scenery objects...
+		if (Active_Mod == MODIFY_SCENE)
+		{
+			// add object
+		}
+		else
+		{
+			// remove object
+		}
 	}
 	else
 	{
@@ -493,20 +502,23 @@ bool CMapEdit::CheckZup(const int& mX)
 		CMEScenery::ScnControl.Z += Z_inc;
 		return true;
 	}
-	if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+	if (Active_Mod == REMOVE_SCENE)
 	{
-		// ... left up arrows pressed
-		float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
-		if (CMEScenery::ScnControl.Zl + Z_inc < CMEScenery::ScnControl.Zu)
-			CMEScenery::ScnControl.Zl += Z_inc;
-		return true;
-	}
-	if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
-	{
-		// ... right up arrows pressed
-		float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
-		CMEScenery::ScnControl.Zu += Z_inc;
-		return true;
+		if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+		{
+			// ... left up arrows pressed
+			float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
+			if (CMEScenery::ScnControl.Zl + Z_inc < CMEScenery::ScnControl.Zu)
+				CMEScenery::ScnControl.Zl += Z_inc;
+			return true;
+		}
+		if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
+		{
+			// ... right up arrows pressed
+			float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
+			CMEScenery::ScnControl.Zu += Z_inc;
+			return true;
+		}
 	}
 	return false;
 }
@@ -520,20 +532,23 @@ bool CMapEdit::CheckZdown(const int& mX)
 		if (CMEScenery::ScnControl.Z > Z_inc) CMEScenery::ScnControl.Z -= Z_inc;
 		return true;
 	}
-	if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+	if (Active_Mod == REMOVE_SCENE)
 	{
-		// ... left dw arrows pressed
-		float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
-		if (CMEScenery::ScnControl.Zl > Z_inc) CMEScenery::ScnControl.Zl -= Z_inc;
-		return true;
-	}
-	if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
-	{
-		// ... right dw arrows pressed
-		float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
-		if (CMEScenery::ScnControl.Zu - Z_inc > CMEScenery::ScnControl.Zl)
-			CMEScenery::ScnControl.Zu -= Z_inc;
-		return true;
+		if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+		{
+			// ... left dw arrows pressed
+			float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
+			if (CMEScenery::ScnControl.Zl > Z_inc) CMEScenery::ScnControl.Zl -= Z_inc;
+			return true;
+		}
+		if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
+		{
+			// ... right dw arrows pressed
+			float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
+			if (CMEScenery::ScnControl.Zu - Z_inc > CMEScenery::ScnControl.Zl)
+				CMEScenery::ScnControl.Zu -= Z_inc;
+			return true;
+		}
 	}
 	return false;
 }

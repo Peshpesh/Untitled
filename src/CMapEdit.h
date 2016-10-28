@@ -52,7 +52,8 @@ public:
 		MODIFY_MAP = 0,
 		MODIFY_NPC,
 		REMOVE_NPC,
-		MODIFY_SCENE
+		MODIFY_SCENE,
+		REMOVE_SCENE,
 	};
 
 public:

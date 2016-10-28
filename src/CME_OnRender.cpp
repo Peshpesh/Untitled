@@ -36,7 +36,7 @@ void CMapEdit::OnRender()
 	{
 		RenderNPCedit();
 	}
-	else if (Active_Mod == MODIFY_SCENE)
+	else if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
 	{
 		RenderSCNedit();
 	}
@@ -185,7 +185,10 @@ bool CMapEdit::RenderNPCedit()
 
 bool CMapEdit::RenderSCNedit()
 {
-	CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, WHEIGHT - 34, 100, 34);
+	if (Active_Mod == MODIFY_SCENE)
+		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, WHEIGHT - 34, 100, 34);
+	else
+		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, 312, 100, 34);
 
 	if (!RenderSCNswitch()) return false;
 	if (!RenderSCNdepth()) return false;
@@ -209,7 +212,7 @@ bool CMapEdit::RenderSCNdepth()
 		Xp += CHAR_WIDTH;
 		truncator /= 10;
 	}
-	if (true)
+	if (Active_Mod == REMOVE_SCENE)
 	{
 		truncator = Z_MAGNIFIER;
 		int Zl_magnified = CMEScenery::ScnControl.Zl * Z_MAGNIFIER;
