@@ -463,6 +463,7 @@ bool CMapEdit::EventSCNedit(int mX, int mY)
 		if (Active_Mod == MODIFY_SCENE)
 		{
 			// add object
+			CMEScenery::ScnControl.AddObject(Map_Renderer, mX, mY);
 		}
 		else
 		{
@@ -471,6 +472,12 @@ bool CMapEdit::EventSCNedit(int mX, int mY)
 	}
 	else
 	{
+		if (mY >= SCN_NAME_Y && mY < SCN_NAME_Y + CHAR_HEIGHT)
+		{
+			// The Y-range overlaps the scenery name display.
+			// A click may have been over the arrow keys to change scenery.
+			if (CheckSCNchange(mX)) return true;
+		}
 		if (mY >= DEPTH_COMBO_Y - (ARROW_SIZE + SYM_SPACING) && mY < DEPTH_COMBO_Y - SYM_SPACING)
 		{
 			// The Y-range satisfied overlaps the up-arrow buttons.
@@ -588,6 +595,23 @@ bool CMapEdit::CheckSCNswitch(const int& mY)
 	{
 		if (!CMEScenery::ScnControl.permanent) CMEScenery::ScnControl.permanent = true;
 		else CMEScenery::ScnControl.permanent = false;
+		return true;
+	}
+	return false;
+}
+
+bool CMapEdit::CheckSCNchange(const int& mX)
+{
+	if (mX >= SCN_NAME_X - ARROW_SIZE - SYM_SPACING && mX < SCN_NAME_X - SYM_SPACING)
+	{
+		// left arrow clicked...
+		CMEScenery::ScnControl.SwitchObj(CMEScenery::ScnControl.scn_ID - 1);
+		return true;
+	}
+	if (mX >= SCN_NAME_X + SCN_NAME_W + SYM_SPACING && mX < SCN_NAME_X + SCN_NAME_W + SYM_SPACING + ARROW_SIZE)
+	{
+		// right arrow clicked...
+		CMEScenery::ScnControl.SwitchObj(CMEScenery::ScnControl.scn_ID + 1);
 		return true;
 	}
 	return false;

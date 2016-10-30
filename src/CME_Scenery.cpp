@@ -100,6 +100,7 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   tmp_scn->OnLoad(CMEScenery::TexList[loc_ID], Xo, Yo, W, H, MaxFrames);
   tmp_scn->OnPlace(tX, tY, Z, vert_repeat, hori_repeat, permanent);
   CMEScenery::SceneList.insert(CMEScenery::SceneList.begin() + i, tmp_scn);
+  
 }
 
 bool CMEScenery::GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames)
@@ -154,4 +155,21 @@ bool CMEScenery::AddTexture(SDL_Renderer* renderer, const int& tex_ID)
 bool CMEScenery::SaveScenery()
 {
   return true;
+}
+
+bool CMEScenery::RenderName(SDL_Renderer* renderer, SDL_Texture* Font, const int& Xo, const int& Yo)
+{
+  if (renderer == NULL || Font == NULL) return false;
+
+  bool retval = true;
+  char scnname[10];
+  switch (scn_ID)
+  {
+    case SUN: std::strcpy(scnname, "SUN"); break;
+    case PILLAR: std::strcpy(scnname, "PILLAR"); break;
+    case WATERFALL: std::strcpy(scnname, "WATRFL"); break;
+    default: retval = false; break;
+  }
+  if (retval) Font::Write(renderer, Font, scnname, Xo, Yo);
+  return retval;
 }

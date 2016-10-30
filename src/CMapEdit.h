@@ -73,6 +73,7 @@ public:
 	bool CheckZdown(const int& mX);
 	float GetZincrement(const int& mX, const int& Xo);
 	bool CheckSCNswitch(const int& mY);
+	bool CheckSCNchange(const int& mX);
 
 	bool OnStart();
 

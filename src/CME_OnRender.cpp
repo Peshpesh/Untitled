@@ -190,6 +190,9 @@ bool CMapEdit::RenderSCNedit()
 	else
 		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, 312, 100, 34);
 
+	if (!CSurface::OnDraw(Map_Renderer, Map_Interface, SCN_NAME_X - ARROW_SIZE - SYM_SPACING, SCN_NAME_Y, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE)) return false;
+	if (!CSurface::OnDraw(Map_Renderer, Map_Interface, SCN_NAME_X + SCN_NAME_W + SYM_SPACING, SCN_NAME_Y, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE)) return false;
+	if (!CMEScenery::ScnControl.RenderName(Map_Renderer, Font, SCN_NAME_X, SCN_NAME_Y)) return false;
 	if (!RenderSCNswitch()) return false;
 	if (!RenderSCNdepth()) return false;
 
@@ -201,14 +204,16 @@ bool CMapEdit::RenderSCNdepth()
 	int Z_magnified = CMEScenery::ScnControl.Z * Z_MAGNIFIER;
 	int truncator = Z_MAGNIFIER;
 	int Xp = DEPTH_COMBO_X;
+	int Y_up = DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING);
+	int Y_dw = DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING;
 
 	// print each digit of the magnified Z value
 	while (truncator != 0)
 	{
 		int Z_display = (Z_magnified % (truncator * 10)) / truncator;
 		Font::Write(Map_Renderer, Font, Z_display, Xp, DEPTH_COMBO_Y);
-		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
-		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, Y_up, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, Y_dw, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 		Xp += CHAR_WIDTH;
 		truncator /= 10;
 	}
@@ -225,10 +230,10 @@ bool CMapEdit::RenderSCNdepth()
 			int Zu_display = (Zu_magnified % (truncator * 10)) / truncator;
 			Font::Write(Map_Renderer, Font, Zl_display, Xl, DEPTH_COMBO_Y);
 			Font::Write(Map_Renderer, Font, Zu_display, Xu, DEPTH_COMBO_Y);
-			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
-			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
-			CSurface::OnDraw(Map_Renderer, Map_Interface, Xu, DEPTH_COMBO_Y - (CHAR_HEIGHT + SYM_SPACING), U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
-			CSurface::OnDraw(Map_Renderer, Map_Interface, Xu, DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, Y_up, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, Y_dw, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xu, Y_up, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			CSurface::OnDraw(Map_Renderer, Map_Interface, Xu, Y_dw, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 			Xl += CHAR_WIDTH; Xu += CHAR_WIDTH;
 			truncator /= 10;
 		}
