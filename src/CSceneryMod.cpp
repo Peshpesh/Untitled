@@ -28,15 +28,13 @@ bool CSceneryMod::ClearAll()
 
 bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
 {
-	int num_tex, tex_ID, scn_ID, X_loc, Y_loc, Z_loc;
-  bool v_rep, h_rep, perm;
-
 	// Try to open the .scn file
 	FILE* FileHandle = fopen(sceneryfile, "r");
 	if (FileHandle == NULL) return false;
 
 	// The first entry in the data file is always the number of
   // textures to load.
+  int num_tex;
 	fscanf(FileHandle, "%d\n", &num_tex);
 
   // A list of image paths follows the header. Load all images.
@@ -64,13 +62,26 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
   * h_rep:  horizontal repetition flag
   * perm:   permanent position flag
   */
+  int tex_ID, scn_ID, X_loc, Y_loc;
+  int Z_loc;
+  int v_rep, h_rep, perm;
+	// while (fscanf(FileHandle, "%d:%d:%d:%d:%lf:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
 	while (fscanf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
   {
     if (tex_ID >= num_tex || tex_ID < 0) return false;
     if (scn_ID < 0) return false;
     if (Z_loc < 0) return false;
 
-    float Zo = float(Z_loc) / 10000.0f;
+    // if (tex_ID != 1) SDL_Delay(3000);
+    // if (scn_ID != 1) SDL_Delay(3000);
+    // if (X_loc != 200) SDL_Delay(3000);
+    // if (Y_loc != 250) SDL_Delay(3000);
+    // if (Z_loc != 200) SDL_Delay(3000);
+    // if (v_rep != 2) SDL_Delay(3000);
+    // if (h_rep != 2) SDL_Delay(3000);
+    // if (perm != 2) SDL_Delay(3000);
+
+    double Zo = double(Z_loc) / 10000.0;
     int Xo = 0; int Yo = 0;
     int W = 0; int H = 0;
     int MaxFrames = 0;
@@ -84,6 +95,7 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
       // SDefault tmp_scn;
       tmp_scn->OnLoad(CScenery::TexList[tex_ID], Xo, Yo, W, H, MaxFrames);
       tmp_scn->OnPlace(X_loc, Y_loc, Zo, v_rep, h_rep, perm);
+      // tmp_scn->OnPlace(X_loc, Y_loc, Z_loc, v_rep, h_rep, perm);
     }
     else
     {

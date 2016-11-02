@@ -100,7 +100,6 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   tmp_scn->OnLoad(CMEScenery::TexList[loc_ID], Xo, Yo, W, H, MaxFrames);
   tmp_scn->OnPlace(tX, tY, Z, vert_repeat, hori_repeat, permanent);
   CMEScenery::SceneList.insert(CMEScenery::SceneList.begin() + i, tmp_scn);
-  
 }
 
 bool CMEScenery::GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames)
