@@ -102,26 +102,6 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
       // special scenery object added to container
     }
     CScenery::SceneList.push_back(tmp_scn);
-    // if (CScenery::SceneList.size() > 0)
-    // {
-    //   for (int i = 0; i < CScenery::SceneList.size(); i++)
-    //   {
-    //     float tmpZ = CScenery::SceneList[i]->Z;
-    //     if (Z_loc >= tmpZ)
-    //     {
-    //       CScenery::SceneList.insert(CScenery::SceneList.begin() + i, tmp_scn);
-    //       break;
-    //     }
-    //     else if (i == CScenery::SceneList.size() - 1)
-    //     {
-    //       CScenery::SceneList.push_back(tmp_scn);
-    //     }
-    //   }
-    // }
-    // else
-    // {
-    //   CScenery::SceneList.push_back(tmp_scn);
-    // }
   }
   return true;
 }

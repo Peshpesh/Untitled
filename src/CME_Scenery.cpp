@@ -41,8 +41,8 @@ void CMEScenery::SwitchObj(int queryID)
 void CMEScenery::ConvertToTrue(const int& rX, const int& rY, float& tX, float& tY)
 {
   // window center positions
-  float cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
-  float cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
+  float cX = rX + ((WWIDTH - 1) / 2.0);
+  float cY = rY + ((WHEIGHT - 1) / 2.0);
   // true X, Y positions
   tX = (cX * (1 - Z)) + (rX * Z);
   tY = (cY * (1 - Z)) + (rY * Z);
@@ -50,7 +50,16 @@ void CMEScenery::ConvertToTrue(const int& rX, const int& rY, float& tX, float& t
 
 void CMEScenery::ConvertToRel(const int& tX, const int& tY, int& rX, int& rY)
 {
+  // float true_dx = CCamera::CameraControl.GetX() - X;
+  // float true_dy = CCamera::CameraControl.GetY() - Y;
+  // float x_distort = (true_dx / Z) * (Z - 1.0f);
+  // float y_distort = (true_dy / Z) * (Z - 1.0f);
+  // CSurface::OnDraw(renderer, Tex_Scenery, X - CCamera::CameraControl.GetX() + x_distort,
+	// 	Y - CCamera::CameraControl.GetY() + y_distort, Xo, Yo, Width, Height);
 
+
+  // float X_win = (X - CCamera::CameraControl.GetX()) / Z;
+  // float Y_win = (Y - CCamera::CameraControl.GetY()) / Z;
 }
 
 void CMEScenery::SubObject(const int& Xc, const int& Yc)
@@ -147,6 +156,10 @@ bool CMEScenery::AddTexture(SDL_Renderer* renderer, const int& tex_ID)
   {
     CMEScenery::TexList.push_back(tmp_tex);   // push back the SDL_texture*
     CMEScenery::TexID_List.push_back(tex_ID); // push back the global texture ID
+  }
+  else
+  {
+
   }
   return retval;
 }

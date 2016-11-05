@@ -463,7 +463,7 @@ bool CMapEdit::EventSCNedit(int mX, int mY)
 		if (Active_Mod == MODIFY_SCENE)
 		{
 			// add object
-			CMEScenery::ScnControl.AddObject(Map_Renderer, mX, mY);
+			CMEScenery::ScnControl.AddObject(Map_Renderer, mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY());
 		}
 		else
 		{

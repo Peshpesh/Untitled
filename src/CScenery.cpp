@@ -61,7 +61,6 @@ bool CScenery::OnRender(SDL_Renderer* renderer)
   if (renderer == NULL) return false;
   if (Tex_Scenery == NULL)
   {
-    SDL_Delay(5000);
     return false;
   }
 

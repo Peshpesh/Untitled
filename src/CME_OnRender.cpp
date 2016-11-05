@@ -11,11 +11,26 @@ void CMapEdit::OnRender()
 	CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 	CArea::AreaControl.OnRenderSlope(Map_Renderer, Slope_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
+	// Draw background scenery
+	int s_i = 0;
+	while (s_i < CMEScenery::SceneList.size())
+	{
+		if (CMEScenery::SceneList[s_i]->Z <= 1.0f) break;
+
+		CMEScenery::SceneList[s_i]->OnRender(Map_Renderer);
+		s_i++;
+	}
 	// Draw the entities in the area
 	for (int i = 0; i < CME_NPC::NPCControl.EntityList.size(); i++)
 	{
 		if (&CME_NPC::NPCControl.EntityList[i] == NULL) continue;
 		CME_NPC::NPCControl.EntityList[i].OnRender(Map_Renderer);
+	}
+	// Draw foreground scenery
+	while (s_i < CMEScenery::SceneList.size())
+	{
+		CMEScenery::SceneList[s_i]->OnRender(Map_Renderer);
+		s_i++;
 	}
 
 	// Draws the surrounding interface containing current info and accessible buttons
