@@ -30,9 +30,25 @@ void CMapEdit::OnLoop()
 		mouseX = mX;
 		mouseY = mY;
 	}
-	char Buffer[255];
-	sprintf(Buffer, "X %d | Y %d [ tX %d | tY %d ]", mX, mY, tX, tY);
-	SDL_SetWindowTitle(Map_Display, Buffer);
+	// DEBUGGING
+	if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
+	{
+		float trueX, trueY;
+		float rX = mX;
+		float rY = mY;
+		CMEScenery::ScnControl.ConvertToTrue(rX, rY, trueX, trueY);
+		if (rX < 0) rX = -rX;
+		if (trueX < 0) trueX = -trueX;
 
+		char Buffer[255];
+		sprintf(Buffer, "X %d | Y %d [ tX %d | tY %d ]", mX, mY, (int)(trueX), (int)(trueY));
+		SDL_SetWindowTitle(Map_Display, Buffer);
+	}
+	else
+	{
+		char Buffer[255];
+		sprintf(Buffer, "X %d | Y %d [ tX %d | tY %d ]", mX, mY, tX, tY);
+		SDL_SetWindowTitle(Map_Display, Buffer);
+	}
 	return;
 }

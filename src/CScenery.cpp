@@ -63,15 +63,11 @@ bool CScenery::OnRender(SDL_Renderer* renderer)
   {
     return false;
   }
+  // float Xc = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
+  // float Yc = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
+  float X_win = ((WWIDTH - 1) / 2.0) + ((X - (CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0))) / Z);
+  float Y_win = ((WHEIGHT - 1) / 2.0) + ((Y - (CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0))) / Z);
 
-  // float true_dx = CCamera::CameraControl.GetX() - X;
-  // float true_dy = CCamera::CameraControl.GetY() - Y;
-  // float x_distort = (true_dx / Z) * (Z - 1.0f);
-  // float y_distort = (true_dy / Z) * (Z - 1.0f);
-  // CSurface::OnDraw(renderer, Tex_Scenery, X - CCamera::CameraControl.GetX() + x_distort,
-	// 	Y - CCamera::CameraControl.GetY() + y_distort, Xo, Yo, Width, Height);
-  float X_win = (X - CCamera::CameraControl.GetX()) / Z;
-  float Y_win = (Y - CCamera::CameraControl.GetY()) / Z;
   CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_win, Xo, Yo, Width, Height);
 
   return true;

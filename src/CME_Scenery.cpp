@@ -40,9 +40,11 @@ void CMEScenery::SwitchObj(int queryID)
 
 void CMEScenery::ConvertToTrue(const int& rX, const int& rY, float& tX, float& tY)
 {
+  // rX = X_win + CamX
+  // X_win = rX - CamX
   // window center positions
-  float cX = rX + ((WWIDTH - 1) / 2.0);
-  float cY = rY + ((WHEIGHT - 1) / 2.0);
+  float cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
+  float cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
   // true X, Y positions
   tX = (cX * (1 - Z)) + (rX * Z);
   tY = (cY * (1 - Z)) + (rY * Z);
