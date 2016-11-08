@@ -52,16 +52,8 @@ void CMEScenery::ConvertToTrue(const int& rX, const int& rY, float& tX, float& t
 
 void CMEScenery::ConvertToRel(const int& tX, const int& tY, int& rX, int& rY)
 {
-  // float true_dx = CCamera::CameraControl.GetX() - X;
-  // float true_dy = CCamera::CameraControl.GetY() - Y;
-  // float x_distort = (true_dx / Z) * (Z - 1.0f);
-  // float y_distort = (true_dy / Z) * (Z - 1.0f);
-  // CSurface::OnDraw(renderer, Tex_Scenery, X - CCamera::CameraControl.GetX() + x_distort,
-	// 	Y - CCamera::CameraControl.GetY() + y_distort, Xo, Yo, Width, Height);
-
-
-  // float X_win = (X - CCamera::CameraControl.GetX()) / Z;
-  // float Y_win = (Y - CCamera::CameraControl.GetY()) / Z;
+  // float X_win = ((WWIDTH - 1) / 2.0) + ((tX - (CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0))) / Z);
+  // float Y_win = ((WHEIGHT - 1) / 2.0) + ((tY - (CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0))) / Z);
 }
 
 void CMEScenery::SubObject(const int& Xc, const int& Yc)
@@ -111,6 +103,9 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   tmp_scn->OnLoad(CMEScenery::TexList[loc_ID], Xo, Yo, W, H, MaxFrames);
   tmp_scn->OnPlace(tX, tY, Z, vert_repeat, hori_repeat, permanent);
   CMEScenery::SceneList.insert(CMEScenery::SceneList.begin() + i, tmp_scn);
+
+  // TESTING
+  SaveScenery("TESTING");
 }
 
 bool CMEScenery::GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames)
@@ -166,8 +161,95 @@ bool CMEScenery::AddTexture(SDL_Renderer* renderer, const int& tex_ID)
   return retval;
 }
 
-bool CMEScenery::SaveScenery()
+bool CMEScenery::SaveScenery(char const* areaname)
 {
+  char pre[] = "../data/maps/";
+  char ext[] = ".scn";
+  char* filename = new char[std::strlen(areaname) + std::strlen(pre) + std::strlen(ext) + 1];
+  std::strcpy(filename, pre);
+  std::strcat(filename, areaname);
+  std::strcat(filename, ext);
+  FILE* FileHandle = fopen(filename, "w");
+  delete filename;
+
+  if (FileHandle == NULL)	return false;
+
+  // Output number of textures to load
+  fprintf(FileHandle, "%d\n", TexList.size());
+
+  // Output the texture file paths
+  if (!SaveTexPaths(FileHandle))
+  {
+    fclose(FileHandle);
+    return false;
+  }
+
+  // Output list of object information
+  for (int i = 0; i < SceneList.size(); i++)
+  {
+    int C = 0;
+    int X = SceneList[i]->X;
+    int Y = SceneList[i]->Y;
+    int Z_mag =  SceneList[i]->Z * Z_MAGNIFIER;
+    int VR_flag = SceneList[i]->vert_repeat;
+    int HR_flag = SceneList[i]->hori_repeat;
+    int P_flag = SceneList[i]->permanent;
+
+    fprintf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", C, C, X, Y, Z_mag, VR_flag, HR_flag, P_flag);
+  }
+// "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm
+
+  // // Output the path to the tileset for the area
+  // fprintf(FileHandle, setpath);
+  // fprintf(FileHandle, "\n");
+  //
+  // // Output AreaWidth & AreaHeight
+  // fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
+  //
+  // for (int Y = 0; Y < AreaHeight; Y++)
+  // {
+  //   for (int X = 0; X < AreaWidth; X++)
+  //   {
+  //     int ID = X + Y * AreaWidth;
+  //     MapList[ID].SaveMap(ID, areaname);
+  //     fprintf(FileHandle, "%s%s%02d%s ", pre, areaname, ID, ".map");
+  //   }
+  //   fprintf(FileHandle, "\n");
+  // }
+  fclose(FileHandle);
+  return true;
+}
+
+bool CMEScenery::SaveTexPaths(FILE* ofile)
+{
+  if (ofile == NULL) return false;
+
+  for (int i = 0; i < TexList.size(); i++)
+  {
+    int ID = TexID_List[i];
+    switch (ID)
+    {
+      case SCN_COSMO:
+      {
+        char TexFile[255] = "../res/scn/cosmic.png";
+        fprintf(ofile, "%s\n", TexFile);
+        break;
+      }
+      case SCN_ARCH:
+      {
+        char TexFile[255] = "../res/scn/arch.png";
+        fprintf(ofile, "%s\n", TexFile);
+        break;
+      }
+      case SCN_WATER:
+      {
+        char TexFile[255] = "../res/scn/water.png";
+        fprintf(ofile, "%s\n", TexFile);
+        break;
+      }
+      default: break;
+    }
+  }
   return true;
 }
 

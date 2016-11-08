@@ -2,8 +2,10 @@
 #define _CME_SCENERY_H_
 
 #include "CScenery.h"
+#include "CME_Resource.h"
 #include "Font.h"
 #include <cstring>
+#include <stdio.h>
 
 enum scn_texture
 {
@@ -57,7 +59,8 @@ public:
 
   bool AddTexture(SDL_Renderer* renderer, const int& tex_ID);
 
-  bool SaveScenery();
+  bool SaveScenery(char const* areaname);
+  bool SaveTexPaths(FILE* ofile);
 
   bool RenderName(SDL_Renderer* renderer, SDL_Texture* Font, const int& Xo, const int& Yo);
 };
