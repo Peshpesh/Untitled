@@ -229,6 +229,7 @@ void CMapEdit::OnLButtonDown(int mX, int mY)
 			char* Filename = CME_IO::IOControl.OnSave(Map_Renderer, Map_Interface, Font);
 			CArea::AreaControl.SaveArea(Filename, Tileset_Path);
 			CME_NPC::NPCControl.SaveList(Filename);
+			CMEScenery::ScnControl.SaveScenery(Filename);
 			return;
 		}
 

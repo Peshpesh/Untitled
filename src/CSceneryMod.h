@@ -10,6 +10,8 @@ enum SCN_NAME
 {
   TEST_A = 0,
   TEST_B, TEST_C,
+  // SUN = 0,
+  // PILLAR, WATERFALL,
 };
 
 class CSceneryMod {

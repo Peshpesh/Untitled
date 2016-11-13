@@ -106,8 +106,8 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   CMEScenery::SceneList.insert(CMEScenery::SceneList.begin() + i, tmp_scn);
   CMEScenery::ScnID_List.insert(CMEScenery::ScnID_List.begin() + i, scn_ID);
 
-  // TESTING
-  SaveScenery("TESTING");
+  // // TESTING
+  // SaveScenery("TESTING");
 }
 
 bool CMEScenery::GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames)
@@ -228,7 +228,6 @@ bool CMEScenery::SaveScenery(char const* areaname)
 
     fprintf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", t_ID, s_ID, X, Y, Z_mag, VR_flag, HR_flag, P_flag);
   }
-
   fclose(FileHandle);
   return true;
 }
