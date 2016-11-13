@@ -3,6 +3,7 @@
 CMEScenery CMEScenery::ScnControl;
 
 std::vector<CScenery*> CMEScenery::SceneList;
+std::vector<int> CMEScenery::ScnID_List;
 std::vector<SDL_Texture*> CMEScenery::TexList;
 std::vector<int> CMEScenery::TexID_List;
 
@@ -103,6 +104,7 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   tmp_scn->OnLoad(CMEScenery::TexList[loc_ID], Xo, Yo, W, H, MaxFrames);
   tmp_scn->OnPlace(tX, tY, Z, vert_repeat, hori_repeat, permanent);
   CMEScenery::SceneList.insert(CMEScenery::SceneList.begin() + i, tmp_scn);
+  CMEScenery::ScnID_List.insert(CMEScenery::ScnID_List.begin() + i, scn_ID);
 
   // TESTING
   SaveScenery("TESTING");
@@ -188,6 +190,7 @@ bool CMEScenery::SaveScenery(char const* areaname)
   for (int i = 0; i < SceneList.size(); i++)
   {
     int C = 0;
+    int s_ID = ScnID_List[i];
     int X = SceneList[i]->X;
     int Y = SceneList[i]->Y;
     int Z_mag =  SceneList[i]->Z * Z_MAGNIFIER;
@@ -195,27 +198,10 @@ bool CMEScenery::SaveScenery(char const* areaname)
     int HR_flag = SceneList[i]->hori_repeat;
     int P_flag = SceneList[i]->permanent;
 
-    fprintf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", C, C, X, Y, Z_mag, VR_flag, HR_flag, P_flag);
+    fprintf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", C, s_ID, X, Y, Z_mag, VR_flag, HR_flag, P_flag);
   }
-// "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm
+  // "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm
 
-  // // Output the path to the tileset for the area
-  // fprintf(FileHandle, setpath);
-  // fprintf(FileHandle, "\n");
-  //
-  // // Output AreaWidth & AreaHeight
-  // fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
-  //
-  // for (int Y = 0; Y < AreaHeight; Y++)
-  // {
-  //   for (int X = 0; X < AreaWidth; X++)
-  //   {
-  //     int ID = X + Y * AreaWidth;
-  //     MapList[ID].SaveMap(ID, areaname);
-  //     fprintf(FileHandle, "%s%s%02d%s ", pre, areaname, ID, ".map");
-  //   }
-  //   fprintf(FileHandle, "\n");
-  // }
   fclose(FileHandle);
   return true;
 }

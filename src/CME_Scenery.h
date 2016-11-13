@@ -28,6 +28,7 @@ public:
 
 public:
   static std::vector<CScenery*> SceneList;
+  static std::vector<int> ScnID_List;
   static std::vector<SDL_Texture*> TexList;
   static std::vector<int> TexID_List;
 
