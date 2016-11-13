@@ -57,6 +57,7 @@ public:
   void AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc);
 
   bool GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames);
+  bool GetObjInfo(const int& queryID, int& tex_ID);
 
   bool AddTexture(SDL_Renderer* renderer, const int& tex_ID);
 

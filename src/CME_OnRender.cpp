@@ -5,12 +5,6 @@ void CMapEdit::OnRender()
 {
 	SDL_RenderClear(Map_Renderer);
 
-	// Draw the working area
-	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
-	CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	CArea::AreaControl.OnRenderSlope(Map_Renderer, Slope_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-
 	// Draw background scenery
 	int s_i = 0;
 	while (s_i < CMEScenery::SceneList.size())
@@ -20,6 +14,13 @@ void CMapEdit::OnRender()
 		CMEScenery::SceneList[s_i]->OnRender(Map_Renderer);
 		s_i++;
 	}
+	
+	// Draw the working area
+	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
+	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+	CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	CArea::AreaControl.OnRenderSlope(Map_Renderer, Slope_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+
 	// Draw the entities in the area
 	for (int i = 0; i < CME_NPC::NPCControl.EntityList.size(); i++)
 	{

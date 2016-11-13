@@ -123,6 +123,19 @@ bool CMEScenery::GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, i
   return retval;
 }
 
+bool CMEScenery::GetObjInfo(const int& queryID, int& tex_ID)
+{
+  bool retval = true;
+  switch (queryID)
+  {
+    case SUN: tex_ID = SCN_COSMO; break;
+    case PILLAR: tex_ID = SCN_ARCH; break;
+    case WATERFALL: tex_ID = SCN_WATER; break;
+    default: retval = false; break;
+  }
+  return retval;
+}
+
 bool CMEScenery::AddTexture(SDL_Renderer* renderer, const int& tex_ID)
 {
   bool retval = true;
@@ -189,7 +202,22 @@ bool CMEScenery::SaveScenery(char const* areaname)
   // Output list of object information
   for (int i = 0; i < SceneList.size(); i++)
   {
-    int C = 0;
+    int t_ID;
+    if (!GetObjInfo(ScnID_List[i], t_ID))
+    {
+      fclose(FileHandle);
+      return false;
+    }
+    int j = 0;
+    while (j < TexList.size())
+    {
+      if (t_ID ==  TexID_List[j])
+      {
+        t_ID = j;
+        break;
+      }
+      j++;
+    }
     int s_ID = ScnID_List[i];
     int X = SceneList[i]->X;
     int Y = SceneList[i]->Y;
@@ -198,9 +226,8 @@ bool CMEScenery::SaveScenery(char const* areaname)
     int HR_flag = SceneList[i]->hori_repeat;
     int P_flag = SceneList[i]->permanent;
 
-    fprintf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", C, s_ID, X, Y, Z_mag, VR_flag, HR_flag, P_flag);
+    fprintf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", t_ID, s_ID, X, Y, Z_mag, VR_flag, HR_flag, P_flag);
   }
-  // "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm
 
   fclose(FileHandle);
   return true;
