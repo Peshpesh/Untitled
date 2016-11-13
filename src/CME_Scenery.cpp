@@ -18,8 +18,79 @@ CMEScenery::CMEScenery()
   permanent = false;
 }
 
-bool CMEScenery::LoadScenery()
+bool CMEScenery::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
 {
+  // NOTE: The local texture ID, or the texture ID relative to the
+  // Z position of groups of textures, is meaningless in the scenery editor.
+  // Thus, number of textures at the start of the file, the paths to textures,
+  // and the local texture IDs are not necessary. We can use the scenery object
+  // IDs to load textures as we normally would in the editor; and if/when we save,
+  // local texture IDs will be derived and recorded.
+
+  // Try to open the .scn file
+	FILE* FileHandle = fopen(sceneryfile, "r");
+	if (FileHandle == NULL) return false;
+
+	// The first entry in the data file is always the number of
+  // textures to load.
+  int num_tex;
+	fscanf(FileHandle, "%d\n", &num_tex);
+
+  // A list of image paths follows the header. Scan all, but do nothing more.
+  for (int i = 0; i < num_tex; i++)
+  {
+    char TexFile[255];
+    fscanf(FileHandle, "%s\n", TexFile);
+  }
+
+  /* Lastly comes a map of information, with each line containing eight values:
+  * t_ID: which texture is used for the object (not used here)
+  * s_ID: scenery object ID
+  * X_loc:  true x-position in the area
+  * Y_loc:  true y-position in the area
+  * Z_loc:  depth of the scenery (multiplied by 1000)
+  * v_rep:  vertical repetition flag
+  * h_rep:  horizontal repetition flag
+  * perm:   permanent position flag
+  */
+  int t_ID, s_ID, X_loc, Y_loc;
+  int Z_loc;
+  int v_rep, h_rep, perm;
+	while (fscanf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", &t_ID, &s_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
+  {
+    if (s_ID < 0) return false;
+    if (Z_loc < 0) return false;
+
+    // Get the scenery object's static info, including global texture ID
+    double Zo = double(Z_loc) / 1000.0;
+    int Xo; int Yo;
+    int W; int H;
+    int MaxFrames;
+    if (!GetObjInfo(s_ID, t_ID, Xo, Yo, W, H, MaxFrames)) return false;
+
+    // check texture ID container for scenery's required texture
+    int loc_ID = 0;
+    while (loc_ID < TexID_List.size())
+    {
+      if (t_ID == TexID_List[loc_ID]) break;
+      loc_ID++;
+    }
+    if (loc_ID == TexID_List.size())
+    {
+      // load texture, if not loaded
+      if (!AddTexture(renderer, t_ID)) return false;
+    }
+
+    // dynamically create "new" object and insert into container
+    CScenery* tmp_scn;
+    tmp_scn = new CScenery;
+    tmp_scn->OnLoad(TexList[loc_ID], Xo, Yo, W, H, MaxFrames);
+    tmp_scn->OnPlace(X_loc, Y_loc, Zo, v_rep, h_rep, perm);
+    // SceneList.insert(SceneList.begin() + i, tmp_scn);
+    // ScnID_List.insert(ScnID_List.begin() + i, s_ID);
+    SceneList.push_back(tmp_scn);
+    ScnID_List.push_back(s_ID);
+  }
   return true;
 }
 

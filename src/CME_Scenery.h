@@ -44,7 +44,7 @@ public:
 
   CMEScenery();
 
-  bool LoadScenery();
+  bool LoadScenery(char const* sceneryfile, SDL_Renderer* renderer);
 
   void SwitchObj(int queryID);
 

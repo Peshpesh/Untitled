@@ -72,7 +72,7 @@ bool CME_IO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, SDL_Texture* fo
 		return false;
 
 	delete filename;
-	
+
 	return true;
 }
 
