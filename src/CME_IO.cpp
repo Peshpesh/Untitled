@@ -71,7 +71,16 @@ bool CME_IO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, SDL_Texture* fo
 	if (!CME_NPC::NPCControl.LoadList(Areaname, renderer))
 		return false;
 
+	char scnext[] = ".scn";
+	char* scnfile = new char[std::strlen(Areaname) + std::strlen(pre) + std::strlen(scnext) + 1];
+	std::strcpy(filename, pre);
+	std::strcat(filename, Areaname);
+	std::strcat(filename, scnext);
+	if (!CMEScenery::ScnControl.LoadScenery(filename, renderer))
+		return false;
+
 	delete filename;
+	delete scnfile;
 
 	return true;
 }

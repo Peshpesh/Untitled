@@ -8,8 +8,9 @@
 #include "Define.h"
 #include "Font.h"
 #include <cstring>
+#include "CME_Scenery.h"
 
-class CME_IO : public CEvent 
+class CME_IO : public CEvent
 {
 public:
 	static CME_IO		IOControl;
