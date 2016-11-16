@@ -36,7 +36,7 @@ void CMapEdit::OnLoop()
 		float trueX, trueY;
 		float rX = mX;
 		float rY = mY;
-		CMEScenery::ScnControl.ConvertToTrue(rX, rY, trueX, trueY);
+		CMEScenery::ScnControl.ConvertToTrue(rX, rY, CMEScenery::ScnControl.Z, trueX, trueY);
 		if (rX < 0) rX = -rX;
 		if (trueX < 0) trueX = -trueX;
 

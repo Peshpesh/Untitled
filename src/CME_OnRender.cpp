@@ -9,12 +9,15 @@ void CMapEdit::OnRender()
 	int s_i = 0;
 	while (s_i < CMEScenery::SceneList.size())
 	{
-		if (CMEScenery::SceneList[s_i]->Z <= 1.0f) break;
-
-		CMEScenery::SceneList[s_i]->OnRender(Map_Renderer);
+		float Z = CMEScenery::SceneList[s_i]->Z;
+		if (Z <= 1.0f) break;
+		if (Active_Mod != REMOVE_SCENE || ((Z >= CMEScenery::ScnControl.Zl) && (Z <= CMEScenery::ScnControl.Zu)))
+		{
+			CMEScenery::SceneList[s_i]->OnRender(Map_Renderer);
+		}
 		s_i++;
 	}
-	
+
 	// Draw the working area
 	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
 	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
@@ -30,7 +33,11 @@ void CMapEdit::OnRender()
 	// Draw foreground scenery
 	while (s_i < CMEScenery::SceneList.size())
 	{
-		CMEScenery::SceneList[s_i]->OnRender(Map_Renderer);
+		float Z = CMEScenery::SceneList[s_i]->Z;
+		if (Active_Mod != REMOVE_SCENE || ((Z >= CMEScenery::ScnControl.Zl) && (Z <= CMEScenery::ScnControl.Zu)))
+		{
+			CMEScenery::SceneList[s_i]->OnRender(Map_Renderer);
+		}
 		s_i++;
 	}
 

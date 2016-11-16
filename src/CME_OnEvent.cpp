@@ -469,6 +469,7 @@ bool CMapEdit::EventSCNedit(int mX, int mY)
 		else
 		{
 			// remove object
+			CMEScenery::ScnControl.SubObject(mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY());
 		}
 	}
 	else

@@ -48,9 +48,9 @@ public:
 
   void SwitchObj(int queryID);
 
-  void ConvertToTrue(const int& rX, const int& rY, float& tX, float& tY);
+  void ConvertToTrue(const int& rX, const int& rY, const float& oZ, float& tX, float& tY);
 
-  void ConvertToRel(const int& tX, const int& tY, int& rX, int& rY);
+  void ConvertToRel(const int& tX, const int& tY, const float& oZ, float& rX, float& rY);
 
   void SubObject(const int& Xc, const int& Yc);
 

@@ -110,7 +110,7 @@ void CMEScenery::SwitchObj(int queryID)
   }
 }
 
-void CMEScenery::ConvertToTrue(const int& rX, const int& rY, float& tX, float& tY)
+void CMEScenery::ConvertToTrue(const int& rX, const int& rY, const float& oZ, float& tX, float& tY)
 {
   // rX = X_win + CamX
   // X_win = rX - CamX
@@ -118,19 +118,89 @@ void CMEScenery::ConvertToTrue(const int& rX, const int& rY, float& tX, float& t
   float cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
   float cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
   // true X, Y positions
-  tX = (cX * (1 - Z)) + (rX * Z);
-  tY = (cY * (1 - Z)) + (rY * Z);
+  tX = (cX * (1 - oZ)) + (rX * oZ);
+  tY = (cY * (1 - oZ)) + (rY * oZ);
 }
 
-void CMEScenery::ConvertToRel(const int& tX, const int& tY, int& rX, int& rY)
+void CMEScenery::ConvertToRel(const int& tX, const int& tY, const float& oZ, float& rX, float& rY)
 {
-  // float X_win = ((WWIDTH - 1) / 2.0) + ((tX - (CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0))) / Z);
-  // float Y_win = ((WHEIGHT - 1) / 2.0) + ((tY - (CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0))) / Z);
+  // window center positions
+  float cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
+  float cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
+  // relative X, Y positions
+  rX = (tX - (cX * (1 - oZ))) / oZ;
+  rY = (tY - (cY * (1 - oZ))) / oZ;
 }
 
 void CMEScenery::SubObject(const int& Xc, const int& Yc)
 {
+  // initialize variables for identifying an object to remove
+  float dZ_min = 0.0f;
+  int i_scn = -1;
+  for (int i = SceneList.size() - 1; i >= 0; i--)
+  {
+    if (SceneList[i]->Z < Zl) continue; // Z out of bounds; continue in loop
+    if (SceneList[i]->Z > Zu) break;    // Z and all following (greater) Z's are out of bounds; break loop
+    // Using the scn object's true X, Y, Z-- get X, Y relative to window PLUS camera displacement
+    float Xi, Yi;
+    ConvertToRel(SceneList[i]->X, SceneList[i]->Y, SceneList[i]->Z, Xi, Yi);
+    float Xf = Xi + SceneList[i]->Width - 1;
+    float Yf = Yi + SceneList[i]->Height - 1;
+    // Xc and Yc are position of the click relative to window PLUS camera displacement
+    // Check to see if the click is within the perimeter of current object in loop
+    if ((Xc >= Xi) && (Xc <= Xf) && (Yc >= Yi) && (Yc <= Yf))
+    {
+      // click is over scenery object
+      float dZ = SceneList[i]->Z - Z;
+      if (dZ < 0.0f)
+      {
+        dZ = -dZ;
+      }
+      if ((i_scn < 0) || (dZ < dZ_min))
+      {
+        dZ_min = dZ;
+        i_scn = i;
+      }
+    }
+  }
+  // remove scenery object, if one was identified
+  if (i_scn >= 0)
+  {
+    // Find the local texture index associated with the targeted scenery
+    int i_tex;
+    for (int i = 0; i < TexList.size(); i++)
+    {
+      if (SceneList[i_scn]->Tex_Scenery == TexList[i])
+      {
+        i_tex = i;
+        break;
+      }
+    }
+    // Destroy the scenery object and ID
+    delete SceneList[i_scn];
+    SceneList.erase(SceneList.begin() + i_scn);
+    ScnID_List.erase(ScnID_List.begin() + i_scn);
 
+    // Scan remaining objects for texture associated with deleted object
+    bool del_tex = true;
+    for (int i = 0; i < SceneList.size(); i++)
+    {
+      if (SceneList[i]->Tex_Scenery == TexList[i_tex])
+      {
+        del_tex = false;
+        break;
+      }
+    }
+    // If the SDL_texture associated with the delted object is no longer needed...
+    if (del_tex)
+    {
+      // Destroy that texture.
+      SDL_DestroyTexture(TexList[i_tex]);
+      TexList.erase(TexList.begin() + i_tex);
+      // Destroy that texture's global ID.
+      TexID_List.erase(TexID_List.begin() + i_tex);
+    }
+  }
 }
 
 void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
@@ -138,7 +208,7 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   // convert relative X, Y to true coordinates
   float tX = 0.0f;
   float tY = 0.0f;
-  ConvertToTrue(Xc, Yc, tX, tY);
+  ConvertToTrue(Xc, Yc, Z, tX, tY);
 
   // get object-specific information (Xo, Yo, etc.)
   int tex_ID = 0;
