@@ -110,23 +110,23 @@ void CMEScenery::SwitchObj(int queryID)
   }
 }
 
-void CMEScenery::ConvertToTrue(const int& rX, const int& rY, const float& oZ, float& tX, float& tY)
+void CMEScenery::ConvertToTrue(const int& rX, const int& rY, const double& oZ, double& tX, double& tY)
 {
   // rX = X_win + CamX
   // X_win = rX - CamX
   // window center positions
-  float cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
-  float cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
+  double cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
+  double cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
   // true X, Y positions
   tX = (cX * (1 - oZ)) + (rX * oZ);
   tY = (cY * (1 - oZ)) + (rY * oZ);
 }
 
-void CMEScenery::ConvertToRel(const int& tX, const int& tY, const float& oZ, float& rX, float& rY)
+void CMEScenery::ConvertToRel(const int& tX, const int& tY, const double& oZ, double& rX, double& rY)
 {
   // window center positions
-  float cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
-  float cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
+  double cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
+  double cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
   // relative X, Y positions
   rX = (tX - (cX * (1 - oZ))) / oZ;
   rY = (tY - (cY * (1 - oZ))) / oZ;
@@ -142,10 +142,10 @@ void CMEScenery::SubObject(const int& Xc, const int& Yc)
     if (SceneList[i]->Z < Zl) continue; // Z out of bounds; continue in loop
     if (SceneList[i]->Z > Zu) break;    // Z and all following (greater) Z's are out of bounds; break loop
     // Using the scn object's true X, Y, Z-- get X, Y relative to window PLUS camera displacement
-    float Xi, Yi;
+    double Xi, Yi;
     ConvertToRel(SceneList[i]->X, SceneList[i]->Y, SceneList[i]->Z, Xi, Yi);
-    float Xf = Xi + SceneList[i]->Width - 1;
-    float Yf = Yi + SceneList[i]->Height - 1;
+    double Xf = Xi + SceneList[i]->Width - 1;
+    double Yf = Yi + SceneList[i]->Height - 1;
     // Xc and Yc are position of the click relative to window PLUS camera displacement
     // Check to see if the click is within the perimeter of current object in loop
     if ((Xc >= Xi) && (Xc <= Xf) && (Yc >= Yi) && (Yc <= Yf))
@@ -206,8 +206,8 @@ void CMEScenery::SubObject(const int& Xc, const int& Yc)
 void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
 {
   // convert relative X, Y to true coordinates
-  float tX = 0.0f;
-  float tY = 0.0f;
+  double tX = 0.0;
+  double tY = 0.0;
   ConvertToTrue(Xc, Yc, Z, tX, tY);
 
   // get object-specific information (Xo, Yo, etc.)

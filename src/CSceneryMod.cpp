@@ -72,15 +72,6 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
     if (scn_ID < 0) return false;
     if (Z_loc < 0) return false;
 
-    // if (tex_ID != 1) SDL_Delay(3000);
-    // if (scn_ID != 1) SDL_Delay(3000);
-    // if (X_loc != 200) SDL_Delay(3000);
-    // if (Y_loc != 250) SDL_Delay(3000);
-    // if (Z_loc != 200) SDL_Delay(3000);
-    // if (v_rep != 2) SDL_Delay(3000);
-    // if (h_rep != 2) SDL_Delay(3000);
-    // if (perm != 2) SDL_Delay(3000);
-
     double Zo = double(Z_loc) / 1000.0;
     int Xo = 0; int Yo = 0;
     int W = 0; int H = 0;
@@ -95,7 +86,6 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
       // SDefault tmp_scn;
       tmp_scn->OnLoad(CScenery::TexList[tex_ID], Xo, Yo, W, H, MaxFrames);
       tmp_scn->OnPlace(X_loc, Y_loc, Zo, v_rep, h_rep, perm);
-      // tmp_scn->OnPlace(X_loc, Y_loc, Z_loc, v_rep, h_rep, perm);
     }
     else
     {

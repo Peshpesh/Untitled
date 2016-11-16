@@ -33,9 +33,9 @@ void CMapEdit::OnLoop()
 	// DEBUGGING
 	if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
 	{
-		float trueX, trueY;
-		float rX = mX;
-		float rY = mY;
+		double trueX, trueY;
+		double rX = mX;
+		double rY = mY;
 		CMEScenery::ScnControl.ConvertToTrue(rX, rY, CMEScenery::ScnControl.Z, trueX, trueY);
 		if (rX < 0) rX = -rX;
 		if (trueX < 0) trueX = -trueX;

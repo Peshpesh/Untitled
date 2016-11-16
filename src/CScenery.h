@@ -66,9 +66,9 @@ public:	// texture attributes
   unsigned int MaxFrames;      // number of frames for animated scenery
 
 public:	// dynamic attributes
-  float X;            // X-position on screen
-  float Y;            // Y-position on screen
-	float Z;   					/* "Depth" of scenery; 1.0f is at map-level,
+  int X;           		// True X-position
+  int Y;           		// True Y-position
+	double Z;   				/* "Depth" of scenery; 1.0f is at map-level,
                        * greater is farther, lesser is closer
 											 * see parallax concept .ai file for info
                        */
@@ -86,7 +86,7 @@ public:
 	virtual bool OnLoad(SDL_Texture* scenery,
     const unsigned int& Xo, const unsigned int& Yo, const unsigned int& Width, const unsigned int& Height, const unsigned int& MaxFrames);
 
-	virtual void OnPlace(const float& X, const float& Y, const float& Z, const bool& v_rep, const bool& h_rep, const bool& perm);
+	virtual void OnPlace(const int& X, const int& Y, const double& Z, const bool& v_rep, const bool& h_rep, const bool& perm);
 
 	virtual void OnLoop();
 
