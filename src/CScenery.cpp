@@ -11,7 +11,7 @@ CScenery::CScenery()
   Width = Height = 0;
   // MaxFrames = 0;
 
-  X = Y = 0.0f;
+  X = Y = 0;
   Z = 1.0f;
 
   vert_repeat = false;
@@ -59,18 +59,57 @@ void CScenery::OnLoop()
 bool CScenery::OnRender(SDL_Renderer* renderer)
 {
   if (renderer == NULL) return false;
-  if (Tex_Scenery == NULL)
-  {
-    return false;
-  }
+  if (Tex_Scenery == NULL) return false;
+
   // float Xc = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
   // float Yc = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
-  float X_win = ((WWIDTH - 1) / 2.0) + ((X - (CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0))) / Z);
-  float Y_win = ((WHEIGHT - 1) / 2.0) + ((Y - (CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0))) / Z);
+  int X_win, Y_win;
+  if (!permanent)
+  {
+    X_win = ((WWIDTH - 1) / 2.0) + ((X - (CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0))) / Z);
+    Y_win = ((WHEIGHT - 1) / 2.0) + ((Y - (CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0))) / Z);
+  }
+  else
+  {
+    X_win = X;
+    Y_win = Y;
+  }
 
-  if (hori_repeat)
+  if (!vert_repeat && !hori_repeat)
   {
     CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_win, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+  }
+  else if (hori_repeat && !vert_repeat)
+  {
+    int X_disp = (X_win % Width) - Width;
+    while (X_disp < WWIDTH)
+    {
+      CSurface::OnDraw(renderer, Tex_Scenery, X_disp, Y_win, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+      X_disp += Width;
+    }
+  }
+  else if (vert_repeat && !hori_repeat)
+  {
+    int Y_disp = (Y_win % Height) - Height;
+    while (Y_disp < WHEIGHT)
+    {
+      CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_disp, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+      Y_disp += Height;
+    }
+  }
+  else if (vert_repeat && hori_repeat)
+  {
+    int X_disp = (X_win % Width) - Width;
+    while (X_disp < WWIDTH)
+    {
+      int Y_disp = (Y_win % Height) - Height;
+      while (Y_disp < WHEIGHT)
+      {
+        CSurface::OnDraw(renderer, Tex_Scenery, X_disp, Y_disp, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+        Y_disp += Height;
+      }
+      X_disp += Width;
+    }
   }
 
   return true;

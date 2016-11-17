@@ -208,7 +208,15 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   // convert relative X, Y to true coordinates
   double tX = 0.0;
   double tY = 0.0;
-  ConvertToTrue(Xc, Yc, Z, tX, tY);
+  if (!permanent)
+  {
+    ConvertToTrue(Xc, Yc, Z, tX, tY);
+  }
+  else
+  {
+    tX = Xc - CCamera::CameraControl.GetX();
+    tY = Yc - CCamera::CameraControl.GetY();
+  }
 
   // get object-specific information (Xo, Yo, etc.)
   int tex_ID = 0;
@@ -246,9 +254,6 @@ void CMEScenery::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
   tmp_scn->OnPlace(tX, tY, Z, vert_repeat, hori_repeat, permanent);
   CMEScenery::SceneList.insert(CMEScenery::SceneList.begin() + i, tmp_scn);
   CMEScenery::ScnID_List.insert(CMEScenery::ScnID_List.begin() + i, scn_ID);
-
-  // // TESTING
-  // SaveScenery("TESTING");
 }
 
 bool CMEScenery::GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames)

@@ -5,6 +5,7 @@
 #include "CSurface.h"
 #include "CAnimation.h"
 #include "CCamera.h"
+#include "Define.h"
 
 	/*************************************************************************
 	*	This virtual base class is designed to provide a foundational
