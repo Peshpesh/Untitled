@@ -63,7 +63,7 @@ public:	// texture attributes
   unsigned int Yo;             // Y-position on texture
   unsigned int Width;          // width of scenery piece within texture
   unsigned int Height;         // height of scenery piece within texture
-  unsigned int MaxFrames;      // number of frames for animated scenery
+  // unsigned int MaxFrames;      // number of frames for animated scenery
 
 public:	// dynamic attributes
   int X;           		// True X-position

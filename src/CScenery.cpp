@@ -9,7 +9,7 @@ CScenery::CScenery()
 
   Xo = Yo = 0;
   Width = Height = 0;
-  MaxFrames = 0;
+  // MaxFrames = 0;
 
   X = Y = 0.0f;
   Z = 1.0f;
@@ -36,7 +36,7 @@ bool CScenery::OnLoad(SDL_Texture* scenery,
   this->Yo = Yo;
   this->Width = Width;
   this->Height = Height;
-  this->MaxFrames = MaxFrames;
+  Anim_Control.MaxFrames = MaxFrames;
 
   return true;
 }
@@ -53,7 +53,7 @@ void CScenery::OnPlace(const int& X, const int& Y, const double& Z, const bool& 
 
 void CScenery::OnLoop()
 {
-  // animation handling
+  Anim_Control.OnAnimate();
 }
 
 bool CScenery::OnRender(SDL_Renderer* renderer)
@@ -68,7 +68,10 @@ bool CScenery::OnRender(SDL_Renderer* renderer)
   float X_win = ((WWIDTH - 1) / 2.0) + ((X - (CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0))) / Z);
   float Y_win = ((WHEIGHT - 1) / 2.0) + ((Y - (CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0))) / Z);
 
-  CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_win, Xo, Yo, Width, Height);
+  if (hori_repeat)
+  {
+    CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_win, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+  }
 
   return true;
 }

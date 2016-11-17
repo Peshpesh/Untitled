@@ -109,6 +109,11 @@ void CApp::OnLoop()
 				}
 				CEntity::EntityList[i]->OnLoop();
 			}
+			for (int i = 0; i < CScenery::SceneList.size(); i++)
+			{
+				if (!CScenery::SceneList[i]) continue;
+				CScenery::SceneList[i]->OnLoop();
+			}
 
 			// Collisions
 			for (int i = 0; i < CEntityCol::EntityColList.size(); i++)
