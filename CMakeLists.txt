@@ -7,6 +7,7 @@ set(SDL2_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/inc)
 set(SDL2_LIBRARY ${PROJECT_SOURCE_DIR}/lib/SDL2.lib)
 set(SDL2_MAIN ${PROJECT_SOURCE_DIR}/lib/SDL2main.lib)
 set(SDLIMG_LIBRARY ${PROJECT_SOURCE_DIR}/lib/SDL2_image.lib)
+set(SDLMIX_LIBRARY ${PROJECT_SOURCE_DIR}/lib/SDL2_mixer.lib)
 
 include_directories(${SDL2_INCLUDE_DIR})
 
@@ -56,9 +57,10 @@ ${SRCDIR}/CMEUI.cpp
 ${SRCDIR}/Config.cpp
 ${SRCDIR}/CPause.cpp
 ${SRCDIR}/CPlayer.cpp
-${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryMod.cpp
+${SRCDIR}/CSound.cpp
+${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTitle.cpp
 ${SRCDIR}/CTransport.cpp
@@ -112,9 +114,10 @@ ${SRCDIR}/CMEUI.h
 ${SRCDIR}/Config.h
 ${SRCDIR}/CPause.h
 ${SRCDIR}/CPlayer.h
-${SRCDIR}/CSurface.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryMod.h
+${SRCDIR}/CSound.h
+${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CTitle.h
 ${SRCDIR}/CTransport.h
@@ -143,4 +146,4 @@ set(GCC_COVERAGE_LINK_FLAGS	"-mwindows")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 add_executable(Untitled ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(Untitled ${SDL2_MAIN} ${SDL2_LIBRARY} ${SDLIMG_LIBRARY})
+target_link_libraries(Untitled ${SDL2_MAIN} ${SDL2_LIBRARY} ${SDLIMG_LIBRARY} ${SDLMIX_LIBRARY})

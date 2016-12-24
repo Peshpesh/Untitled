@@ -23,6 +23,7 @@
 #include "CPause.h"
 #include "CEntityRes.h"
 #include "CSceneryMod.h"
+#include "CSound.h"
 
 #include "CMapEdit.h"
 

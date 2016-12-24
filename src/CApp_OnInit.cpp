@@ -31,6 +31,16 @@ bool CApp::OnInit()
 		return false;
 	if (CInventory::InvControl.OnInit(Win_Renderer) == false)
 		return false;
+	if (CSound::SoundSys.OnInit() == false)
+		return false;
+
+	///TESTING SOUND SYSTEM
+	Mix_Music* tmpmus = NULL;
+	tmpmus = CSound::SoundSys.LoadMUS(MUS_HOLLOW);
+	if (tmpmus == NULL) return false;
+	if (CSound::SoundSys.PlayMusic(tmpmus) == false)
+		return false;
+
 	////
 	if ((TESTSFC = CSurface::OnLoad("../res/palette.png", Win_Renderer)) == NULL)	return false;
 	SDL_SetTextureBlendMode(TESTSFC, SDL_BLENDMODE_MOD);
