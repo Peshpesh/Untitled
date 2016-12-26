@@ -179,6 +179,8 @@ public:
   Mix_Chunk* LoadSFX(int sfxnum);
 
   bool PlayMusic(Mix_Music* music);
+  bool PlaySound(Mix_Chunk* chunk);
+  bool PlaySound(const int& sfxnum);
 
   bool ChangeOutput();
   bool IncreaseSFX();

@@ -267,6 +267,55 @@ bool CSound::PlayMusic(Mix_Music* music)
   return true;
 }
 
+bool CSound::PlaySound(Mix_Chunk* chunk)
+{
+  if (chunk == NULL) return false;
+  if (Mix_PlayChannel(-1, chunk, 0) == -1) return false;
+
+  return true;
+}
+
+//  Note that this function only works for globally-loaded sfx
+//  Passed enumerations that are not linked to global sfx
+//  will play no sound and return false
+bool CSound::PlaySound(const int& sfxnum)
+{
+  Mix_Chunk* chunk = NULL;
+  switch (sfxnum)
+  {
+    case WAV_MENU_NAV:      chunk = wav_nav; break;
+    case WAV_MENU_CONFIRM:  chunk = wav_confirm; break;
+    case WAV_MENU_CANCEL:   chunk = wav_cancel; break;
+    case WAV_MENU_SCRIBE:   chunk = wav_scribe; break;
+    case WAV_DAMAGE:        chunk = wav_dam; break;
+    case WAV_MUFFLE:        chunk = wav_mufdam; break;
+    case WAV_DEAD:          chunk = wav_dead; break;
+    case WAV_POOF:          chunk = wav_poof; break;
+    case WAV_DING:          chunk = wav_ding; break;
+    case WAV_BOOM:          chunk = wav_boom; break;
+    case WAV_SUPER_BOOM:    chunk = wav_superboom; break;
+    case WAV_SWITCH:        chunk = wav_switch; break;
+    case WAV_HEAL:          chunk = wav_heal; break;
+    case WAV_GAIN_HP:       chunk = wav_hpup; break;
+    case WAV_PELLET:        chunk = wav_pellet; break;
+    case WAV_SHIELD:        chunk = wav_shield; break;
+    case WAV_BLOCK:         chunk = wav_block; break;
+    case WAV_BROKEN:        chunk = wav_break; break;
+    case WAV_CLICK:         chunk = wav_click; break;
+    case WAV_BOOMSTICK:     chunk = wav_boomstick; break;
+    case WAV_GOOD_KEY:      chunk = wav_goodkey; break;
+    case WAV_BAD_KEY:       chunk = wav_badkey; break;
+    case WAV_BOOST:         chunk = wav_boost; break;
+    case WAV_SECRET:        chunk = wav_secret; break;
+    default:  break;
+  }
+  return PlaySound(chunk);
+}
+
+//  Changing the audio output requires a reinitialization
+//  of the mixing library. Thus, this change should only be
+//  permitted in low-dynamic situations, such as via the main
+//  menu or in pre-execution.
 bool CSound::ChangeOutput()
 {
   if (stereo) stereo = false;
