@@ -82,7 +82,7 @@ Mix_Music* CSound::LoadMUS(int tracknum)
   Mix_Music* music = NULL;
   switch (tracknum)
   {
-    case MUS_HOLLOW: music = Mix_LoadMUS("curly.ogg"); break;
+    case MUS_HOLLOW: music = Mix_LoadMUS("home.ogg"); break;
     // External (non-game) Tracks
     case MUS_I_TITLE: music = Mix_LoadMUS("../res/ogg/title_intr.ogg"); break;
     case MUS_L_TITLE: music = Mix_LoadMUS("../res/ogg/title_loop.ogg"); break;
@@ -262,7 +262,7 @@ Mix_Chunk* CSound::LoadSFX(int sfxnum)
 
 bool CSound::PlayMusic(Mix_Music* music)
 {
-  if (Mix_PlayMusic(music, 1) == -1) return false;
+  if (Mix_PlayMusic(music, -1) == -1) return false;
 
   return true;
 }

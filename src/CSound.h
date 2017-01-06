@@ -19,7 +19,7 @@ enum track
   MUS_I_GOODEND,            MUS_L_GOODEND,  //  Good (normal) ending music
   MUS_I_BESTEND,            MUS_L_BESTEND,  //  Best (complete) ending music
   // Regional Tracks
-  MUS_I_HOME,               MUS_L_HOME,         //  Played when you're home.
+  MUS_I_HOME,               MUS_L_HOME,         //  Played when you're home...
   MUS_I_YRAI,               MUS_L_YRAI,         //  Yrai
   MUS_I_RHIGHID,            MUS_L_RHIGHID,      //  Rhighid Range
   MUS_I_RUINS,              MUS_L_RUINS,        //  Avan Ruins
@@ -53,7 +53,7 @@ enum track
   MUS_I_ICARID,             MUS_L_ICARID,       //  Icarid theme
   MUS_I_ZACH,               MUS_L_ZACH,         //  Zacharia theme
   MUS_I_FINAL,              MUS_L_FINAL,        //  The last battle
-  MUS_I_VERY,               MUS_L_VERY,         //  The VERY last battle (I swear)
+  MUS_I_VERY,               MUS_L_VERY,         //  The VERY last battle (I promise)
   MUS_I_LEPPY,              MUS_L_LEPPY,        //  You don't want none of this
   // Situational Tracks
   MUS_I_SHOP,               MUS_L_SHOP,               //  Shopping

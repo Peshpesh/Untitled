@@ -8,7 +8,8 @@ CTransport::CTransport()
 	Relocate = true;
 	Origin = -1;
 	Destination = ARENA;
-	rX = rY = 300.0f;
+	rX = 128.0f;
+	rY = 300.0f;
 }
 
 bool CTransport::OnInit()
@@ -95,5 +96,6 @@ void CTransport::OnCleanup()
 	Relocate = true;
 	Origin = -1;
 	Destination = ARENA;
-	rX = rY = 300.0f;
+	rX = 128.0f;
+	rY = 300.0f;
 }
