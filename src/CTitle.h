@@ -13,7 +13,7 @@ enum MAIN_OPTIONS
 	STATISTICS,
 	OPTIONS,
 	QUIT_GAME,
-	MAP_EDITOR,
+	// MAP_EDITOR,
 };
 
 class CTitle

@@ -1,5 +1,5 @@
-#ifndef _CAPP_H_
-#define _CAPP_H_
+#ifndef _C_APP_H_
+#define _C_APP_H_
 
 #include <SDL.h>
 
@@ -25,7 +25,7 @@
 #include "CSceneryMod.h"
 #include "CSound.h"
 
-#include "CMapEdit.h"
+// #include "CMapEdit.h"
 
 class CApp : public CEvent
 {
@@ -76,7 +76,7 @@ public:
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnCleanup();
 
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	// const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 	void OnKeyUp(SDL_Keycode sym, Uint16 mod);
