@@ -31,16 +31,16 @@ void CApp::OnLoop()
 				}
 				case OPTIONS:	break;
 				case QUIT_GAME: OnExit(); break;
-				case MAP_EDITOR:
-				{
-					InitGame();
-					CGameData::GameControl.ImportData('A', CTransport::Transporter.Destination, Player.MaxHealth, Player.Health, Player.Weapon,
-						Player.Ammo, Player.Purse, Player.Arsenal, CTransport::Transporter.rX, CTransport::Transporter.rY);
-					CMapEdit MEditor;
-					MEditor.OnExecute(state);
-					//OnExit();
-					break;
-				}
+				// case MAP_EDITOR:
+				// {
+				// 	InitGame();
+				// 	CGameData::GameControl.ImportData('A', CTransport::Transporter.Destination, Player.MaxHealth, Player.Health, Player.Weapon,
+				// 		Player.Ammo, Player.Purse, Player.Arsenal, CTransport::Transporter.rX, CTransport::Transporter.rY);
+				// 	CMapEdit MEditor;
+				// 	MEditor.OnExecute(state);
+				// 	//OnExit();
+				// 	break;
+				// }
 				default:	break;
 			}
 		}

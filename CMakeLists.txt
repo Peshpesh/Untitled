@@ -13,7 +13,7 @@ include_directories(${SDL2_INCLUDE_DIR})
 
 set(SRCDIR ${PROJECT_SOURCE_DIR}/src)
 
-set(SOURCE_FILES 
+set(SOURCE_FILES
 ${SRCDIR}/CApp.cpp
 ${SRCDIR}/CApp_OnCleanup.cpp
 ${SRCDIR}/CApp_OnEvent.cpp
@@ -40,20 +40,7 @@ ${SRCDIR}/CInventory.cpp
 ${SRCDIR}/CItem.cpp
 ${SRCDIR}/CItemProcess.cpp
 ${SRCDIR}/CMap.cpp
-${SRCDIR}/CMapEdit.cpp
-${SRCDIR}/CME_ChTile.cpp
-${SRCDIR}/CME_IO.cpp
-${SRCDIR}/CME_NPC.cpp
-${SRCDIR}/CME_OnCleanup.cpp
-${SRCDIR}/CME_OnClick.cpp
-${SRCDIR}/CME_OnEvent.cpp
-${SRCDIR}/CME_OnLoop.cpp
-${SRCDIR}/CME_OnMotion.cpp
-${SRCDIR}/CME_OnRender.cpp
-${SRCDIR}/CME_OnStart.cpp
-${SRCDIR}/CME_Scenery.cpp
 ${SRCDIR}/CMenu.cpp
-${SRCDIR}/CMEUI.cpp
 ${SRCDIR}/Config.cpp
 ${SRCDIR}/CPause.cpp
 ${SRCDIR}/CPlayer.cpp
@@ -80,7 +67,6 @@ ${SRCDIR}/ESpikefall.cpp
 ${SRCDIR}/EYoshi_CPU.cpp
 ${SRCDIR}/Font.cpp
 ${SRCDIR}/IDebug.cpp
-${SRCDIR}/NPCName.cpp
 )
 
 set(HEADER_FILES
@@ -103,14 +89,7 @@ ${SRCDIR}/CInventory.h
 ${SRCDIR}/CItem.h
 ${SRCDIR}/CItemProcess.h
 ${SRCDIR}/CMap.h
-${SRCDIR}/CMapEdit.h
-${SRCDIR}/CME_ChTile.h
-${SRCDIR}/CME_IO.h
-${SRCDIR}/CME_NPC.h
-${SRCDIR}/CME_Scenery.h
-${SRCDIR}/CME_Resource.h
 ${SRCDIR}/CMenu.h
-${SRCDIR}/CMEUI.h
 ${SRCDIR}/Config.h
 ${SRCDIR}/CPause.h
 ${SRCDIR}/CPlayer.h

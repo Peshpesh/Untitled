@@ -34,13 +34,15 @@ void CTitle::OnEvent(SDL_Keycode sym)
 		if (sym == Config::ConfControl.right)	return;
 		if (sym == Config::ConfControl.down)
 		{
-			if (hilight == MAP_EDITOR) hilight = NEW_GAME;
+			// if (hilight == MAP_EDITOR) hilight = NEW_GAME;
+			if (hilight == QUIT_GAME) hilight = NEW_GAME;
 			else hilight++;
 			return;
 		}
 		if (sym == Config::ConfControl.up)
 		{
-			if (hilight == NEW_GAME) hilight = MAP_EDITOR;
+			// if (hilight == NEW_GAME) hilight = MAP_EDITOR;
+			if (hilight == NEW_GAME) hilight = QUIT_GAME;
 			else hilight--;
 			return;
 		}
@@ -125,7 +127,7 @@ void CTitle::OnLoop()
 			case STATISTICS: Submit = false; showstats = true; break;
 			case OPTIONS:	Submit = false; Config::ConfControl.modify = true; break;
 			case QUIT_GAME: break;
-			case MAP_EDITOR: break;
+			// case MAP_EDITOR: break;
 			default: break;
 		}
 	}
@@ -137,12 +139,14 @@ void CTitle::OnRender(SDL_Renderer* renderer)
 	{
 		if (!showstats && !selectGame)
 		{
-			Font::Write(renderer, Font::FontControl.Tex_Font,
-				"NEW GAME\nLOAD GAME\nSTATISTICS\nOPTIONS\nQUIT\n\nMAP EDITOR", WWIDTH / 2, WHEIGHT / 2);
-			if (hilight != MAP_EDITOR)
-				Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (hilight * 16));
-			else
-				Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + ((hilight + 1) * 16));
+			// Font::Write(renderer, Font::FontControl.Tex_Font,
+			// 	"NEW GAME\nLOAD GAME\nSTATISTICS\nOPTIONS\nQUIT\n\nMAP EDITOR", WWIDTH / 2, WHEIGHT / 2);
+			// if (hilight != MAP_EDITOR)
+			// 	Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (hilight * 16));
+			// else
+			// 	Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + ((hilight + 1) * 16));
+			Font::Write(renderer, Font::FontControl.Tex_Font, "NEW GAME\nLOAD GAME\nSTATISTICS\nOPTIONS\nQUIT", WWIDTH / 2, WHEIGHT / 2);
+			Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (hilight * 16));
 		}
 		else if (selectGame)
 		{
