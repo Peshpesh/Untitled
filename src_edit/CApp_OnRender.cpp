@@ -63,98 +63,9 @@ void CApp::OnRender()
 	{
 		RenderSCNedit();
 	}
-
-	// Write a button name for changing tiles within a tileset
-	Font::CenterWrite(Map_Renderer, Font, "CHANGE", EWIDTH - 50, 50);
-	Font::CenterWrite(Map_Renderer, Font, "TILE", EWIDTH - 50, 66);
-
-	// Draw the active tileset, tiles, and type.
-	// Draws active tile
-	CSurface::OnDraw(Map_Renderer, Main_Tileset, EWIDTH - (50 + TILE_SIZE / 2), 275,
-		(Current_Tile % TilesetWidth) * TILE_SIZE,
-		(Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws tile before active tile
-	if (Current_Tile != 0)
-		CSurface::OnDraw(Map_Renderer, Main_Tileset, EWIDTH - (50 + TILE_SIZE / 2) - TILE_SIZE, 275,
-		((Current_Tile - 1) % TilesetWidth) * TILE_SIZE,
-		((Current_Tile - 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws tile after active tile
-	if (Current_Tile != TilesetWidth * TilesetHeight - 1)
-		CSurface::OnDraw(Map_Renderer, Main_Tileset, EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE, 275,
-		((Current_Tile + 1) % TilesetWidth) * TILE_SIZE,
-		((Current_Tile + 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draw active foreground tile on top of active tile
-	if (Current_Fore != 0)
+	else
 	{
-		CSurface::OnDraw(Map_Renderer, Main_Tileset, EWIDTH - (50 + TILE_SIZE / 2), 275,
-			(Current_Fore % TilesetWidth) * TILE_SIZE,
-			(Current_Fore / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-	}
-
-	// Draws active type
-	CSurface::OnDraw(Map_Renderer, Type_Tileset, EWIDTH - (50 + TILE_SIZE / 2), 405,
-		(Current_Type % TypesetWidth) * TILE_SIZE,
-		(Current_Type / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws type before active type
-	if (Current_Type != TILE_TYPE_NONE)
-		CSurface::OnDraw(Map_Renderer, Type_Tileset, EWIDTH - (50 + TILE_SIZE / 2) - TILE_SIZE, 405,
-		((Current_Type - 1) % TypesetWidth) * TILE_SIZE,
-		((Current_Type - 1) / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws type after active type
-	if (Current_Type != TILE_TYPE_FIRE)
-		CSurface::OnDraw(Map_Renderer, Type_Tileset, EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE, 405,
-		((Current_Type + 1) % TypesetWidth) * TILE_SIZE,
-		((Current_Type + 1) / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Writes out the active type
-	switch (Current_Type)
-	{
-		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, Font, "NONE", EWIDTH - 50, 447); break;
-		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, Font, "HOLLO", EWIDTH - 50, 447); break;
-		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, Font, "NORM", EWIDTH - 50, 447); break;
-		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, Font, "BLOCK", EWIDTH - 50, 447); break;
-		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, Font, "WATER", EWIDTH - 50, 447); break;
-		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, Font, "ICE", EWIDTH - 50, 447); break;
-		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, Font, "FIRE", EWIDTH - 50, 447); break;
-		default: break;
-	}
-
-	// Draws active slope
-	if (Current_Slope != SLOPE_FLAT)
-		CSurface::OnDraw(Map_Renderer, Slope_Tileset, EWIDTH - (50 + TILE_SIZE / 2), 320,
-			((Current_Slope - 1) % SlopesetWidth) * TILE_SIZE,
-			((Current_Slope - 1) / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws slope before active slope
-	if (Current_Slope > SLOPE_FLAT + 1)
-		CSurface::OnDraw(Map_Renderer, Slope_Tileset, EWIDTH - (50 + TILE_SIZE / 2) - TILE_SIZE, 320,
-		((Current_Slope - 2) % SlopesetWidth) * TILE_SIZE,
-		((Current_Slope - 2) / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws slope after active slope
-	if (Current_Slope != STEEP_DSCE)
-		CSurface::OnDraw(Map_Renderer, Slope_Tileset, EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE, 320,
-		((Current_Slope) % SlopesetWidth) * TILE_SIZE,
-		((Current_Slope) / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Writes out the active slope
-	switch (Current_Slope)
-	{
-	case SLOPE_FLAT: Font::CenterWrite(Map_Renderer, Font, "FLAT", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_ASC: Font::CenterWrite(Map_Renderer, Font, "ASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_ASCE: Font::CenterWrite(Map_Renderer, Font, "ASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_DSC: Font::CenterWrite(Map_Renderer, Font, "DSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_DSCE: Font::CenterWrite(Map_Renderer, Font, "DSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_ASC: Font::CenterWrite(Map_Renderer, Font, "SASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_DSC: Font::CenterWrite(Map_Renderer, Font, "SDSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_ASCE: Font::CenterWrite(Map_Renderer, Font, "SASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_DSCE: Font::CenterWrite(Map_Renderer, Font, "SDSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	default: break;
+		RenderMAPedit();
 	}
 
 	int tX = -CCamera::CameraControl.GetX() + (32 * (mouseX / 32));
@@ -172,8 +83,112 @@ void CApp::OnRender()
 	{
 		CSurface::OnDraw(Map_Renderer, Map_Interface, tX, tY, 300, 448, 32, 32);
 	}
-
 	SDL_RenderPresent(Map_Renderer);
+}
+
+bool CApp::RenderMAPedit()
+{
+	// Write a button name for changing tiles within a tileset
+	Font::CenterWrite(Map_Renderer, Font, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - (CHAR_HEIGHT / 2));
+	Font::CenterWrite(Map_Renderer, Font, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + (CHAR_HEIGHT / 2));
+
+	// Draws active background tile
+	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X, DISP_BTILE_Y,
+		(Current_Tile % TilesetWidth) * TILE_SIZE,
+		(Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws tile before active background tile
+	if (Current_Tile != 0)
+		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X - TILE_SIZE, DISP_BTILE_Y,
+			((Current_Tile - 1) % TilesetWidth) * TILE_SIZE,
+			((Current_Tile - 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws tile after active background tile
+	if (Current_Tile != TilesetWidth * TilesetHeight - 1)
+		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X + TILE_SIZE, DISP_BTILE_Y,
+			((Current_Tile + 1) % TilesetWidth) * TILE_SIZE,
+			((Current_Tile + 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws active foreground tile
+	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_FTILE_X, DISP_FTILE_Y,
+		(Current_Fore % TilesetWidth) * TILE_SIZE,
+		(Current_Fore / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws tile before active foreground tile
+	if (Current_Fore != 0)
+		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_FTILE_X - TILE_SIZE, DISP_FTILE_Y,
+			((Current_Fore - 1) % TilesetWidth) * TILE_SIZE,
+			((Current_Fore - 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws tile after active foreground tile
+	if (Current_Fore != TilesetWidth * TilesetHeight - 1)
+		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_FTILE_X + TILE_SIZE, DISP_FTILE_Y,
+			((Current_Fore + 1) % TilesetWidth) * TILE_SIZE,
+			((Current_Fore + 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws active tile type
+	CSurface::OnDraw(Map_Renderer, Type_Tileset, DISP_TYPE_X, DISP_TYPE_Y,
+		(Current_Type % TypesetWidth) * TILE_SIZE,
+		(Current_Type / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws type before active type
+	if (Current_Type != 0)
+		CSurface::OnDraw(Map_Renderer, Type_Tileset, DISP_TYPE_X - TILE_SIZE, DISP_TYPE_Y,
+			((Current_Type - 1) % TypesetWidth) * TILE_SIZE,
+			((Current_Type - 1) / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws type after active type
+	if (Current_Type != TypesetWidth * TypesetHeight - 1)
+		CSurface::OnDraw(Map_Renderer, Type_Tileset, DISP_TYPE_X + TILE_SIZE, DISP_TYPE_Y,
+			((Current_Type + 1) % TypesetWidth) * TILE_SIZE,
+			((Current_Type + 1) / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Writes out the active type
+	switch (Current_Type)
+	{
+		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, Font, "NONE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, Font, "HOLLO", EWIDTH - 50, 447); break;
+		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, Font, "NORM", EWIDTH - 50, 447); break;
+		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, Font, "BLOCK", EWIDTH - 50, 447); break;
+		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, Font, "WATER", EWIDTH - 50, 447); break;
+		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, Font, "ICE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, Font, "FIRE", EWIDTH - 50, 447); break;
+		default: break;
+	}
+
+	// Draws active tile slope
+	CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X, DISP_SLOPE_Y,
+		(Current_Slope % SlopesetWidth) * TILE_SIZE,
+		(Current_Slope / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws slope before active slope
+	if (Current_Slope != 0)
+		CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X - TILE_SIZE, DISP_SLOPE_Y,
+			((Current_Slope - 1) % SlopesetWidth) * TILE_SIZE,
+			((Current_Slope - 1) / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Draws slope after active slope
+	if (Current_Slope != SlopesetWidth * SlopesetHeight - 1)
+		CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X + TILE_SIZE, DISP_SLOPE_Y,
+			((Current_Slope + 1) % SlopesetWidth) * TILE_SIZE,
+			((Current_Slope + 1) / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+	// Writes out the active slope
+	switch (Current_Slope)
+	{
+	case SLOPE_FLAT: Font::CenterWrite(Map_Renderer, Font, "FLAT", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_ASC: Font::CenterWrite(Map_Renderer, Font, "ASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_ASCE: Font::CenterWrite(Map_Renderer, Font, "ASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_DSC: Font::CenterWrite(Map_Renderer, Font, "DSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_DSCE: Font::CenterWrite(Map_Renderer, Font, "DSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_ASC: Font::CenterWrite(Map_Renderer, Font, "SASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_DSC: Font::CenterWrite(Map_Renderer, Font, "SDSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_ASCE: Font::CenterWrite(Map_Renderer, Font, "SASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_DSCE: Font::CenterWrite(Map_Renderer, Font, "SDSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	default: break;
+	}
+
+	return true;
 }
 
 bool CApp::RenderNPCedit()

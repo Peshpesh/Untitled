@@ -90,6 +90,7 @@ public:
 
 	// Renders graphics
 	void OnRender();
+	bool RenderMAPedit();
 	bool RenderNPCedit();
 	bool RenderSCNedit();
 	bool RenderSCNswitch();

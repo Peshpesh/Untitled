@@ -84,105 +84,10 @@ void CApp::OnLButtonDown(int mX, int mY)
 		// returns false if error...
 		EventSCNedit(mX, mY);
 	}
-
-	// Click is on "Set". This displays a prompt to change tilesets,
-	// and the function within the loop performs a change if requested.
-	if (mX >= EWIDTH - 75 && mX <= EWIDTH - 25)
+	else
 	{
-		if (mY >= 10 && mY <= 40)
-		{
-			if ((Main_Tileset = CUI::UIControl.OnChange(Map_Renderer, Map_Interface, Font, Tileset_Path)) != NULL)
-			{
-				CArea::AreaControl.ChangeSet(Main_Tileset);
-				Current_Tile = 0;
-				QueryTileset();
-				return;
-			}
-		}
-	}
-
-	// Click over "CHANGE TILE". A display of all tiles is rendered,
-	// and clicking a tile will update the active tile to use the clicked tile.
-	if (mX >= EWIDTH - 100 && mX < EWIDTH)
-	{
-		if (mY >= 42 && mY <= 74)
-		{
-			Current_Tile = CChangeTile::UIControl.OnExecute(Map_Renderer, Main_Tileset);
-			return;
-		}
-	}
-
-	// Click is on left side of active tile type. Changes the tile type to that left type.
-	if (Current_Type != 0)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) - TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2))
-		{
-			if (mY >= 405 && mY < 405 + TILE_SIZE)
-			{
-				Current_Type -= 1;
-				return;
-			}
-		}
-	}
-	// Click is on right side of active tile type. Changes the tile type to that right type.
-	if (Current_Type != TILE_TYPE_FIRE)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE * 2)
-		{
-			if (mY >= 405 && mY < 405 + TILE_SIZE)
-			{
-				Current_Type += 1;
-				return;
-			}
-		}
-	}
-	// Click is on left side of active tile slope. Changes the tile slope to that left slope.
-	if (Current_Slope != 0)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) - TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2))
-		{
-			if (mY >= 320 && mY < 320 + TILE_SIZE)
-			{
-				Current_Slope -= 1;
-				return;
-			}
-		}
-	}
-	// Click is on right side of active tile slope. Changes the tile slope to that right slope.
-	if (Current_Slope != STEEP_DSCE)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE * 2)
-		{
-			if (mY >= 320 && mY < 320 + TILE_SIZE)
-			{
-				Current_Slope += 1;
-				return;
-			}
-		}
-	}
-	// Click is on left side of active tile. Changes the active tile to that left tile.
-	if (Current_Tile != 0)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) - TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2))
-		{
-			if (mY >= 275 && mY < 275 + TILE_SIZE)
-			{
-				Current_Tile -= 1;
-				return;
-			}
-		}
-	}
-	// Click is on right side of active tile. Changes the active tile to that right tile.
-	if (Current_Tile != TilesetWidth * TilesetHeight - 1)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE * 2)
-		{
-			if (mY >= 275 && mY < 275 + TILE_SIZE)
-			{
-				Current_Tile += 1;
-				return;
-			}
-		}
+		// returns false if error...
+		EventMAPedit(mX, mY);
 	}
 
 	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
@@ -292,6 +197,123 @@ void CApp::OnRButtonDown(int mX, int mY)
 
 bool CApp::EventMAPedit(int mX, int mY)
 {
+	/*
+	Interactive buttons to add/update:
+	1. Change Tileset button
+	2. Change Tile(s) button
+	3a. Separate background and foreground tiles for precision/simplicity
+	3b. Render combined tile result for clarity
+	3c. Scroll-through (left/right) Tile buttons
+	4. Enable/disable 2x2 Tile "block" placer
+	5. Change Tile "block" button(s)
+	*/
+
+	// Click on "Change Tileset" button. This displays a prompt to change tilesets,
+	// and the function within the loop performs a change if requested.
+	if (mX >= TS_CHG_BUT_X && mX < TS_CHG_BUT_X + TS_CHG_BUT_W)
+	{
+		if (mY >= TS_CHG_BUT_Y && mY < TS_CHG_BUT_Y + TS_CHG_BUT_H)
+		{
+			if ((Main_Tileset = CUI::UIControl.OnChange(Map_Renderer, Map_Interface, Font, Tileset_Path)) != NULL)
+			{
+				CArea::AreaControl.ChangeSet(Main_Tileset);
+				Current_Tile = 0;
+				QueryTileset();
+				return true;
+			}
+		}
+	}
+
+	// Click on "Change Tile" button. A display of all tiles is rendered,
+	// and clicking a tile will update the active tile to use the clicked tile.
+	if (mX >= TILE_CHG_BUT_X && mX < TILE_CHG_BUT_X + TILE_CHG_BUT_W)
+	{
+		if (mY >= TILE_CHG_BUT_Y && mY < TILE_CHG_BUT_Y + TILE_CHG_BUT_H)
+		{
+			Current_Tile = CChangeTile::UIControl.OnExecute(Map_Renderer, Main_Tileset);
+			return true;
+		}
+	}
+
+	// Click on arrow LEFT or RIGHT of active background tile.
+	// Changes the active tile to previous or next index.
+	if (mY >= DISP_BTILE_Y && mY < DISP_BTILE_Y + TILE_SIZE)
+	{
+		// Left Arrow
+		if (mX >= DISP_BTILE_X - TILE_SIZE && mX < DISP_BTILE_X)
+		{
+				if (Current_Tile != 0) Current_Tile -= 1;
+				else Current_Tile = (TilesetWidth * TilesetHeight) - 1;
+				return true;
+		}
+		// Right Arrow
+		if (mX >= DISP_BTILE_X + TILE_SIZE && mX < DISP_BTILE_X + (TILE_SIZE * 2))
+		{
+				if (Current_Tile != (TilesetWidth * TilesetHeight) - 1) Current_Tile += 1;
+				else Current_Tile = 0;
+				return true;
+		}
+	}
+
+	// Click on arrow LEFT or RIGHT of active foreground tile.
+	// Changes the active tile to previous or next index.
+	if (mY >= DISP_FTILE_Y && mY < DISP_FTILE_Y + TILE_SIZE)
+	{
+		// Left Arrow
+		if (mX >= DISP_FTILE_X - TILE_SIZE && mX < DISP_FTILE_X)
+		{
+				if (Current_Fore != 0) Current_Fore -= 1;
+				else Current_Fore = (TilesetWidth * TilesetHeight) - 1;
+				return true;
+		}
+		// Right Arrow
+		if (mX >= DISP_FTILE_X + TILE_SIZE && mX < DISP_FTILE_X + (TILE_SIZE * 2))
+		{
+				if (Current_Fore != (TilesetWidth * TilesetHeight) - 1) Current_Fore += 1;
+				else Current_Fore = 0;
+				return true;
+		}
+	}
+
+	// Click on arrow LEFT or RIGHT of active tile type.
+	// Changes the active tile type to previous or next type index.
+	if (mY >= DISP_TYPE_Y && mY < DISP_TYPE_Y + TILE_SIZE)
+	{
+		// Left Arrow
+		if (mX >= DISP_TYPE_X - TILE_SIZE && mX < DISP_TYPE_X)
+		{
+				if (Current_Type != 0) Current_Type -= 1;
+				else Current_Type = TILE_TYPE_FIRE;
+				return true;
+		}
+		// Right Arrow
+		if (mX >= DISP_TYPE_X + TILE_SIZE && mX < DISP_TYPE_X + (TILE_SIZE * 2))
+		{
+				if (Current_Type != TILE_TYPE_FIRE) Current_Type += 1;
+				else Current_Type = 0;
+				return true;
+		}
+	}
+
+	// Click on arrow LEFT or RIGHT of active tile slope.
+	// Changes the active tile slope to previous or next slope index.
+	if (mY >= DISP_SLOPE_Y && mY < DISP_SLOPE_Y + TILE_SIZE)
+	{
+		// Left Arrow
+		if (mX >= DISP_SLOPE_X - TILE_SIZE && mX < DISP_SLOPE_X)
+		{
+				if (Current_Slope != 0) Current_Slope -= 1;
+				else Current_Slope = STEEP_DSCE;
+				return true;
+		}
+		// Right Arrow
+		if (mX >= DISP_SLOPE_X + TILE_SIZE && mX < DISP_SLOPE_X + (TILE_SIZE * 2))
+		{
+				if (Current_Slope != STEEP_DSCE) Current_Slope += 1;
+				else Current_Slope = 0;
+				return true;
+		}
+	}
 	return true;
 }
 
