@@ -8,6 +8,9 @@ void CApp::OnClick()
 	{
 		if (mX < WWIDTH && mY < WHEIGHT)
 		{
+			// Left-click hold will overwrite map tiles based on changing cursor position.
+			// Note that this function does not (and should not) apply to entities or
+			// scenery objects.
 			if (Active_Mod == MODIFY_MAP)
 			{
 				CArea::AreaControl.ChangeTile

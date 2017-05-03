@@ -61,6 +61,8 @@ public:
 
 	void OnEvent(SDL_Event* Event);
 
+	bool EventMAPedit(int mX, int mY);
+
 	bool EventNPCedit(int mX, int mY);
 	void ModEntity(int mX, int mY);
 	bool AddEntity(int Xo, int Yo);

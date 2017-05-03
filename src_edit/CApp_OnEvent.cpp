@@ -5,6 +5,7 @@ void CApp::OnEvent(SDL_Event* Event)
 	CEvent::OnEvent(Event);
 }
 
+// Handle key-press events
 void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 {
 		switch (sym)
@@ -67,6 +68,7 @@ void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 		}
 }
 
+// Handle left-click events
 void CApp::OnLButtonDown(int mX, int mY)
 {
 	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT)
@@ -286,6 +288,11 @@ void CApp::OnRButtonDown(int mX, int mY)
 			}
 		}
 	}
+}
+
+bool CApp::EventMAPedit(int mX, int mY)
+{
+	return true;
 }
 
 bool CApp::EventNPCedit(int mX, int mY)

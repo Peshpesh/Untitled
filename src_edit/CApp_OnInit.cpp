@@ -18,7 +18,7 @@ bool CApp::OnInit()
 		return false;
 	}
 
-	if ((Map_Interface = CSurface::OnLoad("../res_edit/interface.png", Map_Renderer)) == NULL)
+	if ((Map_Interface = CSurface::OnLoad("../res_edit/interface_plain.png", Map_Renderer)) == NULL)
 	{
 		return false;
 	}
