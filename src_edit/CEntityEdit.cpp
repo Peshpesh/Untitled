@@ -12,18 +12,17 @@ CEntityEdit::CEntityEdit()
 	Speak_ID = 0;
 }
 
-bool CEntityEdit::CWrite_Name(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y)
+bool CEntityEdit::CWrite_Name(SDL_Renderer* renderer, const int& fontID, int X, int Y)
 {
-	if (renderer == NULL || font == NULL)
+	if (renderer == NULL)
 		return false;
 
-//	if (CEntityInfo::EntityInfoList[NPC_ID].Common)
-	if (UseCommon) CWrite_Common(renderer, font, X, Y);
+	if (UseCommon) CWrite_Common(renderer, fontID, X, Y);
 	else
 	{
 		switch (Table_ID)
 		{
-			case DEBUG: CWrite_Debug(renderer, font, X, Y); break;
+			case DEBUG: CWrite_Debug(renderer, fontID, X, Y); break;
 			default: break;
 		}
 	}
@@ -176,37 +175,37 @@ SDL_Texture* CEntityEdit::ForwardSet(int ID)
 }
 
 
-void CEntityEdit::CWrite_Common(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y)
+void CEntityEdit::CWrite_Common(SDL_Renderer* renderer, const int& fontID, int X, int Y)
 {
 	switch (NPC_ID)
 	{
 	/*ID*/
-	/*00*/ case YOSHI: Font::Write(renderer, font, "YOSHI", X, Y); break;
-	/*01*/ case MAINCHAR: Font::Write(renderer, font, "MAINCHAR", X, Y); break;
-	/*02*/ case EVILMAIN: Font::Write(renderer, font, "EVILMAIN", X, Y); break;
-	case BOMB: Font::Write(renderer, font, "BOMB", X, Y); break;
-	case EXPLODE: Font::Write(renderer, font, "EXPLODE", X, Y); break;
+	/*00*/ case YOSHI: Font::Write(renderer, fontID, "YOSHI", X, Y); break;
+	/*01*/ case MAINCHAR: Font::Write(renderer, fontID, "MAINCHAR", X, Y); break;
+	/*02*/ case EVILMAIN: Font::Write(renderer, fontID, "EVILMAIN", X, Y); break;
+	case BOMB: Font::Write(renderer, fontID, "BOMB", X, Y); break;
+	case EXPLODE: Font::Write(renderer, fontID, "EXPLODE", X, Y); break;
 	default: break;
 	}
 }
 
-void CEntityEdit::CWrite_Debug(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y)
+void CEntityEdit::CWrite_Debug(SDL_Renderer* renderer, const int& fontID, int X, int Y)
 {
 	switch (NPC_ID)
 	{
 	/*ID*/
-	/*03*/ case WSTAR: Font::Write(renderer, font, "WHITE STAR", X, Y); break;
-	/*04*/ case BSTAR: Font::Write(renderer, font, "BLACK STAR", X, Y); break;
-	/*05*/ case BARS: Font::Write(renderer, font, "BARS", X, Y); break;
-	/*06*/ case BOX: Font::Write(renderer, font, "BOX", X, Y); break;
-	/*07*/ case SPIKEFALL: Font::Write(renderer, font, "SPIKEFALL", X, Y); break;
-	/*08*/ case BLDSPK_UP: Font::Write(renderer, font, "BLDSPK UP", X, Y); break;
-	/*09*/ case HEART: Font::Write(renderer, font, "HEART", X, Y); break;
-	/*10*/ case AMYTHYST: Font::Write(renderer, font, "AMYTHYST", X, Y); break;
-	/*11*/ case ACIDBALL: Font::Write(renderer, font, "ACIDBALL", X, Y); break;
-	/*12*/ case DOOR: Font::Write(renderer, font, "DOOR", X, Y); break;
-	/*13*/ case SVPT: Font::Write(renderer, font, "SAVEPT", X, Y); break;
-	/*14*/ case SIGN: Font::Write(renderer, font, "SIGN", X, Y); break;
+	/*03*/ case WSTAR: Font::Write(renderer, fontID, "WHITE STAR", X, Y); break;
+	/*04*/ case BSTAR: Font::Write(renderer, fontID, "BLACK STAR", X, Y); break;
+	/*05*/ case BARS: Font::Write(renderer, fontID, "BARS", X, Y); break;
+	/*06*/ case BOX: Font::Write(renderer, fontID, "BOX", X, Y); break;
+	/*07*/ case SPIKEFALL: Font::Write(renderer, fontID, "SPIKEFALL", X, Y); break;
+	/*08*/ case BLDSPK_UP: Font::Write(renderer, fontID, "BLDSPK UP", X, Y); break;
+	/*09*/ case HEART: Font::Write(renderer, fontID, "HEART", X, Y); break;
+	/*10*/ case AMYTHYST: Font::Write(renderer, fontID, "AMYTHYST", X, Y); break;
+	/*11*/ case ACIDBALL: Font::Write(renderer, fontID, "ACIDBALL", X, Y); break;
+	/*12*/ case DOOR: Font::Write(renderer, fontID, "DOOR", X, Y); break;
+	/*13*/ case SVPT: Font::Write(renderer, fontID, "SAVEPT", X, Y); break;
+	/*14*/ case SIGN: Font::Write(renderer, fontID, "SIGN", X, Y); break;
 	default: break;
 	}
 }

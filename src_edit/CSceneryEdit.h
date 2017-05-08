@@ -65,7 +65,7 @@ public:
   bool SaveScenery(char const* areaname);
   bool SaveTexPaths(FILE* ofile);
 
-  bool RenderName(SDL_Renderer* renderer, SDL_Texture* Font, const int& Xo, const int& Yo);
+  bool RenderName(SDL_Renderer* renderer, const int& fontID, const int& Xo, const int& Yo);
 };
 
 #endif

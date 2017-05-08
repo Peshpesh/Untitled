@@ -133,7 +133,7 @@ void CApp::OnLButtonDown(int mX, int mY)
 		// Save maps and entities
 		if (mY >= WHEIGHT && mY < WHEIGHT + 50)
 		{
-			char* Filename = CIO::IOControl.OnSave(Map_Renderer, Map_Interface, Font);
+			char* Filename = CIO::IOControl.OnSave(Map_Renderer, Map_Interface);
 			CArea::AreaControl.SaveArea(Filename, Tileset_Path);
 			CEntityEdit::NPCControl.SaveList(Filename);
 			CSceneryEdit::ScnControl.SaveScenery(Filename);
@@ -144,7 +144,7 @@ void CApp::OnLButtonDown(int mX, int mY)
 		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
 		if (mY >= WHEIGHT + 50)
 		{
-			if (CIO::IOControl.OnLoad(Map_Renderer, Map_Interface, Font, Tileset_Path))
+			if (CIO::IOControl.OnLoad(Map_Renderer, Map_Interface, Tileset_Path))
 			{
 				Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer);
 				Current_Tile = Current_Type = 0;
@@ -214,7 +214,7 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mY >= TS_CHG_BUT_Y && mY < TS_CHG_BUT_Y + TS_CHG_BUT_H)
 		{
-			if ((Main_Tileset = CUI::UIControl.OnChange(Map_Renderer, Map_Interface, Font, Tileset_Path)) != NULL)
+			if ((Main_Tileset = CUI::UIControl.OnChange(Map_Renderer, Map_Interface, Tileset_Path)) != NULL)
 			{
 				CArea::AreaControl.ChangeSet(Main_Tileset);
 				Current_Tile = 0;
@@ -350,7 +350,7 @@ bool CApp::EventNPCedit(int mX, int mY)
 	{
 		if (mY >= TBL_CHG_BUTTON_Y && mY <= TBL_CHG_BUTTON_Y + SWITCH_SIZE)
 		{
-			int New_Table = CUI::UIControl.OnEntity(Map_Renderer, Map_Interface, Font);
+			int New_Table = CUI::UIControl.OnEntity(Map_Renderer, Map_Interface);
 			if (New_Table >= 0)
 			{
 				CEntityEdit::NPCControl.LoadTable(New_Table, Entity_Path);
@@ -415,9 +415,9 @@ void CApp::ModEntity(int mX, int mY)
 // can be used to look-up the appropriate X, Y, W, and H associated with the NPC.
 // That info along with the mX and mY are necessary info to report to an external
 // file for gameplay (i.e., the NPC and where it is). We need, however, the
-// Xo, Xo, X, Y, and the dimensions of the NPC placeholding image (W and H).
+// Xo, Yo, X, Y, and the dimensions of the NPC placeholding image (W and H).
 // After all these are gathered, we feed them to an entity-like object that
-// contains all these integer values. That object is then pushed back into
+// contains all these integral values. That object is then pushed back into
 // a vector that contains all active entities in the workspace, which is used
 // to render all NPCs to the window.
 bool CApp::AddEntity(int Xo, int Yo)

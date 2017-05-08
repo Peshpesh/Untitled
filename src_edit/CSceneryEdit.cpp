@@ -411,9 +411,9 @@ bool CSceneryEdit::SaveTexPaths(FILE* ofile)
   return true;
 }
 
-bool CSceneryEdit::RenderName(SDL_Renderer* renderer, SDL_Texture* Font, const int& Xo, const int& Yo)
+bool CSceneryEdit::RenderName(SDL_Renderer* renderer, const int& fontID, const int& Xo, const int& Yo)
 {
-  if (renderer == NULL || Font == NULL) return false;
+  if (renderer == NULL) return false;
 
   bool retval = true;
   char scnname[10];
@@ -424,6 +424,6 @@ bool CSceneryEdit::RenderName(SDL_Renderer* renderer, SDL_Texture* Font, const i
     case WATERFALL: std::strcpy(scnname, "WATRFL"); break;
     default: retval = false; break;
   }
-  if (retval) Font::Write(renderer, Font, scnname, Xo, Yo);
+  if (retval) Font::Write(renderer, fontID, scnname, Xo, Yo);
   return retval;
 }

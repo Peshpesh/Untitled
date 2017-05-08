@@ -32,10 +32,10 @@ public:
 public:
 	CEntityEdit();
 
-	bool CWrite_Name(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y);
+	bool CWrite_Name(SDL_Renderer* renderer, const int& fontID, int X, int Y);
 
-	void CWrite_Common(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y);
-	void CWrite_Debug(SDL_Renderer* renderer, SDL_Texture* font, int X, int Y);
+	void CWrite_Common(SDL_Renderer* renderer, const int& fontID, int X, int Y);
+	void CWrite_Debug(SDL_Renderer* renderer, const int& fontID, int X, int Y);
 
 	// Write out a list of entity information for the working area.
 	void SaveList(char const* filename);

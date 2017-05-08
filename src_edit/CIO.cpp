@@ -9,7 +9,7 @@ CIO::CIO()
 	UI_Height = 100;
 }
 
-char* CIO::OnSave(SDL_Renderer* renderer, SDL_Texture* map_ui, SDL_Texture* font)
+char* CIO::OnSave(SDL_Renderer* renderer, SDL_Texture* map_ui)
 {
 	Running = true;
 	SDL_Event Event;
@@ -23,15 +23,15 @@ char* CIO::OnSave(SDL_Renderer* renderer, SDL_Texture* map_ui, SDL_Texture* font
 		SDL_RenderClear(renderer);
 		CSurface::OnDraw(renderer, map_ui, (WWIDTH - UI_Width) / 2, (WHEIGHT - UI_Height) / 2,
 			0, WHEIGHT - UI_Height, UI_Width, UI_Height);
-		Font::CenterWrite(renderer, font, "ENTER AN AREANAME", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
-		Font::Write(renderer, font, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
+		Font::CenterWrite(renderer, FONT_DEFAULT, "ENTER AN AREANAME", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
+		Font::Write(renderer, FONT_DEFAULT, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
 		SDL_RenderPresent(renderer);
 	}
 
 	return Areaname;
 }
 
-bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, SDL_Texture* font, char* &setpath)
+bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath)
 {
 	Running = true;
 	SDL_Event Event;
@@ -45,8 +45,8 @@ bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, SDL_Texture* font,
 		SDL_RenderClear(renderer);
 		CSurface::OnDraw(renderer, map_ui, (WWIDTH - UI_Width) / 2, (WHEIGHT - UI_Height) / 2,
 			0, WHEIGHT - UI_Height, UI_Width, UI_Height);
-		Font::CenterWrite(renderer, font, "ENTER AREANAME TO LOAD", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
-		Font::Write(renderer, font, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
+		Font::CenterWrite(renderer, FONT_DEFAULT, "ENTER AREANAME TO LOAD", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
+		Font::Write(renderer, FONT_DEFAULT, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
 		SDL_RenderPresent(renderer);
 	}
 	char pre[] = "../data/maps/";

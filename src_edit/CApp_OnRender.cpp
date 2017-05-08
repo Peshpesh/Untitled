@@ -89,8 +89,8 @@ void CApp::OnRender()
 bool CApp::RenderMAPedit()
 {
 	// Write a button name for changing tiles within a tileset
-	Font::CenterWrite(Map_Renderer, Font, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - (CHAR_HEIGHT / 2));
-	Font::CenterWrite(Map_Renderer, Font, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + (CHAR_HEIGHT / 2));
+	Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - (CHAR_HEIGHT / 2));
+	Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + (CHAR_HEIGHT / 2));
 
 	// Draws active background tile
 	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X, DISP_BTILE_Y,
@@ -146,13 +146,13 @@ bool CApp::RenderMAPedit()
 	// Writes out the active type
 	switch (Current_Type)
 	{
-		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, Font, "NONE", EWIDTH - 50, 447); break;
-		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, Font, "HOLLO", EWIDTH - 50, 447); break;
-		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, Font, "NORM", EWIDTH - 50, 447); break;
-		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, Font, "BLOCK", EWIDTH - 50, 447); break;
-		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, Font, "WATER", EWIDTH - 50, 447); break;
-		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, Font, "ICE", EWIDTH - 50, 447); break;
-		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, Font, "FIRE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "NONE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "HOLLO", EWIDTH - 50, 447); break;
+		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "NORM", EWIDTH - 50, 447); break;
+		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "BLOCK", EWIDTH - 50, 447); break;
+		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "WATER", EWIDTH - 50, 447); break;
+		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "ICE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "FIRE", EWIDTH - 50, 447); break;
 		default: break;
 	}
 
@@ -176,15 +176,15 @@ bool CApp::RenderMAPedit()
 	// Writes out the active slope
 	switch (Current_Slope)
 	{
-	case SLOPE_FLAT: Font::CenterWrite(Map_Renderer, Font, "FLAT", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_ASC: Font::CenterWrite(Map_Renderer, Font, "ASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_ASCE: Font::CenterWrite(Map_Renderer, Font, "ASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_DSC: Font::CenterWrite(Map_Renderer, Font, "DSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_DSCE: Font::CenterWrite(Map_Renderer, Font, "DSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_ASC: Font::CenterWrite(Map_Renderer, Font, "SASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_DSC: Font::CenterWrite(Map_Renderer, Font, "SDSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_ASCE: Font::CenterWrite(Map_Renderer, Font, "SASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_DSCE: Font::CenterWrite(Map_Renderer, Font, "SDSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_FLAT: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "FLAT", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_ASC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "ASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_ASCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "ASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_DSC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "DSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_DSCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "DSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_ASC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_DSC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SDSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_ASCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case STEEP_DSCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SDSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
 	default: break;
 	}
 
@@ -199,24 +199,24 @@ bool CApp::RenderNPCedit()
 		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 33, WWIDTH - 100 - 32, WHEIGHT - 134, 100, 33);
 
 	if (CEntityEdit::NPCControl.UseCommon)
-		tabl_name_W = Font::Write(Map_Renderer, Font, "COMMON", TABL_NAME_X, TABL_NAME_Y);
+		tabl_name_W = Font::Write(Map_Renderer, FONT_DEFAULT, "COMMON", TABL_NAME_X, TABL_NAME_Y);
 	else
-		tabl_name_W = Font::Write(Map_Renderer, Font, "UNIQUE", TABL_NAME_X, TABL_NAME_Y);
+		tabl_name_W = Font::Write(Map_Renderer, FONT_DEFAULT, "UNIQUE", TABL_NAME_X, TABL_NAME_Y);
 
 	CSurface::OnDraw(Map_Renderer, Map_Interface, TABL_NAME_X - ARROW_SIZE - 5, TABL_NAME_Y, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 	CSurface::OnDraw(Map_Renderer, Map_Interface, TABL_NAME_X + tabl_name_W + 5, TABL_NAME_Y, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 
 	// Draw working NPC name
-	if (!CEntityEdit::NPCControl.CWrite_Name(Map_Renderer, Font, ENT_NAME_X, ENT_NAME_Y))
+	if (!CEntityEdit::NPCControl.CWrite_Name(Map_Renderer, FONT_DEFAULT, ENT_NAME_X, ENT_NAME_Y))
 		return false;
 
 	// Print # of NPCs in the area
-	Font::Write(Map_Renderer, Font, " NPCS", Font::Write(Map_Renderer, Font,
+	Font::Write(Map_Renderer, FONT_DEFAULT, " NPCS", Font::Write(Map_Renderer, FONT_DEFAULT,
 		CEntityEdit::NPCControl.EntityList.size(), 5, EHEIGHT - 20) + 5, EHEIGHT - 20);
 
 	// Print "NPC Tables" crap-button
 	CSurface::OnDraw(Map_Renderer, Map_Interface, TBL_CHG_BUTTON_X, TBL_CHG_BUTTON_Y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	Font::Write(Map_Renderer, Font, "NPC TABLES", TBL_CHG_BUTTON_X + SWITCH_SIZE + SYM_SPACING, TBL_CHG_BUTTON_Y);
+	Font::Write(Map_Renderer, FONT_DEFAULT, "NPC TABLES", TBL_CHG_BUTTON_X + SWITCH_SIZE + SYM_SPACING, TBL_CHG_BUTTON_Y);
 
 	return true;
 }
@@ -230,7 +230,7 @@ bool CApp::RenderSCNedit()
 
 	if (!CSurface::OnDraw(Map_Renderer, Map_Interface, SCN_NAME_X - ARROW_SIZE - SYM_SPACING, SCN_NAME_Y, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE)) return false;
 	if (!CSurface::OnDraw(Map_Renderer, Map_Interface, SCN_NAME_X + SCN_NAME_W + SYM_SPACING, SCN_NAME_Y, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE)) return false;
-	if (!CSceneryEdit::ScnControl.RenderName(Map_Renderer, Font, SCN_NAME_X, SCN_NAME_Y)) return false;
+	if (!CSceneryEdit::ScnControl.RenderName(Map_Renderer, FONT_DEFAULT, SCN_NAME_X, SCN_NAME_Y)) return false;
 	if (!RenderSCNswitch()) return false;
 	if (!RenderSCNdepth()) return false;
 
@@ -249,7 +249,7 @@ bool CApp::RenderSCNdepth()
 	while (truncator != 0)
 	{
 		int Z_display = (Z_magnified % (truncator * 10)) / truncator;
-		Font::Write(Map_Renderer, Font, Z_display, Xp, DEPTH_COMBO_Y);
+		Font::Write(Map_Renderer, FONT_DEFAULT, Z_display, Xp, DEPTH_COMBO_Y);
 		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, Y_up, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 		CSurface::OnDraw(Map_Renderer, Map_Interface, Xp, Y_dw, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 		Xp += CHAR_WIDTH;
@@ -266,8 +266,8 @@ bool CApp::RenderSCNdepth()
 		{
 			int Zl_display = (Zl_magnified % (truncator * 10)) / truncator;
 			int Zu_display = (Zu_magnified % (truncator * 10)) / truncator;
-			Font::Write(Map_Renderer, Font, Zl_display, Xl, DEPTH_COMBO_Y);
-			Font::Write(Map_Renderer, Font, Zu_display, Xu, DEPTH_COMBO_Y);
+			Font::Write(Map_Renderer, FONT_DEFAULT, Zl_display, Xl, DEPTH_COMBO_Y);
+			Font::Write(Map_Renderer, FONT_DEFAULT, Zu_display, Xu, DEPTH_COMBO_Y);
 			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, Y_up, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 			CSurface::OnDraw(Map_Renderer, Map_Interface, Xl, Y_dw, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 			CSurface::OnDraw(Map_Renderer, Map_Interface, Xu, Y_up, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
@@ -291,7 +291,7 @@ bool CApp::RenderSCNswitch()
 		if (!CSurface::OnDraw(Map_Renderer, Map_Interface, SWITCHLIST_X, SWITCHLIST_Y, SWITCH_XO, ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE))
 			return false;
 	}
-	Font::Write(Map_Renderer, Font, "HREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y);
+	Font::Write(Map_Renderer, FONT_DEFAULT, "HREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y);
 	if (!CSceneryEdit::ScnControl.vert_repeat)
 	{
 		if (!CSurface::OnDraw(Map_Renderer, Map_Interface,
@@ -308,7 +308,7 @@ bool CApp::RenderSCNswitch()
 			return false;
 		}
 	}
-	Font::Write(Map_Renderer, Font, "VREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + SWITCH_SIZE + SYM_SPACING);
+	Font::Write(Map_Renderer, FONT_DEFAULT, "VREP", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + SWITCH_SIZE + SYM_SPACING);
 	if (!CSceneryEdit::ScnControl.permanent)
 	{
 		if (!CSurface::OnDraw(Map_Renderer, Map_Interface,
@@ -325,6 +325,6 @@ bool CApp::RenderSCNswitch()
 			return false;
 		}
 	}
-	Font::Write(Map_Renderer, Font, "PERM", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)));
+	Font::Write(Map_Renderer, FONT_DEFAULT, "PERM", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)));
 	return true;
 }

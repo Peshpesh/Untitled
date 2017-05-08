@@ -55,7 +55,11 @@ bool CApp::OnInit()
 	SlopesetWidth = PixWidth / TILE_SIZE;
 	SlopesetHeight = PixHeight / TILE_SIZE;
 
-	if ((Font = CSurface::OnLoad("../res/font.png", Map_Renderer)) == NULL)
+	// if ((Font = CSurface::OnLoad("../res/font.png", Map_Renderer)) == NULL)
+	// {
+	// 	return false;
+	// }
+	if (!Font::FontControl.OnInit(Map_Renderer))
 	{
 		return false;
 	}

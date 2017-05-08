@@ -23,7 +23,7 @@ private:
 	SDL_Texture* Slope_Tileset;	// Tileset showing slope type
 	SDL_Texture* Main_Tileset;  // The actual tileset in use
 	SDL_Texture* Map_Interface; // Bordering interface for editor
-	SDL_Texture* Font;
+	// SDL_Texture* Font;
 
 	bool Running;
 
