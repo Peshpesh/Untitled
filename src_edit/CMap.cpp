@@ -154,8 +154,8 @@ void CMap::OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX,
 		{
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			int TilesetX = ((TileList[ID].Slope - 1) % TilesetWidth) * TILE_SIZE;
-			int TilesetY = ((TileList[ID].Slope - 1) / TilesetWidth) * TILE_SIZE;
+			int TilesetX = ((TileList[ID].Slope) % TilesetWidth) * TILE_SIZE;
+			int TilesetY = ((TileList[ID].Slope) / TilesetWidth) * TILE_SIZE;
 			CSurface::OnDraw(renderer, tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}

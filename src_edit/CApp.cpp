@@ -14,8 +14,11 @@ CApp::CApp()
 	mouseX = mouseY = 0;
 
 	Current_Tile = Current_Fore = 0;
+	Use_Fore = false;
 	Current_Type = TILE_TYPE_NONE;
+	Type_Alpha = 85;
 	Current_Slope = SLOPE_FLAT;
+	Slope_Alpha = 125;
 	TypesetWidth = TypesetHeight = TilesetWidth = TilesetHeight = 0;
 	Tileset_Path = "../res/tile/default.png";
 	Entity_Path = "../res/npc/debug.png";

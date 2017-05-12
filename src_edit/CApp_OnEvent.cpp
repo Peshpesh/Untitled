@@ -171,28 +171,6 @@ void CApp::OnRButtonDown(int mX, int mY)
 		if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
 			OnExit();
 	}
-
-	if (Current_Fore != 0)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) - TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2))
-		{
-			if (mY >= 275 && mY < 275 + TILE_SIZE)
-			{
-				Current_Fore -= 1;
-			}
-		}
-	}
-
-	if (Current_Fore != TilesetWidth * TilesetHeight - 1)
-	{
-		if (mX >= EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE && mX < EWIDTH - (50 + TILE_SIZE / 2) + TILE_SIZE * 2)
-		{
-			if (mY >= 275 && mY < 275 + TILE_SIZE)
-			{
-				Current_Fore += 1;
-			}
-		}
-	}
 }
 
 bool CApp::EventMAPedit(int mX, int mY)
@@ -252,6 +230,18 @@ bool CApp::EventMAPedit(int mX, int mY)
 				if (Current_Tile != (TilesetWidth * TilesetHeight) - 1) Current_Tile += 1;
 				else Current_Tile = 0;
 				return true;
+		}
+	}
+
+	// Click on foreground activity switch.
+	// Turn the foreground tile on/off.
+	if (mY >= FORE_SWIT_Y && mY < FORE_SWIT_Y + SWITCH_SIZE)
+	{
+		if (mX >= FORE_SWIT_X && mX < FORE_SWIT_X + SWITCH_SIZE)
+		{
+			if (!Use_Fore) Use_Fore = true;
+			else Use_Fore = false;
+			return true;
 		}
 	}
 

@@ -39,6 +39,7 @@ bool CApp::OnInit()
 	{
 		return false;
 	}
+	SDL_SetTextureAlphaMod(Type_Tileset, Type_Alpha);
 
 	SDL_QueryTexture(Type_Tileset, NULL, NULL, &PixWidth, &PixHeight);
 
@@ -49,6 +50,7 @@ bool CApp::OnInit()
 	{
 		return false;
 	}
+	SDL_SetTextureAlphaMod(Slope_Tileset, Slope_Alpha);
 
 	SDL_QueryTexture(Slope_Tileset, NULL, NULL, &PixWidth, &PixHeight);
 

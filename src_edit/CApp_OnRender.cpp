@@ -1,8 +1,8 @@
 #include "CApp.h"
-// #include "CHUD.h"
 
 void CApp::OnRender()
 {
+	bool debug = false;
 	SDL_RenderClear(Map_Renderer);
 
 	// Draw background scenery
@@ -83,110 +83,108 @@ void CApp::OnRender()
 	{
 		CSurface::OnDraw(Map_Renderer, Map_Interface, tX, tY, 300, 448, 32, 32);
 	}
+
+	//	DEBUGGING
+	if (debug)
+	{
+		//
+	}
 	SDL_RenderPresent(Map_Renderer);
 }
 
 bool CApp::RenderMAPedit()
 {
 	// Write a button name for changing tiles within a tileset
-	Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - (CHAR_HEIGHT / 2));
-	Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + (CHAR_HEIGHT / 2));
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - MINI_CHAR_SIZE);
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + MINI_CHAR_SIZE);
 
 	// Draws active background tile
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "BACKGROUND", EWIDTH - 50, DISP_BTILE_Y - DISP_NAME_OFFSET);
 	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X, DISP_BTILE_Y,
 		(Current_Tile % TilesetWidth) * TILE_SIZE,
 		(Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-	// Draws tile before active background tile
-	if (Current_Tile != 0)
-		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X - TILE_SIZE, DISP_BTILE_Y,
-			((Current_Tile - 1) % TilesetWidth) * TILE_SIZE,
-			((Current_Tile - 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	// Draws background tile arrows
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_BTILE_X - ((TILE_SIZE+ARROW_SIZE)/2),
+			DISP_BTILE_Y + ((TILE_SIZE-ARROW_SIZE)/2), L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_BTILE_X + TILE_SIZE + ((TILE_SIZE-ARROW_SIZE)/2),
+			DISP_BTILE_Y + ((TILE_SIZE-ARROW_SIZE)/2), R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 
-	// Draws tile after active background tile
-	if (Current_Tile != TilesetWidth * TilesetHeight - 1)
-		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X + TILE_SIZE, DISP_BTILE_Y,
-			((Current_Tile + 1) % TilesetWidth) * TILE_SIZE,
-			((Current_Tile + 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	// Foreground tile header & switch
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "FOREGROUND", EWIDTH - 50, DISP_FTILE_Y - DISP_NAME_OFFSET);
+	if (Use_Fore)	CSurface::OnDraw(Map_Renderer, Map_Interface, FORE_SWIT_X, FORE_SWIT_Y, SWITCH_XO, ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	else CSurface::OnDraw(Map_Renderer, Map_Interface, FORE_SWIT_X, FORE_SWIT_Y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 
 	// Draws active foreground tile
 	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_FTILE_X, DISP_FTILE_Y,
 		(Current_Fore % TilesetWidth) * TILE_SIZE,
 		(Current_Fore / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-	// Draws tile before active foreground tile
-	if (Current_Fore != 0)
-		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_FTILE_X - TILE_SIZE, DISP_FTILE_Y,
-			((Current_Fore - 1) % TilesetWidth) * TILE_SIZE,
-			((Current_Fore - 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws tile after active foreground tile
-	if (Current_Fore != TilesetWidth * TilesetHeight - 1)
-		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_FTILE_X + TILE_SIZE, DISP_FTILE_Y,
-			((Current_Fore + 1) % TilesetWidth) * TILE_SIZE,
-			((Current_Fore + 1) / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	// Draws foreground tile arrows
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_FTILE_X - ((TILE_SIZE+ARROW_SIZE)/2),
+			DISP_FTILE_Y + ((TILE_SIZE-ARROW_SIZE)/2), L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_FTILE_X + TILE_SIZE + ((TILE_SIZE-ARROW_SIZE)/2),
+			DISP_FTILE_Y + ((TILE_SIZE-ARROW_SIZE)/2), R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 
 	// Draws active tile type
 	CSurface::OnDraw(Map_Renderer, Type_Tileset, DISP_TYPE_X, DISP_TYPE_Y,
 		(Current_Type % TypesetWidth) * TILE_SIZE,
 		(Current_Type / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-	// Draws type before active type
-	if (Current_Type != 0)
-		CSurface::OnDraw(Map_Renderer, Type_Tileset, DISP_TYPE_X - TILE_SIZE, DISP_TYPE_Y,
-			((Current_Type - 1) % TypesetWidth) * TILE_SIZE,
-			((Current_Type - 1) / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws type after active type
-	if (Current_Type != TypesetWidth * TypesetHeight - 1)
-		CSurface::OnDraw(Map_Renderer, Type_Tileset, DISP_TYPE_X + TILE_SIZE, DISP_TYPE_Y,
-			((Current_Type + 1) % TypesetWidth) * TILE_SIZE,
-			((Current_Type + 1) / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	// Draws tile type arrows
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_TYPE_X - ((TILE_SIZE+ARROW_SIZE)/2),
+			DISP_TYPE_Y + ((TILE_SIZE-ARROW_SIZE)/2), L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_TYPE_X + TILE_SIZE + ((TILE_SIZE-ARROW_SIZE)/2),
+			DISP_TYPE_Y + ((TILE_SIZE-ARROW_SIZE)/2), R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 
 	// Writes out the active type
 	switch (Current_Type)
 	{
-		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "NONE", EWIDTH - 50, 447); break;
-		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "HOLLO", EWIDTH - 50, 447); break;
-		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "NORM", EWIDTH - 50, 447); break;
-		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "BLOCK", EWIDTH - 50, 447); break;
-		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "WATER", EWIDTH - 50, 447); break;
-		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "ICE", EWIDTH - 50, 447); break;
-		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "FIRE", EWIDTH - 50, 447); break;
+		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, FONT_MINI, "NONE", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
+		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, FONT_MINI, "HOLLOW", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
+		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, FONT_MINI, "NORMAL", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
+		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, FONT_MINI, "BLOCK", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
+		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, FONT_MINI, "WATER", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
+		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, FONT_MINI, "ICE", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
+		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, FONT_MINI, "FIRE", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
 		default: break;
 	}
+
+	// Draw an opacity bar for Type overlay
+	int opacity_W = ALPH_BAR_W*((double)(Type_Alpha)/(double)(MAX_RGBA));
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_TYPE_Y, SWITCH_COLOR_X, ON_COLOR_Y, 1, 1, opacity_W, ALPH_BAR_H);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_TYPE_Y, SWITCH_COLOR_X, OFF_COLOR_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
 	// Draws active tile slope
 	CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X, DISP_SLOPE_Y,
 		(Current_Slope % SlopesetWidth) * TILE_SIZE,
 		(Current_Slope / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-	// Draws slope before active slope
-	if (Current_Slope != 0)
-		CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X - TILE_SIZE, DISP_SLOPE_Y,
-			((Current_Slope - 1) % SlopesetWidth) * TILE_SIZE,
-			((Current_Slope - 1) / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-	// Draws slope after active slope
-	if (Current_Slope != SlopesetWidth * SlopesetHeight - 1)
-		CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X + TILE_SIZE, DISP_SLOPE_Y,
-			((Current_Slope + 1) % SlopesetWidth) * TILE_SIZE,
-			((Current_Slope + 1) / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	// Draws tile slope arrows
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_SLOPE_X - ((TILE_SIZE+ARROW_SIZE)/2),
+			DISP_SLOPE_Y + ((TILE_SIZE-ARROW_SIZE)/2), L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_SLOPE_X + TILE_SIZE + ((TILE_SIZE-ARROW_SIZE)/2),
+			DISP_SLOPE_Y + ((TILE_SIZE-ARROW_SIZE)/2), R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 
 	// Writes out the active slope
 	switch (Current_Slope)
 	{
-	case SLOPE_FLAT: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "FLAT", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_ASC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "ASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_ASCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "ASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_DSC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "DSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case SLOPE_DSCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "DSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_ASC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SASC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_DSC: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SDSC", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_ASCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SASCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
-	case STEEP_DSCE: Font::CenterWrite(Map_Renderer, FONT_DEFAULT, "SDSCE", EWIDTH - 50, 320 + TILE_SIZE + 8); break;
+	case SLOPE_FLAT: Font::CenterWrite(Map_Renderer, FONT_MINI, "FLAT", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case SLOPE_ASC: Font::CenterWrite(Map_Renderer, FONT_MINI, "ASC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case SLOPE_ASCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "ASCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case SLOPE_DSC: Font::CenterWrite(Map_Renderer, FONT_MINI, "DSC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case SLOPE_DSCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "DSCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case STEEP_ASC: Font::CenterWrite(Map_Renderer, FONT_MINI, "SASC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case STEEP_DSC: Font::CenterWrite(Map_Renderer, FONT_MINI, "SDSC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case STEEP_ASCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "SASCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case STEEP_DSCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "SDSCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
 	default: break;
 	}
+
+	// Draw an opacity bar for Type overlay
+	opacity_W = ALPH_BAR_W*((double)(Slope_Alpha)/(double)(MAX_RGBA));
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_SLOPE_Y, SWITCH_COLOR_X, ON_COLOR_Y, 1, 1, opacity_W, ALPH_BAR_H);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_SLOPE_Y, SWITCH_COLOR_X, OFF_COLOR_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
 	return true;
 }

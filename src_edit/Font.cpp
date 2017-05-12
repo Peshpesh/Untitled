@@ -11,7 +11,7 @@ Font::Font()
 
 bool Font::OnInit(SDL_Renderer* renderer)
 {
-	SDL_Delay(5000);
+//	SDL_Delay(5000);
 	if ((Tex_Font = CSurface::OnLoad("../res/font.png", renderer)) == NULL) 	return false;
 	if ((Mini_Font = CSurface::OnLoad("../res_edit/minifont.png", renderer)) == NULL) 	return false;
 	if ((Tex_HUD = CSurface::OnLoad("../res/HUD.png", renderer)) == NULL)			return false;
@@ -526,11 +526,10 @@ int Font::CenterWrite(SDL_Renderer* renderer, const int& fontID, char const* mes
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
 	int v_spacing = 0;
-	// if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL)
-	// {
-	// 	return -99;
-	// }
-	font = GetInfo(FONT_DEFAULT, h_spacing, v_spacing);
+	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL)
+	{
+		return -99;
+	}
 
 	int i = 0;
 	int Xo, Yo, W, H;

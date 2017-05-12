@@ -29,8 +29,11 @@ private:
 
 	int Current_Tile;           // Active tileID
 	int Current_Fore;						// Active foreID
+	bool Use_Fore;							// If true, foreID is valid
 	int Current_Type;           // Active typeID
+	int Type_Alpha;							// Current Opacity of the Type overlay
 	int Current_Slope;					// Active tile slope
+	int Slope_Alpha;						// Current Opacity of the Slope overlay
 	int TypesetWidth, TypesetHeight;  	// Typeset texture dimension (tiles)
 	int SlopesetWidth, SlopesetHeight; 	// Slopeset texture dimension (tiles)
 	int TilesetWidth, TilesetHeight;  	// Tileset texture dimension (tiles)
