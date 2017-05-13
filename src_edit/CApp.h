@@ -99,6 +99,7 @@ public:
 	bool RenderSCNedit();
 	bool RenderSCNswitch();
 	bool RenderSCNdepth();
+	bool RenderButton(SDL_Renderer* renderer, SDL_Texture* texture, int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnTerminate();

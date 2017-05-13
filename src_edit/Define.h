@@ -84,9 +84,24 @@
 
 
 // Other definitions
+#define BUT_BORDER_SIZ 2
 #define SWITCH_COLOR_X 40
 #define ON_COLOR_Y 372
 #define OFF_COLOR_Y 360
+#define COLOR_SAT_Y 0
+#define COLOR_PURE_Y 1
+#define COLOR_DSAT_Y 2
+#define RED_X 554
+#define ORANGE_X 555
+#define YELLOW_X 556
+#define GREEN_X 557
+#define CYAN_X 558
+#define BLUE_X 559
+#define INDIGO_X 560
+#define VIOLET_X 561
+#define MAGENTA_X 562
+#define DARKS_X 563
+#define LIGHTS_X 564
 #define SWITCH_XO 32
 #define ON_SWITCH_YO 365
 #define OFF_SWITCH_YO 350

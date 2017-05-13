@@ -94,6 +94,16 @@ void CApp::OnRender()
 
 bool CApp::RenderMAPedit()
 {
+	if (!RenderButton(Map_Renderer, Map_Interface, TS_CHG_BUT_X, TS_CHG_BUT_Y, TS_CHG_BUT_W, TS_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+		return false;
+
+	// Write a button name for changing a tileset
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE", TS_CHG_BUT_X + (TS_CHG_BUT_W / 2), TS_CHG_BUT_Y + (TS_CHG_BUT_H / 2) - MINI_CHAR_SIZE);
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "SET", TS_CHG_BUT_X + (TS_CHG_BUT_W / 2), TS_CHG_BUT_Y + (TS_CHG_BUT_H / 2) + MINI_CHAR_SIZE);
+
+	if (!RenderButton(Map_Renderer, Map_Interface, TILE_CHG_BUT_X, TILE_CHG_BUT_Y, TILE_CHG_BUT_W, TILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+		return false;
+
 	// Write a button name for changing tiles within a tileset
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - MINI_CHAR_SIZE);
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + MINI_CHAR_SIZE);
@@ -165,8 +175,8 @@ bool CApp::RenderMAPedit()
 
 	// Draw an opacity bar for Type overlay
 	int opacity_W = ALPH_BAR_W*((double)(Type_Alpha)/(double)(MAX_RGBA));
-	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_TYPE_Y, SWITCH_COLOR_X, ON_COLOR_Y, 1, 1, opacity_W, ALPH_BAR_H);
-	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_TYPE_Y, SWITCH_COLOR_X, OFF_COLOR_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_TYPE_Y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, ALPH_BAR_H);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_TYPE_Y, DARKS_X, COLOR_PURE_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
 	// Draws active tile slope
 	CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X, DISP_SLOPE_Y,
@@ -194,16 +204,18 @@ bool CApp::RenderMAPedit()
 	default: break;
 	}
 
-	// Draw an opacity bar for Type overlay
+	// Draw an opacity bar for Slope overlay
 	opacity_W = ALPH_BAR_W*((double)(Slope_Alpha)/(double)(MAX_RGBA));
-	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_SLOPE_Y, SWITCH_COLOR_X, ON_COLOR_Y, 1, 1, opacity_W, ALPH_BAR_H);
-	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_SLOPE_Y, SWITCH_COLOR_X, OFF_COLOR_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_SLOPE_Y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, ALPH_BAR_H);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_SLOPE_Y, DARKS_X, COLOR_PURE_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
 	// Menu/Options list for viewing various overlays
-	int sY = VIEWOPTS_Y;
+	int sY = VIEWOPTS_Y - (SWITCH_SIZE + SYM_SPACING);
 	int tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;
 	int tX_offset = SWITCH_SIZE + MINI_CHAR_SIZE;
-	Font::Write(Map_Renderer, FONT_MINI, "View Foreground", VIEWOPTS_X + tX_offset, sY + tY_offset);
+	Font::Write(Map_Renderer, FONT_MINI, "Overlay Switches", VIEWOPTS_X, sY + tY_offset);
+	sY += SWITCH_SIZE + SYM_SPACING;
+	Font::Write(Map_Renderer, FONT_MINI, "Foreground", VIEWOPTS_X + tX_offset, sY + tY_offset);
 	if (View_Fore)
 	{
 		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
@@ -215,7 +227,7 @@ bool CApp::RenderMAPedit()
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(Map_Renderer, FONT_MINI, "View Tile Types", VIEWOPTS_X + tX_offset, sY + tY_offset);
+	Font::Write(Map_Renderer, FONT_MINI, "Tile Types", VIEWOPTS_X + tX_offset, sY + tY_offset);
 	if (View_Type)
 	{
 		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
@@ -227,7 +239,7 @@ bool CApp::RenderMAPedit()
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(Map_Renderer, FONT_MINI, "View Tile Slopes", VIEWOPTS_X + tX_offset, sY + tY_offset);
+	Font::Write(Map_Renderer, FONT_MINI, "Tile Slopes", VIEWOPTS_X + tX_offset, sY + tY_offset);
 	if (View_Slope)
 	{
 		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
@@ -377,5 +389,29 @@ bool CApp::RenderSCNswitch()
 		}
 	}
 	Font::Write(Map_Renderer, FONT_DEFAULT, "PERM", SWITCHLIST_X + SWITCH_SIZE + SYM_SPACING, SWITCHLIST_Y + (2*(SWITCH_SIZE + SYM_SPACING)));
+	return true;
+}
+
+bool CApp::RenderButton(SDL_Renderer* renderer, SDL_Texture* texture, int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl)
+{
+	bool but_glow = false;
+	if (hl)
+	{
+		int mX, mY;
+		SDL_GetMouseState(&mX, &mY);
+		if (mX >= X && mX < X + W)
+		{
+			if (mY >= Y && mY < Y + H)
+			{
+				but_glow = true;
+			}
+		}
+	}
+
+	if (!CSurface::OnDraw(renderer, texture, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))
+		return false;
+	if (!CSurface::OnDraw(renderer, texture, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
+		return false;
+
 	return true;
 }
