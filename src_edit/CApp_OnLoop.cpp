@@ -50,5 +50,10 @@ void CApp::OnLoop()
 		sprintf(Buffer, "X %d | Y %d [ tX %d | tY %d ]", mX, mY, tX, tY);
 		SDL_SetWindowTitle(Map_Display, Buffer);
 	}
+
+	if (SDL_GetWindowFlags(Map_Display) & SDL_WINDOW_MINIMIZED)
+	{
+		SDL_RestoreWindow(Map_Display);
+	}
 	return;
 }
