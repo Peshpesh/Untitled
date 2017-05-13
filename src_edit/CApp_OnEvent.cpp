@@ -329,6 +329,35 @@ bool CApp::EventMAPedit(int mX, int mY)
 		}
 	}
 
+	// Click on View overlay buttons
+	if (mX >= VIEWOPTS_X && mX < VIEWOPTS_X + SWITCH_SIZE)
+	{
+		int Yi = VIEWOPTS_Y;
+		int Yf = VIEWOPTS_Y + SWITCH_SIZE;
+		if (mY >= Yi && mY < Yf)
+		{
+			if (View_Fore) View_Fore = false;
+			else View_Fore = true;
+			return true;
+		}
+		Yi = Yf + SYM_SPACING;
+		Yf = Yi + SWITCH_SIZE;
+		if (mY >= Yi && mY < Yf)
+		{
+			if (View_Type) View_Type = false;
+			else View_Type = true;
+			return true;
+		}
+		Yi = Yf + SYM_SPACING;
+		Yf = Yi + SWITCH_SIZE;
+		if (mY >= Yi && mY < Yf)
+		{
+			if (View_Slope) View_Slope = false;
+			else View_Slope = true;
+			return true;
+		}
+	}
+
 	return true;
 }
 
