@@ -200,40 +200,44 @@ bool CApp::RenderMAPedit()
 	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_SLOPE_Y, SWITCH_COLOR_X, OFF_COLOR_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
 	// Menu/Options list for viewing various overlays
+	int sY = VIEWOPTS_Y;
+	int tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;
+	int tX_offset = SWITCH_SIZE + MINI_CHAR_SIZE;
+	Font::Write(Map_Renderer, FONT_MINI, "View Foreground", VIEWOPTS_X + tX_offset, sY + tY_offset);
 	if (View_Fore)
 	{
-		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y, SWITCH_XO,
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	else
 	{
-		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y, SWITCH_XO,
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
+	sY += SWITCH_SIZE + SYM_SPACING;
+	Font::Write(Map_Renderer, FONT_MINI, "View Tile Types", VIEWOPTS_X + tX_offset, sY + tY_offset);
 	if (View_Type)
 	{
-		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + SWITCH_SIZE + SYM_SPACING, SWITCH_XO,
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	else
 	{
-		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + SWITCH_SIZE + SYM_SPACING, SWITCH_XO,
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
+	sY += SWITCH_SIZE + SYM_SPACING;
+	Font::Write(Map_Renderer, FONT_MINI, "View Tile Slopes", VIEWOPTS_X + tX_offset, sY + tY_offset);
 	if (View_Slope)
 	{
-		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + (SWITCH_SIZE + SYM_SPACING) * 2, SWITCH_XO,
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	else
 	{
-		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + (SWITCH_SIZE + SYM_SPACING) * 2, SWITCH_XO,
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
-
-
-
-
 
 	return true;
 }

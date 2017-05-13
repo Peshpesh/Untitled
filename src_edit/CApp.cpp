@@ -15,7 +15,7 @@ CApp::CApp()
 
 	Current_Tile = Current_Fore = 0;
 	Use_Fore = false;
-	View_Fore = View_Type = View_Slope = false;
+	View_Fore = View_Type = View_Slope = true;
 	Current_Type = TILE_TYPE_NONE;
 	Type_Alpha = 85;
 	Current_Slope = SLOPE_FLAT;
