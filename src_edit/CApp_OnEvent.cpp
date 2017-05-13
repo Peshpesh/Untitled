@@ -285,6 +285,18 @@ bool CApp::EventMAPedit(int mX, int mY)
 		}
 	}
 
+	// Click on opacity bar for tile type overlay
+	if (mY >= ALPH_TYPE_Y && mY < ALPH_TYPE_Y + ALPH_BAR_H)
+	{
+		if (mX >= ALPH_BAR_X && mX < ALPH_BAR_X + ALPH_BAR_W)
+		{
+			double barfract = (double)(mX - ALPH_BAR_X) / (double)(ALPH_BAR_W - 1.0);
+			Type_Alpha = MAX_RGBA * barfract;
+			SDL_SetTextureAlphaMod(Type_Tileset, Type_Alpha);
+			return true;
+		}
+	}
+
 	// Click on arrow LEFT or RIGHT of active tile slope.
 	// Changes the active tile slope to previous or next slope index.
 	if (mY >= DISP_SLOPE_Y && mY < DISP_SLOPE_Y + TILE_SIZE)
@@ -304,6 +316,19 @@ bool CApp::EventMAPedit(int mX, int mY)
 				return true;
 		}
 	}
+
+	// Click on opacity bar for tile slope overlay
+	if (mY >= ALPH_SLOPE_Y && mY < ALPH_SLOPE_Y + ALPH_BAR_H)
+	{
+		if (mX >= ALPH_BAR_X && mX < ALPH_BAR_X + ALPH_BAR_W)
+		{
+			double barfract = (double)(mX - ALPH_BAR_X) / (double)(ALPH_BAR_W - 1.0);
+			Slope_Alpha = MAX_RGBA * barfract;
+			SDL_SetTextureAlphaMod(Slope_Tileset, Slope_Alpha);
+			return true;
+		}
+	}
+
 	return true;
 }
 

@@ -20,9 +20,9 @@ void CApp::OnRender()
 
 	// Draw the working area
 	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
-	CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	CArea::AreaControl.OnRenderSlope(Map_Renderer, Slope_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (View_Fore) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+	if (View_Type) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (View_Slope) CArea::AreaControl.OnRenderSlope(Map_Renderer, Slope_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
 	// Draw the entities in the area
 	for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
@@ -97,6 +97,19 @@ bool CApp::RenderMAPedit()
 	// Write a button name for changing tiles within a tileset
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - MINI_CHAR_SIZE);
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + MINI_CHAR_SIZE);
+
+	// Draw complete active tile with dummy entity & outline (for depth clarity)
+	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_TILE_X, DISP_TILE_Y,
+		(Current_Tile % TilesetWidth) * TILE_SIZE, (Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_TILE_X, DISP_TILE_Y,
+		DUMMY_ENTITY_X, DUMMY_ENTITY_Y, TILE_SIZE, TILE_SIZE);
+	if (Use_Fore)
+	{
+		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_TILE_X, DISP_TILE_Y,
+			(Current_Fore % TilesetWidth) * TILE_SIZE, (Current_Fore / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	}
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_TILE_X, DISP_TILE_Y,
+		DUMMY_ENTITY_X, DUMMY_ENTITY_Y + TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 	// Draws active background tile
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "BACKGROUND", EWIDTH - 50, DISP_BTILE_Y - DISP_NAME_OFFSET);
@@ -185,6 +198,42 @@ bool CApp::RenderMAPedit()
 	opacity_W = ALPH_BAR_W*((double)(Slope_Alpha)/(double)(MAX_RGBA));
 	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_SLOPE_Y, SWITCH_COLOR_X, ON_COLOR_Y, 1, 1, opacity_W, ALPH_BAR_H);
 	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_SLOPE_Y, SWITCH_COLOR_X, OFF_COLOR_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
+
+	// Menu/Options list for viewing various overlays
+	if (View_Fore)
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y, SWITCH_XO,
+			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	else
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y, SWITCH_XO,
+			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	if (View_Type)
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + SWITCH_SIZE + SYM_SPACING, SWITCH_XO,
+			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	else
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + SWITCH_SIZE + SYM_SPACING, SWITCH_XO,
+			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	if (View_Slope)
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + (SWITCH_SIZE + SYM_SPACING) * 2, SWITCH_XO,
+			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	else
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, VIEWOPTS_Y + (SWITCH_SIZE + SYM_SPACING) * 2, SWITCH_XO,
+			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+
+
+
+
 
 	return true;
 }

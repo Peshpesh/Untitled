@@ -34,6 +34,7 @@ private:
 	int Type_Alpha;							// Current Opacity of the Type overlay
 	int Current_Slope;					// Active tile slope
 	int Slope_Alpha;						// Current Opacity of the Slope overlay
+	bool View_Fore, View_Type, View_Slope;
 	int TypesetWidth, TypesetHeight;  	// Typeset texture dimension (tiles)
 	int SlopesetWidth, SlopesetHeight; 	// Slopeset texture dimension (tiles)
 	int TilesetWidth, TilesetHeight;  	// Tileset texture dimension (tiles)

@@ -46,7 +46,7 @@ void CMap::OnLoad()
 
 	CTile tempTile;
 	tempTile.TileID = 0;
-	tempTile.ForeID = 0;
+	tempTile.ForeID = -1;
 	tempTile.TypeID = TILE_TYPE_NONE;
 	tempTile.Slope = SLOPE_FLAT;
 
@@ -90,7 +90,7 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool depth)
 				TilesetX = (TileList[ID].TileID % TilesetWidth) * TILE_SIZE;
 				TilesetY = (TileList[ID].TileID / TilesetWidth) * TILE_SIZE;
 			}
-			else if (TileList[ID].ForeID != 0)
+			else if (TileList[ID].ForeID >= 0)
 			{
 				TilesetX = (TileList[ID].ForeID % TilesetWidth) * TILE_SIZE;
 				TilesetY = (TileList[ID].ForeID / TilesetWidth) * TILE_SIZE;

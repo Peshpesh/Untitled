@@ -57,6 +57,10 @@
 #define DISP_SLOPE_X 674    // "..." Tile slope info
 #define DISP_SLOPE_Y 420    //
 #define ALPH_SLOPE_Y 460
+#define DUMMY_ENTITY_X 522
+#define DUMMY_ENTITY_Y 0
+#define VIEWOPTS_X 20
+#define VIEWOPTS_Y 510
 
 // Entity Editor definitions (application static)
 #define TABL_NAME_X 250

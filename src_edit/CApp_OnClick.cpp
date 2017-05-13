@@ -13,10 +13,16 @@ void CApp::OnClick()
 			// scenery objects.
 			if (Active_Mod == MODIFY_MAP)
 			{
-				CArea::AreaControl.ChangeTile
-					(CCamera::CameraControl.GetX() + mX,
-					CCamera::CameraControl.GetY() + mY,
-					Current_Tile, Current_Fore, Current_Type, Current_Slope);
+				if (Use_Fore)
+				{
+					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mX, CCamera::CameraControl.GetY() + mY,
+						Current_Tile, Current_Fore, Current_Type, Current_Slope);
+				}
+				else
+				{
+					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mX, CCamera::CameraControl.GetY() + mY,
+						Current_Tile, -1, Current_Type, Current_Slope);
+				}
 			}
 		}
 	}
