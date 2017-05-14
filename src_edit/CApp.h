@@ -13,6 +13,7 @@
 #include "CIO.h"
 #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
+#include "CInterrupt.h"
 #include "Define.h"
 
 class CApp : public CEvent {
@@ -47,6 +48,7 @@ public:
 	char* Entity_Path;
 
 	int Active_Mod;
+	int Interrupt;
 	int tabl_name_W;
 
 	enum
@@ -64,6 +66,8 @@ public:
 	int OnExecute();
 
 	void OnEvent(SDL_Event* Event);
+
+	bool EventOPTS(int mX, int mY);
 
 	bool EventMAPedit(int mX, int mY);
 
@@ -101,7 +105,7 @@ public:
 	bool RenderSCNedit();
 	bool RenderSCNswitch();
 	bool RenderSCNdepth();
-	bool RenderButton(SDL_Renderer* renderer, SDL_Texture* texture, int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
+	bool RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnTerminate();
@@ -113,8 +117,6 @@ public:
 	void OnLButtonDown(int mX, int mY);
 
 	void OnRButtonDown(int mX, int mY);
-
-	// const Uint8 *state;
 };
 
 #endif

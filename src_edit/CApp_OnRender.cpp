@@ -102,7 +102,7 @@ bool CApp::RenderMAPedit()
 
 bool CApp::RenderMAPside()
 {
-	if (!RenderButton(Map_Renderer, Map_Interface, TS_CHG_BUT_X, TS_CHG_BUT_Y, TS_CHG_BUT_W, TS_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+	if (!RenderButton(TS_CHG_BUT_X, TS_CHG_BUT_Y, TS_CHG_BUT_W, TS_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
 		return false;
 
 	// Write a button name for changing a tileset
@@ -216,17 +216,17 @@ bool CApp::RenderMAPside()
 
 bool CApp::RenderMAPbottom()
 {
-	if (!RenderButton(Map_Renderer, Map_Interface, BTILE_CHG_BUT_X, BTILE_CHG_BUT_Y, BTILE_CHG_BUT_W, BTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+	if (!RenderButton(BTILE_CHG_BUT_X, BTILE_CHG_BUT_Y, BTILE_CHG_BUT_W, BTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
 		return false;
 
 	// Write a button name for changing background tiles within a tileset
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE B.TILE", BTILE_CHG_BUT_X + (BTILE_CHG_BUT_W / 2), BTILE_CHG_BUT_Y + (BTILE_CHG_BUT_H / 2));
 
-	if (!RenderButton(Map_Renderer, Map_Interface, FTILE_CHG_BUT_X, FTILE_CHG_BUT_Y, FTILE_CHG_BUT_W, FTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+	if (!RenderButton(FTILE_CHG_BUT_X, FTILE_CHG_BUT_Y, FTILE_CHG_BUT_W, FTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
 		return false;
 
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE F.TILE", FTILE_CHG_BUT_X + (FTILE_CHG_BUT_W / 2), FTILE_CHG_BUT_Y + (FTILE_CHG_BUT_H / 2));
-	
+
 	// Menu/Options list for viewing various overlays
 	int sY = VIEWOPTS_Y - (SWITCH_SIZE + SYM_SPACING);
 	int tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;
@@ -410,7 +410,7 @@ bool CApp::RenderSCNswitch()
 	return true;
 }
 
-bool CApp::RenderButton(SDL_Renderer* renderer, SDL_Texture* texture, int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl)
+bool CApp::RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl)
 {
 	bool but_glow = false;
 	if (hl)
@@ -426,9 +426,9 @@ bool CApp::RenderButton(SDL_Renderer* renderer, SDL_Texture* texture, int X, int
 		}
 	}
 
-	if (!CSurface::OnDraw(renderer, texture, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))
+	if (!CSurface::OnDraw(Map_Renderer, Map_Interface, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))
 		return false;
-	if (!CSurface::OnDraw(renderer, texture, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
+	if (!CSurface::OnDraw(Map_Renderer, Map_Interface, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
 		return false;
 
 	return true;

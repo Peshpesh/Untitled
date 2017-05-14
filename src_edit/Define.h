@@ -18,6 +18,28 @@
 
 //---------  Application structural constants ----------//
 
+// Permanent option buttons (image/interface static)
+#define PERM_OPTS_X 508
+#define PERM_OPTS_Y 480
+#define PERM_OPTS_W 232
+#define PERM_OPTS_H 100
+#define EDIT_BUT_X 508
+#define EDIT_BUT_W 100
+#define EDIT_BUT_H 33
+#define MAP_BUT_Y 480
+#define NPC_BUT_Y 513
+#define SCN_BUT_Y 546
+#define MODEL_BUT_X 608
+#define MODEL_BUT_Y 480
+#define MODEL_BUT_W 32
+#define MODEL_BUT_H 100
+#define IO_BUT_X 640
+#define IO_BUT_W 100
+#define IO_BUT_H 50
+#define SAVE_BUT_Y 480
+#define LOAD_BUT_Y 530
+
+
 // Directional Arrow definitions (image static)
 #define L_ARROW_XO 2
 #define R_ARROW_XO 17

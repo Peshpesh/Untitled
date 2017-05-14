@@ -25,6 +25,7 @@ CApp::CApp()
 	Entity_Path = "../res/npc/debug.png";
 
 	Active_Mod = MODIFY_MAP;
+	Interrupt = INTRPT_NONE;
 	tabl_name_W = 0;
 }
 

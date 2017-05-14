@@ -71,8 +71,24 @@ void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 // Handle left-click events
 void CApp::OnLButtonDown(int mX, int mY)
 {
-	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT)
+	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) return;
+
+	// Event is passed to interrupting prompts, if there are any
+	if (Interrupt ^ INTRPT_NONE)
+	{
+
 		return;
+	}
+
+	// Clicks on permanently-placed options buttons (independent of Active_Mod)
+	if (mX >= PERM_OPTS_X && mX < PERM_OPTS_X + PERM_OPTS_W)
+	{
+		if (mY >= PERM_OPTS_Y && mY < PERM_OPTS_Y + PERM_OPTS_H)
+		{
+			EventOPTS(mX, mY);
+			return;
+		}
+	}
 
 	if (Active_Mod == MODIFY_NPC || Active_Mod == REMOVE_NPC)
 	{
@@ -89,77 +105,11 @@ void CApp::OnLButtonDown(int mX, int mY)
 		// returns false if error...
 		EventMAPedit(mX, mY);
 	}
-
-	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
-	if (mX >= WWIDTH - 100 - 32 && mX < WWIDTH - 32)
-	{
-		if (mY >= WHEIGHT && mY < WHEIGHT + 33)
-		{
-			Active_Mod = MODIFY_MAP;
-			return;
-		}
-		if (mY >= WHEIGHT + 33 && mY < WHEIGHT + 66)
-		{
-			// Clicking "NPC" twice allows NPCs to be deleted.
-			if (Active_Mod == MODIFY_NPC) Active_Mod = REMOVE_NPC;
-			else Active_Mod = MODIFY_NPC;
-			return;
-		}
-		if (mY >= WHEIGHT + 66 && mY < EHEIGHT)
-		{
-			if (Active_Mod == MODIFY_SCENE) Active_Mod = REMOVE_SCENE;
-			else Active_Mod = MODIFY_SCENE;
-			return;
-		}
-	}
-
-	// View Area Call (click on "MODEL")
-	if (mX >= 608 && mX <= 639)
-	{
-		if (mY >= WHEIGHT)
-		{
-			CArea::AreaControl.ViewArea(Map_Renderer, Map_Interface);
-			SDL_RenderPresent(Map_Renderer);
-			SDL_Event Event;
-			SDL_WaitEvent(&Event);
-			SDL_WaitEvent(&Event);
-			return;
-		}
-	}
-
-	// Save and load functions
-	if (mX > WWIDTH)
-	{
-		// Save maps and entities
-		if (mY >= WHEIGHT && mY < WHEIGHT + 50)
-		{
-			char* Filename = CIO::IOControl.OnSave(Map_Renderer, Map_Interface);
-			CArea::AreaControl.SaveArea(Filename, Tileset_Path);
-			CEntityEdit::NPCControl.SaveList(Filename);
-			CSceneryEdit::ScnControl.SaveScenery(Filename);
-			return;
-		}
-
-		// Load maps and entities; update the current tileset if area is loaded successfully.
-		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
-		if (mY >= WHEIGHT + 50)
-		{
-			if (CIO::IOControl.OnLoad(Map_Renderer, Map_Interface, Tileset_Path))
-			{
-				Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer);
-				Current_Tile = Current_Type = 0;
-
-				QueryTileset();
-				return;
-			}
-		}
-	}
 }
 
 void CApp::OnRButtonDown(int mX, int mY)
 {
-	if (mX < 0 || mY < 0 || mX > EWIDTH || mY > EHEIGHT)
-		return;
+	if (mX < 0 || mY < 0 || mX > EWIDTH || mY > EHEIGHT) return;
 
 	// If we're trying to do stuff with NPCs ... This places the NPC at the X, Y
 	// coordinates of the map tile clicked upon (good for doors, save points, etc.)
@@ -171,6 +121,75 @@ void CApp::OnRButtonDown(int mX, int mY)
 		if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
 			OnExit();
 	}
+}
+
+bool CApp::EventOPTS(int mX, int mY)
+{
+	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
+	if (mX >= EDIT_BUT_X && mX < EDIT_BUT_X + EDIT_BUT_W)
+	{
+		if (mY >= MAP_BUT_Y && mY < MAP_BUT_Y + EDIT_BUT_H)
+		{
+			Active_Mod = MODIFY_MAP;
+			return true;
+		}
+		if (mY >= NPC_BUT_Y && mY < NPC_BUT_Y + EDIT_BUT_H)
+		{
+			// Clicking "NPC" twice allows NPCs to be deleted.
+			if (Active_Mod == MODIFY_NPC) Active_Mod = REMOVE_NPC;
+			else Active_Mod = MODIFY_NPC;
+			return true;
+		}
+		if (mY >= SCN_BUT_Y && mY < SCN_BUT_Y + EDIT_BUT_H)
+		{
+			if (Active_Mod == MODIFY_SCENE) Active_Mod = REMOVE_SCENE;
+			else Active_Mod = MODIFY_SCENE;
+			return true;
+		}
+	}
+
+	// View Area Call (click on "MODEL")
+	if (mX >= MODEL_BUT_X && mX < MODEL_BUT_X + MODEL_BUT_W)
+	{
+		if (mY >= MODEL_BUT_Y && mY < MODEL_BUT_Y + MODEL_BUT_H)
+		{
+			CArea::AreaControl.ViewArea(Map_Renderer, Map_Interface);
+			SDL_RenderPresent(Map_Renderer);
+			SDL_Event Event;
+			SDL_WaitEvent(&Event);
+			SDL_WaitEvent(&Event);
+			return true;
+		}
+	}
+
+	// Save and load functions
+	if (mX >= IO_BUT_X && mX < IO_BUT_X + IO_BUT_W)
+	{
+		// Save maps and entities
+		if (mY >= SAVE_BUT_Y && mY < SAVE_BUT_Y + IO_BUT_H)
+		{
+			char* Filename = CIO::IOControl.OnSave(Map_Renderer, Map_Interface);
+			CArea::AreaControl.SaveArea(Filename, Tileset_Path);
+			CEntityEdit::NPCControl.SaveList(Filename);
+			CSceneryEdit::ScnControl.SaveScenery(Filename);
+			return true;
+		}
+
+		// Load maps and entities; update the current tileset if area is loaded successfully.
+		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
+		if (mY >= LOAD_BUT_Y && mY < LOAD_BUT_Y + IO_BUT_H)
+		{
+			if (CIO::IOControl.OnLoad(Map_Renderer, Map_Interface, Tileset_Path))
+			{
+				Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer);
+				Current_Tile = Current_Type = 0;
+
+				QueryTileset();
+				return true;
+			}
+		}
+	}
+	return true;
 }
 
 bool CApp::EventMAPedit(int mX, int mY)
@@ -208,7 +227,7 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mY >= BTILE_CHG_BUT_Y && mY < BTILE_CHG_BUT_Y + BTILE_CHG_BUT_H)
 		{
-			Current_Tile = CChangeTile::UIControl.OnExecute(Map_Renderer, Main_Tileset);
+			Interrupt = INTRPT_CH_BTILE;
 			return true;
 		}
 	}

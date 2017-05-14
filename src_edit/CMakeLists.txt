@@ -34,6 +34,7 @@ ${SRCDIR}/CEntityInfo.cpp
 ${SRCDIR}/CEntityRes.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
+${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CIO.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMenu.cpp
@@ -59,6 +60,7 @@ ${SRCDIR}/CEntityEdit.h
 ${SRCDIR}/CEntityRes.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFPS.h
+${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CIO.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMenu.h
