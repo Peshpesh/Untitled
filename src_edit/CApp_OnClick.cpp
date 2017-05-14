@@ -2,6 +2,25 @@
 
 void CApp::OnClick()
 {
+	static int disable_init = 0;
+	static int disable_timer = 0;
+	if (Interrupt ^ INTRPT_NONE)
+	{
+		disable_init = SDL_GetTicks();
+		if (disable_timer <= 0)
+		{
+			disable_timer = 1000;
+		}
+		return;
+	}
+
+	if (disable_timer > 0)
+	{
+		disable_timer += disable_init - SDL_GetTicks();
+		disable_init = SDL_GetTicks();
+		return;
+	}
+
 	int mX, mY;
 	//SDL_PumpEvents();
 	if (SDL_GetMouseState(&mX, &mY) & SDL_BUTTON(SDL_BUTTON_LEFT))

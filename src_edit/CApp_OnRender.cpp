@@ -84,11 +84,18 @@ void CApp::OnRender()
 		CSurface::OnDraw(Map_Renderer, Map_Interface, tX, tY, 300, 448, 32, 32);
 	}
 
+	if (Interrupt ^ INTRPT_NONE)
+	{
+		if (Interrupt & INTRPT_CH_BTILE || Interrupt & INTRPT_CH_FTILE)
+		{
+			PickTile.RenderTileset(Map_Renderer, Map_Interface, Main_Tileset);
+		}
+	}
+
 	//	DEBUGGING
 	if (debug)
 	{
-		PickTile.Init(TilesetWidth, TilesetHeight);
-		PickTile.RenderTileset(Map_Renderer, Main_Tileset);
+		//
 	}
 	SDL_RenderPresent(Map_Renderer);
 }

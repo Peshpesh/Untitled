@@ -111,7 +111,7 @@
 
 
 // Change-tile interface definitions
-#define MAX_TILES 10
+#define MAX_TILES 8
 
 
 // Other definitions

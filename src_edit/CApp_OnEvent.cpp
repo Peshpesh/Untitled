@@ -76,6 +76,14 @@ void CApp::OnLButtonDown(int mX, int mY)
 	// Event is passed to interrupting prompts, if there are any
 	if (Interrupt ^ INTRPT_NONE)
 	{
+		if (Interrupt & INTRPT_CH_BTILE)
+		{
+			if (PickTile.OnLClick(mX, mY, Current_Tile)) Interrupt = INTRPT_NONE;
+		}
+		if (Interrupt & INTRPT_CH_FTILE)
+		{
+			if (PickTile.OnLClick(mX, mY, Current_Fore)) Interrupt = INTRPT_NONE;
+		}
 
 		return;
 	}
@@ -227,7 +235,17 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mY >= BTILE_CHG_BUT_Y && mY < BTILE_CHG_BUT_Y + BTILE_CHG_BUT_H)
 		{
+			PickTile.Init(TilesetWidth, TilesetHeight);
 			Interrupt = INTRPT_CH_BTILE;
+			return true;
+		}
+	}
+	if (mX >= FTILE_CHG_BUT_X && mX < FTILE_CHG_BUT_X + FTILE_CHG_BUT_W)
+	{
+		if (mY >= FTILE_CHG_BUT_Y && mY < FTILE_CHG_BUT_Y + FTILE_CHG_BUT_H)
+		{
+			PickTile.Init(TilesetWidth, TilesetHeight);
+			Interrupt = INTRPT_CH_FTILE;
 			return true;
 		}
 	}

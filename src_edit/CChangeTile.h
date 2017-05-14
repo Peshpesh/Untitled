@@ -7,14 +7,21 @@
 
 class CChangeTile {
 private:
+	// X: x-pos on tileset being viewed (tile coordinate)
+	// Y: y-pos on tileset being viewed (tile coordinate)
+	// W: width of tileset (tiles)
+	// H: height of tileset (tiles)
 	int X, Y, W, H;
+	int dispX, dispY, dispW, dispH;
 
 public:
 	CChangeTile();
 
 	void Init(int W, int H);
 
-	bool RenderTileset(SDL_Renderer* renderer, SDL_Texture* tileset);
+	bool OnLClick(int mX, int mY, int& ID);
+
+	bool RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset);
 
 };
 
