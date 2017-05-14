@@ -94,21 +94,23 @@ void CApp::OnRender()
 
 bool CApp::RenderMAPedit()
 {
+	if (!RenderMAPside()) return false;
+	if (!RenderMAPbottom()) return false;
+
+	return true;
+}
+
+bool CApp::RenderMAPside()
+{
 	if (!RenderButton(Map_Renderer, Map_Interface, TS_CHG_BUT_X, TS_CHG_BUT_Y, TS_CHG_BUT_W, TS_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
 		return false;
 
 	// Write a button name for changing a tileset
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE", TS_CHG_BUT_X + (TS_CHG_BUT_W / 2), TS_CHG_BUT_Y + (TS_CHG_BUT_H / 2) - MINI_CHAR_SIZE);
-	Font::CenterWrite(Map_Renderer, FONT_MINI, "SET", TS_CHG_BUT_X + (TS_CHG_BUT_W / 2), TS_CHG_BUT_Y + (TS_CHG_BUT_H / 2) + MINI_CHAR_SIZE);
-
-	if (!RenderButton(Map_Renderer, Map_Interface, TILE_CHG_BUT_X, TILE_CHG_BUT_Y, TILE_CHG_BUT_W, TILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
-		return false;
-
-	// Write a button name for changing tiles within a tileset
-	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) - MINI_CHAR_SIZE);
-	Font::CenterWrite(Map_Renderer, FONT_MINI, "TILE", TILE_CHG_BUT_X + (TILE_CHG_BUT_W / 2), TILE_CHG_BUT_Y + (TILE_CHG_BUT_H / 2) + MINI_CHAR_SIZE);
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "TILESET", TS_CHG_BUT_X + (TS_CHG_BUT_W / 2), TS_CHG_BUT_Y + (TS_CHG_BUT_H / 2) + MINI_CHAR_SIZE);
 
 	// Draw complete active tile with dummy entity & outline (for depth clarity)
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "WORKING TILE", EWIDTH - 50, DISP_TILE_Y - DISP_NAME_OFFSET);
 	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_TILE_X, DISP_TILE_Y,
 		(Current_Tile % TilesetWidth) * TILE_SIZE, (Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_TILE_X, DISP_TILE_Y,
@@ -209,6 +211,22 @@ bool CApp::RenderMAPedit()
 	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_SLOPE_Y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, ALPH_BAR_H);
 	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_SLOPE_Y, DARKS_X, COLOR_PURE_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
+	return true;
+}
+
+bool CApp::RenderMAPbottom()
+{
+	if (!RenderButton(Map_Renderer, Map_Interface, BTILE_CHG_BUT_X, BTILE_CHG_BUT_Y, BTILE_CHG_BUT_W, BTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+		return false;
+
+	// Write a button name for changing background tiles within a tileset
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE B.TILE", BTILE_CHG_BUT_X + (BTILE_CHG_BUT_W / 2), BTILE_CHG_BUT_Y + (BTILE_CHG_BUT_H / 2));
+
+	if (!RenderButton(Map_Renderer, Map_Interface, FTILE_CHG_BUT_X, FTILE_CHG_BUT_Y, FTILE_CHG_BUT_W, FTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+		return false;
+
+	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE F.TILE", FTILE_CHG_BUT_X + (FTILE_CHG_BUT_W / 2), FTILE_CHG_BUT_Y + (FTILE_CHG_BUT_H / 2));
+	
 	// Menu/Options list for viewing various overlays
 	int sY = VIEWOPTS_Y - (SWITCH_SIZE + SYM_SPACING);
 	int tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;

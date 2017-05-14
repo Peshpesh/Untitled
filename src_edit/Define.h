@@ -34,11 +34,7 @@
 #define TS_CHG_BUT_W 50     // Change Tileset button info
 #define TS_CHG_BUT_H 40     //
 #define TS_CHG_BUT_X 665    //
-#define TS_CHG_BUT_Y 20     //
-#define TILE_CHG_BUT_W 50   // Change Tile button info
-#define TILE_CHG_BUT_H 40   //
-#define TILE_CHG_BUT_X 665  //
-#define TILE_CHG_BUT_Y 80   //
+#define TS_CHG_BUT_Y 50     //
 #define DISP_TILE_X 674     // Displayed (current) Tile info
 #define DISP_TILE_Y 140     //
 #define DISP_NAME_OFFSET 10
@@ -61,6 +57,14 @@
 #define DUMMY_ENTITY_Y 0
 #define VIEWOPTS_X 20
 #define VIEWOPTS_Y 510
+#define BTILE_CHG_BUT_W 100   // Change Tile button info
+#define BTILE_CHG_BUT_H 20   //
+#define BTILE_CHG_BUT_X 120  //
+#define BTILE_CHG_BUT_Y 510  //
+#define FTILE_CHG_BUT_W 100   // Change Tile button info
+#define FTILE_CHG_BUT_H 20   //
+#define FTILE_CHG_BUT_X 120  //
+#define FTILE_CHG_BUT_Y 540  //
 
 // Entity Editor definitions (application static)
 #define TABL_NAME_X 250

@@ -204,9 +204,9 @@ bool CApp::EventMAPedit(int mX, int mY)
 
 	// Click on "Change Tile" button. A display of all tiles is rendered,
 	// and clicking a tile will update the active tile to use the clicked tile.
-	if (mX >= TILE_CHG_BUT_X && mX < TILE_CHG_BUT_X + TILE_CHG_BUT_W)
+	if (mX >= BTILE_CHG_BUT_X && mX < BTILE_CHG_BUT_X + BTILE_CHG_BUT_W)
 	{
-		if (mY >= TILE_CHG_BUT_Y && mY < TILE_CHG_BUT_Y + TILE_CHG_BUT_H)
+		if (mY >= BTILE_CHG_BUT_Y && mY < BTILE_CHG_BUT_Y + BTILE_CHG_BUT_H)
 		{
 			Current_Tile = CChangeTile::UIControl.OnExecute(Map_Renderer, Main_Tileset);
 			return true;
