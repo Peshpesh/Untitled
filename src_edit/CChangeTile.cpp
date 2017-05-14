@@ -1,68 +1,59 @@
 #include "CChangeTile.h"
 
-CChangeTile CChangeTile::UIControl;
-
 CChangeTile::CChangeTile()
 {
-	//
+	X = Y = W = H = 0;
 }
 
-int CChangeTile::OnExecute(SDL_Renderer* renderer, SDL_Texture* tileset)
+void CChangeTile::Init(int W, int H)
 {
-	SDL_QueryTexture(tileset, NULL, NULL, &W, &H);
-	if (W <= WWIDTH && H <= WHEIGHT)
+	X = Y = 0;
+	this->W = W;
+	this->H = H;
+}
+
+bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* tileset)
+{
+	int dispX, dispY, dispW, dispH;
+	if (W - X < MAX_TILES)
 	{
-		// Draw the full tileset in the center of the workspace
-		Running =
-			CSurface::OnDraw(renderer, tileset, (WWIDTH - W) / 2, (WHEIGHT - H) / 2, 0, 0, W, H);
-		SDL_RenderPresent(renderer);
+		dispW = TILE_SIZE * (W - X);
 	}
 	else
-		Running = false;
-
-	SDL_Event Event;
-	// This loop will run endlessly until something makes the Running
-	// flag false. That will happen, hopefully, by the user's decision.
-	while (Running)
 	{
-		// Check for pending events; handle them
-		while (SDL_PollEvent(&Event))
-		{
-			OnEvent(&Event);
-		}
+		dispW = TILE_SIZE * MAX_TILES;
 	}
-
-	return GetID();
-}
-
-void CChangeTile::OnEvent(SDL_Event* Event)
-{
-	CEvent::OnEvent(Event);
-}
-
-void CChangeTile::OnLButtonDown(int mX, int mY)
-{
-	if (mX >= (WWIDTH - W) / 2 && mX < (WWIDTH + W) / 2)
+	if (H - Y < MAX_TILES)
 	{
-		if (mY >= (WHEIGHT - H) / 2 && mY < (WHEIGHT + H) / 2)
-		{
-			this->X = mX;
-			this->Y = mY;
-			Running = false;
-		}
+		dispH = TILE_SIZE * (H - Y);
 	}
+	else
+	{
+		dispH = TILE_SIZE * MAX_TILES;
+	}
+	dispX = (WWIDTH - dispW) / 2;
+	dispY = (WHEIGHT - dispH) / 2;
+
+	CSurface::OnDraw(renderer, tileset, dispX, dispY, X, Y, dispW, dispH);
+
+	return true;
 }
 
-int CChangeTile::GetID()
-{
-	int TileID;
-
-	// Get X,Y relative to tileset display
-	X -= (WWIDTH - W) / 2;
-	Y -= (WHEIGHT - W) / 2;
-
-	TileID = X / TILE_SIZE;
-	TileID += (Y / TILE_SIZE) * W / TILE_SIZE;
-
-	return TileID;
-}
+// void CChangeTile::OnLButtonDown(int mX, int mY)
+// {
+//
+// }
+//
+// int CChangeTile::GetID()
+// {
+// 	int TileID;
+//
+// 	// Get X,Y relative to tileset display
+// 	X -= (WWIDTH - W) / 2;
+// 	Y -= (WHEIGHT - W) / 2;
+//
+// 	TileID = X / TILE_SIZE;
+// 	TileID += (Y / TILE_SIZE) * W / TILE_SIZE;
+//
+// 	return TileID;
+// }

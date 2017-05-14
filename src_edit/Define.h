@@ -88,6 +88,7 @@
 #define FTILE_CHG_BUT_X 120  //
 #define FTILE_CHG_BUT_Y 540  //
 
+
 // Entity Editor definitions (application static)
 #define TABL_NAME_X 250
 #define TABL_NAME_Y 490
@@ -109,8 +110,13 @@
 #define DEPTH_UPPER_X 350
 
 
+// Change-tile interface definitions
+#define MAX_TILES 10
+
+
 // Other definitions
 #define BUT_BORDER_SIZ 2
+#define MENU_BORDER_SIZ 3
 #define SWITCH_COLOR_X 40
 #define ON_COLOR_Y 372
 #define OFF_COLOR_Y 360

@@ -2,7 +2,7 @@
 
 void CApp::OnRender()
 {
-	bool debug = false;
+	bool debug = true;
 	SDL_RenderClear(Map_Renderer);
 
 	// Draw background scenery
@@ -87,7 +87,8 @@ void CApp::OnRender()
 	//	DEBUGGING
 	if (debug)
 	{
-		//
+		PickTile.Init(TilesetWidth, TilesetHeight);
+		PickTile.RenderTileset(Map_Renderer, Main_Tileset);
 	}
 	SDL_RenderPresent(Map_Renderer);
 }
