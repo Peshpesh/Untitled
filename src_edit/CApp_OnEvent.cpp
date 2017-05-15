@@ -229,7 +229,7 @@ bool CApp::EventMAPedit(int mX, int mY)
 		}
 	}
 
-	// Click on "Change Tile" button. A display of all tiles is rendered,
+	// Click on "Change Tile" buttons. A display of all tiles is rendered,
 	// and clicking a tile will update the active tile to use the clicked tile.
 	if (mX >= BTILE_CHG_BUT_X && mX < BTILE_CHG_BUT_X + BTILE_CHG_BUT_W)
 	{
@@ -391,6 +391,43 @@ bool CApp::EventMAPedit(int mX, int mY)
 		{
 			if (View_Slope) View_Slope = false;
 			else View_Slope = true;
+			return true;
+		}
+	}
+
+	// Click on active tile attribute switches
+	if (mX >= TILEOPTS_X && mX < TILEOPTS_X + SWITCH_SIZE)
+	{
+		int Yi = TILEOPTS_Y;
+		int Yf = TILEOPTS_Y + SWITCH_SIZE;
+		if (mY >= Yi && mY < Yf)
+		{
+			if (OnTiles & ENABLE_BTILE) OnTiles ^= ENABLE_BTILE;
+			else OnTiles |= ENABLE_BTILE;
+			return true;
+		}
+		Yi = Yf + SYM_SPACING;
+		Yf = Yi + SWITCH_SIZE;
+		if (mY >= Yi && mY < Yf)
+		{
+			if (OnTiles & ENABLE_FTILE) OnTiles ^= ENABLE_FTILE;
+			else OnTiles |= ENABLE_FTILE;
+			return true;
+		}
+		Yi = Yf + SYM_SPACING;
+		Yf = Yi + SWITCH_SIZE;
+		if (mY >= Yi && mY < Yf)
+		{
+			if (OnTiles & ENABLE_TYPE) OnTiles ^= ENABLE_TYPE;
+			else OnTiles |= ENABLE_TYPE;
+			return true;
+		}
+		Yi = Yf + SYM_SPACING;
+		Yf = Yi + SWITCH_SIZE;
+		if (mY >= Yi && mY < Yf)
+		{
+			if (OnTiles & ENABLE_SLOPE) OnTiles ^= ENABLE_SLOPE;
+			else OnTiles |= ENABLE_SLOPE;
 			return true;
 		}
 	}

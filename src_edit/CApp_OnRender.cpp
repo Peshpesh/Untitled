@@ -277,6 +277,59 @@ bool CApp::RenderMAPbottom()
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 
+
+	// Menu/Options list for active tile attributes on placement
+	sY = TILEOPTS_Y;
+	tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;
+	tX_offset = SWITCH_SIZE + MINI_CHAR_SIZE;
+	Font::Write(Map_Renderer, FONT_MINI, "Use B.Tile", TILEOPTS_X + tX_offset, sY + tY_offset);
+	if (OnTiles & ENABLE_BTILE)
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	else
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	sY += SWITCH_SIZE + SYM_SPACING;
+	Font::Write(Map_Renderer, FONT_MINI, "Use F.Tile", TILEOPTS_X + tX_offset, sY + tY_offset);
+	if (OnTiles & ENABLE_FTILE)
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	else
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	sY += SWITCH_SIZE + SYM_SPACING;
+	Font::Write(Map_Renderer, FONT_MINI, "Use Type", TILEOPTS_X + tX_offset, sY + tY_offset);
+	if (OnTiles & ENABLE_TYPE)
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	else
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	sY += SWITCH_SIZE + SYM_SPACING;
+	Font::Write(Map_Renderer, FONT_MINI, "Use Slope", TILEOPTS_X + tX_offset, sY + tY_offset);
+	if (OnTiles & ENABLE_SLOPE)
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+	else
+	{
+		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
+			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	}
+
 	return true;
 }
 

@@ -26,6 +26,7 @@ CApp::CApp()
 
 	Active_Mod = MODIFY_MAP;
 	Interrupt = INTRPT_NONE;
+	OnTiles = ENABLE_BTILE | ENABLE_FTILE | ENABLE_TYPE | ENABLE_SLOPE;
 	tabl_name_W = 0;
 }
 

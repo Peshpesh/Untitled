@@ -29,7 +29,7 @@ public:
 	void OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY);
 	void ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo);
 
-	void ChangeTile(int X, int Y, int tile, int fore, int type, int slope);
+	void ChangeTile(int X, int Y, int tile, int fore, int type, int slope, int usetiles);
 
 	void SaveMap(int ID, char const* areaname);
 };

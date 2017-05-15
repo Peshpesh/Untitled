@@ -3,7 +3,16 @@
 
 #include "Define.h"
 
-enum 
+enum
+{
+  ENABLE_NONE 	= 0,						
+	ENABLE_BTILE	= 0x00000001,		// Place background tiles
+  ENABLE_FTILE 	= 0x00000002,		// Place foreground tiles
+  ENABLE_TYPE 	= 0x00000004,		// Place tile types
+	ENABLE_SLOPE 	= 0x00000008,		// Place tile slopes
+};
+
+enum
 {
 	TILE_TYPE_NONE = 0,		// void tiles; these are (typically) not rendered!
 	TILE_TYPE_HOLLOW,		// non-void non-filled tiles; rendered, no collision, some transparency!
@@ -18,7 +27,7 @@ enum
 {
 	SLOPE_FLAT = 0,			// flat tiles
 	SLOPE_ASC,				// sloped floor tiles that ascend FROM flat
-	SLOPE_ASCE,				// sloped floor tiles continuing ascent possibly TO flat 
+	SLOPE_ASCE,				// sloped floor tiles continuing ascent possibly TO flat
 	SLOPE_DSC,				// sloped floor tiles that descend FROM flat
 	SLOPE_DSCE,				// sloped floor tiles continuing descent possibly TO flat
 	STEEP_ASC,				// steep ascending slopes possibly TO vertical

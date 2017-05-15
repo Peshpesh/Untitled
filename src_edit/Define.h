@@ -79,13 +79,15 @@
 #define DUMMY_ENTITY_Y 0
 #define VIEWOPTS_X 20
 #define VIEWOPTS_Y 510
+#define TILEOPTS_X 150
+#define TILEOPTS_Y 495
 #define BTILE_CHG_BUT_W 100   // Change Tile button info
 #define BTILE_CHG_BUT_H 20   //
-#define BTILE_CHG_BUT_X 120  //
+#define BTILE_CHG_BUT_X 320  //
 #define BTILE_CHG_BUT_Y 510  //
 #define FTILE_CHG_BUT_W 100   // Change Tile button info
 #define FTILE_CHG_BUT_H 20   //
-#define FTILE_CHG_BUT_X 120  //
+#define FTILE_CHG_BUT_X 320  //
 #define FTILE_CHG_BUT_Y 540  //
 
 

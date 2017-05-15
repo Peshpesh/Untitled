@@ -56,6 +56,7 @@ public:
 
 	int Active_Mod;
 	int Interrupt;
+  int OnTiles;
 	int tabl_name_W;
 
 	enum

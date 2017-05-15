@@ -13,7 +13,6 @@ void CApp::OnClick()
 		}
 		return;
 	}
-
 	if (disable_timer > 0)
 	{
 		disable_timer += disable_init - SDL_GetTicks();
@@ -35,12 +34,12 @@ void CApp::OnClick()
 				if (Use_Fore)
 				{
 					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mX, CCamera::CameraControl.GetY() + mY,
-						Current_Tile, Current_Fore, Current_Type, Current_Slope);
+						Current_Tile, Current_Fore, Current_Type, Current_Slope, OnTiles);
 				}
 				else
 				{
 					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mX, CCamera::CameraControl.GetY() + mY,
-						Current_Tile, -1, Current_Type, Current_Slope);
+						Current_Tile, -1, Current_Type, Current_Slope, OnTiles);
 				}
 			}
 		}

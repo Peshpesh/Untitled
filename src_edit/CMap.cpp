@@ -198,13 +198,13 @@ void CMap::ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo)
 	}
 }
 
-void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int slope)
+void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int slope, int usetiles)
 {
 	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
-	TileList[ID].TileID = tile;
-	TileList[ID].ForeID = fore;
-	TileList[ID].TypeID = type;
-	TileList[ID].Slope = slope;
+	if (usetiles & ENABLE_BTILE) 	TileList[ID].TileID = tile;
+	if (usetiles & ENABLE_FTILE) 	TileList[ID].ForeID = fore;
+	if (usetiles & ENABLE_TYPE)		TileList[ID].TypeID = type;
+	if (usetiles & ENABLE_SLOPE)	TileList[ID].Slope = slope;
 }
 
 void CMap::SaveMap(int ID, char const* areaname)

@@ -382,7 +382,7 @@ void CArea::ChangeSet(SDL_Texture* newset)
 	}
 }
 
-void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int slope)
+void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int slope, int usetiles)
 {
 	if (X < 0 || Y < 0 || X > AreaWidth * MAP_WIDTH * TILE_SIZE - 1 || Y > AreaHeight * MAP_HEIGHT * TILE_SIZE - 1)
 		return;
@@ -390,7 +390,7 @@ void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int slope)
 	int MapWidth = MAP_WIDTH*TILE_SIZE;
 	int MapHeight = MAP_HEIGHT*TILE_SIZE;
 	int ID = (X / MapWidth) + (Y / MapHeight) * AreaWidth;
-	MapList[ID].ChangeTile(X % MapWidth, Y % MapHeight, tile, fore, type, slope);
+	MapList[ID].ChangeTile(X % MapWidth, Y % MapHeight, tile, fore, type, slope, usetiles);
 }
 
 void CArea::SaveArea(char const* areaname, char const* setpath)
