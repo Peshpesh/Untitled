@@ -24,11 +24,8 @@ void CChangeTile::Init(int W, int H)
 bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 {
 	bool retval = false;
-	if (mX < dispX || mX >= dispX + dispW || mY < dispY || mY >= dispY + dispH)
-	{
 
-	}
-	else
+	if (mX >= dispX && mX < dispX + dispW && mY >= dispY && mY < dispY + dispH)
 	{
 		int xrel = mX - dispX;
 		int yrel = mY - dispY;
@@ -37,33 +34,37 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 		ID = (ytile * W) + xtile;
 		retval = true;
 	}
+	else
+	{
+		// Maybe an arrow was clicked?
+
+	}
 	return retval;
 }
 
 bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset)
 {
+	int aX, aY;
+	// Render a "frame" for the tileset
 	CSurface::OnDraw(renderer, interface, dispX - MENU_BORDER_SIZ, dispY - MENU_BORDER_SIZ,
 		LIGHTS_X, COLOR_PURE_Y, 1, 1, dispW + (MENU_BORDER_SIZ*2), dispH + (MENU_BORDER_SIZ*2));
+	// Render the tileset (or part of it)
 	CSurface::OnDraw(renderer, tileset, dispX, dispY, X, Y, dispW, dispH);
+
+
+	// Render clickable arrows
+	aX = dispX - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
+	aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
+	CSurface::OnDraw(renderer, interface, aX, aY, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	aX = dispX + dispW + MENU_BORDER_SIZ + SYM_SPACING;
+	CSurface::OnDraw(renderer, interface, aX, aY, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+
+	aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
+	aY = dispY - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
+	CSurface::OnDraw(renderer, interface, aX, aY, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	aY = dispY + dispH + MENU_BORDER_SIZ + SYM_SPACING;
+	CSurface::OnDraw(renderer, interface, aX, aY, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+
 
 	return true;
 }
-
-// void CChangeTile::OnLButtonDown(int mX, int mY)
-// {
-//
-// }
-//
-// int CChangeTile::GetID()
-// {
-// 	int TileID;
-//
-// 	// Get X,Y relative to tileset display
-// 	X -= (WWIDTH - W) / 2;
-// 	Y -= (WHEIGHT - W) / 2;
-//
-// 	TileID = X / TILE_SIZE;
-// 	TileID += (Y / TILE_SIZE) * W / TILE_SIZE;
-//
-// 	return TileID;
-// }
