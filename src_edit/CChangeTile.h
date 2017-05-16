@@ -23,6 +23,9 @@ public:
 
 	bool RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset);
 
+private:
+	bool RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, const int& aX, const int& aY, char direction);
+
 };
 
 #endif

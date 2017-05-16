@@ -49,6 +49,14 @@
 #define R_ARROW_YO 365
 #define U_ARROW_YO 350
 #define D_ARROW_YO 350
+#define L_ARRGLOW_XO 32
+#define R_ARRGLOW_XO 47
+#define U_ARRGLOW_XO 47
+#define D_ARRGLOW_XO 32
+#define L_ARRGRAY_XO 62
+#define R_ARRGRAY_XO 77
+#define U_ARRGRAY_XO 77
+#define D_ARRGRAY_XO 62
 #define ARROW_SIZE 15
 
 
@@ -136,7 +144,7 @@
 #define MAGENTA_X 562
 #define DARKS_X 563
 #define LIGHTS_X 564
-#define SWITCH_XO 32
+#define SWITCH_XO 92
 #define ON_SWITCH_YO 365
 #define OFF_SWITCH_YO 350
 #define SWITCH_SIZE 15

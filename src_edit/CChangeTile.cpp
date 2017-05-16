@@ -85,15 +85,89 @@ bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, 
 	// Render clickable arrows
 	aX = dispX - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
 	aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
-	CSurface::OnDraw(renderer, interface, aX, aY, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	RenderArrow(renderer, interface, aX, aY, 'L');
 	aX = dispX + dispW + MENU_BORDER_SIZ + SYM_SPACING;
-	CSurface::OnDraw(renderer, interface, aX, aY, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	RenderArrow(renderer, interface, aX, aY, 'R');
 
 	aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
 	aY = dispY - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
-	CSurface::OnDraw(renderer, interface, aX, aY, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	RenderArrow(renderer, interface, aX, aY, 'U');
 	aY = dispY + dispH + MENU_BORDER_SIZ + SYM_SPACING;
-	CSurface::OnDraw(renderer, interface, aX, aY, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	RenderArrow(renderer, interface, aX, aY, 'D');
 
 	return true;
+}
+
+bool CChangeTile::RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, const int& aX, const int& aY, char direction)
+{
+	bool retval = false;
+	if (direction == 'L')
+	{
+		if (X > 0)
+		{
+			int mX, mY;
+			SDL_GetMouseState(&mX, &mY);
+			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARRGLOW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+			else
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+		}
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARRGRAY_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	}
+	else if (direction == 'R')
+	{
+		if (X < W - MAX_TILES)
+		{
+			int mX, mY;
+			SDL_GetMouseState(&mX, &mY);
+			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARRGLOW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+			else
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+		}
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARRGRAY_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	}
+	else if (direction == 'U')
+	{
+		if (Y > 0)
+		{
+			int mX, mY;
+			SDL_GetMouseState(&mX, &mY);
+			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARRGLOW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+			else
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+		}
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARRGRAY_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	}
+	else if (direction == 'D')
+	{
+		if (Y < H - MAX_TILES)
+		{
+			int mX, mY;
+			SDL_GetMouseState(&mX, &mY);
+			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARRGLOW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+			else
+			{
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+			}
+		}
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARRGRAY_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	}
+	return retval;
 }
