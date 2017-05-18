@@ -43,13 +43,13 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 			aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
 			if (X > 0) 							// Left arrow?
 			{
-				aX = dispX - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
+				aX = dispX - (ARROW_SIZE + SYM_SPACING);
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	X--;
 			}
 
 			if (X < W - MAX_TILES)	// Right arrow?
 			{
-				aX = dispX + dispW + MENU_BORDER_SIZ + SYM_SPACING;
+				aX = dispX + dispW + SYM_SPACING;
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	X++;
 			}
 		}
@@ -59,13 +59,13 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 			aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
 			if (Y > 0) 							// Up arrow?
 			{
-				aY = dispY - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
+				aY = dispY - (ARROW_SIZE + SYM_SPACING);
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	Y--;
 			}
 
 			if (Y < H - MAX_TILES)	// Down arrow?
 			{
-				aY = dispY + dispH + MENU_BORDER_SIZ + SYM_SPACING;
+				aY = dispY + dispH + SYM_SPACING;
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	Y++;
 			}
 		}
@@ -77,22 +77,22 @@ bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, 
 {
 	int aX, aY;
 	// Render a "frame" for the tileset
-	CSurface::OnDraw(renderer, interface, dispX - MENU_BORDER_SIZ, dispY - MENU_BORDER_SIZ,
-		LIGHTS_X, COLOR_PURE_Y, 1, 1, dispW + (MENU_BORDER_SIZ*2), dispH + (MENU_BORDER_SIZ*2));
+	CSurface::OnDraw(renderer, interface, dispX - TILETABLE_SIZ, dispY - TILETABLE_SIZ,
+		LIGHTS_X, COLOR_PURE_Y, 1, 1, dispW + (TILETABLE_SIZ*2), dispH + (TILETABLE_SIZ*2));
 	// Render the tileset (or part of it)
 	CSurface::OnDraw(renderer, tileset, dispX, dispY, X * TILE_SIZE, Y * TILE_SIZE, dispW, dispH);
 
 	// Render clickable arrows
-	aX = dispX - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
+	aX = dispX - (ARROW_SIZE + SYM_SPACING);
 	aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
 	RenderArrow(renderer, interface, aX, aY, 'L');
-	aX = dispX + dispW + MENU_BORDER_SIZ + SYM_SPACING;
+	aX = dispX + dispW + SYM_SPACING;
 	RenderArrow(renderer, interface, aX, aY, 'R');
 
 	aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
-	aY = dispY - (MENU_BORDER_SIZ + ARROW_SIZE + SYM_SPACING);
+	aY = dispY - (ARROW_SIZE + SYM_SPACING);
 	RenderArrow(renderer, interface, aX, aY, 'U');
-	aY = dispY + dispH + MENU_BORDER_SIZ + SYM_SPACING;
+	aY = dispY + dispH + SYM_SPACING;
 	RenderArrow(renderer, interface, aX, aY, 'D');
 
 	return true;

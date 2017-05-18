@@ -127,6 +127,7 @@
 // Other definitions
 #define BUT_BORDER_SIZ 2
 #define MENU_BORDER_SIZ 3
+#define TILETABLE_SIZ 24
 #define SWITCH_COLOR_X 40
 #define ON_COLOR_Y 372
 #define OFF_COLOR_Y 360
