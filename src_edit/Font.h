@@ -44,6 +44,8 @@ public:
 	a font texture pointer on success, or NULL on failure.
 	*/
 	static SDL_Texture* GetInfo(const int& fontID, int& h_spacing, int& v_spacing);
+	static int GetHSpacing(const int& fontID);
+	static int GetVSpacing(const int& fontID);
 
 	static void GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H);
 

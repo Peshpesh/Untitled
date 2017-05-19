@@ -75,13 +75,40 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 
 bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset)
 {
-	int aX, aY;
 	// Render a "frame" for the tileset
 	CSurface::OnDraw(renderer, interface, dispX - TILETABLE_SIZ, dispY - TILETABLE_SIZ,
-		LIGHTS_X, COLOR_PURE_Y, 1, 1, dispW + (TILETABLE_SIZ*2), dispH + (TILETABLE_SIZ*2));
+		LIGHTS_X, COLOR_PURE_Y, 1, 1, dispW + (TILETABLE_SIZ*2), dispH + (TILETABLE_SIZ * 2));
 	// Render the tileset (or part of it)
 	CSurface::OnDraw(renderer, tileset, dispX, dispY, X * TILE_SIZE, Y * TILE_SIZE, dispW, dispH);
 
+	// display text-based information in the table border
+	int retsiz = Font::GetVSpacing(FONT_MINI);
+	int xF = dispX - TILETABLE_SIZ + 1;
+	int yF = dispY - TILETABLE_SIZ + 1;
+	Font::Write(renderer, FONT_MINI, "Display Range:", xF, yF);
+	yF += retsiz;
+	xF += Font::Write(renderer, FONT_MINI, "X: ", xF, yF);
+	xF += Font::Write(renderer, FONT_MINI, X, xF, yF);
+	Font::Write(renderer, FONT_MINI, X + (dispW / TILE_SIZE) - 1, xF, yF);
+	xF = dispX - TILETABLE_SIZ + 1;
+	yF += retsiz;
+	xF += Font::Write(renderer, FONT_MINI, "Y: ", xF, yF);
+	xF += Font::Write(renderer, FONT_MINI, Y, xF, yF);
+	Font::Write(renderer, FONT_MINI, Y + (dispH / TILE_SIZE) - 1, xF, yF);
+
+	xF = dispX - TILETABLE_SIZ + 1;
+	yF = dispY + dispW + 1;
+	Font::Write(renderer, FONT_MINI, "Tileset Info:", xF, yF);
+	yF += retsiz;
+	xF += Font::Write(renderer, FONT_MINI, "Width: ", xF, yF);
+	Font::Write(renderer, FONT_MINI, W, xF, yF);
+	xF = dispX - TILETABLE_SIZ + 1;
+	yF += retsiz;
+	xF += Font::Write(renderer, FONT_MINI, "Height: ", xF, yF);
+	Font::Write(renderer, FONT_MINI, H, xF, yF);
+
+
+	int aX, aY;
 	// Render clickable arrows
 	aX = dispX - (ARROW_SIZE + SYM_SPACING);
 	aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);

@@ -11,7 +11,6 @@ Font::Font()
 
 bool Font::OnInit(SDL_Renderer* renderer)
 {
-//	SDL_Delay(5000);
 	if ((Tex_Font = CSurface::OnLoad("../res/font.png", renderer)) == NULL) 	return false;
 	if ((Mini_Font = CSurface::OnLoad("../res_edit/minifont.png", renderer)) == NULL) 	return false;
 	if ((Tex_HUD = CSurface::OnLoad("../res/HUD.png", renderer)) == NULL)			return false;
@@ -21,20 +20,30 @@ bool Font::OnInit(SDL_Renderer* renderer)
 
 SDL_Texture* Font::GetInfo(const int& fontID, int& h_spacing, int& v_spacing)
 {
-	if (fontID == FONT_DEFAULT)
-	{
-		h_spacing = 2;
-		v_spacing = 16;
-		return FontControl.Tex_Font;
-	}
-	if (fontID == FONT_MINI)
-	{
-		h_spacing = 1;
-		v_spacing = 6;
-		return FontControl.Mini_Font;
-	}
+	h_spacing = GetHSpacing(fontID);
+	v_spacing = GetVSpacing(fontID);
 
-	return NULL;
+	SDL_Texture* retptr = NULL;
+	if (fontID == FONT_DEFAULT)		retptr = FontControl.Tex_Font;
+	if (fontID == FONT_MINI)			retptr = FontControl.Mini_Font;
+
+	return retptr;
+}
+
+int Font::GetHSpacing(const int& fontID)
+{
+	int h_spacing = 0;
+	if (fontID == FONT_DEFAULT)		h_spacing = 2;
+	if (fontID == FONT_MINI)			h_spacing = 1;
+	return h_spacing;
+}
+
+int Font::GetVSpacing(const int& fontID)
+{
+	int v_spacing = 0;
+	if (fontID == FONT_DEFAULT)		v_spacing = 16;
+	if (fontID == FONT_MINI)			v_spacing = 6;
+	return v_spacing;
 }
 
 // Takes in a queried symbol, passes X and Y coords
@@ -339,7 +348,7 @@ int Font::Write(SDL_Renderer* renderer, const int& fontID, int number, int Mx, i
 		Mx += W + h_spacing;
 		magnitude /= 10;
 	}
-	return Mx - FirstMx;
+	return Mx - FirstMx + W;
 }
 
 int Font::Writef(SDL_Renderer* renderer, const int& fontID, float number, unsigned int precision, int Mx, int My)
