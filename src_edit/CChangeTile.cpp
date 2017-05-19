@@ -81,6 +81,8 @@ bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, 
 	// Render the tileset (or part of it)
 	CSurface::OnDraw(renderer, tileset, dispX, dispY, X * TILE_SIZE, Y * TILE_SIZE, dispW, dispH);
 
+
+
 	// display text-based information in the table border
 	int retsiz = Font::GetVSpacing(FONT_MINI);
 	int xF = dispX - TILETABLE_SIZ + 1;

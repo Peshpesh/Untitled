@@ -125,6 +125,8 @@
 
 
 // Other definitions
+#define TILE_HILIGHT_X 300
+#define TILE_HILIGHT_Y 448
 #define BUT_BORDER_SIZ 2
 #define MENU_BORDER_SIZ 3
 #define TILETABLE_SIZ 24

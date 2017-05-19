@@ -10,7 +10,6 @@ CApp::CApp()
 	Type_Tileset = NULL;
 	Slope_Tileset = NULL;
 	Main_Tileset = NULL;
-	// Font = NULL;
 	mouseX = mouseY = 0;
 
 	Current_Tile = Current_Fore = 0;

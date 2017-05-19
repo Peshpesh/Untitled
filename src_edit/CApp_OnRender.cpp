@@ -79,16 +79,18 @@ void CApp::OnRender()
 		tY -= 32;
 	}
 
-	if (mouseX != -404404 && mouseY != -404404)
-	{
-		CSurface::OnDraw(Map_Renderer, Map_Interface, tX, tY, 300, 448, 32, 32);
-	}
-
 	if (Interrupt ^ INTRPT_NONE)
 	{
 		if (Interrupt & INTRPT_CH_BTILE || Interrupt & INTRPT_CH_FTILE)
 		{
 			PickTile.RenderTileset(Map_Renderer, Map_Interface, Main_Tileset);
+		}
+	}
+	else
+	{
+		if (mouseX != -404404 && mouseY != -404404)
+		{
+			CSurface::OnDraw(Map_Renderer, Map_Interface, tX, tY, TILE_HILIGHT_X, TILE_HILIGHT_Y, TILE_SIZE, TILE_SIZE);
 		}
 	}
 
@@ -224,15 +226,22 @@ bool CApp::RenderMAPside()
 
 bool CApp::RenderMAPbottom()
 {
-	if (!RenderButton(BTILE_CHG_BUT_X, BTILE_CHG_BUT_Y, BTILE_CHG_BUT_W, BTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
-		return false;
+	bool hl = !(Interrupt ^ INTRPT_NONE);
+	int colX;
 
-	// Write a button name for changing background tiles within a tileset
+	// render button for picking background tiles
+	if (Interrupt & INTRPT_CH_BTILE) colX = RED_X;
+	else colX = BLUE_X;
+
+	if (!RenderButton(BTILE_CHG_BUT_X, BTILE_CHG_BUT_Y, BTILE_CHG_BUT_W, BTILE_CHG_BUT_H, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
+		return false;
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE B.TILE", BTILE_CHG_BUT_X + (BTILE_CHG_BUT_W / 2), BTILE_CHG_BUT_Y + (BTILE_CHG_BUT_H / 2));
 
-	if (!RenderButton(FTILE_CHG_BUT_X, FTILE_CHG_BUT_Y, FTILE_CHG_BUT_W, FTILE_CHG_BUT_H, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, true))
+	// render button for picking foreground tiles
+	if (Interrupt & INTRPT_CH_FTILE) colX = RED_X;
+	else colX = BLUE_X;
+	if (!RenderButton(FTILE_CHG_BUT_X, FTILE_CHG_BUT_Y, FTILE_CHG_BUT_W, FTILE_CHG_BUT_H, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
 		return false;
-
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE F.TILE", FTILE_CHG_BUT_X + (FTILE_CHG_BUT_W / 2), FTILE_CHG_BUT_Y + (FTILE_CHG_BUT_H / 2));
 
 	// Menu/Options list for viewing various overlays
