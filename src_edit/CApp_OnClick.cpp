@@ -20,11 +20,10 @@ void CApp::OnClick()
 		return;
 	}
 
-	int mX, mY;
 	//SDL_PumpEvents();
-	if (SDL_GetMouseState(&mX, &mY) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
-		if (mX < WWIDTH && mY < WHEIGHT)
+		if (mouseX < WWIDTH && mouseY < WHEIGHT)
 		{
 			// Left-click hold will overwrite map tiles based on changing cursor position.
 			// Note that this function does not (and should not) apply to entities or
@@ -33,12 +32,12 @@ void CApp::OnClick()
 			{
 				if (Use_Fore)
 				{
-					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mX, CCamera::CameraControl.GetY() + mY,
+					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mouseX, CCamera::CameraControl.GetY() + mouseY,
 						Current_Tile, Current_Fore, Current_Type, Current_Slope, OnTiles);
 				}
 				else
 				{
-					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mX, CCamera::CameraControl.GetY() + mY,
+					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mouseX, CCamera::CameraControl.GetY() + mouseY,
 						Current_Tile, -1, Current_Type, Current_Slope, OnTiles);
 				}
 			}

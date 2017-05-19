@@ -2,7 +2,6 @@
 
 void CApp::OnMotion(const Uint8 *state)
 {
-	SDL_PumpEvents();
 		if (state[SDL_SCANCODE_LEFT])
 			CCamera::CameraControl.OnMove(-6, 0);
 		if (state[SDL_SCANCODE_UP])

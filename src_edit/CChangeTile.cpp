@@ -73,15 +73,19 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 	return retval;
 }
 
-bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset)
+bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset, const int& mX, const int& mY)
 {
 	// Render a "frame" for the tileset
 	CSurface::OnDraw(renderer, interface, dispX - TILETABLE_SIZ, dispY - TILETABLE_SIZ,
-		LIGHTS_X, COLOR_PURE_Y, 1, 1, dispW + (TILETABLE_SIZ*2), dispH + (TILETABLE_SIZ * 2));
+		LIGHTS_X, COLOR_PURE_Y, 1, 1, dispW + (TILETABLE_SIZ * 2), dispH + (TILETABLE_SIZ * 2));
 	// Render the tileset (or part of it)
 	CSurface::OnDraw(renderer, tileset, dispX, dispY, X * TILE_SIZE, Y * TILE_SIZE, dispW, dispH);
-
-
+	if (mX >= dispX && mX < dispX + dispW && mY >= dispY && mY < dispY + dispH)
+	{
+		int hX = dispX + TILE_SIZE * ((mX - dispX) / TILE_SIZE);
+		int hY = dispY + TILE_SIZE * ((mY - dispY) / TILE_SIZE);
+		CSurface::OnDraw(renderer, interface, hX, hY, TILE_HILIGHT_X, TILE_HILIGHT_Y, TILE_SIZE, TILE_SIZE);
+	}
 
 	// display text-based information in the table border
 	int retsiz = Font::GetVSpacing(FONT_MINI);
@@ -109,33 +113,30 @@ bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, 
 	xF += Font::Write(renderer, FONT_MINI, "Height: ", xF, yF);
 	Font::Write(renderer, FONT_MINI, H, xF, yF);
 
-
 	int aX, aY;
 	// Render clickable arrows
 	aX = dispX - (ARROW_SIZE + SYM_SPACING);
 	aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
-	RenderArrow(renderer, interface, aX, aY, 'L');
+	RenderArrow(renderer, interface, aX, aY, 'L', mX, mY);
 	aX = dispX + dispW + SYM_SPACING;
-	RenderArrow(renderer, interface, aX, aY, 'R');
+	RenderArrow(renderer, interface, aX, aY, 'R', mX, mY);
 
 	aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
 	aY = dispY - (ARROW_SIZE + SYM_SPACING);
-	RenderArrow(renderer, interface, aX, aY, 'U');
+	RenderArrow(renderer, interface, aX, aY, 'U', mX, mY);
 	aY = dispY + dispH + SYM_SPACING;
-	RenderArrow(renderer, interface, aX, aY, 'D');
+	RenderArrow(renderer, interface, aX, aY, 'D', mX, mY);
 
 	return true;
 }
 
-bool CChangeTile::RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, const int& aX, const int& aY, char direction)
+bool CChangeTile::RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, const int& aX, const int& aY, char direction, const int& mX, const int& mY)
 {
 	bool retval = false;
 	if (direction == 'L')
 	{
 		if (X > 0)
 		{
-			int mX, mY;
-			SDL_GetMouseState(&mX, &mY);
 			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
 			{
 				retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARRGLOW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
@@ -151,8 +152,6 @@ bool CChangeTile::RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, co
 	{
 		if (X < W - MAX_TILES)
 		{
-			int mX, mY;
-			SDL_GetMouseState(&mX, &mY);
 			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
 			{
 				retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARRGLOW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
@@ -168,8 +167,6 @@ bool CChangeTile::RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, co
 	{
 		if (Y > 0)
 		{
-			int mX, mY;
-			SDL_GetMouseState(&mX, &mY);
 			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
 			{
 				retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARRGLOW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
@@ -185,8 +182,6 @@ bool CChangeTile::RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, co
 	{
 		if (Y < H - MAX_TILES)
 		{
-			int mX, mY;
-			SDL_GetMouseState(&mX, &mY);
 			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
 			{
 				retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARRGLOW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);

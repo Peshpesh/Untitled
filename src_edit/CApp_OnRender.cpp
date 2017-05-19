@@ -67,28 +67,29 @@ void CApp::OnRender()
 	{
 		RenderMAPedit();
 	}
-
-	int tX = -CCamera::CameraControl.GetX() + (32 * (mouseX / 32));
-	int tY = -CCamera::CameraControl.GetY() + (32 * (mouseY / 32));
-	if (mouseX < 0)
+	int mX = mouseX + CCamera::CameraControl.GetX();
+	int mY = mouseY + CCamera::CameraControl.GetY();
+	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mX / TILE_SIZE));
+	int tY = -CCamera::CameraControl.GetY() + (TILE_SIZE * (mY / TILE_SIZE));
+	if (mX < 0)
 	{
-		tX -= 32;
+		tX -= TILE_SIZE;
 	}
-	if (mouseY < 0)
+	if (mY < 0)
 	{
-		tY -= 32;
+		tY -= TILE_SIZE;
 	}
 
 	if (Interrupt ^ INTRPT_NONE)
 	{
 		if (Interrupt & INTRPT_CH_BTILE || Interrupt & INTRPT_CH_FTILE)
 		{
-			PickTile.RenderTileset(Map_Renderer, Map_Interface, Main_Tileset);
+			PickTile.RenderTileset(Map_Renderer, Map_Interface, Main_Tileset, mouseX, mouseY);
 		}
 	}
 	else
 	{
-		if (mouseX != -404404 && mouseY != -404404)
+		if (mouseX >= 0 && mouseX < WWIDTH && mouseY >= 0 && mouseY < WHEIGHT)
 		{
 			CSurface::OnDraw(Map_Renderer, Map_Interface, tX, tY, TILE_HILIGHT_X, TILE_HILIGHT_Y, TILE_SIZE, TILE_SIZE);
 		}
@@ -485,11 +486,11 @@ bool CApp::RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY
 	bool but_glow = false;
 	if (hl)
 	{
-		int mX, mY;
-		SDL_GetMouseState(&mX, &mY);
-		if (mX >= X && mX < X + W)
+		// int mX, mY;
+		// SDL_GetMouseState(&mX, &mY);
+		if (mouseX >= X && mouseX < X + W)
 		{
-			if (mY >= Y && mY < Y + H)
+			if (mouseY >= Y && mouseY < Y + H)
 			{
 				but_glow = true;
 			}

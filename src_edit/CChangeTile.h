@@ -21,10 +21,10 @@ public:
 
 	bool OnLClick(int mX, int mY, int& ID);
 
-	bool RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset);
+	bool RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Texture* tileset, const int& mX, const int& mY);
 
 private:
-	bool RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, const int& aX, const int& aY, char direction);
+	bool RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, const int& aX, const int& aY, char direction, const int& mX, const int& mY);
 
 };
 

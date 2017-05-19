@@ -4,31 +4,27 @@ void CApp::OnLoop()
 {
 	int mX, mY;
 	int tX = 0, tY = 0;
-	SDL_GetMouseState(&mX, &mY);
-	if (mX < WWIDTH && mY < WHEIGHT && mX >= 0 && mY >= 0)
+	SDL_GetMouseState(&mouseX, &mouseY);
+	if (mouseX < WWIDTH && mouseY < WHEIGHT && mouseX >= 0 && mouseY >= 0)
 	{
-		mX += CCamera::CameraControl.GetX();
-		mY += CCamera::CameraControl.GetY();
-		mouseX = mX;
-		mouseY = mY;
-		tX = 32 * (mX / 32);
-		tY = 32 * (mY / 32);
+		mX = mouseX + CCamera::CameraControl.GetX();
+		mY = mouseY + CCamera::CameraControl.GetY();
+		tX = TILE_SIZE * (mX / TILE_SIZE);
+		tY = TILE_SIZE * (mY / TILE_SIZE);
 
-		if (mouseX < 0)
+		if (mX < 0)
 		{
-			tX -= 32;
+			tX -= TILE_SIZE;
 		}
-		if (mouseY < 0)
+		if (mY < 0)
 		{
-			tY -= 32;
+			tY -= TILE_SIZE;
 		}
 	}
 	else
 	{
 		mX = -404404;
 		mY = -404404;
-		mouseX = mX;
-		mouseY = mY;
 	}
 	// DEBUGGING
 	if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
