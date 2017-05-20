@@ -387,8 +387,8 @@ void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int slope, in
 	if (X < 0 || Y < 0 || X > AreaWidth * MAP_WIDTH * TILE_SIZE - 1 || Y > AreaHeight * MAP_HEIGHT * TILE_SIZE - 1)
 		return;
 
-	int MapWidth = MAP_WIDTH*TILE_SIZE;
-	int MapHeight = MAP_HEIGHT*TILE_SIZE;
+	int MapWidth = MAP_WIDTH * TILE_SIZE;
+	int MapHeight = MAP_HEIGHT * TILE_SIZE;
 	int ID = (X / MapWidth) + (Y / MapHeight) * AreaWidth;
 	MapList[ID].ChangeTile(X % MapWidth, Y % MapHeight, tile, fore, type, slope, usetiles);
 }

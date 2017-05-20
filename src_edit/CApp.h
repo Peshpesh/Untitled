@@ -36,7 +36,7 @@ private:
 
 	int Current_Tile;           // Active tileID
 	int Current_Fore;						// Active foreID
-	bool Use_Fore;							// If true, foreID is valid
+	bool NoBack, NoFore;				// If true, use -1 as a tile number (render nothing)
 	int Current_Type;           // Active typeID
 	int Type_Alpha;							// Current Opacity of the Type overlay
 	int Current_Slope;					// Active tile slope

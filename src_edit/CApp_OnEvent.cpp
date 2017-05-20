@@ -276,8 +276,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mX >= FORE_SWIT_X && mX < FORE_SWIT_X + SWITCH_SIZE)
 		{
-			if (!Use_Fore) Use_Fore = true;
-			else Use_Fore = false;
+			if (NoFore) NoFore = false;
+			else NoFore = true;
 			return true;
 		}
 	}

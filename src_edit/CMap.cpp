@@ -211,12 +211,11 @@ void CMap::SaveMap(int ID, char const* areaname)
 {
 	int TensDigit = ID / 10;
 	int OnesDigit = ID % 10;
+	int zeroASCII = 48;
 
 	// Add 48, as 48 is the ASCII decimal code for zero ('0')
-	char ID_ASCII[] = { (char)(TensDigit + 48), (char)(OnesDigit + 48), '\0'};
+	char ID_ASCII[] = { (char)(TensDigit + zeroASCII), (char)(OnesDigit + zeroASCII), '\0'};
 
-	// Add 5 for ext and '\0', 7 for pre, and 2 for ID
-//	char* filename = new char[std::strlen(areaname) + 5 + 7 + 2];
 	char pre[] = "../data/maps/";
 	char ext[] = ".map";
 	char* filename = new char[std::strlen(areaname) + std::strlen(pre) + std::strlen(ext) + std::strlen(ID_ASCII) + 1];
@@ -233,7 +232,6 @@ void CMap::SaveMap(int ID, char const* areaname)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			int ID = X + Y * MAP_WIDTH;
-			// fprintf(FileHandle, "%d:%d:%d ", TileList[ID].TileID, TileList[ID].ForeID, TileList[ID].TypeID);
 			fprintf(FileHandle, "%d:%d:%d:%d ", TileList[ID].TileID, TileList[ID].ForeID, TileList[ID].TypeID, TileList[ID].Slope);
 		}
 		fprintf(FileHandle, "\n");

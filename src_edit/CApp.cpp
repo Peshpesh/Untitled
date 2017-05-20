@@ -13,7 +13,8 @@ CApp::CApp()
 	mouseX = mouseY = 0;
 
 	Current_Tile = Current_Fore = 0;
-	Use_Fore = false;
+	NoBack = false;
+	NoFore = true;
 	View_Fore = View_Type = View_Slope = true;
 	Current_Type = TILE_TYPE_NONE;
 	Type_Alpha = 85;

@@ -20,7 +20,6 @@ void CApp::OnClick()
 		return;
 	}
 
-	//SDL_PumpEvents();
 	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
 		if (mouseX < WWIDTH && mouseY < WHEIGHT)
@@ -30,16 +29,9 @@ void CApp::OnClick()
 			// scenery objects.
 			if (Active_Mod == MODIFY_MAP)
 			{
-				if (Use_Fore)
-				{
-					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mouseX, CCamera::CameraControl.GetY() + mouseY,
-						Current_Tile, Current_Fore, Current_Type, Current_Slope, OnTiles);
-				}
-				else
-				{
-					CArea::AreaControl.ChangeTile(CCamera::CameraControl.GetX() + mouseX, CCamera::CameraControl.GetY() + mouseY,
-						Current_Tile, -1, Current_Type, Current_Slope, OnTiles);
-				}
+				int mX = CCamera::CameraControl.GetX() + mouseX;
+				int mY = CCamera::CameraControl.GetY() + mouseY;
+				CArea::AreaControl.ChangeTile(mX, mY,	NoBack ? -1 : Current_Tile, NoFore ? -1 : Current_Fore, Current_Type, Current_Slope, OnTiles);
 			}
 		}
 	}
