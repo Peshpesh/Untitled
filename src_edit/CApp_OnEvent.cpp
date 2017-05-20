@@ -202,17 +202,6 @@ bool CApp::EventOPTS(int mX, int mY)
 
 bool CApp::EventMAPedit(int mX, int mY)
 {
-	/*
-	Interactive buttons to add/update:
-	1. Change Tileset button
-	2. Change Tile(s) button
-	3a. Separate background and foreground tiles for precision/simplicity
-	3b. Render combined tile result for clarity
-	3c. Scroll-through (left/right) Tile buttons
-	4. Enable/disable 2x2 Tile "block" placer
-	5. Change Tile "block" button(s)
-	*/
-
 	// Click on "Change Tileset" button. This displays a prompt to change tilesets,
 	// and the function within the loop performs a change if requested.
 	if (mX >= TS_CHG_BUT_X && mX < TS_CHG_BUT_X + TS_CHG_BUT_W)
@@ -267,6 +256,18 @@ bool CApp::EventMAPedit(int mX, int mY)
 				if (Current_Tile != (TilesetWidth * TilesetHeight) - 1) Current_Tile += 1;
 				else Current_Tile = 0;
 				return true;
+		}
+	}
+
+	// Click on background activity switch.
+	// Turn the background tile on/off.
+	if (mY >= BACK_SWIT_Y && mY < BACK_SWIT_Y + SWITCH_SIZE)
+	{
+		if (mX >= BACK_SWIT_X && mX < BACK_SWIT_X + SWITCH_SIZE)
+		{
+			if (!NoBack) NoBack = true;
+			else NoBack = false;
+			return true;
 		}
 	}
 
@@ -327,7 +328,7 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mX >= ALPH_BAR_X && mX < ALPH_BAR_X + ALPH_BAR_W)
 		{
-			double barfract = (double)(mX - ALPH_BAR_X) / (double)(ALPH_BAR_W - 1.0);
+			double barfract = (double)(mX - ALPH_BAR_X) / (double)(ALPH_BAR_W - 1);
 			Type_Alpha = MAX_RGBA * barfract;
 			SDL_SetTextureAlphaMod(Type_Tileset, Type_Alpha);
 			return true;
@@ -359,7 +360,7 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mX >= ALPH_BAR_X && mX < ALPH_BAR_X + ALPH_BAR_W)
 		{
-			double barfract = (double)(mX - ALPH_BAR_X) / (double)(ALPH_BAR_W - 1.0);
+			double barfract = (double)(mX - ALPH_BAR_X) / (double)(ALPH_BAR_W - 1);
 			Slope_Alpha = MAX_RGBA * barfract;
 			SDL_SetTextureAlphaMod(Slope_Tileset, Slope_Alpha);
 			return true;
