@@ -486,8 +486,6 @@ bool CApp::RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY
 	bool but_glow = false;
 	if (hl)
 	{
-		// int mX, mY;
-		// SDL_GetMouseState(&mX, &mY);
 		if (mouseX >= X && mouseX < X + W)
 		{
 			if (mouseY >= Y && mouseY < Y + H)
