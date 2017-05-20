@@ -72,6 +72,8 @@
 #define DISP_BTILE_Y 210    //
 #define DISP_FTILE_X 674    // "..." foreground Tile info
 #define DISP_FTILE_Y 280    //
+#define BACK_SWIT_X 642
+#define BACK_SWIT_Y 192
 #define FORE_SWIT_X 642
 #define FORE_SWIT_Y 262
 #define ALPH_BAR_X 645

@@ -24,7 +24,7 @@ public:
 	bool OnLoad(char const* File);
 	void OnLoad();
 
-	void OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool depth);
+	void OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg);
 	void OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY);
 	void OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY);
 	void ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo);

@@ -1,6 +1,5 @@
 #include "CApp.h"
 
-/* The constructor initializes the Running Program flag */
 CApp::CApp()
 {
 	Running = true;

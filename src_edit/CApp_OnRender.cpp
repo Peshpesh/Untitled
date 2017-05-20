@@ -19,8 +19,8 @@ void CApp::OnRender()
 	}
 
 	// Draw the working area
-	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	if (View_Fore) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+	if (View_Fore) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
 	if (View_Type) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 	if (View_Slope) CArea::AreaControl.OnRenderSlope(Map_Renderer, Slope_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
@@ -122,8 +122,11 @@ bool CApp::RenderMAPside()
 
 	// Draw complete active tile with dummy entity & outline (for depth clarity)
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "WORKING TILE", EWIDTH - 50, DISP_TILE_Y - DISP_NAME_OFFSET);
-	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_TILE_X, DISP_TILE_Y,
-		(Current_Tile % TilesetWidth) * TILE_SIZE, (Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	if (!NoBack)
+	{
+		CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_TILE_X, DISP_TILE_Y,
+			(Current_Tile % TilesetWidth) * TILE_SIZE, (Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	}
 	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_TILE_X, DISP_TILE_Y,
 		DUMMY_ENTITY_X, DUMMY_ENTITY_Y, TILE_SIZE, TILE_SIZE);
 	if (!NoFore)
@@ -136,6 +139,7 @@ bool CApp::RenderMAPside()
 
 	// Draws active background tile
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "BACKGROUND", EWIDTH - 50, DISP_BTILE_Y - DISP_NAME_OFFSET);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, BACK_SWIT_X, BACK_SWIT_Y, SWITCH_XO, NoBack ? OFF_SWITCH_YO : ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_BTILE_X, DISP_BTILE_Y,
 		(Current_Tile % TilesetWidth) * TILE_SIZE,
 		(Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -148,8 +152,7 @@ bool CApp::RenderMAPside()
 
 	// Foreground tile header & switch
 	Font::CenterWrite(Map_Renderer, FONT_MINI, "FOREGROUND", EWIDTH - 50, DISP_FTILE_Y - DISP_NAME_OFFSET);
-	if (!NoFore)	CSurface::OnDraw(Map_Renderer, Map_Interface, FORE_SWIT_X, FORE_SWIT_Y, SWITCH_XO, ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	else CSurface::OnDraw(Map_Renderer, Map_Interface, FORE_SWIT_X, FORE_SWIT_Y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, FORE_SWIT_X, FORE_SWIT_Y, SWITCH_XO, NoFore ? OFF_SWITCH_YO : ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 
 	// Draws active foreground tile
 	CSurface::OnDraw(Map_Renderer, Main_Tileset, DISP_FTILE_X, DISP_FTILE_Y,

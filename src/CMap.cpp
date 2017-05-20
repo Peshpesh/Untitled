@@ -59,7 +59,7 @@ void CMap::OnLoad()
 	}
 }
 
-void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool depth)
+void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
 {
 	if (Tex_Tileset == NULL) return;
 
@@ -77,20 +77,18 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool depth)
 	{
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
-			if (TileList[ID].TypeID == TILE_TYPE_NONE)
-			{
-				ID++;
-				continue;
-			}
-			int tX = MapX + (X * TILE_SIZE);
-			int tY = MapY + (Y * TILE_SIZE);
+			// if (TileList[ID].TypeID == TILE_TYPE_NONE)
+			// {
+			// 	ID++;
+			// 	continue;
+			// }
 			int TilesetX = 0, TilesetY = 0;
-			if (!depth)
+			if (bg && TileList[ID].TileID >= 0)
 			{
 				TilesetX = (TileList[ID].TileID % TilesetWidth) * TILE_SIZE;
 				TilesetY = (TileList[ID].TileID / TilesetWidth) * TILE_SIZE;
 			}
-			else if (TileList[ID].ForeID >= 0)
+			else if (!bg && TileList[ID].ForeID >= 0)
 			{
 				TilesetX = (TileList[ID].ForeID % TilesetWidth) * TILE_SIZE;
 				TilesetY = (TileList[ID].ForeID / TilesetWidth) * TILE_SIZE;
@@ -100,6 +98,8 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool depth)
 				ID++;
 				continue;
 			}
+			int tX = MapX + (X * TILE_SIZE);
+			int tY = MapY + (Y * TILE_SIZE);
 			CSurface::OnDraw(renderer, Tex_Tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}

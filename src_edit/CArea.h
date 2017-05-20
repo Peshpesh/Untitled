@@ -42,9 +42,9 @@ public:
 			param renderer	:	Current renderer
 			param CameraX		:	Camera's X position (increasing LEFT)
 			param CameraY		:	Camera's Y position (increasing UP)
-			param depth			:	Flag to draw foreground or middleground
+			param bg			:	Flag to draw foreground or middleground
 	*/
-	void	OnRender(SDL_Renderer* renderer, int CameraX, int CameraY, bool depth);
+	void	OnRender(SDL_Renderer* renderer, int CameraX, int CameraY, bool bg);
 	void	OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
 	void	OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
 	void	ViewArea(SDL_Renderer* renderer, SDL_Texture* ui);
