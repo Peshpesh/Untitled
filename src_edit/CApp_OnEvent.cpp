@@ -84,7 +84,6 @@ void CApp::OnLButtonDown(int mX, int mY)
 		{
 			if (PickTile.OnLClick(mX, mY, Current_Fore)) Interrupt = INTRPT_NONE;
 		}
-
 		return;
 	}
 

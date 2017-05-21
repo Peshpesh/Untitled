@@ -127,6 +127,9 @@
 
 
 // Other definitions
+#define CANCEL_X 620
+#define CANCEL_Y 0
+#define CANCEL_SZ 20
 #define TILE_HILIGHT_X 300
 #define TILE_HILIGHT_Y 448
 #define BUT_BORDER_SIZ 2

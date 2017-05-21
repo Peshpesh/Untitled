@@ -24,7 +24,6 @@ void CChangeTile::Init(int W, int H)
 bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 {
 	bool retval = false;
-
 	if (mX >= dispX && mX < dispX + dispW && mY >= dispY && mY < dispY + dispH)
 	{
 		int xrel = mX - dispX;
@@ -46,15 +45,13 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 				aX = dispX - (ARROW_SIZE + SYM_SPACING);
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	X--;
 			}
-
-			if (X < W - MAX_TILES)	// Right arrow?
+			else if (X < W - MAX_TILES)	// Right arrow?
 			{
 				aX = dispX + dispW + SYM_SPACING;
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	X++;
 			}
 		}
-
-		if (H > MAX_TILES)	// Up/down arrows are worth processing
+		else if (H > MAX_TILES)	// Up/down arrows are worth processing
 		{
 			aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
 			if (Y > 0) 							// Up arrow?
@@ -62,8 +59,7 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 				aY = dispY - (ARROW_SIZE + SYM_SPACING);
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	Y--;
 			}
-
-			if (Y < H - MAX_TILES)	// Down arrow?
+			else if (Y < H - MAX_TILES)	// Down arrow?
 			{
 				aY = dispY + dispH + SYM_SPACING;
 				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	Y++;
@@ -113,19 +109,23 @@ bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, 
 	xF += Font::Write(renderer, FONT_MINI, "Height: ", xF, yF);
 	Font::Write(renderer, FONT_MINI, H, xF, yF);
 
-	int aX, aY;
 	// Render clickable arrows
+	int aX, aY;
 	aX = dispX - (ARROW_SIZE + SYM_SPACING);
 	aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
 	RenderArrow(renderer, interface, aX, aY, 'L', mX, mY);
 	aX = dispX + dispW + SYM_SPACING;
 	RenderArrow(renderer, interface, aX, aY, 'R', mX, mY);
-
 	aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
 	aY = dispY - (ARROW_SIZE + SYM_SPACING);
 	RenderArrow(renderer, interface, aX, aY, 'U', mX, mY);
 	aY = dispY + dispH + SYM_SPACING;
 	RenderArrow(renderer, interface, aX, aY, 'D', mX, mY);
+
+	// Render cancel button
+	int cX = dispX + dispW + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
+	int cY = dispY - TILETABLE_SIZ + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
+	CSurface::OnDraw(renderer, interface, cX, cY, CANCEL_X, CANCEL_Y, CANCEL_SZ, CANCEL_SZ);
 
 	return true;
 }
