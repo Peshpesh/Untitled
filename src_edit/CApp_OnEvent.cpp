@@ -74,7 +74,7 @@ void CApp::OnLButtonDown(int mX, int mY)
 	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) return;
 
 	// Event is passed to interrupting prompts, if there are any
-	if (Interrupt ^ INTRPT_NONE)
+	if (Interrupt & ~INTRPT_NONE)
 	{
 		if (Interrupt & INTRPT_CH_BTILE)
 		{
