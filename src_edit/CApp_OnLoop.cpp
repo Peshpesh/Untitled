@@ -51,5 +51,6 @@ void CApp::OnLoop()
 	{
 		SDL_RestoreWindow(Map_Display);
 	}
+	CFPS::FPSControl.OnLoop();
 	return;
 }

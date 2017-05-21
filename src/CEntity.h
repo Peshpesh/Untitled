@@ -49,12 +49,12 @@ protected:
 	SDL_Texture* Tex_Entity;
 
 public:
-	float	X;
-	float	Y;
+	float	X;	// sprite x-position
+	float	Y;  // sprite y-position
 	int		Xo;	// X position on entity texture
 	int		Yo;	// Y position on entity texture
-	int		Width;
-	int		Height;
+	int		Width;	// sprite width
+	int		Height; // sprite height
 	bool	MoveLeft;
 	bool	MoveRight;
 //	int	AnimState;
@@ -70,24 +70,24 @@ public:
 	bool	Icy;	// Contacting ice tiles
 
 protected:
-	float	SpeedX; // pixels / second
-	float	SpeedY; // pixels / second
-	float	AccelX; // pixels / second^2
-	float	AccelY; // pixels / second^2
+	float	SpeedX; // pixels / idealframe
+	float	SpeedY; // pixels / idealframe
+	float	AccelX; // pixels / idealframe^2
+	float	AccelY; // pixels / idealframe^2
 
 public:
-	float	MaxSpeedX; // pixels / second
-	float	MaxSpeedY; // pixels / second
-	float	MaxAccelX; // pixels / second^2
-	float	MaxAccelY; // pixels / second^2
+	float	MaxSpeedX; // pixels / idealframe
+	float	MaxSpeedY; // pixels / idealframe
+	float	MaxAccelX; // pixels / idealframe^2
+	float	MaxAccelY; // pixels / idealframe^2
 
 protected:
 	int	CurrentFrameCol;
 	int	CurrentFrameRow;
 
 protected:
-	int	Col_X; // "Hitbox" X location
-	int	Col_Y; // "Hitbox" Y location
+	int	Col_X; // "Hitbox" offset from x-position
+	int	Col_Y; // "Hitbox" offset from y-position
 	int	Col_Width; // "Hitbox" Width
 	int	Col_Height; // "Hitbox" Height
 
