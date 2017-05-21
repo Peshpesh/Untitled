@@ -24,6 +24,7 @@ void CChangeTile::Init(int W, int H)
 bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 {
 	bool retval = false;
+	// process clicks on the tileset. Return value of true (done processing events)
 	if (mX >= dispX && mX < dispX + dispW && mY >= dispY && mY < dispY + dispH)
 	{
 		int xrel = mX - dispX;
@@ -33,9 +34,18 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 		ID = (ytile * W) + xtile;
 		retval = true;
 	}
-	else
+
+	// process clicks on cancel button. Return value of true (done processing events)
+	if (!retval)
 	{
-		// Maybe an arrow was clicked?
+		int cX = dispX + dispW + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
+		int cY = dispY - TILETABLE_SIZ + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
+		if (mX >= cX && mX < cX + CANCEL_SZ && mY >= cY && mY < cY + CANCEL_SZ) retval = true;
+	}
+
+	// Maybe an arrow was clicked?
+	if (!retval)
+	{
 		int aX, aY;
 		if (W > MAX_TILES)	// Left/right arrows are worth processing
 		{
@@ -66,6 +76,8 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 			}
 		}
 	}
+
+
 	return retval;
 }
 
