@@ -44,16 +44,16 @@ bool CApp::OnInit()
 	TypesetWidth = PixWidth / TILE_SIZE;
 	TypesetHeight = PixHeight / TILE_SIZE;
 
-	if ((Slope_Tileset = CSurface::OnLoad("../res_edit/slopes.png", Map_Renderer)) == NULL)
+	if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png", Map_Renderer)) == NULL)
 	{
 		return false;
 	}
-	SDL_SetTextureAlphaMod(Slope_Tileset, Slope_Alpha);
+	SDL_SetTextureAlphaMod(Coll_Tileset, Coll_Alpha);
 
-	SDL_QueryTexture(Slope_Tileset, NULL, NULL, &PixWidth, &PixHeight);
+	SDL_QueryTexture(Coll_Tileset, NULL, NULL, &PixWidth, &PixHeight);
 
-	SlopesetWidth = PixWidth / TILE_SIZE;
-	SlopesetHeight = PixHeight / TILE_SIZE;
+	CollsetWidth = PixWidth / TILE_SIZE;
+	CollsetHeight = PixHeight / TILE_SIZE;
 
 	if (!Font::FontControl.OnInit(Map_Renderer))
 	{

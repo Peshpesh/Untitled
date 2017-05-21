@@ -7,25 +7,25 @@ CApp::CApp()
 	Map_Renderer = NULL;
 	Map_Interface = NULL;
 	Type_Tileset = NULL;
-	Slope_Tileset = NULL;
+	Coll_Tileset = NULL;
 	Main_Tileset = NULL;
 	mouseX = mouseY = 0;
 
 	Current_Tile = Current_Fore = 0;
 	NoBack = false;
 	NoFore = true;
-	View_Fore = View_Type = View_Slope = true;
-	Current_Type = TILE_TYPE_NONE;
+	View_Fore = View_Type = View_Coll = true;
+	Current_Type = TILE_TYPE_NORMAL;
 	Type_Alpha = 85;
-	Current_Slope = SLOPE_FLAT;
-	Slope_Alpha = 125;
+	Current_Coll = SOLID_NONE;
+	Coll_Alpha = 125;
 	TypesetWidth = TypesetHeight = TilesetWidth = TilesetHeight = 0;
 	Tileset_Path = "../res/tile/default.png";
 	Entity_Path = "../res/npc/debug.png";
 
 	Active_Mod = MODIFY_MAP;
 	Interrupt = INTRPT_NONE;
-	OnTiles = ENABLE_BTILE | ENABLE_FTILE | ENABLE_TYPE | ENABLE_SLOPE;
+	OnTiles = ENABLE_BTILE | ENABLE_FTILE | ENABLE_TYPE | ENABLE_COLL;
 	tabl_name_W = 0;
 }
 

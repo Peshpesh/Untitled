@@ -334,34 +334,34 @@ bool CApp::EventMAPedit(int mX, int mY)
 		}
 	}
 
-	// Click on arrow LEFT or RIGHT of active tile slope.
-	// Changes the active tile slope to previous or next slope index.
-	if (mY >= DISP_SLOPE_Y && mY < DISP_SLOPE_Y + TILE_SIZE)
+	// Click on arrow LEFT or RIGHT of active collision.
+	// Changes the active collision to previous or next collision index.
+	if (mY >= DISP_COLL_Y && mY < DISP_COLL_Y + TILE_SIZE)
 	{
 		// Left Arrow
-		if (mX >= DISP_SLOPE_X - TILE_SIZE && mX < DISP_SLOPE_X)
+		if (mX >= DISP_COLL_X - TILE_SIZE && mX < DISP_COLL_X)
 		{
-				if (Current_Slope != 0) Current_Slope -= 1;
-				else Current_Slope = STEEP_DSCE;
+				if (Current_Coll != 0) Current_Coll -= 1;
+				else Current_Coll = SOLID_A_ML_BR;
 				return true;
 		}
 		// Right Arrow
-		if (mX >= DISP_SLOPE_X + TILE_SIZE && mX < DISP_SLOPE_X + (TILE_SIZE * 2))
+		if (mX >= DISP_COLL_X + TILE_SIZE && mX < DISP_COLL_X + (TILE_SIZE * 2))
 		{
-				if (Current_Slope != STEEP_DSCE) Current_Slope += 1;
-				else Current_Slope = 0;
+				if (Current_Coll != SOLID_A_ML_BR) Current_Coll += 1;
+				else Current_Coll = 0;
 				return true;
 		}
 	}
 
-	// Click on opacity bar for tile slope overlay
-	if (mY >= ALPH_SLOPE_Y && mY < ALPH_SLOPE_Y + ALPH_BAR_H)
+	// Click on opacity bar for tile collision overlay
+	if (mY >= ALPH_COLL_Y && mY < ALPH_COLL_Y + ALPH_BAR_H)
 	{
 		if (mX >= ALPH_BAR_X && mX < ALPH_BAR_X + ALPH_BAR_W)
 		{
 			double barfract = (double)(mX - ALPH_BAR_X) / (double)(ALPH_BAR_W - 1);
-			Slope_Alpha = MAX_RGBA * barfract;
-			SDL_SetTextureAlphaMod(Slope_Tileset, Slope_Alpha);
+			Coll_Alpha = MAX_RGBA * barfract;
+			SDL_SetTextureAlphaMod(Coll_Tileset, Coll_Alpha);
 			return true;
 		}
 	}
@@ -389,8 +389,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 		Yf = Yi + SWITCH_SIZE;
 		if (mY >= Yi && mY < Yf)
 		{
-			if (View_Slope) View_Slope = false;
-			else View_Slope = true;
+			if (View_Coll) View_Coll = false;
+			else View_Coll = true;
 			return true;
 		}
 	}
@@ -426,8 +426,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 		Yf = Yi + SWITCH_SIZE;
 		if (mY >= Yi && mY < Yf)
 		{
-			if (OnTiles & ENABLE_SLOPE) OnTiles ^= ENABLE_SLOPE;
-			else OnTiles |= ENABLE_SLOPE;
+			if (OnTiles & ENABLE_COLL) OnTiles ^= ENABLE_COLL;
+			else OnTiles |= ENABLE_COLL;
 			return true;
 		}
 	}

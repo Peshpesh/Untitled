@@ -158,7 +158,7 @@ bool CEntity::Jump()
 bool CEntity::PosValid(int NewX, int NewY, bool Vertical)
 {
 	bool Return = true;
-	bool OnSlope = false;
+	bool OnColl = false;
 
 	int StartX = (NewX + Col_X) ;
 	int StartY = (NewY + Col_Y) ;
@@ -173,9 +173,9 @@ bool CEntity::PosValid(int NewX, int NewY, bool Vertical)
 		for (int iX = StartX / TILE_SIZE; iX <= EndX / TILE_SIZE; iX++)
 		{
 			CTile* Tile = CArea::AreaControl.GetTile(iX * TILE_SIZE, iY * TILE_SIZE);
-			if (!OnSlope && Tile->Slope != SLOPE_FLAT)
+			if (!OnColl && Tile->CollID != SOLID_NONE)
 			{
-				OnSlope = true;
+				OnColl = true;
 			}
 			if (PosValidTile(Tile) == false)
 			{
@@ -183,7 +183,7 @@ bool CEntity::PosValid(int NewX, int NewY, bool Vertical)
 			}
 		}
 	}
-	if (Return && OnSlope)
+	if (Return && OnColl)
 	{
 		int TileRefXe = (EndX % TILE_SIZE) + 1;   // right side of new hitbox position
 		int TileRefYe = (EndY % TILE_SIZE) + 1;   // bottom side of new hitbox position
@@ -192,73 +192,73 @@ bool CEntity::PosValid(int NewX, int NewY, bool Vertical)
 		CTile* TileBL = CArea::AreaControl.GetTile((StartX / TILE_SIZE) * TILE_SIZE, (EndY / TILE_SIZE) * TILE_SIZE);
 		CTile* TileBR = CArea::AreaControl.GetTile((EndX / TILE_SIZE) * TILE_SIZE, (EndY / TILE_SIZE) * TILE_SIZE);
 
-		switch (TileBL->Slope)
-		{
-			case SLOPE_DSC:
-			{
-				if (TileRefYe > TileRefXs / 2)
-				{
-					if (Vertical) Return = false;
-					if (Flags & ENTITY_FLAG_BULLET) Return = false;
-					else BoostY = (TileRefXs / 2) - TileRefYe;
-				}
-				break;
-			}
-			case SLOPE_DSCE:
-			{
-				if (TileRefYe > (TILE_SIZE + TileRefXs) / 2)
-				{
-					if (Vertical) Return = false;
-					if (Flags & ENTITY_FLAG_BULLET) Return = false;
-					else BoostY = ((TILE_SIZE + TileRefXs) / 2) - TileRefYe;
-				}
-				break;
-			}
-			default:
-			{
-				break;
-			}
-		}
-		switch (TileBR->Slope)
-		{
-			case SLOPE_ASC:
-			{
-				if (TileRefYe > TILE_SIZE - (TileRefXe / 2))
-				{
-					if (Vertical) Return = false;
-					if (Flags & ENTITY_FLAG_BULLET) Return = false;
-					else if ((TILE_SIZE - (TileRefXe / 2)) - TileRefYe < BoostY)
-						BoostY = (TILE_SIZE - (TileRefXe / 2)) - TileRefYe;
-				}
-				break;
-			}
-			case SLOPE_ASCE:
-			{
-				if (TileRefYe > (TILE_SIZE - TileRefXe) / 2)
-				{
-					if (Vertical) Return = false;
-					if (Flags & ENTITY_FLAG_BULLET) Return = false;
-					else BoostY = ((TILE_SIZE - TileRefXe) / 2) - TileRefYe;
-				}
-				break;
-			}
-			default:
-			{
-				if (TileRefYe > TILE_SIZE / 2 && TileBR->Slope == SLOPE_DSCE)
-				{
-					if (Vertical) Return = false;
-					if (Flags & ENTITY_FLAG_BULLET) Return = false;
-					else if ((int)(BoostY) >= 0) BoostY = (TILE_SIZE / 2) - TileRefYe;
-				}
-				else if (TileBR->Slope == SLOPE_DSC)
-				{
-					if (Vertical) Return = false;
-					if (Flags & ENTITY_FLAG_BULLET) Return = false;
-					else if ((int)(BoostY) >= 0) BoostY = -TileRefYe;
-				}
-				break;
-			}
-		}
+		// switch (TileBL->CollID)
+		// {
+		// 	case SLOPE_DSC:
+		// 	{
+		// 		if (TileRefYe > TileRefXs / 2)
+		// 		{
+		// 			if (Vertical) Return = false;
+		// 			if (Flags & ENTITY_FLAG_BULLET) Return = false;
+		// 			else BoostY = (TileRefXs / 2) - TileRefYe;
+		// 		}
+		// 		break;
+		// 	}
+		// 	case SLOPE_DSCE:
+		// 	{
+		// 		if (TileRefYe > (TILE_SIZE + TileRefXs) / 2)
+		// 		{
+		// 			if (Vertical) Return = false;
+		// 			if (Flags & ENTITY_FLAG_BULLET) Return = false;
+		// 			else BoostY = ((TILE_SIZE + TileRefXs) / 2) - TileRefYe;
+		// 		}
+		// 		break;
+		// 	}
+		// 	default:
+		// 	{
+		// 		break;
+		// 	}
+		// }
+		// switch (TileBR->CollID)
+		// {
+		// 	case SLOPE_ASC:
+		// 	{
+		// 		if (TileRefYe > TILE_SIZE - (TileRefXe / 2))
+		// 		{
+		// 			if (Vertical) Return = false;
+		// 			if (Flags & ENTITY_FLAG_BULLET) Return = false;
+		// 			else if ((TILE_SIZE - (TileRefXe / 2)) - TileRefYe < BoostY)
+		// 				BoostY = (TILE_SIZE - (TileRefXe / 2)) - TileRefYe;
+		// 		}
+		// 		break;
+		// 	}
+		// 	case SLOPE_ASCE:
+		// 	{
+		// 		if (TileRefYe > (TILE_SIZE - TileRefXe) / 2)
+		// 		{
+		// 			if (Vertical) Return = false;
+		// 			if (Flags & ENTITY_FLAG_BULLET) Return = false;
+		// 			else BoostY = ((TILE_SIZE - TileRefXe) / 2) - TileRefYe;
+		// 		}
+		// 		break;
+		// 	}
+		// 	default:
+		// 	{
+		// 		if (TileRefYe > TILE_SIZE / 2 && TileBR->Slope == SLOPE_DSCE)
+		// 		{
+		// 			if (Vertical) Return = false;
+		// 			if (Flags & ENTITY_FLAG_BULLET) Return = false;
+		// 			else if ((int)(BoostY) >= 0) BoostY = (TILE_SIZE / 2) - TileRefYe;
+		// 		}
+		// 		else if (TileBR->Slope == SLOPE_DSC)
+		// 		{
+		// 			if (Vertical) Return = false;
+		// 			if (Flags & ENTITY_FLAG_BULLET) Return = false;
+		// 			else if ((int)(BoostY) >= 0) BoostY = -TileRefYe;
+		// 		}
+		// 		break;
+		// 	}
+		// }
 	}
 	if (Flags & ENTITY_FLAG_MAPONLY)
 	{
@@ -285,10 +285,10 @@ bool CEntity::PosValid(int NewX, int NewY, bool Vertical)
 bool CEntity::PosValidTile(CTile* Tile)
 {
 	if (Tile == NULL) return true;
-	if (Tile->TypeID == TILE_TYPE_BLOCK || Tile->TypeID == TILE_TYPE_ICE)
-	{
-		return false;
-	}
+	// if (Tile->TypeID == TILE_TYPE_BLOCK || Tile->TypeID == TILE_TYPE_ICE)
+	// {
+	// 	return false;
+	// }
 	return true;
 }
 

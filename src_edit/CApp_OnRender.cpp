@@ -22,7 +22,7 @@ void CApp::OnRender()
 	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
 	if (View_Fore) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
 	if (View_Type) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	if (View_Slope) CArea::AreaControl.OnRenderSlope(Map_Renderer, Slope_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (View_Coll) CArea::AreaControl.OnRenderColl(Map_Renderer, Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
 	// Draw the entities in the area
 	for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
@@ -179,10 +179,7 @@ bool CApp::RenderMAPside()
 	// Writes out the active type
 	switch (Current_Type)
 	{
-		case TILE_TYPE_NONE: Font::CenterWrite(Map_Renderer, FONT_MINI, "NONE", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
-		case TILE_TYPE_HOLLOW: Font::CenterWrite(Map_Renderer, FONT_MINI, "HOLLOW", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
 		case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, FONT_MINI, "NORMAL", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
-		case TILE_TYPE_BLOCK: Font::CenterWrite(Map_Renderer, FONT_MINI, "BLOCK", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
 		case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, FONT_MINI, "WATER", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
 		case TILE_TYPE_ICE: Font::CenterWrite(Map_Renderer, FONT_MINI, "ICE", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
 		case TILE_TYPE_FIRE: Font::CenterWrite(Map_Renderer, FONT_MINI, "FIRE", EWIDTH - 50, DISP_TYPE_Y - DISP_NAME_OFFSET); break;
@@ -194,36 +191,37 @@ bool CApp::RenderMAPside()
 	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_TYPE_Y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, ALPH_BAR_H);
 	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_TYPE_Y, DARKS_X, COLOR_PURE_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
-	// Draws active tile slope
-	CSurface::OnDraw(Map_Renderer, Slope_Tileset, DISP_SLOPE_X, DISP_SLOPE_Y,
-		(Current_Slope % SlopesetWidth) * TILE_SIZE,
-		(Current_Slope / SlopesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	// Draws active collision tile
+	CSurface::OnDraw(Map_Renderer, Coll_Tileset, DISP_COLL_X, DISP_COLL_Y,
+		(Current_Coll % CollsetWidth) * TILE_SIZE,
+		(Current_Coll / CollsetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-	// Draws tile slope arrows
-	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_SLOPE_X - ((TILE_SIZE+ARROW_SIZE)/2),
-			DISP_SLOPE_Y + ((TILE_SIZE-ARROW_SIZE)/2), L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
-	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_SLOPE_X + TILE_SIZE + ((TILE_SIZE-ARROW_SIZE)/2),
-			DISP_SLOPE_Y + ((TILE_SIZE-ARROW_SIZE)/2), R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	// Draws collision tile arrows
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_COLL_X - ((TILE_SIZE+ARROW_SIZE)/2),
+			DISP_COLL_Y + ((TILE_SIZE-ARROW_SIZE)/2), L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, DISP_COLL_X + TILE_SIZE + ((TILE_SIZE-ARROW_SIZE)/2),
+			DISP_COLL_Y + ((TILE_SIZE-ARROW_SIZE)/2), R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
 
-	// Writes out the active slope
-	switch (Current_Slope)
+	// Writes out the active collision type
+	switch (Current_Coll)
 	{
-	case SLOPE_FLAT: Font::CenterWrite(Map_Renderer, FONT_MINI, "FLAT", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case SLOPE_ASC: Font::CenterWrite(Map_Renderer, FONT_MINI, "ASC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case SLOPE_ASCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "ASCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case SLOPE_DSC: Font::CenterWrite(Map_Renderer, FONT_MINI, "DSC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case SLOPE_DSCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "DSCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case STEEP_ASC: Font::CenterWrite(Map_Renderer, FONT_MINI, "SASC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case STEEP_DSC: Font::CenterWrite(Map_Renderer, FONT_MINI, "SDSC", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case STEEP_ASCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "SASCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
-	case STEEP_DSCE: Font::CenterWrite(Map_Renderer, FONT_MINI, "SDSCE", EWIDTH - 50, DISP_SLOPE_Y - DISP_NAME_OFFSET); break;
+	case SOLID_NONE: Font::CenterWrite(Map_Renderer, FONT_MINI, "NONE", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_ALL: Font::CenterWrite(Map_Renderer, FONT_MINI, "FULL", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_U_BL_MR: Font::CenterWrite(Map_Renderer, FONT_MINI, "UBLMR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_U_ML_TR: Font::CenterWrite(Map_Renderer, FONT_MINI, "UMLTR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_U_TL_MR: Font::CenterWrite(Map_Renderer, FONT_MINI, "UTLMR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_U_ML_BR: Font::CenterWrite(Map_Renderer, FONT_MINI, "UMLBR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_A_BL_MR: Font::CenterWrite(Map_Renderer, FONT_MINI, "ABLMR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_A_ML_TR: Font::CenterWrite(Map_Renderer, FONT_MINI, "AMLTR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_A_TL_MR: Font::CenterWrite(Map_Renderer, FONT_MINI, "ATLMR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
+	case SOLID_A_ML_BR: Font::CenterWrite(Map_Renderer, FONT_MINI, "AMLBR", EWIDTH - 50, DISP_COLL_Y - DISP_NAME_OFFSET); break;
 	default: break;
 	}
 
-	// Draw an opacity bar for Slope overlay
-	opacity_W = ALPH_BAR_W*((double)(Slope_Alpha)/(double)(MAX_RGBA));
-	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_SLOPE_Y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, ALPH_BAR_H);
-	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_SLOPE_Y, DARKS_X, COLOR_PURE_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
+	// Draw an opacity bar for collision overlay
+	opacity_W = ALPH_BAR_W*((double)(Coll_Alpha)/(double)(MAX_RGBA));
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X, ALPH_COLL_Y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, ALPH_BAR_H);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, ALPH_BAR_X + opacity_W, ALPH_COLL_Y, DARKS_X, COLOR_PURE_Y, 1, 1, ALPH_BAR_W - opacity_W, ALPH_BAR_H);
 
 	return true;
 }
@@ -278,8 +276,8 @@ bool CApp::RenderMAPbottom()
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(Map_Renderer, FONT_MINI, "Tile Slopes", VIEWOPTS_X + tX_offset, sY + tY_offset);
-	if (View_Slope)
+	Font::Write(Map_Renderer, FONT_MINI, "Collisions", VIEWOPTS_X + tX_offset, sY + tY_offset);
+	if (View_Coll)
 	{
 		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
@@ -289,7 +287,6 @@ bool CApp::RenderMAPbottom()
 		CSurface::OnDraw(Map_Renderer, Map_Interface, VIEWOPTS_X, sY, SWITCH_XO,
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
-
 
 	// Menu/Options list for active tile attributes on placement
 	sY = TILEOPTS_Y;
@@ -331,8 +328,8 @@ bool CApp::RenderMAPbottom()
 			OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(Map_Renderer, FONT_MINI, "Use Slope", TILEOPTS_X + tX_offset, sY + tY_offset);
-	if (OnTiles & ENABLE_SLOPE)
+	Font::Write(Map_Renderer, FONT_MINI, "Use Collision", TILEOPTS_X + tX_offset, sY + tY_offset);
+	if (OnTiles & ENABLE_COLL)
 	{
 		CSurface::OnDraw(Map_Renderer, Map_Interface, TILEOPTS_X, sY, SWITCH_XO,
 			ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);

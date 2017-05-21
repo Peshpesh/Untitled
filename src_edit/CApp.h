@@ -28,10 +28,9 @@ private:
 	SDL_Window* Map_Display;    // Edit Window
 	SDL_Renderer* Map_Renderer; // Edit Renderer
 	SDL_Texture* Type_Tileset;  // Tileset showing tile type
-	SDL_Texture* Slope_Tileset;	// Tileset showing slope type
+	SDL_Texture* Coll_Tileset;	// Tileset showing collision type
 	SDL_Texture* Main_Tileset;  // The actual tileset in use
 	SDL_Texture* Map_Interface; // Bordering interface for editor
-	// SDL_Texture* Font;
 
 	bool Running;
 
@@ -40,11 +39,11 @@ private:
 	bool NoBack, NoFore;				// If true, use -1 as a tile number (render nothing)
 	int Current_Type;           // Active typeID
 	int Type_Alpha;							// Current Opacity of the Type overlay
-	int Current_Slope;					// Active tile slope
-	int Slope_Alpha;						// Current Opacity of the Slope overlay
-	bool View_Fore, View_Type, View_Slope;
+	int Current_Coll;					  // Active tile collision ID
+	int Coll_Alpha;						  // Current Opacity of the Collision overlay
+	bool View_Fore, View_Type, View_Coll;
 	int TypesetWidth, TypesetHeight;  	// Typeset texture dimension (tiles)
-	int SlopesetWidth, SlopesetHeight; 	// Slopeset texture dimension (tiles)
+	int CollsetWidth, CollsetHeight; 	// Collset texture dimension (tiles)
 	int TilesetWidth, TilesetHeight;  	// Tileset texture dimension (tiles)
 	CChangeTile PickTile;
 

@@ -46,7 +46,7 @@ public:
 	*/
 	void	OnRender(SDL_Renderer* renderer, int CameraX, int CameraY, bool bg);
 	void	OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
-	void	OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
+	void	OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
 	void	ViewArea(SDL_Renderer* renderer, SDL_Texture* ui);
 
 	/*	Intended only for map editing.
@@ -66,7 +66,7 @@ public:
 	void	OnReduceDown();
 
 	void	ChangeSet(SDL_Texture* newset);
-	void	ChangeTile(int X, int Y, int tile, int fore, int type, int slope, int usetiles);
+	void	ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles);
 	void	SaveArea(char const* areaname, char const* setpath);
 	void	OnCleanup();
 };

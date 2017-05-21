@@ -129,7 +129,7 @@ void CArea::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int Camer
 	}
 }
 
-void CArea::OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY)
+void CArea::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY)
 {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
@@ -145,7 +145,7 @@ void CArea::OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int Came
 		int X = ((ID % AreaWidth) * MapWidth) + CameraX;
 		int Y = ((ID / AreaWidth) * MapHeight) + CameraY;
 
-		MapList[ID].OnRenderSlope(renderer, tileset, X, Y);
+		MapList[ID].OnRenderColl(renderer, tileset, X, Y);
 	}
 }
 
@@ -382,7 +382,7 @@ void CArea::ChangeSet(SDL_Texture* newset)
 	}
 }
 
-void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int slope, int usetiles)
+void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles)
 {
 	if (X < 0 || Y < 0 || X > AreaWidth * MAP_WIDTH * TILE_SIZE - 1 || Y > AreaHeight * MAP_HEIGHT * TILE_SIZE - 1)
 		return;
@@ -390,7 +390,7 @@ void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int slope, in
 	int MapWidth = MAP_WIDTH * TILE_SIZE;
 	int MapHeight = MAP_HEIGHT * TILE_SIZE;
 	int ID = (X / MapWidth) + (Y / MapHeight) * AreaWidth;
-	MapList[ID].ChangeTile(X % MapWidth, Y % MapHeight, tile, fore, type, slope, usetiles);
+	MapList[ID].ChangeTile(X % MapWidth, Y % MapHeight, tile, fore, type, coll, usetiles);
 }
 
 void CArea::SaveArea(char const* areaname, char const* setpath)

@@ -82,9 +82,9 @@
 #define DISP_TYPE_X 674     // "..." Tile type info
 #define DISP_TYPE_Y 350     //
 #define ALPH_TYPE_Y 390
-#define DISP_SLOPE_X 674    // "..." Tile slope info
-#define DISP_SLOPE_Y 420    //
-#define ALPH_SLOPE_Y 460
+#define DISP_COLL_X 674    // "..." Tile collision info
+#define DISP_COLL_Y 420    //
+#define ALPH_COLL_Y 460
 #define DUMMY_ENTITY_X 522
 #define DUMMY_ENTITY_Y 0
 #define VIEWOPTS_X 20

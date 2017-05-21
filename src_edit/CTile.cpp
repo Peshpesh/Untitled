@@ -2,8 +2,8 @@
 
 CTile::CTile()
 {
-	TileID = 0;
-	ForeID = 0;
-	TypeID = TILE_TYPE_NONE;
-	Slope = SLOPE_FLAT;
+	TileID = -1;
+	ForeID = -1;
+	TypeID = TILE_TYPE_NORMAL;
+	CollID = SOLID_NONE;
 }

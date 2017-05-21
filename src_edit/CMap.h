@@ -26,10 +26,10 @@ public:
 
 	void OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg);
 	void OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY);
-	void OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY);
+	void OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY);
 	void ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo);
 
-	void ChangeTile(int X, int Y, int tile, int fore, int type, int slope, int usetiles);
+	void ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles);
 
 	void SaveMap(int ID, char const* areaname);
 };

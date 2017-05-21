@@ -30,7 +30,7 @@ bool CMap::OnLoad(char const* File)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			CTile tempTile;
-			fscanf(FileHandle, "%d:%d:%d:%d ", &tempTile.TileID, &tempTile.ForeID, &tempTile.TypeID, &tempTile.Slope);
+			fscanf(FileHandle, "%d:%d:%d:%d ", &tempTile.TileID, &tempTile.ForeID, &tempTile.TypeID, &tempTile.CollID);
 			TileList.push_back(tempTile);
 		}
 		fscanf(FileHandle, "\n");
@@ -46,8 +46,8 @@ void CMap::OnLoad()
 	CTile tempTile;
 	tempTile.TileID = -1;
 	tempTile.ForeID = -1;
-	tempTile.TypeID = TILE_TYPE_NONE;
-	tempTile.Slope = SLOPE_FLAT;
+	tempTile.TypeID = TILE_TYPE_NORMAL;
+	tempTile.CollID = SOLID_NONE;
 
 	for (int Y = 0; Y < MAP_HEIGHT; Y++)
 	{
@@ -76,11 +76,6 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
 	{
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
-			// if (TileList[ID].TypeID == TILE_TYPE_NONE)
-			// {
-			// 	ID++;
-			// 	continue;
-			// }
 			int TilesetX = 0, TilesetY = 0;
 			if (bg && TileList[ID].TileID >= 0)
 			{
@@ -133,7 +128,7 @@ void CMap::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, 
 	}
 }
 
-void CMap::OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY)
+void CMap::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY)
 {
 	if (tileset == NULL) return;
 
@@ -153,8 +148,8 @@ void CMap::OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX,
 		{
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			int TilesetX = ((TileList[ID].Slope) % TilesetWidth) * TILE_SIZE;
-			int TilesetY = ((TileList[ID].Slope) / TilesetWidth) * TILE_SIZE;
+			int TilesetX = ((TileList[ID].CollID) % TilesetWidth) * TILE_SIZE;
+			int TilesetY = ((TileList[ID].CollID) / TilesetWidth) * TILE_SIZE;
 			CSurface::OnDraw(renderer, tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
@@ -173,23 +168,13 @@ void CMap::ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			int VTileY = 350; // 350 px is where the 2 x 2 tiles start for the editor.
-			if (TileList[ID].TypeID == TILE_TYPE_NONE && TileList[ID].TileID == 0)
+			switch (TileList[ID].TypeID)
 			{
-				// Do Nothing
-			}
-			else
-			{
-				switch (TileList[ID].TypeID)
-				{
-					case TILE_TYPE_NONE: VTileY += VTileSize; break;
-					case TILE_TYPE_HOLLOW: VTileY += VTileSize; break;
 					case TILE_TYPE_NORMAL: VTileY += VTileSize * 3; break;
-					case TILE_TYPE_BLOCK: break;
 					case TILE_TYPE_WATER: VTileY += VTileSize * 2; break;
 					case TILE_TYPE_ICE: VTileY += VTileSize * 4; break;
 					case TILE_TYPE_FIRE: VTileY += VTileSize * 4; break;
 					default: break;
-				}
 			}
 			CSurface::OnDraw(renderer, ui, Xo + X * VTileSize, Yo + Y * VTileSize, 0, VTileY, VTileSize, VTileSize);
 			ID++;
@@ -197,13 +182,13 @@ void CMap::ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo)
 	}
 }
 
-void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int slope, int usetiles)
+void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles)
 {
 	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
 	if (usetiles & ENABLE_BTILE) 	TileList[ID].TileID = tile;
 	if (usetiles & ENABLE_FTILE) 	TileList[ID].ForeID = fore;
 	if (usetiles & ENABLE_TYPE)		TileList[ID].TypeID = type;
-	if (usetiles & ENABLE_SLOPE)	TileList[ID].Slope = slope;
+	if (usetiles & ENABLE_COLL)	TileList[ID].CollID = coll;
 }
 
 void CMap::SaveMap(int ID, char const* areaname)
@@ -231,7 +216,7 @@ void CMap::SaveMap(int ID, char const* areaname)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			int ID = X + Y * MAP_WIDTH;
-			fprintf(FileHandle, "%d:%d:%d:%d ", TileList[ID].TileID, TileList[ID].ForeID, TileList[ID].TypeID, TileList[ID].Slope);
+			fprintf(FileHandle, "%d:%d:%d:%d ", TileList[ID].TileID, TileList[ID].ForeID, TileList[ID].TypeID, TileList[ID].CollID);
 		}
 		fprintf(FileHandle, "\n");
 	}
