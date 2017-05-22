@@ -188,6 +188,83 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 	return CanMove;
 }
 
+bool CEntity::TranslateX(double NewX, double NewY)
+{
+	// NOTE: NewX, NewY params are the same
+	// value as FPS speedfactor, which should be <= 1.0.
+
+	bool retval = true;
+	int destXl = X + NewX + Col_X;
+	int destYt = Y + NewY + Col_Y;
+	int destXr = destXl + Col_Width - 1;
+	int destYb = destYt + Col_Height - 1;
+	int deflectY = 0;
+
+	// First, let's see what lies ahead in terms of the map.
+	// These two conditional blocks handle sloping grounds.
+	// If necessary, a deflection amount is assigned to deflectY.
+	// This value is such that adding it to the intended Y position
+	// will yield a valid Y position on the map (use this for entities,
+	// tiles that might block movement, etc.). The deflectY term is basically
+	// a "correction" term in Y.
+	if (NewX > 0.0)	// Moving right
+	{
+		CTile* Tile = CArea::AreaControl.GetTile(destXr, destYb - NewY);
+		if (Tile->CollID == SOLID_U_BL_MR || Tile->CollID == SOLID_U_ML_TR)
+		{
+			int Yo = SOLID_U_BL_MR ? TILE_SIZE - 1 : (TILE_SIZE / 2) - 1;
+			double slope = 0.5;
+			int Xrel = destXr % TILE_SIZE;
+			int Yrel = destYb % TILE_SIZE;
+			int Yground = Yo - (slope * Xrel);
+			if (Yrel >= Yground) // intended destination of bottom side is "in the ground"
+			{
+				deflectY = Yground - Yrel - 1;
+			}
+		}
+	}
+	else if (NewX < 0.0)	// Moving left
+	{
+		CTile* Tile = CArea::AreaControl.GetTile(destXl, destYb - NewY);
+		if (Tile->CollID == SOLID_U_TL_MR || Tile->CollID == SOLID_U_ML_BR)
+		{
+			int Yo = SOLID_U_TL_MR ? 0 : TILE_SIZE / 2;
+			double slope = -0.5;
+			int Xrel = destXl % TILE_SIZE;
+			int Yrel = destYb % TILE_SIZE;
+			int Yground = Yo - (slope * Xrel);
+			if (Yrel >= Yground) // intended destination of bottom side is "in the ground"
+			{
+				deflectY = Yground - Yrel - 1;
+			}
+		}
+	}
+
+	// Now, let's see if the destination hitbox will collide with
+	// something that will stop this entity. First, let's check the map.
+	for (int tY = destYt + deflectY; tY <= destYb + deflectY; tY += TILE_SIZE)
+	{
+		for ()
+		{
+
+		}
+		CTile* Tile = CArea::AreaControl.GetTile(destX, tY);
+	}
+
+	return retval;
+}
+
+bool CEntity::TranslateY(double NewY)
+{
+	bool retval = true;
+	int destXi = X + Col_X;
+	int destYi = Y + NewY + Col_Y;
+	int destXf = destXi + Col_Width - 1;
+	int destYf = destYf + Col_Height - 1;
+
+	return retval;
+}
+
 // Checks to see if the position an entity is moving toward
 // is valid. Returns false if the destination is invalid.
 // First checks if the entity collides with the map, then

@@ -117,8 +117,7 @@ public:
 	// Returns false if no interaction is occurring
 	virtual bool OnInteract(SDL_Renderer* renderer);
 
-public:
-	// Params are in pixels/second
+protected:
 	bool OnMove(float MoveX, float MoveY);
 
 	void ChkEnviro();
@@ -135,8 +134,10 @@ protected:
 public:
 	bool Jump();
 
-private:
+protected:
 	bool PosValid(int NewX, int NewY, bool Vertical);
+	bool TranslateX(double NewX);
+	bool TranslateY(double NewY);
 	bool PosValidTile(CTile* Tile);
 	bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
 };

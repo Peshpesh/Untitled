@@ -27,7 +27,6 @@ CTile* CArea::GetTile(int X, int Y)
 	int MapHeight = MAP_HEIGHT * TILE_SIZE;
 
 	CMap* Map = GetMap(X, Y);
-
 	if (Map == NULL) return NULL;
 
 	X = X % MapWidth;
