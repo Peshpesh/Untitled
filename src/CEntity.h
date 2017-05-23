@@ -136,8 +136,11 @@ public:
 
 protected:
 	bool PosValid(int NewX, int NewY, bool Vertical);
-	bool TranslateX(double NewX);
-	bool TranslateY(double NewY);
+	bool Translate(double NewX, double NewY);
+	bool CheckPathX(double NewX);
+	bool CheckPathY(double NewY);
+	bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);
+	bool CollGround(const int& collID, const int& Xrel, const int& Yrel);
 	bool PosValidTile(CTile* Tile);
 	bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
 };
