@@ -240,25 +240,23 @@ bool CEntity::Translate(double NewX, double NewY)
 		}
 	}
 
-	bool canmoveXY = true;
 	// Now, let's see if the destination hitbox will collide with
 	// something that will stop this entity. First, let's check the map.
-	for (int tY = (destYt + deflectY) / TILE_SIZE; tY <= (destYb + deflectY) / TILE_SIZE; tY++)
+	if (deflect != 0)
 	{
-		for (int tX = destXl / TILE_SIZE; tX <= destXr / TILE_SIZE; tX++)
+		if (!CheckPathXY(destXl, destXr, destYt + deflectY, destYb + deflectY))
 		{
-			CTile* Tile = CArea::AreaControl.GetTile(tX * TILE_SIZE, tY * TILE_SIZE);
-			if (Tile->CollID == SOLID_ALL)	canmoveXY = false;
-			if (tY == (destYt + deflectY) / TILE_SIZE)
-			{
-				if (Tile->CollID == SOLID_A_ML_BR || Tile->CollID == SOLID_A_BL_MR)
-				{
-					canmoveXY = false;
-				}
-			}
-			if (!canmoveXY) break;
+			// The entity cannot move.
 		}
-		if (!canmoveXY) break;
+		else
+		{
+			// The entity can move.
+		}
+	}
+	else
+	{
+		CheckPathX();
+		CheckPathY();
 	}
 
 	return retval;
