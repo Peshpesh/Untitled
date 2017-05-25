@@ -356,6 +356,59 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 						return false;
 					}
 				}
+
+				// Handling case #2:
+				if (tY == destYb / TILE_SIZE) // If the current tile is associated with the bottom of hitbox...
+				{
+					if (Tile->CollID == SOLID_U_ML_BR)
+					{
+						if (tX != destXl / TILE_SIZE)
+						{
+							if (destYb % TILE_SIZE >= TILE_SIZE / 2) return false;
+						}
+						else
+						{
+							if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE)) return false;
+						}
+					}
+					else if (Tile->CollID == SOLID_U_BL_MR)
+					{
+						if (tX != destXr / TILE_SIZE)
+						{
+							if (destYb % TILE_SIZE >= TILE_SIZE / 2) return false;
+						}
+						else
+						{
+							if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
+						}
+					}
+					else if (Tile->CollID == SOLID_U_TL_MR)
+					{
+						if (tX != destXl / TILE_SIZE)
+						{
+							return false;
+						}
+						else
+						{
+							if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE)) return false;
+						}
+					}
+					else if (Tile->CollID == SOLID_U_ML_TR)
+					{
+						if (tX != destXr / TILE_SIZE)
+						{
+							return false;
+						}
+						else
+						{
+							if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
 			}
 		}
 	}
@@ -364,7 +417,7 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 
 bool CEntity::CheckPathX(double NewX)
 {
-
+	return true;
 }
 
 bool CEntity::CheckPathY(double NewY)
