@@ -358,7 +358,7 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 				}
 
 				// Handling case #2:
-				if (tY == destYb / TILE_SIZE) // If the current tile is associated with the bottom of hitbox...
+				else if (tY == destYb / TILE_SIZE) // If the current tile is associated with the bottom of hitbox...
 				{
 					if (Tile->CollID == SOLID_U_ML_BR)
 					{
@@ -408,6 +408,14 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 					{
 						return false;
 					}
+				}
+
+				// Handling cases #3 and #4
+				else
+				{
+					// There are no exceptions that allow the entity to move if
+					// the colliding sector is not from the top or bottom of the hitbox.
+					return false;
 				}
 			}
 		}
