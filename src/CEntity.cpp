@@ -27,6 +27,7 @@ CEntity::CEntity()
 	MaxAccelY = 0.75f;
 
 	Jumper = false;
+	Grounded = false;
 
 	CurrentFrameCol = 0;
 	CurrentFrameRow = 0;
@@ -188,23 +189,23 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 	return CanMove;
 }
 
-bool CEntity::Translate(double NewX, double NewY)
+void CEntity::Translate(double NewX, double NewY)
 {
 	// NOTE: NewX, NewY params should be <= 1.0.
-
-	bool movethis = true;
-	int destXl = X + NewX + Col_X;
-	int destYt = Y + NewY + Col_Y;
+	int destXl = (int)(X) + NewX + Col_X;
+	int destYt = (int)(Y) + NewY + Col_Y;
 	int destXr = destXl + Col_Width - 1;
 	int destYb = destYt + Col_Height - 1;
-	int deflectY = 0;
+	int pushY = 0;
+
+	Grounded = false;
 
 	// First, let's see what lies ahead in terms of the map.
 	// These two conditional blocks handle sloping grounds.
-	// If necessary, a deflection amount is assigned to deflectY.
+	// If necessary, a deflection (push) amount is assigned to pushY.
 	// This value is such that adding it to the intended Y position
 	// will yield a valid Y position on the map (use this for entities,
-	// tiles that might block movement, etc.). The deflectY term is basically
+	// tiles that might block movement, etc.). The pushY term is basically
 	// a "correction" term in Y, which must be satisfied if this entity is to move
 	// horizontally.
 	if (NewX > 0.0)	// Moving right
@@ -212,15 +213,7 @@ bool CEntity::Translate(double NewX, double NewY)
 		CTile* Tile = CArea::AreaControl.GetTile(destXr, destYb - NewY);
 		if (Tile->CollID == SOLID_U_BL_MR || Tile->CollID == SOLID_U_ML_TR)
 		{
-			int Yo = SOLID_U_BL_MR ? TILE_SIZE - 1 : (TILE_SIZE / 2) - 1;
-			double slope = 0.5;
-			int Xrel = destXr % TILE_SIZE;
-			int Yrel = destYb % TILE_SIZE;
-			int Yground = Yo - (slope * Xrel);
-			if (Yrel >= Yground) // intended destination of bottom side is "in the ground"
-			{
-				deflectY = Yground - Yrel - 1;
-			}
+			pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE);
 		}
 	}
 	else if (NewX < 0.0)	// Moving left
@@ -228,217 +221,238 @@ bool CEntity::Translate(double NewX, double NewY)
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, destYb - NewY);
 		if (Tile->CollID == SOLID_U_TL_MR || Tile->CollID == SOLID_U_ML_BR)
 		{
-			int Yo = SOLID_U_TL_MR ? 0 : TILE_SIZE / 2;
-			double slope = -0.5;
-			int Xrel = destXl % TILE_SIZE;
-			int Yrel = destYb % TILE_SIZE;
-			int Yground = Yo - (slope * Xrel);
-			if (Yrel >= Yground) // intended destination of bottom side is "in the ground"
-			{
-				deflectY = Yground - Yrel - 1;
-			}
+			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE);
 		}
 	}
 
 	// Now, let's see if the destination hitbox will collide with
-	// something that will stop this entity. First, let's check the map.
-	if (deflect != 0)
+	// something that will stop this entity.
+	if (pushY != 0)
 	{
-		if (!CheckPathXY(destXl, destXr, destYt + deflectY, destYb + deflectY))
+		if (CheckPathXY(destXl, destXr, destYt + pushY, destYb + pushY))
 		{
-			// The entity cannot move.
+			// The entity can move in X and Y. The entity is being "pushed"
+			// in Y by a sloping surface, which means that we also have checked
+			// for stoppages in the Y direction and found none.
+			X += NewX;
+			Y += NewY + pushY;
+			SpeedY = 0;
+			if (pushY < 0) Grounded = true;
 		}
 		else
 		{
-			// The entity can move.
+			// The entity CANNOT move in X. The queried movement in X
+			// required a change in Y, so we must check if the entity can move in only Y
+			// now that it is apparent it cannot move in X.
+			SpeedX = 0;
+			if (CheckPathXY(destXl - NewX, destXr - NewX, destYt, destYb))
+			{
+				Y += NewY;
+
+			}
+			else
+			{
+				SpeedY = 0;
+				if (NewY > 0) Grounded = true;
+			}
 		}
 	}
 	else
 	{
-		CheckPathX();
-		CheckPathY();
-	}
+		// If there is no push in Y, then we can just check for
+		// if movement is possible in X, and then in Y.
+		if (CheckPathXY(destXl, destXr, destYt - NewY, destYb - NewY))
+		{
+			X += NewX;
+		}
+		else
+		{
+			SpeedX = 0;
+		}
 
-	return retval;
+		if (CheckPathXY(destXl - NewX, destXr - NewX, destYt, destYb))
+		{
+			Y += NewY;
+		}
+		else
+		{
+			SpeedY = 0;
+			if (NewY > 0) Grounded = true;
+		}
+	}
 }
 
 bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb)
 {
-	for (int tY = destYt / TILE_SIZE; tY <= destYb / TILE_SIZE; tY++)
+	bool pathclear = true;
+	for (int i = 0; i < EntityList.size(); i++)
 	{
-		for (int tX = destXl / TILE_SIZE; tX <= destXr / TILE_SIZE; tX++)
+		if (CollEntity(EntityList[i], destXl, destXr, destYt, destYb))
+			pathclear = false;
+	}
+
+	if (pathclear)
+	{
+		for (int tY = destYt / TILE_SIZE; tY <= destYb / TILE_SIZE; tY++)
 		{
-			CTile* Tile = CArea::AreaControl.GetTile(tX * TILE_SIZE, tY * TILE_SIZE);
-			// Check if the collided tile is entirely solid.
-			// If it is, entity can't move to destination.
-			if (Tile->CollID == SOLID_ALL) return false;
-
-			// Check if the collided tile is partially solid.
-			// If it is, the entity MIGHT be able to move.
-			if (Tile->CollID != SOLID_NONE)
+			for (int tX = destXl / TILE_SIZE; tX <= destXr / TILE_SIZE; tX++)
 			{
-				// Cases where colliding with a partially-filled tile
-				// should prevent movement:
-				// 1. The top of the hitbox intersects with the
-				// 		"lowest height" of a sloping roof, or the bottom of a sloping floor
-				// 2. The bottom of the hitbox intersects with the
-				//		"highest height" of a sloping floor, or the top of a sloping roof
-				// 3.	The left/right sides of the hitbox intersect with a
-				//		sloped floor or roof
-				// 4. The internal hitbox (non-side) somehow negotiates
-				//		an intersection
+				CTile* Tile = CArea::AreaControl.GetTile(tX * TILE_SIZE, tY * TILE_SIZE);
+				// Check if the collided tile is entirely solid.
+				// If it is, entity can't move to destination.
+				if (Tile->CollID == SOLID_ALL) return false;
 
-				// Handling case #1:
-				if (tY == destYt / TILE_SIZE)	// If the current tile is associated with the top of the hitbox...
+				// Check if the collided tile is partially solid.
+				// If it is, the entity MIGHT be able to move.
+				if (Tile->CollID != SOLID_NONE)
 				{
-					if (Tile->CollID == SOLID_A_ML_BR)
-					{
-						if (tX != destXr / TILE_SIZE)
-						{
-							return false;
-						}
-						else
-						{
-							if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYt % TILE_SIZE)) return false;
-						}
-					}
-					else if (Tile->CollID == SOLID_A_BL_MR)
-					{
-						// These sloped roof tiles occupy space from Y = [16, 31] relative to
-						// the tile.
-						// This entity can't move to the destination. The lowest height of
-						// the colliding tile is the bottom of the tile itself.
-						if (tX != destXl / TILE_SIZE)
-						{
-							return false;
-						}
-						else
-						{
-							if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYt % TILE_SIZE)) return false;
-						}
-					}
-					else if (Tile->CollID == SOLID_A_TL_MR)
-					{
-						// These sloped roof tiles occupy space from Y = [0, 15] relative to
-						// the tile.
-						// IF the top of the hitbox destination collides with the space
-						// occupied by the sloping roof, then the entity cannot move to
-						// the destination.
-						if (tX != destXr / TILE_SIZE)
-						{
-							if (destYt % TILE_SIZE < TILE_SIZE / 2) return false;
-						}
-						else
-						{
-							if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYt % TILE_SIZE)) return false;
-						}
-					}
-					else if (Tile->CollID == SOLID_A_ML_TR)
-					{
-						// These sloped roof tiles occupy space from Y = [0, 15] relative to
-						// the tile.
-						// IF the top of the hitbox destination collides with the space
-						// occupied by the sloping roof, then the entity cannot move to
-						// the destination.
-						if (tX != destXl / TILE_SIZE)
-						{
-							if (destYt % TILE_SIZE < TILE_SIZE / 2) return false;
-						}
-						else
-						{
-							if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYt % TILE_SIZE)) return false;
-						}
-					}
-					else // Hitbox top collides with a sloped floor. Probably the tile's underside.
-					{
-						return false;
-					}
-				}
+					// Cases where colliding with a partially-filled tile
+					// should prevent movement:
+					// 1. The top of the hitbox intersects with the
+					// 		"lowest height" of a sloping roof, or the bottom of a sloping floor
+					// 2. The bottom of the hitbox intersects with the
+					//		"highest height" of a sloping floor, or the top of a sloping roof
+					// 3.	The left/right sides of the hitbox intersect with a
+					//		sloped floor or roof
+					// 4. The internal hitbox (non-side) somehow negotiates
+					//		an intersection
 
-				// Handling case #2:
-				else if (tY == destYb / TILE_SIZE) // If the current tile is associated with the bottom of hitbox...
-				{
-					if (Tile->CollID == SOLID_U_ML_BR)
+					// Handling case #1:
+					if (tY == destYt / TILE_SIZE)	// If the current tile is associated with the top of the hitbox...
 					{
-						if (tX != destXl / TILE_SIZE)
+						if (Tile->CollID == SOLID_A_ML_BR)
 						{
-							if (destYb % TILE_SIZE >= TILE_SIZE / 2) return false;
+							if (tX != destXr / TILE_SIZE)
+							{
+								return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYt % TILE_SIZE)) return false;
+							}
 						}
-						else
+						else if (Tile->CollID == SOLID_A_BL_MR)
 						{
-							if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE)) return false;
+							// These sloped roof tiles occupy space from Y = [16, 31] relative to
+							// the tile.
+							// This entity can't move to the destination. The lowest height of
+							// the colliding tile is the bottom of the tile itself.
+							if (tX != destXl / TILE_SIZE)
+							{
+								return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYt % TILE_SIZE)) return false;
+							}
 						}
-					}
-					else if (Tile->CollID == SOLID_U_BL_MR)
-					{
-						if (tX != destXr / TILE_SIZE)
+						else if (Tile->CollID == SOLID_A_TL_MR)
 						{
-							if (destYb % TILE_SIZE >= TILE_SIZE / 2) return false;
+							// These sloped roof tiles occupy space from Y = [0, 15] relative to
+							// the tile.
+							// IF the top of the hitbox destination collides with the space
+							// occupied by the sloping roof, then the entity cannot move to
+							// the destination.
+							if (tX != destXr / TILE_SIZE)
+							{
+								if (destYt % TILE_SIZE < TILE_SIZE / 2) return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYt % TILE_SIZE)) return false;
+							}
 						}
-						else
+						else if (Tile->CollID == SOLID_A_ML_TR)
 						{
-							if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
+							// These sloped roof tiles occupy space from Y = [0, 15] relative to
+							// the tile.
+							// IF the top of the hitbox destination collides with the space
+							// occupied by the sloping roof, then the entity cannot move to
+							// the destination.
+							if (tX != destXl / TILE_SIZE)
+							{
+								if (destYt % TILE_SIZE < TILE_SIZE / 2) return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYt % TILE_SIZE)) return false;
+							}
 						}
-					}
-					else if (Tile->CollID == SOLID_U_TL_MR)
-					{
-						if (tX != destXl / TILE_SIZE)
+						else // Hitbox top collides with a sloped floor. Probably the tile's underside.
 						{
 							return false;
 						}
-						else
-						{
-							if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE)) return false;
-						}
 					}
-					else if (Tile->CollID == SOLID_U_ML_TR)
+
+					// Handling case #2:
+					else if (tY == destYb / TILE_SIZE) // If the current tile is associated with the bottom of hitbox...
 					{
-						if (tX != destXr / TILE_SIZE)
+						if (Tile->CollID == SOLID_U_ML_BR)
+						{
+							if (tX != destXl / TILE_SIZE)
+							{
+								if (destYb % TILE_SIZE >= TILE_SIZE / 2) return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE)) return false;
+							}
+						}
+						else if (Tile->CollID == SOLID_U_BL_MR)
+						{
+							if (tX != destXr / TILE_SIZE)
+							{
+								if (destYb % TILE_SIZE >= TILE_SIZE / 2) return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
+							}
+						}
+						else if (Tile->CollID == SOLID_U_TL_MR)
+						{
+							if (tX != destXl / TILE_SIZE)
+							{
+								return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE)) return false;
+							}
+						}
+						else if (Tile->CollID == SOLID_U_ML_TR)
+						{
+							if (tX != destXr / TILE_SIZE)
+							{
+								return false;
+							}
+							else
+							{
+								if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
+							}
+						}
+						else
 						{
 							return false;
 						}
-						else
-						{
-							if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
-						}
 					}
+					// Handling cases #3 and #4
 					else
 					{
+						// There are no exceptions that allow the entity to move if
+						// the colliding sector is not from the top or bottom of the hitbox.
 						return false;
 					}
-				}
-
-				// Handling cases #3 and #4
-				else
-				{
-					// There are no exceptions that allow the entity to move if
-					// the colliding sector is not from the top or bottom of the hitbox.
-					return false;
 				}
 			}
 		}
 	}
+
 	return true;
 }
 
-bool CEntity::CheckPathX(double NewX)
-{
-	return true;
-}
-
-bool CEntity::CheckPathY(double NewY)
-{
-	bool retval = true;
-	int destXi = X + Col_X;
-	int destYi = Y + NewY + Col_Y;
-	int destXf = destXi + Col_Width - 1;
-	int destYf = destYf + Col_Height - 1;
-
-	return retval;
-}
-
-// Returns true if the queried tile-relative X, Y intersect solid ground.
-bool CEntity::CollGround(const int& collID, const int& Xrel, const int& Yrel)
+// Returns true (non-zero) if the queried tile-relative X, Y intersect solid ground.
+int CEntity::CollGround(const int& collID, const int& Xrel, const int& Yrel)
 {
 	bool solidabove = false;
 	int Yo = 0;
@@ -458,8 +472,34 @@ bool CEntity::CollGround(const int& collID, const int& Xrel, const int& Yrel)
 	}
 
 	int Yl = Yo - (slope * Xrel);
+	int Ypush = 0;
+	if (!solidabove && Yrel >= Yl)
+	{
+		Ypush = Yl - Yrel - 1;
+	}
+	else if (solidabove && Yrel <= Yl)
+	{
+		Ypush = Yl - Yrel + 1;
+	}
+	return Ypush;
+}
 
-	return !solidabove ? (Yrel >= Yl) : (Yrel <= Yl);
+bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb)
+{
+	if (this == Entity || Entity == NULL) return false;
+	if (Entity->Flags & ~ENTITY_FLAG_MAPONLY && Entity->Collides(destXl, destYt, destXr, destYb))
+	{
+		CEntityCol EntityCol;
+		EntityCol.EntityA = this;
+		EntityCol.EntityB = Entity;
+		CEntityCol::EntityColList.push_back(EntityCol);
+
+		// If the entity is NOT hollow, then the requested position is denied.
+		// Otherwise, return true (i.e., the entities don't stop each other,
+		// but a collision is still triggered).
+		if (Entity->Flags & ~ENTITY_FLAG_HOLLOW)) return true;
+	}
+	return false;
 }
 
 // Checks to see if the position an entity is moving toward
@@ -649,14 +689,6 @@ bool CEntity::Jump()
 	return true;
 }
 
-bool CEntity::PosValidTile(CTile* Tile)
-{
-	if (Tile == NULL) return true;
-	if (Tile->CollID == SOLID_ALL)	return false;
-
-	return true;
-}
-
 bool CEntity::PosValidEntity(CEntity* Entity, int NewX, int NewY)
 {
 	if (this != Entity && Entity != NULL && Entity->Dead == false &&
@@ -673,6 +705,21 @@ bool CEntity::PosValidEntity(CEntity* Entity, int NewX, int NewY)
 		// but a collision is still triggered).
 		if (!(Entity->Flags & ENTITY_FLAG_HOLLOW)) return false;
 	}
+	return true;
+}
+
+bool CEntity::Collides(const int& oXl, const int& oYt, const int& oXr, const int& oYb)
+{
+	int Xl = (int)(X) + Col_X;
+	int Yt = (int)(Y) + Col_Y;
+	int Xr = Xl + Col_Width - 1;
+	int Yb = Yt + Col_Height - 1;
+
+	if (Yb < oYt) return false;
+	if (oYb < Yt) return false;
+	if (Xr < oXl) return false;
+	if (oXr < Xl) return false;
+
 	return true;
 }
 
@@ -696,31 +743,6 @@ void CEntity::StopMove()
 			SpeedX = 0;
 		}
 	}
-}
-
-bool CEntity::Collides(int oX, int oY, int oW, int oH)
-{
-	int left1, left2;
-	int right1, right2;
-	int top1, top2;
-	int bottom1, bottom2;
-	int tX = (int)X + Col_X;
-	int tY = (int)Y + Col_Y;
-
-	left1 = tX;
-	left2 = oX;
-	right1 = left1 + Width - 1 - Col_Width;
-	right2 = oX + oW - 1;
-	top1 = tY;
-	top2 = oY;
-	bottom1 = top1 + Height - 1 - Col_Height;
-	bottom2 = oY + oH - 1;
-
-	if (bottom1 < top2) return false;
-	if (bottom2 < top1) return false;
-	if (right1 < left2) return false;
-	if (right2 < left1) return false;
-	return true;
 }
 
 bool CEntity::OnCollision(CEntity* Entity)

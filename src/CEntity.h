@@ -82,6 +82,10 @@ public:
 	float	MaxAccelY; // pixels / idealframe^2
 
 protected:
+	bool Jumper;
+	bool Grounded;
+
+protected:
 	int	CurrentFrameCol;
 	int	CurrentFrameRow;
 
@@ -125,23 +129,19 @@ protected:
 	void StopMove();
 
 public:
-	// Determines collisions
-	bool Collides(int oX, int oY, int oW, int oH);
-
-protected:
-	bool Jumper;
+	// Checks if the entity's hitbox intersects passed hitbox
+	bool Collides(const int& oXl, const int& oYt, const int& oXr, const int& oYb);
 
 public:
 	bool Jump();
 
 protected:
 	bool PosValid(int NewX, int NewY, bool Vertical);
-	bool Translate(double NewX, double NewY);
-	bool CheckPathX(double NewX);
-	bool CheckPathY(double NewY);
+	void Translate(double NewX, double NewY);
 	bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);
-	bool CollGround(const int& collID, const int& Xrel, const int& Yrel);
-	bool PosValidTile(CTile* Tile);
+	// bool CollGround(const int& collID, const int& Xrel, const int& Yrel);
+	int CollGround(const int& collID, const int& Xrel, const int& Yrel);
+	bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb);
 	bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
 };
 
