@@ -28,7 +28,7 @@ public:
 
 	void ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo);
 
-	void ChangeTile(int X, int Y, int tile, int fore, int type, int slope);
+	void ChangeTile(int X, int Y, int tile, int fore, int type, int coll);
 
 };
 #endif

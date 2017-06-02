@@ -136,12 +136,11 @@ public:
 	bool Jump();
 
 protected:
-	bool PosValid(int NewX, int NewY, bool Vertical);
+	// bool PosValid(int NewX, int NewY, bool Vertical);
 	void Translate(double NewX, double NewY);
 	bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);
-	// bool CollGround(const int& collID, const int& Xrel, const int& Yrel);
-	int CollGround(const int& collID, const int& Xrel, const int& Yrel);
 	bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb);
+	int CollGround(const int& collID, const int& Xrel, const int& Yrel);
 	bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
 };
 

@@ -68,6 +68,5 @@ bool CApp::InitGame()
 
 	CCamera::CameraControl.TargetMode = TARGET_MODE_CENTER;
 	CCamera::CameraControl.SetTarget(&Player.X, &Player.Y);
-
 	return true;
 }

@@ -57,7 +57,6 @@ bool CEntity::OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Heig
 void CEntity::OnLoop()
 {
 	ChkEnviro();
-
 	if (MoveLeft == false && MoveRight == false) StopMove();
 	else if (MoveLeft) AccelX = -MaxAccelX;
 	else if (MoveRight) AccelX = MaxAccelX;
@@ -315,7 +314,10 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 				CTile* Tile = CArea::AreaControl.GetTile(tX * TILE_SIZE, tY * TILE_SIZE);
 				// Check if the collided tile is entirely solid.
 				// If it is, entity can't move to destination.
-				if (Tile->CollID == SOLID_ALL) return false;
+				if (Tile->CollID == SOLID_ALL)
+				{
+					return false;
+				}
 
 				// Check if the collided tile is partially solid.
 				// If it is, the entity MIGHT be able to move.
@@ -499,7 +501,7 @@ int CEntity::CollGround(const int& collID, const int& Xrel, const int& Yrel)
 	return Ypush;
 }
 
-bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb)
+bool CEntity::CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb)
 {
 	if (this == Entity || Entity == NULL) return false;
 	if (Entity->Flags & ~ENTITY_FLAG_MAPONLY && Entity->Collides(destXl, destYt, destXr, destYb))
@@ -512,7 +514,7 @@ bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int
 		// If the entity is NOT hollow, then the requested position is denied.
 		// Otherwise, return true (i.e., the entities don't stop each other,
 		// but a collision is still triggered).
-		if (Entity->Flags & ~ENTITY_FLAG_HOLLOW)) return true;
+		if (Entity->Flags & ~ENTITY_FLAG_HOLLOW) return true;
 	}
 	return false;
 }
@@ -521,132 +523,132 @@ bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int
 // is valid. Returns false if the destination is invalid.
 // First checks if the entity collides with the map, then
 // checks for other entities.
-bool CEntity::PosValid(int NewX, int NewY, bool Vertical)
-{
-	bool retval = true;
-	bool OnSlope = false;
-
-	int StartX = (NewX + Col_X) ;
-	int StartY = (NewY + Col_Y) ;
-
-	int EndX = ((NewX + Col_X) + Width - Col_Width - 1) ;
-	int EndY = ((NewY + Col_Y) + Height - Col_Height - 1) ;
-
-	float BoostY = 0.0;
-
-	for (int iY = StartY / TILE_SIZE; iY <= EndY / TILE_SIZE; iY++)
-	{
-		for (int iX = StartX / TILE_SIZE; iX <= EndX / TILE_SIZE; iX++)
-		{
-			CTile* Tile = CArea::AreaControl.GetTile(iX * TILE_SIZE, iY * TILE_SIZE);
-			if (!OnSlope && Tile->Slope != SLOPE_FLAT)
-			{
-				OnSlope = true;
-			}
-			if (PosValidTile(Tile) == false)
-			{
-				retval = false;
-			}
-		}
-	}
-	if (retval && OnSlope)
-	{
-		int TileRefXe = (EndX % TILE_SIZE) + 1;   // right side of new hitbox position
-		int TileRefYe = (EndY % TILE_SIZE) + 1;   // bottom side of new hitbox position
-		int TileRefXs = (StartX % TILE_SIZE) + 1; // left side of new hitbox position
-		int TileRefYs = (StartY % TILE_SIZE) + 1; // top side of new hitbox position
-		CTile* TileBL = CArea::AreaControl.GetTile((StartX / TILE_SIZE) * TILE_SIZE, (EndY / TILE_SIZE) * TILE_SIZE);
-		CTile* TileBR = CArea::AreaControl.GetTile((EndX / TILE_SIZE) * TILE_SIZE, (EndY / TILE_SIZE) * TILE_SIZE);
-
-		switch (TileBL->Slope)
-		{
-			case SLOPE_DSC:
-			{
-				if (TileRefYe > TileRefXs / 2)
-				{
-					if (Vertical) retval = false;
-					if (Flags & ENTITY_FLAG_BULLET) retval = false;
-					else BoostY = (TileRefXs / 2) - TileRefYe;
-				}
-				break;
-			}
-			case SLOPE_DSCE:
-			{
-				if (TileRefYe > (TILE_SIZE + TileRefXs) / 2)
-				{
-					if (Vertical) retval = false;
-					if (Flags & ENTITY_FLAG_BULLET) retval = false;
-					else BoostY = ((TILE_SIZE + TileRefXs) / 2) - TileRefYe;
-				}
-				break;
-			}
-			default:
-			{
-				break;
-			}
-		}
-		switch (TileBR->Slope)
-		{
-			case SLOPE_ASC:
-			{
-				if (TileRefYe > TILE_SIZE - (TileRefXe / 2))
-				{
-					if (Vertical) retval = false;
-					if (Flags & ENTITY_FLAG_BULLET) retval = false;
-					else if ((TILE_SIZE - (TileRefXe / 2)) - TileRefYe < BoostY)
-						BoostY = (TILE_SIZE - (TileRefXe / 2)) - TileRefYe;
-				}
-				break;
-			}
-			case SLOPE_ASCE:
-			{
-				if (TileRefYe > (TILE_SIZE - TileRefXe) / 2)
-				{
-					if (Vertical) retval = false;
-					if (Flags & ENTITY_FLAG_BULLET) retval = false;
-					else BoostY = ((TILE_SIZE - TileRefXe) / 2) - TileRefYe;
-				}
-				break;
-			}
-			default:
-			{
-				if (TileRefYe > TILE_SIZE / 2 && TileBR->Slope == SLOPE_DSCE)
-				{
-					if (Vertical) retval = false;
-					if (Flags & ENTITY_FLAG_BULLET) retval = false;
-					else if ((int)(BoostY) >= 0) BoostY = (TILE_SIZE / 2) - TileRefYe;
-				}
-				else if (TileBR->Slope == SLOPE_DSC)
-				{
-					if (Vertical) retval = false;
-					if (Flags & ENTITY_FLAG_BULLET) retval = false;
-					else if ((int)(BoostY) >= 0) BoostY = -TileRefYe;
-				}
-				break;
-			}
-		}
-	}
-	if (Flags & ENTITY_FLAG_MAPONLY)
-	{
-		// If the entity only is blocked by the map, then
-		// don't worry about entities (the else block).
-	}
-	else
-	{
-		for (int i = 0; i < EntityList.size(); i++)
-		{
-			if (PosValidEntity(EntityList[i], NewX, NewY + BoostY) == false)
-			{
-				retval = false;
-			}
-		}
-	}
-	if (retval && !Vertical)
-	{
-		Y += BoostY;
-	}
-	return retval;
-}
+// bool CEntity::PosValid(int NewX, int NewY, bool Vertical)
+// {
+// 	bool retval = true;
+// 	bool OnSlope = false;
+//
+// 	int StartX = (NewX + Col_X) ;
+// 	int StartY = (NewY + Col_Y) ;
+//
+// 	int EndX = ((NewX + Col_X) + Width - Col_Width - 1) ;
+// 	int EndY = ((NewY + Col_Y) + Height - Col_Height - 1) ;
+//
+// 	float BoostY = 0.0;
+//
+// 	for (int iY = StartY / TILE_SIZE; iY <= EndY / TILE_SIZE; iY++)
+// 	{
+// 		for (int iX = StartX / TILE_SIZE; iX <= EndX / TILE_SIZE; iX++)
+// 		{
+// 			CTile* Tile = CArea::AreaControl.GetTile(iX * TILE_SIZE, iY * TILE_SIZE);
+// 			if (!OnSlope && Tile->Slope != SLOPE_FLAT)
+// 			{
+// 				OnSlope = true;
+// 			}
+// 			if (PosValidTile(Tile) == false)
+// 			{
+// 				retval = false;
+// 			}
+// 		}
+// 	}
+// 	if (retval && OnSlope)
+// 	{
+// 		int TileRefXe = (EndX % TILE_SIZE) + 1;   // right side of new hitbox position
+// 		int TileRefYe = (EndY % TILE_SIZE) + 1;   // bottom side of new hitbox position
+// 		int TileRefXs = (StartX % TILE_SIZE) + 1; // left side of new hitbox position
+// 		int TileRefYs = (StartY % TILE_SIZE) + 1; // top side of new hitbox position
+// 		CTile* TileBL = CArea::AreaControl.GetTile((StartX / TILE_SIZE) * TILE_SIZE, (EndY / TILE_SIZE) * TILE_SIZE);
+// 		CTile* TileBR = CArea::AreaControl.GetTile((EndX / TILE_SIZE) * TILE_SIZE, (EndY / TILE_SIZE) * TILE_SIZE);
+//
+// 		switch (TileBL->Slope)
+// 		{
+// 			case SLOPE_DSC:
+// 			{
+// 				if (TileRefYe > TileRefXs / 2)
+// 				{
+// 					if (Vertical) retval = false;
+// 					if (Flags & ENTITY_FLAG_BULLET) retval = false;
+// 					else BoostY = (TileRefXs / 2) - TileRefYe;
+// 				}
+// 				break;
+// 			}
+// 			case SLOPE_DSCE:
+// 			{
+// 				if (TileRefYe > (TILE_SIZE + TileRefXs) / 2)
+// 				{
+// 					if (Vertical) retval = false;
+// 					if (Flags & ENTITY_FLAG_BULLET) retval = false;
+// 					else BoostY = ((TILE_SIZE + TileRefXs) / 2) - TileRefYe;
+// 				}
+// 				break;
+// 			}
+// 			default:
+// 			{
+// 				break;
+// 			}
+// 		}
+// 		switch (TileBR->Slope)
+// 		{
+// 			case SLOPE_ASC:
+// 			{
+// 				if (TileRefYe > TILE_SIZE - (TileRefXe / 2))
+// 				{
+// 					if (Vertical) retval = false;
+// 					if (Flags & ENTITY_FLAG_BULLET) retval = false;
+// 					else if ((TILE_SIZE - (TileRefXe / 2)) - TileRefYe < BoostY)
+// 						BoostY = (TILE_SIZE - (TileRefXe / 2)) - TileRefYe;
+// 				}
+// 				break;
+// 			}
+// 			case SLOPE_ASCE:
+// 			{
+// 				if (TileRefYe > (TILE_SIZE - TileRefXe) / 2)
+// 				{
+// 					if (Vertical) retval = false;
+// 					if (Flags & ENTITY_FLAG_BULLET) retval = false;
+// 					else BoostY = ((TILE_SIZE - TileRefXe) / 2) - TileRefYe;
+// 				}
+// 				break;
+// 			}
+// 			default:
+// 			{
+// 				if (TileRefYe > TILE_SIZE / 2 && TileBR->Slope == SLOPE_DSCE)
+// 				{
+// 					if (Vertical) retval = false;
+// 					if (Flags & ENTITY_FLAG_BULLET) retval = false;
+// 					else if ((int)(BoostY) >= 0) BoostY = (TILE_SIZE / 2) - TileRefYe;
+// 				}
+// 				else if (TileBR->Slope == SLOPE_DSC)
+// 				{
+// 					if (Vertical) retval = false;
+// 					if (Flags & ENTITY_FLAG_BULLET) retval = false;
+// 					else if ((int)(BoostY) >= 0) BoostY = -TileRefYe;
+// 				}
+// 				break;
+// 			}
+// 		}
+// 	}
+// 	if (Flags & ENTITY_FLAG_MAPONLY)
+// 	{
+// 		// If the entity only is blocked by the map, then
+// 		// don't worry about entities (the else block).
+// 	}
+// 	else
+// 	{
+// 		for (int i = 0; i < EntityList.size(); i++)
+// 		{
+// 			if (PosValidEntity(EntityList[i], NewX, NewY + BoostY) == false)
+// 			{
+// 				retval = false;
+// 			}
+// 		}
+// 	}
+// 	if (retval && !Vertical)
+// 	{
+// 		Y += BoostY;
+// 	}
+// 	return retval;
+// }
 
 void CEntity::OnRender(SDL_Renderer* Surf_Dest)
 {
@@ -665,16 +667,13 @@ void CEntity::ChkEnviro()
 	// a larger ratio leads to a larger Y, and a ratio of
 	// 0.5 corresponds to the hitbox center in Y)
 	// uY is Y of the pixel under the hitbox.
-
-	// int cX = (X + Col_X + ((Width - Col_Width - 1) / 2)) / TILE_SIZE;
-	// int cY = (Y + Col_Y + ((Height - Col_Height - 1) * (1 - 0.5))) / TILE_SIZE;
-	// int uY = (Y + Col_Y + Height - Col_Height) / TILE_SIZE;
 	int cX = X + Col_X + (Col_Width / 2);
 	int cY = Y + Col_Y + (Col_Height / 2);
 	int uY = Y + Col_Y + Col_Height;
 	int bY = uY - 1;
 
 	CTile* WTile = CArea::AreaControl.GetTile(cX * TILE_SIZE, cY * TILE_SIZE);
+	if (WTile == NULL) return;
 	if (Wet && WTile->TypeID != TILE_TYPE_WATER)
 	{
 		Wet = false;
