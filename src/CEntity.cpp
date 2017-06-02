@@ -142,39 +142,42 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 
 	while (true)
 	{
-		if (Flags & ENTITY_FLAG_GHOST)
-		{
-			// We don't care about collisions, but we need to send events to other entities
-			PosValid((int)(X + NewX), (int)(Y + NewY), true);
-			X += NewX;
-			Y += NewY;
-		}
-		else
-		{
-			// Check if the new position is valid...
-			if (PosValid((int)(X + NewX), (int)(Y), false))
-			{
-				X += NewX;
-			}
-			else
-			{
-				SpeedX = 0;
-				CanMove = false;
-			}
-			if (PosValid((int)(X), (int)(Y + NewY), true))
-			{
-				Y += NewY;
-			}
-			else
-			{
-				if (MoveY > 0)
-				{
-					Jumper = true;
-				}
-				SpeedY = 0;
-				CanMove = false;
-			}
-		}
+		// if (Flags & ENTITY_FLAG_GHOST)
+		// {
+		// 	// We don't care about collisions, but we need to send events to other entities
+		// 	PosValid((int)(X + NewX), (int)(Y + NewY), true);
+		// 	X += NewX;
+		// 	Y += NewY;
+		// }
+		// else
+		// {
+		// 	// Check if the new position is valid...
+		// 	if (PosValid((int)(X + NewX), (int)(Y), false))
+		// 	{
+		// 		X += NewX;
+		// 	}
+		// 	else
+		// 	{
+		// 		SpeedX = 0;
+		// 		CanMove = false;
+		// 	}
+		// 	if (PosValid((int)(X), (int)(Y + NewY), true))
+		// 	{
+		// 		Y += NewY;
+		// 	}
+		// 	else
+		// 	{
+		// 		if (MoveY > 0)
+		// 		{
+		// 			Jumper = true;
+		// 		}
+		// 		SpeedY = 0;
+		// 		CanMove = false;
+		// 	}
+		// }
+
+		Translate(NewX, NewY);
+
 		MoveX -= NewX;
 		MoveY -= NewY;
 		if (NewX > 0 && MoveX <= 0) NewX = 0;
@@ -237,7 +240,11 @@ void CEntity::Translate(double NewX, double NewY)
 			X += NewX;
 			Y += NewY + pushY;
 			SpeedY = 0;
-			if (pushY < 0) Grounded = true;
+			if (pushY < 0)
+			{
+				Jumper = true;
+				Grounded = true;
+			}
 		}
 		else
 		{
@@ -253,7 +260,11 @@ void CEntity::Translate(double NewX, double NewY)
 			else
 			{
 				SpeedY = 0;
-				if (NewY > 0) Grounded = true;
+				if (NewY > 0)
+				{
+					Jumper = true;
+					Grounded = true;
+				}
 			}
 		}
 	}
@@ -277,7 +288,11 @@ void CEntity::Translate(double NewX, double NewY)
 		else
 		{
 			SpeedY = 0;
-			if (NewY > 0) Grounded = true;
+			if (NewY > 0)
+			{
+				Jumper = true;
+				Grounded = true;
+			}
 		}
 	}
 }
@@ -287,7 +302,7 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 	bool pathclear = true;
 	for (int i = 0; i < EntityList.size(); i++)
 	{
-		if (CollEntity(EntityList[i], destXl, destXr, destYt, destYb))
+		if (CollEntity(EntityList[i], destXl, destXr, destYt, destYb) && pathclear)
 			pathclear = false;
 	}
 
