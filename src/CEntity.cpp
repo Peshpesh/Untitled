@@ -194,8 +194,10 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 void CEntity::Translate(double NewX, double NewY)
 {
 	// NOTE: NewX, NewY params should be <= 1.0.
-	int destXl = (int)(X) + NewX + Col_X;
-	int destYt = (int)(Y) + NewY + Col_Y;
+	// int destXl = (int)(X) + NewX + Col_X;
+	// int destYt = (int)(Y) + NewY + Col_Y;
+	int destXl = X + NewX + Col_X;
+	int destYt = Y + NewY + Col_Y;
 	int destXr = destXl + Col_Width - 1;
 	int destYb = destYt + Col_Height - 1;
 	int pushY = 0;
@@ -215,7 +217,9 @@ void CEntity::Translate(double NewX, double NewY)
 		CTile* Tile = CArea::AreaControl.GetTile(destXr, destYb - NewY);
 		if (Tile->CollID == SOLID_U_BL_MR || Tile->CollID == SOLID_U_ML_TR)
 		{
-			pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE);
+			int Yrel = destYb % TILE_SIZE;
+			if (Tile != CArea::AreaControl.GetTile(destXr, destYb)) Yrel += TILE_SIZE;
+			pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
 		}
 	}
 	else if (NewX < 0.0)	// Moving left
@@ -223,6 +227,7 @@ void CEntity::Translate(double NewX, double NewY)
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, destYb - NewY);
 		if (Tile->CollID == SOLID_U_TL_MR || Tile->CollID == SOLID_U_ML_BR)
 		{
+
 			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE);
 		}
 	}
@@ -402,7 +407,7 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 					}
 
 					// Handling case #2:
-					else if (tY == destYb / TILE_SIZE) // If the current tile is associated with the bottom of hitbox...
+					if (tY == destYb / TILE_SIZE) // If the current tile is associated with the bottom of hitbox...
 					{
 						if (Tile->CollID == SOLID_U_ML_BR)
 						{
@@ -454,18 +459,17 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 						}
 					}
 					// Handling cases #3 and #4
-					else
+					// There are no exceptions that allow the entity to move if
+					// the colliding sector is not from the top or bottom of the hitbox.
+					if ((tY != destYt / TILE_SIZE) && (tY != destYb / TILE_SIZE))
 					{
-						// There are no exceptions that allow the entity to move if
-						// the colliding sector is not from the top or bottom of the hitbox.
 						return false;
 					}
 				}
 			}
 		}
 	}
-
-	return true;
+	return pathclear;
 }
 
 // Returns true (non-zero) if the queried tile-relative X, Y intersect solid ground.
@@ -488,7 +492,7 @@ int CEntity::CollGround(const int& collID, const int& Xrel, const int& Yrel)
 		default: break;
 	}
 
-	int Yl = Yo - (slope * Xrel);
+	int Yl = Yo - (int)(slope * Xrel);
 	int Ypush = 0;
 	if (!solidabove && Yrel >= Yl)
 	{
@@ -498,6 +502,7 @@ int CEntity::CollGround(const int& collID, const int& Xrel, const int& Yrel)
 	{
 		Ypush = Yl - Yrel + 1;
 	}
+
 	return Ypush;
 }
 
