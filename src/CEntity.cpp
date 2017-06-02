@@ -227,8 +227,9 @@ void CEntity::Translate(double NewX, double NewY)
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, destYb - NewY);
 		if (Tile->CollID == SOLID_U_TL_MR || Tile->CollID == SOLID_U_ML_BR)
 		{
-
-			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE);
+			int Yrel = destYb % TILE_SIZE;
+			if (Tile != CArea::AreaControl.GetTile(destXl, destYb)) Yrel += TILE_SIZE;
+			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
 		}
 	}
 
