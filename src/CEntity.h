@@ -138,11 +138,11 @@ protected:
 	int CollGround(const int& collID, const int& Xrel, const int& Yrel);
 	bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
 
-	//	Debug functions
+	//	Debug members
 public:
 	void GetColInfo(int& colX, int& colY, int& colW, int& colH);
 	void GetPos(float& X, float& Y);
-
+	// void GetPushY(int& pushY);
 };
 
 class CEntityInfo

@@ -53,14 +53,30 @@ void CApp::OnRender()
 			float pX, pY;
 			CEntity::EntityList[0]->GetColInfo(colX, colY, colW, colH);
 			CEntity::EntityList[0]->GetPos(pX, pY);
-			Font::Writef(Win_Renderer, FONT_DEFAULT, pX, 3, 0, 10, 10);
-			Font::Writef(Win_Renderer, FONT_DEFAULT, pY+TILE_SIZE-1, 3, 0, 210, 10);
-			pX += colX - CCamera::CameraControl.GetX();
-			pY += colY - CCamera::CameraControl.GetY();
-			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX, pY, 0, 0, 1, 1, colW, 1);
-			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX, pY, 0, 0, 1, 1, 1, colH);
-			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX + colW - 1, pY, 0, 0, 1, 1, 1, colH);
-			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX, pY + colH - 1, 0, 0, 1, 1, colW, 1);
+			Font::Writef(Win_Renderer, FONT_DEFAULT, (int)(pX) % TILE_SIZE, 1, 0, 10, 10);
+			Font::Writef(Win_Renderer, FONT_DEFAULT, (int)(pY) % TILE_SIZE, 1, 0, 210, 10);
+			int hX = pX + colX - CCamera::CameraControl.GetX();
+			int hY = pY + colY - CCamera::CameraControl.GetY();
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX, hY, 0, 0, 1, 1, colW, 1);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX, hY, 0, 0, 1, 1, 1, colH);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX + colW - 1, hY, 0, 0, 1, 1, 1, colH);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX, hY + colH - 1, 0, 0, 1, 1, colW, 1);
+			int pXi = pX + colX;
+			int pYi = pY + colY;
+			int pXf = pXi + colW - 1;
+			int pYf = pYi + colH - 1;
+			for (int tY = pYi / TILE_SIZE; tY <= pYf / TILE_SIZE; tY++)
+			{
+				for (int tX = pXi / TILE_SIZE; tX <= pXf / TILE_SIZE; tX++)
+				{
+					int tileX = (tX * TILE_SIZE) - CCamera::CameraControl.GetX();
+					int tileY = (tY * TILE_SIZE) - CCamera::CameraControl.GetY();
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX, tileY, 0, 5, 1, 1, TILE_SIZE, 1);
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX, tileY, 0, 5, 1, 1, 1, TILE_SIZE);
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX + TILE_SIZE - 1, tileY, 0, 5, 1, 1, 1, TILE_SIZE);
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX, tileY + TILE_SIZE - 1, 0, 5, 1, 1, TILE_SIZE, 1);
+				}
+			}
 		}
 	}
 	SDL_RenderPresent(Win_Renderer);

@@ -167,7 +167,6 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 
 void CEntity::Translate(double NewX, double NewY)
 {
-	if (NewX >= 1.0 || NewY >= 1.0) SDL_Delay(5000);
 	// NOTE: NewX, NewY params should be <= 1.0.
 	// int destXl = (int)(X) + NewX + Col_X;
 	// int destYt = (int)(Y) + NewY + Col_Y;
@@ -175,6 +174,10 @@ void CEntity::Translate(double NewX, double NewY)
 	int destYt = Y + NewY + Col_Y;
 	int destXr = destXl + Col_Width - 1;
 	int destYb = destYt + Col_Height - 1;
+	int srcXl = X + Col_X;
+	int srcYt = Y + Col_Y;
+	int srcXr = srcXl + Col_Width - 1;
+	int srcYb = srcYt + Col_Height - 1;
 	int pushY = 0;
 
 	Grounded = false;
@@ -189,7 +192,7 @@ void CEntity::Translate(double NewX, double NewY)
 	// horizontally.
 	if (NewX > 0.0)	// Moving right
 	{
-		CTile* Tile = CArea::AreaControl.GetTile(destXr, destYb - NewY);
+		CTile* Tile = CArea::AreaControl.GetTile(destXr, srcYb);
 		if (Tile->CollID == SOLID_U_BL_MR || Tile->CollID == SOLID_U_ML_TR)
 		{
 			int Yrel = destYb % TILE_SIZE;
@@ -199,7 +202,7 @@ void CEntity::Translate(double NewX, double NewY)
 	}
 	else if (NewX < 0.0)	// Moving left
 	{
-		CTile* Tile = CArea::AreaControl.GetTile(destXl, destYb - NewY);
+		CTile* Tile = CArea::AreaControl.GetTile(destXl, srcYb);
 		if (Tile->CollID == SOLID_U_TL_MR || Tile->CollID == SOLID_U_ML_BR)
 		{
 			int Yrel = destYb % TILE_SIZE;
@@ -232,10 +235,9 @@ void CEntity::Translate(double NewX, double NewY)
 			// required a change in Y, so we must check if the entity can move in only Y
 			// now that it is apparent it cannot move in X.
 			SpeedX = 0;
-			if (CheckPathXY(destXl - NewX, destXr - NewX, destYt, destYb))
+			if (CheckPathXY(srcXl, srcXr, destYt, destYb))
 			{
 				Y += NewY;
-
 			}
 			else
 			{
@@ -252,7 +254,7 @@ void CEntity::Translate(double NewX, double NewY)
 	{
 		// If there is no push in Y, then we can just check for
 		// if movement is possible in X, and then in Y.
-		if (CheckPathXY(destXl, destXr, destYt - NewY, destYb - NewY))
+		if (CheckPathXY(destXl, destXr, srcYt, srcYb))
 		{
 			X += NewX;
 		}
@@ -261,7 +263,7 @@ void CEntity::Translate(double NewX, double NewY)
 			SpeedX = 0;
 		}
 
-		if (CheckPathXY(destXl - NewX, destXr - NewX, destYt, destYb))
+		if (CheckPathXY(srcXl, srcXr, destYt, destYb))
 		{
 			Y += NewY;
 		}

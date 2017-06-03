@@ -9,8 +9,8 @@ CPlayer::CPlayer()
 	Arsenal = 0x00000001;
 	MaxHealth = 12;
 	Health = 3;
-	MaxSpeedX = 8;
-	MaxSpeedY = 12;
+	MaxSpeedX = 3.0;
+	MaxSpeedY = 12.0;
 	Timer_Invinc = Timer_Invis =
 		Timer_Haste = Timer_Flight = 0;
 	Weapon = ARM_TEST;
@@ -20,7 +20,7 @@ CPlayer::CPlayer()
 	Livebullets = 0;
 	Purse = 0;
 	Ammo = 0;
-	Col_Width = Col_Height = 4;
+	Col_Width = Col_Height = 32;
 }
 
 void CPlayer::Reset()
@@ -31,8 +31,8 @@ void CPlayer::Reset()
 	Arsenal = 0x00000001;
 	MaxHealth = 12;
 	Health = 3;
-	MaxSpeedX = 8;
-	MaxSpeedY = 12;
+	MaxSpeedX = 3.0;
+	MaxSpeedY = 12.0;
 	Timer_Invinc = Timer_Invis =
 		Timer_Haste = Timer_Flight = 0;
 	Weapon = ARM_TEST;
