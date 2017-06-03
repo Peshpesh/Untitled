@@ -55,6 +55,12 @@ void CApp::OnRender()
 			CEntity::EntityList[0]->GetPos(pX, pY);
 			Font::Writef(Win_Renderer, FONT_DEFAULT, pX, 3, 0, 10, 10);
 			Font::Writef(Win_Renderer, FONT_DEFAULT, pY+TILE_SIZE-1, 3, 0, 210, 10);
+			pX += colX - CCamera::CameraControl.GetX();
+			pY += colY - CCamera::CameraControl.GetY();
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX, pY, 0, 0, 1, 1, colW, 1);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX, pY, 0, 0, 1, 1, 1, colH);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX + colW - 1, pY, 0, 0, 1, 1, 1, colH);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, pX, pY + colH - 1, 0, 0, 1, 1, colW, 1);
 		}
 	}
 	SDL_RenderPresent(Win_Renderer);

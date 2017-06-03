@@ -148,32 +148,6 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 		// 	X += NewX;
 		// 	Y += NewY;
 		// }
-		// else
-		// {
-		// 	// Check if the new position is valid...
-		// 	if (PosValid((int)(X + NewX), (int)(Y), false))
-		// 	{
-		// 		X += NewX;
-		// 	}
-		// 	else
-		// 	{
-		// 		SpeedX = 0;
-		// 		CanMove = false;
-		// 	}
-		// 	if (PosValid((int)(X), (int)(Y + NewY), true))
-		// 	{
-		// 		Y += NewY;
-		// 	}
-		// 	else
-		// 	{
-		// 		if (MoveY > 0)
-		// 		{
-		// 			Jumper = true;
-		// 		}
-		// 		SpeedY = 0;
-		// 		CanMove = false;
-		// 	}
-		// }
 
 		Translate(NewX, NewY);
 
@@ -193,6 +167,7 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 
 void CEntity::Translate(double NewX, double NewY)
 {
+	if (NewX >= 1.0 || NewY >= 1.0) SDL_Delay(5000);
 	// NOTE: NewX, NewY params should be <= 1.0.
 	// int destXl = (int)(X) + NewX + Col_X;
 	// int destYt = (int)(Y) + NewY + Col_Y;

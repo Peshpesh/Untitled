@@ -38,7 +38,7 @@ private:
 	SDL_Renderer* Win_Renderer; // Main Renderer
 
 private:
-	SDL_Texture* TESTSFC;
+	SDL_Texture* DEBUG_TEXTURE;
 	CPlayer		Player;
 	CPause		PauseMenu;
 
