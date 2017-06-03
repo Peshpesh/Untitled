@@ -101,10 +101,6 @@ public:
 
 public:
 	// Load the frame info (image, etc.) for an entity.
-	//
-	// NOTE:
-	// In the Map Editor, animation is nullified,
-	// and "MaxFrames" is used to store NPC_IDs.
 	virtual bool OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames);
 
 	virtual void OnLoop();
@@ -136,18 +132,22 @@ public:
 	bool Jump();
 
 protected:
-	// bool PosValid(int NewX, int NewY, bool Vertical);
 	void Translate(double NewX, double NewY);
 	bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);
 	bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb);
 	int CollGround(const int& collID, const int& Xrel, const int& Yrel);
 	bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
+
+	//	Debug functions
+public:
+	void GetColInfo(int& colX, int& colY, int& colW, int& colH);
+	void GetPos(float& X, float& Y);
+
 };
 
 class CEntityInfo
 {
 public:
-	// static std::vector<CEntityInfo>	EntityInfoList;
 	static std::vector<CEntityInfo> Com_EntityInfo;
 	static std::vector<CEntityInfo> Unq_EntityInfo;
 
@@ -157,13 +157,9 @@ public:
 	int H;
 	int NumRows;
 	int NumCols;
-	// bool Common;
 
 	CEntityInfo();
 
-	// static int OnLoad(char* File);
-
-	// static bool LoadCommons();
 	static bool LoadCommon();
 	static int LoadUnique(char const* File);
 };
