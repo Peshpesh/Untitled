@@ -192,7 +192,8 @@ void CEntity::Translate(double NewX, double NewY)
 	// horizontally.
 	if (NewX > 0.0)	// Moving right
 	{
-		int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
+		// int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
+		int Yrel = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXr, srcYb);
 		if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Yrel <= TILE_SIZE / 2))
 		{
@@ -201,7 +202,8 @@ void CEntity::Translate(double NewX, double NewY)
 	}
 	else if (NewX < 0.0)	// Moving left
 	{
-		int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
+		// int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
+		int Yrel = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, srcYb);
 		if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Yrel <= TILE_SIZE / 2))
 		{
@@ -213,18 +215,23 @@ void CEntity::Translate(double NewX, double NewY)
 	// something that will stop this entity.
 	if (pushY != 0)
 	{
-		if (CheckPathXY(destXl, destXr, destYt + pushY, destYb + pushY))
+		// if (CheckPathXY(destXl, destXr, destYt + pushY, destYb + pushY))
+		if (CheckPathXY(destXl, destXr, srcYt + pushY, srcYb + pushY))
 		{
 			// The entity can move in X and Y. The entity is being "pushed"
 			// in Y by a sloping surface, which means that we also have checked
 			// for stoppages in the Y direction and found none.
 			X += NewX;
-			Y += NewY + pushY;
-			SpeedY = 0;
+			// Y += NewY + pushY;
+			Y += pushY;
 			if (pushY < 0)
 			{
 				Jumper = true;
 				Grounded = true;
+				if (NewY > 0)
+				{
+					SpeedY = 0;
+				}
 			}
 		}
 		else
