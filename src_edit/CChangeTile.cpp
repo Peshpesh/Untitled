@@ -53,12 +53,20 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 			if (X > 0) 							// Left arrow?
 			{
 				aX = dispX - (ARROW_SIZE + SYM_SPACING);
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	X--;
+				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				{
+					X--;
+					return retval;
+				}
 			}
 			if (X < W - MAX_TILES)	// Right arrow?
 			{
 				aX = dispX + dispW + SYM_SPACING;
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	X++;
+				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				{
+					X++;
+					return retval;
+				}
 			}
 		}
 		if (H > MAX_TILES)	// Up/down arrows are worth processing
@@ -67,12 +75,20 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 			if (Y > 0) 							// Up arrow?
 			{
 				aY = dispY - (ARROW_SIZE + SYM_SPACING);
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	Y--;
+				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				{
+					Y--;
+					return retval;
+				}
 			}
 			if (Y < H - MAX_TILES)	// Down arrow?
 			{
 				aY = dispY + dispH + SYM_SPACING;
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)	Y++;
+				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				{
+					Y++;
+					return retval;
+				}
 			}
 		}
 	}
