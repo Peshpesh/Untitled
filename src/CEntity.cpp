@@ -194,7 +194,7 @@ void CEntity::Translate(double NewX, double NewY)
 	{
 		int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXr, srcYb);
-		if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Yrel < TILE_SIZE / 2))
+		if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Yrel <= TILE_SIZE / 2))
 		{
 			pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
 		}
@@ -203,7 +203,7 @@ void CEntity::Translate(double NewX, double NewY)
 	{
 		int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, srcYb);
-		if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Yrel < TILE_SIZE / 2))
+		if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Yrel <= TILE_SIZE / 2))
 		{
 			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
 		}
@@ -314,6 +314,14 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 					//		sloped floor or roof
 					// 4. The internal hitbox (non-side) somehow negotiates
 					//		an intersection
+
+					// Handling cases #3 and #4
+					// There are no exceptions that allow the entity to move if
+					// the colliding sector is not from the top or bottom of the hitbox.
+					if ((tY != destYt / TILE_SIZE) && (tY != destYb / TILE_SIZE))
+					{
+						return false;
+					}
 
 					// Handling case #1:
 					if (tY == destYt / TILE_SIZE)	// If the current tile is associated with the top of the hitbox...
@@ -452,15 +460,29 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 						}
 						else // Hitbox bottom collides with a sloped roof. Maybe the tile's top.
 						{
-							if (CollGround(Tile->CollID, 0, destYb % TILE_SIZE)) return false;
+							if (tX != destXl / TILE_SIZE && tX != destXr / TILE_SIZE)
+							{
+								if (Tile->CollID == SOLID_A_ML_BR || Tile->CollID == SOLID_A_BL_MR)
+								{
+									return false;
+								}
+								else if (destYb % TILE_SIZE < TILE_SIZE / 2)
+								{
+									return false;
+								}
+							}
+							else
+							{
+								if (tX == destXl / TILE_SIZE)
+								{
+									if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYb % TILE_SIZE)) return false;
+								}
+								if (tX == destXr / TILE_SIZE)
+								{
+									if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
+								}
+							}
 						}
-					}
-					// Handling cases #3 and #4
-					// There are no exceptions that allow the entity to move if
-					// the colliding sector is not from the top or bottom of the hitbox.
-					if ((tY != destYt / TILE_SIZE) && (tY != destYb / TILE_SIZE))
-					{
-						return false;
 					}
 				}
 			}

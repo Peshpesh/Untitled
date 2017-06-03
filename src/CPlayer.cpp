@@ -20,7 +20,7 @@ CPlayer::CPlayer()
 	Livebullets = 0;
 	Purse = 0;
 	Ammo = 0;
-	Col_Width = Col_Height = 4;
+	Col_Width = Col_Height = 32;
 }
 
 void CPlayer::Reset()
