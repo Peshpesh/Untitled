@@ -195,8 +195,10 @@ void CEntity::Translate(double NewX, double NewY)
 		CTile* Tile = CArea::AreaControl.GetTile(destXr, srcYb);
 		if (Tile->CollID == SOLID_U_BL_MR || Tile->CollID == SOLID_U_ML_TR)
 		{
-			int Yrel = destYb % TILE_SIZE;
-			if (Tile != CArea::AreaControl.GetTile(destXr, destYb)) Yrel += TILE_SIZE;
+			// int Yrel = destYb % TILE_SIZE;
+			// if (Tile != CArea::AreaControl.GetTile(destXr, destYb)) Yrel += TILE_SIZE;
+			// pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
+			int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 			pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
 		}
 	}
@@ -205,8 +207,10 @@ void CEntity::Translate(double NewX, double NewY)
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, srcYb);
 		if (Tile->CollID == SOLID_U_TL_MR || Tile->CollID == SOLID_U_ML_BR)
 		{
-			int Yrel = destYb % TILE_SIZE;
-			if (Tile != CArea::AreaControl.GetTile(destXl, destYb)) Yrel += TILE_SIZE;
+			// int Yrel = destYb % TILE_SIZE;
+			// if (Tile != CArea::AreaControl.GetTile(destXl, destYb)) Yrel += TILE_SIZE;
+			// pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
+			int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
 		}
 	}
@@ -215,6 +219,7 @@ void CEntity::Translate(double NewX, double NewY)
 	// something that will stop this entity.
 	if (pushY != 0)
 	{
+		if (pushY < -30) SDL_Delay(1000);
 		if (CheckPathXY(destXl, destXr, destYt + pushY, destYb + pushY))
 		{
 			// The entity can move in X and Y. The entity is being "pushed"
