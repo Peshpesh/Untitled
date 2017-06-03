@@ -9,7 +9,7 @@ CPlayer::CPlayer()
 	Arsenal = 0x00000001;
 	MaxHealth = 12;
 	Health = 3;
-	MaxSpeedX = 8.0;
+	MaxSpeedX = 7.0;
 	MaxSpeedY = 12.0;
 	Timer_Invinc = Timer_Invis =
 		Timer_Haste = Timer_Flight = 0;
@@ -31,7 +31,7 @@ void CPlayer::Reset()
 	Arsenal = 0x00000001;
 	MaxHealth = 12;
 	Health = 3;
-	MaxSpeedX = 8.0;
+	MaxSpeedX = 7.0;
 	MaxSpeedY = 12.0;
 	Timer_Invinc = Timer_Invis =
 		Timer_Haste = Timer_Flight = 0;
