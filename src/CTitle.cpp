@@ -139,19 +139,19 @@ void CTitle::OnRender(SDL_Renderer* renderer)
 	{
 		if (!showstats && !selectGame)
 		{
-			// Font::Write(renderer, Font::FontControl.Tex_Font,
+			// Font::Write(renderer, FONT_DEFAULT,
 			// 	"NEW GAME\nLOAD GAME\nSTATISTICS\nOPTIONS\nQUIT\n\nMAP EDITOR", WWIDTH / 2, WHEIGHT / 2);
 			// if (hilight != MAP_EDITOR)
-			// 	Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (hilight * 16));
+			// 	Font::Write(renderer, FONT_DEFAULT, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (hilight * 16));
 			// else
-			// 	Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + ((hilight + 1) * 16));
-			Font::Write(renderer, Font::FontControl.Tex_Font, "NEW GAME\nLOAD GAME\nSTATISTICS\nOPTIONS\nQUIT", WWIDTH / 2, WHEIGHT / 2);
-			Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (hilight * 16));
+			// 	Font::Write(renderer, FONT_DEFAULT, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + ((hilight + 1) * 16));
+			Font::Write(renderer, FONT_DEFAULT, "NEW GAME\nLOAD GAME\nSTATISTICS\nOPTIONS\nQUIT", WWIDTH / 2, WHEIGHT / 2);
+			Font::Write(renderer, FONT_DEFAULT, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (hilight * 16));
 		}
 		else if (selectGame)
 		{
 			int displace = 0;
-			Font::Write(renderer, Font::FontControl.Tex_Font, "FILE A\nFILE B\nFILE C", WWIDTH / 2, WHEIGHT / 2);
+			Font::Write(renderer, FONT_DEFAULT, "FILE A\nFILE B\nFILE C", WWIDTH / 2, WHEIGHT / 2);
 			switch (sfile)
 			{
 				case 'A': break;
@@ -159,7 +159,7 @@ void CTitle::OnRender(SDL_Renderer* renderer)
 				case 'C': displace = 2; break;
 				default: break;
 			}
-			Font::Write(renderer, Font::FontControl.Tex_Font, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (displace * 16));
+			Font::Write(renderer, FONT_DEFAULT, "X", (WWIDTH / 2) - 30, (WHEIGHT / 2) + (displace * 16));
 		}
 		else RenderStats(renderer);
 	}
@@ -168,36 +168,36 @@ void CTitle::OnRender(SDL_Renderer* renderer)
 
 void CTitle::RenderStats(SDL_Renderer* renderer)
 {
-	Font::Write(renderer, Font::FontControl.Tex_Font,
+	Font::Write(renderer, FONT_DEFAULT,
 		"DEATH COUNT\nPOWER COUNT\nFINISHED GAMES\nRUNNING TIME\nPLAY TIME",
 		60, WHEIGHT / 2);
-	Font::Write(renderer, Font::FontControl.Tex_Font, CGameData::GameControl.Global.deathcount, 300, (WHEIGHT / 2) + (16 * 0));
-	Font::Write(renderer, Font::FontControl.Tex_Font, CGameData::GameControl.Global.powercount, 300, (WHEIGHT / 2) + (16 * 1));
-	Font::Write(renderer, Font::FontControl.Tex_Font, CGameData::GameControl.Global.Nfinish, 300, (WHEIGHT / 2) + (16 * 2));
+	Font::Write(renderer, FONT_DEFAULT, CGameData::GameControl.Global.deathcount, 300, (WHEIGHT / 2) + (16 * 0));
+	Font::Write(renderer, FONT_DEFAULT, CGameData::GameControl.Global.powercount, 300, (WHEIGHT / 2) + (16 * 1));
+	Font::Write(renderer, FONT_DEFAULT, CGameData::GameControl.Global.Nfinish, 300, (WHEIGHT / 2) + (16 * 2));
 
 	int allhr = CGameData::GameControl.Global.uptime / 360000;
 	int allmn = (CGameData::GameControl.Global.uptime % 360000) / 6000;
 	int allsc = ((CGameData::GameControl.Global.uptime % 360000) % 6000) / 100;
 
 	int offset = 0;
-	offset += Font::Write(renderer, Font::FontControl.Tex_Font, allhr, 300 + offset, (WHEIGHT / 2) + (16 * 3));
+	offset += Font::Write(renderer, FONT_DEFAULT, allhr, 300 + offset, (WHEIGHT / 2) + (16 * 3));
 	if (allmn < 10)
-		offset += Font::Write(renderer, Font::FontControl.Tex_Font, 0, 300 + offset, (WHEIGHT / 2) + (16 * 3));
-	offset += Font::Write(renderer, Font::FontControl.Tex_Font, allmn, 300 + offset, (WHEIGHT / 2) + (16 * 3));
+		offset += Font::Write(renderer, FONT_DEFAULT, 0, 300 + offset, (WHEIGHT / 2) + (16 * 3));
+	offset += Font::Write(renderer, FONT_DEFAULT, allmn, 300 + offset, (WHEIGHT / 2) + (16 * 3));
 	if (allsc < 10)
-		offset += Font::Write(renderer, Font::FontControl.Tex_Font, 0, 300 + offset, (WHEIGHT / 2) + (16 * 3));
-	Font::Write(renderer, Font::FontControl.Tex_Font, allsc, 300 + offset, (WHEIGHT / 2) + (16 * 3));
+		offset += Font::Write(renderer, FONT_DEFAULT, 0, 300 + offset, (WHEIGHT / 2) + (16 * 3));
+	Font::Write(renderer, FONT_DEFAULT, allsc, 300 + offset, (WHEIGHT / 2) + (16 * 3));
 
 	int gamehr = CGameData::GameControl.Global.playtime / 360000;
 	int gamemn = (CGameData::GameControl.Global.playtime % 360000) / 6000;
 	int gamesc = ((CGameData::GameControl.Global.playtime % 360000) % 6000) / 100;
 
 	offset = 0;
-	offset += Font::Write(renderer, Font::FontControl.Tex_Font, gamehr, 300 + offset, (WHEIGHT / 2) + (16 * 4));
+	offset += Font::Write(renderer, FONT_DEFAULT, gamehr, 300 + offset, (WHEIGHT / 2) + (16 * 4));
 	if (gamemn < 10)
-		offset += Font::Write(renderer, Font::FontControl.Tex_Font, 0, 300 + offset, (WHEIGHT / 2) + (16 * 4));
-	offset += Font::Write(renderer, Font::FontControl.Tex_Font, gamemn, 300 + offset, (WHEIGHT / 2) + (16 * 4));
+		offset += Font::Write(renderer, FONT_DEFAULT, 0, 300 + offset, (WHEIGHT / 2) + (16 * 4));
+	offset += Font::Write(renderer, FONT_DEFAULT, gamemn, 300 + offset, (WHEIGHT / 2) + (16 * 4));
 	if (gamesc < 10)
-		offset += Font::Write(renderer, Font::FontControl.Tex_Font, 0, 300 + offset, (WHEIGHT / 2) + (16 * 4));
-	Font::Write(renderer, Font::FontControl.Tex_Font, gamesc, 300 + offset, (WHEIGHT / 2) + (16 * 4));
+		offset += Font::Write(renderer, FONT_DEFAULT, 0, 300 + offset, (WHEIGHT / 2) + (16 * 4));
+	Font::Write(renderer, FONT_DEFAULT, gamesc, 300 + offset, (WHEIGHT / 2) + (16 * 4));
 }

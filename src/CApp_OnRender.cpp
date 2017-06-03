@@ -49,7 +49,12 @@ void CApp::OnRender()
 
 		if (DEBUG)
 		{
-
+			int colX, colY, colW, colH;
+			float pX, pY;
+			CEntity::EntityList[0]->GetColInfo(colX, colY, colW, colH);
+			CEntity::EntityList[0]->GetPos(pX, pY);
+			Font::Writef(Win_Renderer, FONT_DEFAULT, pX, 3, 0, 10, 10);
+			Font::Writef(Win_Renderer, FONT_DEFAULT, pY+TILE_SIZE-1, 3, 0, 210, 10);
 		}
 	}
 	SDL_RenderPresent(Win_Renderer);

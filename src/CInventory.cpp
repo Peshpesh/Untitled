@@ -229,8 +229,8 @@ void CInventory::OnRender(SDL_Renderer* renderer)
 			// render highlighted item's information
 			int tX = xB + ((MENU_W - DETAIL_TEXT_W) / 2);
 			int tY = dyB + ((DETAIL_MENU_H - DETAIL_TEXT_H) / 2);
-			Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->name, tX, tY, DETAIL_TEXT_W, DETAIL_TEXT_H);
-			Font::FontControl.TextBox(renderer, CItem::Inventory[highlight]->about, tX, tY + spacing, DETAIL_TEXT_W, DETAIL_TEXT_H);
+			Font::FontControl.TextBox(renderer, FONT_DEFAULT, CItem::Inventory[highlight]->name, tX, tY, DETAIL_TEXT_W, DETAIL_TEXT_H);
+			Font::FontControl.TextBox(renderer, FONT_DEFAULT, CItem::Inventory[highlight]->about, tX, tY + spacing, DETAIL_TEXT_W, DETAIL_TEXT_H);
 		}
 	}
 }

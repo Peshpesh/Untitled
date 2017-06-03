@@ -47,7 +47,7 @@ int CDialogue::OnSpeech(SDL_Renderer* renderer, char const* message)
 			return 0;
 		}
 	}
-	switch (Font::CenterBoxWrite(renderer, Font::FontControl.Tex_Font,
+	switch (Font::CenterBoxWrite(renderer, FONT_DEFAULT,
 		message, 100, 300, 300, 150, 115, Length, Pagenum))
 	{
 		case '|':

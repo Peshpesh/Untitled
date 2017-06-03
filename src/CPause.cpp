@@ -203,14 +203,14 @@ int CPause::GetResponse()
 
 void CPause::OnRender(SDL_Renderer* renderer)
 {
-	Font::CenterBoxWrite(renderer, Font::FontControl.Tex_Font, options, 0, 0, 400, 200, 16, 256, 0);
+	Font::CenterBoxWrite(renderer, FONT_DEFAULT, options, 0, 0, 400, 200, 16, 256, 0);
 	if (videomenu)
-		Font::CenterWrite(renderer, Font::FontControl.Tex_Font, "VIDEO MENU IS NOT\nCURRENTLY ACTIVE", 200, 30);
+		Font::CenterWrite(renderer, FONT_DEFAULT, "VIDEO MENU IS NOT\nCURRENTLY ACTIVE", 200, 30);
 	else if (audiomenu)
-		Font::CenterWrite(renderer, Font::FontControl.Tex_Font, "AUDIO MENU IS NOT\nCURRENTLY ACTIVE", 200, 30);
+		Font::CenterWrite(renderer, FONT_DEFAULT, "AUDIO MENU IS NOT\nCURRENTLY ACTIVE", 200, 30);
 	else if (quitmenu)
-		Font::CenterWrite(renderer, Font::FontControl.Tex_Font, "ARE YOU SURE", 200, 30);
-	Font::CenterWrite(renderer, Font::FontControl.Tex_Font, "X", 200, 110 + 20 * (hilight - (Nops / 2)));
+		Font::CenterWrite(renderer, FONT_DEFAULT, "ARE YOU SURE", 200, 30);
+	Font::CenterWrite(renderer, FONT_DEFAULT, "X", 200, 110 + 20 * (hilight - (Nops / 2)));
 }
 
 void CPause::OnCleanup()

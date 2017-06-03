@@ -401,9 +401,9 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 								if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYt % TILE_SIZE)) return false;
 							}
 						}
-						else // Hitbox top collides with a sloped floor. Probably the tile's underside.
+						else // Hitbox top collides with a sloped floor. Maybe the tile's underside.
 						{
-							return false;
+							if (CollGround(Tile->CollID, 0, destYt % TILE_SIZE)) return false;
 						}
 					}
 
@@ -454,9 +454,9 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 								if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYb % TILE_SIZE)) return false;
 							}
 						}
-						else
+						else // Hitbox bottom collides with a sloped roof. Maybe the tile's top.
 						{
-							return false;
+							if (CollGround(Tile->CollID, 0, destYb % TILE_SIZE)) return false;
 						}
 					}
 					// Handling cases #3 and #4
