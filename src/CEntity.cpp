@@ -192,25 +192,19 @@ void CEntity::Translate(double NewX, double NewY)
 	// horizontally.
 	if (NewX > 0.0)	// Moving right
 	{
+		int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXr, srcYb);
-		if (Tile->CollID == SOLID_U_BL_MR || Tile->CollID == SOLID_U_ML_TR)
+		if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Yrel < TILE_SIZE / 2))
 		{
-			// int Yrel = destYb % TILE_SIZE;
-			// if (Tile != CArea::AreaControl.GetTile(destXr, destYb)) Yrel += TILE_SIZE;
-			// pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
-			int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 			pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
 		}
 	}
 	else if (NewX < 0.0)	// Moving left
 	{
+		int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, srcYb);
-		if (Tile->CollID == SOLID_U_TL_MR || Tile->CollID == SOLID_U_ML_BR)
+		if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Yrel < TILE_SIZE / 2))
 		{
-			// int Yrel = destYb % TILE_SIZE;
-			// if (Tile != CArea::AreaControl.GetTile(destXl, destYb)) Yrel += TILE_SIZE;
-			// pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
-			int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
 		}
 	}
@@ -219,7 +213,6 @@ void CEntity::Translate(double NewX, double NewY)
 	// something that will stop this entity.
 	if (pushY != 0)
 	{
-		if (pushY < -30) SDL_Delay(1000);
 		if (CheckPathXY(destXl, destXr, destYt + pushY, destYb + pushY))
 		{
 			// The entity can move in X and Y. The entity is being "pushed"
@@ -385,7 +378,28 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 						}
 						else // Hitbox top collides with a sloped floor. Maybe the tile's underside.
 						{
-							if (CollGround(Tile->CollID, 0, destYt % TILE_SIZE)) return false;
+							if (tX != destXl / TILE_SIZE && tX != destXr / TILE_SIZE)
+							{
+								if (Tile->CollID == SOLID_U_ML_TR || Tile->CollID == SOLID_U_TL_MR)
+								{
+									return false;
+								}
+								else if (destYt % TILE_SIZE >= TILE_SIZE / 2)
+								{
+									return false;
+								}
+							}
+							else
+							{
+								if (tX == destXl / TILE_SIZE)
+								{
+									if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYt % TILE_SIZE)) return false;
+								}
+								if (tX == destXr / TILE_SIZE)
+								{
+									if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYt % TILE_SIZE)) return false;
+								}
+							}
 						}
 					}
 
