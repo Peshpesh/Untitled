@@ -14,7 +14,6 @@
 #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
 #include "Define.h"
-#include "DefineMapEdit.h"
 #include "DefineNpcEdit.h"
 #include "DefineScnEdit.h"
 
@@ -25,6 +24,90 @@ enum
   INTRPT_CH_FTILE = 0x00000002,		// interrupt via fg tile change
   INTRPT_MODEL = 0x00000004,
 };
+
+namespace map_editor
+{
+  namespace but_tset
+  {
+    const unsigned short w = 50;              // #define TS_CHG_BUT_W 50     // Change Tileset button info
+    const unsigned short h = 40;              // #define TS_CHG_BUT_H 40     //
+    const short x = 665;              // #define TS_CHG_BUT_X 665    //
+    const short y = 50;              // #define TS_CHG_BUT_Y 50     //
+  }
+  namespace but_t
+  {
+    const short bg_x = 260;      // #define BTILE_CHG_BUT_W 100   // Change Tile button info
+    const short bg_y = 510;      // #define BTILE_CHG_BUT_H 20   //
+    const short bg_w = 100;      // #define BTILE_CHG_BUT_X 260  //
+    const short bg_h = 20;      // #define BTILE_CHG_BUT_Y 510  //
+    const short fg_x = 260;      // #define FTILE_CHG_BUT_W 100   // Change Tile button info
+    const short fg_y = 540;      // #define FTILE_CHG_BUT_H 20   //
+    const short fg_w = 100;      // #define FTILE_CHG_BUT_X 260  //
+    const short fg_h = 20;      // #define FTILE_CHG_BUT_Y 540  //
+  }
+  namespace disp_t
+  {
+    const short bgfg_x = 674;        // #define DISP_TILE_X 674     // Displayed (current) Tile info
+    const short bgfg_y = 140;        // #define DISP_TILE_Y 140     //
+            // #define DISP_NAME_OFFSET 10
+    const short bg_x = 674;        // #define DISP_BTILE_X 674    // "..." background Tile info
+    const short bg_y = 210;        // #define DISP_BTILE_Y 210    //
+    const short fg_x = 674;        // #define DISP_FTILE_X 674    // "..." foreground Tile info
+    const short fg_y = 280;        // #define DISP_FTILE_Y 280    //
+    const short ty_x = 674;        // #define DISP_TYPE_X 674     // "..." Tile type info
+    const short ty_y = 350;        // #define DISP_TYPE_Y 350     //
+    const short co_x = 674;        // #define DISP_COLL_X 674    // "..." Tile collision info
+    const short co_y = 420;        // #define DISP_COLL_Y 420    //
+  }
+  namespace opac
+  {
+    const short w = 90;    // #define ALPH_TYPE_Y 390
+    const short h = 4;    // #define ALPH_COLL_Y 460
+    const short x = 645;    // #define ALPH_BAR_X 645
+    const short ty_y = 390;    // #define ALPH_BAR_W 90
+    const short co_y = 460;    // #define ALPH_BAR_H 4
+  }
+  namespace erase_flip
+  {
+    const short bg_x = 642;              // #define BACK_SWIT_X 642
+    const short bg_y = 192;              // #define BACK_SWIT_Y 192
+    const short fg_x = 642;              // #define FORE_SWIT_X 642
+    const short fg_y = 262;              // #define FORE_SWIT_Y 262
+    const short ty_x = 642;
+    const short ty_y = 332;
+    const short co_x = 642;
+    const short co_y = 402;
+  }
+  namespace view_flip
+  {
+    // #define VIEWOPTS_X 20
+    // #define VIEWOPTS_Y 510
+    const short x = 20;
+    const short y = 510;
+  }
+  namespace place_flip
+  {
+    // #define TILEOPTS_X 150
+    // #define TILEOPTS_Y 495
+    const short x = 150;
+    const short y = 495;
+  }
+  // Map Editor definitions (application static)
+                // #define DUMMY_ENTITY_X 522
+                // #define DUMMY_ENTITY_Y 0
+  const unsigned short dummy_x = 522;
+  const unsigned short dummy_y = 0;
+}
+
+// namespace npc_editor
+// {
+//
+// }
+//
+// namespace scn_editor
+// {
+//
+// }
 
 class CApp : public CEvent {
 private:
