@@ -193,9 +193,19 @@ void CEntity::Translate(double NewX, double NewY)
 		// int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		int Yrel = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXr, srcYb);
-		if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Yrel <= TILE_SIZE / 2))
+		// if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Yrel <= TILE_SIZE / 2))
+		if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Yrel < TILE_SIZE / 2))
 		{
 			pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
+		}
+		if (pushY == 0)
+		{
+			Tile = CArea::AreaControl.GetTile(destXr, srcYt);
+			Yrel = srcYt - ((srcYt / TILE_SIZE) * TILE_SIZE);
+			if (Tile->CollID == SOLID_A_TL_MR || (Tile->CollID == SOLID_A_ML_BR && Yrel >= TILE_SIZE / 2))
+			{
+				pushY = CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel);
+			}
 		}
 	}
 	else if (NewX < 0.0)	// Moving left
@@ -203,9 +213,19 @@ void CEntity::Translate(double NewX, double NewY)
 		// int Yrel = destYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		int Yrel = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
 		CTile* Tile = CArea::AreaControl.GetTile(destXl, srcYb);
-		if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Yrel <= TILE_SIZE / 2))
+		// if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Yrel <= TILE_SIZE / 2))
+		if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Yrel < TILE_SIZE / 2))
 		{
 			pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
+		}
+		if (pushY == 0)
+		{
+			Tile = CArea::AreaControl.GetTile(destXl, srcYt);
+			Yrel = srcYt - ((srcYt / TILE_SIZE) * TILE_SIZE);
+			if (Tile->CollID == SOLID_A_ML_TR || (Tile->CollID == SOLID_A_BL_MR && Yrel >= TILE_SIZE / 2))
+			{
+				pushY = CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel);
+			}
 		}
 	}
 
@@ -225,6 +245,13 @@ void CEntity::Translate(double NewX, double NewY)
 				Jumper = true;
 				Grounded = true;
 				if (NewY > 0)
+				{
+					SpeedY = 0;
+				}
+			}
+			else
+			{
+				if (NewY < 0)
 				{
 					SpeedY = 0;
 				}
