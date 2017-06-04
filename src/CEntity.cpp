@@ -168,8 +168,6 @@ bool CEntity::OnMove(float MoveX, float MoveY)
 void CEntity::Translate(double NewX, double NewY)
 {
 	// NOTE: NewX, NewY params should be <= 1.0.
-	// int destXl = (int)(X) + NewX + Col_X;
-	// int destYt = (int)(Y) + NewY + Col_Y;
 	int destXl = X + NewX + Col_X;
 	int destYt = Y + NewY + Col_Y;
 	int destXr = destXl + Col_Width - 1;
@@ -215,14 +213,12 @@ void CEntity::Translate(double NewX, double NewY)
 	// something that will stop this entity.
 	if (pushY != 0)
 	{
-		// if (CheckPathXY(destXl, destXr, destYt + pushY, destYb + pushY))
 		if (CheckPathXY(destXl, destXr, srcYt + pushY, srcYb + pushY))
 		{
 			// The entity can move in X and Y. The entity is being "pushed"
 			// in Y by a sloping surface, which means that we also have checked
 			// for stoppages in the Y direction and found none.
 			X += NewX;
-			// Y += NewY + pushY;
 			Y += pushY;
 			if (pushY < 0)
 			{
@@ -399,20 +395,26 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
 								{
 									return false;
 								}
-								else if (destYt % TILE_SIZE >= TILE_SIZE / 2)
+								// else if (destYt % TILE_SIZE >= TILE_SIZE / 2)
+								else
 								{
-									return false;
+									int Yrel = destYb - ((destYt / TILE_SIZE) * TILE_SIZE);
+									if (destYb - ((destYt / TILE_SIZE) * TILE_SIZE) >= TILE_SIZE / 2)
+									{
+										return false;
+									}
 								}
 							}
 							else
 							{
+								int Yrel = destYb - ((destYt / TILE_SIZE) * TILE_SIZE);
 								if (tX == destXl / TILE_SIZE)
 								{
-									if (CollGround(Tile->CollID, destXl % TILE_SIZE, destYt % TILE_SIZE)) return false;
+									if (CollGround(Tile->CollID, destXl % TILE_SIZE, Yrel)) return false;
 								}
 								if (tX == destXr / TILE_SIZE)
 								{
-									if (CollGround(Tile->CollID, destXr % TILE_SIZE, destYt % TILE_SIZE)) return false;
+									if (CollGround(Tile->CollID, destXr % TILE_SIZE, Yrel)) return false;
 								}
 							}
 						}
