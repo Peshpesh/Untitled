@@ -90,8 +90,8 @@ int CMenu::GetResponse()
 
 void CMenu::OnRender(SDL_Renderer* renderer)
 {
-	Font::CenterBoxWrite(renderer, Font::FontControl.Tex_Font, options, 0, 0, 400, 200, 16, 256, 0);
-	Font::CenterWrite(renderer, Font::FontControl.Tex_Font, "X", 200, 110 + 20 * (hilight - (Nops / 2)));
+	Font::CenterBoxWrite(renderer, FONT_DEFAULT, options, 0, 0, 400, 200, 16, 256, 0);
+	Font::CenterWrite(renderer, FONT_DEFAULT, "X", 200, 110 + 20 * (hilight - (Nops / 2)));
 }
 
 void CMenu::OnCleanup()

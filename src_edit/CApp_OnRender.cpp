@@ -98,7 +98,7 @@ void CApp::OnRender()
 	//	DEBUGGING
 	if (debug)
 	{
-		//
+		Font::Write(Map_Renderer, FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
 	SDL_RenderPresent(Map_Renderer);
 }

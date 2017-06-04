@@ -45,29 +45,10 @@ public:
 			param bg			:	Flag to draw foreground or middleground
 	*/
 	void	OnRender(SDL_Renderer* renderer, int CameraX, int CameraY, bool bg);
-	void	OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
-	void	OnRenderSlope(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
 	void	ViewArea(SDL_Renderer* renderer, SDL_Texture* ui);
-
-	/*	Intended only for map editing.
-			Expands the current area rightward by one map.
-			For example, a 2 map x 2 map area will turn to a
-			3 map x 2 map area upon this call. The added maps
-			are initialized as "empty."
-	*/
-	void	OnExpandRight();
-	void	OnExpandLeft();
-	void	OnExpandUp();
-	void	OnExpandDown();
-
-	void	OnReduceRight();
-	bool	OnReduceLeft();
-	bool	OnReduceUp();
-	void	OnReduceDown();
 
 	void	ChangeSet(SDL_Texture* newset);
 	void	ChangeTile(int X, int Y, int tile, int fore, int type, int slope);
-	void	SaveArea(char const* areaname, char const* setpath);
 	void	OnCleanup();
 };
 #endif

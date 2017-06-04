@@ -20,7 +20,7 @@ void CFPS::OnLoop()
 	// our use elsewhere. NumFrames is essentially our "FPS on
 	// record", while Frames is a running total of frames passed
 	// in the immediate 1000 ms.
-	if (OldTime + 1000 < SDL_GetTicks())
+	if (SDL_GetTicks() > OldTime + 1000)
 	{
 		OldTime = SDL_GetTicks();
 		NumFrames = Frames;

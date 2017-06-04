@@ -39,10 +39,11 @@ void CFPS::OnLoop()
 	// successive frames in such a case would be high, perhaps
 	// exceeding 1000 ms (a full second, or 1 FPS). Anything greater,
 	// and the physics (gravity in particular) begin to break. In the
-	// unlikely event that FPS is 1 or less, we force the SpeedFactor
+	// unlikely event that FPS is less than 1, we force the SpeedFactor
 	// to a smaller number to prevent serious glitches in gameplay.
 	// Glitches can involve entities translating through walls and floors.
-	if (SpeedFactor > TargetFPS) SpeedFactor = TargetFPS;
+	// if (SpeedFactor > TargetFPS) SpeedFactor = TargetFPS;
+	if (SpeedFactor > 1.0f) SpeedFactor = 1.0f;
 
 	// We get a new "LastTime" to set up for calc'ing SF next
 	// loop, and add one to our running total of frames in the

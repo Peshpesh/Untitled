@@ -49,12 +49,12 @@ protected:
 	SDL_Texture* Tex_Entity;
 
 public:
-	float	X;
-	float	Y;
+	float	X;	// sprite x-position
+	float	Y;  // sprite y-position
 	int		Xo;	// X position on entity texture
 	int		Yo;	// Y position on entity texture
-	int		Width;
-	int		Height;
+	int		Width;	// sprite width
+	int		Height; // sprite height
 	bool	MoveLeft;
 	bool	MoveRight;
 //	int	AnimState;
@@ -70,24 +70,28 @@ public:
 	bool	Icy;	// Contacting ice tiles
 
 protected:
-	float	SpeedX; // pixels / second
-	float	SpeedY; // pixels / second
-	float	AccelX; // pixels / second^2
-	float	AccelY; // pixels / second^2
+	float	SpeedX; // pixels / idealframe
+	float	SpeedY; // pixels / idealframe
+	float	AccelX; // pixels / idealframe^2
+	float	AccelY; // pixels / idealframe^2
 
 public:
-	float	MaxSpeedX; // pixels / second
-	float	MaxSpeedY; // pixels / second
-	float	MaxAccelX; // pixels / second^2
-	float	MaxAccelY; // pixels / second^2
+	float	MaxSpeedX; // pixels / idealframe
+	float	MaxSpeedY; // pixels / idealframe
+	float	MaxAccelX; // pixels / idealframe^2
+	float	MaxAccelY; // pixels / idealframe^2
+
+protected:
+	bool Jumper;
+	bool Grounded;
 
 protected:
 	int	CurrentFrameCol;
 	int	CurrentFrameRow;
 
 protected:
-	int	Col_X; // "Hitbox" X location
-	int	Col_Y; // "Hitbox" Y location
+	int	Col_X; // "Hitbox" offset from x-position
+	int	Col_Y; // "Hitbox" offset from y-position
 	int	Col_Width; // "Hitbox" Width
 	int	Col_Height; // "Hitbox" Height
 
@@ -97,10 +101,6 @@ public:
 
 public:
 	// Load the frame info (image, etc.) for an entity.
-	//
-	// NOTE:
-	// In the Map Editor, animation is nullified,
-	// and "MaxFrames" is used to store NPC_IDs.
 	virtual bool OnLoad(SDL_Texture* entityset, int Xo, int Yo, int Width, int Height, int MaxFrames);
 
 	virtual void OnLoop();
@@ -117,8 +117,7 @@ public:
 	// Returns false if no interaction is occurring
 	virtual bool OnInteract(SDL_Renderer* renderer);
 
-public:
-	// Params are in pixels/second
+protected:
 	bool OnMove(float MoveX, float MoveY);
 
 	void ChkEnviro();
@@ -126,25 +125,29 @@ public:
 	void StopMove();
 
 public:
-	// Determines collisions
-	bool Collides(int oX, int oY, int oW, int oH);
-
-protected:
-	bool Jumper;
+	// Checks if the entity's hitbox intersects passed hitbox
+	bool Collides(const int& oXl, const int& oYt, const int& oXr, const int& oYb);
 
 public:
 	bool Jump();
 
-private:
-	bool PosValid(int NewX, int NewY, bool Vertical);
-	bool PosValidTile(CTile* Tile);
+protected:
+	void Translate(double NewX, double NewY);
+	bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);
+	bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb);
+	int CollGround(const int& collID, const int& Xrel, const int& Yrel);
 	bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
+
+	//	Debug members
+public:
+	void GetColInfo(int& colX, int& colY, int& colW, int& colH);
+	void GetPos(float& X, float& Y);
+	// void GetPushY(int& pushY);
 };
 
 class CEntityInfo
 {
 public:
-	// static std::vector<CEntityInfo>	EntityInfoList;
 	static std::vector<CEntityInfo> Com_EntityInfo;
 	static std::vector<CEntityInfo> Unq_EntityInfo;
 
@@ -154,13 +157,9 @@ public:
 	int H;
 	int NumRows;
 	int NumCols;
-	// bool Common;
 
 	CEntityInfo();
 
-	// static int OnLoad(char* File);
-
-	// static bool LoadCommons();
 	static bool LoadCommon();
 	static int LoadUnique(char const* File);
 };

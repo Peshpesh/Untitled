@@ -31,16 +31,6 @@ void CApp::OnLoop()
 				}
 				case OPTIONS:	break;
 				case QUIT_GAME: OnExit(); break;
-				// case MAP_EDITOR:
-				// {
-				// 	InitGame();
-				// 	CGameData::GameControl.ImportData('A', CTransport::Transporter.Destination, Player.MaxHealth, Player.Health, Player.Weapon,
-				// 		Player.Ammo, Player.Purse, Player.Arsenal, CTransport::Transporter.rX, CTransport::Transporter.rY);
-				// 	CMapEdit MEditor;
-				// 	MEditor.OnExecute(state);
-				// 	//OnExit();
-				// 	break;
-				// }
 				default:	break;
 			}
 		}
@@ -148,7 +138,6 @@ void CApp::OnLoop()
 				if (!response) Player.Engaged = false;	// If no NPC reciprocated, the player is not engaged.
 			}
 		}
-//	if (Paused)	OnPause();
 	}
 
 	CFPS::FPSControl.OnLoop();
@@ -157,6 +146,7 @@ void CApp::OnLoop()
 	//char Buffer[255];
 	//sprintf(Buffer, "%d", CFPS::FPSControl.GetFPS());
 	//SDL_SetWindowTitle(Win_Display, Buffer);
+
 }
 
 void CApp::ExitGame()

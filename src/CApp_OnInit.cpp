@@ -42,10 +42,9 @@ bool CApp::OnInit()
 	// 	return false;
 
 	////
-	if ((TESTSFC = CSurface::OnLoad("../res/palette.png", Win_Renderer)) == NULL)	return false;
-	SDL_SetTextureBlendMode(TESTSFC, SDL_BLENDMODE_MOD);
+	if ((DEBUG_TEXTURE = CSurface::OnLoad("../res/palette.png", Win_Renderer)) == NULL)	return false;
+	// SDL_SetTextureBlendMode(DEBUG_TEXTURE, SDL_BLENDMODE_MOD);
 	////
-	// if (!CSceneryMod::LoadScenery("../data/maps/ARENA.dev.scn", Win_Renderer))
 	if (!CSceneryMod::LoadScenery("../data/maps/ARENA.scn", Win_Renderer))
 		return false;
 	////
@@ -68,6 +67,5 @@ bool CApp::InitGame()
 
 	CCamera::CameraControl.TargetMode = TARGET_MODE_CENTER;
 	CCamera::CameraControl.SetTarget(&Player.X, &Player.Y);
-
 	return true;
 }

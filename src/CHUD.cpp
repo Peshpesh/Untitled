@@ -31,11 +31,11 @@ void CHUD::OnRender(SDL_Renderer* renderer, const int &HP, const int &Max_HP, co
 	}
 
 	// Write how much is in purse
-	Font::Write(renderer, Font::FontControl.Tex_Font, Purse, WWIDTH-25, WHEIGHT-25);
+	Font::Write(renderer, FONT_DEFAULT, Purse, WWIDTH-25, WHEIGHT-25);
 
 	// Write how much HP
-	// Font::Write(renderer, Font::FontControl.Tex_Font, HP, 260, 25);
-	// Font::Write(renderer, Font::FontControl.Tex_Font, Arsenal, 260, 25);
+	// Font::Write(renderer, FONT_DEFAULT, HP, 260, 25);
+	// Font::Write(renderer, FONT_DEFAULT, Arsenal, 260, 25);
 
 	// Draw weapon selector
 	if (Weapon != UNARMED)

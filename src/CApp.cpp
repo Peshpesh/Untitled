@@ -11,7 +11,7 @@ CApp::CApp()
 	Suspend = false;
 
 	// debugging
-	TESTSFC = NULL;
+	DEBUG_TEXTURE = NULL;
 }
 
 /* This is the executable member that contains the program's

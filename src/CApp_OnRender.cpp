@@ -38,25 +38,6 @@ void CApp::OnRender()
 			s_i++;
 		}
 
-//	if (CCinema::CinemaControl->Scene)
-//		CCinema::CinemaControl->OnRender(Win_Renderer);
-
-	if (DEBUG)
-	{
-		Font::Write(Win_Renderer, Font::FontControl.Tex_Font, CCamera::CameraControl.GetX() + 100000, WWIDTH - 100, 100);
-		Font::Write(Win_Renderer, Font::FontControl.Tex_Font, &CGameData::GameControl.Slot, 260, 25);
-		Font::Write(Win_Renderer, Font::FontControl.Tex_Font, CTransport::Transporter.Destination, 360, 25);
-		Font::Write(Win_Renderer, Font::FontControl.Tex_Font, CMenu::MenuList.size(), 520, 55);
-		// Font::Write(Win_Renderer, Font::FontControl.Tex_Font, *CCinema::CinemaControl->Progress, 460, 25);
-		// Font::Write(Win_Renderer, Font::FontControl.Tex_Font, CGameData::GameControl.ProgressList[0], 510, 25);
-		if (CItem::Inventory.size() == 0)
-			Font::Write(Win_Renderer, Font::FontControl.Tex_Font, 99, 570, 25);
-
-		if (Player.Engaged)
-			Font::Write(Win_Renderer, Font::FontControl.Tex_Font, 1, 540, 25);
-		else
-			Font::Write(Win_Renderer, Font::FontControl.Tex_Font, 0, 540, 25);
-		}
 		// Render menus
 		if (CInventory::InvControl.active) CInventory::InvControl.OnRender(Win_Renderer);
 		for (int i = 0; i < CMenu::MenuList.size(); i++)
@@ -65,6 +46,38 @@ void CApp::OnRender()
 			CMenu::MenuList[i]->OnRender(Win_Renderer);
 		}
 		if (PauseMenu.Active) PauseMenu.OnRender(Win_Renderer);
+
+		if (DEBUG)
+		{
+			int colX, colY, colW, colH;
+			float pX, pY;
+			CEntity::EntityList[0]->GetColInfo(colX, colY, colW, colH);
+			CEntity::EntityList[0]->GetPos(pX, pY);
+			Font::Writef(Win_Renderer, FONT_DEFAULT, (int)(pX) % TILE_SIZE, 1, 0, 10, 10);
+			Font::Writef(Win_Renderer, FONT_DEFAULT, (int)(pY) % TILE_SIZE, 1, 0, 210, 10);
+			int hX = pX + colX - CCamera::CameraControl.GetX();
+			int hY = pY + colY - CCamera::CameraControl.GetY();
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX, hY, 0, 0, 1, 1, colW, 1);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX, hY, 0, 0, 1, 1, 1, colH);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX + colW - 1, hY, 0, 0, 1, 1, 1, colH);
+			CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, hX, hY + colH - 1, 0, 0, 1, 1, colW, 1);
+			int pXi = pX + colX;
+			int pYi = pY + colY;
+			int pXf = pXi + colW - 1;
+			int pYf = pYi + colH - 1;
+			for (int tY = pYi / TILE_SIZE; tY <= pYf / TILE_SIZE; tY++)
+			{
+				for (int tX = pXi / TILE_SIZE; tX <= pXf / TILE_SIZE; tX++)
+				{
+					int tileX = (tX * TILE_SIZE) - CCamera::CameraControl.GetX();
+					int tileY = (tY * TILE_SIZE) - CCamera::CameraControl.GetY();
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX, tileY, 0, 5, 1, 1, TILE_SIZE, 1);
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX, tileY, 0, 5, 1, 1, 1, TILE_SIZE);
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX + TILE_SIZE - 1, tileY, 0, 5, 1, 1, 1, TILE_SIZE);
+					CSurface::OnDraw(Win_Renderer, DEBUG_TEXTURE, tileX, tileY + TILE_SIZE - 1, 0, 5, 1, 1, TILE_SIZE, 1);
+				}
+			}
+		}
 	}
 	SDL_RenderPresent(Win_Renderer);
 }
