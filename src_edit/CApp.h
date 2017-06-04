@@ -15,6 +15,8 @@
 #include "CSceneryEdit.h"
 #include "Define.h"
 #include "DefineMapEdit.h"
+#include "DefineNpcEdit.h"
+#include "DefineScnEdit.h"
 
 enum
 {

@@ -60,27 +60,6 @@
 #define ARROW_SIZE 15
 
 
-// Entity Editor definitions (application static)
-#define TABL_NAME_X 250
-#define TABL_NAME_Y 490
-#define ENT_NAME_X 250
-#define ENT_NAME_Y 510
-#define TBL_CHG_BUTTON_X 5
-#define TBL_CHG_BUTTON_Y 540
-
-
-// Scenery Editor definitions (application static)
-#define SWITCHLIST_X 20
-#define SWITCHLIST_Y 510
-#define SCN_NAME_X 250
-#define SCN_NAME_Y 490
-#define SCN_NAME_W 160
-#define DEPTH_COMBO_X 250
-#define DEPTH_COMBO_Y 530
-#define DEPTH_LOWER_X 150
-#define DEPTH_UPPER_X 350
-
-
 // Change-tile interface definitions
 #define MAX_TILES 8
 

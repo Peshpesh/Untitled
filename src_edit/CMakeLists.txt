@@ -77,6 +77,8 @@ ${SRCDIR}/CTile.h
 ${SRCDIR}/CUI.h
 ${SRCDIR}/Define.h
 ${SRCDIR}/DefineMapEdit.h
+${SRCDIR}/DefineNpcEdit.h
+${SRCDIR}/DefineScnEdit.h
 ${SRCDIR}/Font.h
 )
 
