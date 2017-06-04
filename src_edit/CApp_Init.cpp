@@ -81,3 +81,12 @@ bool CApp::OnInit()
 
 	return true;
 }
+
+void CApp::QueryTileset()
+{
+	int PixWidth, PixHeight;
+	SDL_QueryTexture(Main_Tileset, NULL, NULL, &PixWidth, &PixHeight);
+
+	TilesetWidth = PixWidth / TILE_SIZE;
+	TilesetHeight = PixHeight / TILE_SIZE;
+}

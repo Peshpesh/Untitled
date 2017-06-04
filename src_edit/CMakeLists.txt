@@ -16,13 +16,19 @@ set(SRCDIR ${PROJECT_SOURCE_DIR})
 set(SOURCE_FILES
 ${SRCDIR}/CAnimation.cpp
 ${SRCDIR}/CApp.cpp
-${SRCDIR}/CApp_OnClick.cpp
-${SRCDIR}/CApp_OnEvent.cpp
-${SRCDIR}/CApp_OnInit.cpp
-${SRCDIR}/CApp_OnLoop.cpp
-${SRCDIR}/CApp_OnMotion.cpp
-${SRCDIR}/CApp_OnRender.cpp
-${SRCDIR}/CApp_OnTerminate.cpp
+${SRCDIR}/CApp_Click.cpp
+${SRCDIR}/CApp_Event.cpp
+${SRCDIR}/CApp_EventMapEdit.cpp
+${SRCDIR}/CApp_EventNpcEdit.cpp
+${SRCDIR}/CApp_EventScnEdit.cpp
+${SRCDIR}/CApp_Init.cpp
+${SRCDIR}/CApp_Loop.cpp
+${SRCDIR}/CApp_Motion.cpp
+${SRCDIR}/CApp_Render.cpp
+${SRCDIR}/CApp_RenderMapEdit.cpp
+${SRCDIR}/CApp_RenderNpcEdit.cpp
+${SRCDIR}/CApp_RenderScnEdit.cpp
+${SRCDIR}/CApp_Terminate.cpp
 ${SRCDIR}/CArea.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CChangeTile.cpp
@@ -70,6 +76,7 @@ ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CUI.h
 ${SRCDIR}/Define.h
+${SRCDIR}/DefineMapEdit.h
 ${SRCDIR}/Font.h
 )
 
