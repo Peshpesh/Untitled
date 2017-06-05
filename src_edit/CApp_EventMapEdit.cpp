@@ -1,9 +1,9 @@
 #include "CApp.h"
 
+using namespace map_editor;
+
 bool CApp::EventMAPedit(int mX, int mY)
 {
-	using namespace map_editor;
-
 	// Click on "Change Tileset" button. This displays a prompt to change tilesets,
 	// and the function within the loop performs a change if requested.
 	if (mX >= but_tset::x && mX < but_tset::x + but_tset::w)

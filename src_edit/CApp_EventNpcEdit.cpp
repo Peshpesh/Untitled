@@ -1,5 +1,7 @@
 #include "CApp.h"
 
+using namespace npc_editor;
+
 bool CApp::EventNPCedit(int mX, int mY)
 {
 	if (mX < WWIDTH && mY < WHEIGHT)
@@ -19,9 +21,9 @@ bool CApp::EventNPCedit(int mX, int mY)
 	}
 
 	// Changing Entity (or Type)
-	if (mX >= TABL_NAME_X - ARROW_SIZE - SYM_SPACING && mX <= TABL_NAME_X + tabl_name_W + ARROW_SIZE + SYM_SPACING)
+	if (mX >= tbl_nm_x - ARROW_SIZE - SYM_SPACING && mX <= tbl_nm_x + tabl_name_W + ARROW_SIZE + SYM_SPACING)
 	{
-		if (mY >= TABL_NAME_Y && mY <= ENT_NAME_Y + CHAR_HEIGHT)
+		if (mY >= tbl_nm_y && mY <= ent_nm_y + CHAR_HEIGHT)
 		{
 			ModEntity(mX, mY);
 		}
@@ -29,9 +31,9 @@ bool CApp::EventNPCedit(int mX, int mY)
 
 	// Click is on "NPC Tables" button. This displays a prompt to change entity tables,
 	// and the function within the loop performs a change if requested.
-	if (mX >= TBL_CHG_BUTTON_X && mX <= TBL_CHG_BUTTON_X + SWITCH_SIZE)
+	if (mX >= but_nset::x && mX <= but_nset::x + SWITCH_SIZE)
 	{
-		if (mY >= TBL_CHG_BUTTON_Y && mY <= TBL_CHG_BUTTON_Y + SWITCH_SIZE)
+		if (mY >= but_nset::y && mY <= but_nset::y + SWITCH_SIZE)
 		{
 			int New_Table = CUI::UIControl.OnEntity(Map_Renderer, Map_Interface);
 			if (New_Table >= 0)
@@ -48,9 +50,9 @@ void CApp::ModEntity(int mX, int mY)
 {
 	// This region is over the leftward arrow next to "COMMON" or "UNIQUE"
 	// This changes the NPC_ID, which changes the active entity being placed.
-	if (mX >= TABL_NAME_X - ARROW_SIZE - SYM_SPACING && mX <= TABL_NAME_X - SYM_SPACING)
+	if (mX >= tbl_nm_x - ARROW_SIZE - SYM_SPACING && mX <= tbl_nm_x - SYM_SPACING)
 	{
-		if (mY >= TABL_NAME_Y && mY <= TABL_NAME_Y + ARROW_SIZE)
+		if (mY >= tbl_nm_y && mY <= tbl_nm_y + ARROW_SIZE)
 		{
 			if (CEntityEdit::NPCControl.NPC_ID != 0)
 				--CEntityEdit::NPCControl.NPC_ID;
@@ -58,9 +60,9 @@ void CApp::ModEntity(int mX, int mY)
 		}
 	}
 	// This region is between the arrows enclosing "COMMON" or "UNIQUE"
-	if (mX >= TABL_NAME_X && mX <= TABL_NAME_X + tabl_name_W)
+	if (mX >= tbl_nm_x && mX <= tbl_nm_x + tabl_name_W)
 	{
-		if (mY >= TABL_NAME_Y && mY <= TABL_NAME_Y + CHAR_HEIGHT)
+		if (mY >= tbl_nm_y && mY <= tbl_nm_y + CHAR_HEIGHT)
 		{
 			if (CEntityEdit::NPCControl.UseCommon) CEntityEdit::NPCControl.UseCommon = false;
 			else CEntityEdit::NPCControl.UseCommon = true;
@@ -69,9 +71,9 @@ void CApp::ModEntity(int mX, int mY)
 		}
 	}
 	// This region is over the rightward arrow next to "COMMON" or "UNIQUE"
-	if (mX >= TABL_NAME_X + tabl_name_W + SYM_SPACING && mX <= TABL_NAME_X + tabl_name_W + SYM_SPACING + ARROW_SIZE)
+	if (mX >= tbl_nm_x + tabl_name_W + SYM_SPACING && mX <= tbl_nm_x + tabl_name_W + SYM_SPACING + ARROW_SIZE)
 	{
-		if (mY >= TABL_NAME_Y && mY <= TABL_NAME_Y + CHAR_HEIGHT)
+		if (mY >= tbl_nm_y && mY <= tbl_nm_y + CHAR_HEIGHT)
 		{
 			if (CEntityEdit::NPCControl.UseCommon)
 			{

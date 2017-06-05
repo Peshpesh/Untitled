@@ -14,8 +14,6 @@
 #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
 #include "Define.h"
-#include "DefineNpcEdit.h"
-#include "DefineScnEdit.h"
 
 enum
 {
@@ -29,51 +27,50 @@ namespace map_editor
 {
   namespace but_tset
   {
-    const unsigned short w = 50;              // #define TS_CHG_BUT_W 50     // Change Tileset button info
-    const unsigned short h = 40;              // #define TS_CHG_BUT_H 40     //
-    const short x = 665;              // #define TS_CHG_BUT_X 665    //
-    const short y = 50;              // #define TS_CHG_BUT_Y 50     //
+    const unsigned short w = 50;    // Change Tileset button info
+    const unsigned short h = 40;    //
+    const short x = 665;            //
+    const short y = 50;             //
   }
   namespace but_t
   {
-    const short bg_x = 260;      // #define BTILE_CHG_BUT_W 100   // Change Tile button info
-    const short bg_y = 510;      // #define BTILE_CHG_BUT_H 20   //
-    const short bg_w = 100;      // #define BTILE_CHG_BUT_X 260  //
-    const short bg_h = 20;      // #define BTILE_CHG_BUT_Y 510  //
-    const short fg_x = 260;      // #define FTILE_CHG_BUT_W 100   // Change Tile button info
-    const short fg_y = 540;      // #define FTILE_CHG_BUT_H 20   //
-    const short fg_w = 100;      // #define FTILE_CHG_BUT_X 260  //
-    const short fg_h = 20;      // #define FTILE_CHG_BUT_Y 540  //
+    const short bg_x = 260;   // Change Tile button info
+    const short bg_y = 510;   //
+    const short bg_w = 100;   //
+    const short bg_h = 20;    //
+    const short fg_x = 260;   // Change Tile button info
+    const short fg_y = 540;   //
+    const short fg_w = 100;   //
+    const short fg_h = 20;    //
   }
   namespace disp_t
   {
-    const short bgfg_x = 674;        // #define disp_t::bgfg_x 674     // Displayed (current) Tile info
-    const short bgfg_y = 140;        // #define disp_t::bgfg_y 140     //
-    // const short DISP_NAME_OFFSET = 10; //UGH        // #define DISP_NAME_OFFSET 10
+    const short bgfg_x = 674;         // Displayed (current) Tile info
+    const short bgfg_y = 140;         //
     const short name_offset = 10;
-    const short bg_x = 674;        // #define disp_t::bg_x 674    // "..." background Tile info
-    const short bg_y = 210;        // #define disp_t::bg_y 210    //
-    const short fg_x = 674;        // #define disp_t::fg_x 674    // "..." foreground Tile info
-    const short fg_y = 280;        // #define disp_t::fg_y 280    //
-    const short ty_x = 674;        // #define disp_t::ty_x 674     // "..." Tile type info
-    const short ty_y = 350;        // #define disp_t::ty_y 350     //
-    const short co_x = 674;        // #define disp_t::co_x 674    // "..." Tile collision info
-    const short co_y = 420;        // #define disp_t::co_y 420    //
+    const short bg_x = 674;           // "..." background Tile info
+    const short bg_y = 210;           //
+    const short fg_x = 674;           // "..." foreground Tile info
+    const short fg_y = 280;           //
+    const short ty_x = 674;           // "..." Tile type info
+    const short ty_y = 350;           //
+    const short co_x = 674;           // "..." Tile collision info
+    const short co_y = 420;           //
   }
   namespace opac    // opacity meters
   {
-    const short w = 90;    // #define opac::ty_y 390
-    const short h = 4;    // #define opac::co_y 460
-    const short x = 645;    // #define opac::x 645
-    const short ty_y = 390;    // #define opac::w 90
-    const short co_y = 460;    // #define opac::h 4
+    const short w = 90;
+    const short h = 4;
+    const short x = 645;
+    const short ty_y = 390;
+    const short co_y = 460;
   }
   namespace rm_flip
   {
-    const short bg_x = 642;              // #define rm_flip::bg_x 642
-    const short bg_y = 192;              // #define rm_flip::bg_y 192
-    const short fg_x = 642;              // #define rm_flip::fg_x 642
-    const short fg_y = 262;              // #define rm_flip::fg_y 262
+    const short bg_x = 642;
+    const short bg_y = 192;
+    const short fg_x = 642;
+    const short fg_y = 262;
     const short ty_x = 642;
     const short ty_y = 332;
     const short co_x = 642;
@@ -81,34 +78,54 @@ namespace map_editor
   }
   namespace view_flip
   {
-    // #define view_flip::x 20
-    // #define view_flip::y 510
     const short x = 20;
     const short y = 510;
   }
   namespace place_flip
   {
-    // #define place_flip::x 150
-    // #define place_flip::y 495
     const short x = 150;
     const short y = 495;
   }
   // Map Editor definitions (application static)
-                // #define dummy_x 522
-                // #define dummy_y 0
   const unsigned short dummy_x = 522;
   const unsigned short dummy_y = 0;
 }
 
-// namespace npc_editor
-// {
-//
-// }
-//
-// namespace scn_editor
-// {
-//
-// }
+namespace npc_editor
+{
+  const short tbl_nm_x = 250;
+  const short tbl_nm_y = 490;
+  const short ent_nm_x = 250;
+  const short ent_nm_y = 510;
+  namespace but_nset
+  {
+    const short x = 5;
+    const short y = 540;
+    const short w = 75;
+    const short h = 50;
+  }
+  // Entity Editor definitions (application static)
+}
+
+namespace scn_editor
+{
+  namespace popt_flip
+  {
+    const short x = 20;
+    const short y = 510;
+  }
+  namespace dp_adj
+  {
+    const short l_x = 150;
+    const short c_x = 250;
+    const short u_x = 350;
+    const short y = 530;
+  }
+  const short scn_nm_x = 250;
+  const short scn_nm_y = 490;
+  const unsigned short scn_nm_w = 160;
+  // Scenery Editor definitions (application static)
+}
 
 class CApp : public CEvent {
 private:

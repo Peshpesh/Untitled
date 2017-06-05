@@ -1,5 +1,7 @@
 #include "CApp.h"
 
+using namespace scn_editor;
+
 bool CApp::EventSCNedit(int mX, int mY)
 {
 	if (mX < WWIDTH && mY < WHEIGHT)
@@ -18,25 +20,25 @@ bool CApp::EventSCNedit(int mX, int mY)
 	}
 	else
 	{
-		if (mY >= SCN_NAME_Y && mY < SCN_NAME_Y + CHAR_HEIGHT)
+		if (mY >= scn_nm_y && mY < scn_nm_y + CHAR_HEIGHT)
 		{
 			// The Y-range overlaps the scenery name display.
 			// A click may have been over the arrow keys to change scenery.
 			if (CheckSCNchange(mX)) return true;
 		}
-		if (mY >= DEPTH_COMBO_Y - (ARROW_SIZE + SYM_SPACING) && mY < DEPTH_COMBO_Y - SYM_SPACING)
+		if (mY >= dp_adj::y - (ARROW_SIZE + SYM_SPACING) && mY < dp_adj::y - SYM_SPACING)
 		{
 			// The Y-range satisfied overlaps the up-arrow buttons.
 			// We check to see if any of those buttons were pressed.
 			if (CheckZup(mX)) return true;
 		}
-		if (mY >= DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING && mY < DEPTH_COMBO_Y + CHAR_HEIGHT + SYM_SPACING + ARROW_SIZE)
+		if (mY >= dp_adj::y + CHAR_HEIGHT + SYM_SPACING && mY < dp_adj::y + CHAR_HEIGHT + SYM_SPACING + ARROW_SIZE)
 		{
 			// The Y-range satisfied overlaps the down-arrow buttons.
 			// We check to see if any of those buttons were pressed.
 			if (CheckZdown(mX)) return true;
 		}
-		if (mX >= SWITCHLIST_X && mX < SWITCHLIST_X + SWITCH_SIZE)
+		if (mX >= popt_flip::x && mX < popt_flip::x + SWITCH_SIZE)
 		{
 			// The X-range satisfied overlaps the scenery switches.
 			// We check to see if any switches were flipped.
@@ -48,27 +50,27 @@ bool CApp::EventSCNedit(int mX, int mY)
 
 bool CApp::CheckZup(const int& mX)
 {
-	if (mX >= DEPTH_COMBO_X && mX < DEPTH_COMBO_X + (Z_PRECISION * CHAR_WIDTH))
+	if (mX >= dp_adj::c_x && mX < dp_adj::c_x + (Z_PRECISION * CHAR_WIDTH))
 	{
 		// ... middle up arrows pressed
-		float Z_inc = GetZincrement(mX, DEPTH_COMBO_X);
+		float Z_inc = GetZincrement(mX, dp_adj::c_x);
 		CSceneryEdit::ScnControl.Z += Z_inc;
 		return true;
 	}
 	if (Active_Mod == REMOVE_SCENE)
 	{
-		if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+		if (mX >= dp_adj::l_x && mX < dp_adj::l_x + (Z_PRECISION * CHAR_WIDTH))
 		{
 			// ... left up arrows pressed
-			float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
+			float Z_inc = GetZincrement(mX, dp_adj::l_x);
 			if (CSceneryEdit::ScnControl.Zl + Z_inc < CSceneryEdit::ScnControl.Zu)
 				CSceneryEdit::ScnControl.Zl += Z_inc;
 			return true;
 		}
-		if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
+		if (mX >= dp_adj::u_x && mX < dp_adj::u_x + (Z_PRECISION * CHAR_WIDTH))
 		{
 			// ... right up arrows pressed
-			float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
+			float Z_inc = GetZincrement(mX, dp_adj::u_x);
 			CSceneryEdit::ScnControl.Zu += Z_inc;
 			return true;
 		}
@@ -78,26 +80,26 @@ bool CApp::CheckZup(const int& mX)
 
 bool CApp::CheckZdown(const int& mX)
 {
-	if (mX >= DEPTH_COMBO_X && mX < DEPTH_COMBO_X + (Z_PRECISION * CHAR_WIDTH))
+	if (mX >= dp_adj::c_x && mX < dp_adj::c_x + (Z_PRECISION * CHAR_WIDTH))
 	{
 		// ... middle dw arrows pressed
-		float Z_inc = GetZincrement(mX, DEPTH_COMBO_X);
+		float Z_inc = GetZincrement(mX, dp_adj::c_x);
 		if (CSceneryEdit::ScnControl.Z > Z_inc) CSceneryEdit::ScnControl.Z -= Z_inc;
 		return true;
 	}
 	if (Active_Mod == REMOVE_SCENE)
 	{
-		if (mX >= DEPTH_LOWER_X && mX < DEPTH_LOWER_X + (Z_PRECISION * CHAR_WIDTH))
+		if (mX >= dp_adj::l_x && mX < dp_adj::l_x + (Z_PRECISION * CHAR_WIDTH))
 		{
 			// ... left dw arrows pressed
-			float Z_inc = GetZincrement(mX, DEPTH_LOWER_X);
+			float Z_inc = GetZincrement(mX, dp_adj::l_x);
 			if (CSceneryEdit::ScnControl.Zl > Z_inc) CSceneryEdit::ScnControl.Zl -= Z_inc;
 			return true;
 		}
-		if (mX >= DEPTH_UPPER_X && mX < DEPTH_UPPER_X + (Z_PRECISION * CHAR_WIDTH))
+		if (mX >= dp_adj::u_x && mX < dp_adj::u_x + (Z_PRECISION * CHAR_WIDTH))
 		{
 			// ... right dw arrows pressed
-			float Z_inc = GetZincrement(mX, DEPTH_UPPER_X);
+			float Z_inc = GetZincrement(mX, dp_adj::u_x);
 			if (CSceneryEdit::ScnControl.Zu - Z_inc > CSceneryEdit::ScnControl.Zl)
 				CSceneryEdit::ScnControl.Zu -= Z_inc;
 			return true;
@@ -119,8 +121,8 @@ float CApp::GetZincrement(const int& mX, const int& Xo)
 
 bool CApp::CheckSCNswitch(const int& mY)
 {
-	int Yi = SWITCHLIST_Y;
-	int Yf = SWITCHLIST_Y + SWITCH_SIZE;
+	int Yi = popt_flip::y;
+	int Yf = popt_flip::y + SWITCH_SIZE;
 	if (mY >= Yi && mY < Yf)
 	{
 		if (!CSceneryEdit::ScnControl.hori_repeat) CSceneryEdit::ScnControl.hori_repeat = true;
@@ -148,13 +150,13 @@ bool CApp::CheckSCNswitch(const int& mY)
 
 bool CApp::CheckSCNchange(const int& mX)
 {
-	if (mX >= SCN_NAME_X - ARROW_SIZE - SYM_SPACING && mX < SCN_NAME_X - SYM_SPACING)
+	if (mX >= scn_nm_x - ARROW_SIZE - SYM_SPACING && mX < scn_nm_x - SYM_SPACING)
 	{
 		// left arrow clicked...
 		CSceneryEdit::ScnControl.SwitchObj(CSceneryEdit::ScnControl.scn_ID - 1);
 		return true;
 	}
-	if (mX >= SCN_NAME_X + SCN_NAME_W + SYM_SPACING && mX < SCN_NAME_X + SCN_NAME_W + SYM_SPACING + ARROW_SIZE)
+	if (mX >= scn_nm_x + scn_nm_w + SYM_SPACING && mX < scn_nm_x + scn_nm_w + SYM_SPACING + ARROW_SIZE)
 	{
 		// right arrow clicked...
 		CSceneryEdit::ScnControl.SwitchObj(CSceneryEdit::ScnControl.scn_ID + 1);
