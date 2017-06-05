@@ -1,9 +1,12 @@
-#ifndef _CCHANGETILE_H_
-#define _CCHANGETILE_H_
+#ifndef _C_CHANGETILE_H_
+#define _C_CHANGETILE_H_
 
 #include "CSurface.h"
 #include "Font.h"
 #include "Define.h"
+
+// Change-tile interface definitions
+#define MAX_TILES 8
 
 class CChangeTile {
 private:

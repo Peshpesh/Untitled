@@ -49,11 +49,11 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 		int aX, aY;
 		if (W > MAX_TILES)	// Left/right arrows are worth processing
 		{
-			aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
+			aY = dispY + (dispH / 2) - (ARR_SZ / 2);
 			if (X > 0) 							// Left arrow?
 			{
-				aX = dispX - (ARROW_SIZE + SYM_SPACING);
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				aX = dispX - (ARR_SZ + SYM_SPACING);
+				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 				{
 					X--;
 					return retval;
@@ -62,7 +62,7 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 			if (X < W - MAX_TILES)	// Right arrow?
 			{
 				aX = dispX + dispW + SYM_SPACING;
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 				{
 					X++;
 					return retval;
@@ -71,11 +71,11 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 		}
 		if (H > MAX_TILES)	// Up/down arrows are worth processing
 		{
-			aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
+			aX = dispX + (dispW / 2) - (ARR_SZ / 2);
 			if (Y > 0) 							// Up arrow?
 			{
-				aY = dispY - (ARROW_SIZE + SYM_SPACING);
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				aY = dispY - (ARR_SZ + SYM_SPACING);
+				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 				{
 					Y--;
 					return retval;
@@ -84,7 +84,7 @@ bool CChangeTile::OnLClick(int mX, int mY, int& ID)
 			if (Y < H - MAX_TILES)	// Down arrow?
 			{
 				aY = dispY + dispH + SYM_SPACING;
-				if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 				{
 					Y++;
 					return retval;
@@ -137,13 +137,13 @@ bool CChangeTile::RenderTileset(SDL_Renderer* renderer, SDL_Texture* interface, 
 
 	// Render clickable arrows
 	int aX, aY;
-	aX = dispX - (ARROW_SIZE + SYM_SPACING);
-	aY = dispY + (dispH / 2) - (ARROW_SIZE / 2);
+	aX = dispX - (ARR_SZ + SYM_SPACING);
+	aY = dispY + (dispH / 2) - (ARR_SZ / 2);
 	RenderArrow(renderer, interface, aX, aY, 'L', mX, mY);
 	aX = dispX + dispW + SYM_SPACING;
 	RenderArrow(renderer, interface, aX, aY, 'R', mX, mY);
-	aX = dispX + (dispW / 2) - (ARROW_SIZE / 2);
-	aY = dispY - (ARROW_SIZE + SYM_SPACING);
+	aX = dispX + (dispW / 2) - (ARR_SZ / 2);
+	aY = dispY - (ARR_SZ + SYM_SPACING);
 	RenderArrow(renderer, interface, aX, aY, 'U', mX, mY);
 	aY = dispY + dispH + SYM_SPACING;
 	RenderArrow(renderer, interface, aX, aY, 'D', mX, mY);
@@ -163,61 +163,61 @@ bool CChangeTile::RenderArrow(SDL_Renderer* renderer, SDL_Texture* interface, co
 	{
 		if (X > 0)
 		{
-			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARRGLOW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARR_GL_X, L_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 			else
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARR_X, L_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 		}
-		else retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARRGRAY_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, L_ARR_GR_X, L_ARR_Y, ARR_SZ, ARR_SZ);
 	}
 	else if (direction == 'R')
 	{
 		if (X < W - MAX_TILES)
 		{
-			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARRGLOW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARR_GL_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 			else
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 		}
-		else retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARRGRAY_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, R_ARR_GR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 	}
 	else if (direction == 'U')
 	{
 		if (Y > 0)
 		{
-			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARRGLOW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARR_GL_X, U_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 			else
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARROW_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARR_X, U_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 		}
-		else retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARRGRAY_XO, U_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, U_ARR_GR_X, U_ARR_Y, ARR_SZ, ARR_SZ);
 	}
 	else if (direction == 'D')
 	{
 		if (Y < H - MAX_TILES)
 		{
-			if (mX >= aX && mX < aX + ARROW_SIZE && mY >= aY && mY < aY + ARROW_SIZE)
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARRGLOW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARR_GL_X, D_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 			else
 			{
-				retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARROW_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+				retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARR_X, D_ARR_Y, ARR_SZ, ARR_SZ);
 			}
 		}
-		else retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARRGRAY_XO, D_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+		else retval = CSurface::OnDraw(renderer, interface, aX, aY, D_ARR_GR_X, D_ARR_Y, ARR_SZ, ARR_SZ);
 	}
 	return retval;
 }

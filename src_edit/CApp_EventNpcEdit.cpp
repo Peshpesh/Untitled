@@ -21,7 +21,7 @@ bool CApp::EventNPCedit(int mX, int mY)
 	}
 
 	// Changing Entity (or Type)
-	if (mX >= tbl_nm_x - ARROW_SIZE - SYM_SPACING && mX <= tbl_nm_x + tabl_name_W + ARROW_SIZE + SYM_SPACING)
+	if (mX >= tbl_nm_x - ARR_SZ - SYM_SPACING && mX <= tbl_nm_x + tabl_name_W + ARR_SZ + SYM_SPACING)
 	{
 		if (mY >= tbl_nm_y && mY <= ent_nm_y + CHAR_HEIGHT)
 		{
@@ -50,9 +50,9 @@ void CApp::ModEntity(int mX, int mY)
 {
 	// This region is over the leftward arrow next to "COMMON" or "UNIQUE"
 	// This changes the NPC_ID, which changes the active entity being placed.
-	if (mX >= tbl_nm_x - ARROW_SIZE - SYM_SPACING && mX <= tbl_nm_x - SYM_SPACING)
+	if (mX >= tbl_nm_x - ARR_SZ - SYM_SPACING && mX <= tbl_nm_x - SYM_SPACING)
 	{
-		if (mY >= tbl_nm_y && mY <= tbl_nm_y + ARROW_SIZE)
+		if (mY >= tbl_nm_y && mY <= tbl_nm_y + ARR_SZ)
 		{
 			if (CEntityEdit::NPCControl.NPC_ID != 0)
 				--CEntityEdit::NPCControl.NPC_ID;
@@ -71,7 +71,7 @@ void CApp::ModEntity(int mX, int mY)
 		}
 	}
 	// This region is over the rightward arrow next to "COMMON" or "UNIQUE"
-	if (mX >= tbl_nm_x + tabl_name_W + SYM_SPACING && mX <= tbl_nm_x + tabl_name_W + SYM_SPACING + ARROW_SIZE)
+	if (mX >= tbl_nm_x + tabl_name_W + SYM_SPACING && mX <= tbl_nm_x + tabl_name_W + SYM_SPACING + ARR_SZ)
 	{
 		if (mY >= tbl_nm_y && mY <= tbl_nm_y + CHAR_HEIGHT)
 		{

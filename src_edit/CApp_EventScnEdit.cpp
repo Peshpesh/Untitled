@@ -26,13 +26,13 @@ bool CApp::EventSCNedit(int mX, int mY)
 			// A click may have been over the arrow keys to change scenery.
 			if (CheckSCNchange(mX)) return true;
 		}
-		if (mY >= dp_adj::y - (ARROW_SIZE + SYM_SPACING) && mY < dp_adj::y - SYM_SPACING)
+		if (mY >= dp_adj::y - (ARR_SZ + SYM_SPACING) && mY < dp_adj::y - SYM_SPACING)
 		{
 			// The Y-range satisfied overlaps the up-arrow buttons.
 			// We check to see if any of those buttons were pressed.
 			if (CheckZup(mX)) return true;
 		}
-		if (mY >= dp_adj::y + CHAR_HEIGHT + SYM_SPACING && mY < dp_adj::y + CHAR_HEIGHT + SYM_SPACING + ARROW_SIZE)
+		if (mY >= dp_adj::y + CHAR_HEIGHT + SYM_SPACING && mY < dp_adj::y + CHAR_HEIGHT + SYM_SPACING + ARR_SZ)
 		{
 			// The Y-range satisfied overlaps the down-arrow buttons.
 			// We check to see if any of those buttons were pressed.
@@ -150,13 +150,13 @@ bool CApp::CheckSCNswitch(const int& mY)
 
 bool CApp::CheckSCNchange(const int& mX)
 {
-	if (mX >= scn_nm_x - ARROW_SIZE - SYM_SPACING && mX < scn_nm_x - SYM_SPACING)
+	if (mX >= scn_nm_x - ARR_SZ - SYM_SPACING && mX < scn_nm_x - SYM_SPACING)
 	{
 		// left arrow clicked...
 		CSceneryEdit::ScnControl.SwitchObj(CSceneryEdit::ScnControl.scn_ID - 1);
 		return true;
 	}
-	if (mX >= scn_nm_x + scn_nm_w + SYM_SPACING && mX < scn_nm_x + scn_nm_w + SYM_SPACING + ARROW_SIZE)
+	if (mX >= scn_nm_x + scn_nm_w + SYM_SPACING && mX < scn_nm_x + scn_nm_w + SYM_SPACING + ARR_SZ)
 	{
 		// right arrow clicked...
 		CSceneryEdit::ScnControl.SwitchObj(CSceneryEdit::ScnControl.scn_ID + 1);

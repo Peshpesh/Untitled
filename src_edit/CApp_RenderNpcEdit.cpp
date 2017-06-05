@@ -14,8 +14,8 @@ bool CApp::RenderNPCedit()
 	else
 		tabl_name_W = Font::Write(Map_Renderer, FONT_DEFAULT, "UNIQUE", tbl_nm_x, tbl_nm_y);
 
-	CSurface::OnDraw(Map_Renderer, Map_Interface, tbl_nm_x - ARROW_SIZE - 5, tbl_nm_y, L_ARROW_XO, L_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
-	CSurface::OnDraw(Map_Renderer, Map_Interface, tbl_nm_x + tabl_name_W + 5, tbl_nm_y, R_ARROW_XO, R_ARROW_YO, ARROW_SIZE, ARROW_SIZE);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, tbl_nm_x - ARR_SZ - 5, tbl_nm_y, L_ARR_X, L_ARR_Y, ARR_SZ, ARR_SZ);
+	CSurface::OnDraw(Map_Renderer, Map_Interface, tbl_nm_x + tabl_name_W + 5, tbl_nm_y, R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 
 	// Draw working NPC name
 	if (!CEntityEdit::NPCControl.CWrite_Name(Map_Renderer, FONT_DEFAULT, ent_nm_x, ent_nm_y))

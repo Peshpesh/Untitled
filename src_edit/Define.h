@@ -41,28 +41,23 @@
 
 
 // Directional Arrow definitions (image static)
-#define L_ARROW_XO 2
-#define R_ARROW_XO 17
-#define U_ARROW_XO 17
-#define D_ARROW_XO 2
-#define L_ARROW_YO 365
-#define R_ARROW_YO 365
-#define U_ARROW_YO 350
-#define D_ARROW_YO 350
-#define L_ARRGLOW_XO 32
-#define R_ARRGLOW_XO 47
-#define U_ARRGLOW_XO 47
-#define D_ARRGLOW_XO 32
-#define L_ARRGRAY_XO 62
-#define R_ARRGRAY_XO 77
-#define U_ARRGRAY_XO 77
-#define D_ARRGRAY_XO 62
-#define ARROW_SIZE 15
-
-
-// Change-tile interface definitions
-#define MAX_TILES 8
-
+#define L_ARR_X 2
+#define R_ARR_X 17
+#define U_ARR_X 17
+#define D_ARR_X 2
+#define L_ARR_Y 365
+#define R_ARR_Y 365
+#define U_ARR_Y 350
+#define D_ARR_Y 350
+#define L_ARR_GL_X 32
+#define R_ARR_GL_X 47
+#define U_ARR_GL_X 47
+#define D_ARR_GL_X 32
+#define L_ARR_GR_X 62
+#define R_ARR_GR_X 77
+#define U_ARR_GR_X 77
+#define D_ARR_GR_X 62
+#define ARR_SZ 15
 
 // Other definitions
 #define CANCEL_X 620
