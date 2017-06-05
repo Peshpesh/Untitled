@@ -47,32 +47,33 @@ namespace map_editor
   }
   namespace disp_t
   {
-    const short bgfg_x = 674;        // #define DISP_TILE_X 674     // Displayed (current) Tile info
-    const short bgfg_y = 140;        // #define DISP_TILE_Y 140     //
-            // #define DISP_NAME_OFFSET 10
-    const short bg_x = 674;        // #define DISP_BTILE_X 674    // "..." background Tile info
-    const short bg_y = 210;        // #define DISP_BTILE_Y 210    //
-    const short fg_x = 674;        // #define DISP_FTILE_X 674    // "..." foreground Tile info
-    const short fg_y = 280;        // #define DISP_FTILE_Y 280    //
-    const short ty_x = 674;        // #define DISP_TYPE_X 674     // "..." Tile type info
-    const short ty_y = 350;        // #define DISP_TYPE_Y 350     //
-    const short co_x = 674;        // #define DISP_COLL_X 674    // "..." Tile collision info
-    const short co_y = 420;        // #define DISP_COLL_Y 420    //
+    const short bgfg_x = 674;        // #define disp_t::bgfg_x 674     // Displayed (current) Tile info
+    const short bgfg_y = 140;        // #define disp_t::bgfg_y 140     //
+    // const short DISP_NAME_OFFSET = 10; //UGH        // #define DISP_NAME_OFFSET 10
+    const short name_offset = 10;
+    const short bg_x = 674;        // #define disp_t::bg_x 674    // "..." background Tile info
+    const short bg_y = 210;        // #define disp_t::bg_y 210    //
+    const short fg_x = 674;        // #define disp_t::fg_x 674    // "..." foreground Tile info
+    const short fg_y = 280;        // #define disp_t::fg_y 280    //
+    const short ty_x = 674;        // #define disp_t::ty_x 674     // "..." Tile type info
+    const short ty_y = 350;        // #define disp_t::ty_y 350     //
+    const short co_x = 674;        // #define disp_t::co_x 674    // "..." Tile collision info
+    const short co_y = 420;        // #define disp_t::co_y 420    //
   }
-  namespace opac
+  namespace opac    // opacity meters
   {
-    const short w = 90;    // #define ALPH_TYPE_Y 390
-    const short h = 4;    // #define ALPH_COLL_Y 460
-    const short x = 645;    // #define ALPH_BAR_X 645
-    const short ty_y = 390;    // #define ALPH_BAR_W 90
-    const short co_y = 460;    // #define ALPH_BAR_H 4
+    const short w = 90;    // #define opac::ty_y 390
+    const short h = 4;    // #define opac::co_y 460
+    const short x = 645;    // #define opac::x 645
+    const short ty_y = 390;    // #define opac::w 90
+    const short co_y = 460;    // #define opac::h 4
   }
-  namespace erase_flip
+  namespace rm_flip
   {
-    const short bg_x = 642;              // #define BACK_SWIT_X 642
-    const short bg_y = 192;              // #define BACK_SWIT_Y 192
-    const short fg_x = 642;              // #define FORE_SWIT_X 642
-    const short fg_y = 262;              // #define FORE_SWIT_Y 262
+    const short bg_x = 642;              // #define rm_flip::bg_x 642
+    const short bg_y = 192;              // #define rm_flip::bg_y 192
+    const short fg_x = 642;              // #define rm_flip::fg_x 642
+    const short fg_y = 262;              // #define rm_flip::fg_y 262
     const short ty_x = 642;
     const short ty_y = 332;
     const short co_x = 642;
@@ -80,21 +81,21 @@ namespace map_editor
   }
   namespace view_flip
   {
-    // #define VIEWOPTS_X 20
-    // #define VIEWOPTS_Y 510
+    // #define view_flip::x 20
+    // #define view_flip::y 510
     const short x = 20;
     const short y = 510;
   }
   namespace place_flip
   {
-    // #define TILEOPTS_X 150
-    // #define TILEOPTS_Y 495
+    // #define place_flip::x 150
+    // #define place_flip::y 495
     const short x = 150;
     const short y = 495;
   }
   // Map Editor definitions (application static)
-                // #define DUMMY_ENTITY_X 522
-                // #define DUMMY_ENTITY_Y 0
+                // #define dummy_x 522
+                // #define dummy_y 0
   const unsigned short dummy_x = 522;
   const unsigned short dummy_y = 0;
 }
