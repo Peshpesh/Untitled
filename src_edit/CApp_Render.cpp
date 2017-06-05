@@ -11,7 +11,7 @@ void CApp::OnRender()
 	{
 		float Z = CSceneryEdit::SceneList[s_i]->Z;
 		if (Z <= 1.0f) break;
-		if (Active_Mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
+		if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
 		{
 			CSceneryEdit::SceneList[s_i]->OnRender(Map_Renderer);
 		}
@@ -20,9 +20,9 @@ void CApp::OnRender()
 
 	// Draw the working area
 	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
-	if (View_Fore) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	if (View_Type) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	if (View_Coll) CArea::AreaControl.OnRenderColl(Map_Renderer, Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (show_fg) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
+	if (show_ty) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (show_co) CArea::AreaControl.OnRenderColl(Map_Renderer, Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
 	// Draw the entities in the area
 	for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
@@ -34,7 +34,7 @@ void CApp::OnRender()
 	while (s_i < CSceneryEdit::SceneList.size())
 	{
 		float Z = CSceneryEdit::SceneList[s_i]->Z;
-		if (Active_Mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
+		if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
 		{
 			CSceneryEdit::SceneList[s_i]->OnRender(Map_Renderer);
 		}
@@ -45,7 +45,7 @@ void CApp::OnRender()
 	CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
 	CSurface::OnDraw(Map_Renderer, Map_Interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
 
-	switch (Active_Mod)
+	switch (active_mod)
 	{
 	case MODIFY_MAP:
 	{
@@ -55,11 +55,11 @@ void CApp::OnRender()
 	default: break;
 	}
 
-	if (Active_Mod == MODIFY_NPC || Active_Mod == REMOVE_NPC)
+	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
 	{
 		RenderNPCedit();
 	}
-	else if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
+	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
 		RenderSCNedit();
 	}
@@ -80,9 +80,9 @@ void CApp::OnRender()
 		tY -= TILE_SIZE;
 	}
 
-	if (Interrupt ^ INTRPT_NONE)
+	if (intrpt ^ INTRPT_NONE)
 	{
-		if (Interrupt & INTRPT_CH_BTILE || Interrupt & INTRPT_CH_FTILE)
+		if (intrpt & INTRPT_CH_BTILE || intrpt & INTRPT_CH_FTILE)
 		{
 			PickTile.RenderTileset(Map_Renderer, Map_Interface, Main_Tileset, mouseX, mouseY);
 		}

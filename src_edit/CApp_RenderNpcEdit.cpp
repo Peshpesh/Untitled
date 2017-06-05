@@ -4,7 +4,7 @@ using namespace npc_editor;
 
 bool CApp::RenderNPCedit()
 {
-	if (Active_Mod == MODIFY_NPC)
+	if (active_mod == MODIFY_NPC)
 		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 33, WWIDTH - 100 - 32, WHEIGHT - 67, 100, 33);
 	else
 		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 33, WWIDTH - 100 - 32, WHEIGHT - 134, 100, 33);

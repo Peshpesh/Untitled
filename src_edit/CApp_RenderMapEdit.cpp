@@ -24,17 +24,17 @@ bool CApp::RenderMAPside()
 		using namespace disp_t;
 		// Draw complete active tile with dummy entity & outline (for depth clarity)
 		Font::CenterWrite(Map_Renderer, FONT_MINI, "WORKING TILE", EWIDTH - 50, bgfg_y - name_offset);
-		if (!NoBack)
+		if (!no_bg)
 		{
 			CSurface::OnDraw(Map_Renderer, Main_Tileset, bgfg_x, bgfg_y,
-				(Current_Tile % TilesetWidth) * TILE_SIZE, (Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+				(active_bg % tset_w) * TILE_SIZE, (active_bg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 		}
 		CSurface::OnDraw(Map_Renderer, Map_Interface, bgfg_x, bgfg_y,
 			dummy_x, dummy_y, TILE_SIZE, TILE_SIZE);
-		if (!NoFore)
+		if (!no_fg)
 		{
 			CSurface::OnDraw(Map_Renderer, Main_Tileset, bgfg_x, bgfg_y,
-				(Current_Fore % TilesetWidth) * TILE_SIZE, (Current_Fore / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+				(active_fg % tset_w) * TILE_SIZE, (active_fg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 		}
 		CSurface::OnDraw(Map_Renderer, Map_Interface, bgfg_x, bgfg_y,
 			dummy_x, dummy_y + TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -42,8 +42,8 @@ bool CApp::RenderMAPside()
 		// Draws active background tile
 		Font::CenterWrite(Map_Renderer, FONT_MINI, "BACKGROUND", EWIDTH - 50, bg_y - name_offset);
 		CSurface::OnDraw(Map_Renderer, Main_Tileset, bg_x, bg_y,
-			(Current_Tile % TilesetWidth) * TILE_SIZE,
-			(Current_Tile / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+			(active_bg % tset_w) * TILE_SIZE,
+			(active_bg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 		// Draws background tile arrows
 		CSurface::OnDraw(Map_Renderer, Map_Interface, bg_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -56,8 +56,8 @@ bool CApp::RenderMAPside()
 
 		// Draws active foreground tile
 		CSurface::OnDraw(Map_Renderer, Main_Tileset, fg_x, fg_y,
-			(Current_Fore % TilesetWidth) * TILE_SIZE,
-			(Current_Fore / TilesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+			(active_fg % tset_w) * TILE_SIZE,
+			(active_fg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 		// Draws foreground tile arrows
 		CSurface::OnDraw(Map_Renderer, Map_Interface, fg_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -67,8 +67,8 @@ bool CApp::RenderMAPside()
 
 		// Draws active tile type
 		CSurface::OnDraw(Map_Renderer, Type_Tileset, ty_x, ty_y,
-			(Current_Type % TypesetWidth) * TILE_SIZE,
-			(Current_Type / TypesetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+			(active_type % type_w) * TILE_SIZE,
+			(active_type / type_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 		// Draws tile type arrows
 		CSurface::OnDraw(Map_Renderer, Map_Interface, ty_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -77,7 +77,7 @@ bool CApp::RenderMAPside()
 			ty_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 
 		// Writes out the active type
-		switch (Current_Type)
+		switch (active_type)
 		{
 			case TILE_TYPE_NORMAL: Font::CenterWrite(Map_Renderer, FONT_MINI, "NORMAL", EWIDTH - 50, ty_y - name_offset); break;
 			case TILE_TYPE_WATER: Font::CenterWrite(Map_Renderer, FONT_MINI, "WATER", EWIDTH - 50, ty_y - name_offset); break;
@@ -88,8 +88,8 @@ bool CApp::RenderMAPside()
 
 		// Draws active collision tile
 		CSurface::OnDraw(Map_Renderer, Coll_Tileset, co_x, co_y,
-			(Current_Coll % CollsetWidth) * TILE_SIZE,
-			(Current_Coll / CollsetWidth) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+			(active_coll % coll_w) * TILE_SIZE,
+			(active_coll / coll_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 		// Draws collision tile arrows
 		CSurface::OnDraw(Map_Renderer, Map_Interface, co_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -98,7 +98,7 @@ bool CApp::RenderMAPside()
 				co_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 
 		// Writes out the active collision type
-		switch (Current_Coll)
+		switch (active_coll)
 		{
 			case SOLID_NONE: Font::CenterWrite(Map_Renderer, FONT_MINI, "NONE", EWIDTH - 50, co_y - name_offset); break;
 			case SOLID_ALL: Font::CenterWrite(Map_Renderer, FONT_MINI, "FULL", EWIDTH - 50, co_y - name_offset); break;
@@ -115,18 +115,18 @@ bool CApp::RenderMAPside()
 	}
 	{
 		using namespace rm_flip;
-		CSurface::OnDraw(Map_Renderer, Map_Interface, bg_x, bg_y, SWITCH_XO, NoBack ? OFF_SWITCH_YO : ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-		CSurface::OnDraw(Map_Renderer, Map_Interface, fg_x, fg_y, SWITCH_XO, NoFore ? OFF_SWITCH_YO : ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, bg_x, bg_y, SWITCH_XO, no_bg ? OFF_SWITCH_YO : ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+		CSurface::OnDraw(Map_Renderer, Map_Interface, fg_x, fg_y, SWITCH_XO, no_fg ? OFF_SWITCH_YO : ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
 	{
 		using namespace opac;
 		// Draw an opacity meter for Type overlay
-		int opacity_W = w * ((double)(Type_Alpha) / (double)(MAX_RGBA));
+		int opacity_W = w * ((double)(type_alpha) / (double)(MAX_RGBA));
 		CSurface::OnDraw(Map_Renderer, Map_Interface, x, ty_y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, h);
 		CSurface::OnDraw(Map_Renderer, Map_Interface, x + opacity_W, ty_y, DARKS_X, COLOR_PURE_Y, 1, 1, w - opacity_W, h);
 
 		// Draw an opacity meter for Collision overlay
-		opacity_W = w * ((double)(Coll_Alpha) / (double)(MAX_RGBA));
+		opacity_W = w * ((double)(coll_alpha) / (double)(MAX_RGBA));
 		CSurface::OnDraw(Map_Renderer, Map_Interface, x, co_y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, h);
 		CSurface::OnDraw(Map_Renderer, Map_Interface, x + opacity_W, co_y, DARKS_X, COLOR_PURE_Y, 1, 1, w - opacity_W, h);
 	}
@@ -135,12 +135,12 @@ bool CApp::RenderMAPside()
 
 bool CApp::RenderMAPbottom()
 {
-	bool hl = !(Interrupt ^ INTRPT_NONE);
+	bool hl = !(intrpt ^ INTRPT_NONE);
 	int colX;
 	{
 		using namespace but_t;
 		// render button for picking background tiles
-		if (Interrupt & INTRPT_CH_BTILE) colX = RED_X;
+		if (intrpt & INTRPT_CH_BTILE) colX = RED_X;
 		else colX = BLUE_X;
 
 		if (!RenderButton(bg_x, bg_y, bg_w, bg_h, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
@@ -148,7 +148,7 @@ bool CApp::RenderMAPbottom()
 		Font::CenterWrite(Map_Renderer, FONT_MINI, "CHANGE B.TILE", bg_x + (bg_w / 2), bg_y + (bg_h / 2));
 
 		// render button for picking foreground tiles
-		if (Interrupt & INTRPT_CH_FTILE) colX = RED_X;
+		if (intrpt & INTRPT_CH_FTILE) colX = RED_X;
 		else colX = BLUE_X;
 		if (!RenderButton(fg_x, fg_y, fg_w, fg_h, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
 			return false;
@@ -163,7 +163,7 @@ bool CApp::RenderMAPbottom()
 		Font::Write(Map_Renderer, FONT_MINI, "Overlay Switches", x, sY + tY_offset);
 		sY += SWITCH_SIZE + SYM_SPACING;
 		Font::Write(Map_Renderer, FONT_MINI, "Foreground", x + tX_offset, sY + tY_offset);
-		if (View_Fore)
+		if (show_fg)
 		{
 			CSurface::OnDraw(Map_Renderer, Map_Interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 		}
@@ -173,7 +173,7 @@ bool CApp::RenderMAPbottom()
 		}
 		sY += SWITCH_SIZE + SYM_SPACING;
 		Font::Write(Map_Renderer, FONT_MINI, "Tile Types", x + tX_offset, sY + tY_offset);
-		if (View_Type)
+		if (show_ty)
 		{
 			CSurface::OnDraw(Map_Renderer, Map_Interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 		}
@@ -183,7 +183,7 @@ bool CApp::RenderMAPbottom()
 		}
 		sY += SWITCH_SIZE + SYM_SPACING;
 		Font::Write(Map_Renderer, FONT_MINI, "Collisions", x + tX_offset, sY + tY_offset);
-		if (View_Coll)
+		if (show_co)
 		{
 			CSurface::OnDraw(Map_Renderer, Map_Interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 		}

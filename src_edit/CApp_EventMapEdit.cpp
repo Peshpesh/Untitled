@@ -13,7 +13,7 @@ bool CApp::EventMAPedit(int mX, int mY)
 			if ((Main_Tileset = CUI::UIControl.OnChange(Map_Renderer, Map_Interface, Tileset_Path)) != NULL)
 			{
 				CArea::AreaControl.ChangeSet(Main_Tileset);
-				Current_Tile = 0;
+				active_bg = 0;
 				QueryTileset();
 				return true;
 			}
@@ -26,8 +26,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mY >= but_t::bg_y && mY < but_t::bg_y + but_t::bg_h)
 		{
-			PickTile.Init(TilesetWidth, TilesetHeight);
-			Interrupt = INTRPT_CH_BTILE;
+			PickTile.Init(tset_w, tset_h);
+			intrpt = INTRPT_CH_BTILE;
 			return true;
 		}
 	}
@@ -35,8 +35,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mY >= but_t::fg_y && mY < but_t::fg_y + but_t::fg_h)
 		{
-			PickTile.Init(TilesetWidth, TilesetHeight);
-			Interrupt = INTRPT_CH_FTILE;
+			PickTile.Init(tset_w, tset_h);
+			intrpt = INTRPT_CH_FTILE;
 			return true;
 		}
 	}
@@ -48,15 +48,15 @@ bool CApp::EventMAPedit(int mX, int mY)
 		// Left Arrow
 		if (mX >= disp_t::bg_x - TILE_SIZE && mX < disp_t::bg_x)
 		{
-				if (Current_Tile != 0) Current_Tile -= 1;
-				else Current_Tile = (TilesetWidth * TilesetHeight) - 1;
+				if (active_bg != 0) active_bg -= 1;
+				else active_bg = (tset_w * tset_h) - 1;
 				return true;
 		}
 		// Right Arrow
 		if (mX >= disp_t::bg_x + TILE_SIZE && mX < disp_t::bg_x + (TILE_SIZE * 2))
 		{
-				if (Current_Tile != (TilesetWidth * TilesetHeight) - 1) Current_Tile += 1;
-				else Current_Tile = 0;
+				if (active_bg != (tset_w * tset_h) - 1) active_bg += 1;
+				else active_bg = 0;
 				return true;
 		}
 	}
@@ -67,8 +67,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mX >= rm_flip::bg_x && mX < rm_flip::bg_x + SWITCH_SIZE)
 		{
-			if (!NoBack) NoBack = true;
-			else NoBack = false;
+			if (!no_bg) no_bg = true;
+			else no_bg = false;
 			return true;
 		}
 	}
@@ -79,8 +79,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 	{
 		if (mX >= rm_flip::fg_x && mX < rm_flip::fg_x + SWITCH_SIZE)
 		{
-			if (NoFore) NoFore = false;
-			else NoFore = true;
+			if (no_fg) no_fg = false;
+			else no_fg = true;
 			return true;
 		}
 	}
@@ -92,15 +92,15 @@ bool CApp::EventMAPedit(int mX, int mY)
 		// Left Arrow
 		if (mX >= disp_t::fg_x - TILE_SIZE && mX < disp_t::fg_x)
 		{
-				if (Current_Fore != 0) Current_Fore -= 1;
-				else Current_Fore = (TilesetWidth * TilesetHeight) - 1;
+				if (active_fg != 0) active_fg -= 1;
+				else active_fg = (tset_w * tset_h) - 1;
 				return true;
 		}
 		// Right Arrow
 		if (mX >= disp_t::fg_x + TILE_SIZE && mX < disp_t::fg_x + (TILE_SIZE * 2))
 		{
-				if (Current_Fore != (TilesetWidth * TilesetHeight) - 1) Current_Fore += 1;
-				else Current_Fore = 0;
+				if (active_fg != (tset_w * tset_h) - 1) active_fg += 1;
+				else active_fg = 0;
 				return true;
 		}
 	}
@@ -112,15 +112,15 @@ bool CApp::EventMAPedit(int mX, int mY)
 		// Left Arrow
 		if (mX >= disp_t::ty_x - TILE_SIZE && mX < disp_t::ty_x)
 		{
-				if (Current_Type != 0) Current_Type -= 1;
-				else Current_Type = TILE_TYPE_FIRE;
+				if (active_type != 0) active_type -= 1;
+				else active_type = TILE_TYPE_FIRE;
 				return true;
 		}
 		// Right Arrow
 		if (mX >= disp_t::ty_x + TILE_SIZE && mX < disp_t::ty_x + (TILE_SIZE * 2))
 		{
-				if (Current_Type != TILE_TYPE_FIRE) Current_Type += 1;
-				else Current_Type = 0;
+				if (active_type != TILE_TYPE_FIRE) active_type += 1;
+				else active_type = 0;
 				return true;
 		}
 	}
@@ -131,8 +131,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 		if (mX >= opac::x && mX < opac::x + opac::w)
 		{
 			double barfract = (double)(mX - opac::x) / (double)(opac::w - 1);
-			Type_Alpha = MAX_RGBA * barfract;
-			SDL_SetTextureAlphaMod(Type_Tileset, Type_Alpha);
+			type_alpha = MAX_RGBA * barfract;
+			SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
 			return true;
 		}
 	}
@@ -144,15 +144,15 @@ bool CApp::EventMAPedit(int mX, int mY)
 		// Left Arrow
 		if (mX >= disp_t::co_x - TILE_SIZE && mX < disp_t::co_x)
 		{
-				if (Current_Coll != 0) Current_Coll -= 1;
-				else Current_Coll = SOLID_A_ML_BR;
+				if (active_coll != 0) active_coll -= 1;
+				else active_coll = SOLID_A_ML_BR;
 				return true;
 		}
 		// Right Arrow
 		if (mX >= disp_t::co_x + TILE_SIZE && mX < disp_t::co_x + (TILE_SIZE * 2))
 		{
-				if (Current_Coll != SOLID_A_ML_BR) Current_Coll += 1;
-				else Current_Coll = 0;
+				if (active_coll != SOLID_A_ML_BR) active_coll += 1;
+				else active_coll = 0;
 				return true;
 		}
 	}
@@ -163,8 +163,8 @@ bool CApp::EventMAPedit(int mX, int mY)
 		if (mX >= opac::x && mX < opac::x + opac::w)
 		{
 			double barfract = (double)(mX - opac::x) / (double)(opac::w - 1);
-			Coll_Alpha = MAX_RGBA * barfract;
-			SDL_SetTextureAlphaMod(Coll_Tileset, Coll_Alpha);
+			coll_alpha = MAX_RGBA * barfract;
+			SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
 			return true;
 		}
 	}
@@ -176,24 +176,24 @@ bool CApp::EventMAPedit(int mX, int mY)
 		int Yf = view_flip::y + SWITCH_SIZE;
 		if (mY >= Yi && mY < Yf)
 		{
-			if (View_Fore) View_Fore = false;
-			else View_Fore = true;
+			if (show_fg) show_fg = false;
+			else show_fg = true;
 			return true;
 		}
 		Yi = Yf + SYM_SPACING;
 		Yf = Yi + SWITCH_SIZE;
 		if (mY >= Yi && mY < Yf)
 		{
-			if (View_Type) View_Type = false;
-			else View_Type = true;
+			if (show_ty) show_ty = false;
+			else show_ty = true;
 			return true;
 		}
 		Yi = Yf + SYM_SPACING;
 		Yf = Yi + SWITCH_SIZE;
 		if (mY >= Yi && mY < Yf)
 		{
-			if (View_Coll) View_Coll = false;
-			else View_Coll = true;
+			if (show_co) show_co = false;
+			else show_co = true;
 			return true;
 		}
 	}

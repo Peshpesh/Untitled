@@ -7,7 +7,7 @@ bool CApp::EventSCNedit(int mX, int mY)
 	if (mX < WWIDTH && mY < WHEIGHT)
 	{
 		// add or subtract scenery objects...
-		if (Active_Mod == MODIFY_SCENE)
+		if (active_mod == MODIFY_SCENE)
 		{
 			// add object
 			CSceneryEdit::ScnControl.AddObject(Map_Renderer, mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY());
@@ -57,7 +57,7 @@ bool CApp::CheckZup(const int& mX)
 		CSceneryEdit::ScnControl.Z += Z_inc;
 		return true;
 	}
-	if (Active_Mod == REMOVE_SCENE)
+	if (active_mod == REMOVE_SCENE)
 	{
 		if (mX >= dp_adj::l_x && mX < dp_adj::l_x + (Z_PRECISION * CHAR_WIDTH))
 		{
@@ -87,7 +87,7 @@ bool CApp::CheckZdown(const int& mX)
 		if (CSceneryEdit::ScnControl.Z > Z_inc) CSceneryEdit::ScnControl.Z -= Z_inc;
 		return true;
 	}
-	if (Active_Mod == REMOVE_SCENE)
+	if (active_mod == REMOVE_SCENE)
 	{
 		if (mX >= dp_adj::l_x && mX < dp_adj::l_x + (Z_PRECISION * CHAR_WIDTH))
 		{

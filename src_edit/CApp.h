@@ -17,9 +17,18 @@
 
 enum
 {
-  INTRPT_NONE = 0,								// No interrupt
-  INTRPT_CH_BTILE = 0x00000001,		// interrupt via bg tile change
-  INTRPT_CH_FTILE = 0x00000002,		// interrupt via fg tile change
+  MODIFY_MAP = 0,
+  MODIFY_NPC,
+  REMOVE_NPC,
+  MODIFY_SCENE,
+  REMOVE_SCENE,
+};
+
+enum
+{
+  INTRPT_NONE = 0,								// No intrpt
+  INTRPT_CH_BTILE = 0x00000001,		// intrpt via bg tile change
+  INTRPT_CH_FTILE = 0x00000002,		// intrpt via fg tile change
   INTRPT_MODEL = 0x00000004,
 };
 
@@ -138,17 +147,17 @@ private:
 
 	bool Running;
 
-	int Current_Tile;           // Active tileID
-	int Current_Fore;						// Active foreID
-	bool NoBack, NoFore;				// If true, use -1 as a tile number (render nothing)
-	int Current_Type;           // Active typeID
-	int Type_Alpha;							// Current Opacity of the Type overlay
-	int Current_Coll;					  // Active tile collision ID
-	int Coll_Alpha;						  // Current Opacity of the Collision overlay
-	bool View_Fore, View_Type, View_Coll;
-	int TypesetWidth, TypesetHeight;  	// Typeset texture dimension (tiles)
-	int CollsetWidth, CollsetHeight; 	// Collset texture dimension (tiles)
-	int TilesetWidth, TilesetHeight;  	// Tileset texture dimension (tiles)
+	int active_bg;           // Active tileID
+	int active_fg;						// Active foreID
+	bool no_bg, no_fg;				// If true, use -1 as a tile number (render nothing)
+	int active_type;           // Active typeID
+	int type_alpha;							// Current Opacity of the Type overlay
+	int active_coll;					  // Active tile collision ID
+	int coll_alpha;						  // Current Opacity of the Collision overlay
+	bool show_fg, show_ty, show_co;
+	int type_w, type_h;  	// Typeset texture dimension (tiles)
+	int coll_w, coll_h; 	// Collset texture dimension (tiles)
+	int tset_w, tset_h;  	// Tileset texture dimension (tiles)
 	CChangeTile PickTile;
 
 	int mouseX;
@@ -158,19 +167,10 @@ public:
 	char* Tileset_Path;
 	char* Entity_Path;
 
-	int Active_Mod;
-	int Interrupt;
+	int active_mod;
+	int intrpt;
   int OnTiles;
 	int tabl_name_W;
-
-	enum
-	{
-		MODIFY_MAP = 0,
-		MODIFY_NPC,
-		REMOVE_NPC,
-		MODIFY_SCENE,
-		REMOVE_SCENE,
-	};
 
 public:
 	CApp();

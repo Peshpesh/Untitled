@@ -67,8 +67,8 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
 
 	SDL_QueryTexture(Tex_Tileset, NULL, NULL, &PixWidth, &PixHeight);
 
-	int TilesetWidth  = PixWidth / TILE_SIZE; // tiles
-	int TilesetHeight = PixHeight / TILE_SIZE; // tiles
+	int tset_w  = PixWidth / TILE_SIZE; // tiles
+	int tset_h = PixHeight / TILE_SIZE; // tiles
 
 	int ID = 0;
 
@@ -79,13 +79,13 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
 			int TilesetX = 0, TilesetY = 0;
 			if (bg && TileList[ID].TileID >= 0)
 			{
-				TilesetX = (TileList[ID].TileID % TilesetWidth) * TILE_SIZE;
-				TilesetY = (TileList[ID].TileID / TilesetWidth) * TILE_SIZE;
+				TilesetX = (TileList[ID].TileID % tset_w) * TILE_SIZE;
+				TilesetY = (TileList[ID].TileID / tset_w) * TILE_SIZE;
 			}
 			else if (!bg && TileList[ID].ForeID >= 0)
 			{
-				TilesetX = (TileList[ID].ForeID % TilesetWidth) * TILE_SIZE;
-				TilesetY = (TileList[ID].ForeID / TilesetWidth) * TILE_SIZE;
+				TilesetX = (TileList[ID].ForeID % tset_w) * TILE_SIZE;
+				TilesetY = (TileList[ID].ForeID / tset_w) * TILE_SIZE;
 			}
 			else
 			{
@@ -109,8 +109,8 @@ void CMap::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, 
 
 	SDL_QueryTexture(tileset, NULL, NULL, &PixWidth, &PixHeight);
 
-	int TilesetWidth = PixWidth / TILE_SIZE; // tiles
-	int TilesetHeight = PixHeight / TILE_SIZE; // tiles
+	int tset_w = PixWidth / TILE_SIZE; // tiles
+	int tset_h = PixHeight / TILE_SIZE; // tiles
 
 	int ID = 0;
 
@@ -120,8 +120,8 @@ void CMap::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, 
 		{
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			int TilesetX = (TileList[ID].TypeID % TilesetWidth) * TILE_SIZE;
-			int TilesetY = (TileList[ID].TypeID / TilesetWidth) * TILE_SIZE;
+			int TilesetX = (TileList[ID].TypeID % tset_w) * TILE_SIZE;
+			int TilesetY = (TileList[ID].TypeID / tset_w) * TILE_SIZE;
 			CSurface::OnDraw(renderer, tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
@@ -137,8 +137,8 @@ void CMap::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, 
 
 	SDL_QueryTexture(tileset, NULL, NULL, &PixWidth, &PixHeight);
 
-	int TilesetWidth = PixWidth / TILE_SIZE; // tiles
-	int TilesetHeight = PixHeight / TILE_SIZE; // tiles
+	int tset_w = PixWidth / TILE_SIZE; // tiles
+	int tset_h = PixHeight / TILE_SIZE; // tiles
 
 	int ID = 0;
 
@@ -148,8 +148,8 @@ void CMap::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, 
 		{
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			int TilesetX = ((TileList[ID].CollID) % TilesetWidth) * TILE_SIZE;
-			int TilesetY = ((TileList[ID].CollID) / TilesetWidth) * TILE_SIZE;
+			int TilesetX = ((TileList[ID].CollID) % tset_w) * TILE_SIZE;
+			int TilesetY = ((TileList[ID].CollID) / tset_w) * TILE_SIZE;
 			CSurface::OnDraw(renderer, tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}

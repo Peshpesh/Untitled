@@ -11,20 +11,20 @@ CApp::CApp()
 	Main_Tileset = NULL;
 	mouseX = mouseY = 0;
 
-	Current_Tile = Current_Fore = 0;
-	NoBack = false;
-	NoFore = true;
-	View_Fore = View_Type = View_Coll = true;
-	Current_Type = TILE_TYPE_NORMAL;
-	Type_Alpha = 85;
-	Current_Coll = SOLID_NONE;
-	Coll_Alpha = 125;
-	TypesetWidth = TypesetHeight = TilesetWidth = TilesetHeight = 0;
+	active_bg = active_fg = 0;
+	no_bg = false;
+	no_fg = true;
+	show_fg = show_ty = show_co = true;
+	active_type = TILE_TYPE_NORMAL;
+	type_alpha = 85;
+	active_coll = SOLID_NONE;
+	coll_alpha = 125;
+	type_w = type_h = tset_w = tset_h = 0;
 	Tileset_Path = "../res/tile/default.png";
 	Entity_Path = "../res/npc/debug.png";
 
-	Active_Mod = MODIFY_MAP;
-	Interrupt = INTRPT_NONE;
+	active_mod = MODIFY_MAP;
+	intrpt = INTRPT_NONE;
 	OnTiles = ENABLE_BTILE | ENABLE_FTILE | ENABLE_TYPE | ENABLE_COLL;
 	tabl_name_W = 0;
 }

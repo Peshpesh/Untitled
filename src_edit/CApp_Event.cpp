@@ -73,21 +73,21 @@ void CApp::OnLButtonDown(int mX, int mY)
 {
 	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) return;
 
-	// Event is passed to interrupting prompts, if there are any
-	if (Interrupt & ~INTRPT_NONE)
+	// Event is passed to intrpting prompts, if there are any
+	if (intrpt & ~INTRPT_NONE)
 	{
-		if (Interrupt & INTRPT_CH_BTILE)
+		if (intrpt & INTRPT_CH_BTILE)
 		{
-			if (PickTile.OnLClick(mX, mY, Current_Tile)) Interrupt = INTRPT_NONE;
+			if (PickTile.OnLClick(mX, mY, active_bg)) intrpt = INTRPT_NONE;
 		}
-		if (Interrupt & INTRPT_CH_FTILE)
+		if (intrpt & INTRPT_CH_FTILE)
 		{
-			if (PickTile.OnLClick(mX, mY, Current_Fore)) Interrupt = INTRPT_NONE;
+			if (PickTile.OnLClick(mX, mY, active_fg)) intrpt = INTRPT_NONE;
 		}
 		return;
 	}
 
-	// Clicks on permanently-placed options buttons (independent of Active_Mod)
+	// Clicks on permanently-placed options buttons (independent of active_mod)
 	if (mX >= PERM_OPTS_X && mX < PERM_OPTS_X + PERM_OPTS_W)
 	{
 		if (mY >= PERM_OPTS_Y && mY < PERM_OPTS_Y + PERM_OPTS_H)
@@ -97,12 +97,12 @@ void CApp::OnLButtonDown(int mX, int mY)
 		}
 	}
 
-	if (Active_Mod == MODIFY_NPC || Active_Mod == REMOVE_NPC)
+	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
 	{
 		// returns false if error...
 		EventNPCedit(mX, mY);
 	}
-	else if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
+	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
 		// returns false if error...
 		EventSCNedit(mX, mY);
@@ -120,7 +120,7 @@ void CApp::OnRButtonDown(int mX, int mY)
 
 	// If we're trying to do stuff with NPCs ... This places the NPC at the X, Y
 	// coordinates of the map tile clicked upon (good for doors, save points, etc.)
-	if (Active_Mod == MODIFY_NPC && mX < WWIDTH && mY < WHEIGHT)
+	if (active_mod == MODIFY_NPC && mX < WWIDTH && mY < WHEIGHT)
 	{
 		int Xo = mX + CCamera::CameraControl.GetX();
 		int Yo = mY + CCamera::CameraControl.GetY();
@@ -137,20 +137,20 @@ bool CApp::EventOPTS(int mX, int mY)
 	{
 		if (mY >= MAP_BUT_Y && mY < MAP_BUT_Y + EDIT_BUT_H)
 		{
-			Active_Mod = MODIFY_MAP;
+			active_mod = MODIFY_MAP;
 			return true;
 		}
 		if (mY >= NPC_BUT_Y && mY < NPC_BUT_Y + EDIT_BUT_H)
 		{
 			// Clicking "NPC" twice allows NPCs to be deleted.
-			if (Active_Mod == MODIFY_NPC) Active_Mod = REMOVE_NPC;
-			else Active_Mod = MODIFY_NPC;
+			if (active_mod == MODIFY_NPC) active_mod = REMOVE_NPC;
+			else active_mod = MODIFY_NPC;
 			return true;
 		}
 		if (mY >= SCN_BUT_Y && mY < SCN_BUT_Y + EDIT_BUT_H)
 		{
-			if (Active_Mod == MODIFY_SCENE) Active_Mod = REMOVE_SCENE;
-			else Active_Mod = MODIFY_SCENE;
+			if (active_mod == MODIFY_SCENE) active_mod = REMOVE_SCENE;
+			else active_mod = MODIFY_SCENE;
 			return true;
 		}
 	}
@@ -189,7 +189,7 @@ bool CApp::EventOPTS(int mX, int mY)
 			if (CIO::IOControl.OnLoad(Map_Renderer, Map_Interface, Tileset_Path))
 			{
 				Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer);
-				Current_Tile = Current_Type = 0;
+				active_bg = active_type = 0;
 
 				QueryTileset();
 				return true;

@@ -4,7 +4,7 @@ using namespace scn_editor;
 
 bool CApp::RenderSCNedit()
 {
-	if (Active_Mod == MODIFY_SCENE)
+	if (active_mod == MODIFY_SCENE)
 		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, WHEIGHT - 34, 100, 34);
 	else
 		CSurface::OnDraw(Map_Renderer, Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, 312, 100, 34);
@@ -36,7 +36,7 @@ bool CApp::RenderSCNdepth()
 		Xp += CHAR_WIDTH;
 		truncator /= 10;
 	}
-	if (Active_Mod == REMOVE_SCENE)
+	if (active_mod == REMOVE_SCENE)
 	{
 		truncator = Z_MAGNIFIER;
 		int Zl_magnified = CSceneryEdit::ScnControl.Zl * Z_MAGNIFIER;

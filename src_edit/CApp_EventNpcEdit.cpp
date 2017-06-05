@@ -7,13 +7,13 @@ bool CApp::EventNPCedit(int mX, int mY)
 	if (mX < WWIDTH && mY < WHEIGHT)
 	{
 		// If we're allowing NPC additions, this function does that
-		if (Active_Mod == MODIFY_NPC)
+		if (active_mod == MODIFY_NPC)
 		{
 			if (!AddEntity(mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY()))
 				OnExit();
 		}
 		// Attempt to remove an entity
-		if (Active_Mod == REMOVE_NPC)
+		if (active_mod == REMOVE_NPC)
 		{
 			// returns true if an entity was removed successfully
 			SubEntity(mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY());

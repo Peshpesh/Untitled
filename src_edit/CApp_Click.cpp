@@ -4,7 +4,7 @@ void CApp::OnClick()
 {
 	static int disable_init = 0;
 	static int disable_timer = 0;
-	if (Interrupt ^ INTRPT_NONE)
+	if (intrpt ^ INTRPT_NONE)
 	{
 		disable_init = SDL_GetTicks();
 		if (disable_timer <= 0)
@@ -27,11 +27,11 @@ void CApp::OnClick()
 			// Left-click hold will overwrite map tiles based on changing cursor position.
 			// Note that this function does not (and should not) apply to entities or
 			// scenery objects.
-			if (Active_Mod == MODIFY_MAP)
+			if (active_mod == MODIFY_MAP)
 			{
 				int mX = CCamera::CameraControl.GetX() + mouseX;
 				int mY = CCamera::CameraControl.GetY() + mouseY;
-				CArea::AreaControl.ChangeTile(mX, mY,	NoBack ? -1 : Current_Tile, NoFore ? -1 : Current_Fore, Current_Type, Current_Coll, OnTiles);
+				CArea::AreaControl.ChangeTile(mX, mY,	no_bg ? -1 : active_bg, no_fg ? -1 : active_fg, active_type, active_coll, OnTiles);
 			}
 		}
 	}

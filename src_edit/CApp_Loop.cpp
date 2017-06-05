@@ -27,7 +27,7 @@ void CApp::OnLoop()
 		mY = -404404;
 	}
 	// DEBUGGING
-	if (Active_Mod == MODIFY_SCENE || Active_Mod == REMOVE_SCENE)
+	if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
 		double trueX, trueY;
 		double rX = mX;
