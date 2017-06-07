@@ -1,4 +1,4 @@
-#include "Font.h"
+#include "CFont.h"
 
 Font Font::FontControl;
 

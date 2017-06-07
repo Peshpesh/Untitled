@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include "CEntity.h"
 #include "CEntityRes.h"
-#include "Font.h"
+#include "CFont.h"
 
 enum Tablename
 {

@@ -2,13 +2,16 @@
 #define _C_CHANGETILE_H_
 
 #include "CSurface.h"
-#include "Font.h"
+#include "CFont.h"
 #include "Define.h"
 
 // Change-tile interface definitions
 #define MAX_TILES 8
 
 class CChangeTile {
+public:
+	static CChangeTile PickTile;
+
 private:
 	// X: x-pos on tileset being viewed (tile coordinate)
 	// Y: y-pos on tileset being viewed (tile coordinate)

@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <cstring>
-#include "Font.h"
+#include "CFont.h"
 #include "Define.h"
 
 enum

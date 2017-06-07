@@ -2,7 +2,7 @@
 #define _CMENU_H_
 
 #include <vector>
-#include "Font.h"
+#include "CFont.h"
 #include "CConfig.h"
 
 class CMenu

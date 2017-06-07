@@ -33,12 +33,16 @@ ${SRCDIR}/CArea.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CChangeTile.cpp
 ${SRCDIR}/CConfig.cpp
+${SRCDIR}/CEditMap.cpp
+${SRCDIR}/CEditMap_Event.cpp
+${SRCDIR}/CEditMap_Render.cpp
 ${SRCDIR}/CEntity.cpp
 ${SRCDIR}/CEntityCol.cpp
 ${SRCDIR}/CEntityEdit.cpp
 ${SRCDIR}/CEntityInfo.cpp
 ${SRCDIR}/CEntityRes.cpp
 ${SRCDIR}/CEvent.cpp
+${SRCDIR}/CFont.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CIO.cpp
 ${SRCDIR}/CMap.cpp
@@ -50,7 +54,6 @@ ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CUI.cpp
-${SRCDIR}/Font.cpp
 )
 
 set(HEADER_FILES
@@ -60,10 +63,12 @@ ${SRCDIR}/CArea.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CChangeTile.h
 ${SRCDIR}/CConfig.h
+${SRCDIR}/CEditMap.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityEdit.h
 ${SRCDIR}/CEntityRes.h
 ${SRCDIR}/CEvent.h
+${SRCDIR}/CFont.h
 ${SRCDIR}/CFPS.h
 ${SRCDIR}/CIO.h
 ${SRCDIR}/CMap.h
@@ -76,7 +81,6 @@ ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CUI.h
 ${SRCDIR}/Define.h
-${SRCDIR}/Font.h
 )
 
 set(GCC_COVERAGE_LINK_FLAGS	"-mwindows")

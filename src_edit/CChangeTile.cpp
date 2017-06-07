@@ -1,5 +1,7 @@
 #include "CChangeTile.h"
 
+CChangeTile CChangeTile::PickTile;
+
 CChangeTile::CChangeTile()
 {
 	X = Y = W = H = 0;

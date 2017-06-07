@@ -1,5 +1,5 @@
-#ifndef _FONT_H_
-#define _FONT_H_
+#ifndef _C_FONT_H_
+#define _C_FONT_H_
 
 #include <SDL.h>
 #include <vector>

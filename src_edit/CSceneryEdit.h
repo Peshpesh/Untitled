@@ -4,7 +4,7 @@
 #include "CScenery.h"
 // #include "CME_Resource.h"
 #include "Define.h"
-#include "Font.h"
+#include "CFont.h"
 #include <cstring>
 #include <stdio.h>
 

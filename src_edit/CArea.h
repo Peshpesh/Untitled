@@ -1,5 +1,5 @@
-#ifndef _CAREA_H_
-#define _CAREA_H_
+#ifndef _C_AREA_H_
+#define _C_AREA_H_
 
 #include "CMap.h"
 

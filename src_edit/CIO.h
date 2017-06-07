@@ -6,7 +6,7 @@
 #include "CEvent.h"
 #include "CArea.h"
 #include "Define.h"
-#include "Font.h"
+#include "CFont.h"
 #include <cstring>
 #include "CSceneryEdit.h"
 

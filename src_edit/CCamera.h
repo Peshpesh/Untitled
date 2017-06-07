@@ -1,5 +1,5 @@
-#ifndef _CCAMERA_H_
-#define _CCAMERA_H_
+#ifndef _C_CAMERA_H_
+#define _C_CAMERA_H_
 
 #include <SDL.h>
 #include "Define.h"

@@ -79,6 +79,9 @@ bool CApp::OnInit()
 	if (CArea::AreaControl.OnLoad(Main_Tileset) == false)
 		return false;
 
+	if (CEditMap::MapEditor.OnInit(Map_Renderer) == false)
+		return false;
+
 	return true;
 }
 

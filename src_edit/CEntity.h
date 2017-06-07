@@ -1,5 +1,5 @@
-#ifndef _CENTITY_H_
-#define _CENTITY_H_
+#ifndef _C_ENTITY_H_
+#define _C_ENTITY_H_
 
 #include <vector>
 #include "CArea.h"

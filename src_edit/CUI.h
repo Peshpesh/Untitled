@@ -4,7 +4,7 @@
 #include "CSurface.h"
 #include "CEvent.h"
 #include "Define.h"
-#include "Font.h"
+#include "CFont.h"
 #include <vector>
 
 enum
