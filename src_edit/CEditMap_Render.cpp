@@ -15,10 +15,42 @@ bool CEditMap::RenderMap(SDL_Renderer* renderer)
 
 bool CEditMap::OnRender(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
 {
+	if (!RenderWkspc(renderer, interface, mX, mY)) return false;
   if (!RenderSidebar(renderer, interface, mX, mY)) return false;
   if (!RenderBottom(renderer, interface, mX, mY)) return false;
 
   return true;
+}
+
+bool CEditMap::RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
+{
+	int mapX = mX + CCamera::CameraControl.GetX();
+	int mapY = mY + CCamera::CameraControl.GetY();
+	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mapX / TILE_SIZE));
+	int tY = -CCamera::CameraControl.GetY() + (TILE_SIZE * (mapY / TILE_SIZE));
+	if (mapX < 0)
+	{
+		tX -= TILE_SIZE;
+	}
+	if (mapY < 0)
+	{
+		tY -= TILE_SIZE;
+	}
+
+	if (intrpt ^ INTRPT_NONE)
+	{
+		if (intrpt & INTRPT_CH_BTILE || intrpt & INTRPT_CH_FTILE)
+		{
+			CChangeTile::PickTile.RenderTileset(renderer, interface, Main_Tileset, mX, mY);
+		}
+	}
+	else
+	{
+		if (mX >= 0 && mX < WWIDTH && mY >= 0 && mY < WHEIGHT)
+		{
+			CSurface::OnDraw(renderer, interface, tX, tY, TILE_HILIGHT_X, TILE_HILIGHT_Y, TILE_SIZE, TILE_SIZE);
+		}
+	}
 }
 
 bool CEditMap::RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
@@ -149,12 +181,11 @@ bool CEditMap::RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, con
 bool CEditMap::RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
 {
   bool hl = !(bool)(intrpt);
-	int colX;
+	int colX = BLUE_X;
 	{
 		using namespace but_t;
 		// render button for picking background tiles
 		if (intrpt & INTRPT_CH_BTILE) colX = RED_X;
-		else colX = BLUE_X;
 
 		if (!RenderButton(renderer, interface, mX, mY, bg_x, bg_y, bg_w, bg_h, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
 			return false;
@@ -273,6 +304,36 @@ bool CEditMap::RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, cons
 		return false;
 	if (!CSurface::OnDraw(renderer, interface, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
 		return false;
+
+	return true;
+}
+
+
+bool CEditMap::RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* cursor, SDL_Rect* button, int bsiz, int colX, int colY, bool hl)
+{
+	bool but_glow = false;
+  if (hl)
+  {
+    if (cursor->x >= button->x && cursor->x < button->x + button->w)
+  	{
+  		if (cursor->y >= button->y && cursor->y < button->y + button->h)
+  		{
+  			but_glow = true;
+  		}
+  	}
+  }
+
+	SDL_Rect srcR;
+	srcR.x = DARKS_X;
+	srcR.y = COLOR_PURE_Y;
+	srcR.w = srcR.h = 1;
+	if (!CSurface::OnDraw(renderer, interface, &srcR, button))
+		return false;
+
+	// if (!CSurface::OnDraw(renderer, interface, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))
+	// 	return false;
+	// if (!CSurface::OnDraw(renderer, interface, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
+	// 	return false;
 
 	return true;
 }

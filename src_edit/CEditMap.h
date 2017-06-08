@@ -19,6 +19,7 @@ namespace map_editor
 {
   namespace but_tset
   {
+    // const SDL_Rect button_tset = {665, 50, 50, 40};
     const unsigned short w = 50;    // Change Tileset button info
     const unsigned short h = 40;    //
     const short x = 665;            //
@@ -26,6 +27,8 @@ namespace map_editor
   }
   namespace but_t
   {
+    // const SDL_Rect button_bg = {260, 510, 100, 20};
+    // const SDL_Rect button_fg = {260, 540, 100, 20};
     const short bg_x = 260;   // Change Tile button info
     const short bg_y = 510;   //
     const short bg_w = 100;   //
@@ -120,9 +123,11 @@ public:
 	bool OnEvent(int mX, int mY);
 
   bool OnRender(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
+  bool RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
   bool RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
   bool RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
   bool RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY, int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
+  bool RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* cursor, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
 };
 
 #endif

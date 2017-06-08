@@ -81,6 +81,8 @@ bool CSurface::OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, int X, int
 
 	DestR.x = X;
 	DestR.y = Y;
+	DestR.w = W;
+	DestR.h = H;
 
 	SDL_Rect SrcR;
 
@@ -88,9 +90,16 @@ bool CSurface::OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, int X, int
 	SrcR.y = Yo;
 	SrcR.w = Wo;
 	SrcR.h = Ho;
-	DestR.w = W;
-	DestR.h = H;
 
 	SDL_RenderCopy(Surf_Dest, Surf_Src, &SrcR, &DestR);
+	return true;
+}
+
+bool CSurface::OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, SDL_Rect* srcrect, SDL_Rect* dstrect)
+{
+	if (Surf_Dest == NULL || Surf_Src == NULL || srcrect == NULL || dstrect == NULL)
+		return false;
+
+	SDL_RenderCopy(Surf_Dest, Surf_Src, srcrect, dstrect);
 	return true;
 }

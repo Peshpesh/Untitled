@@ -19,10 +19,11 @@ void CApp::OnRender()
 	}
 
 	// Draw the working area
-	CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
-	if (show_fg) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	if (show_ty) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	if (show_co) CArea::AreaControl.OnRenderColl(Map_Renderer, Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	// CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+	// if (show_fg) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
+	// if (show_ty) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	// if (show_co) CArea::AreaControl.OnRenderColl(Map_Renderer, Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	CEditMap::MapEditor.RenderMap(Map_Renderer);
 
 	// Draw the entities in the area
 	for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
@@ -65,7 +66,8 @@ void CApp::OnRender()
 	}
 	else
 	{
-		RenderMAPedit();
+		// RenderMAPedit();
+		CEditMap::MapEditor.OnRender(Map_Renderer, Map_Interface, mouseX, mouseY);
 	}
 	int mX = mouseX + CCamera::CameraControl.GetX();
 	int mY = mouseY + CCamera::CameraControl.GetY();

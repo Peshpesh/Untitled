@@ -1,5 +1,5 @@
-#ifndef _CSURFACE_H_
-#define _CSURFACE_H_
+#ifndef _C_SURFACE_H_
+#define _C_SURFACE_H_
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -10,6 +10,7 @@ class CSurface
 		CSurface();
 
 	public:
+
 		static SDL_Texture* OnLoad(char const* File, SDL_Renderer *renderer);
 
 		static bool OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, int X, int Y);
@@ -39,6 +40,8 @@ class CSurface
 		* param H : destination area height
 		*/
 		static bool OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int Wo, int Ho, int W, int H);
+
+		static bool OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, SDL_Rect* srcrect, SDL_Rect* dstrect);
 
 };
 
