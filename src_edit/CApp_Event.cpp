@@ -74,18 +74,18 @@ void CApp::OnLButtonDown(int mX, int mY)
 	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) return;
 
 	// Event is passed to intrpting prompts, if there are any
-	if (intrpt & ~INTRPT_NONE)
-	{
-		if (intrpt & INTRPT_CH_BTILE)
-		{
-			if (PickTile.OnLClick(mX, mY, active_bg)) intrpt = INTRPT_NONE;
-		}
-		if (intrpt & INTRPT_CH_FTILE)
-		{
-			if (PickTile.OnLClick(mX, mY, active_fg)) intrpt = INTRPT_NONE;
-		}
-		return;
-	}
+	// if (intrpt & ~INTRPT_NONE)
+	// {
+	// 	if (intrpt & INTRPT_CH_BTILE)
+	// 	{
+	// 		if (PickTile.OnLClick(mX, mY, active_bg)) intrpt = INTRPT_NONE;
+	// 	}
+	// 	if (intrpt & INTRPT_CH_FTILE)
+	// 	{
+	// 		if (PickTile.OnLClick(mX, mY, active_fg)) intrpt = INTRPT_NONE;
+	// 	}
+	// 	return;
+	// }
 
 	// Clicks on permanently-placed options buttons (independent of active_mod)
 	if (mX >= PERM_OPTS_X && mX < PERM_OPTS_X + PERM_OPTS_W)
@@ -110,7 +110,8 @@ void CApp::OnLButtonDown(int mX, int mY)
 	else
 	{
 		// returns false if error...
-		EventMAPedit(mX, mY);
+		// EventMAPedit(mX, mY);
+		CEditMap::MapEditor.OnEvent(&mouse);
 	}
 }
 

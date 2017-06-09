@@ -162,6 +162,7 @@ private:
 	int tset_w, tset_h;  	// Tileset texture dimension (tiles)
 	CChangeTile PickTile;
 
+  SDL_Point mouse;
 	int mouseX;
 	int mouseY;
 

@@ -13,19 +13,19 @@ bool CEditMap::RenderMap(SDL_Renderer* renderer)
   return true;
 }
 
-bool CEditMap::OnRender(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
+bool CEditMap::OnRender(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse)
 {
-	if (!RenderWkspc(renderer, interface, mX, mY)) return false;
-  if (!RenderSidebar(renderer, interface, mX, mY)) return false;
-  if (!RenderBottom(renderer, interface, mX, mY)) return false;
+	if (!RenderWkspc(renderer, interface, mouse)) return false;
+  if (!RenderSidebar(renderer, interface, mouse)) return false;
+  if (!RenderBottom(renderer, interface, mouse)) return false;
 
   return true;
 }
 
-bool CEditMap::RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
+bool CEditMap::RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse)
 {
-	int mapX = mX + CCamera::CameraControl.GetX();
-	int mapY = mY + CCamera::CameraControl.GetY();
+	int mapX = mouse->x + CCamera::CameraControl.GetX();
+	int mapY = mouse->y + CCamera::CameraControl.GetY();
 	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mapX / TILE_SIZE));
 	int tY = -CCamera::CameraControl.GetY() + (TILE_SIZE * (mapY / TILE_SIZE));
 	if (mapX < 0)
@@ -41,24 +41,28 @@ bool CEditMap::RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, const
 	{
 		if (intrpt & INTRPT_CH_BTILE || intrpt & INTRPT_CH_FTILE)
 		{
-			CChangeTile::PickTile.RenderTileset(renderer, interface, Main_Tileset, mX, mY);
+			CChangeTile::PickTile.RenderTileset(renderer, interface, Main_Tileset, mouse->x, mouse->y);
 		}
 	}
 	else
 	{
-		if (mX >= 0 && mX < WWIDTH && mY >= 0 && mY < WHEIGHT)
+		if (mouse->x >= 0 && mouse->x < WWIDTH && mouse->y >= 0 && mouse->y < WHEIGHT)
 		{
 			CSurface::OnDraw(renderer, interface, tX, tY, TILE_HILIGHT_X, TILE_HILIGHT_Y, TILE_SIZE, TILE_SIZE);
 		}
 	}
+	return true;
 }
 
-bool CEditMap::RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
+bool CEditMap::RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse)
 {
   {
     using namespace but_tset;
     bool hl = !(bool)(intrpt);
-    if (!RenderButton(renderer, interface, mX, mY, x, y, w, h, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, hl))
+
+    // if (!RenderButton(renderer, interface, mouse, x, y, w, h, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, hl))
+		SDL_Rect dstrect = CSurface::getRect(x, y, w, h);
+		if (!RenderButton(renderer, interface, mouse, &dstrect, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, hl))
       return false;
 
     // Write a button name for changing a tileset
@@ -178,7 +182,7 @@ bool CEditMap::RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, con
   return true;
 }
 
-bool CEditMap::RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY)
+bool CEditMap::RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse)
 {
   bool hl = !(bool)(intrpt);
 	int colX = BLUE_X;
@@ -187,14 +191,17 @@ bool CEditMap::RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, cons
 		// render button for picking background tiles
 		if (intrpt & INTRPT_CH_BTILE) colX = RED_X;
 
-		if (!RenderButton(renderer, interface, mX, mY, bg_x, bg_y, bg_w, bg_h, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
+		SDL_Rect dstrect = CSurface::getRect(bg_x, bg_y, bg_w, bg_h);
+		if (!RenderButton(renderer, interface, mouse, &dstrect, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
 			return false;
 		Font::CenterWrite(renderer, FONT_MINI, "CHANGE B.TILE", bg_x + (bg_w / 2), bg_y + (bg_h / 2));
 
 		// render button for picking foreground tiles
 		if (intrpt & INTRPT_CH_FTILE) colX = RED_X;
 		else colX = BLUE_X;
-		if (!RenderButton(renderer, interface, mX, mY, fg_x, fg_y, fg_w, fg_h, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
+
+		dstrect = CSurface::getRect(fg_x, fg_y, fg_w, fg_h);
+		if (!RenderButton(renderer, interface, mouse, &dstrect, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
 			return false;
 		Font::CenterWrite(renderer, FONT_MINI, "CHANGE F.TILE", fg_x + (fg_w / 2), fg_y + (fg_h / 2));
 	}
@@ -285,49 +292,52 @@ bool CEditMap::RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, cons
   return true;
 }
 
-bool CEditMap::RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY,
-  int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl)
+// bool CEditMap::RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse,
+//   int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl)
+// {
+// 	bool but_glow = false;
+//   if (hl)
+//   {
+//     if (mouse->x >= X && mouse->x < X + W)
+//   	{
+//   		if (mouse->y >= Y && mouse->y < Y + H)
+//   		{
+//   			but_glow = true;
+//   		}
+//   	}
+//   }
+//
+// 	if (!CSurface::OnDraw(renderer, interface, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))
+// 		return false;
+// 	if (!CSurface::OnDraw(renderer, interface, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
+// 		return false;
+//
+// 	return true;
+// }
+
+
+bool CEditMap::RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl)
 {
 	bool but_glow = false;
   if (hl)
   {
-    if (mX >= X && mX < X + W)
+    if (mouse->x >= button->x && mouse->x < button->x + button->w)
   	{
-  		if (mY >= Y && mY < Y + H)
+  		if (mouse->y >= button->y && mouse->y < button->y + button->h)
   		{
   			but_glow = true;
   		}
   	}
   }
 
-	if (!CSurface::OnDraw(renderer, interface, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))
-		return false;
-	if (!CSurface::OnDraw(renderer, interface, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
-		return false;
-
-	return true;
-}
-
-
-bool CEditMap::RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* cursor, SDL_Rect* button, int bsiz, int colX, int colY, bool hl)
-{
-	bool but_glow = false;
-  if (hl)
-  {
-    if (cursor->x >= button->x && cursor->x < button->x + button->w)
-  	{
-  		if (cursor->y >= button->y && cursor->y < button->y + button->h)
-  		{
-  			but_glow = true;
-  		}
-  	}
-  }
-
-	SDL_Rect srcR;
-	srcR.x = DARKS_X;
-	srcR.y = COLOR_PURE_Y;
-	srcR.w = srcR.h = 1;
+	SDL_Rect srcR = CSurface::getRect(DARKS_X, COLOR_PURE_Y, 1, 1);
 	if (!CSurface::OnDraw(renderer, interface, &srcR, button))
+		return false;
+
+	srcR.x = colX;
+	srcR.y = colY - but_glow;
+	SDL_Rect dstR = CSurface::getRect(button->x + bsiz, button->y + bsiz, button->w - (bsiz * 2), button->h - (bsiz * 2));
+	if (!CSurface::OnDraw(renderer, interface, &srcR, &dstR))
 		return false;
 
 	// if (!CSurface::OnDraw(renderer, interface, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))

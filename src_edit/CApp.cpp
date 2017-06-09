@@ -10,6 +10,7 @@ CApp::CApp()
 	Coll_Tileset = NULL;
 	Main_Tileset = NULL;
 	mouseX = mouseY = 0;
+	mouse.x = mouse.y = 0;
 
 	active_bg = active_fg = 0;
 	no_bg = false;
@@ -55,7 +56,7 @@ int CApp::OnExecute()
 		}
 		SDL_PumpEvents();
 		OnMotion(state);    // For repeating user input (i.e. holding directional button)
-		OnClick();     // For holding a mouse button down
+		// OnClick();     // For holding a mouse button down
 		OnLoop();      // Perform necessary manipulations
 		OnRender();    // Render updated info
 	}

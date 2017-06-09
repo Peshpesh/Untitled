@@ -19,10 +19,6 @@ void CApp::OnRender()
 	}
 
 	// Draw the working area
-	// CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
-	// if (show_fg) CArea::AreaControl.OnRender(Map_Renderer, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	// if (show_ty) CArea::AreaControl.OnRenderType(Map_Renderer, Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	// if (show_co) CArea::AreaControl.OnRenderColl(Map_Renderer, Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 	CEditMap::MapEditor.RenderMap(Map_Renderer);
 
 	// Draw the entities in the area
@@ -66,35 +62,7 @@ void CApp::OnRender()
 	}
 	else
 	{
-		// RenderMAPedit();
-		CEditMap::MapEditor.OnRender(Map_Renderer, Map_Interface, mouseX, mouseY);
-	}
-	int mX = mouseX + CCamera::CameraControl.GetX();
-	int mY = mouseY + CCamera::CameraControl.GetY();
-	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mX / TILE_SIZE));
-	int tY = -CCamera::CameraControl.GetY() + (TILE_SIZE * (mY / TILE_SIZE));
-	if (mX < 0)
-	{
-		tX -= TILE_SIZE;
-	}
-	if (mY < 0)
-	{
-		tY -= TILE_SIZE;
-	}
-
-	if (intrpt ^ INTRPT_NONE)
-	{
-		if (intrpt & INTRPT_CH_BTILE || intrpt & INTRPT_CH_FTILE)
-		{
-			PickTile.RenderTileset(Map_Renderer, Map_Interface, Main_Tileset, mouseX, mouseY);
-		}
-	}
-	else
-	{
-		if (mouseX >= 0 && mouseX < WWIDTH && mouseY >= 0 && mouseY < WHEIGHT)
-		{
-			CSurface::OnDraw(Map_Renderer, Map_Interface, tX, tY, TILE_HILIGHT_X, TILE_HILIGHT_Y, TILE_SIZE, TILE_SIZE);
-		}
+		CEditMap::MapEditor.OnRender(Map_Renderer, Map_Interface, &mouse);
 	}
 
 	//	DEBUGGING

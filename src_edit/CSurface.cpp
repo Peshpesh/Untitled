@@ -103,3 +103,15 @@ bool CSurface::OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, SDL_Rect* 
 	SDL_RenderCopy(Surf_Dest, Surf_Src, srcrect, dstrect);
 	return true;
 }
+
+SDL_Rect CSurface::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H)
+{
+	SDL_Rect rect;
+
+	rect.x = X;
+	rect.y = Y;
+	rect.w = W;
+	rect.h = H;
+
+	return rect;
+}

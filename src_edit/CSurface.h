@@ -41,6 +41,8 @@ class CSurface
 		*/
 		static bool OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int Wo, int Ho, int W, int H);
 
+		static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
+
 		static bool OnDraw(SDL_Renderer* Surf_Dest, SDL_Texture* Surf_Src, SDL_Rect* srcrect, SDL_Rect* dstrect);
 
 };

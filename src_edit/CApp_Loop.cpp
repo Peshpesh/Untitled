@@ -5,6 +5,8 @@ void CApp::OnLoop()
 	int mX, mY;
 	int tX = 0, tY = 0;
 	SDL_GetMouseState(&mouseX, &mouseY);
+	mouse.x = mouseX;
+	mouse.y = mouseY;
 	if (mouseX < WWIDTH && mouseY < WHEIGHT && mouseX >= 0 && mouseY >= 0)
 	{
 		mX = mouseX + CCamera::CameraControl.GetX();

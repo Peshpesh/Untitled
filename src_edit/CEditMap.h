@@ -120,14 +120,28 @@ public:
 
   bool RenderMap(SDL_Renderer* renderer);
 
-	bool OnEvent(int mX, int mY);
+	// bool OnEvent(int mX, int mY);
+  bool OnEvent(SDL_Point* mouse);
+  bool handleInterr(SDL_Point* mouse);
+  bool handleNewTile(SDL_Point* mouse);
+  bool handleGetSet(SDL_Point* mouse);
+  bool handleGetTile(SDL_Point* mouse);
+  bool handleScroll_bg(SDL_Point* mouse);
+  bool handleScroll_fg(SDL_Point* mouse);
+  bool handleScroll_ty(SDL_Point* mouse);
+  bool handleScroll_co(SDL_Point* mouse);
+  bool handleRemove_bg(SDL_Point* mouse);
+  bool handleRemove_fg(SDL_Point* mouse);
+  bool handleOpac_ty(SDL_Point* mouse);
+  bool handleOpac_co(SDL_Point* mouse);
+  bool handleLayers(SDL_Point* mouse);
+  bool handlePlace(SDL_Point* mouse);
 
-  bool OnRender(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
-  bool RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
-  bool RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
-  bool RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY);
-  bool RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, const int& mX, const int& mY, int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
-  bool RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* cursor, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
+  bool OnRender(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
 };
 
 #endif
