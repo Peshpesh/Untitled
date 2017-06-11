@@ -120,8 +120,10 @@ public:
 
   bool RenderMap(SDL_Renderer* renderer);
 
-	// bool OnEvent(int mX, int mY);
+public:
   bool OnEvent(SDL_Point* mouse);
+
+private:
   bool handleInterr(SDL_Point* mouse);
   bool handleNewTile(SDL_Point* mouse);
   bool handleGetSet(SDL_Point* mouse);
@@ -137,10 +139,31 @@ public:
   bool handleLayers(SDL_Point* mouse);
   bool handlePlace(SDL_Point* mouse);
 
+public:
   bool OnRender(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+
+private:
   bool RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+
+private:
   bool RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButtonSet(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool drawActiveTile(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool drawActive_bg(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool drawActive_fg(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool drawActive_ty(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool drawActive_co(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool drawOpac_ty(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool drawOpac_co(SDL_Renderer* renderer, SDL_Texture* interface);
+
+private:
   bool RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButton_bg(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButton_fg(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool drawOverlayList(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool drawPlacementList(SDL_Renderer* renderer, SDL_Texture* interface);
+
+public:
   bool RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
 };
 
