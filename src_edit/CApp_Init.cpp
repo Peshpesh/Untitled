@@ -12,17 +12,17 @@ bool CApp::OnInit()
 		return false;
 	}
 
-	if ((Map_Renderer = SDL_CreateRenderer(Map_Display, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)) == NULL)
+	if (!CSurface::SurfControl.OnInit(Map_Display))
 	{
 		return false;
 	}
 
-	if ((Map_Interface = CSurface::OnLoad("../res_edit/interface_plain.png", Map_Renderer)) == NULL)
+	if ((Map_Interface = CSurface::OnLoad("../res_edit/interface_plain.png")) == NULL)
 	{
 		return false;
 	}
 
-	if ((Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer)) == NULL)
+	if ((Main_Tileset = CSurface::OnLoad(Tileset_Path)) == NULL)
 	{
 		return false;
 	}
@@ -33,7 +33,7 @@ bool CApp::OnInit()
 	tset_w = PixWidth / TILE_SIZE;
 	tset_h = PixHeight / TILE_SIZE;
 
-	if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png", Map_Renderer)) == NULL)
+	if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL)
 	{
 		return false;
 	}
@@ -44,7 +44,7 @@ bool CApp::OnInit()
 	type_w = PixWidth / TILE_SIZE;
 	type_h = PixHeight / TILE_SIZE;
 
-	if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png", Map_Renderer)) == NULL)
+	if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL)
 	{
 		return false;
 	}
@@ -55,17 +55,17 @@ bool CApp::OnInit()
 	coll_w = PixWidth / TILE_SIZE;
 	coll_h = PixHeight / TILE_SIZE;
 
-	if (!Font::FontControl.OnInit(Map_Renderer))
+	if (!Font::FontControl.OnInit())
 	{
 		return false;
 	}
 
-	if ((CEntityEdit::NPCControl.NPC_Tileset = CSurface::OnLoad(Entity_Path, Map_Renderer)) == NULL)
+	if ((CEntityEdit::NPCControl.NPC_Tileset = CSurface::OnLoad(Entity_Path)) == NULL)
 	{
 		return false;
 	}
 
-	if ((CEntityEdit::NPCControl.NPC_Common = CSurface::OnLoad("../res/npc/common.png", Map_Renderer)) == NULL)
+	if ((CEntityEdit::NPCControl.NPC_Common = CSurface::OnLoad("../res/npc/common.png")) == NULL)
 	{
 		return false;
 	}
@@ -79,7 +79,7 @@ bool CApp::OnInit()
 	if (CArea::AreaControl.OnLoad(Main_Tileset) == false)
 		return false;
 
-	if (CEditMap::MapEditor.OnInit(Map_Renderer) == false)
+	if (CEditMap::MapEditor.OnInit() == false)
 		return false;
 
 	return true;

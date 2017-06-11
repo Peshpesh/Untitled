@@ -31,7 +31,7 @@ public:
   *       object as default-style or derivative; and X, Y, and Z
   *       coordinates.
   */
-  static bool LoadScenery(char const* sceneryfile, SDL_Renderer* renderer);
+  static bool LoadScenery(char const* sceneryfile);
 
   static bool GetInfo(const int& ID, int& X, int& Y, int& W, int& H, int& MaxFrames);
 };

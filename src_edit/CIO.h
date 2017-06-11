@@ -28,8 +28,8 @@ private:
 public:
 	CIO();
 
-	char* OnSave(SDL_Renderer* renderer, SDL_Texture* map_ui);
-	bool OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath);
+	char* OnSave(SDL_Texture* map_ui);
+	bool OnLoad(SDL_Texture* map_ui, char* &setpath);
 
 	void OnEvent(SDL_Event* Event);
 

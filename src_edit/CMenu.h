@@ -36,7 +36,7 @@ public:
 
 	virtual int		GetResponse();
 
-	virtual void	OnRender(SDL_Renderer* renderer);
+	virtual void	OnRender();
 
 	virtual void	OnCleanup();
 };

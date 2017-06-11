@@ -73,20 +73,6 @@ void CApp::OnLButtonDown(int mX, int mY)
 {
 	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) return;
 
-	// Event is passed to intrpting prompts, if there are any
-	// if (intrpt & ~INTRPT_NONE)
-	// {
-	// 	if (intrpt & INTRPT_CH_BTILE)
-	// 	{
-	// 		if (PickTile.OnLClick(mX, mY, active_bg)) intrpt = INTRPT_NONE;
-	// 	}
-	// 	if (intrpt & INTRPT_CH_FTILE)
-	// 	{
-	// 		if (PickTile.OnLClick(mX, mY, active_fg)) intrpt = INTRPT_NONE;
-	// 	}
-	// 	return;
-	// }
-
 	// Clicks on permanently-placed options buttons (independent of active_mod)
 	if (mX >= PERM_OPTS_X && mX < PERM_OPTS_X + PERM_OPTS_W)
 	{
@@ -110,7 +96,6 @@ void CApp::OnLButtonDown(int mX, int mY)
 	else
 	{
 		// returns false if error...
-		// EventMAPedit(mX, mY);
 		CEditMap::MapEditor.OnEvent(&mouse);
 	}
 }
@@ -161,11 +146,11 @@ bool CApp::EventOPTS(int mX, int mY)
 	{
 		if (mY >= MODEL_BUT_Y && mY < MODEL_BUT_Y + MODEL_BUT_H)
 		{
-			CArea::AreaControl.ViewArea(Map_Renderer, Map_Interface);
-			SDL_RenderPresent(Map_Renderer);
-			SDL_Event Event;
-			SDL_WaitEvent(&Event);
-			SDL_WaitEvent(&Event);
+			// CArea::AreaControl.ViewArea(Map_Interface);
+			// SDL_RenderPresent(Map_Renderer);
+			// SDL_Event Event;
+			// SDL_WaitEvent(&Event);
+			// SDL_WaitEvent(&Event);
 			return true;
 		}
 	}
@@ -176,7 +161,7 @@ bool CApp::EventOPTS(int mX, int mY)
 		// Save maps and entities
 		if (mY >= SAVE_BUT_Y && mY < SAVE_BUT_Y + IO_BUT_H)
 		{
-			char* Filename = CIO::IOControl.OnSave(Map_Renderer, Map_Interface);
+			char* Filename = CIO::IOControl.OnSave(Map_Interface);
 			CArea::AreaControl.SaveArea(Filename, Tileset_Path);
 			CEntityEdit::NPCControl.SaveList(Filename);
 			CSceneryEdit::ScnControl.SaveScenery(Filename);
@@ -187,9 +172,9 @@ bool CApp::EventOPTS(int mX, int mY)
 		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
 		if (mY >= LOAD_BUT_Y && mY < LOAD_BUT_Y + IO_BUT_H)
 		{
-			if (CIO::IOControl.OnLoad(Map_Renderer, Map_Interface, Tileset_Path))
+			if (CIO::IOControl.OnLoad(Map_Interface, Tileset_Path))
 			{
-				Main_Tileset = CSurface::OnLoad(Tileset_Path, Map_Renderer);
+				Main_Tileset = CSurface::OnLoad(Tileset_Path);
 				active_bg = active_type = 0;
 
 				QueryTileset();

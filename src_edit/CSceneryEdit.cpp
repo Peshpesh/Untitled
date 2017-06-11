@@ -18,7 +18,7 @@ CSceneryEdit::CSceneryEdit()
   permanent = false;
 }
 
-bool CSceneryEdit::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
+bool CSceneryEdit::LoadScenery(char const* sceneryfile)
 {
   // NOTE: The local texture ID, or the texture ID relative to the
   // Z position of groups of textures, is meaningless in the scenery editor.
@@ -78,7 +78,7 @@ bool CSceneryEdit::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
     if (loc_ID == TexID_List.size())
     {
       // load texture, if not loaded
-      if (!AddTexture(renderer, t_ID)) return false;
+      if (!AddTexture(t_ID)) return false;
     }
 
     // dynamically create "new" object and insert into container
@@ -203,7 +203,7 @@ void CSceneryEdit::SubObject(const int& Xc, const int& Yc)
   }
 }
 
-void CSceneryEdit::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc)
+void CSceneryEdit::AddObject(const int& Xc, const int& Yc)
 {
   // convert relative X, Y to true coordinates
   double tX = 0.0;
@@ -236,7 +236,7 @@ void CSceneryEdit::AddObject(SDL_Renderer* renderer, const int& Xc, const int& Y
   if (loc_ID == CSceneryEdit::TexID_List.size())
   {
     // load texture, if not loaded
-    AddTexture(renderer, tex_ID);
+    AddTexture(tex_ID);
   }
 
   // locate index destination in scenery container based on Z
@@ -282,7 +282,7 @@ bool CSceneryEdit::GetObjInfo(const int& queryID, int& tex_ID)
   return retval;
 }
 
-bool CSceneryEdit::AddTexture(SDL_Renderer* renderer, const int& tex_ID)
+bool CSceneryEdit::AddTexture(const int& tex_ID)
 {
   bool retval = true;
   SDL_Texture* tmp_tex = NULL;
@@ -292,19 +292,19 @@ bool CSceneryEdit::AddTexture(SDL_Renderer* renderer, const int& tex_ID)
     case SCN_COSMO:
     {
       char TexFile[255] = "../res/scn/cosmic.png";
-      if ((tmp_tex = CSurface::OnLoad(TexFile, renderer)) == false) retval = false;
+      if ((tmp_tex = CSurface::OnLoad(TexFile)) == false) retval = false;
       break;
     }
     case SCN_ARCH:
     {
       char TexFile[255] = "../res/scn/arch.png";
-      if ((tmp_tex = CSurface::OnLoad(TexFile, renderer)) == false) retval = false;
+      if ((tmp_tex = CSurface::OnLoad(TexFile)) == false) retval = false;
       break;
     }
     case SCN_WATER:
     {
       char TexFile[255] = "../res/scn/water.png";
-      if ((tmp_tex = CSurface::OnLoad(TexFile, renderer)) == false) retval = false;
+      if ((tmp_tex = CSurface::OnLoad(TexFile)) == false) retval = false;
       break;
     }
     default: retval = false; break;
@@ -411,10 +411,8 @@ bool CSceneryEdit::SaveTexPaths(FILE* ofile)
   return true;
 }
 
-bool CSceneryEdit::RenderName(SDL_Renderer* renderer, const int& fontID, const int& Xo, const int& Yo)
+bool CSceneryEdit::RenderName(const int& fontID, const int& Xo, const int& Yo)
 {
-  if (renderer == NULL) return false;
-
   bool retval = true;
   char scnname[10];
   switch (scn_ID)
@@ -424,6 +422,6 @@ bool CSceneryEdit::RenderName(SDL_Renderer* renderer, const int& fontID, const i
     case WATERFALL: std::strcpy(scnname, "WATRFL"); break;
     default: retval = false; break;
   }
-  if (retval) Font::Write(renderer, fontID, scnname, Xo, Yo);
+  if (retval) Font::Write(fontID, scnname, Xo, Yo);
   return retval;
 }

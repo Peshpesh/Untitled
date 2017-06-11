@@ -32,16 +32,16 @@ public:
 public:
 	CEntityEdit();
 
-	bool CWrite_Name(SDL_Renderer* renderer, const int& fontID, int X, int Y);
+	bool CWrite_Name(const int& fontID, int X, int Y);
 
-	void CWrite_Common(SDL_Renderer* renderer, const int& fontID, int X, int Y);
-	void CWrite_Debug(SDL_Renderer* renderer, const int& fontID, int X, int Y);
+	void CWrite_Common(const int& fontID, int X, int Y);
+	void CWrite_Debug(const int& fontID, int X, int Y);
 
 	// Write out a list of entity information for the working area.
 	void SaveList(char const* filename);
 
 	// Load an existing list of entities for an area.
-	bool LoadList(char const* filename, SDL_Renderer* renderer);
+	bool LoadList(char const* filename);
 
 	// Load a new table of entities to work with.
 	bool LoadTable(int ID, char* &entitypath);

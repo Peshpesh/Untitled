@@ -91,6 +91,6 @@ public:
 
 	virtual void OnLoop();
 
-	virtual bool OnRender(SDL_Renderer* renderer);
+	virtual bool OnRender();
 };
 #endif

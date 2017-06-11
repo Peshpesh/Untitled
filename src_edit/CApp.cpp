@@ -4,7 +4,7 @@ CApp::CApp()
 {
 	Running = true;
 	Map_Display = NULL;
-	Map_Renderer = NULL;
+	// Map_Renderer = NULL;
 	Map_Interface = NULL;
 	Type_Tileset = NULL;
 	Coll_Tileset = NULL;

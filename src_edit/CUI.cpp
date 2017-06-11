@@ -13,28 +13,29 @@ CUI::CUI()
 	Current_Table = -1;
 }
 
-bool CUI::OnWindow(SDL_Renderer* renderer, SDL_Texture* map_ui, int type)
+bool CUI::OnWindow(SDL_Texture* map_ui, int type)
 {
-	if (CSurface::OnDraw(renderer, map_ui, Px, Py, 0, 0, UI_Width, UI_Height) == false)
+	if (CSurface::OnDraw(map_ui, Px, Py, 0, 0, UI_Width, UI_Height) == false)
 		return false;
 
 	if (type == TILESET)
 	{
-		Font::Write(renderer, FONT_DEFAULT, "CHOOSE A TILESET", Px + 10, Py + 5);
-		Title_Length[TILESET_DEF] = Font::Write(renderer, FONT_DEFAULT, "DEFAULT", Px + 25, Py + 10 + 17 * 1);
-		Title_Length[TILESET_FOREST] = Font::Write(renderer, FONT_DEFAULT, "FOREST", Px + 25, Py + 10 + 17 * 2);
-		Title_Length[TILESET_CAVE] = Font::Write(renderer, FONT_DEFAULT, "CAVE", Px + 25, Py + 10 + 17 * 3);
+		Font::Write(FONT_DEFAULT, "CHOOSE A TILESET", Px + 10, Py + 5);
+		Title_Length[TILESET_DEF] = Font::Write(FONT_DEFAULT, "DEFAULT", Px + 25, Py + 10 + 17 * 1);
+		Title_Length[TILESET_FOREST] = Font::Write(FONT_DEFAULT, "FOREST", Px + 25, Py + 10 + 17 * 2);
+		Title_Length[TILESET_CAVE] = Font::Write(FONT_DEFAULT, "CAVE", Px + 25, Py + 10 + 17 * 3);
 	}
 	else if (type == ENTITY)
 	{
-		Font::Write(renderer, FONT_DEFAULT, "CHOOSE A NPC TABLE", Px + 10, Py + 5);
-		Title_Length[ENTITY_DEBUG] = Font::Write(renderer, FONT_DEFAULT, "DEBUG", Px + 25, Py + 10 + 17 * 1);
+		Font::Write(FONT_DEFAULT, "CHOOSE A NPC TABLE", Px + 10, Py + 5);
+		Title_Length[ENTITY_DEBUG] = Font::Write(FONT_DEFAULT, "DEBUG", Px + 25, Py + 10 + 17 * 1);
 
-		Font::Write(renderer, FONT_DEFAULT, "WARNING\nTHIS WILL REMOVE ALL NPCS", Px + 10, Py + 80);
+		Font::Write(FONT_DEFAULT, "WARNING\nTHIS WILL REMOVE ALL NPCS", Px + 10, Py + 80);
 	}
 
-	Font::Write(renderer, FONT_DEFAULT, "NVM", Px + UI_Width - 10 - 14 * 3, Py + UI_Height - 5 - 14);
-	SDL_RenderPresent(renderer);
+	Font::Write(FONT_DEFAULT, "NVM", Px + UI_Width - 10 - 14 * 3, Py + UI_Height - 5 - 14);
+	// SDL_RenderPresent(renderer);
+	CSurface::SurfControl.Present();
 	return true;
 }
 
@@ -43,10 +44,10 @@ bool CUI::OnWindow(SDL_Renderer* renderer, SDL_Texture* map_ui, int type)
 * rendering, and house keeping are done within this member.
 */
 
-int CUI::OnEntity(SDL_Renderer* renderer, SDL_Texture* map_ui)
+int CUI::OnEntity(SDL_Texture* map_ui)
 {
 	Window_Type = ENTITY;
-	Running = OnWindow(renderer, map_ui, Window_Type);
+	Running = OnWindow(map_ui, Window_Type);
 
 	SDL_Event Event;
 	// This loop will run endlessly until something makes the Running
@@ -65,10 +66,10 @@ int CUI::OnEntity(SDL_Renderer* renderer, SDL_Texture* map_ui)
 	return Current_Table;
 }
 
-SDL_Texture* CUI::OnChange(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath)
+SDL_Texture* CUI::OnChange(SDL_Texture* map_ui, char* &setpath)
 {
 	Window_Type = TILESET;
-	Running = OnWindow(renderer, map_ui, Window_Type);
+	Running = OnWindow(map_ui, Window_Type);
 
 	SDL_Event Event;
 	// This loop will run endlessly until something makes the Running
@@ -84,7 +85,7 @@ SDL_Texture* CUI::OnChange(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &s
 
 	OnCleanup();       // Clean up the program before exiting
 
-	return ChangeSet(renderer, New_Tileset, setpath);
+	return ChangeSet(New_Tileset, setpath);
 }
 
 void CUI::OnEvent(SDL_Event* Event)
@@ -167,7 +168,7 @@ void CUI::OnLButtonDown(int mX, int mY)
 	}
 }
 
-SDL_Texture* CUI::ChangeSet(SDL_Renderer* renderer, int setname, char* &setpath)
+SDL_Texture* CUI::ChangeSet(int setname, char* &setpath)
 {
 	SDL_Texture* Newset = NULL;
 
@@ -175,17 +176,17 @@ SDL_Texture* CUI::ChangeSet(SDL_Renderer* renderer, int setname, char* &setpath)
 	{
 			case TILESET_DEF:
 									setpath = "../res/tile/default.png";
-									Newset = CSurface::OnLoad(setpath, renderer);
+									Newset = CSurface::OnLoad(setpath);
 									break;
 
 			case TILESET_FOREST:
 									setpath = "../res/tile/forest.png";
-									Newset = CSurface::OnLoad(setpath, renderer);
+									Newset = CSurface::OnLoad(setpath);
 									break;
 
 			case TILESET_CAVE:
 									setpath = "../res/tile/cave.png";
-									Newset = CSurface::OnLoad(setpath, renderer);
+									Newset = CSurface::OnLoad(setpath);
 									break;
 
 			default: break;

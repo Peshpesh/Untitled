@@ -49,9 +49,9 @@ public:
 
   CEntityRes();
 
-  static bool OnInit(SDL_Renderer* renderer);
+  static bool OnInit();
 
-  static bool OnLoad(SDL_Renderer* renderer, const int& SetID);
+  static bool OnLoad(const int& SetID);
 
   static SDL_Texture*	Com_Texture;	// Common (global) NPC Image pointer
   static SDL_Texture*	Unq_Texture;	// Unique (local) NPC Image pointer

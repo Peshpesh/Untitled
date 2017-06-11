@@ -26,7 +26,7 @@ bool CSceneryMod::ClearAll()
   return true;
 }
 
-bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
+bool CSceneryMod::LoadScenery(char const* sceneryfile)
 {
 	// Try to open the .scn file
 	FILE* FileHandle = fopen(sceneryfile, "r");
@@ -44,7 +44,7 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile, SDL_Renderer* renderer)
     fscanf(FileHandle, "%s\n", TexFile);
 
     SDL_Texture* tmp_tex = NULL;
-    if ((tmp_tex = CSurface::OnLoad(TexFile, renderer)) == false)
+    if ((tmp_tex = CSurface::OnLoad(TexFile)) == false)
     {
       fclose(FileHandle);
       return false;

@@ -58,7 +58,7 @@ void CMap::OnLoad()
 	}
 }
 
-void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
+void CMap::OnRender(int MapX, int MapY, bool bg)
 {
 	if (Tex_Tileset == NULL) return;
 
@@ -94,13 +94,13 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
 			}
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			CSurface::OnDraw(renderer, Tex_Tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			CSurface::OnDraw(Tex_Tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}
 }
 
-void CMap::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY)
+void CMap::OnRenderType(SDL_Texture* tileset, int MapX, int MapY)
 {
 	if (tileset == NULL) return;
 
@@ -122,13 +122,13 @@ void CMap::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, 
 			int tY = MapY + (Y * TILE_SIZE);
 			int TilesetX = (TileList[ID].TypeID % tset_w) * TILE_SIZE;
 			int TilesetY = (TileList[ID].TypeID / tset_w) * TILE_SIZE;
-			CSurface::OnDraw(renderer, tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			CSurface::OnDraw(tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}
 }
 
-void CMap::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, int MapY)
+void CMap::OnRenderColl(SDL_Texture* tileset, int MapX, int MapY)
 {
 	if (tileset == NULL) return;
 
@@ -150,13 +150,13 @@ void CMap::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int MapX, 
 			int tY = MapY + (Y * TILE_SIZE);
 			int TilesetX = ((TileList[ID].CollID) % tset_w) * TILE_SIZE;
 			int TilesetY = ((TileList[ID].CollID) / tset_w) * TILE_SIZE;
-			CSurface::OnDraw(renderer, tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			CSurface::OnDraw(tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}
 }
 
-void CMap::ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo)
+void CMap::ViewMap(SDL_Texture* ui, int Xo, int Yo)
 {
 	if (ui == NULL)	return;
 
@@ -176,7 +176,7 @@ void CMap::ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo)
 					case TILE_TYPE_FIRE: VTileY += VTileSize * 4; break;
 					default: break;
 			}
-			CSurface::OnDraw(renderer, ui, Xo + X * VTileSize, Yo + Y * VTileSize, 0, VTileY, VTileSize, VTileSize);
+			CSurface::OnDraw(ui, Xo + X * VTileSize, Yo + Y * VTileSize, 0, VTileY, VTileSize, VTileSize);
 			ID++;
 		}
 	}

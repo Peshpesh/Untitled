@@ -88,10 +88,10 @@ int CMenu::GetResponse()
 	return hilight;
 }
 
-void CMenu::OnRender(SDL_Renderer* renderer)
+void CMenu::OnRender()
 {
-	Font::CenterBoxWrite(renderer, FONT_DEFAULT, options, 0, 0, 400, 200, 16, 256, 0);
-	Font::CenterWrite(renderer, FONT_DEFAULT, "X", 200, 110 + 20 * (hilight - (Nops / 2)));
+	Font::CenterBoxWrite(FONT_DEFAULT, options, 0, 0, 400, 200, 16, 256, 0);
+	Font::CenterWrite(FONT_DEFAULT, "X", 200, 110 + 20 * (hilight - (Nops / 2)));
 }
 
 void CMenu::OnCleanup()

@@ -18,14 +18,12 @@ ${SRCDIR}/CAnimation.cpp
 ${SRCDIR}/CApp.cpp
 ${SRCDIR}/CApp_Click.cpp
 ${SRCDIR}/CApp_Event.cpp
-${SRCDIR}/CApp_EventMapEdit.cpp
 ${SRCDIR}/CApp_EventNpcEdit.cpp
 ${SRCDIR}/CApp_EventScnEdit.cpp
 ${SRCDIR}/CApp_Init.cpp
 ${SRCDIR}/CApp_Loop.cpp
 ${SRCDIR}/CApp_Motion.cpp
 ${SRCDIR}/CApp_Render.cpp
-${SRCDIR}/CApp_RenderMapEdit.cpp
 ${SRCDIR}/CApp_RenderNpcEdit.cpp
 ${SRCDIR}/CApp_RenderScnEdit.cpp
 ${SRCDIR}/CApp_Terminate.cpp

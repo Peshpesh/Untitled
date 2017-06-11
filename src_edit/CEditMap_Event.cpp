@@ -62,7 +62,7 @@ bool CEditMap::handleGetSet(SDL_Point* mouse)
 	{
 		if (mouse->y >= y && mouse->y < y + h)
 		{
-			// if ((Main_Tileset = CUI::UIControl.OnChange(Map_Renderer, Map_Interface, Tileset_Path)) != NULL)
+			// if ((Main_Tileset = CUI::UIControl.OnChange(Map_Interface, Tileset_Path)) != NULL)
 			// {
 			// 	CArea::AreaControl.ChangeSet(Main_Tileset);
 			// 	active_bg = 0;

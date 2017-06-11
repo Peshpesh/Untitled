@@ -105,7 +105,7 @@ public:
 
 	virtual void OnLoop();
 
-	virtual void OnRender(SDL_Renderer* Surf_Dest);
+	virtual void OnRender();
 
 	virtual void OnCleanup();
 
@@ -115,7 +115,7 @@ public:
 	virtual bool OnCollision(CEntity* Entity);
 
 	// Returns false if no interaction is occurring
-	virtual bool OnInteract(SDL_Renderer* renderer);
+	virtual bool OnInteract();
 
 public:
 	// Params are in pixels/second

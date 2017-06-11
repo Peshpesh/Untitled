@@ -116,9 +116,9 @@ private:
 public:
   CEditMap();
 
-  bool OnInit(SDL_Renderer* renderer);
+  bool OnInit();
 
-  bool RenderMap(SDL_Renderer* renderer);
+  bool RenderMap();
 
 public:
   bool OnEvent(SDL_Point* mouse);
@@ -140,31 +140,31 @@ private:
   bool handlePlace(SDL_Point* mouse);
 
 public:
-  bool OnRender(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool OnRender(SDL_Texture* interface, SDL_Point* mouse);
 
 private:
-  bool RenderWkspc(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderWkspc(SDL_Texture* interface, SDL_Point* mouse);
 
 private:
-  bool RenderSidebar(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
-  bool drawButtonSet(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
-  bool drawActiveTile(SDL_Renderer* renderer, SDL_Texture* interface);
-  bool drawActive_bg(SDL_Renderer* renderer, SDL_Texture* interface);
-  bool drawActive_fg(SDL_Renderer* renderer, SDL_Texture* interface);
-  bool drawActive_ty(SDL_Renderer* renderer, SDL_Texture* interface);
-  bool drawActive_co(SDL_Renderer* renderer, SDL_Texture* interface);
-  bool drawOpac_ty(SDL_Renderer* renderer, SDL_Texture* interface);
-  bool drawOpac_co(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool RenderSidebar(SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButtonSet(SDL_Texture* interface, SDL_Point* mouse);
+  bool drawActiveTile(SDL_Texture* interface);
+  bool drawActive_bg(SDL_Texture* interface);
+  bool drawActive_fg(SDL_Texture* interface);
+  bool drawActive_ty(SDL_Texture* interface);
+  bool drawActive_co(SDL_Texture* interface);
+  bool drawOpac_ty(SDL_Texture* interface);
+  bool drawOpac_co(SDL_Texture* interface);
 
 private:
-  bool RenderBottom(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
-  bool drawButton_bg(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
-  bool drawButton_fg(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse);
-  bool drawOverlayList(SDL_Renderer* renderer, SDL_Texture* interface);
-  bool drawPlacementList(SDL_Renderer* renderer, SDL_Texture* interface);
+  bool RenderBottom(SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButton_bg(SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButton_fg(SDL_Texture* interface, SDL_Point* mouse);
+  bool drawOverlayList(SDL_Texture* interface);
+  bool drawPlacementList(SDL_Texture* interface);
 
 public:
-  bool RenderButton(SDL_Renderer* renderer, SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
+  bool RenderButton(SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
 };
 
 #endif

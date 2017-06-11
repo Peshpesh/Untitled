@@ -56,9 +56,8 @@ void CScenery::OnLoop()
   Anim_Control.OnAnimate();
 }
 
-bool CScenery::OnRender(SDL_Renderer* renderer)
+bool CScenery::OnRender()
 {
-  if (renderer == NULL) return false;
   if (Tex_Scenery == NULL) return false;
 
   // float Xc = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
@@ -77,14 +76,14 @@ bool CScenery::OnRender(SDL_Renderer* renderer)
 
   if (!vert_repeat && !hori_repeat)
   {
-    CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_win, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+    CSurface::OnDraw(Tex_Scenery, X_win, Y_win, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
   }
   else if (hori_repeat && !vert_repeat)
   {
     int X_disp = (X_win % Width) - Width;
     while (X_disp < WWIDTH)
     {
-      CSurface::OnDraw(renderer, Tex_Scenery, X_disp, Y_win, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+      CSurface::OnDraw(Tex_Scenery, X_disp, Y_win, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
       X_disp += Width;
     }
   }
@@ -93,7 +92,7 @@ bool CScenery::OnRender(SDL_Renderer* renderer)
     int Y_disp = (Y_win % Height) - Height;
     while (Y_disp < WHEIGHT)
     {
-      CSurface::OnDraw(renderer, Tex_Scenery, X_win, Y_disp, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+      CSurface::OnDraw(Tex_Scenery, X_win, Y_disp, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
       Y_disp += Height;
     }
   }
@@ -105,7 +104,7 @@ bool CScenery::OnRender(SDL_Renderer* renderer)
       int Y_disp = (Y_win % Height) - Height;
       while (Y_disp < WHEIGHT)
       {
-        CSurface::OnDraw(renderer, Tex_Scenery, X_disp, Y_disp, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
+        CSurface::OnDraw(Tex_Scenery, X_disp, Y_disp, Xo + (Anim_Control.GetCurrentFrame() * Width), Yo, Width, Height);
         Y_disp += Height;
       }
       X_disp += Width;

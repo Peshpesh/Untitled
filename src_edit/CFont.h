@@ -33,7 +33,7 @@ public:
 
 	Font();
 
-	bool OnInit(SDL_Renderer* renderer);
+	bool OnInit();
 
 public:
 	/*
@@ -57,9 +57,9 @@ public:
 	* param message  : Pointer to char array/string (i.e., the message written)
 	* param Mx : x-position of left edge of message
 	* param My : y-position of top edge of message */
-	static int Write(SDL_Renderer* renderer, const int& fontID, char const* message, int Mx, int My);
+	static int Write(const int& fontID, char const* message, int Mx, int My);
 
-	static int Write(SDL_Renderer* renderer, const int& fontID, char const* message, int color, bool flicker, int Mx, int My);
+	static int Write(const int& fontID, char const* message, int color, bool flicker, int Mx, int My);
 
 	/* BRIEF: Static function that writes a one-line message
 	***** using a loaded font as an SDL_Texture.
@@ -69,7 +69,7 @@ public:
 	* param number : Integer to render
 	* param Mx : x-position of left edge of message
 	* param My : y-position of top edge of message */
-	static int Write(SDL_Renderer* renderer, const int& fontID, int number, int Mx, int My);
+	static int Write(const int& fontID, int number, int Mx, int My);
 
 	/* BRIEF: Static function that writes a one-line float
 	***** using a loaded font as an SDL_Texture.
@@ -80,7 +80,7 @@ public:
 	* param precision: number of decimal places to render
 	* param Mx : x-position of left edge of message
 	* param My : y-position of top edge of message */
-	static int Writef(SDL_Renderer* renderer, const int& fontID, float number, unsigned int precision, int Mx, int My);
+	static int Writef(const int& fontID, float number, unsigned int precision, int Mx, int My);
 
 	/* BRIEF: Static function that writes a message within a box
 	***** using a loaded font as an SDL_Texture.
@@ -98,7 +98,7 @@ public:
 	* param tH : Height of message
 	* param speed: rate of type (char per second)
 	*/
-	static char BoxWrite(SDL_Renderer* renderer, const int& fontID, char const* message,
+	static char BoxWrite(const int& fontID, char const* message,
 		int bX, int bY, int bW, int bH, int tX, int tY, int tW, int tH, int length, int page);
 
 	/* BRIEF:	write a multi-lined, left-justified message in an
@@ -110,7 +110,7 @@ public:
 	* param tW:	width of text box
 	* param tH:	height of text box
 	*/
-	static bool TextBox(SDL_Renderer* renderer, const int& fontID, char const* message,
+	static bool TextBox(const int& fontID, char const* message,
 		int tX, int tY, int tW, int tH);
 
 	/* BRIEF: Static function that writes a one-line message
@@ -120,12 +120,12 @@ public:
 	* param message  : Pointer to char array/string (i.e., the message written)
 	* param Mx : x-position of message center
 	* param My : y-position of message center */
-	static int CenterWrite(SDL_Renderer* renderer, const int& fontID, char const* message, int Mx, int My);
+	static int CenterWrite(const int& fontID, char const* message, int Mx, int My);
 
-	static char CenterBoxWrite(SDL_Renderer* renderer, const int& fontID, char const* message,
+	static char CenterBoxWrite(const int& fontID, char const* message,
 		int bX, int bY, int bW, int bH, int tX, int length, int page);
 
-	static bool	DrawContainer(SDL_Renderer* renderer, const int &bX, const int &bY,
+	static bool	DrawContainer(const int &bX, const int &bY,
 		const int &bW, const int &bH, const char &color);
 };
 #endif

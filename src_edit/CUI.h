@@ -49,16 +49,16 @@ private:
 public:
 	CUI();
 
-	SDL_Texture* OnChange(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath);
-	int OnEntity(SDL_Renderer* renderer, SDL_Texture* map_ui);
+	SDL_Texture* OnChange(SDL_Texture* map_ui, char* &setpath);
+	int OnEntity(SDL_Texture* map_ui);
 
-	bool OnWindow(SDL_Renderer* renderer, SDL_Texture* map_ui, int type);
+	bool OnWindow(SDL_Texture* map_ui, int type);
 
 	void OnEvent(SDL_Event* Event);
 
 	void OnExit();
 
-	SDL_Texture* ChangeSet(SDL_Renderer* renderer, int setname, char* &setpath);
+	SDL_Texture* ChangeSet(int setname, char* &setpath);
 
 	//void OnLoad();
 

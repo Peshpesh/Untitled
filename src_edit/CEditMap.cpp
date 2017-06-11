@@ -22,9 +22,9 @@ CEditMap::CEditMap()
   intrpt = 0;
 }
 
-bool CEditMap::OnInit(SDL_Renderer* renderer)
+bool CEditMap::OnInit()
 {
-  if ((Main_Tileset = CSurface::OnLoad("../res/tile/default.png", renderer)) == NULL)
+  if ((Main_Tileset = CSurface::OnLoad("../res/tile/default.png")) == NULL)
   {
     return false;
   }
@@ -34,7 +34,7 @@ bool CEditMap::OnInit(SDL_Renderer* renderer)
   tset_w = PixWidth / TILE_SIZE;
   tset_h = PixHeight / TILE_SIZE;
 
-  if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png", renderer)) == NULL)
+  if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL)
   {
     return false;
   }
@@ -44,7 +44,7 @@ bool CEditMap::OnInit(SDL_Renderer* renderer)
   type_w = PixWidth / TILE_SIZE;
   type_h = PixHeight / TILE_SIZE;
 
-  if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png", renderer)) == NULL)
+  if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL)
   {
     return false;
   }

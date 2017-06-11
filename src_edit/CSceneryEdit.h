@@ -45,7 +45,7 @@ public:
 
   CSceneryEdit();
 
-  bool LoadScenery(char const* sceneryfile, SDL_Renderer* renderer);
+  bool LoadScenery(char const* sceneryfile);
 
   void SwitchObj(int queryID);
 
@@ -55,17 +55,17 @@ public:
 
   void SubObject(const int& Xc, const int& Yc);
 
-  void AddObject(SDL_Renderer* renderer, const int& Xc, const int& Yc);
+  void AddObject(const int& Xc, const int& Yc);
 
   bool GetObjInfo(const int& queryID, int& tex_ID, int& Xo, int& Yo, int& W, int& H, int& MaxFrames);
   bool GetObjInfo(const int& queryID, int& tex_ID);
 
-  bool AddTexture(SDL_Renderer* renderer, const int& tex_ID);
+  bool AddTexture(const int& tex_ID);
 
   bool SaveScenery(char const* areaname);
   bool SaveTexPaths(FILE* ofile);
 
-  bool RenderName(SDL_Renderer* renderer, const int& fontID, const int& Xo, const int& Yo);
+  bool RenderName(const int& fontID, const int& Xo, const int& Yo);
 };
 
 #endif

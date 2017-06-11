@@ -28,7 +28,7 @@ public:
 			Renderer is used in a call to CSurface to load
 			a tileset, which needs the renderer in use.
 	*/
-	bool	OnLoad(char const* File, SDL_Renderer* renderer);
+	bool	OnLoad(char const* File);
 
 	/*	Loads an "empty" 1 x 1 map area.
 			param tileset : Tileset for the area.
@@ -44,10 +44,10 @@ public:
 			param CameraY		:	Camera's Y position (increasing UP)
 			param bg			:	Flag to draw foreground or middleground
 	*/
-	void	OnRender(SDL_Renderer* renderer, int CameraX, int CameraY, bool bg);
-	void	OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
-	void	OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY);
-	void	ViewArea(SDL_Renderer* renderer, SDL_Texture* ui);
+	void	OnRender(int CameraX, int CameraY, bool bg);
+	void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
+	void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
+	void	ViewArea(SDL_Texture* ui);
 
 	/*	Intended only for map editing.
 			Expands the current area rightward by one map.

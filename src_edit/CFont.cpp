@@ -9,11 +9,11 @@ Font::Font()
 	Tex_HUD = NULL;
 }
 
-bool Font::OnInit(SDL_Renderer* renderer)
+bool Font::OnInit()
 {
-	if ((Tex_Font = CSurface::OnLoad("../res/font.png", renderer)) == NULL) 	return false;
-	if ((Mini_Font = CSurface::OnLoad("../res_edit/minifont.png", renderer)) == NULL) 	return false;
-	if ((Tex_HUD = CSurface::OnLoad("../res/HUD.png", renderer)) == NULL)			return false;
+	if ((Tex_Font = CSurface::OnLoad("../res/font.png")) == NULL) 	return false;
+	if ((Mini_Font = CSurface::OnLoad("../res_edit/minifont.png")) == NULL) 	return false;
+	if ((Tex_HUD = CSurface::OnLoad("../res/HUD.png")) == NULL)			return false;
 
 	return true;
 }
@@ -209,7 +209,7 @@ void Font::GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H)
 	}
 }
 
-int Font::Write(SDL_Renderer* renderer, const int& fontID, char const* message, int Mx, int My)
+int Font::Write(const int& fontID, char const* message, int Mx, int My)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -233,7 +233,7 @@ int Font::Write(SDL_Renderer* renderer, const int& fontID, char const* message, 
 			continue;
 		}
 		GetXY(fontID, message[i], Xo, Yo, W, H);
-		if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
 			return 0;
 		Mx += W + h_spacing;
 		i++;
@@ -241,7 +241,7 @@ int Font::Write(SDL_Renderer* renderer, const int& fontID, char const* message, 
 	return Mx - FirstMx - h_spacing;
 }
 
-int Font::Write(SDL_Renderer* renderer, const int& fontID, char const* message, int color, bool flicker, int Mx, int My)
+int Font::Write(const int& fontID, char const* message, int color, bool flicker, int Mx, int My)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -284,7 +284,7 @@ int Font::Write(SDL_Renderer* renderer, const int& fontID, char const* message, 
 			continue;
 		}
 		GetXY(fontID, message[i], Xo, Yo, W, H);
-		if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
 			return 0;
 		Mx += W + h_spacing;
 		i++;
@@ -299,7 +299,7 @@ int Font::Write(SDL_Renderer* renderer, const int& fontID, char const* message, 
 	return Mx - FirstMx - h_spacing;
 }
 
-int Font::Write(SDL_Renderer* renderer, const int& fontID, int number, int Mx, int My)
+int Font::Write(const int& fontID, int number, int Mx, int My)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -342,7 +342,7 @@ int Font::Write(SDL_Renderer* renderer, const int& fontID, int number, int Mx, i
 			default: break;
 		}
 
-		if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
 			return 0;
 
 		Mx += W + h_spacing;
@@ -351,7 +351,7 @@ int Font::Write(SDL_Renderer* renderer, const int& fontID, int number, int Mx, i
 	return Mx - FirstMx + W;
 }
 
-int Font::Writef(SDL_Renderer* renderer, const int& fontID, float number, unsigned int precision, int Mx, int My)
+int Font::Writef(const int& fontID, float number, unsigned int precision, int Mx, int My)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -372,7 +372,7 @@ int Font::Writef(SDL_Renderer* renderer, const int& fontID, float number, unsign
 
 	int truncated = ((magnifier)*(number - (int)(number)));
 
-	// if (truncated == 0) return Write(renderer, font, ((int)(number)) * (1 - (2*negative)), Mx, My);
+	// if (truncated == 0) return Write(font, ((int)(number)) * (1 - (2*negative)), Mx, My);
 
 	// How big is this truncated, magnified number? (how many digits is key)
 	while (truncated / (magnitude * 10) != 0)
@@ -391,15 +391,15 @@ int Font::Writef(SDL_Renderer* renderer, const int& fontID, float number, unsign
 	if (negative)
 	{
 		GetXY(fontID, '-', Xo, Yo, W, H);
-		if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
 			return 0;
 		Mx += W + h_spacing;
 	}
 
 	// Write the integer part of the number, and then add a decimal point
-	Mx += Write(renderer, fontID, (int)(number), Mx, My);
+	Mx += Write(fontID, (int)(number), Mx, My);
 	GetXY(fontID, '.', Xo, Yo, W, H);
-	if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+	if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
 		return 0;
 	Mx += W + h_spacing;
 
@@ -407,18 +407,18 @@ int Font::Writef(SDL_Renderer* renderer, const int& fontID, float number, unsign
 	while (magnitude * 10 < (int)(magnifier))
 	{
 		GetXY(fontID, '0', Xo, Yo, W, H);
-		if (!CSurface::OnDraw(renderer, font, Mx, My, Xo, Yo, W, H))
+		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
 			return 0;
 		Mx += W + h_spacing;
 		magnitude *= 10;
 	}
 
-	Mx += Write(renderer, fontID, truncated, Mx, My);
+	Mx += Write(fontID, truncated, Mx, My);
 
 	return Mx - FirstMx;
 }
 
-char Font::BoxWrite(SDL_Renderer* renderer, const int& fontID, char const* message,
+char Font::BoxWrite(const int& fontID, char const* message,
 	int bX, int bY, int bW, int bH, int tX, int tY, int tW, int tH, int length, int page)
 {
 	SDL_Texture* font = NULL;
@@ -427,7 +427,7 @@ char Font::BoxWrite(SDL_Renderer* renderer, const int& fontID, char const* messa
  	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL) return '!';
 
 	// Draw the box (container)
-	if (!DrawContainer(renderer, bX, bY, bW, bH, 'r')) return '!';
+	if (!DrawContainer(bX, bY, bW, bH, 'r')) return '!';
 
 	int PageLeft = page;
 	int i = 0;
@@ -467,7 +467,7 @@ char Font::BoxWrite(SDL_Renderer* renderer, const int& fontID, char const* messa
 				curr_tY += v_spacing;
 			}
 			// Draw the current character
-			if (!CSurface::OnDraw(renderer, font, curr_tX, curr_tY, Xo, Yo, W, H))
+			if (!CSurface::OnDraw(font, curr_tX, curr_tY, Xo, Yo, W, H))
 				return '!';
 			if (message[i] == ' ' && curr_tX == tX)
 			{
@@ -481,7 +481,7 @@ char Font::BoxWrite(SDL_Renderer* renderer, const int& fontID, char const* messa
 	return message[i];
 }
 
-bool Font::TextBox(SDL_Renderer* renderer, const int& fontID, char const* message,
+bool Font::TextBox(const int& fontID, char const* message,
 	int tX, int tY, int tW, int tH)
 {
 	SDL_Texture* font = NULL;
@@ -517,7 +517,7 @@ bool Font::TextBox(SDL_Renderer* renderer, const int& fontID, char const* messag
 				curr_tY += v_spacing;
 			}
 			// Draw the current character
-			if (!CSurface::OnDraw(renderer, font, curr_tX, curr_tY, Xo, Yo, W, H))
+			if (!CSurface::OnDraw(font, curr_tX, curr_tY, Xo, Yo, W, H))
 				return false;
 			if (message[i] == ' ' && curr_tX == tX)
 			{
@@ -530,7 +530,7 @@ bool Font::TextBox(SDL_Renderer* renderer, const int& fontID, char const* messag
 	return true;
 }
 
-int Font::CenterWrite(SDL_Renderer* renderer, const int& fontID, char const* message, int Mx, int My)
+int Font::CenterWrite(const int& fontID, char const* message, int Mx, int My)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -559,7 +559,7 @@ int Font::CenterWrite(SDL_Renderer* renderer, const int& fontID, char const* mes
 	while (message[i] != '\0')
 	{
 		GetXY(fontID, message[i], Xo, Yo, W, H);
-		if (!CSurface::OnDraw(renderer, font, Mx, My - (v_spacing / 2), Xo, Yo, W, H))
+		if (!CSurface::OnDraw(font, Mx, My - (v_spacing / 2), Xo, Yo, W, H))
 			return 0;
 		Mx += W + h_spacing;
 		i++;
@@ -568,7 +568,7 @@ int Font::CenterWrite(SDL_Renderer* renderer, const int& fontID, char const* mes
 }
 
 
-char Font::CenterBoxWrite(SDL_Renderer* renderer, const int& fontID, char const* message,
+char Font::CenterBoxWrite(const int& fontID, char const* message,
 	int bX, int bY, int bW, int bH, int tX, int length, int page)
 {
 	SDL_Texture* font = NULL;
@@ -577,7 +577,7 @@ char Font::CenterBoxWrite(SDL_Renderer* renderer, const int& fontID, char const*
 	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL) return '!';
 
 	// Draw the box (container)
-	DrawContainer(renderer, bX, bY, bW, bH, 'b');
+	DrawContainer(bX, bY, bW, bH, 'b');
 
 	int PageLeft = page;
 	int i = 0;
@@ -656,7 +656,7 @@ char Font::CenterBoxWrite(SDL_Renderer* renderer, const int& fontID, char const*
 				curr_tY += v_spacing;
 			}
 			// Draw the current character
-			if (!CSurface::OnDraw(renderer, font, curr_tX, curr_tY, Xo, Yo, W, H))
+			if (!CSurface::OnDraw(font, curr_tX, curr_tY, Xo, Yo, W, H))
 				return '!';
 			if (message[i] == ' ' && curr_tX == tX)
 			{
@@ -670,9 +670,9 @@ char Font::CenterBoxWrite(SDL_Renderer* renderer, const int& fontID, char const*
 	return message[i];
 }
 
-bool Font::DrawContainer(SDL_Renderer* renderer, const int &bX, const int &bY, const int &bW, const int &bH, const char &color)
+bool Font::DrawContainer(const int &bX, const int &bY, const int &bW, const int &bH, const char &color)
 {
-	if (FontControl.Tex_HUD == NULL || renderer == NULL) return false;
+	if (FontControl.Tex_HUD == NULL) return false;
 
 	Uint8 color_mod = 0;
 	switch (color)
@@ -683,20 +683,20 @@ bool Font::DrawContainer(SDL_Renderer* renderer, const int &bX, const int &bY, c
 	}
 
 	// Draw the inside of the box (no borders)
-	if (!CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX + 8, bY + 8, 108 + 8, color_mod * 16 + 8, 1, 1, bW - 16, bH - 16))
+	if (!CSurface::OnDraw(FontControl.Tex_HUD, bX + 8, bY + 8, 108 + 8, color_mod * 16 + 8, 1, 1, bW - 16, bH - 16))
 		return false;
 
 	// Draw the borders
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX, bY + 8, 108, color_mod * 16 + 8 - 1, 8, 2, 8, bH - 16);						// left
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX + bW - 1 - 8, bY + 8, 108 + 8, color_mod * 16 + 8 - 1, 8, 2, 8, bH - 16);	// right
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX + 8, bY, 108 + 8 - 1, color_mod * 16, 2, 8, bW - 16, 8);						// top
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX + 8, bY + bH - 1 - 8, 108 + 8 - 1, color_mod * 16 + 8, 2, 8, bW - 16, 8);	// bottom
+	CSurface::OnDraw(FontControl.Tex_HUD, bX, bY + 8, 108, color_mod * 16 + 8 - 1, 8, 2, 8, bH - 16);						// left
+	CSurface::OnDraw(FontControl.Tex_HUD, bX + bW - 1 - 8, bY + 8, 108 + 8, color_mod * 16 + 8 - 1, 8, 2, 8, bH - 16);	// right
+	CSurface::OnDraw(FontControl.Tex_HUD, bX + 8, bY, 108 + 8 - 1, color_mod * 16, 2, 8, bW - 16, 8);						// top
+	CSurface::OnDraw(FontControl.Tex_HUD, bX + 8, bY + bH - 1 - 8, 108 + 8 - 1, color_mod * 16 + 8, 2, 8, bW - 16, 8);	// bottom
 
 	// Draw the corners
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX, bY, 108, color_mod * 16, 8, 8);										// top left
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX + bW - 1 - 8, bY, 108 + 8, color_mod * 16, 8, 8);					// top right
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX, bY + bH - 1 - 8, 108, color_mod * 16 + 8, 8, 8);					// bottom left
-	CSurface::OnDraw(renderer, FontControl.Tex_HUD, bX + bW - 1 - 8, bY + bH - 1 - 8, 108 + 8, color_mod * 16 + 8, 8, 8);	// bottom right
+	CSurface::OnDraw(FontControl.Tex_HUD, bX, bY, 108, color_mod * 16, 8, 8);										// top left
+	CSurface::OnDraw(FontControl.Tex_HUD, bX + bW - 1 - 8, bY, 108 + 8, color_mod * 16, 8, 8);					// top right
+	CSurface::OnDraw(FontControl.Tex_HUD, bX, bY + bH - 1 - 8, 108, color_mod * 16 + 8, 8, 8);					// bottom left
+	CSurface::OnDraw(FontControl.Tex_HUD, bX + bW - 1 - 8, bY + bH - 1 - 8, 108 + 8, color_mod * 16 + 8, 8, 8);	// bottom right
 
 	return true;
 }

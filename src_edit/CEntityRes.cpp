@@ -10,15 +10,15 @@ CEntityRes::CEntityRes()
   //
 }
 
-bool CEntityRes::OnInit(SDL_Renderer* renderer)
+bool CEntityRes::OnInit()
 {
-  if ((Com_Texture = CSurface::OnLoad("../res/npc/common.png", renderer)) == NULL) return false;
-	if ((Arm_Texture = CSurface::OnLoad("../res/npc/arms.png", renderer)) == NULL) return false;
-	if ((Bul_Texture = CSurface::OnLoad("../res/npc/bullet.png", renderer)) == NULL) return false;
+  if ((Com_Texture = CSurface::OnLoad("../res/npc/common.png")) == NULL) return false;
+	if ((Arm_Texture = CSurface::OnLoad("../res/npc/arms.png")) == NULL) return false;
+	if ((Bul_Texture = CSurface::OnLoad("../res/npc/bullet.png")) == NULL) return false;
   return true;
 }
 
-bool CEntityRes::OnLoad(SDL_Renderer* renderer, const int& SetID)
+bool CEntityRes::OnLoad(const int& SetID)
 {
   char* SpriteFile = new char[255];
   switch(SetID)
@@ -27,7 +27,7 @@ bool CEntityRes::OnLoad(SDL_Renderer* renderer, const int& SetID)
     default: break;
   }
   // Load the texture of unique NPCs.
-  if ((Unq_Texture = CSurface::OnLoad(SpriteFile, renderer)) == NULL)	return false;
+  if ((Unq_Texture = CSurface::OnLoad(SpriteFile)) == NULL)	return false;
 
   return true;
 }

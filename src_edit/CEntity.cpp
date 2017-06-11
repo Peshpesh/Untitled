@@ -86,11 +86,11 @@ void CEntity::OnLoop()
 	OnMove(SpeedX, SpeedY);
 }
 
-void CEntity::OnRender(SDL_Renderer* Surf_Dest)
+void CEntity::OnRender()
 {
-	if (Tex_Entity == NULL || Surf_Dest == NULL) return;
+	if (Tex_Entity == NULL) return;
 
-	CSurface::OnDraw(Surf_Dest, Tex_Entity, X - CCamera::CameraControl.GetX(),
+	CSurface::OnDraw(Tex_Entity, X - CCamera::CameraControl.GetX(),
 		Y - CCamera::CameraControl.GetY(), Xo + (CurrentFrameCol + Anim_Control.GetCurrentFrame()) * Width,
 		Yo + CurrentFrameRow * Height, Width, Height);
 }
@@ -435,7 +435,7 @@ bool CEntity::OnCollision(CEntity* Entity)
 	return true;
 }
 
-bool CEntity::OnInteract(SDL_Renderer* renderer)
+bool CEntity::OnInteract()
 {
 	return false;
 }

@@ -10,7 +10,7 @@ bool CApp::EventSCNedit(int mX, int mY)
 		if (active_mod == MODIFY_SCENE)
 		{
 			// add object
-			CSceneryEdit::ScnControl.AddObject(Map_Renderer, mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY());
+			CSceneryEdit::ScnControl.AddObject(mX + CCamera::CameraControl.GetX(), mY + CCamera::CameraControl.GetY());
 		}
 		else
 		{

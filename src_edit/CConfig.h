@@ -46,7 +46,7 @@ public:
 
 	void OnEvent(SDL_Keycode sym);
 
-	bool OnRender(SDL_Renderer* renderer);
+	bool OnRender();
 
 	bool ErrCheck(SDL_Keycode sym);
 	void Reset();

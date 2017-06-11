@@ -35,7 +35,7 @@ CTile* CArea::GetTile(int X, int Y)
 	return Map->GetTile(X, Y);
 }
 
-bool CArea::OnLoad(char const* File, SDL_Renderer* renderer)
+bool CArea::OnLoad(char const* File)
 {
 	MapList.clear();
 
@@ -44,7 +44,7 @@ bool CArea::OnLoad(char const* File, SDL_Renderer* renderer)
 	char TilesetFile[255];
 	fscanf(FileHandle, "%s\n", TilesetFile);
 
-	if ((Tex_Tileset = CSurface::OnLoad(TilesetFile, renderer)) == false)
+	if ((Tex_Tileset = CSurface::OnLoad(TilesetFile)) == false)
 	{
 		fclose(FileHandle);
 		return false;
@@ -89,7 +89,7 @@ bool CArea::OnLoad(SDL_Texture* tileset)
 	return true;
 }
 
-void CArea::OnRender(SDL_Renderer* renderer, int CameraX, int CameraY, bool bg)
+void CArea::OnRender(int CameraX, int CameraY, bool bg)
 {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
@@ -105,11 +105,11 @@ void CArea::OnRender(SDL_Renderer* renderer, int CameraX, int CameraY, bool bg)
 		int X = ((ID % AreaWidth) * MapWidth) + CameraX;
 		int Y = ((ID / AreaWidth) * MapHeight) + CameraY;
 
-		MapList[ID].OnRender(renderer, X, Y, bg);
+		MapList[ID].OnRender(X, Y, bg);
 	}
 }
 
-void CArea::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY)
+void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY)
 {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
@@ -125,11 +125,11 @@ void CArea::OnRenderType(SDL_Renderer* renderer, SDL_Texture* tileset, int Camer
 		int X = ((ID % AreaWidth) * MapWidth) + CameraX;
 		int Y = ((ID / AreaWidth) * MapHeight) + CameraY;
 
-		MapList[ID].OnRenderType(renderer, tileset, X, Y);
+		MapList[ID].OnRenderType(tileset, X, Y);
 	}
 }
 
-void CArea::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int CameraX, int CameraY)
+void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY)
 {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
@@ -145,11 +145,11 @@ void CArea::OnRenderColl(SDL_Renderer* renderer, SDL_Texture* tileset, int Camer
 		int X = ((ID % AreaWidth) * MapWidth) + CameraX;
 		int Y = ((ID / AreaWidth) * MapHeight) + CameraY;
 
-		MapList[ID].OnRenderColl(renderer, tileset, X, Y);
+		MapList[ID].OnRenderColl(tileset, X, Y);
 	}
 }
 
-void CArea::ViewArea(SDL_Renderer* renderer, SDL_Texture* ui)
+void CArea::ViewArea(SDL_Texture* ui)
 {
 	// We will map our whole area by scanning every map,
 	// and plotting every tile as a 2 x 2 solid color proxy (blue).
@@ -176,18 +176,18 @@ void CArea::ViewArea(SDL_Renderer* renderer, SDL_Texture* ui)
 			// X and Y passes are modified so that the next map of each loop is either on the
 			// next row or right beside the current positioned map. The added (offset) term
 			// is just the dimension of a map in pixels using VTS px x VTS px tiles.
-			MapList[ID].ViewMap(renderer, ui, Xo + i * MAP_WIDTH * VTileSize, Yo + j * MAP_HEIGHT * VTileSize);
+			MapList[ID].ViewMap(ui, Xo + i * MAP_WIDTH * VTileSize, Yo + j * MAP_HEIGHT * VTileSize);
 		}
 	}
 	for (int X = Xo - VTileSize; X <= Xo + PixWidth; X += VTileSize)
 	{
-		CSurface::OnDraw(renderer, ui, X, Yo - VTileSize, 0, 352, VTileSize, VTileSize);
-		CSurface::OnDraw(renderer, ui, X, Yo + PixHeight, 0, 352, VTileSize, VTileSize);
+		CSurface::OnDraw(ui, X, Yo - VTileSize, 0, 352, VTileSize, VTileSize);
+		CSurface::OnDraw(ui, X, Yo + PixHeight, 0, 352, VTileSize, VTileSize);
 	}
 	for (int Y = Yo; Y < Yo + PixHeight; Y += VTileSize)
 	{
-		CSurface::OnDraw(renderer, ui, Xo - VTileSize, Y, 0, 352, VTileSize, VTileSize);
-		CSurface::OnDraw(renderer, ui, Xo + PixWidth, Y, 0, 352, VTileSize, VTileSize);
+		CSurface::OnDraw(ui, Xo - VTileSize, Y, 0, 352, VTileSize, VTileSize);
+		CSurface::OnDraw(ui, Xo + PixWidth, Y, 0, 352, VTileSize, VTileSize);
 	}
 }
 

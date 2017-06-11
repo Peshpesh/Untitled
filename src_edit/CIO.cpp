@@ -9,7 +9,7 @@ CIO::CIO()
 	UI_Height = 100;
 }
 
-char* CIO::OnSave(SDL_Renderer* renderer, SDL_Texture* map_ui)
+char* CIO::OnSave(SDL_Texture* map_ui)
 {
 	Running = true;
 	SDL_Event Event;
@@ -20,18 +20,20 @@ char* CIO::OnSave(SDL_Renderer* renderer, SDL_Texture* map_ui)
 			OnEvent(&Event);
 		}
 
-		SDL_RenderClear(renderer);
-		CSurface::OnDraw(renderer, map_ui, (WWIDTH - UI_Width) / 2, (WHEIGHT - UI_Height) / 2,
+		// SDL_RenderClear(renderer);
+		CSurface::SurfControl.Clear();
+		CSurface::OnDraw(map_ui, (WWIDTH - UI_Width) / 2, (WHEIGHT - UI_Height) / 2,
 			0, WHEIGHT - UI_Height, UI_Width, UI_Height);
-		Font::CenterWrite(renderer, FONT_DEFAULT, "ENTER AN AREANAME", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
-		Font::Write(renderer, FONT_DEFAULT, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
-		SDL_RenderPresent(renderer);
+		Font::CenterWrite(FONT_DEFAULT, "ENTER AN AREANAME", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
+		Font::Write(FONT_DEFAULT, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
+		// SDL_RenderPresent(renderer);
+		CSurface::SurfControl.Present();
 	}
 
 	return Areaname;
 }
 
-bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath)
+bool CIO::OnLoad(SDL_Texture* map_ui, char* &setpath)
 {
 	Running = true;
 	SDL_Event Event;
@@ -42,12 +44,14 @@ bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath)
 			OnEvent(&Event);
 		}
 
-		SDL_RenderClear(renderer);
-		CSurface::OnDraw(renderer, map_ui, (WWIDTH - UI_Width) / 2, (WHEIGHT - UI_Height) / 2,
+		// SDL_RenderClear(renderer);
+		CSurface::SurfControl.Clear();
+		CSurface::OnDraw(map_ui, (WWIDTH - UI_Width) / 2, (WHEIGHT - UI_Height) / 2,
 			0, WHEIGHT - UI_Height, UI_Width, UI_Height);
-		Font::CenterWrite(renderer, FONT_DEFAULT, "ENTER AREANAME TO LOAD", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
-		Font::Write(renderer, FONT_DEFAULT, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
-		SDL_RenderPresent(renderer);
+		Font::CenterWrite(FONT_DEFAULT, "ENTER AREANAME TO LOAD", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
+		Font::Write(FONT_DEFAULT, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
+		// SDL_RenderPresent(renderer);
+		CSurface::SurfControl.Present();
 	}
 	char pre[] = "../data/maps/";
 	char ext[] = ".area";
@@ -60,7 +64,7 @@ bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath)
 	if (AFileHandle == NULL)
 		return false;
 
-	CArea::AreaControl.OnLoad(filename, renderer);
+	CArea::AreaControl.OnLoad(filename);
 
 	fscanf(AFileHandle, "%s\n", TilesetPath);
 
@@ -68,7 +72,7 @@ bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath)
 
 	setpath = TilesetPath;
 
-	if (!CEntityEdit::NPCControl.LoadList(Areaname, renderer))
+	if (!CEntityEdit::NPCControl.LoadList(Areaname))
 		return false;
 
 	char scnext[] = ".scn";
@@ -76,7 +80,7 @@ bool CIO::OnLoad(SDL_Renderer* renderer, SDL_Texture* map_ui, char* &setpath)
 	std::strcpy(filename, pre);
 	std::strcat(filename, Areaname);
 	std::strcat(filename, scnext);
-	if (!CSceneryEdit::ScnControl.LoadScenery(filename, renderer))
+	if (!CSceneryEdit::ScnControl.LoadScenery(filename))
 		return false;
 
 	delete filename;

@@ -110,51 +110,51 @@ void CConfig::OnEvent(SDL_Keycode sym)
 	}
 }
 
-bool CConfig::OnRender(SDL_Renderer* renderer)
+bool CConfig::OnRender()
 {
-	Font::Write(renderer, FONT_DEFAULT,
+	Font::Write(FONT_DEFAULT,
 		"BACK\n\nATTACK\nJUMP\nLEFT\nRIGHT\nDOWN\nUP\nINVENTORY\nPAUSE\n\nRESTORE TO DEFAULT",
 		60, (WHEIGHT / 2) - 16);
 
 	if (hilight != CF_RETURN && hilight != CF_RESTORE)
-		Font::Write(renderer, FONT_DEFAULT, "X", 30, (WHEIGHT / 2) + (hilight * 16));
+		Font::Write(FONT_DEFAULT, "X", 30, (WHEIGHT / 2) + (hilight * 16));
 	else if (hilight == CF_RETURN)
-		Font::Write(renderer, FONT_DEFAULT, "X", 30, (WHEIGHT / 2) - 16);
+		Font::Write(FONT_DEFAULT, "X", 30, (WHEIGHT / 2) - 16);
 	else
-		Font::Write(renderer, FONT_DEFAULT, "X", 30, (WHEIGHT / 2) + (hilight * 16) + 16);
+		Font::Write(FONT_DEFAULT, "X", 30, (WHEIGHT / 2) + (hilight * 16) + 16);
 
 	if (querykey && hilight == CF_CONFIRM)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(confirm), F_RED, true, 200, (WHEIGHT / 2) + (CF_CONFIRM * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(confirm), F_RED, true, 200, (WHEIGHT / 2) + (CF_CONFIRM * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(confirm), 200, (WHEIGHT / 2) + (CF_CONFIRM * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(confirm), 200, (WHEIGHT / 2) + (CF_CONFIRM * 16));
 	if (querykey && hilight == CF_JUMP)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(jump), F_ORANGE, true, 200, (WHEIGHT / 2) + (CF_JUMP * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(jump), F_ORANGE, true, 200, (WHEIGHT / 2) + (CF_JUMP * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(jump), 200, (WHEIGHT / 2) + (CF_JUMP * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(jump), 200, (WHEIGHT / 2) + (CF_JUMP * 16));
 	if (querykey && hilight == CF_LEFT)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(left), F_YELLOW, false, 200, (WHEIGHT / 2) + (CF_LEFT * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(left), F_YELLOW, false, 200, (WHEIGHT / 2) + (CF_LEFT * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(left), 200, (WHEIGHT / 2) + (CF_LEFT * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(left), 200, (WHEIGHT / 2) + (CF_LEFT * 16));
 	if (querykey && hilight == CF_RIGHT)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(right), F_GREEN, false, 200, (WHEIGHT / 2) + (CF_RIGHT * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(right), F_GREEN, false, 200, (WHEIGHT / 2) + (CF_RIGHT * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(right), 200, (WHEIGHT / 2) + (CF_RIGHT * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(right), 200, (WHEIGHT / 2) + (CF_RIGHT * 16));
 	if (querykey && hilight == CF_DOWN)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(down), F_CYAN, true, 200, (WHEIGHT / 2) + (CF_DOWN * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(down), F_CYAN, true, 200, (WHEIGHT / 2) + (CF_DOWN * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(down), 200, (WHEIGHT / 2) + (CF_DOWN * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(down), 200, (WHEIGHT / 2) + (CF_DOWN * 16));
 	if (querykey && hilight == CF_UP)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(up), F_BLUE, true, 200, (WHEIGHT / 2) + (CF_UP * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(up), F_BLUE, true, 200, (WHEIGHT / 2) + (CF_UP * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(up), 200, (WHEIGHT / 2) + (CF_UP * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(up), 200, (WHEIGHT / 2) + (CF_UP * 16));
 	if (querykey && hilight == CF_SELECT)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(select), F_VIOLET, true, 200, (WHEIGHT / 2) + (CF_SELECT * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(select), F_VIOLET, true, 200, (WHEIGHT / 2) + (CF_SELECT * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(select), 200, (WHEIGHT / 2) + (CF_SELECT * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(select), 200, (WHEIGHT / 2) + (CF_SELECT * 16));
 	if (querykey && hilight == CF_PAUSE)
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(pause), F_VIOLET, true, 200, (WHEIGHT / 2) + (CF_PAUSE * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(pause), F_VIOLET, true, 200, (WHEIGHT / 2) + (CF_PAUSE * 16));
 	else
-		Font::Write(renderer, FONT_DEFAULT, (char*)SDL_GetKeyName(pause), 200, (WHEIGHT / 2) + (CF_PAUSE * 16));
+		Font::Write(FONT_DEFAULT, (char*)SDL_GetKeyName(pause), 200, (WHEIGHT / 2) + (CF_PAUSE * 16));
 	return true;
 }
 
