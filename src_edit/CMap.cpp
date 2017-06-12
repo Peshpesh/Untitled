@@ -30,7 +30,7 @@ bool CMap::OnLoad(char const* File)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			CTile tempTile;
-			fscanf(FileHandle, "%d:%d:%d:%d ", &tempTile.TileID, &tempTile.ForeID, &tempTile.TypeID, &tempTile.CollID);
+			fscanf(FileHandle, "%d:%d:%d:%d ", &tempTile.bg_ID, &tempTile.fg_ID, &tempTile.TypeID, &tempTile.CollID);
 			TileList.push_back(tempTile);
 		}
 		fscanf(FileHandle, "\n");
@@ -44,8 +44,8 @@ void CMap::OnLoad()
 	TileList.clear();
 
 	CTile tempTile;
-	tempTile.TileID = -1;
-	tempTile.ForeID = -1;
+	tempTile.bg_ID = -1;
+	tempTile.fg_ID = -1;
 	tempTile.TypeID = TILE_TYPE_NORMAL;
 	tempTile.CollID = SOLID_NONE;
 
@@ -77,15 +77,15 @@ void CMap::OnRender(int MapX, int MapY, bool bg)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			int TilesetX = 0, TilesetY = 0;
-			if (bg && TileList[ID].TileID >= 0)
+			if (bg && TileList[ID].bg_ID >= 0)
 			{
-				TilesetX = (TileList[ID].TileID % tset_w) * TILE_SIZE;
-				TilesetY = (TileList[ID].TileID / tset_w) * TILE_SIZE;
+				TilesetX = (TileList[ID].bg_ID % tset_w) * TILE_SIZE;
+				TilesetY = (TileList[ID].bg_ID / tset_w) * TILE_SIZE;
 			}
-			else if (!bg && TileList[ID].ForeID >= 0)
+			else if (!bg && TileList[ID].fg_ID >= 0)
 			{
-				TilesetX = (TileList[ID].ForeID % tset_w) * TILE_SIZE;
-				TilesetY = (TileList[ID].ForeID / tset_w) * TILE_SIZE;
+				TilesetX = (TileList[ID].fg_ID % tset_w) * TILE_SIZE;
+				TilesetY = (TileList[ID].fg_ID / tset_w) * TILE_SIZE;
 			}
 			else
 			{
@@ -185,8 +185,8 @@ void CMap::ViewMap(SDL_Texture* ui, int Xo, int Yo)
 void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles)
 {
 	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
-	if (usetiles & ENABLE_BTILE) 	TileList[ID].TileID = tile;
-	if (usetiles & ENABLE_FTILE) 	TileList[ID].ForeID = fore;
+	if (usetiles & ENABLE_BG) 	TileList[ID].bg_ID = tile;
+	if (usetiles & ENABLE_FG) 	TileList[ID].fg_ID = fore;
 	if (usetiles & ENABLE_TYPE)		TileList[ID].TypeID = type;
 	if (usetiles & ENABLE_COLL)	TileList[ID].CollID = coll;
 }
@@ -216,7 +216,7 @@ void CMap::SaveMap(int ID, char const* areaname)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			int ID = X + Y * MAP_WIDTH;
-			fprintf(FileHandle, "%d:%d:%d:%d ", TileList[ID].TileID, TileList[ID].ForeID, TileList[ID].TypeID, TileList[ID].CollID);
+			fprintf(FileHandle, "%d:%d:%d:%d ", TileList[ID].bg_ID, TileList[ID].fg_ID, TileList[ID].TypeID, TileList[ID].CollID);
 		}
 		fprintf(FileHandle, "\n");
 	}

@@ -8,18 +8,20 @@ CEditMap::CEditMap()
   Type_Tileset = NULL;    // Tileset showing tile type
   Coll_Tileset = NULL;    // Tileset showing collision type
 
-  active_bg = active_fg = 0;
 	no_bg = false;
 	no_fg = true;
 	show_fg = show_ty = show_co = true;
-	active_type = TILE_TYPE_NORMAL;
 	type_alpha = 85;
-	active_coll = SOLID_NONE;
 	coll_alpha = 125;
 	type_w = type_h = tset_w = tset_h = 0;
 
-  onTiles = ENABLE_BTILE | ENABLE_FTILE | ENABLE_TYPE | ENABLE_COLL;
+  onTiles = ENABLE_BG | ENABLE_FG | ENABLE_TYPE | ENABLE_COLL;
   intrpt = 0;
+
+  ActiveTileTL.bg_ID = ActiveTileTL.fg_ID = 0;
+  ActiveTileTR.bg_ID = ActiveTileTR.fg_ID = 0;
+  ActiveTileBL.bg_ID = ActiveTileBL.fg_ID = 0;
+  ActiveTileBR.bg_ID = ActiveTileBR.fg_ID = 0;
 }
 
 bool CEditMap::OnInit()
@@ -53,6 +55,9 @@ bool CEditMap::OnInit()
   SDL_QueryTexture(Coll_Tileset, NULL, NULL, &PixWidth, &PixHeight);
   coll_w = PixWidth / TILE_SIZE;
   coll_h = PixHeight / TILE_SIZE;
+
+  if (CArea::AreaControl.OnLoad(Main_Tileset) == false)
+		return false;
 
   return true;
 }

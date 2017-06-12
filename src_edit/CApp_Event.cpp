@@ -174,11 +174,11 @@ bool CApp::EventOPTS(int mX, int mY)
 		{
 			if (CIO::IOControl.OnLoad(Map_Interface, Tileset_Path))
 			{
-				Main_Tileset = CSurface::OnLoad(Tileset_Path);
-				active_bg = active_type = 0;
-
-				QueryTileset();
-				return true;
+				// Main_Tileset = CSurface::OnLoad(Tileset_Path);
+				// active_bg = active_type = 0;
+				//
+				// QueryTileset();
+				// return true;
 			}
 		}
 	}

@@ -22,39 +22,6 @@ bool CApp::OnInit()
 		return false;
 	}
 
-	if ((Main_Tileset = CSurface::OnLoad(Tileset_Path)) == NULL)
-	{
-		return false;
-	}
-
-	int PixWidth, PixHeight;
-	SDL_QueryTexture(Main_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	tset_w = PixWidth / TILE_SIZE;
-	tset_h = PixHeight / TILE_SIZE;
-
-	if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL)
-	{
-		return false;
-	}
-	SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
-
-	SDL_QueryTexture(Type_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	type_w = PixWidth / TILE_SIZE;
-	type_h = PixHeight / TILE_SIZE;
-
-	if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL)
-	{
-		return false;
-	}
-	SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
-
-	SDL_QueryTexture(Coll_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	coll_w = PixWidth / TILE_SIZE;
-	coll_h = PixHeight / TILE_SIZE;
-
 	if (!Font::FontControl.OnInit())
 	{
 		return false;
@@ -76,8 +43,8 @@ bool CApp::OnInit()
 	if ((CEntityEdit::NPCControl.Table_ID = CEntityInfo::LoadUnique("../res/npc/debug.tbl")) < 0)
 		return false;
 
-	if (CArea::AreaControl.OnLoad(Main_Tileset) == false)
-		return false;
+	// if (CArea::AreaControl.OnLoad(Main_Tileset) == false)
+	// 	return false;
 
 	if (CEditMap::MapEditor.OnInit() == false)
 		return false;
@@ -85,11 +52,11 @@ bool CApp::OnInit()
 	return true;
 }
 
-void CApp::QueryTileset()
-{
-	int PixWidth, PixHeight;
-	SDL_QueryTexture(Main_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	tset_w = PixWidth / TILE_SIZE;
-	tset_h = PixHeight / TILE_SIZE;
-}
+// void CApp::QueryTileset()
+// {
+// 	int PixWidth, PixHeight;
+// 	SDL_QueryTexture(Main_Tileset, NULL, NULL, &PixWidth, &PixHeight);
+//
+// 	tset_w = PixWidth / TILE_SIZE;
+// 	tset_h = PixHeight / TILE_SIZE;
+// }

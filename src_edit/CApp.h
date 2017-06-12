@@ -26,14 +26,6 @@ enum
   REMOVE_SCENE,
 };
 
-// enum
-// {
-//   INTRPT_NONE = 0,								// No intrpt
-//   INTRPT_CH_BTILE = 0x00000001,		// intrpt via bg tile change
-//   INTRPT_CH_FTILE = 0x00000002,		// intrpt via fg tile change
-//   INTRPT_MODEL = 0x00000004,
-// };
-
 namespace npc_editor
 {
   const short tbl_nm_x = 250;
@@ -73,26 +65,9 @@ namespace scn_editor
 class CApp : public CEvent {
 private:
 	SDL_Window* Map_Display;    // Edit Window
-	// SDL_Renderer* Map_Renderer; // Edit Renderer
-	SDL_Texture* Type_Tileset;  // Tileset showing tile type
-	SDL_Texture* Coll_Tileset;	// Tileset showing collision type
-	SDL_Texture* Main_Tileset;  // The actual tileset in use
 	SDL_Texture* Map_Interface; // Bordering interface for editor
 
 	bool Running;
-
-	int active_bg;            // Active tileID
-	int active_fg;						// Active foreID
-	bool no_bg, no_fg;				// If true, use -1 as a tile number (render nothing)
-	int active_type;          // Active typeID
-	int type_alpha;						// Current Opacity of the Type overlay
-	int active_coll;					// Active tile collision ID
-	int coll_alpha;						// Current Opacity of the Collision overlay
-	bool show_fg, show_ty, show_co;
-	int type_w, type_h;  	// Typeset texture dimension (tiles)
-	int coll_w, coll_h; 	// Collset texture dimension (tiles)
-	int tset_w, tset_h;  	// Tileset texture dimension (tiles)
-	CChangeTile PickTile;
 
   SDL_Point mouse;
 	int mouseX;
@@ -104,7 +79,6 @@ public:
 
 	int active_mod;
 	int intrpt;
-  int OnTiles;
 	int tabl_name_W;
 
 public:
@@ -115,8 +89,6 @@ public:
 	void OnEvent(SDL_Event* Event);
 
 	bool EventOPTS(int mX, int mY);
-
-	bool EventMAPedit(int mX, int mY);
 
 	bool EventNPCedit(int mX, int mY);
 	void ModEntity(int mX, int mY);
@@ -131,8 +103,6 @@ public:
 	bool CheckSCNchange(const int& mX);
 
 	bool OnInit();
-
-	// Terminates the Map Editor loop
 	void OnExit();
 
 	// Handles looping calculations
@@ -145,9 +115,6 @@ public:
 
 	// Renders graphics
 	void OnRender();
-	bool RenderMAPedit();
-	bool RenderMAPside();
-	bool RenderMAPbottom();
 	bool RenderNPCedit();
 	bool RenderSCNedit();
 	bool RenderSCNswitch();
@@ -157,7 +124,7 @@ public:
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnTerminate();
 
-	void QueryTileset();
+	// void QueryTileset();
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 

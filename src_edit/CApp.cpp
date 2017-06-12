@@ -6,27 +6,14 @@ CApp::CApp()
 	Map_Display = NULL;
 	// Map_Renderer = NULL;
 	Map_Interface = NULL;
-	Type_Tileset = NULL;
-	Coll_Tileset = NULL;
-	Main_Tileset = NULL;
 	mouseX = mouseY = 0;
 	mouse.x = mouse.y = 0;
 
-	active_bg = active_fg = 0;
-	no_bg = false;
-	no_fg = true;
-	show_fg = show_ty = show_co = true;
-	active_type = TILE_TYPE_NORMAL;
-	type_alpha = 85;
-	active_coll = SOLID_NONE;
-	coll_alpha = 125;
-	type_w = type_h = tset_w = tset_h = 0;
 	Tileset_Path = "../res/tile/default.png";
 	Entity_Path = "../res/npc/debug.png";
 
 	active_mod = MODIFY_MAP;
 	intrpt = INTRPT_NONE;
-	OnTiles = ENABLE_BTILE | ENABLE_FTILE | ENABLE_TYPE | ENABLE_COLL;
 	tabl_name_W = 0;
 }
 

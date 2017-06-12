@@ -123,12 +123,12 @@ bool CEditMap::drawActiveTile(SDL_Texture* interface)
 	Font::CenterWrite(FONT_MINI, "WORKING TILE", EWIDTH - 50, bgfg_y - name_offset);
 	if (!no_bg)
 	{
-		CSurface::OnDraw(Main_Tileset, bgfg_x, bgfg_y, (active_bg % tset_w) * TILE_SIZE, (active_bg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		CSurface::OnDraw(Main_Tileset, bgfg_x, bgfg_y, (ActiveTileTL.bg_ID % tset_w) * TILE_SIZE, (ActiveTileTL.bg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	}
 	CSurface::OnDraw(interface, bgfg_x, bgfg_y, dummy_x, dummy_y, TILE_SIZE, TILE_SIZE);
 	if (!no_fg)
 	{
-		CSurface::OnDraw(Main_Tileset, bgfg_x, bgfg_y, (active_fg % tset_w) * TILE_SIZE, (active_fg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		CSurface::OnDraw(Main_Tileset, bgfg_x, bgfg_y, (ActiveTileTL.fg_ID % tset_w) * TILE_SIZE, (ActiveTileTL.fg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	}
 	CSurface::OnDraw(interface, bgfg_x, bgfg_y, dummy_x, dummy_y + TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
@@ -143,8 +143,8 @@ bool CEditMap::drawActive_bg(SDL_Texture* interface)
 	Font::CenterWrite(FONT_MINI, "BACKGROUND", EWIDTH - 50, bg_y - name_offset);
 
 	CSurface::OnDraw(Main_Tileset, bg_x, bg_y,
-		(active_bg % tset_w) * TILE_SIZE,
-		(active_bg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		(ActiveTileTL.bg_ID % tset_w) * TILE_SIZE,
+		(ActiveTileTL.bg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 	// Draws background tile arrows
 	CSurface::OnDraw(interface, bg_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -166,8 +166,8 @@ bool CEditMap::drawActive_fg(SDL_Texture* interface)
 
 	// Draws active foreground tile
 	CSurface::OnDraw(Main_Tileset, fg_x, fg_y,
-		(active_fg % tset_w) * TILE_SIZE,
-		(active_fg / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		(ActiveTileTL.fg_ID % tset_w) * TILE_SIZE,
+		(ActiveTileTL.fg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 	// Draws foreground tile arrows
 	CSurface::OnDraw(interface, fg_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -186,8 +186,8 @@ bool CEditMap::drawActive_ty(SDL_Texture* interface)
 
 	// Draws active tile type
 	CSurface::OnDraw(Type_Tileset, ty_x, ty_y,
-		(active_type % type_w) * TILE_SIZE,
-		(active_type / type_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		(ActiveTileTL.TypeID % type_w) * TILE_SIZE,
+		(ActiveTileTL.TypeID / type_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 	// Draws tile type arrows
 	CSurface::OnDraw(interface, ty_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -196,7 +196,7 @@ bool CEditMap::drawActive_ty(SDL_Texture* interface)
 		ty_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 
 	// Writes out the active type
-	switch (active_type)
+	switch (ActiveTileTL.TypeID)
 	{
 		case TILE_TYPE_NORMAL: Font::CenterWrite(FONT_MINI, "NORMAL", EWIDTH - 50, ty_y - name_offset); break;
 		case TILE_TYPE_WATER: Font::CenterWrite(FONT_MINI, "WATER", EWIDTH - 50, ty_y - name_offset); break;
@@ -214,8 +214,8 @@ bool CEditMap::drawActive_co(SDL_Texture* interface)
 
 	// Draws active collision tile
 	CSurface::OnDraw(Coll_Tileset, co_x, co_y,
-		(active_coll % coll_w) * TILE_SIZE,
-		(active_coll / coll_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		(ActiveTileTL.CollID % coll_w) * TILE_SIZE,
+		(ActiveTileTL.CollID / coll_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 	// Draws collision tile arrows
 	CSurface::OnDraw(interface, co_x - ((TILE_SIZE+ARR_SZ)/2),
@@ -224,7 +224,7 @@ bool CEditMap::drawActive_co(SDL_Texture* interface)
 			co_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 
 	// Writes out the active collision type
-	switch (active_coll)
+	switch (ActiveTileTL.CollID)
 	{
 		case SOLID_NONE: Font::CenterWrite(FONT_MINI, "NONE", EWIDTH - 50, co_y - name_offset); break;
 		case SOLID_ALL: Font::CenterWrite(FONT_MINI, "FULL", EWIDTH - 50, co_y - name_offset); break;
@@ -353,7 +353,7 @@ bool CEditMap::drawPlacementList(SDL_Texture* interface)
 	int tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;
 	int tX_offset = SWITCH_SIZE + MINI_CHAR_SIZE;
 	Font::Write(FONT_MINI, "Use B.Tile", x + tX_offset, sY + tY_offset);
-	if (onTiles & ENABLE_BTILE)
+	if (onTiles & ENABLE_BG)
 	{
 		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}
@@ -363,7 +363,7 @@ bool CEditMap::drawPlacementList(SDL_Texture* interface)
 	}
 	sY += SWITCH_SIZE + SYM_SPACING;
 	Font::Write(FONT_MINI, "Use F.Tile", x + tX_offset, sY + tY_offset);
-	if (onTiles & ENABLE_FTILE)
+	if (onTiles & ENABLE_FG)
 	{
 		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 	}

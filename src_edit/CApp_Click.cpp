@@ -31,7 +31,7 @@ void CApp::OnClick()
 			{
 				int mX = CCamera::CameraControl.GetX() + mouseX;
 				int mY = CCamera::CameraControl.GetY() + mouseY;
-				CArea::AreaControl.ChangeTile(mX, mY,	no_bg ? -1 : active_bg, no_fg ? -1 : active_fg, active_type, active_coll, OnTiles);
+				// CArea::AreaControl.ChangeTile(mX, mY,	no_bg ? -1 : active_bg, no_fg ? -1 : active_fg, active_type, active_coll, OnTiles);
 			}
 		}
 	}

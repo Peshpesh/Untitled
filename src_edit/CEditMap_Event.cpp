@@ -29,11 +29,11 @@ bool CEditMap::handleInterr(SDL_Point* mouse)
 	{
 		if (intrpt & INTRPT_CH_BTILE)
 		{
-			if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, active_bg)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, ActiveTileTL.bg_ID)) intrpt = INTRPT_NONE;
 		}
 		if (intrpt & INTRPT_CH_FTILE)
 		{
-			if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, active_fg)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, ActiveTileTL.fg_ID)) intrpt = INTRPT_NONE;
 		}
 		return true;
 	}
@@ -47,7 +47,7 @@ bool CEditMap::handleNewTile(SDL_Point* mouse)
   {
     int mX = CCamera::CameraControl.GetX() + mouse->x;
     int mY = CCamera::CameraControl.GetY() + mouse->y;
-    CArea::AreaControl.ChangeTile(mX, mY,	no_bg ? -1 : active_bg, no_fg ? -1 : active_fg, active_type, active_coll, onTiles);
+    CArea::AreaControl.ChangeTile(mX, mY,	no_bg ? -1 : ActiveTileTL.bg_ID, no_fg ? -1 : ActiveTileTL.fg_ID, ActiveTileTL.TypeID, ActiveTileTL.CollID, onTiles);
     return true;
   }
   return false;
@@ -65,7 +65,7 @@ bool CEditMap::handleGetSet(SDL_Point* mouse)
 			// if ((Main_Tileset = CUI::UIControl.OnChange(Map_Interface, Tileset_Path)) != NULL)
 			// {
 			// 	CArea::AreaControl.ChangeSet(Main_Tileset);
-			// 	active_bg = 0;
+			// 	ActiveTileTL.bg_ID = 0;
 			// 	QueryTileset();
 			return true;
 			// }
@@ -110,15 +110,15 @@ bool CEditMap::handleScroll_bg(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= bg_x - TILE_SIZE && mouse->x < bg_x)
     {
-        if (active_bg != 0) active_bg -= 1;
-        else active_bg = (tset_w * tset_h) - 1;
+        if (ActiveTileTL.bg_ID != 0) ActiveTileTL.bg_ID -= 1;
+        else ActiveTileTL.bg_ID = (tset_w * tset_h) - 1;
         return true;
     }
     // Right Arrow
     if (mouse->x >= bg_x + TILE_SIZE && mouse->x < bg_x + (TILE_SIZE * 2))
     {
-        if (active_bg != (tset_w * tset_h) - 1) active_bg += 1;
-        else active_bg = 0;
+        if (ActiveTileTL.bg_ID != (tset_w * tset_h) - 1) ActiveTileTL.bg_ID += 1;
+        else ActiveTileTL.bg_ID = 0;
         return true;
     }
   }
@@ -135,15 +135,15 @@ bool CEditMap::handleScroll_fg(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= fg_x - TILE_SIZE && mouse->x < fg_x)
     {
-        if (active_fg != 0) active_fg -= 1;
-        else active_fg = (tset_w * tset_h) - 1;
+        if (ActiveTileTL.fg_ID != 0) ActiveTileTL.fg_ID -= 1;
+        else ActiveTileTL.fg_ID = (tset_w * tset_h) - 1;
         return true;
     }
     // Right Arrow
     if (mouse->x >= fg_x + TILE_SIZE && mouse->x < fg_x + (TILE_SIZE * 2))
     {
-        if (active_fg != (tset_w * tset_h) - 1) active_fg += 1;
-        else active_fg = 0;
+        if (ActiveTileTL.fg_ID != (tset_w * tset_h) - 1) ActiveTileTL.fg_ID += 1;
+        else ActiveTileTL.fg_ID = 0;
         return true;
     }
   }
@@ -160,15 +160,15 @@ bool CEditMap::handleScroll_ty(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= ty_x - TILE_SIZE && mouse->x < ty_x)
     {
-        if (active_type != 0) active_type -= 1;
-        else active_type = TILE_TYPE_FIRE;
+        if (ActiveTileTL.TypeID != 0) ActiveTileTL.TypeID -= 1;
+        else ActiveTileTL.TypeID = TILE_TYPE_FIRE;
         return true;
     }
     // Right Arrow
     if (mouse->x >= ty_x + TILE_SIZE && mouse->x < ty_x + (TILE_SIZE * 2))
     {
-        if (active_type != TILE_TYPE_FIRE) active_type += 1;
-        else active_type = 0;
+        if (ActiveTileTL.TypeID != TILE_TYPE_FIRE) ActiveTileTL.TypeID += 1;
+        else ActiveTileTL.TypeID = 0;
         return true;
     }
   }
@@ -185,15 +185,15 @@ bool CEditMap::handleScroll_co(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= co_x - TILE_SIZE && mouse->x < co_x)
     {
-        if (active_coll != 0) active_coll -= 1;
-        else active_coll = SOLID_A_ML_BR;
+        if (ActiveTileTL.CollID != 0) ActiveTileTL.CollID -= 1;
+        else ActiveTileTL.CollID = SOLID_A_ML_BR;
         return true;
     }
     // Right Arrow
     if (mouse->x >= co_x + TILE_SIZE && mouse->x < co_x + (TILE_SIZE * 2))
     {
-        if (active_coll != SOLID_A_ML_BR) active_coll += 1;
-        else active_coll = 0;
+        if (ActiveTileTL.CollID != SOLID_A_ML_BR) ActiveTileTL.CollID += 1;
+        else ActiveTileTL.CollID = 0;
         return true;
     }
   }
@@ -312,16 +312,16 @@ bool CEditMap::handlePlace(SDL_Point* mouse)
     int Yf = y + SWITCH_SIZE;
     if (mouse->y >= Yi && mouse->y < Yf)
     {
-      if (onTiles & ENABLE_BTILE) onTiles ^= ENABLE_BTILE;
-      else onTiles |= ENABLE_BTILE;
+      if (onTiles & ENABLE_BG) onTiles ^= ENABLE_BG;
+      else onTiles |= ENABLE_BG;
       return true;
     }
     Yi = Yf + SYM_SPACING;
     Yf = Yi + SWITCH_SIZE;
     if (mouse->y >= Yi && mouse->y < Yf)
     {
-      if (onTiles & ENABLE_FTILE) onTiles ^= ENABLE_FTILE;
-      else onTiles |= ENABLE_FTILE;
+      if (onTiles & ENABLE_FG) onTiles ^= ENABLE_FG;
+      else onTiles |= ENABLE_FG;
       return true;
     }
     Yi = Yf + SYM_SPACING;

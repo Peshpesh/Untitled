@@ -3,7 +3,6 @@
 void CApp::OnRender()
 {
 	bool debug = true;
-	// SDL_RenderClear(Map_Renderer);
 	CSurface::SurfControl.Clear();
 
 	// Draw background scenery
@@ -71,7 +70,6 @@ void CApp::OnRender()
 	{
 		Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
-	// SDL_RenderPresent(Map_Renderer);
 	CSurface::SurfControl.Present();
 }
 

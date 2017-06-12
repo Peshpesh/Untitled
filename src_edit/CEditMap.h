@@ -15,6 +15,7 @@ enum interrupts
   INTRPT_CH_FTILE = 0x00000002,		// intrpt via fg tile change
   INTRPT_MODEL = 0x00000004,
 };
+
 namespace map_editor
 {
   namespace but_tset
@@ -94,14 +95,15 @@ private:
   SDL_Texture* Coll_Tileset;	// Tileset showing collision type
 
 private:
-  int active_bg;            // Active tileID
-  int active_fg;						// Active foreID
+
   bool no_bg, no_fg;				// If true, use -1 as a tile number (render nothing)
 
-  int active_type;          // Active typeID
-  int type_alpha;						// Current Opacity of the Type overlay
+  CTile ActiveTileTL;
+  CTile ActiveTileTR;
+  CTile ActiveTileBL;
+  CTile ActiveTileBR;
 
-  int active_coll;					// Active tile collision ID
+  int type_alpha;						// Current Opacity of the Type overlay
   int coll_alpha;						// Current Opacity of the Collision overlay
 
   bool show_fg, show_ty, show_co;
