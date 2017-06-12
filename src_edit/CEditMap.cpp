@@ -8,6 +8,16 @@ CEditMap::CEditMap()
   Type_Tileset = NULL;    // Tileset showing tile type
   Coll_Tileset = NULL;    // Tileset showing collision type
 
+  TileTL.bg_ID = TileTL.fg_ID = 0;
+  TileTR.bg_ID = TileTR.fg_ID = 0;
+  TileBL.bg_ID = TileBL.fg_ID = 0;
+  TileBR.bg_ID = TileBR.fg_ID = 0;
+
+  active_TL = true;
+  active_TR = false;
+  active_BL = false;
+  active_BR = false;
+
 	no_bg = false;
 	no_fg = true;
 	show_fg = show_ty = show_co = true;
@@ -16,12 +26,8 @@ CEditMap::CEditMap()
 	type_w = type_h = tset_w = tset_h = 0;
 
   onTiles = ENABLE_BG | ENABLE_FG | ENABLE_TYPE | ENABLE_COLL;
-  intrpt = 0;
 
-  ActiveTileTL.bg_ID = ActiveTileTL.fg_ID = 0;
-  ActiveTileTR.bg_ID = ActiveTileTR.fg_ID = 0;
-  ActiveTileBL.bg_ID = ActiveTileBL.fg_ID = 0;
-  ActiveTileBR.bg_ID = ActiveTileBR.fg_ID = 0;
+  intrpt = 0;
 }
 
 bool CEditMap::OnInit()
@@ -60,4 +66,11 @@ bool CEditMap::OnInit()
 		return false;
 
   return true;
+}
+
+void CEditMap::OnTerminate()
+{
+  SDL_DestroyTexture(Main_Tileset);
+  SDL_DestroyTexture(Type_Tileset);
+  SDL_DestroyTexture(Coll_Tileset);
 }

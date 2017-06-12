@@ -1,7 +1,5 @@
 #include "CEditMap.h"
 
-using namespace map_editor;
-
 bool CEditMap::OnEvent(SDL_Point* mouse)
 {
   if (handleInterr(mouse)) return true;
@@ -18,6 +16,7 @@ bool CEditMap::OnEvent(SDL_Point* mouse)
   if (handleOpac_co(mouse)) return true;
   if (handleLayers(mouse)) return true;
   if (handlePlace(mouse)) return true;
+  if (handleQuadrant(mouse)) return true;
 
 	return false;
 }
@@ -29,12 +28,28 @@ bool CEditMap::handleInterr(SDL_Point* mouse)
 	{
 		if (intrpt & INTRPT_CH_BTILE)
 		{
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, ActiveTileTL.bg_ID)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, TileTL.bg_ID)) intrpt = INTRPT_NONE;
 		}
 		if (intrpt & INTRPT_CH_FTILE)
 		{
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, ActiveTileTL.fg_ID)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, TileTL.fg_ID)) intrpt = INTRPT_NONE;
 		}
+    // if (intrpt & INTRPT_CH_TL)
+    // {
+    //
+    // }
+    // else if (intrpt & INTRPT_CH_TR)
+    // {
+    //
+    // }
+    // else if (intrpt & INTRPT_CH_BL)
+    // {
+    //
+    // }
+    // else if (intrpt & INTRPT_CH_BR)
+    // {
+    //
+    // }
 		return true;
 	}
   return false;
@@ -47,7 +62,7 @@ bool CEditMap::handleNewTile(SDL_Point* mouse)
   {
     int mX = CCamera::CameraControl.GetX() + mouse->x;
     int mY = CCamera::CameraControl.GetY() + mouse->y;
-    CArea::AreaControl.ChangeTile(mX, mY,	no_bg ? -1 : ActiveTileTL.bg_ID, no_fg ? -1 : ActiveTileTL.fg_ID, ActiveTileTL.TypeID, ActiveTileTL.CollID, onTiles);
+    CArea::AreaControl.ChangeTile(mX, mY,	no_bg ? -1 : TileTL.bg_ID, no_fg ? -1 : TileTL.fg_ID, TileTL.TypeID, TileTL.CollID, onTiles);
     return true;
   }
   return false;
@@ -65,7 +80,7 @@ bool CEditMap::handleGetSet(SDL_Point* mouse)
 			// if ((Main_Tileset = CUI::UIControl.OnChange(Map_Interface, Tileset_Path)) != NULL)
 			// {
 			// 	CArea::AreaControl.ChangeSet(Main_Tileset);
-			// 	ActiveTileTL.bg_ID = 0;
+			// 	TileTL.bg_ID = 0;
 			// 	QueryTileset();
 			return true;
 			// }
@@ -110,15 +125,15 @@ bool CEditMap::handleScroll_bg(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= bg_x - TILE_SIZE && mouse->x < bg_x)
     {
-        if (ActiveTileTL.bg_ID != 0) ActiveTileTL.bg_ID -= 1;
-        else ActiveTileTL.bg_ID = (tset_w * tset_h) - 1;
+        if (TileTL.bg_ID != 0) TileTL.bg_ID -= 1;
+        else TileTL.bg_ID = (tset_w * tset_h) - 1;
         return true;
     }
     // Right Arrow
     if (mouse->x >= bg_x + TILE_SIZE && mouse->x < bg_x + (TILE_SIZE * 2))
     {
-        if (ActiveTileTL.bg_ID != (tset_w * tset_h) - 1) ActiveTileTL.bg_ID += 1;
-        else ActiveTileTL.bg_ID = 0;
+        if (TileTL.bg_ID != (tset_w * tset_h) - 1) TileTL.bg_ID += 1;
+        else TileTL.bg_ID = 0;
         return true;
     }
   }
@@ -135,15 +150,15 @@ bool CEditMap::handleScroll_fg(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= fg_x - TILE_SIZE && mouse->x < fg_x)
     {
-        if (ActiveTileTL.fg_ID != 0) ActiveTileTL.fg_ID -= 1;
-        else ActiveTileTL.fg_ID = (tset_w * tset_h) - 1;
+        if (TileTL.fg_ID != 0) TileTL.fg_ID -= 1;
+        else TileTL.fg_ID = (tset_w * tset_h) - 1;
         return true;
     }
     // Right Arrow
     if (mouse->x >= fg_x + TILE_SIZE && mouse->x < fg_x + (TILE_SIZE * 2))
     {
-        if (ActiveTileTL.fg_ID != (tset_w * tset_h) - 1) ActiveTileTL.fg_ID += 1;
-        else ActiveTileTL.fg_ID = 0;
+        if (TileTL.fg_ID != (tset_w * tset_h) - 1) TileTL.fg_ID += 1;
+        else TileTL.fg_ID = 0;
         return true;
     }
   }
@@ -160,15 +175,15 @@ bool CEditMap::handleScroll_ty(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= ty_x - TILE_SIZE && mouse->x < ty_x)
     {
-        if (ActiveTileTL.TypeID != 0) ActiveTileTL.TypeID -= 1;
-        else ActiveTileTL.TypeID = TILE_TYPE_FIRE;
+        if (TileTL.TypeID != 0) TileTL.TypeID -= 1;
+        else TileTL.TypeID = TILE_TYPE_FIRE;
         return true;
     }
     // Right Arrow
     if (mouse->x >= ty_x + TILE_SIZE && mouse->x < ty_x + (TILE_SIZE * 2))
     {
-        if (ActiveTileTL.TypeID != TILE_TYPE_FIRE) ActiveTileTL.TypeID += 1;
-        else ActiveTileTL.TypeID = 0;
+        if (TileTL.TypeID != TILE_TYPE_FIRE) TileTL.TypeID += 1;
+        else TileTL.TypeID = 0;
         return true;
     }
   }
@@ -185,15 +200,15 @@ bool CEditMap::handleScroll_co(SDL_Point* mouse)
     // Left Arrow
     if (mouse->x >= co_x - TILE_SIZE && mouse->x < co_x)
     {
-        if (ActiveTileTL.CollID != 0) ActiveTileTL.CollID -= 1;
-        else ActiveTileTL.CollID = SOLID_A_ML_BR;
+        if (TileTL.CollID != 0) TileTL.CollID -= 1;
+        else TileTL.CollID = SOLID_A_ML_BR;
         return true;
     }
     // Right Arrow
     if (mouse->x >= co_x + TILE_SIZE && mouse->x < co_x + (TILE_SIZE * 2))
     {
-        if (ActiveTileTL.CollID != SOLID_A_ML_BR) ActiveTileTL.CollID += 1;
-        else ActiveTileTL.CollID = 0;
+        if (TileTL.CollID != SOLID_A_ML_BR) TileTL.CollID += 1;
+        else TileTL.CollID = 0;
         return true;
     }
   }
@@ -342,4 +357,43 @@ bool CEditMap::handlePlace(SDL_Point* mouse)
     }
   }
   return false;
+}
+
+bool CEditMap::handleQuadrant(SDL_Point* mouse)
+{
+  using namespace but_quad_t;
+
+  if (mouse->x < left_x || mouse->x >= right_x + w || mouse->y < top_y || mouse->y >= bottom_y + h)
+  {
+    return false;
+  }
+
+  if (mouse->y < top_y + h)
+  {
+    if (mouse->x < left_x + w)
+    {
+      // top left
+      intrpt = INTRPT_CH_TL;
+    }
+    else
+    {
+      // top right
+      intrpt = INTRPT_CH_TR;
+    }
+  }
+  else
+  {
+    if (mouse->x < left_x + w)
+    {
+      // bottom left
+      intrpt = INTRPT_CH_BL;
+    }
+    else
+    {
+      // bottom right
+      intrpt = INTRPT_CH_BR;
+    }
+  }
+
+  return true;
 }

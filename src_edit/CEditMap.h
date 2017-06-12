@@ -14,77 +14,89 @@ enum interrupts
   INTRPT_CH_BTILE = 0x00000001,		// intrpt via bg tile change
   INTRPT_CH_FTILE = 0x00000002,		// intrpt via fg tile change
   INTRPT_MODEL = 0x00000004,
+  INTRPT_CH_TL = 0x00000008,
+  INTRPT_CH_TR = 0x00000010,
+  INTRPT_CH_BL = 0x00000020,
+  INTRPT_CH_BR = 0x00000040,
 };
 
-namespace map_editor
+namespace but_tset
 {
-  namespace but_tset
-  {
-    // const SDL_Rect button_tset = {665, 50, 50, 40};
-    const unsigned short w = 50;    // Change Tileset button info
-    const unsigned short h = 40;    //
-    const short x = 665;            //
-    const short y = 50;             //
-  }
-  namespace but_t
-  {
-    // const SDL_Rect button_bg = {260, 510, 100, 20};
-    // const SDL_Rect button_fg = {260, 540, 100, 20};
-    const short bg_x = 260;   // Change Tile button info
-    const short bg_y = 510;   //
-    const short bg_w = 100;   //
-    const short bg_h = 20;    //
-    const short fg_x = 260;   // Change Tile button info
-    const short fg_y = 540;   //
-    const short fg_w = 100;   //
-    const short fg_h = 20;    //
-  }
-  namespace disp_t
-  {
-    const short bgfg_x = 674;         // Displayed (current) Tile info
-    const short bgfg_y = 140;         //
-    const short name_offset = 10;
-    const short bg_x = 674;           // "..." background Tile info
-    const short bg_y = 210;           //
-    const short fg_x = 674;           // "..." foreground Tile info
-    const short fg_y = 280;           //
-    const short ty_x = 674;           // "..." Tile type info
-    const short ty_y = 350;           //
-    const short co_x = 674;           // "..." Tile collision info
-    const short co_y = 420;           //
-    const unsigned short dummy_x = 522;
-    const unsigned short dummy_y = 0;
-  }
-  namespace opac    // opacity meters
-  {
-    const short w = 90;
-    const short h = 4;
-    const short x = 645;
-    const short ty_y = 390;
-    const short co_y = 460;
-  }
-  namespace rm_flip
-  {
-    const short bg_x = 642;
-    const short bg_y = 192;
-    const short fg_x = 642;
-    const short fg_y = 262;
-    const short ty_x = 642;
-    const short ty_y = 332;
-    const short co_x = 642;
-    const short co_y = 402;
-  }
-  namespace view_flip
-  {
-    const short x = 20;
-    const short y = 510;
-  }
-  namespace place_flip
-  {
-    const short x = 150;
-    const short y = 495;
-  }
+  // const SDL_Rect button_tset = {665, 50, 50, 40};
+  const unsigned short w = 50;    // Change Tileset button info
+  const unsigned short h = 40;    //
+  const short x = 665;            //
+  const short y = 50;             //
 }
+namespace but_t
+{
+  // const SDL_Rect button_bg = {260, 510, 100, 20};
+  // const SDL_Rect button_fg = {260, 540, 100, 20};
+  const short bg_x = 260;   // Change Tile button info
+  const short bg_y = 510;   //
+  const short bg_w = 100;   //
+  const short bg_h = 20;    //
+  const short fg_x = 260;   // Change Tile button info
+  const short fg_y = 540;   //
+  const short fg_w = 100;   //
+  const short fg_h = 20;    //
+}
+namespace but_quad_t
+{
+  const short left_x = 260;       // Change Tile button info
+  const short right_x = 284;      //
+  const short top_y = 510;        //
+  const short bottom_y = 534;     //
+  const short w = 24;             //
+  const short h = 24;             //
+  const short bsiz = 2;
+}
+namespace disp_t
+{
+  const short bgfg_x = 674;         // Displayed (current) Tile info
+  const short bgfg_y = 140;         //
+  const short name_offset = 10;
+  const short bg_x = 674;           // "..." background Tile info
+  const short bg_y = 210;           //
+  const short fg_x = 674;           // "..." foreground Tile info
+  const short fg_y = 280;           //
+  const short ty_x = 674;           // "..." Tile type info
+  const short ty_y = 350;           //
+  const short co_x = 674;           // "..." Tile collision info
+  const short co_y = 420;           //
+  const unsigned short dummy_x = 522;
+  const unsigned short dummy_y = 0;
+}
+namespace opac    // opacity meters
+{
+  const short w = 90;
+  const short h = 4;
+  const short x = 645;
+  const short ty_y = 390;
+  const short co_y = 460;
+}
+namespace rm_flip
+{
+  const short bg_x = 642;
+  const short bg_y = 192;
+  const short fg_x = 642;
+  const short fg_y = 262;
+  const short ty_x = 642;
+  const short ty_y = 332;
+  const short co_x = 642;
+  const short co_y = 402;
+}
+namespace view_flip
+{
+  const short x = 20;
+  const short y = 510;
+}
+namespace place_flip
+{
+  const short x = 150;
+  const short y = 495;
+}
+
 class CEditMap {
 public:
 	static CEditMap	MapEditor;
@@ -95,13 +107,14 @@ private:
   SDL_Texture* Coll_Tileset;	// Tileset showing collision type
 
 private:
+  CTile TileTL;
+  CTile TileTR;
+  CTile TileBL;
+  CTile TileBR;
+  bool active_TL, active_TR, active_BL, active_BR;
 
+private:
   bool no_bg, no_fg;				// If true, use -1 as a tile number (render nothing)
-
-  CTile ActiveTileTL;
-  CTile ActiveTileTR;
-  CTile ActiveTileBL;
-  CTile ActiveTileBR;
 
   int type_alpha;						// Current Opacity of the Type overlay
   int coll_alpha;						// Current Opacity of the Collision overlay
@@ -119,6 +132,7 @@ public:
   CEditMap();
 
   bool OnInit();
+  void OnTerminate();
 
   bool RenderMap();
 
@@ -140,6 +154,7 @@ private:
   bool handleOpac_co(SDL_Point* mouse);
   bool handleLayers(SDL_Point* mouse);
   bool handlePlace(SDL_Point* mouse);
+  bool handleQuadrant(SDL_Point* mouse);
 
 public:
   bool OnRender(SDL_Texture* interface, SDL_Point* mouse);
@@ -150,7 +165,7 @@ private:
 private:
   bool RenderSidebar(SDL_Texture* interface, SDL_Point* mouse);
   bool drawButtonSet(SDL_Texture* interface, SDL_Point* mouse);
-  bool drawActiveTile(SDL_Texture* interface);
+  bool drawTile(SDL_Texture* interface);
   bool drawActive_bg(SDL_Texture* interface);
   bool drawActive_fg(SDL_Texture* interface);
   bool drawActive_ty(SDL_Texture* interface);
@@ -164,6 +179,7 @@ private:
   bool drawButton_fg(SDL_Texture* interface, SDL_Point* mouse);
   bool drawOverlayList(SDL_Texture* interface);
   bool drawPlacementList(SDL_Texture* interface);
+  bool drawQuadrants(SDL_Texture* interface, SDL_Point* mouse);
 
 public:
   bool RenderButton(SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
