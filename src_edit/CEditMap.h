@@ -20,6 +20,14 @@ enum interrupts
   INTRPT_CH_BR = 0x00000040,
 };
 
+enum
+{
+  MODIFY_TILE_TL = 0,
+  MODIFY_TILE_TR,
+  MODIFY_TILE_BL,
+  MODIFY_TILE_BR,
+};
+
 namespace but_tset
 {
   // const SDL_Rect button_tset = {665, 50, 50, 40};
@@ -32,14 +40,25 @@ namespace but_t
 {
   // const SDL_Rect button_bg = {260, 510, 100, 20};
   // const SDL_Rect button_fg = {260, 540, 100, 20};
-  const short bg_x = 260;   // Change Tile button info
+  const short bg_x = 325;   // Change Tile button info
   const short bg_y = 510;   //
   const short bg_w = 100;   //
-  const short bg_h = 20;    //
-  const short fg_x = 260;   // Change Tile button info
-  const short fg_y = 540;   //
+  const short bg_h = 24;    //
+  const short fg_x = 325;   // Change Tile button info
+  const short fg_y = 534;   //
   const short fg_w = 100;   //
-  const short fg_h = 20;    //
+  const short fg_h = 24;    //
+}
+namespace but_act_t
+{
+  static const char* onTitle = "active";
+  static const char* offTitle = "idle";
+  
+  const short x = 260;
+  const short y = 486;
+  const short w = 48;
+  const short h = 16;
+  const short bsiz = 2;
 }
 namespace but_quad_t
 {
@@ -75,7 +94,7 @@ namespace opac    // opacity meters
   const short ty_y = 390;
   const short co_y = 460;
 }
-namespace rm_flip
+namespace but_rm
 {
   const short bg_x = 642;
   const short bg_y = 192;
@@ -112,9 +131,10 @@ private:
   CTile TileBL;
   CTile TileBR;
   bool active_TL, active_TR, active_BL, active_BR;
+  int modifyTile;
 
 private:
-  bool no_bg, no_fg;				// If true, use -1 as a tile number (render nothing)
+  // bool no_bg, no_fg;				// If true, use -1 as a tile number (render nothing)
 
   int type_alpha;						// Current Opacity of the Type overlay
   int coll_alpha;						// Current Opacity of the Collision overlay
@@ -144,12 +164,12 @@ private:
   bool handleNewTile(SDL_Point* mouse);
   bool handleGetSet(SDL_Point* mouse);
   bool handleGetTile(SDL_Point* mouse);
-  bool handleScroll_bg(SDL_Point* mouse);
-  bool handleScroll_fg(SDL_Point* mouse);
-  bool handleScroll_ty(SDL_Point* mouse);
-  bool handleScroll_co(SDL_Point* mouse);
-  bool handleRemove_bg(SDL_Point* mouse);
-  bool handleRemove_fg(SDL_Point* mouse);
+  bool handleScroll_bg(SDL_Point* mouse, CTile* EditTile);
+  bool handleScroll_fg(SDL_Point* mouse, CTile* EditTile);
+  bool handleScroll_ty(SDL_Point* mouse, CTile* EditTile);
+  bool handleScroll_co(SDL_Point* mouse, CTile* EditTile);
+  bool handleRemove_bg(SDL_Point* mouse, CTile* EditTile);
+  bool handleRemove_fg(SDL_Point* mouse, CTile* EditTile);
   bool handleOpac_ty(SDL_Point* mouse);
   bool handleOpac_co(SDL_Point* mouse);
   bool handleLayers(SDL_Point* mouse);
@@ -164,12 +184,12 @@ private:
 
 private:
   bool RenderSidebar(SDL_Texture* interface, SDL_Point* mouse);
-  bool drawButtonSet(SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButtonTileset(SDL_Texture* interface, SDL_Point* mouse);
   bool drawTile(SDL_Texture* interface);
-  bool drawActive_bg(SDL_Texture* interface);
-  bool drawActive_fg(SDL_Texture* interface);
-  bool drawActive_ty(SDL_Texture* interface);
-  bool drawActive_co(SDL_Texture* interface);
+  bool drawActive_bg(SDL_Texture* interface, CTile* ShowTile);
+  bool drawActive_fg(SDL_Texture* interface, CTile* ShowTile);
+  bool drawActive_ty(SDL_Texture* interface, CTile* ShowTile);
+  bool drawActive_co(SDL_Texture* interface, CTile* ShowTile);
   bool drawOpac_ty(SDL_Texture* interface);
   bool drawOpac_co(SDL_Texture* interface);
 
@@ -179,6 +199,7 @@ private:
   bool drawButton_fg(SDL_Texture* interface, SDL_Point* mouse);
   bool drawOverlayList(SDL_Texture* interface);
   bool drawPlacementList(SDL_Texture* interface);
+  bool drawButtonActive(SDL_Texture* interface, SDL_Point* mouse, bool active);
   bool drawQuadrants(SDL_Texture* interface, SDL_Point* mouse);
 
 public:

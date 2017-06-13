@@ -8,18 +8,20 @@ CEditMap::CEditMap()
   Type_Tileset = NULL;    // Tileset showing tile type
   Coll_Tileset = NULL;    // Tileset showing collision type
 
-  TileTL.bg_ID = TileTL.fg_ID = 0;
-  TileTR.bg_ID = TileTR.fg_ID = 0;
-  TileBL.bg_ID = TileBL.fg_ID = 0;
-  TileBR.bg_ID = TileBR.fg_ID = 0;
+  TileTL.bg_ID = TileTL.fg_ID = -1;
+  TileTR.bg_ID = TileTR.fg_ID = -1;
+  TileBL.bg_ID = TileBL.fg_ID = -1;
+  TileBR.bg_ID = TileBR.fg_ID = -1;
 
   active_TL = true;
   active_TR = false;
   active_BL = false;
   active_BR = false;
 
-	no_bg = false;
-	no_fg = true;
+  modifyTile = MODIFY_TILE_TL;
+
+	// no_bg = false;
+	// no_fg = true;
 	show_fg = show_ty = show_co = true;
 	type_alpha = 85;
 	coll_alpha = 125;
