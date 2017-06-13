@@ -53,7 +53,6 @@ namespace but_act_t
 {
   static const char* onTitle = "active";
   static const char* offTitle = "idle";
-  
   const short x = 260;
   const short y = 486;
   const short w = 48;
@@ -62,6 +61,13 @@ namespace but_act_t
 }
 namespace but_quad_t
 {
+  static const char* tileNames[] =
+  {
+    "TL",
+    "TR",
+    "BL",
+    "BR"
+  };
   const short left_x = 260;       // Change Tile button info
   const short right_x = 284;      //
   const short top_y = 510;        //
@@ -134,8 +140,6 @@ private:
   int modifyTile;
 
 private:
-  // bool no_bg, no_fg;				// If true, use -1 as a tile number (render nothing)
-
   int type_alpha;						// Current Opacity of the Type overlay
   int coll_alpha;						// Current Opacity of the Collision overlay
 
@@ -174,6 +178,7 @@ private:
   bool handleOpac_co(SDL_Point* mouse);
   bool handleLayers(SDL_Point* mouse);
   bool handlePlace(SDL_Point* mouse);
+  bool handleActTile(SDL_Point* mouse, bool& active);
   bool handleQuadrant(SDL_Point* mouse);
 
 public:

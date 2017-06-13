@@ -451,28 +451,28 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, SDL_Point* mouse)
 	SDL_Rect dstrect;
 	int colX;
 
-	name = "TL";
+	name = tileNames[0];
 	dstrect = CSurface::getRect(left_x, top_y, w, h);
 	colX = (modifyTile == MODIFY_TILE_TL) ? YELLOW_X : (active_TL ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
 	Font::CenterWrite(FONT_MINI, name, left_x + (w / 2), top_y + (h / 2));
 
-	name = "TR";
+	name = tileNames[1];
 	dstrect.x = right_x;
 	colX = (modifyTile == MODIFY_TILE_TR) ? YELLOW_X : (active_TR ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
 	Font::CenterWrite(FONT_MINI, name, right_x + (w / 2), top_y + (h / 2));
 
-	name = "BR";
+	name = tileNames[3];
 	dstrect.y = bottom_y;
 	colX = (modifyTile == MODIFY_TILE_BR) ? YELLOW_X : (active_BR ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
 	Font::CenterWrite(FONT_MINI, name, right_x + (w / 2), bottom_y + (h / 2));
 
-	name = "BL";
+	name = tileNames[2];
 	dstrect.x = left_x;
 	colX = (modifyTile == MODIFY_TILE_BL) ? YELLOW_X : (active_BL ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))

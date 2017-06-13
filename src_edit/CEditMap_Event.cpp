@@ -3,12 +3,13 @@
 bool CEditMap::OnEvent(SDL_Point* mouse)
 {
   CTile* EditTile;
+  bool* active;
   switch (modifyTile)
   {
-    case MODIFY_TILE_TL: EditTile = &TileTL; break;
-    case MODIFY_TILE_TR: EditTile = &TileTR; break;
-    case MODIFY_TILE_BL: EditTile = &TileBL; break;
-    case MODIFY_TILE_BR: EditTile = &TileBR; break;
+    case MODIFY_TILE_TL: EditTile = &TileTL; active = &active_TL; break;
+    case MODIFY_TILE_TR: EditTile = &TileTR; active = &active_TR; break;
+    case MODIFY_TILE_BL: EditTile = &TileBL; active = &active_BL; break;
+    case MODIFY_TILE_BR: EditTile = &TileBR; active = &active_BR; break;
     default: break;
   }
   if (handleInterr(mouse)) return true;
@@ -25,6 +26,7 @@ bool CEditMap::OnEvent(SDL_Point* mouse)
   if (handleOpac_co(mouse)) return true;
   if (handleLayers(mouse)) return true;
   if (handlePlace(mouse)) return true;
+  if (handleActTile(mouse, *active)) return true;
   if (handleQuadrant(mouse)) return true;
 
 	return false;
@@ -345,6 +347,11 @@ bool CEditMap::handlePlace(SDL_Point* mouse)
       return true;
     }
   }
+  return false;
+}
+
+bool CEditMap::handleActTile(SDL_Point* mouse, bool& active)
+{
   return false;
 }
 
