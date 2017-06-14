@@ -182,13 +182,14 @@ void CMap::ViewMap(SDL_Texture* ui, int Xo, int Yo)
 	}
 }
 
-void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles)
+// void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles)
+void CMap::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
 {
 	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
-	if (usetiles & ENABLE_BG) 	TileList[ID].bg_ID = tile;
-	if (usetiles & ENABLE_FG) 	TileList[ID].fg_ID = fore;
-	if (usetiles & ENABLE_TYPE)		TileList[ID].TypeID = type;
-	if (usetiles & ENABLE_COLL)	TileList[ID].CollID = coll;
+	if (useTiles & ENABLE_BG) 	TileList[ID].bg_ID = NewTile->bg_ID;
+	if (useTiles & ENABLE_FG) 	TileList[ID].fg_ID = NewTile->fg_ID;
+	if (useTiles & ENABLE_TYPE)	TileList[ID].TypeID = NewTile->TypeID;
+	if (useTiles & ENABLE_COLL)	TileList[ID].CollID = NewTile->CollID;
 }
 
 void CMap::SaveMap(int ID, char const* areaname)

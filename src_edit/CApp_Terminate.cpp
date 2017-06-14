@@ -8,7 +8,8 @@ void CApp::OnExit()
 void CApp::OnTerminate()
 {
 	SDL_DestroyWindow(Map_Display);
-	CSurface::SurfControl.OnCleanup();
+	CSurface::OnCleanup();
 	SDL_DestroyTexture(Map_Interface);
+	CAsset::OnCleanup();
 	CEditMap::MapEditor.OnTerminate();
 }

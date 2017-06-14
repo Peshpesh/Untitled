@@ -28,6 +28,7 @@ ${SRCDIR}/CApp_RenderNpcEdit.cpp
 ${SRCDIR}/CApp_RenderScnEdit.cpp
 ${SRCDIR}/CApp_Terminate.cpp
 ${SRCDIR}/CArea.cpp
+${SRCDIR}/CAsset.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CChangeTile.cpp
 ${SRCDIR}/CConfig.cpp
@@ -58,6 +59,7 @@ set(HEADER_FILES
 ${SRCDIR}/CAnimation.h
 ${SRCDIR}/CApp.h
 ${SRCDIR}/CArea.h
+${SRCDIR}/CAsset.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CChangeTile.h
 ${SRCDIR}/CConfig.h

@@ -66,7 +66,8 @@ public:
 	void	OnReduceDown();
 
 	void	ChangeSet(SDL_Texture* newset);
-	void	ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles);
+	// void	ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles);
+	void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
 	void	SaveArea(char const* areaname, char const* setpath);
 	void	OnCleanup();
 };

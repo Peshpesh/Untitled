@@ -35,7 +35,7 @@ bool CUI::OnWindow(SDL_Texture* map_ui, int type)
 
 	Font::Write(FONT_DEFAULT, "NVM", Px + UI_Width - 10 - 14 * 3, Py + UI_Height - 5 - 14);
 	// SDL_RenderPresent(renderer);
-	CSurface::SurfControl.Present();
+	CSurface::Present();
 	return true;
 }
 

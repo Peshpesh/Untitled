@@ -1,6 +1,7 @@
 #include "CEditMap.h"
 
 CEditMap CEditMap::MapEditor;
+// SDL_Point* CEditMap::shadowColor = NULL;
 
 CEditMap::CEditMap()
 {
@@ -19,9 +20,9 @@ CEditMap::CEditMap()
   active_BR = false;
 
   modifyTile = MODIFY_TILE_TL;
+  shadowColor = &color::light_blue;
+  shadow_w = 2;
 
-	// no_bg = false;
-	// no_fg = true;
 	show_fg = show_ty = show_co = true;
 	type_alpha = 85;
 	coll_alpha = 125;

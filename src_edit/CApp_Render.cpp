@@ -3,7 +3,7 @@
 void CApp::OnRender()
 {
 	bool debug = true;
-	CSurface::SurfControl.Clear();
+	CSurface::Clear();
 
 	// Draw background scenery
 	int s_i = 0;
@@ -70,7 +70,7 @@ void CApp::OnRender()
 	{
 		Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
-	CSurface::SurfControl.Present();
+	CSurface::Present();
 }
 
 bool CApp::RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl)

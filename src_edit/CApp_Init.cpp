@@ -12,12 +12,17 @@ bool CApp::OnInit()
 		return false;
 	}
 
-	if (!CSurface::SurfControl.OnInit(Map_Display))
+	if (!CSurface::OnInit(Map_Display))
 	{
 		return false;
 	}
 
 	if ((Map_Interface = CSurface::OnLoad("../res_edit/interface_plain.png")) == NULL)
+	{
+		return false;
+	}
+
+	if (!CAsset::OnInit())
 	{
 		return false;
 	}

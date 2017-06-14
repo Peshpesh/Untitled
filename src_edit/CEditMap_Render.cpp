@@ -31,7 +31,7 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, SDL_Point* mouse)
 
 	if (intrpt ^ INTRPT_NONE)
 	{
-		if (intrpt & INTRPT_CH_BTILE || intrpt & INTRPT_CH_FTILE)
+		if (intrpt & INTRPT_CHANGE_BG || intrpt & INTRPT_CHANGE_FG)
 		{
 			CChangeTile::PickTile.RenderTileset(interface, Main_Tileset, mouse->x, mouse->y);
 		}
@@ -40,7 +40,31 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, SDL_Point* mouse)
 	{
 		if (mouse->x >= 0 && mouse->x < WWIDTH && mouse->y >= 0 && mouse->y < WHEIGHT)
 		{
-			CSurface::OnDraw(interface, tX, tY, TILE_HILIGHT_X, TILE_HILIGHT_Y, TILE_SIZE, TILE_SIZE);
+			SDL_Rect dstR = {0, 0, TILE_SIZE, TILE_SIZE};
+			if (active_TL)
+			{
+				dstR.x = tX;
+				dstR.y = tY;
+				CAsset::drawBox(&dstR, shadowColor, shadow_w);
+			}
+			if (active_BL)
+			{
+				dstR.x = tX;
+				dstR.y = tY + TILE_SIZE;
+				CAsset::drawBox(&dstR, shadowColor, shadow_w);
+			}
+			if (active_TR)
+			{
+				dstR.x = tX + TILE_SIZE;
+				dstR.y = tY;
+				CAsset::drawBox(&dstR, shadowColor, shadow_w);
+			}
+			if (active_BR)
+			{
+				dstR.x = tX + TILE_SIZE;
+				dstR.y = tY + TILE_SIZE;
+				CAsset::drawBox(&dstR, shadowColor, shadow_w);
+			}
 		}
 	}
 	return true;
@@ -107,13 +131,13 @@ bool CEditMap::RenderButton(SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* 
   	}
   }
 
-	SDL_Rect srcR = CSurface::getRect(DARKS_X, COLOR_PURE_Y, 1, 1);
+	SDL_Rect srcR = CAsset::getRect(DARKS_X, COLOR_PURE_Y, 1, 1);
 	if (!CSurface::OnDraw(interface, &srcR, button))
 		return false;
 
 	srcR.x = colX;
 	srcR.y = colY - but_glow;
-	SDL_Rect dstR = CSurface::getRect(button->x + bsiz, button->y + bsiz, button->w - (bsiz * 2), button->h - (bsiz * 2));
+	SDL_Rect dstR = CAsset::getRect(button->x + bsiz, button->y + bsiz, button->w - (bsiz * 2), button->h - (bsiz * 2));
 	if (!CSurface::OnDraw(interface, &srcR, &dstR)) return false;
 
 
@@ -125,7 +149,7 @@ bool CEditMap::drawButtonTileset(SDL_Texture* interface, SDL_Point* mouse)
 	using namespace but_tset;
 	bool hl = !(bool)(intrpt);
 
-	SDL_Rect dstrect = CSurface::getRect(x, y, w, h);
+	SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
 	if (!RenderButton(interface, mouse, &dstrect, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, hl))
 		return false;
 
@@ -305,9 +329,9 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, SDL_Point* mouse)
 	int colX = BLUE_X;
 
 	// render button for picking background tiles
-	if (intrpt & INTRPT_CH_BTILE) colX = RED_X;
+	if (intrpt & INTRPT_CHANGE_BG) colX = RED_X;
 
-	SDL_Rect dstrect = CSurface::getRect(bg_x, bg_y, bg_w, bg_h);
+	SDL_Rect dstrect = CAsset::getRect(bg_x, bg_y, bg_w, bg_h);
 	if (!RenderButton(interface, mouse, &dstrect, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
 		return false;
 	Font::CenterWrite(FONT_MINI, "CHANGE B.TILE", bg_x + (bg_w / 2), bg_y + (bg_h / 2));
@@ -323,9 +347,9 @@ bool CEditMap::drawButton_fg(SDL_Texture* interface, SDL_Point* mouse)
 	int colX = BLUE_X;
 
 	// render button for picking foreground tiles
-	if (intrpt & INTRPT_CH_FTILE) colX = RED_X;
+	if (intrpt & INTRPT_CHANGE_FG) colX = RED_X;
 
-	SDL_Rect dstrect = CSurface::getRect(fg_x, fg_y, fg_w, fg_h);
+	SDL_Rect dstrect = CAsset::getRect(fg_x, fg_y, fg_w, fg_h);
 	if (!RenderButton(interface, mouse, &dstrect, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
 		return false;
 	Font::CenterWrite(FONT_MINI, "CHANGE F.TILE", fg_x + (fg_w / 2), fg_y + (fg_h / 2));
@@ -434,7 +458,7 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, SDL_Point* mouse, bool a
 	int colX = active ? GREEN_X : RED_X;
 	const char* name = active ? onTitle : offTitle;
 
-	SDL_Rect dstrect = CSurface::getRect(x, y, w, h);
+	SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
 	Font::CenterWrite(FONT_MINI, name, x + (w / 2), y + (h / 2));
@@ -447,37 +471,32 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, SDL_Point* mouse)
 	using namespace but_quad_t;
 
 	bool hl = !(bool)(intrpt);
-	const char* name;
 	SDL_Rect dstrect;
 	int colX;
 
-	name = tileNames[0];
-	dstrect = CSurface::getRect(left_x, top_y, w, h);
+	dstrect = CAsset::getRect(left_x, top_y, w, h);
 	colX = (modifyTile == MODIFY_TILE_TL) ? YELLOW_X : (active_TL ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
-	Font::CenterWrite(FONT_MINI, name, left_x + (w / 2), top_y + (h / 2));
+	Font::CenterWrite(FONT_MINI, name_TL, left_x + (w / 2), top_y + (h / 2));
 
-	name = tileNames[1];
 	dstrect.x = right_x;
 	colX = (modifyTile == MODIFY_TILE_TR) ? YELLOW_X : (active_TR ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
-	Font::CenterWrite(FONT_MINI, name, right_x + (w / 2), top_y + (h / 2));
+	Font::CenterWrite(FONT_MINI, name_TR, right_x + (w / 2), top_y + (h / 2));
 
-	name = tileNames[3];
 	dstrect.y = bottom_y;
 	colX = (modifyTile == MODIFY_TILE_BR) ? YELLOW_X : (active_BR ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
-	Font::CenterWrite(FONT_MINI, name, right_x + (w / 2), bottom_y + (h / 2));
+	Font::CenterWrite(FONT_MINI, name_BR, right_x + (w / 2), bottom_y + (h / 2));
 
-	name = tileNames[2];
 	dstrect.x = left_x;
 	colX = (modifyTile == MODIFY_TILE_BL) ? YELLOW_X : (active_BL ? GREEN_X : RED_X);
 	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
 		return false;
-	Font::CenterWrite(FONT_MINI, name, left_x + (w / 2), bottom_y + (h / 2));
+	Font::CenterWrite(FONT_MINI, name_BL, left_x + (w / 2), bottom_y + (h / 2));
 
 	return true;
 }

@@ -1,10 +1,10 @@
 #include "CSurface.h"
 
-CSurface CSurface::SurfControl;
+SDL_Renderer* CSurface::Win_Renderer = NULL;
 
 CSurface::CSurface()
 {
-	Win_Renderer = NULL;
+	//
 }
 
 bool CSurface::OnInit(SDL_Window* window)
@@ -31,6 +31,10 @@ void CSurface::OnCleanup()
 	SDL_DestroyRenderer(Win_Renderer);
 }
 
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+
 /* Loads an image using a specified renderer.
 * param File     : character string of the file name
 * param renderer : renderer in use
@@ -45,7 +49,7 @@ SDL_Texture* CSurface::OnLoad(char const* File)
 	if ((Surf_Return = IMG_Load(File)) == NULL)	return NULL;
 
 	// Load the image onto a SDL_Texture
-	if ((Surf_Text = SDL_CreateTextureFromSurface(SurfControl.Win_Renderer, Surf_Return)) == 0)
+	if ((Surf_Text = SDL_CreateTextureFromSurface(Win_Renderer, Surf_Return)) == 0)
 	{
 		return NULL;
 	}
@@ -71,7 +75,7 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y)
 	DestR.y = Y;
 	SDL_QueryTexture(Surf_Src, NULL, NULL, &DestR.w, &DestR.h);
 
-	SDL_RenderCopy(SurfControl.Win_Renderer, Surf_Src, NULL, &DestR);
+	SDL_RenderCopy(Win_Renderer, Surf_Src, NULL, &DestR);
 	return true;
 }
 
@@ -94,7 +98,7 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W
 	DestR.w = W;  // This will make the drawn image have the same
 	DestR.h = H;  // resolution as the source image
 
-	SDL_RenderCopy(SurfControl.Win_Renderer, Surf_Src, &SrcR, &DestR);
+	SDL_RenderCopy(Win_Renderer, Surf_Src, &SrcR, &DestR);
 	return true;
 }
 
@@ -117,7 +121,7 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W
 	SrcR.w = Wo;
 	SrcR.h = Ho;
 
-	SDL_RenderCopy(SurfControl.Win_Renderer, Surf_Src, &SrcR, &DestR);
+	SDL_RenderCopy(Win_Renderer, Surf_Src, &SrcR, &DestR);
 	return true;
 }
 
@@ -126,18 +130,6 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, SDL_Rect* srcrect, SDL_Rect* dstrec
 	if (Surf_Src == NULL || srcrect == NULL || dstrect == NULL)
 		return false;
 
-	SDL_RenderCopy(SurfControl.Win_Renderer, Surf_Src, srcrect, dstrect);
+	SDL_RenderCopy(Win_Renderer, Surf_Src, srcrect, dstrect);
 	return true;
-}
-
-SDL_Rect CSurface::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H)
-{
-	SDL_Rect rect;
-
-	rect.x = X;
-	rect.y = Y;
-	rect.w = W;
-	rect.h = H;
-
-	return rect;
 }

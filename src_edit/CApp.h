@@ -6,6 +6,7 @@
 
 #include "CSurface.h"
 #include "CEvent.h"
+#include "CAsset.h"
 #include "CCamera.h"
 #include "CArea.h"
 #include "CUI.h"

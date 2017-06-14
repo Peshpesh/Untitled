@@ -9,15 +9,13 @@ class CSurface
 	public:
 		CSurface();
 
-		static CSurface	SurfControl;
-
-		bool OnInit(SDL_Window* window);
-		void Clear();
-		void Present();
-		void OnCleanup();
+		static bool OnInit(SDL_Window* window);
+		static void Clear();
+		static void Present();
+		static void OnCleanup();
 
 	private:
-		SDL_Renderer* Win_Renderer;
+		static SDL_Renderer* Win_Renderer;
 
 	public:
 
@@ -52,8 +50,6 @@ class CSurface
 		static bool OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int Wo, int Ho, int W, int H);
 
 		static bool OnDraw(SDL_Texture* Surf_Src, SDL_Rect* srcrect, SDL_Rect* dstrect);
-
-		static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
 
 };
 

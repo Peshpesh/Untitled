@@ -12,7 +12,7 @@ bool CEditMap::OnEvent(SDL_Point* mouse)
     case MODIFY_TILE_BR: EditTile = &TileBR; active = &active_BR; break;
     default: break;
   }
-  if (handleInterr(mouse)) return true;
+  if (handleInterr(mouse, EditTile)) return true;
   if (handleNewTile(mouse)) return true;
   if (handleGetSet(mouse)) return true;
   if (handleGetTile(mouse)) return true;
@@ -32,18 +32,18 @@ bool CEditMap::OnEvent(SDL_Point* mouse)
 	return false;
 }
 
-bool CEditMap::handleInterr(SDL_Point* mouse)
+bool CEditMap::handleInterr(SDL_Point* mouse, CTile* EditTile)
 {
   // Event is passed to intrpting prompts, if there are any
 	if (intrpt & ~INTRPT_NONE)
 	{
-		if (intrpt & INTRPT_CH_BTILE)
+		if (intrpt & INTRPT_CHANGE_BG)
 		{
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, TileTL.bg_ID)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->bg_ID)) intrpt = INTRPT_NONE;
 		}
-		if (intrpt & INTRPT_CH_FTILE)
+		if (intrpt & INTRPT_CHANGE_FG)
 		{
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, TileTL.fg_ID)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->fg_ID)) intrpt = INTRPT_NONE;
 		}
 		return true;
 	}
@@ -52,12 +52,16 @@ bool CEditMap::handleInterr(SDL_Point* mouse)
 
 bool CEditMap::handleNewTile(SDL_Point* mouse)
 {
-  // Place new tile, if click is in the workspace
+  // Place new tiles, if click is in the workspace
   if (mouse->x < WWIDTH && mouse->y < WHEIGHT)
   {
     int mX = CCamera::CameraControl.GetX() + mouse->x;
     int mY = CCamera::CameraControl.GetY() + mouse->y;
-    CArea::AreaControl.ChangeTile(mX, mY,	TileTL.bg_ID, TileTL.fg_ID, TileTL.TypeID, TileTL.CollID, onTiles);
+    if (active_TL) CArea::AreaControl.ChangeTile(mX, mY, &TileTL, onTiles);
+    if (active_TR) CArea::AreaControl.ChangeTile(mX + TILE_SIZE, mY, &TileTR, onTiles);
+    if (active_BL) CArea::AreaControl.ChangeTile(mX, mY + TILE_SIZE, &TileBL, onTiles);
+    if (active_BR) CArea::AreaControl.ChangeTile(mX + TILE_SIZE, mY + TILE_SIZE, &TileBR, onTiles);
+
     return true;
   }
   return false;
@@ -94,7 +98,7 @@ bool CEditMap::handleGetTile(SDL_Point* mouse)
     if (mouse->y >= bg_y && mouse->y < bg_y + bg_h)
     {
       CChangeTile::PickTile.Init(tset_w, tset_h);
-      intrpt = INTRPT_CH_BTILE;
+      intrpt = INTRPT_CHANGE_BG;
       return true;
     }
   }
@@ -103,7 +107,7 @@ bool CEditMap::handleGetTile(SDL_Point* mouse)
     if (mouse->y >= fg_y && mouse->y < fg_y + fg_h)
     {
       CChangeTile::PickTile.Init(tset_w, tset_h);
-      intrpt = INTRPT_CH_FTILE;
+      intrpt = INTRPT_CHANGE_FG;
       return true;
     }
   }
@@ -352,7 +356,16 @@ bool CEditMap::handlePlace(SDL_Point* mouse)
 
 bool CEditMap::handleActTile(SDL_Point* mouse, bool& active)
 {
-  return false;
+  using namespace but_act_t;
+
+  if (mouse->x < x || mouse->x >= x + w || mouse->y < y || mouse->y >= y + h)
+  {
+    return false;
+  }
+
+  active = !active;
+
+  return true;
 }
 
 bool CEditMap::handleQuadrant(SDL_Point* mouse)
@@ -369,13 +382,11 @@ bool CEditMap::handleQuadrant(SDL_Point* mouse)
     if (mouse->x < left_x + w)
     {
       // top left
-      // intrpt = INTRPT_CH_TL;
       modifyTile = MODIFY_TILE_TL;
     }
     else
     {
       // top right
-      // intrpt = INTRPT_CH_TR;
       modifyTile = MODIFY_TILE_TR;
     }
   }
@@ -384,16 +395,13 @@ bool CEditMap::handleQuadrant(SDL_Point* mouse)
     if (mouse->x < left_x + w)
     {
       // bottom left
-      // intrpt = INTRPT_CH_BL;
       modifyTile = MODIFY_TILE_BL;
     }
     else
     {
       // bottom right
-      // intrpt = INTRPT_CH_BR;
       modifyTile = MODIFY_TILE_BR;
     }
   }
-
   return true;
 }

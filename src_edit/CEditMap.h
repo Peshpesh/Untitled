@@ -2,6 +2,7 @@
 #define _C_EDITMAP_H_
 
 #include "CSurface.h"
+#include "CAsset.h"
 #include "CFont.h"
 #include "CArea.h"
 #include "CCamera.h"
@@ -11,13 +12,9 @@
 enum interrupts
 {
   INTRPT_NONE = 0,
-  INTRPT_CH_BTILE = 0x00000001,		// intrpt via bg tile change
-  INTRPT_CH_FTILE = 0x00000002,		// intrpt via fg tile change
+  INTRPT_CHANGE_BG = 0x00000001,		// intrpt via bg tile change
+  INTRPT_CHANGE_FG = 0x00000002,		// intrpt via fg tile change
   INTRPT_MODEL = 0x00000004,
-  INTRPT_CH_TL = 0x00000008,
-  INTRPT_CH_TR = 0x00000010,
-  INTRPT_CH_BL = 0x00000020,
-  INTRPT_CH_BR = 0x00000040,
 };
 
 enum
@@ -54,21 +51,18 @@ namespace but_act_t
   static const char* onTitle = "active";
   static const char* offTitle = "idle";
   const short x = 260;
-  const short y = 486;
+  const short y = 490;
   const short w = 48;
   const short h = 16;
   const short bsiz = 2;
 }
 namespace but_quad_t
 {
-  static const char* tileNames[] =
-  {
-    "TL",
-    "TR",
-    "BL",
-    "BR"
-  };
-  const short left_x = 260;       // Change Tile button info
+  static const char* name_TL = "TL";
+  static const char* name_TR = "TR";
+  static const char* name_BL = "BL";
+  static const char* name_BR = "BR";
+  const short left_x = 260;       //
   const short right_x = 284;      //
   const short top_y = 510;        //
   const short bottom_y = 534;     //
@@ -138,6 +132,8 @@ private:
   CTile TileBR;
   bool active_TL, active_TR, active_BL, active_BR;
   int modifyTile;
+  const SDL_Point* shadowColor;
+  unsigned int shadow_w;
 
 private:
   int type_alpha;						// Current Opacity of the Type overlay
@@ -164,7 +160,7 @@ public:
   bool OnEvent(SDL_Point* mouse);
 
 private:
-  bool handleInterr(SDL_Point* mouse);
+  bool handleInterr(SDL_Point* mouse, CTile* EditTile);
   bool handleNewTile(SDL_Point* mouse);
   bool handleGetSet(SDL_Point* mouse);
   bool handleGetTile(SDL_Point* mouse);
