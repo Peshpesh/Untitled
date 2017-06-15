@@ -43,6 +43,18 @@ int CCamera::GetY()
 	return Y;
 }
 
+SDL_Point CCamera::GetPoint()
+{
+	SDL_Point retval = {GetX(), GetY()};
+	return retval;
+}
+
+SDL_Point CCamera::GetRelPoint(const SDL_Point* absPos)
+{
+	SDL_Point retval = {absPos->x - GetX(), absPos->y - GetY()};
+	return retval;
+}
+
 void CCamera::SetPos(int X, int Y)
 {
 	this->X = X;

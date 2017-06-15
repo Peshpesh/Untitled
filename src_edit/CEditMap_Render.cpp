@@ -14,6 +14,8 @@ bool CEditMap::RenderMap()
 bool CEditMap::OnRender(SDL_Texture* interface, SDL_Point* mouse)
 {
 	if (!RenderWkspc(interface, mouse)) return false;
+	CSurface::OnDraw(interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
+	CSurface::OnDraw(interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
   if (!RenderSidebar(interface, mouse)) return false;
   if (!RenderBottom(interface, mouse)) return false;
 
@@ -64,6 +66,22 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, SDL_Point* mouse)
 				dstR.x = tX + TILE_SIZE;
 				dstR.y = tY + TILE_SIZE;
 				CAsset::drawBox(&dstR, shadowColor, shadow_w);
+			}
+
+			if (rClickA != NULL)
+			{
+				SDL_Point relrClickA = CCamera::CameraControl.GetRelPoint(rClickA);
+				if (rClickB == NULL)
+				{
+					CAsset::drawBox(&relrClickA, mouse, flexAreaColor, rc_area_w);
+				}
+				else
+				{
+					SDL_Point relrClickB = CCamera::CameraControl.GetRelPoint(rClickB);
+					SDL_Rect box = CAsset::getRect(&relrClickA, &relrClickB);
+					const SDL_Point* color = SDL_PointInRect(mouse, &box) ? hoverAreaColor : fixAreaColor;
+					CAsset::drawBox(&box, color, rc_area_w);
+				}
 			}
 		}
 	}
@@ -162,18 +180,6 @@ bool CEditMap::drawButtonTileset(SDL_Texture* interface, SDL_Point* mouse)
 
 bool CEditMap::drawActiveTiles(SDL_Texture* interface)
 {
-	// TEMPORARY //
-	// CTile* ShowTile;
-	// switch (modifyTile)
-	// {
-	// 	case MODIFY_TILE_TL: ShowTile = &TileTL; break;
-	// 	case MODIFY_TILE_TR: ShowTile = &TileTR; break;
-	// 	case MODIFY_TILE_BL: ShowTile = &TileBL; break;
-	// 	case MODIFY_TILE_BR: ShowTile = &TileBR; break;
-	// 	default: break;
-	// }
-	// TEMPORARY //
-
 	// Draw complete active tile with dummy entity & outline (for depth clarity)
 	using namespace disp_t;
 
@@ -206,7 +212,7 @@ bool CEditMap::drawActiveTiles(SDL_Texture* interface)
 		dstR.y = sample_y + TILE_SIZE;
 		drawSampleTile(interface, &TileBR, &dstR);
 	}
-	
+
 	return true;
 }
 

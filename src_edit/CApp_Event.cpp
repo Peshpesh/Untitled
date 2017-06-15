@@ -96,7 +96,7 @@ void CApp::OnLButtonDown(int mX, int mY)
 	else
 	{
 		// returns false if error...
-		CEditMap::MapEditor.OnEvent(&mouse);
+		CEditMap::MapEditor.OnLClick(&mouse);
 	}
 }
 
@@ -113,6 +113,11 @@ void CApp::OnRButtonDown(int mX, int mY)
 
 		if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
 			OnExit();
+	}
+	if (active_mod == MODIFY_MAP)
+	{
+		// returns false if error...
+		CEditMap::MapEditor.OnRClick(&mouse);
 	}
 }
 

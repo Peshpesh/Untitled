@@ -88,8 +88,6 @@ enum
     const short co_y = 420;           //
     static const SDL_Rect dummyEntity = {522, 0, TILE_SIZE, TILE_SIZE};
     static const SDL_Rect dummyOutline = {522, 32, TILE_SIZE, TILE_SIZE};
-    // const unsigned short dummy_x = 522;
-    // const unsigned short dummy_y = 0;
   }
   namespace opac    // opacity meters
   {
@@ -154,6 +152,14 @@ private:
   int onTiles;          // bitwise flag for tiles to place
   int intrpt;           // bitwise flag for interruptions
 
+private:
+  SDL_Point* rClickA;
+  SDL_Point* rClickB;
+  const SDL_Point* flexAreaColor;
+  const SDL_Point* fixAreaColor;
+  const SDL_Point* hoverAreaColor;
+  unsigned int rc_area_w;
+
 public:
   CEditMap();
 
@@ -163,7 +169,7 @@ public:
   bool RenderMap();
 
 public:
-  bool OnEvent(SDL_Point* mouse);
+  bool OnLClick(SDL_Point* mouse);
 
 private:
   bool handleInterr(SDL_Point* mouse, CTile* EditTile);
@@ -182,6 +188,13 @@ private:
   bool handlePlace(SDL_Point* mouse);
   bool handleActTile(SDL_Point* mouse, bool& active);
   bool handleQuadrant(SDL_Point* mouse);
+
+public:
+  bool OnRClick(SDL_Point* mouse);
+  void resetRClick();
+
+private:
+  bool handleNewRegion(SDL_Point* mouse);
 
 public:
   bool OnRender(SDL_Texture* interface, SDL_Point* mouse);

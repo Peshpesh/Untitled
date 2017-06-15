@@ -38,10 +38,6 @@ void CApp::OnRender()
 		s_i++;
 	}
 
-	// Draws the surrounding interface containing current info and accessible buttons
-	CSurface::OnDraw(Map_Interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
-	CSurface::OnDraw(Map_Interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
-
 	switch (active_mod)
 	{
 	case MODIFY_MAP:
@@ -54,10 +50,16 @@ void CApp::OnRender()
 
 	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
 	{
+		// Draws the surrounding interface containing current info and accessible buttons
+		CSurface::OnDraw(Map_Interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
+		CSurface::OnDraw(Map_Interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
 		RenderNPCedit();
 	}
 	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
+		// Draws the surrounding interface containing current info and accessible buttons
+		CSurface::OnDraw(Map_Interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
+		CSurface::OnDraw(Map_Interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
 		RenderSCNedit();
 	}
 	else

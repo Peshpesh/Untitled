@@ -1,7 +1,9 @@
 #include "CEditMap.h"
 
-bool CEditMap::OnEvent(SDL_Point* mouse)
+bool CEditMap::OnLClick(SDL_Point* mouse)
 {
+  resetRClick();
+
   CTile* EditTile;
   bool* active;
   switch (modifyTile)
@@ -30,6 +32,41 @@ bool CEditMap::OnEvent(SDL_Point* mouse)
   if (handleQuadrant(mouse)) return true;
 
 	return false;
+}
+
+bool CEditMap::OnRClick(SDL_Point* mouse)
+{
+  if (rClickA == NULL)
+  {
+    rClickA = new SDL_Point;
+    rClickA->x = mouse->x + CCamera::CameraControl.GetX();
+    rClickA->y = mouse->y + CCamera::CameraControl.GetY();
+  }
+  else if (rClickB == NULL)
+  {
+    rClickB = new SDL_Point;
+    rClickB->x = mouse->x + CCamera::CameraControl.GetX();
+    rClickB->y = mouse->y + CCamera::CameraControl.GetY();
+  }
+  else
+  {
+    resetRClick();
+  }
+  return true;
+}
+
+void CEditMap::resetRClick()
+{
+  if (rClickA != NULL)
+  {
+    delete rClickA;
+    rClickA = NULL;
+  }
+  if (rClickB != NULL)
+  {
+    delete rClickB;
+    rClickB = NULL;
+  }
 }
 
 bool CEditMap::handleInterr(SDL_Point* mouse, CTile* EditTile)

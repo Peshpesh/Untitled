@@ -23,6 +23,13 @@ CEditMap::CEditMap()
   shadowColor = &color::light_blue;
   shadow_w = 2;
 
+  rClickA = NULL;
+  rClickB = NULL;
+  flexAreaColor = &color::yellow;
+  fixAreaColor = &color::red;
+  hoverAreaColor = &color::light_red;
+  rc_area_w = 1;
+
 	show_fg = show_ty = show_co = true;
 	type_alpha = 85;
 	coll_alpha = 125;

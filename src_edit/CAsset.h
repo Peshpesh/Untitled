@@ -53,6 +53,7 @@ class CAsset
   public:
     // returns a SDL_Rect struct for given X, Y, W, H. Ideal for drawing.
   	static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
+    static SDL_Rect getRect(const SDL_Point* A, const SDL_Point* B);
 
     // returns a SDL_Rect struct with W and H equal to 1, given (X, Y).
     // Good for grabbing a pixel of a particular color.
@@ -62,7 +63,7 @@ class CAsset
     static bool drawLine(SDL_Point* A, SDL_Point* B, SDL_Point* color, const int& thick);
 
     static bool drawBox(SDL_Rect* box, const SDL_Point* color, const int& thick);
-    static bool drawBox(SDL_Point* A, SDL_Point* B, SDL_Point* color, const int& thick);
+    static bool drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 
 		static bool drawBoxFill(SDL_Rect* box, SDL_Point* color);
     static bool drawBoxFill(SDL_Point* A, SDL_Point* B, SDL_Point* color);

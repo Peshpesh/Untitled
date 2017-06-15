@@ -29,6 +29,20 @@ SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigne
 	return rect;
 }
 
+SDL_Rect CAsset::getRect(const SDL_Point* A, const SDL_Point* B)
+{
+  int xmin = (A->x < B->x) ? A->x : B->x;
+  int xmax = (A->x >= B->x) ? A->x : B->x;
+  int ymin = (A->y < B->y) ? A->y : B->y;
+  int ymax = (A->y >= B->y) ? A->y : B->y;
+  int w = xmax - xmin + 1;
+  int h = ymax - ymin + 1;
+
+  SDL_Rect rect = {xmin, ymin, w, h};
+
+  return rect;
+}
+
 SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 {
 	SDL_Rect rect;
@@ -72,9 +86,10 @@ bool CAsset::drawBox(SDL_Rect* box, const SDL_Point* color, const int& thick)
   return true;
 }
 
-bool CAsset::drawBox(SDL_Point* A, SDL_Point* B, SDL_Point* color, const int& thick)
+bool CAsset::drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick)
 {
-  return true;
+  SDL_Rect box = getRect(A, B);
+  return drawBox(&box, color, thick);
 }
 
 bool CAsset::drawBoxFill(SDL_Rect* box, SDL_Point* color)

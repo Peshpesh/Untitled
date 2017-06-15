@@ -32,6 +32,8 @@ public:
 public:
 	int GetX();
 	int GetY();
+	SDL_Point GetPoint();
+	SDL_Point GetRelPoint(const SDL_Point* absPos);
 
 public:
 	void SetPos(int X, int Y);
