@@ -83,7 +83,7 @@ bool CEditMap::RenderSidebar(SDL_Texture* interface, SDL_Point* mouse)
 	}
 
 	if (!drawButtonTileset(interface, mouse)) return false;
-  if (!drawTile(interface)) return false;
+  if (!drawActiveTiles(interface)) return false;
   if (!drawActive_bg(interface, ShowTile)) return false;
   if (!drawActive_fg(interface, ShowTile)) return false;
   if (!drawActive_ty(interface, ShowTile)) return false;
@@ -160,34 +160,73 @@ bool CEditMap::drawButtonTileset(SDL_Texture* interface, SDL_Point* mouse)
 	return true;
 }
 
-bool CEditMap::drawTile(SDL_Texture* interface)
+bool CEditMap::drawActiveTiles(SDL_Texture* interface)
 {
 	// TEMPORARY //
-	CTile* ShowTile;
-	switch (modifyTile)
-	{
-		case MODIFY_TILE_TL: ShowTile = &TileTL; break;
-		case MODIFY_TILE_TR: ShowTile = &TileTR; break;
-		case MODIFY_TILE_BL: ShowTile = &TileBL; break;
-		case MODIFY_TILE_BR: ShowTile = &TileBR; break;
-		default: break;
-	}
+	// CTile* ShowTile;
+	// switch (modifyTile)
+	// {
+	// 	case MODIFY_TILE_TL: ShowTile = &TileTL; break;
+	// 	case MODIFY_TILE_TR: ShowTile = &TileTR; break;
+	// 	case MODIFY_TILE_BL: ShowTile = &TileBL; break;
+	// 	case MODIFY_TILE_BR: ShowTile = &TileBR; break;
+	// 	default: break;
+	// }
 	// TEMPORARY //
 
 	// Draw complete active tile with dummy entity & outline (for depth clarity)
 	using namespace disp_t;
 
-	Font::CenterWrite(FONT_MINI, "WORKING TILE", EWIDTH - 50, bgfg_y - name_offset);
-	// if (!no_bg)
+	SDL_Rect srcR = {0, 0, TILE_SIZE, TILE_SIZE};
+	SDL_Rect dstR = {0, 0, TILE_SIZE, TILE_SIZE};
+
+	Font::CenterWrite(FONT_MINI, "SAMPLE", EWIDTH - 50, sample_y - name_offset);
+
+	if (active_TL)
 	{
-		CSurface::OnDraw(Main_Tileset, bgfg_x, bgfg_y, (ShowTile->bg_ID % tset_w) * TILE_SIZE, (ShowTile->bg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		dstR.x = sample_x;
+		dstR.y = sample_y;
+		drawSampleTile(interface, &TileTL, &dstR);
 	}
-	CSurface::OnDraw(interface, bgfg_x, bgfg_y, dummy_x, dummy_y, TILE_SIZE, TILE_SIZE);
-	// if (!no_fg)
+	if (active_TR)
 	{
-		CSurface::OnDraw(Main_Tileset, bgfg_x, bgfg_y, (ShowTile->fg_ID % tset_w) * TILE_SIZE, (ShowTile->fg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+		dstR.x = sample_x + TILE_SIZE;
+		dstR.y = sample_y;
+		drawSampleTile(interface, &TileTR, &dstR);
 	}
-	CSurface::OnDraw(interface, bgfg_x, bgfg_y, dummy_x, dummy_y + TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	if (active_BL)
+	{
+		dstR.x = sample_x;
+		dstR.y = sample_y + TILE_SIZE;
+		drawSampleTile(interface, &TileBL, &dstR);
+	}
+	if (active_BR)
+	{
+		dstR.x = sample_x + TILE_SIZE;
+		dstR.y = sample_y + TILE_SIZE;
+		drawSampleTile(interface, &TileBR, &dstR);
+	}
+	
+	return true;
+}
+
+bool CEditMap::drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL_Rect* dstR)
+{
+	if (interface == NULL || ShowTile == NULL || dstR == NULL) return false;
+
+	using namespace disp_t;
+
+	SDL_Rect srcR = {0, 0, TILE_SIZE, TILE_SIZE};
+
+	srcR.x = (ShowTile->bg_ID % tset_w) * TILE_SIZE;
+	srcR.y = (ShowTile->bg_ID / tset_w) * TILE_SIZE;
+	CSurface::OnDraw(Main_Tileset, &srcR, dstR);
+	CSurface::OnDraw(interface, &dummyEntity, dstR);
+
+	srcR.x = (ShowTile->fg_ID % tset_w) * TILE_SIZE;
+	srcR.y = (ShowTile->fg_ID / tset_w) * TILE_SIZE;
+	CSurface::OnDraw(Main_Tileset, &srcR, dstR);
+	CSurface::OnDraw(interface, &dummyOutline, dstR);
 
 	return true;
 }

@@ -125,7 +125,7 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, SDL_Rect* srcrect, SDL_Rect* dstrect)
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect* srcrect, const SDL_Rect* dstrect)
 {
 	if (Surf_Src == NULL || srcrect == NULL || dstrect == NULL)
 		return false;
