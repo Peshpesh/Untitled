@@ -1,9 +1,7 @@
 #include "CEditMap.h"
 
-bool CEditMap::OnLClick(SDL_Point* mouse)
+bool CEditMap::OnLClick(const SDL_Point* mouse)
 {
-  resetRClick();
-
   CTile* EditTile;
   bool* active;
   switch (modifyTile)
@@ -14,7 +12,9 @@ bool CEditMap::OnLClick(SDL_Point* mouse)
     case MODIFY_TILE_BR: EditTile = &TileBR; active = &active_BR; break;
     default: break;
   }
+
   if (handleInterr(mouse, EditTile)) return true;
+  if (handleNewRegion(mouse)) return true;
   if (handleNewTile(mouse)) return true;
   if (handleGetSet(mouse)) return true;
   if (handleGetTile(mouse)) return true;
@@ -34,7 +34,7 @@ bool CEditMap::OnLClick(SDL_Point* mouse)
 	return false;
 }
 
-bool CEditMap::OnRClick(SDL_Point* mouse)
+bool CEditMap::OnRClick(const SDL_Point* mouse)
 {
   if (rClickA == NULL)
   {
@@ -55,6 +55,26 @@ bool CEditMap::OnRClick(SDL_Point* mouse)
   return true;
 }
 
+bool CEditMap::handleNewRegion(const SDL_Point* mouse)
+{
+  bool retval = false;
+  if (rClickA != NULL && rClickB != NULL)
+  {
+    retval = true;
+
+    SDL_Rect newRegion = CAsset::getTileRect(rClickA, rClickB);
+    newRegion.x -= CCamera::CameraControl.GetX();
+    newRegion.y -= CCamera::CameraControl.GetY();
+    if (SDL_PointInRect(mouse, &newRegion))
+    {
+      SDL_Delay(5000);
+    }
+  }
+
+  resetRClick();
+  return retval;
+}
+
 void CEditMap::resetRClick()
 {
   if (rClickA != NULL)
@@ -69,7 +89,7 @@ void CEditMap::resetRClick()
   }
 }
 
-bool CEditMap::handleInterr(SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleInterr(const SDL_Point* mouse, CTile* EditTile)
 {
   // Event is passed to intrpting prompts, if there are any
 	if (intrpt & ~INTRPT_NONE)
@@ -87,7 +107,7 @@ bool CEditMap::handleInterr(SDL_Point* mouse, CTile* EditTile)
   return false;
 }
 
-bool CEditMap::handleNewTile(SDL_Point* mouse)
+bool CEditMap::handleNewTile(const SDL_Point* mouse)
 {
   // Place new tiles, if click is in the workspace
   if (mouse->x < WWIDTH && mouse->y < WHEIGHT)
@@ -104,7 +124,7 @@ bool CEditMap::handleNewTile(SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleGetSet(SDL_Point* mouse)
+bool CEditMap::handleGetSet(const SDL_Point* mouse)
 {
   // Click on "Change Tileset" button. This displays a prompt to change tilesets,
   // and the function within the loop performs a change if requested.
@@ -125,7 +145,7 @@ bool CEditMap::handleGetSet(SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleGetTile(SDL_Point* mouse)
+bool CEditMap::handleGetTile(const SDL_Point* mouse)
 {
   // Click on "Change Tile" buttons. A display of all tiles is rendered,
   // and clicking a tile will update the active tile to use the clicked tile.
@@ -151,7 +171,7 @@ bool CEditMap::handleGetTile(SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleScroll_bg(SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active background tile.
   // Changes the active tile to previous or next index.
@@ -176,7 +196,7 @@ bool CEditMap::handleScroll_bg(SDL_Point* mouse, CTile* EditTile)
   return false;
 }
 
-bool CEditMap::handleScroll_fg(SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active foreground tile.
   // Changes the active tile to previous or next index.
@@ -201,7 +221,7 @@ bool CEditMap::handleScroll_fg(SDL_Point* mouse, CTile* EditTile)
   return false;
 }
 
-bool CEditMap::handleScroll_ty(SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active tile type.
   // Changes the active tile type to previous or next type index.
@@ -226,7 +246,7 @@ bool CEditMap::handleScroll_ty(SDL_Point* mouse, CTile* EditTile)
   return false;
 }
 
-bool CEditMap::handleScroll_co(SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active collision.
   // Changes the active collision to previous or next collision index.
@@ -251,7 +271,7 @@ bool CEditMap::handleScroll_co(SDL_Point* mouse, CTile* EditTile)
   return false;
 }
 
-bool CEditMap::handleRemove_bg(SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleRemove_bg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Turn the background tile off.
   using namespace but_rm;
@@ -266,7 +286,7 @@ bool CEditMap::handleRemove_bg(SDL_Point* mouse, CTile* EditTile)
   return false;
 }
 
-bool CEditMap::handleRemove_fg(SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleRemove_fg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Turn the foreground tile off.
   using namespace but_rm;
@@ -281,7 +301,7 @@ bool CEditMap::handleRemove_fg(SDL_Point* mouse, CTile* EditTile)
   return false;
 }
 
-bool CEditMap::handleOpac_ty(SDL_Point* mouse)
+bool CEditMap::handleOpac_ty(const SDL_Point* mouse)
 {
   // Click on opacity bar for tile type overlay
   using namespace opac;
@@ -298,7 +318,7 @@ bool CEditMap::handleOpac_ty(SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleOpac_co(SDL_Point* mouse)
+bool CEditMap::handleOpac_co(const SDL_Point* mouse)
 {
   // Click on opacity bar for tile collision overlay
   using namespace opac;
@@ -315,7 +335,7 @@ bool CEditMap::handleOpac_co(SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleLayers(SDL_Point* mouse)
+bool CEditMap::handleLayers(const SDL_Point* mouse)
 {
   // Click on View overlay buttons
   using namespace view_flip;
@@ -349,7 +369,7 @@ bool CEditMap::handleLayers(SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handlePlace(SDL_Point* mouse)
+bool CEditMap::handlePlace(const SDL_Point* mouse)
 {
   // Click on active tile attribute switches
   using namespace place_flip;
@@ -391,7 +411,7 @@ bool CEditMap::handlePlace(SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleActTile(SDL_Point* mouse, bool& active)
+bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active)
 {
   using namespace but_act_t;
 
@@ -405,7 +425,7 @@ bool CEditMap::handleActTile(SDL_Point* mouse, bool& active)
   return true;
 }
 
-bool CEditMap::handleQuadrant(SDL_Point* mouse)
+bool CEditMap::handleQuadrant(const SDL_Point* mouse)
 {
   using namespace but_quad_t;
 
