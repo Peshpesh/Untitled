@@ -55,12 +55,12 @@ SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 	return rect;
 }
 
-bool CAsset::drawLine(SDL_Point* A, SDL_Point* B, SDL_Point* color, const int& thick)
+bool CAsset::drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick)
 {
   return true;
 }
 
-bool CAsset::drawBox(SDL_Rect* box, const SDL_Point* color, const int& thick)
+bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thick)
 {
   if (box == NULL || color == NULL) return false;
 
@@ -92,7 +92,7 @@ bool CAsset::drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* co
   return drawBox(&box, color, thick);
 }
 
-bool CAsset::drawBoxFill(SDL_Rect* box, SDL_Point* color)
+bool CAsset::drawBoxFill(const SDL_Rect* box, const SDL_Point* color)
 {
   if (box == NULL || color == NULL) return false;
 
@@ -102,7 +102,7 @@ bool CAsset::drawBoxFill(SDL_Rect* box, SDL_Point* color)
   return true;
 }
 
-bool CAsset::drawBoxFill(SDL_Point* A, SDL_Point* B, SDL_Point* color)
+bool CAsset::drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color)
 {
   return true;
 }

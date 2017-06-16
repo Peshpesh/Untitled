@@ -60,13 +60,13 @@ class CAsset
 		static SDL_Rect getPixel(const SDL_Point* pix);
 
 	public:
-    static bool drawLine(SDL_Point* A, SDL_Point* B, SDL_Point* color, const int& thick);
+    static bool drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 
-    static bool drawBox(SDL_Rect* box, const SDL_Point* color, const int& thick);
+    static bool drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thick);
     static bool drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 
-		static bool drawBoxFill(SDL_Rect* box, SDL_Point* color);
-    static bool drawBoxFill(SDL_Point* A, SDL_Point* B, SDL_Point* color);
+		static bool drawBoxFill(const SDL_Rect* box, const SDL_Point* color);
+    static bool drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color);
 };
 
 #endif
