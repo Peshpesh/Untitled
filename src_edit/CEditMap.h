@@ -169,42 +169,42 @@ public:
   bool RenderMap();
 
 public:
-  bool OnLClick(SDL_Point* mouse);
+  bool OnLClick(const SDL_Point* mouse);
 
 private:
-  bool handleInterr(SDL_Point* mouse, CTile* EditTile);
-  bool handleNewTile(SDL_Point* mouse);
-  bool handleGetSet(SDL_Point* mouse);
-  bool handleGetTile(SDL_Point* mouse);
-  bool handleScroll_bg(SDL_Point* mouse, CTile* EditTile);
-  bool handleScroll_fg(SDL_Point* mouse, CTile* EditTile);
-  bool handleScroll_ty(SDL_Point* mouse, CTile* EditTile);
-  bool handleScroll_co(SDL_Point* mouse, CTile* EditTile);
-  bool handleRemove_bg(SDL_Point* mouse, CTile* EditTile);
-  bool handleRemove_fg(SDL_Point* mouse, CTile* EditTile);
-  bool handleOpac_ty(SDL_Point* mouse);
-  bool handleOpac_co(SDL_Point* mouse);
-  bool handleLayers(SDL_Point* mouse);
-  bool handlePlace(SDL_Point* mouse);
-  bool handleActTile(SDL_Point* mouse, bool& active);
-  bool handleQuadrant(SDL_Point* mouse);
+  bool handleNewRegion(const SDL_Point* mouse);
+  bool handleInterr(const SDL_Point* mouse, CTile* EditTile);
+  bool handleNewTile(const SDL_Point* mouse);
+  bool handleGetSet(const SDL_Point* mouse);
+  bool handleGetTile(const SDL_Point* mouse);
+  bool handleScroll_bg(const SDL_Point* mouse, CTile* EditTile);
+  bool handleScroll_fg(const SDL_Point* mouse, CTile* EditTile);
+  bool handleScroll_ty(const SDL_Point* mouse, CTile* EditTile);
+  bool handleScroll_co(const SDL_Point* mouse, CTile* EditTile);
+  bool handleRemove_bg(const SDL_Point* mouse, CTile* EditTile);
+  bool handleRemove_fg(const SDL_Point* mouse, CTile* EditTile);
+  bool handleOpac_ty(const SDL_Point* mouse);
+  bool handleOpac_co(const SDL_Point* mouse);
+  bool handleLayers(const SDL_Point* mouse);
+  bool handlePlace(const SDL_Point* mouse);
+  bool handleActTile(const SDL_Point* mouse, bool& active);
+  bool handleQuadrant(const SDL_Point* mouse);
 
 public:
-  bool OnRClick(SDL_Point* mouse);
+  bool OnRClick(const SDL_Point* mouse);
   void resetRClick();
 
 private:
-  bool handleNewRegion(SDL_Point* mouse);
 
 public:
-  bool OnRender(SDL_Texture* interface, SDL_Point* mouse);
+  bool OnRender(SDL_Texture* interface, const SDL_Point* mouse);
 
 private:
-  bool RenderWkspc(SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse);
 
 private:
-  bool RenderSidebar(SDL_Texture* interface, SDL_Point* mouse);
-  bool drawButtonTileset(SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderSidebar(SDL_Texture* interface, const SDL_Point* mouse);
+  bool drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse);
   bool drawActiveTiles(SDL_Texture* interface);
   bool drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL_Rect* dstR);
   bool drawActive_bg(SDL_Texture* interface, CTile* ShowTile);
@@ -215,16 +215,16 @@ private:
   bool drawOpac_co(SDL_Texture* interface);
 
 private:
-  bool RenderBottom(SDL_Texture* interface, SDL_Point* mouse);
-  bool drawButton_bg(SDL_Texture* interface, SDL_Point* mouse);
-  bool drawButton_fg(SDL_Texture* interface, SDL_Point* mouse);
+  bool RenderBottom(SDL_Texture* interface, const SDL_Point* mouse);
+  bool drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse);
+  bool drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse);
   bool drawOverlayList(SDL_Texture* interface);
   bool drawPlacementList(SDL_Texture* interface);
-  bool drawButtonActive(SDL_Texture* interface, SDL_Point* mouse, bool active);
-  bool drawQuadrants(SDL_Texture* interface, SDL_Point* mouse);
+  bool drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, bool active);
+  bool drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse);
 
 public:
-  bool RenderButton(SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
+  bool RenderButton(SDL_Texture* interface, const SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
 };
 
 #endif

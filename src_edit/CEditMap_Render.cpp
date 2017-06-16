@@ -11,7 +11,7 @@ bool CEditMap::RenderMap()
   return true;
 }
 
-bool CEditMap::OnRender(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::OnRender(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	if (!RenderWkspc(interface, mouse)) return false;
 	CSurface::OnDraw(interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
@@ -22,7 +22,7 @@ bool CEditMap::OnRender(SDL_Texture* interface, SDL_Point* mouse)
   return true;
 }
 
-bool CEditMap::RenderWkspc(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	int mapX = mouse->x + CCamera::CameraControl.GetX();
 	int mapY = mouse->y + CCamera::CameraControl.GetY();
@@ -70,15 +70,19 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, SDL_Point* mouse)
 
 			if (rClickA != NULL)
 			{
-				SDL_Point relrClickA = CCamera::CameraControl.GetRelPoint(rClickA);
 				if (rClickB == NULL)
 				{
-					CAsset::drawBox(&relrClickA, mouse, flexAreaColor, rc_area_w);
+					SDL_Point abs_mouse = {mapX, mapY};
+					SDL_Rect box = CAsset::getTileRect(rClickA, &abs_mouse);
+					box.x -= CCamera::CameraControl.GetX();
+					box.y -= CCamera::CameraControl.GetY();
+					CAsset::drawBox(&box, flexAreaColor, rc_area_w);
 				}
 				else
 				{
-					SDL_Point relrClickB = CCamera::CameraControl.GetRelPoint(rClickB);
-					SDL_Rect box = CAsset::getRect(&relrClickA, &relrClickB);
+					SDL_Rect box = CAsset::getTileRect(rClickA, rClickB);
+					box.x -= CCamera::CameraControl.GetX();
+					box.y -= CCamera::CameraControl.GetY();
 					const SDL_Point* color = SDL_PointInRect(mouse, &box) ? hoverAreaColor : fixAreaColor;
 					CAsset::drawBox(&box, color, rc_area_w);
 				}
@@ -88,7 +92,7 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, SDL_Point* mouse)
 	return true;
 }
 
-bool CEditMap::RenderSidebar(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::RenderSidebar(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	CTile* ShowTile;
 	switch (modifyTile)
@@ -112,7 +116,7 @@ bool CEditMap::RenderSidebar(SDL_Texture* interface, SDL_Point* mouse)
   return true;
 }
 
-bool CEditMap::RenderBottom(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::RenderBottom(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	bool activeTile = false;
 	switch (modifyTile)
@@ -135,7 +139,7 @@ bool CEditMap::RenderBottom(SDL_Texture* interface, SDL_Point* mouse)
 }
 
 
-bool CEditMap::RenderButton(SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl)
+bool CEditMap::RenderButton(SDL_Texture* interface, const SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl)
 {
 	bool but_glow = false;
   if (hl)
@@ -162,7 +166,7 @@ bool CEditMap::RenderButton(SDL_Texture* interface, SDL_Point* mouse, SDL_Rect* 
 	return true;
 }
 
-bool CEditMap::drawButtonTileset(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_tset;
 	bool hl = !(bool)(intrpt);
@@ -366,7 +370,7 @@ bool CEditMap::drawOpac_co(SDL_Texture* interface)
 	return true;
 }
 
-bool CEditMap::drawButton_bg(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_t;
 
@@ -384,7 +388,7 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, SDL_Point* mouse)
 	return true;
 }
 
-bool CEditMap::drawButton_fg(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_t;
 
@@ -495,7 +499,7 @@ bool CEditMap::drawPlacementList(SDL_Texture* interface)
 	return true;
 }
 
-bool CEditMap::drawButtonActive(SDL_Texture* interface, SDL_Point* mouse, bool active)
+bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, bool active)
 {
 	using namespace but_act_t;
 
@@ -511,7 +515,7 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, SDL_Point* mouse, bool a
 	return true;
 }
 
-bool CEditMap::drawQuadrants(SDL_Texture* interface, SDL_Point* mouse)
+bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_quad_t;
 
