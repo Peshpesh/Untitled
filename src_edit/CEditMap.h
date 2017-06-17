@@ -172,7 +172,7 @@ public:
   bool OnLClick(const SDL_Point* mouse);
 
 private:
-  bool handleNewRegion(const SDL_Point* mouse);
+  bool handlePlaceDomain(const SDL_Point* mouse);
   bool handleInterr(const SDL_Point* mouse, CTile* EditTile);
   bool handleNewTile(const SDL_Point* mouse);
   bool handleGetSet(const SDL_Point* mouse);
@@ -197,6 +197,7 @@ public:
   bool OnRClick(const SDL_Point* mouse);
 
 private:
+  bool handleMakeDomain(const SDL_Point* mouse);
   bool handleQuadrant_rc(const SDL_Point* mouse);
   SDL_Rect getTileDomain(const SDL_Point* A, const SDL_Point* B);
   void resetRClick();

@@ -14,7 +14,7 @@ bool CEditMap::OnLClick(const SDL_Point* mouse)
   }
 
   if (handleInterr(mouse, EditTile)) return true;
-  if (handleNewRegion(mouse)) return true;
+  if (handlePlaceDomain(mouse)) return true;
   if (handleNewTile(mouse)) return true;
   if (handleGetSet(mouse)) return true;
   if (handleGetTile(mouse)) return true;
@@ -36,6 +36,14 @@ bool CEditMap::OnLClick(const SDL_Point* mouse)
 
 bool CEditMap::OnRClick(const SDL_Point* mouse)
 {
+  if (handleMakeDomain(mouse)) return true;
+  if (handleQuadrant_rc(mouse)) return true;
+
+  return false;
+}
+
+bool CEditMap::handleMakeDomain(const SDL_Point* mouse)
+{
   if (CAsset::inWorkspace(mouse))
   {
     if (rClickA == NULL)
@@ -54,15 +62,12 @@ bool CEditMap::OnRClick(const SDL_Point* mouse)
     {
       resetRClick();
     }
+    return true;
   }
-  else
-  {
-    handleQuadrant_rc(mouse);
-  }
-  return true;
+  return false;
 }
 
-bool CEditMap::handleNewRegion(const SDL_Point* mouse)
+bool CEditMap::handlePlaceDomain(const SDL_Point* mouse)
 {
   bool retval = false;
   if (CAsset::inWorkspace(mouse))

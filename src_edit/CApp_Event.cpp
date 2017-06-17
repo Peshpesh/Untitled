@@ -116,7 +116,7 @@ void CApp::OnRButtonDown(int mX, int mY)
 	}
 	if (active_mod == MODIFY_MAP)
 	{
-		// returns false if error...
+		// returns false if no event was processed
 		CEditMap::MapEditor.OnRClick(&mouse);
 	}
 }
