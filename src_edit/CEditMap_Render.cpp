@@ -74,6 +74,18 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 				{
 					SDL_Point abs_mouse = {mapX, mapY};
 					SDL_Rect box = CAsset::getTileRect(rClickA, &abs_mouse);
+					if (active_TR || active_BR)
+					{
+						int tW = box.w / TILE_SIZE;
+						box.w += TILE_SIZE * (tW % 2);
+						if (abs_mouse.x < rClickA->x) box.x -= TILE_SIZE * (tW % 2);
+					}
+					if (active_BL || active_BR)
+					{
+						int tH = box.h / TILE_SIZE;
+						box.h += TILE_SIZE * (tH % 2);
+						if (abs_mouse.y < rClickA->y) box.y -= TILE_SIZE * (tH % 2);
+					}
 					box.x -= CCamera::CameraControl.GetX();
 					box.y -= CCamera::CameraControl.GetY();
 					CAsset::drawBox(&box, flexAreaColor, rc_area_w);
@@ -81,6 +93,18 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 				else
 				{
 					SDL_Rect box = CAsset::getTileRect(rClickA, rClickB);
+					if (active_TR || active_BR)
+					{
+						int tW = box.w / TILE_SIZE;
+						box.w += TILE_SIZE * (tW % 2);
+						if (rClickB->x < rClickA->x) box.x -= TILE_SIZE * (tW % 2);
+					}
+					if (active_BL || active_BR)
+					{
+						int tH = box.h / TILE_SIZE;
+						box.h += TILE_SIZE * (tH % 2);
+						if (rClickB->y < rClickA->y) box.y -= TILE_SIZE * (tH % 2);
+					}
 					box.x -= CCamera::CameraControl.GetX();
 					box.y -= CCamera::CameraControl.GetY();
 					const SDL_Point* color = SDL_PointInRect(mouse, &box) ? hoverAreaColor : fixAreaColor;
