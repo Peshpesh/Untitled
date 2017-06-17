@@ -60,6 +60,10 @@ class CAsset
     // Good for grabbing a pixel of a particular color.
 		static SDL_Rect getPixel(const SDL_Point* pix);
 
+  public:
+    static bool inWorkspace(const SDL_Point* pos);
+    static bool inWorkspace(const int& x, const int& y);
+
 	public:
     static bool drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 

@@ -24,13 +24,17 @@ bool CEditMap::OnRender(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	int mapX = mouse->x + CCamera::CameraControl.GetX();
-	int mapY = mouse->y + CCamera::CameraControl.GetY();
-	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mapX / TILE_SIZE));
-	int tY = -CCamera::CameraControl.GetY() + (TILE_SIZE * (mapY / TILE_SIZE));
-	if (mapX < 0)	tX -= TILE_SIZE;
-	if (mapY < 0)	tY -= TILE_SIZE;
+	SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(mouse);
 
+  if (!drawTileShadow(mouse, &mapPos)) return false;
+	if (!drawPlaceDomain(mouse, &mapPos)) return false;
+	if (!drawIntrpt(interface, mouse)) return false;
+
+	return true;
+}
+
+bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
+{
 	if (intrpt ^ INTRPT_NONE)
 	{
 		if (intrpt & INTRPT_CHANGE_BG || intrpt & INTRPT_CHANGE_FG)
@@ -38,53 +42,67 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 			CChangeTile::PickTile.RenderTileset(interface, Main_Tileset, mouse->x, mouse->y);
 		}
 	}
-	else
-	{
-		if (mouse->x >= 0 && mouse->x < WWIDTH && mouse->y >= 0 && mouse->y < WHEIGHT)
-		{
-			SDL_Rect dstR = {0, 0, TILE_SIZE, TILE_SIZE};
-			if (active_TL)
-			{
-				dstR.x = tX;
-				dstR.y = tY;
-				CAsset::drawBox(&dstR, shadowColor, shadow_w);
-			}
-			if (active_BL)
-			{
-				dstR.x = tX;
-				dstR.y = tY + TILE_SIZE;
-				CAsset::drawBox(&dstR, shadowColor, shadow_w);
-			}
-			if (active_TR)
-			{
-				dstR.x = tX + TILE_SIZE;
-				dstR.y = tY;
-				CAsset::drawBox(&dstR, shadowColor, shadow_w);
-			}
-			if (active_BR)
-			{
-				dstR.x = tX + TILE_SIZE;
-				dstR.y = tY + TILE_SIZE;
-				CAsset::drawBox(&dstR, shadowColor, shadow_w);
-			}
+	return true;
+}
 
-			if (rClickA != NULL)
-			{
-				if (rClickB == NULL)
-				{
-					SDL_Point abs_mouse = {mapX, mapY};
-					SDL_Rect box = getTileDomain(rClickA, &abs_mouse);
-					CCamera::CameraControl.MakeWinRel(box.x, box.y);
-					CAsset::drawBox(&box, flexAreaColor, rc_area_w);
-				}
-				else
-				{
-					SDL_Rect box = getTileDomain(rClickA, rClickB);
-					CCamera::CameraControl.MakeWinRel(box.x, box.y);
-					const SDL_Point* color = SDL_PointInRect(mouse, &box) ? hoverAreaColor : fixAreaColor;
-					CAsset::drawBox(&box, color, rc_area_w);
-				}
-			}
+bool CEditMap::drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos)
+{
+	if (intrpt ^ INTRPT_NONE) return true;
+
+	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mapPos->x / TILE_SIZE));
+	int tY = -CCamera::CameraControl.GetY() + (TILE_SIZE * (mapPos->y / TILE_SIZE));
+	if (mapPos->x < 0)	tX -= TILE_SIZE;
+	if (mapPos->y < 0)	tY -= TILE_SIZE;
+
+	if (CAsset::inWorkspace(mouse))
+	{
+		SDL_Rect dstR = {0, 0, TILE_SIZE, TILE_SIZE};
+		if (active_TL)
+		{
+			dstR.x = tX;
+			dstR.y = tY;
+			if (!CAsset::drawBox(&dstR, shadowColor, shadow_w)) return false;
+		}
+		if (active_BL)
+		{
+			dstR.x = tX;
+			dstR.y = tY + TILE_SIZE;
+			if (!CAsset::drawBox(&dstR, shadowColor, shadow_w)) return false;
+		}
+		if (active_TR)
+		{
+			dstR.x = tX + TILE_SIZE;
+			dstR.y = tY;
+			if (!CAsset::drawBox(&dstR, shadowColor, shadow_w)) return false;
+		}
+		if (active_BR)
+		{
+			dstR.x = tX + TILE_SIZE;
+			dstR.y = tY + TILE_SIZE;
+			if (!CAsset::drawBox(&dstR, shadowColor, shadow_w)) return false;
+		}
+	}
+	return true;
+}
+
+bool CEditMap::drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos)
+{
+	if (intrpt ^ INTRPT_NONE) return true;
+
+	if (rClickA != NULL)
+	{
+		if (rClickB == NULL)
+		{
+			SDL_Rect box = getTileDomain(rClickA, mapPos);
+			CCamera::CameraControl.MakeWinRel(box.x, box.y);
+			if (!CAsset::drawBox(&box, flexAreaColor, rc_area_w)) return false;
+		}
+		else
+		{
+			SDL_Rect box = getTileDomain(rClickA, rClickB);
+			CCamera::CameraControl.MakeWinRel(box.x, box.y);
+			const SDL_Point* color = SDL_PointInRect(mouse, &box) ? hoverAreaColor : fixAreaColor;
+			if (!CAsset::drawBox(&box, color, rc_area_w)) return false;
 		}
 	}
 	return true;

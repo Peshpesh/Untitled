@@ -28,7 +28,7 @@ CEditMap::CEditMap()
   flexAreaColor = &color::yellow;
   fixAreaColor = &color::red;
   hoverAreaColor = &color::light_red;
-  rc_area_w = 1;
+  rc_area_w = 2;
 
 	show_fg = show_ty = show_co = true;
 	type_alpha = 85;

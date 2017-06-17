@@ -55,6 +55,12 @@ SDL_Point CCamera::GetWinRelPoint(const SDL_Point* absPos)
 	return retval;
 }
 
+SDL_Point CCamera::GetCamRelPoint(const SDL_Point* winPos)
+{
+	SDL_Point retval = {winPos->x + GetX(), winPos->y + GetY()};
+	return retval;
+}
+
 void CCamera::MakeWinRel(int& X, int& Y)
 {
 	X -= GetX();

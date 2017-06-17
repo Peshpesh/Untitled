@@ -34,6 +34,7 @@ public:
 	int GetY();
 	SDL_Point GetPoint();
 	SDL_Point GetWinRelPoint(const SDL_Point* absPos);
+	SDL_Point GetCamRelPoint(const SDL_Point* winPos);
 	void MakeWinRel(int& X, int& Y);
 
 public:

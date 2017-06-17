@@ -29,28 +29,35 @@ bool CEditMap::OnLClick(const SDL_Point* mouse)
   if (handleLayers(mouse)) return true;
   if (handlePlace(mouse)) return true;
   if (handleActTile(mouse, *active)) return true;
-  if (handleQuadrant(mouse)) return true;
+  if (handleQuadrant_lc(mouse)) return true;
 
 	return false;
 }
 
 bool CEditMap::OnRClick(const SDL_Point* mouse)
 {
-  if (rClickA == NULL)
+  if (CAsset::inWorkspace(mouse))
   {
-    rClickA = new SDL_Point;
-    rClickA->x = mouse->x + CCamera::CameraControl.GetX();
-    rClickA->y = mouse->y + CCamera::CameraControl.GetY();
-  }
-  else if (rClickB == NULL)
-  {
-    rClickB = new SDL_Point;
-    rClickB->x = mouse->x + CCamera::CameraControl.GetX();
-    rClickB->y = mouse->y + CCamera::CameraControl.GetY();
+    if (rClickA == NULL)
+    {
+      rClickA = new SDL_Point;
+      rClickA->x = mouse->x + CCamera::CameraControl.GetX();
+      rClickA->y = mouse->y + CCamera::CameraControl.GetY();
+    }
+    else if (rClickB == NULL)
+    {
+      rClickB = new SDL_Point;
+      rClickB->x = mouse->x + CCamera::CameraControl.GetX();
+      rClickB->y = mouse->y + CCamera::CameraControl.GetY();
+    }
+    else
+    {
+      resetRClick();
+    }
   }
   else
   {
-    resetRClick();
+    handleQuadrant_rc(mouse);
   }
   return true;
 }
@@ -58,27 +65,32 @@ bool CEditMap::OnRClick(const SDL_Point* mouse)
 bool CEditMap::handleNewRegion(const SDL_Point* mouse)
 {
   bool retval = false;
-  if (rClickA != NULL && rClickB != NULL)
+  if (CAsset::inWorkspace(mouse))
   {
-    retval = true;
-    SDL_Rect dom = getTileDomain(rClickA, rClickB);
-    if (SDL_PointInRect(mouse, &dom))
+    if (rClickA != NULL && rClickB != NULL)
     {
-      // update the highlighted region in the map
-      int tW = TILE_SIZE * (1 + (active_TR || active_BR));
-      int tH = TILE_SIZE * (1 + (active_BL || active_BR));
-      for (int tX = 0; tX < dom.w / tW; tX++)
+      retval = true;
+      SDL_Rect dom = getTileDomain(rClickA, rClickB);
+      SDL_Point clickPos = CCamera::CameraControl.GetCamRelPoint(mouse);
+
+      if (SDL_PointInRect(&clickPos, &dom))
       {
-        for (int tY = 0; tY < dom.h / tH; tY++)
+        // update the highlighted region in the map
+        int tW = TILE_SIZE * (1 + (active_TR || active_BR));
+        int tH = TILE_SIZE * (1 + (active_BL || active_BR));
+        for (int tX = 0; tX < dom.w / tW; tX++)
         {
-          int mX = dom.x + (tX * tW);
-          int mY = dom.y + (tY * tH);
-          placeQuadrant(mX, mY);
+          for (int tY = 0; tY < dom.h / tH; tY++)
+          {
+            int mX = dom.x + (tX * tW);
+            int mY = dom.y + (tY * tH);
+            placeBlock(mX, mY);
+          }
         }
       }
     }
+    resetRClick();
   }
-  resetRClick();
   return retval;
 }
 
@@ -117,17 +129,17 @@ bool CEditMap::handleInterr(const SDL_Point* mouse, CTile* EditTile)
 bool CEditMap::handleNewTile(const SDL_Point* mouse)
 {
   // Place new tiles, if click is in the workspace
-  if (mouse->x < WWIDTH && mouse->y < WHEIGHT)
+  if (CAsset::inWorkspace(mouse))
   {
     int mX = CCamera::CameraControl.GetX() + mouse->x;
     int mY = CCamera::CameraControl.GetY() + mouse->y;
-    placeQuadrant(mX, mY);
+    placeBlock(mX, mY);
     return true;
   }
   return false;
 }
 
-void CEditMap::placeQuadrant(const int& x, const int& y)
+void CEditMap::placeBlock(const int& x, const int& y)
 {
   if (active_TL) CArea::AreaControl.ChangeTile(x, y, &TileTL, onTiles);
   if (active_TR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y, &TileTR, onTiles);
@@ -436,7 +448,7 @@ bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active)
   return true;
 }
 
-bool CEditMap::handleQuadrant(const SDL_Point* mouse)
+bool CEditMap::handleQuadrant_lc(const SDL_Point* mouse)
 {
   using namespace but_quad_t;
 
@@ -469,6 +481,44 @@ bool CEditMap::handleQuadrant(const SDL_Point* mouse)
     {
       // bottom right
       modifyTile = MODIFY_TILE_BR;
+    }
+  }
+  return true;
+}
+
+bool CEditMap::handleQuadrant_rc(const SDL_Point* mouse)
+{
+  using namespace but_quad_t;
+
+  if (mouse->x < left_x || mouse->x >= right_x + w || mouse->y < top_y || mouse->y >= bottom_y + h)
+  {
+    return false;
+  }
+
+  if (mouse->y < top_y + h)
+  {
+    if (mouse->x < left_x + w)
+    {
+      // top left
+      active_TL = !active_TL;
+    }
+    else
+    {
+      // top right
+      active_TR = !active_TR;
+    }
+  }
+  else
+  {
+    if (mouse->x < left_x + w)
+    {
+      // bottom left
+      active_BL = !active_BL;
+    }
+    else
+    {
+      // bottom right
+      active_BR = !active_BR;
     }
   }
   return true;

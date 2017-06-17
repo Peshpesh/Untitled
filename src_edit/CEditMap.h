@@ -188,15 +188,16 @@ private:
   bool handleLayers(const SDL_Point* mouse);
   bool handlePlace(const SDL_Point* mouse);
   bool handleActTile(const SDL_Point* mouse, bool& active);
-  bool handleQuadrant(const SDL_Point* mouse);
+  bool handleQuadrant_lc(const SDL_Point* mouse);
 
 private:
-  void placeQuadrant(const int& x, const int& y);
+  void placeBlock(const int& x, const int& y);
 
 public:
   bool OnRClick(const SDL_Point* mouse);
 
 private:
+  bool handleQuadrant_rc(const SDL_Point* mouse);
   SDL_Rect getTileDomain(const SDL_Point* A, const SDL_Point* B);
   void resetRClick();
 
@@ -205,6 +206,9 @@ public:
 
 private:
   bool RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse);
+  bool drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse);
+  bool drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos);
+  bool drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos);
 
 private:
   bool RenderSidebar(SDL_Texture* interface, const SDL_Point* mouse);
