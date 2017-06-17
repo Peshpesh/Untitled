@@ -189,7 +189,6 @@ private:
   bool handlePlace(const SDL_Point* mouse);
   bool handleActTile(const SDL_Point* mouse, bool& active);
   bool handleQuadrant(const SDL_Point* mouse);
-<<<<<<< HEAD
 
 private:
   void placeQuadrant(const int& x, const int& y);
@@ -200,14 +199,6 @@ public:
 private:
   SDL_Rect getTileDomain(const SDL_Point* A, const SDL_Point* B);
   void resetRClick();
-=======
-
-public:
-  bool OnRClick(const SDL_Point* mouse);
-  void resetRClick();
-
-private:
->>>>>>> 41a9e5df10b7910d657057d586cde90cd8e94fc4
 
 public:
   bool OnRender(SDL_Texture* interface, const SDL_Point* mouse);

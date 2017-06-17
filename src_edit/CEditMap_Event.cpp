@@ -61,7 +61,6 @@ bool CEditMap::handleNewRegion(const SDL_Point* mouse)
   if (rClickA != NULL && rClickB != NULL)
   {
     retval = true;
-<<<<<<< HEAD
     SDL_Rect dom = getTileDomain(rClickA, rClickB);
     if (SDL_PointInRect(mouse, &dom))
     {
@@ -79,18 +78,6 @@ bool CEditMap::handleNewRegion(const SDL_Point* mouse)
       }
     }
   }
-=======
-
-    SDL_Rect newRegion = CAsset::getTileRect(rClickA, rClickB);
-    newRegion.x -= CCamera::CameraControl.GetX();
-    newRegion.y -= CCamera::CameraControl.GetY();
-    if (SDL_PointInRect(mouse, &newRegion))
-    {
-      SDL_Delay(5000);
-    }
-  }
-
->>>>>>> 41a9e5df10b7910d657057d586cde90cd8e94fc4
   resetRClick();
   return retval;
 }
@@ -140,7 +127,6 @@ bool CEditMap::handleNewTile(const SDL_Point* mouse)
   return false;
 }
 
-<<<<<<< HEAD
 void CEditMap::placeQuadrant(const int& x, const int& y)
 {
   if (active_TL) CArea::AreaControl.ChangeTile(x, y, &TileTL, onTiles);
@@ -149,8 +135,6 @@ void CEditMap::placeQuadrant(const int& x, const int& y)
   if (active_BR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y + TILE_SIZE, &TileBR, onTiles);
 }
 
-=======
->>>>>>> 41a9e5df10b7910d657057d586cde90cd8e94fc4
 bool CEditMap::handleGetSet(const SDL_Point* mouse)
 {
   // Click on "Change Tileset" button. This displays a prompt to change tilesets,
