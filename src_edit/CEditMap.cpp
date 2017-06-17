@@ -78,6 +78,49 @@ bool CEditMap::OnInit()
   return true;
 }
 
+SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)
+{
+  // Points A and B are assumed to be relative to the camera, not the window's
+  // top-left corner.
+  //
+  // First, this takes in points A and B ("A" being the initial point,
+  // "B" being the terminal) and fetches the smallest box that contains both
+  // points AND has width and height that are multiples of TILE_SIZE.
+  // Then, this box is converted in position to be relative to the application
+  // window by subtracting camera coordinates from the box's position.
+  // At this point, the box contains all tiles that "collide" with a box
+  // drawn from points A to B.
+  // Finally, the box is expanded (if necessary) to encapsulate not only the
+  // aforementioned tiles, but ALSO TILES THAT WOULD BE PLACED if we tried to
+  // issue a placement (left-click) on every tile in the box. This makes it so
+  // the domain also contains active tiles that are not oriented top-left in
+  // the 2 x 2 block settings.
+
+  SDL_Rect domain;
+
+  if (A == NULL || B == NULL) return domain;
+
+  domain = CAsset::getTileRect(A, B);
+  domain.x -= CCamera::CameraControl.GetX();
+  domain.y -= CCamera::CameraControl.GetY();
+
+  if (active_TR || active_BR)
+  {
+    int tW = domain.w / TILE_SIZE;
+    domain.w += TILE_SIZE * (tW % 2);
+    if (B->x < A->x) domain.x -= TILE_SIZE * (tW % 2);
+  }
+
+  if (active_BL || active_BR)
+  {
+    int tH = domain.h / TILE_SIZE;
+    domain.h += TILE_SIZE * (tH % 2);
+    if (B->y < A->y) domain.y -= TILE_SIZE * (tH % 2);
+  }
+
+  return domain;
+}
+
 void CEditMap::OnTerminate()
 {
   SDL_DestroyTexture(Main_Tileset);

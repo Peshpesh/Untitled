@@ -192,9 +192,10 @@ private:
 
 public:
   bool OnRClick(const SDL_Point* mouse);
-  void resetRClick();
 
 private:
+  SDL_Rect getTileDomain(const SDL_Point* A, const SDL_Point* B);
+  void resetRClick();
 
 public:
   bool OnRender(SDL_Texture* interface, const SDL_Point* mouse);

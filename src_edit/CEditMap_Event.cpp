@@ -61,13 +61,10 @@ bool CEditMap::handleNewRegion(const SDL_Point* mouse)
   if (rClickA != NULL && rClickB != NULL)
   {
     retval = true;
-
-    SDL_Rect newRegion = CAsset::getTileRect(rClickA, rClickB);
-    newRegion.x -= CCamera::CameraControl.GetX();
-    newRegion.y -= CCamera::CameraControl.GetY();
+    SDL_Rect newRegion = getTileDomain(rClickA, rClickB);
     if (SDL_PointInRect(mouse, &newRegion))
     {
-      SDL_Delay(5000);
+      SDL_Delay(2000);
     }
   }
 
