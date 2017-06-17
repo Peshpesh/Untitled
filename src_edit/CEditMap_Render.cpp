@@ -74,11 +74,13 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 				{
 					SDL_Point abs_mouse = {mapX, mapY};
 					SDL_Rect box = getTileDomain(rClickA, &abs_mouse);
+					CCamera::CameraControl.MakeWinRel(box.x, box.y);
 					CAsset::drawBox(&box, flexAreaColor, rc_area_w);
 				}
 				else
 				{
 					SDL_Rect box = getTileDomain(rClickA, rClickB);
+					CCamera::CameraControl.MakeWinRel(box.x, box.y);
 					const SDL_Point* color = SDL_PointInRect(mouse, &box) ? hoverAreaColor : fixAreaColor;
 					CAsset::drawBox(&box, color, rc_area_w);
 				}

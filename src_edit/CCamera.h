@@ -33,7 +33,8 @@ public:
 	int GetX();
 	int GetY();
 	SDL_Point GetPoint();
-	SDL_Point GetRelPoint(const SDL_Point* absPos);
+	SDL_Point GetWinRelPoint(const SDL_Point* absPos);
+	void MakeWinRel(int& X, int& Y);
 
 public:
 	void SetPos(int X, int Y);

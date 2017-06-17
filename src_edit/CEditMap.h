@@ -190,6 +190,9 @@ private:
   bool handleActTile(const SDL_Point* mouse, bool& active);
   bool handleQuadrant(const SDL_Point* mouse);
 
+private:
+  void placeQuadrant(const int& x, const int& y);
+
 public:
   bool OnRClick(const SDL_Point* mouse);
 

@@ -61,13 +61,23 @@ bool CEditMap::handleNewRegion(const SDL_Point* mouse)
   if (rClickA != NULL && rClickB != NULL)
   {
     retval = true;
-    SDL_Rect newRegion = getTileDomain(rClickA, rClickB);
-    if (SDL_PointInRect(mouse, &newRegion))
+    SDL_Rect dom = getTileDomain(rClickA, rClickB);
+    if (SDL_PointInRect(mouse, &dom))
     {
-      SDL_Delay(2000);
+      // update the highlighted region in the map
+      int tW = TILE_SIZE * (1 + (active_TR || active_BR));
+      int tH = TILE_SIZE * (1 + (active_BL || active_BR));
+      for (int tX = 0; tX < dom.w / tW; tX++)
+      {
+        for (int tY = 0; tY < dom.h / tH; tY++)
+        {
+          int mX = dom.x + (tX * tW);
+          int mY = dom.y + (tY * tH);
+          placeQuadrant(mX, mY);
+        }
+      }
     }
   }
-
   resetRClick();
   return retval;
 }
@@ -111,14 +121,18 @@ bool CEditMap::handleNewTile(const SDL_Point* mouse)
   {
     int mX = CCamera::CameraControl.GetX() + mouse->x;
     int mY = CCamera::CameraControl.GetY() + mouse->y;
-    if (active_TL) CArea::AreaControl.ChangeTile(mX, mY, &TileTL, onTiles);
-    if (active_TR) CArea::AreaControl.ChangeTile(mX + TILE_SIZE, mY, &TileTR, onTiles);
-    if (active_BL) CArea::AreaControl.ChangeTile(mX, mY + TILE_SIZE, &TileBL, onTiles);
-    if (active_BR) CArea::AreaControl.ChangeTile(mX + TILE_SIZE, mY + TILE_SIZE, &TileBR, onTiles);
-
+    placeQuadrant(mX, mY);
     return true;
   }
   return false;
+}
+
+void CEditMap::placeQuadrant(const int& x, const int& y)
+{
+  if (active_TL) CArea::AreaControl.ChangeTile(x, y, &TileTL, onTiles);
+  if (active_TR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y, &TileTR, onTiles);
+  if (active_BL) CArea::AreaControl.ChangeTile(x, y + TILE_SIZE, &TileBL, onTiles);
+  if (active_BR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y + TILE_SIZE, &TileBR, onTiles);
 }
 
 bool CEditMap::handleGetSet(const SDL_Point* mouse)
