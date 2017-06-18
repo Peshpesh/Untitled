@@ -2,7 +2,7 @@
 
 void CApp::OnRender()
 {
-	bool debug = true;
+	static const bool debug = true;
 	CSurface::Clear();
 
 	// Draw background scenery

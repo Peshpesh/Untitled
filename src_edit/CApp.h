@@ -27,6 +27,24 @@ enum
   REMOVE_SCENE,
 };
 
+namespace io_ui
+{
+  static const char* engineName[] = {
+    "Map Editor",
+    "Npc Placer",
+    "Npc Culler",
+    "Scn Placer",
+    "Scn Culler"
+  };
+  static const SDL_Rect engineButtons[] = {
+    {500, 495, 65, 15},
+    {500, 510, 65, 15},
+    {500, 525, 65, 15},
+    {500, 540, 65, 15},
+    {500, 555, 65, 15}
+  };
+}
+
 namespace npc_editor
 {
   const short tbl_nm_x = 250;
@@ -111,8 +129,6 @@ public:
 
 	// Uses keyboard state to detect directional input from user for moving camera
 	void OnMotion(const Uint8 *state);
-
-	void OnClick();
 
 	// Renders graphics
 	void OnRender();

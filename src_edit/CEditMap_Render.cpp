@@ -154,46 +154,17 @@ bool CEditMap::RenderBottom(SDL_Texture* interface, const SDL_Point* mouse)
   return true;
 }
 
-
-bool CEditMap::RenderButton(SDL_Texture* interface, const SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl)
-{
-	bool but_glow = false;
-  if (hl)
-  {
-    if (mouse->x >= button->x && mouse->x < button->x + button->w)
-  	{
-  		if (mouse->y >= button->y && mouse->y < button->y + button->h)
-  		{
-  			but_glow = true;
-  		}
-  	}
-  }
-
-	SDL_Rect srcR = CAsset::getRect(DARKS_X, COLOR_PURE_Y, 1, 1);
-	if (!CSurface::OnDraw(interface, &srcR, button))
-		return false;
-
-	srcR.x = colX;
-	srcR.y = colY - but_glow;
-	SDL_Rect dstR = CAsset::getRect(button->x + bsiz, button->y + bsiz, button->w - (bsiz * 2), button->h - (bsiz * 2));
-	if (!CSurface::OnDraw(interface, &srcR, &dstR)) return false;
-
-
-	return true;
-}
-
 bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_tset;
-	bool hl = !(bool)(intrpt);
 
-	SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
-	if (!RenderButton(interface, mouse, &dstrect, BUT_BORDER_SIZ, BLUE_X, COLOR_PURE_Y, hl))
-		return false;
+	// const SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
+	const SDL_Point* color = SDL_PointInRect(mouse, &button) ? hoverColor : offCol;
+	if (!CAsset::drawButton(&button, bsiz, color)) return false;
 
 	// Write a button name for changing a tileset
-	Font::CenterWrite(FONT_MINI, "CHANGE", x + (w / 2), y + (h / 2) - MINI_CHAR_SIZE);
-	Font::CenterWrite(FONT_MINI, "TILESET", x + (w / 2), y + (h / 2) + MINI_CHAR_SIZE);
+	Font::CenterWrite(FONT_MINI, "CHANGE", button.x + (button.w / 2), button.y + (button.h / 2) - MINI_CHAR_SIZE);
+	Font::CenterWrite(FONT_MINI, "TILESET", button.x + (button.w / 2), button.y + (button.h / 2) + MINI_CHAR_SIZE);
 
 	return true;
 }
@@ -390,16 +361,20 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_t;
 
-	bool hl = !(bool)(intrpt);
-	int colX = BLUE_X;
+	const SDL_Point* color = NULL;
 
-	// render button for picking background tiles
-	if (intrpt & INTRPT_CHANGE_BG) colX = RED_X;
+	if (!(bool)(intrpt))
+	{
+		color = SDL_PointInRect(mouse, &bg_button) ? hoverColor : offCol;
+	}
+	else
+	{
+		color = (intrpt & INTRPT_CHANGE_BG) ? onCol : offCol;
+	}
 
-	SDL_Rect dstrect = CAsset::getRect(bg_x, bg_y, bg_w, bg_h);
-	if (!RenderButton(interface, mouse, &dstrect, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
-		return false;
-	Font::CenterWrite(FONT_MINI, "CHANGE B.TILE", bg_x + (bg_w / 2), bg_y + (bg_h / 2));
+	if (!CAsset::drawButton(&bg_button, bsiz, color)) return false;
+
+	Font::CenterWrite(FONT_MINI, "CHANGE B.TILE", bg_button.x + (bg_button.w / 2), bg_button.y + (bg_button.h / 2));
 
 	return true;
 }
@@ -408,16 +383,20 @@ bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_t;
 
-	bool hl = !(bool)(intrpt);
-	int colX = BLUE_X;
+	const SDL_Point* color = NULL;
 
-	// render button for picking foreground tiles
-	if (intrpt & INTRPT_CHANGE_FG) colX = RED_X;
+	if (!(bool)(intrpt))
+	{
+		color = SDL_PointInRect(mouse, &fg_button) ? hoverColor : offCol;
+	}
+	else
+	{
+		color = (intrpt & INTRPT_CHANGE_FG) ? onCol : offCol;
+	}
 
-	SDL_Rect dstrect = CAsset::getRect(fg_x, fg_y, fg_w, fg_h);
-	if (!RenderButton(interface, mouse, &dstrect, BUT_BORDER_SIZ, colX, COLOR_PURE_Y, hl))
-		return false;
-	Font::CenterWrite(FONT_MINI, "CHANGE F.TILE", fg_x + (fg_w / 2), fg_y + (fg_h / 2));
+	if (!CAsset::drawButton(&fg_button, bsiz, color)) return false;
+
+	Font::CenterWrite(FONT_MINI, "CHANGE F.TILE", fg_button.x + (fg_button.w / 2), fg_button.y + (fg_button.h / 2));
 
 	return true;
 }
@@ -519,14 +498,20 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, 
 {
 	using namespace but_act_t;
 
-	bool hl = !(bool)(intrpt);
-	int colX = active ? GREEN_X : RED_X;
 	const char* name = active ? onTitle : offTitle;
 
-	SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
-	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
-		return false;
-	Font::CenterWrite(FONT_MINI, name, x + (w / 2), y + (h / 2));
+	const SDL_Point* color = NULL;
+	if ((bool)(intrpt) || !SDL_PointInRect(mouse, &button))
+	{
+		color = active ? onCol : offCol;
+	}
+	else
+	{
+		color = active ? onhvCol : offhvCol;
+	}
+
+	if (!CAsset::drawButton(&button, bsiz, color)) return false;
+	Font::CenterWrite(FONT_MINI, name, button.x + (button.w / 2), button.y + (button.h / 2));
 
 	return true;
 }
@@ -535,32 +520,70 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace but_quad_t;
 
-	bool hl = !(bool)(intrpt);
+	bool canHilight = !(bool)(intrpt);
+	bool noHov;
+	const SDL_Point* color = NULL;
 	SDL_Rect dstrect;
-	int colX;
+
+
 
 	dstrect = CAsset::getRect(left_x, top_y, w, h);
-	colX = (modifyTile == MODIFY_TILE_TL) ? YELLOW_X : (active_TL ? GREEN_X : RED_X);
-	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
-		return false;
+	if (modifyTile != MODIFY_TILE_TL)
+	{
+		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
+		color = (noHov) ? (active_TL ? onCol : offCol) : (active_TL ? onhvCol : offhvCol);
+	}
+	else
+	{
+		color = editCol;
+	}
+
+	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
 	Font::CenterWrite(FONT_MINI, name_TL, left_x + (w / 2), top_y + (h / 2));
 
+
+
 	dstrect.x = right_x;
-	colX = (modifyTile == MODIFY_TILE_TR) ? YELLOW_X : (active_TR ? GREEN_X : RED_X);
-	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
-		return false;
+	if (modifyTile != MODIFY_TILE_TR)
+	{
+		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
+		color = (noHov) ? (active_TR ? onCol : offCol) : (active_TR ? onhvCol : offhvCol);
+	}
+	else
+	{
+		color = editCol;
+	}
+	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
 	Font::CenterWrite(FONT_MINI, name_TR, right_x + (w / 2), top_y + (h / 2));
 
+
+
 	dstrect.y = bottom_y;
-	colX = (modifyTile == MODIFY_TILE_BR) ? YELLOW_X : (active_BR ? GREEN_X : RED_X);
-	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
-		return false;
+	if (modifyTile != MODIFY_TILE_BR)
+	{
+		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
+		color = (noHov) ? (active_BR ? onCol : offCol) : (active_BR ? onhvCol : offhvCol);
+	}
+	else
+	{
+		color = editCol;
+	}
+	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
 	Font::CenterWrite(FONT_MINI, name_BR, right_x + (w / 2), bottom_y + (h / 2));
 
+
+
 	dstrect.x = left_x;
-	colX = (modifyTile == MODIFY_TILE_BL) ? YELLOW_X : (active_BL ? GREEN_X : RED_X);
-	if (!RenderButton(interface, mouse, &dstrect, bsiz, colX, COLOR_PURE_Y, hl))
-		return false;
+	if (modifyTile != MODIFY_TILE_BL)
+	{
+		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
+		color = (noHov) ? (active_BL ? onCol : offCol) : (active_BL ? onhvCol : offhvCol);
+	}
+	else
+	{
+		color = editCol;
+	}
+	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
 	Font::CenterWrite(FONT_MINI, name_BL, left_x + (w / 2), bottom_y + (h / 2));
 
 	return true;

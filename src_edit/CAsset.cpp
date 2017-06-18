@@ -127,13 +127,29 @@ bool CAsset::drawBoxFill(const SDL_Rect* box, const SDL_Point* color)
   if (box == NULL || color == NULL) return false;
 
   SDL_Rect srcR = getPixel(color);
-  CSurface::OnDraw(palette, &srcR, box);
+  if (!CSurface::OnDraw(palette, &srcR, box)) return false;
 
   return true;
 }
 
 bool CAsset::drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color)
 {
+  return true;
+}
+
+bool CAsset::drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color)
+{
+  if (!drawBoxFill(box, color)) return false;
+  if (!drawBox(box, &color::black, str_w)) return false;
+
+  return true;
+}
+
+bool CAsset::drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col)
+{
+  if (!drawBoxFill(box, color)) return false;
+  if (!drawBox(box, str_col, str_w)) return false;
+
   return true;
 }
 

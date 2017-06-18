@@ -72,6 +72,10 @@ class CAsset
 
 		static bool drawBoxFill(const SDL_Rect* box, const SDL_Point* color);
     static bool drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color);
+
+    static bool drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color);
+    static bool drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col);
+    
 };
 
 #endif

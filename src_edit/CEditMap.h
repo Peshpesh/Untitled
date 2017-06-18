@@ -28,41 +28,39 @@ enum
 // Map engine namespaces //
   namespace but_tset
   {
-    // const SDL_Rect button_tset = {665, 50, 50, 40};
-    const unsigned short w = 50;    // Change Tileset button info
-    const unsigned short h = 40;    //
-    const short x = 665;            //
-    const short y = 50;             //
+    // Change Tileset button info
+    const SDL_Rect button = {665, 50, 50, 40};
+    const short bsiz = 2;
+    static const SDL_Point* offCol = &color::blue;
+    static const SDL_Point* hoverColor = &color::light_blue;
+    static const SDL_Point* onCol = &color::red;
   }
   namespace but_t
   {
-    // const SDL_Rect button_bg = {260, 510, 100, 20};
-    // const SDL_Rect button_fg = {260, 540, 100, 20};
-    const short bg_x = 325;   // Change Tile button info
-    const short bg_y = 510;   //
-    const short bg_w = 100;   //
-    const short bg_h = 24;    //
-    const short fg_x = 325;   // Change Tile button info
-    const short fg_y = 534;   //
-    const short fg_w = 100;   //
-    const short fg_h = 24;    //
+    const SDL_Rect bg_button = {325, 510, 100, 24};
+    const SDL_Rect fg_button = {325, 534, 100, 24};
+    const short bsiz = 2;
+    static const SDL_Point* offCol = &color::blue;
+    static const SDL_Point* hoverColor = &color::light_blue;
+    static const SDL_Point* onCol = &color::red;
   }
   namespace but_act_t
   {
-    static const char* onTitle = "active";
-    static const char* offTitle = "idle";
-    const short x = 260;
-    const short y = 490;
-    const short w = 48;
-    const short h = 16;
+    const char* const onTitle = "active";
+    const char* const offTitle = "idle";
+    const SDL_Rect button = {260, 490, 48, 16};
     const short bsiz = 2;
+    static const SDL_Point* offCol = &color::red;
+    static const SDL_Point* offhvCol = &color::light_red;
+    static const SDL_Point* onCol = &color::green;
+    static const SDL_Point* onhvCol = &color::light_green;
   }
   namespace but_quad_t
   {
-    static const char* name_TL = "TL";
-    static const char* name_TR = "TR";
-    static const char* name_BL = "BL";
-    static const char* name_BR = "BR";
+    const char* const name_TL = "TL";
+    const char* const name_TR = "TR";
+    const char* const name_BL = "BL";
+    const char* const name_BR = "BR";
     const short left_x = 260;       //
     const short right_x = 284;      //
     const short top_y = 510;        //
@@ -70,6 +68,11 @@ enum
     const short w = 24;             //
     const short h = 24;             //
     const short bsiz = 2;
+    static const SDL_Point* offCol = &color::red;
+    static const SDL_Point* offhvCol = &color::light_red;
+    static const SDL_Point* onCol = &color::green;
+    static const SDL_Point* onhvCol = &color::light_green;
+    static const SDL_Point* editCol = &color::yellow;
   }
   namespace disp_t
   {
@@ -86,8 +89,8 @@ enum
     const short ty_y = 350;           //
     const short co_x = 674;           // "..." Tile collision info
     const short co_y = 420;           //
-    static const SDL_Rect dummyEntity = {522, 0, TILE_SIZE, TILE_SIZE};
-    static const SDL_Rect dummyOutline = {522, 32, TILE_SIZE, TILE_SIZE};
+    const SDL_Rect dummyEntity = {522, 0, TILE_SIZE, TILE_SIZE};
+    const SDL_Rect dummyOutline = {522, 32, TILE_SIZE, TILE_SIZE};
   }
   namespace opac    // opacity meters
   {
@@ -232,8 +235,6 @@ private:
   bool drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, bool active);
   bool drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse);
 
-public:
-  bool RenderButton(SDL_Texture* interface, const SDL_Point* mouse, SDL_Rect* button, int bsiz, int colX, int colY, bool hl);
 };
 
 #endif

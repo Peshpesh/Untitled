@@ -43,7 +43,6 @@ int CApp::OnExecute()
 		}
 		SDL_PumpEvents();
 		OnMotion(state);    // For repeating user input (i.e. holding directional button)
-		// OnClick();     // For holding a mouse button down
 		OnLoop();      // Perform necessary manipulations
 		OnRender();    // Render updated info
 	}

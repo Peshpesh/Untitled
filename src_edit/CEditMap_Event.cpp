@@ -157,19 +157,24 @@ bool CEditMap::handleGetSet(const SDL_Point* mouse)
   // Click on "Change Tileset" button. This displays a prompt to change tilesets,
   // and the function within the loop performs a change if requested.
 	using namespace but_tset;
-	if (mouse->x >= x && mouse->x < x + w)
-	{
-		if (mouse->y >= y && mouse->y < y + h)
-		{
-			// if ((Main_Tileset = CUI::UIControl.OnChange(Map_Interface, Tileset_Path)) != NULL)
-			// {
-			// 	CArea::AreaControl.ChangeSet(Main_Tileset);
-			// 	TileTL.bg_ID = 0;
-			// 	QueryTileset();
-			return true;
-			// }
-		}
-	}
+  if (SDL_PointInRect(mouse, &button))
+  {
+    return true;
+  }
+
+	// if (mouse->x >= x && mouse->x < x + w)
+	// {
+	// 	if (mouse->y >= y && mouse->y < y + h)
+	// 	{
+	// 		// if ((Main_Tileset = CUI::UIControl.OnChange(Map_Interface, Tileset_Path)) != NULL)
+	// 		// {
+	// 		// 	CArea::AreaControl.ChangeSet(Main_Tileset);
+	// 		// 	TileTL.bg_ID = 0;
+	// 		// 	QueryTileset();
+	// 		return true;
+	// 		// }
+	// 	}
+	// }
   return false;
 }
 
@@ -178,23 +183,18 @@ bool CEditMap::handleGetTile(const SDL_Point* mouse)
   // Click on "Change Tile" buttons. A display of all tiles is rendered,
   // and clicking a tile will update the active tile to use the clicked tile.
   using namespace but_t;
-  if (mouse->x >= bg_x && mouse->x < bg_x + bg_w)
+
+  if (SDL_PointInRect(mouse, &bg_button))
   {
-    if (mouse->y >= bg_y && mouse->y < bg_y + bg_h)
-    {
       CChangeTile::PickTile.Init(tset_w, tset_h);
       intrpt = INTRPT_CHANGE_BG;
       return true;
-    }
   }
-  if (mouse->x >= fg_x && mouse->x < fg_x + fg_w)
+  if (SDL_PointInRect(mouse, &fg_button))
   {
-    if (mouse->y >= fg_y && mouse->y < fg_y + fg_h)
-    {
       CChangeTile::PickTile.Init(tset_w, tset_h);
       intrpt = INTRPT_CHANGE_FG;
       return true;
-    }
   }
   return false;
 }
@@ -443,10 +443,7 @@ bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active)
 {
   using namespace but_act_t;
 
-  if (mouse->x < x || mouse->x >= x + w || mouse->y < y || mouse->y >= y + h)
-  {
-    return false;
-  }
+  if (!SDL_PointInRect(mouse, &button)) return false;
 
   active = !active;
 

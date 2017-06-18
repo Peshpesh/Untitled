@@ -16,7 +16,6 @@ set(SRCDIR ${PROJECT_SOURCE_DIR})
 set(SOURCE_FILES
 ${SRCDIR}/CAnimation.cpp
 ${SRCDIR}/CApp.cpp
-${SRCDIR}/CApp_Click.cpp
 ${SRCDIR}/CApp_Event.cpp
 ${SRCDIR}/CApp_EventNpcEdit.cpp
 ${SRCDIR}/CApp_EventScnEdit.cpp
