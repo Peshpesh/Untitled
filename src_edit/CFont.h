@@ -122,6 +122,8 @@ public:
 	* param My : y-position of message center */
 	static int CenterWrite(const int& fontID, char const* message, int Mx, int My);
 
+	static int CenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR);
+
 	static char CenterBoxWrite(const int& fontID, char const* message,
 		int bX, int bY, int bW, int bH, int tX, int length, int page);
 

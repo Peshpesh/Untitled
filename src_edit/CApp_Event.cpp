@@ -123,25 +123,15 @@ void CApp::OnRButtonDown(int mX, int mY)
 
 bool CApp::EventOPTS(int mX, int mY)
 {
+	using namespace io_ui;
+	// const SDL_Point mouse = {mX, mY};
 	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
-	if (mX >= EDIT_BUT_X && mX < EDIT_BUT_X + EDIT_BUT_W)
+	for (int i = MODIFY_MAP; i <= REMOVE_SCENE; i++)
 	{
-		if (mY >= MAP_BUT_Y && mY < MAP_BUT_Y + EDIT_BUT_H)
+		if (SDL_PointInRect(&mouse, &engineButton[i]))
 		{
-			active_mod = MODIFY_MAP;
-			return true;
-		}
-		if (mY >= NPC_BUT_Y && mY < NPC_BUT_Y + EDIT_BUT_H)
-		{
-			// Clicking "NPC" twice allows NPCs to be deleted.
-			if (active_mod == MODIFY_NPC) active_mod = REMOVE_NPC;
-			else active_mod = MODIFY_NPC;
-			return true;
-		}
-		if (mY >= SCN_BUT_Y && mY < SCN_BUT_Y + EDIT_BUT_H)
-		{
-			if (active_mod == MODIFY_SCENE) active_mod = REMOVE_SCENE;
-			else active_mod = MODIFY_SCENE;
+			active_mod = i;
+			// break;
 			return true;
 		}
 	}

@@ -36,13 +36,17 @@ namespace io_ui
     "Scn Placer",
     "Scn Culler"
   };
-  static const SDL_Rect engineButtons[] = {
-    {500, 495, 65, 15},
-    {500, 510, 65, 15},
-    {500, 525, 65, 15},
-    {500, 540, 65, 15},
-    {500, 555, 65, 15}
+  static const SDL_Rect engineButton[] = {
+    {500, 495, 70, 16},
+    {500, 511, 70, 16},
+    {500, 527, 70, 16},
+    {500, 543, 70, 16},
+    {500, 559, 70, 16}
   };
+  const short bsiz = 2;
+  static const SDL_Point* engineOnCol = &color::cyan;
+  static const SDL_Point* engineOffCol = &color::gray;
+  static const SDL_Point* engineHvCol = &color::light_violet;
 }
 
 namespace npc_editor
@@ -132,6 +136,8 @@ public:
 
 	// Renders graphics
 	void OnRender();
+  bool RenderEngine();
+
 	bool RenderNPCedit();
 	bool RenderSCNedit();
 	bool RenderSCNswitch();

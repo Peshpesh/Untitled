@@ -4,11 +4,6 @@ using namespace scn_editor;
 
 bool CApp::RenderSCNedit()
 {
-	if (active_mod == MODIFY_SCENE)
-		CSurface::OnDraw(Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, WHEIGHT - 34, 100, 34);
-	else
-		CSurface::OnDraw(Map_Interface, WWIDTH - 100 - 32, WHEIGHT + 66, WWIDTH - 100 - 32, 312, 100, 34);
-
 	if (!CSurface::OnDraw(Map_Interface, scn_nm_x - ARR_SZ - SYM_SPACING, scn_nm_y, L_ARR_X, L_ARR_Y, ARR_SZ, ARR_SZ)) return false;
 	if (!CSurface::OnDraw(Map_Interface, scn_nm_x + scn_nm_w + SYM_SPACING, scn_nm_y, R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ)) return false;
 	if (!CSceneryEdit::ScnControl.RenderName(FONT_DEFAULT, scn_nm_x, scn_nm_y)) return false;

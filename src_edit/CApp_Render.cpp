@@ -38,16 +38,6 @@ void CApp::OnRender()
 		s_i++;
 	}
 
-	switch (active_mod)
-	{
-	case MODIFY_MAP:
-	{
-		CSurface::OnDraw(Map_Interface, WWIDTH - 100 - 32, WHEIGHT, WWIDTH - 100 - 32, WHEIGHT - 100, 100, 33);
-		break;
-	}
-	default: break;
-	}
-
 	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
 	{
 		// Draws the surrounding interface containing current info and accessible buttons
@@ -70,6 +60,7 @@ void CApp::OnRender()
 	//	DEBUGGING
 	if (debug)
 	{
+		RenderEngine();
 		Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
 	CSurface::Present();
@@ -93,6 +84,25 @@ bool CApp::RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY
 		return false;
 	if (!CSurface::OnDraw(Map_Interface, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
 		return false;
+
+	return true;
+}
+
+bool CApp::RenderEngine()
+{
+	using namespace io_ui;
+
+	bool canHilight = !(bool)(intrpt);
+	bool noHov;
+
+	const SDL_Point* color = NULL;
+	for (int i = MODIFY_MAP; i <= REMOVE_SCENE; i++)
+	{
+		noHov = (!canHilight || !SDL_PointInRect(&mouse, &engineButton[i]));
+		color = (active_mod == i) ? engineOnCol : (noHov ? engineOffCol : engineHvCol);
+		CAsset::drawButton(&engineButton[i], bsiz, color);
+		Font::CenterWrite(FONT_MINI, engineName[i], &engineButton[i]);
+	}
 
 	return true;
 }

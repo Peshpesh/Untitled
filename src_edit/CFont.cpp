@@ -567,6 +567,12 @@ int Font::CenterWrite(const int& fontID, char const* message, int Mx, int My)
 	return Length;
 }
 
+int Font::CenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR)
+{
+	int centerX = dstR->x + (dstR->w / 2);
+	int centerY = dstR->y + (dstR->h / 2);
+	return CenterWrite(fontID, message, centerX, centerY);
+}
 
 char Font::CenterBoxWrite(const int& fontID, char const* message,
 	int bX, int bY, int bW, int bH, int tX, int length, int page)
