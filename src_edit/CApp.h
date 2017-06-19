@@ -37,11 +37,11 @@ namespace io_ui
     "Scn Culler"
   };
   static const SDL_Rect engineButton[] = {
-    {500, 495, 70, 16},
-    {500, 511, 70, 16},
-    {500, 527, 70, 16},
-    {500, 543, 70, 16},
-    {500, 559, 70, 16}
+    {520, 490, 70, 16},
+    {520, 506, 70, 16},
+    {520, 522, 70, 16},
+    {520, 538, 70, 16},
+    {520, 554, 70, 16}
   };
   const short bsiz = 2;
   static const SDL_Point* engineOnCol = &color::cyan;

@@ -57,10 +57,11 @@ void CApp::OnRender()
 		CEditMap::MapEditor.OnRender(Map_Interface, &mouse);
 	}
 
+	RenderEngine();
+
 	//	DEBUGGING
 	if (debug)
 	{
-		RenderEngine();
 		Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
 	CSurface::Present();

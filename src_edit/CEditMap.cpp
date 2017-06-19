@@ -1,7 +1,6 @@
 #include "CEditMap.h"
 
 CEditMap CEditMap::MapEditor;
-// SDL_Point* CEditMap::shadowColor = NULL;
 
 CEditMap::CEditMap()
 {
@@ -31,8 +30,8 @@ CEditMap::CEditMap()
   rc_area_w = 2;
 
 	show_fg = show_ty = show_co = true;
-	type_alpha = 85;
-	coll_alpha = 125;
+	type_alpha = 215;
+	coll_alpha = 55;
 	type_w = type_h = tset_w = tset_h = 0;
 
   onTiles = ENABLE_BG | ENABLE_FG | ENABLE_TYPE | ENABLE_COLL;

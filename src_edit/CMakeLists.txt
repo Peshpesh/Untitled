@@ -33,6 +33,7 @@ ${SRCDIR}/CChangeTile.cpp
 ${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CEditMap.cpp
 ${SRCDIR}/CEditMap_Event.cpp
+${SRCDIR}/CEditMap_Extern.cpp
 ${SRCDIR}/CEditMap_Render.cpp
 ${SRCDIR}/CEntity.cpp
 ${SRCDIR}/CEntityCol.cpp

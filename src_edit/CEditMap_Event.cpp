@@ -333,15 +333,22 @@ bool CEditMap::handleOpac_ty(const SDL_Point* mouse)
 {
   // Click on opacity bar for tile type overlay
   using namespace opac;
-  if (mouse->y >= ty_y && mouse->y < ty_y + h)
+  // if (mouse->y >= ty_y && mouse->y < ty_y + h)
+  // {
+  //   if (mouse->x >= x && mouse->x < x + w)
+  //   {
+  //     double barfract = (double)(mouse->x - x) / (double)(w - 1);
+  //     type_alpha = MAX_RGBA * barfract;
+  //     SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
+  //     return true;
+  //   }
+  // }
+  if (SDL_PointInRect(mouse, &typeBar))
   {
-    if (mouse->x >= x && mouse->x < x + w)
-    {
-      double barfract = (double)(mouse->x - x) / (double)(w - 1);
-      type_alpha = MAX_RGBA * barfract;
-      SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
-      return true;
-    }
+    double barfract = (double)(mouse->x - typeBar.x) / (double)(typeBar.w - 1);
+    type_alpha = MAX_RGBA * barfract;
+    SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
+    return true;
   }
   return false;
 }
@@ -350,15 +357,22 @@ bool CEditMap::handleOpac_co(const SDL_Point* mouse)
 {
   // Click on opacity bar for tile collision overlay
   using namespace opac;
-  if (mouse->y >= co_y && mouse->y < co_y + h)
+  // if (mouse->y >= co_y && mouse->y < co_y + h)
+  // {
+  //   if (mouse->x >= x && mouse->x < x + w)
+  //   {
+  //     double barfract = (double)(mouse->x - x) / (double)(w - 1);
+  //     coll_alpha = MAX_RGBA * barfract;
+  //     SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
+  //     return true;
+  //   }
+  // }
+  if (SDL_PointInRect(mouse, &collBar))
   {
-    if (mouse->x >= x && mouse->x < x + w)
-    {
-      double barfract = (double)(mouse->x - x) / (double)(w - 1);
-      coll_alpha = MAX_RGBA * barfract;
-      SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
-      return true;
-    }
+    double barfract = (double)(mouse->x - collBar.x) / (double)(collBar.w - 1);
+    coll_alpha = MAX_RGBA * barfract;
+    SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
+    return true;
   }
   return false;
 }

@@ -339,9 +339,11 @@ bool CEditMap::drawOpac_ty(SDL_Texture* interface)
 {
 	using namespace opac;
 	// Draw an opacity meter for Type overlay
-	int opacity_W = w * ((double)(type_alpha) / (double)(MAX_RGBA));
-	CSurface::OnDraw(interface, x, ty_y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, h);
-	CSurface::OnDraw(interface, x + opacity_W, ty_y, DARKS_X, COLOR_PURE_Y, 1, 1, w - opacity_W, h);
+	int opacity_W = typeBar.w * ((double)(type_alpha) / (double)(MAX_RGBA));
+	SDL_Rect fill = {typeBar.x, typeBar.y, opacity_W, typeBar.h};
+
+	CAsset::drawBoxFill(&typeBar, emptyCol);
+	CAsset::drawBoxFill(&fill, fillCol);
 
 	return true;
 }
@@ -350,9 +352,11 @@ bool CEditMap::drawOpac_co(SDL_Texture* interface)
 {
 	using namespace opac;
 	// Draw an opacity meter for Collision overlay
-	int opacity_W = w * ((double)(coll_alpha) / (double)(MAX_RGBA));
-	CSurface::OnDraw(interface, x, co_y, YELLOW_X, COLOR_PURE_Y, 1, 1, opacity_W, h);
-	CSurface::OnDraw(interface, x + opacity_W, co_y, DARKS_X, COLOR_PURE_Y, 1, 1, w - opacity_W, h);
+	int opacity_W = collBar.w * ((double)(coll_alpha) / (double)(MAX_RGBA));
+	SDL_Rect fill = {collBar.x, collBar.y, opacity_W, collBar.h};
+
+	CAsset::drawBoxFill(&collBar, emptyCol);
+	CAsset::drawBoxFill(&fill, fillCol);
 
 	return true;
 }

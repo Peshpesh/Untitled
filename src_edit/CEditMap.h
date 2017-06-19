@@ -29,97 +29,101 @@ enum
   namespace but_tset
   {
     // Change Tileset button info
-    const SDL_Rect button = {665, 50, 50, 40};
-    const short bsiz = 2;
-    static const SDL_Point* offCol = &color::blue;
-    static const SDL_Point* hoverColor = &color::light_blue;
-    static const SDL_Point* onCol = &color::red;
+    extern const SDL_Rect button;
+    extern const short bsiz;
+    extern const SDL_Point* offCol;
+    extern const SDL_Point* hoverColor;
+    extern const SDL_Point* onCol;
   }
   namespace but_t
   {
-    const SDL_Rect bg_button = {325, 510, 100, 24};
-    const SDL_Rect fg_button = {325, 534, 100, 24};
-    const short bsiz = 2;
-    static const SDL_Point* offCol = &color::blue;
-    static const SDL_Point* hoverColor = &color::light_blue;
-    static const SDL_Point* onCol = &color::red;
+    extern const SDL_Rect bg_button;
+    extern const SDL_Rect fg_button;
+    extern const short bsiz;
+    extern const SDL_Point* offCol;
+    extern const SDL_Point* hoverColor;
+    extern const SDL_Point* onCol;
   }
   namespace but_act_t
   {
-    const char* const onTitle = "active";
-    const char* const offTitle = "idle";
-    const SDL_Rect button = {260, 490, 48, 16};
-    const short bsiz = 2;
-    static const SDL_Point* offCol = &color::red;
-    static const SDL_Point* offhvCol = &color::light_red;
-    static const SDL_Point* onCol = &color::green;
-    static const SDL_Point* onhvCol = &color::light_green;
+    extern const char* const onTitle;
+    extern const char* const offTitle;
+    extern const SDL_Rect button;
+    extern const short bsiz;
+    extern const SDL_Point* offCol;
+    extern const SDL_Point* offhvCol;
+    extern const SDL_Point* onCol;
+    extern const SDL_Point* onhvCol;
   }
   namespace but_quad_t
   {
-    const char* const name_TL = "TL";
-    const char* const name_TR = "TR";
-    const char* const name_BL = "BL";
-    const char* const name_BR = "BR";
-    const short left_x = 260;       //
-    const short right_x = 284;      //
-    const short top_y = 510;        //
-    const short bottom_y = 534;     //
-    const short w = 24;             //
-    const short h = 24;             //
-    const short bsiz = 2;
-    static const SDL_Point* offCol = &color::red;
-    static const SDL_Point* offhvCol = &color::light_red;
-    static const SDL_Point* onCol = &color::green;
-    static const SDL_Point* onhvCol = &color::light_green;
-    static const SDL_Point* editCol = &color::yellow;
+    extern const char* const name_TL;
+    extern const char* const name_TR;
+    extern const char* const name_BL;
+    extern const char* const name_BR;
+    extern const short left_x;       //
+    extern const short right_x;      //
+    extern const short top_y;        //
+    extern const short bottom_y;     //
+    extern const short w;             //
+    extern const short h;             //
+    extern const short bsiz;
+    extern const SDL_Point* offCol;
+    extern const SDL_Point* offhvCol;
+    extern const SDL_Point* onCol;
+    extern const SDL_Point* onhvCol;
+    extern const SDL_Point* editCol;
   }
   namespace disp_t
   {
-    const short name_offset = 10;
-    const short sample_x = 658;
-    const short sample_y = 120;
-    const short bgfg_x = 674;         // Displayed (current) Tile info
-    const short bgfg_y = 140;         //
-    const short bg_x = 674;           // "..." background Tile info
-    const short bg_y = 210;           //
-    const short fg_x = 674;           // "..." foreground Tile info
-    const short fg_y = 280;           //
-    const short ty_x = 674;           // "..." Tile type info
-    const short ty_y = 350;           //
-    const short co_x = 674;           // "..." Tile collision info
-    const short co_y = 420;           //
-    const SDL_Rect dummyEntity = {522, 0, TILE_SIZE, TILE_SIZE};
-    const SDL_Rect dummyOutline = {522, 32, TILE_SIZE, TILE_SIZE};
+    extern const short name_offset;
+    extern const short sample_x;
+    extern const short sample_y;
+    extern const short bgfg_x;         // Displayed (current) Tile info
+    extern const short bgfg_y;         //
+    extern const short bg_x;           // "..." background Tile info
+    extern const short bg_y;           //
+    extern const short fg_x;           // "..." foreground Tile info
+    extern const short fg_y;           //
+    extern const short ty_x;           // "..." Tile type info
+    extern const short ty_y;           //
+    extern const short co_x;           // "..." Tile collision info
+    extern const short co_y;           //
+    extern const SDL_Rect dummyEntity;
+    extern const SDL_Rect dummyOutline;
   }
   namespace opac    // opacity meters
   {
-    const short w = 90;
-    const short h = 4;
-    const short x = 645;
-    const short ty_y = 390;
-    const short co_y = 460;
+    extern const short w;
+    extern const short h;
+    extern const short x;
+    extern const short ty_y;
+    extern const short co_y;
+    extern const SDL_Rect typeBar;
+    extern const SDL_Rect collBar;
+    extern const SDL_Point* fillCol;
+    extern const SDL_Point* emptyCol;
   }
   namespace but_rm
   {
-    const short bg_x = 642;
-    const short bg_y = 192;
-    const short fg_x = 642;
-    const short fg_y = 262;
-    const short ty_x = 642;
-    const short ty_y = 332;
-    const short co_x = 642;
-    const short co_y = 402;
+    extern const short bg_x;
+    extern const short bg_y;
+    extern const short fg_x;
+    extern const short fg_y;
+    extern const short ty_x;
+    extern const short ty_y;
+    extern const short co_x;
+    extern const short co_y;
   }
   namespace view_flip
   {
-    const short x = 20;
-    const short y = 510;
+    extern const short x;
+    extern const short y;
   }
   namespace place_flip
   {
-    const short x = 150;
-    const short y = 495;
+    extern const short x;
+    extern const short y;
   }
 // Map engine namespaces //
 
