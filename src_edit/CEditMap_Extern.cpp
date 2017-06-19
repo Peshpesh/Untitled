@@ -69,11 +69,6 @@
   }
   namespace opac    // opacity meters
   {
-    // const short w = 90;
-    // const short h = 4;
-    // const short x = 645;
-    // const short ty_y = 390;
-    // const short co_y = 460;
     const SDL_Rect typeBar = {645, 390, 90, 4};
     const SDL_Rect collBar = {645, 460, 90, 4};
     const SDL_Point* fillCol = &color::dark_green;

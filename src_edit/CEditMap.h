@@ -7,6 +7,7 @@
 #include "CArea.h"
 #include "CCamera.h"
 #include "CChangeTile.h"
+#include "CTileset.h"
 #include "Define.h"
 
 enum interrupts
@@ -132,7 +133,7 @@ public:
 	static CEditMap	MapEditor;
 
 private:
-  SDL_Texture* Main_Tileset;  // The actual tileset in use
+  SDL_Texture* Tileset;       // The actual tileset in use
   SDL_Texture* Type_Tileset;  // Tileset showing tile type
   SDL_Texture* Coll_Tileset;	// Tileset showing collision type
 

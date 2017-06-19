@@ -52,6 +52,7 @@ ${SRCDIR}/CSceneryMod.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTile.cpp
+${SRCDIR}/CTileset.cpp
 ${SRCDIR}/CUI.cpp
 )
 
@@ -79,6 +80,7 @@ ${SRCDIR}/CSceneryMod.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h
+${SRCDIR}/CTileset.h
 ${SRCDIR}/CUI.h
 ${SRCDIR}/Define.h
 )

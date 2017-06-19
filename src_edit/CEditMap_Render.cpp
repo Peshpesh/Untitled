@@ -39,7 +39,7 @@ bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 	{
 		if (intrpt & INTRPT_CHANGE_BG || intrpt & INTRPT_CHANGE_FG)
 		{
-			CChangeTile::PickTile.RenderTileset(interface, Main_Tileset, mouse->x, mouse->y);
+			CChangeTile::PickTile.RenderTileset(interface, Tileset, mouse->x, mouse->y);
 		}
 	}
 	return true;
@@ -217,12 +217,12 @@ bool CEditMap::drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL
 
 	srcR.x = (ShowTile->bg_ID % tset_w) * TILE_SIZE;
 	srcR.y = (ShowTile->bg_ID / tset_w) * TILE_SIZE;
-	CSurface::OnDraw(Main_Tileset, &srcR, dstR);
+	CSurface::OnDraw(Tileset, &srcR, dstR);
 	CSurface::OnDraw(interface, &dummyEntity, dstR);
 
 	srcR.x = (ShowTile->fg_ID % tset_w) * TILE_SIZE;
 	srcR.y = (ShowTile->fg_ID / tset_w) * TILE_SIZE;
-	CSurface::OnDraw(Main_Tileset, &srcR, dstR);
+	CSurface::OnDraw(Tileset, &srcR, dstR);
 	CSurface::OnDraw(interface, &dummyOutline, dstR);
 
 	return true;
@@ -235,7 +235,7 @@ bool CEditMap::drawActive_bg(SDL_Texture* interface, CTile* ShowTile)
 	// Draws active background tile
 	Font::CenterWrite(FONT_MINI, "BACKGROUND", EWIDTH - 50, bg_y - name_offset);
 
-	CSurface::OnDraw(Main_Tileset, bg_x, bg_y,
+	CSurface::OnDraw(Tileset, bg_x, bg_y,
 		(ShowTile->bg_ID % tset_w) * TILE_SIZE,
 		(ShowTile->bg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
@@ -258,7 +258,7 @@ bool CEditMap::drawActive_fg(SDL_Texture* interface, CTile* ShowTile)
 	Font::CenterWrite(FONT_MINI, "FOREGROUND", EWIDTH - 50, fg_y - name_offset);
 
 	// Draws active foreground tile
-	CSurface::OnDraw(Main_Tileset, fg_x, fg_y,
+	CSurface::OnDraw(Tileset, fg_x, fg_y,
 		(ShowTile->fg_ID % tset_w) * TILE_SIZE,
 		(ShowTile->fg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 

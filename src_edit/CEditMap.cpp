@@ -4,7 +4,7 @@ CEditMap CEditMap::MapEditor;
 
 CEditMap::CEditMap()
 {
-  Main_Tileset = NULL;    // The actual tileset in use
+  Tileset = NULL;    // The actual tileset in use
   Type_Tileset = NULL;    // Tileset showing tile type
   Coll_Tileset = NULL;    // Tileset showing collision type
 
@@ -41,13 +41,13 @@ CEditMap::CEditMap()
 
 bool CEditMap::OnInit()
 {
-  if ((Main_Tileset = CSurface::OnLoad("../res/tile/default.png")) == NULL)
+  if ((Tileset = CSurface::OnLoad("../res/tile/default.png")) == NULL)
   {
     return false;
   }
 
   int PixWidth, PixHeight;
-  SDL_QueryTexture(Main_Tileset, NULL, NULL, &PixWidth, &PixHeight);
+  SDL_QueryTexture(Tileset, NULL, NULL, &PixWidth, &PixHeight);
   tset_w = PixWidth / TILE_SIZE;
   tset_h = PixHeight / TILE_SIZE;
 
@@ -71,7 +71,7 @@ bool CEditMap::OnInit()
   coll_w = PixWidth / TILE_SIZE;
   coll_h = PixHeight / TILE_SIZE;
 
-  if (CArea::AreaControl.OnLoad(Main_Tileset) == false)
+  if (CArea::AreaControl.OnLoad(Tileset) == false)
 		return false;
 
   return true;
@@ -115,7 +115,7 @@ SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)
 
 void CEditMap::OnTerminate()
 {
-  SDL_DestroyTexture(Main_Tileset);
+  SDL_DestroyTexture(Tileset);
   SDL_DestroyTexture(Type_Tileset);
   SDL_DestroyTexture(Coll_Tileset);
 }
