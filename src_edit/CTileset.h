@@ -2,6 +2,7 @@
 #define _C_TILESET_H_
 
 #include <string>
+#include "CInterrupt.h"
 #include "CSurface.h"
 #include "CFont.h"
 #include "CAsset.h"
@@ -16,7 +17,11 @@ private:
 public:
 	CTileset();
 
-	static bool OnLClick(const SDL_Point* mouse);
+  static void Init();
+
+  static bool OnKeyDown(SDL_Keycode sym, Uint16 mod);
+
+	static bool OnLButtonDown(const SDL_Point* mouse);
 
   static std::string getFilePath();
 };

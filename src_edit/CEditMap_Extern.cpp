@@ -1,6 +1,8 @@
 #include "CEditMap.h"
 
 // Map engine namespaces //
+namespace mapEngine
+{
   namespace but_tset
   {
     // Change Tileset button info
@@ -96,4 +98,5 @@
     const short x = 150;
     const short y = 495;
   }
+}
 // Map engine namespaces //

@@ -35,9 +35,11 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	if (intrpt ^ INTRPT_NONE)
+	// if (intrpt ^ INTRPT_NONE)
+	if (!CInterrupt::isNone())
 	{
-		if (intrpt & INTRPT_CHANGE_BG || intrpt & INTRPT_CHANGE_FG)
+		// if (intrpt & INTRPT_CHANGE_BG || intrpt & INTRPT_CHANGE_FG)
+		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG) || CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
 		{
 			CChangeTile::PickTile.RenderTileset(interface, Tileset, mouse->x, mouse->y);
 		}
@@ -47,7 +49,8 @@ bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos)
 {
-	if (intrpt ^ INTRPT_NONE) return true;
+	// if (intrpt ^ INTRPT_NONE) return true;
+	if (!CInterrupt::isNone()) return true;
 
 	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mapPos->x / TILE_SIZE));
 	int tY = -CCamera::CameraControl.GetY() + (TILE_SIZE * (mapPos->y / TILE_SIZE));
@@ -87,7 +90,8 @@ bool CEditMap::drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos)
 
 bool CEditMap::drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos)
 {
-	if (intrpt ^ INTRPT_NONE) return true;
+	// if (intrpt ^ INTRPT_NONE) return true;
+	if (!CInterrupt::isNone()) return true;
 
 	if (rClickA != NULL)
 	{
@@ -156,7 +160,7 @@ bool CEditMap::RenderBottom(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	using namespace but_tset;
+	using namespace mapEngine::but_tset;
 
 	// const SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
 	const SDL_Point* color = SDL_PointInRect(mouse, &button) ? hoverColor : offCol;
@@ -172,7 +176,7 @@ bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
 bool CEditMap::drawActiveTiles(SDL_Texture* interface)
 {
 	// Draw complete active tile with dummy entity & outline (for depth clarity)
-	using namespace disp_t;
+	using namespace mapEngine::disp_t;
 
 	SDL_Rect srcR = {0, 0, TILE_SIZE, TILE_SIZE};
 	SDL_Rect dstR = {0, 0, TILE_SIZE, TILE_SIZE};
@@ -211,7 +215,7 @@ bool CEditMap::drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL
 {
 	if (interface == NULL || ShowTile == NULL || dstR == NULL) return false;
 
-	using namespace disp_t;
+	using namespace mapEngine::disp_t;
 
 	SDL_Rect srcR = {0, 0, TILE_SIZE, TILE_SIZE};
 
@@ -230,7 +234,7 @@ bool CEditMap::drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL
 
 bool CEditMap::drawActive_bg(SDL_Texture* interface, CTile* ShowTile)
 {
-	using namespace disp_t;
+	using namespace mapEngine::disp_t;
 
 	// Draws active background tile
 	Font::CenterWrite(FONT_MINI, "BACKGROUND", EWIDTH - 50, bg_y - name_offset);
@@ -245,14 +249,14 @@ bool CEditMap::drawActive_bg(SDL_Texture* interface, CTile* ShowTile)
 	CSurface::OnDraw(interface, bg_x + TILE_SIZE + ((TILE_SIZE-ARR_SZ)/2),
 			bg_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 
-  CSurface::OnDraw(interface, but_rm::bg_x, but_rm::bg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+  CSurface::OnDraw(interface, mapEngine::but_rm::bg_x, mapEngine::but_rm::bg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 
 	return true;
 }
 
 bool CEditMap::drawActive_fg(SDL_Texture* interface, CTile* ShowTile)
 {
-	using namespace disp_t;
+	using namespace mapEngine::disp_t;
 
 	// Foreground tile header
 	Font::CenterWrite(FONT_MINI, "FOREGROUND", EWIDTH - 50, fg_y - name_offset);
@@ -268,14 +272,14 @@ bool CEditMap::drawActive_fg(SDL_Texture* interface, CTile* ShowTile)
 	CSurface::OnDraw(interface, fg_x + TILE_SIZE + ((TILE_SIZE-ARR_SZ)/2),
 			fg_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
 
-  CSurface::OnDraw(interface, but_rm::fg_x, but_rm::fg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+  CSurface::OnDraw(interface, mapEngine::but_rm::fg_x, mapEngine::but_rm::fg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 
 	return true;
 }
 
 bool CEditMap::drawActive_ty(SDL_Texture* interface, CTile* ShowTile)
 {
-	using namespace disp_t;
+	using namespace mapEngine::disp_t;
 
 	// Draws active tile type
 	CSurface::OnDraw(Type_Tileset, ty_x, ty_y,
@@ -303,7 +307,7 @@ bool CEditMap::drawActive_ty(SDL_Texture* interface, CTile* ShowTile)
 
 bool CEditMap::drawActive_co(SDL_Texture* interface, CTile* ShowTile)
 {
-	using namespace disp_t;
+	using namespace mapEngine::disp_t;
 
 	// Draws active collision tile
 	CSurface::OnDraw(Coll_Tileset, co_x, co_y,
@@ -337,7 +341,7 @@ bool CEditMap::drawActive_co(SDL_Texture* interface, CTile* ShowTile)
 
 bool CEditMap::drawOpac_ty(SDL_Texture* interface)
 {
-	using namespace opac;
+	using namespace mapEngine::opac;
 	// Draw an opacity meter for Type overlay
 	int opacity_W = typeBar.w * ((double)(type_alpha) / (double)(MAX_RGBA));
 	SDL_Rect fill = {typeBar.x, typeBar.y, opacity_W, typeBar.h};
@@ -350,7 +354,7 @@ bool CEditMap::drawOpac_ty(SDL_Texture* interface)
 
 bool CEditMap::drawOpac_co(SDL_Texture* interface)
 {
-	using namespace opac;
+	using namespace mapEngine::opac;
 	// Draw an opacity meter for Collision overlay
 	int opacity_W = collBar.w * ((double)(coll_alpha) / (double)(MAX_RGBA));
 	SDL_Rect fill = {collBar.x, collBar.y, opacity_W, collBar.h};
@@ -363,17 +367,18 @@ bool CEditMap::drawOpac_co(SDL_Texture* interface)
 
 bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	using namespace but_t;
+	using namespace mapEngine::but_t;
 
 	const SDL_Point* color = NULL;
 
-	if (!(bool)(intrpt))
+	// if (!(bool)(intrpt))
+	if (CInterrupt::isNone())
 	{
 		color = SDL_PointInRect(mouse, &bg_button) ? hoverColor : offCol;
 	}
 	else
 	{
-		color = (intrpt & INTRPT_CHANGE_BG) ? onCol : offCol;
+		color = CInterrupt::isFlagOn(INTRPT_CHANGE_BG) ? onCol : offCol;
 	}
 
 	if (!CAsset::drawButton(&bg_button, bsiz, color)) return false;
@@ -385,17 +390,19 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	using namespace but_t;
+	using namespace mapEngine::but_t;
 
 	const SDL_Point* color = NULL;
 
-	if (!(bool)(intrpt))
+	// if (!(bool)(intrpt))
+	if (CInterrupt::isNone())
 	{
 		color = SDL_PointInRect(mouse, &fg_button) ? hoverColor : offCol;
 	}
 	else
 	{
-		color = (intrpt & INTRPT_CHANGE_FG) ? onCol : offCol;
+		// color = (intrpt & INTRPT_CHANGE_FG) ? onCol : offCol;
+		color = CInterrupt::isFlagOn(INTRPT_CHANGE_FG) ? onCol : offCol;
 	}
 
 	if (!CAsset::drawButton(&fg_button, bsiz, color)) return false;
@@ -407,7 +414,7 @@ bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::drawOverlayList(SDL_Texture* interface)
 {
-	using namespace view_flip;
+	using namespace mapEngine::view_flip;
 
 	// Menu/Options list for viewing various overlays
 	int sY = y - (SWITCH_SIZE + SYM_SPACING);
@@ -450,7 +457,7 @@ bool CEditMap::drawOverlayList(SDL_Texture* interface)
 
 bool CEditMap::drawPlacementList(SDL_Texture* interface)
 {
-	using namespace place_flip;
+	using namespace mapEngine::place_flip;
 
 	// Menu/Options list for active tile attributes on placement
 	int sY = y;
@@ -500,12 +507,13 @@ bool CEditMap::drawPlacementList(SDL_Texture* interface)
 
 bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, bool active)
 {
-	using namespace but_act_t;
+	using namespace mapEngine::but_act_t;
 
 	const char* name = active ? onTitle : offTitle;
 
 	const SDL_Point* color = NULL;
-	if ((bool)(intrpt) || !SDL_PointInRect(mouse, &button))
+	// if ((bool)(intrpt) || !SDL_PointInRect(mouse, &button))
+	if (!CInterrupt::isNone() || !SDL_PointInRect(mouse, &button))
 	{
 		color = active ? onCol : offCol;
 	}
@@ -522,9 +530,10 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, 
 
 bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	using namespace but_quad_t;
+	using namespace mapEngine::but_quad_t;
 
-	bool canHilight = !(bool)(intrpt);
+	// bool canHilight = !(bool)(intrpt);
+	bool canHilight = CInterrupt::isNone();
 	bool noHov;
 	const SDL_Point* color = NULL;
 	SDL_Rect dstrect;

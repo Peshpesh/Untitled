@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <vector>
 
+#include "CInterrupt.h"
 #include "CSurface.h"
 #include "CEvent.h"
 #include "CAsset.h"

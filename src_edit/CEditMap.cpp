@@ -32,11 +32,11 @@ CEditMap::CEditMap()
 	show_fg = show_ty = show_co = true;
 	type_alpha = 215;
 	coll_alpha = 55;
-	type_w = type_h = tset_w = tset_h = 0;
+	coll_w = coll_h = type_w = type_h = tset_w = tset_h = 0;
 
   onTiles = ENABLE_BG | ENABLE_FG | ENABLE_TYPE | ENABLE_COLL;
 
-  intrpt = 0;
+  // intrpt = 0;
 }
 
 bool CEditMap::OnInit()

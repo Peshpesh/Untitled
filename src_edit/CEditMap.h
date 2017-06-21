@@ -1,6 +1,7 @@
 #ifndef _C_EDITMAP_H_
 #define _C_EDITMAP_H_
 
+#include "CInterrupt.h"
 #include "CSurface.h"
 #include "CAsset.h"
 #include "CFont.h"
@@ -10,13 +11,14 @@
 #include "CTileset.h"
 #include "Define.h"
 
-enum interrupts
-{
-  INTRPT_NONE = 0,
-  INTRPT_CHANGE_BG = 0x00000001,		// intrpt via bg tile change
-  INTRPT_CHANGE_FG = 0x00000002,		// intrpt via fg tile change
-  INTRPT_MODEL = 0x00000004,
-};
+// enum interrupts
+// {
+//   INTRPT_NONE = 0,
+//   INTRPT_CHANGE_BG = 0x00000001,		// intrpt via bg tile change
+//   INTRPT_CHANGE_FG = 0x00000002,		// intrpt via fg tile change
+//   INTRPT_MODEL = 0x00000004,
+//   INTRPT_CHANGE_TS = 0x00000008,
+// };
 
 enum
 {
@@ -27,6 +29,8 @@ enum
 };
 
 // Map engine namespaces //
+namespace mapEngine
+{
   namespace but_tset
   {
     // Change Tileset button info
@@ -126,7 +130,7 @@ enum
     extern const short x;
     extern const short y;
   }
-// Map engine namespaces //
+} // Map engine namespaces //
 
 class CEditMap {
 public:
@@ -158,7 +162,7 @@ private:
   int tset_w, tset_h;  	// Tileset texture dimension (tiles)
 
   int onTiles;          // bitwise flag for tiles to place
-  int intrpt;           // bitwise flag for interruptions
+  // int intrpt;           // bitwise flag for interruptions
 
 private:
   SDL_Point* rClickA;

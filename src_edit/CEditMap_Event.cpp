@@ -116,15 +116,20 @@ void CEditMap::resetRClick()
 bool CEditMap::handleInterr(const SDL_Point* mouse, CTile* EditTile)
 {
   // Event is passed to intrpting prompts, if there are any
-	if (intrpt & ~INTRPT_NONE)
+	// if (intrpt & ~INTRPT_NONE)
+  if (!CInterrupt::isNone())
 	{
-		if (intrpt & INTRPT_CHANGE_BG)
+		// if (intrpt & INTRPT_CHANGE_BG)
+    if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG))
 		{
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->bg_ID)) intrpt = INTRPT_NONE;
+      // if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->bg_ID)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->bg_ID)) CInterrupt::removeFlag(INTRPT_CHANGE_BG);
 		}
-		if (intrpt & INTRPT_CHANGE_FG)
+		// if (intrpt & INTRPT_CHANGE_FG)
+    if (CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
 		{
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->fg_ID)) intrpt = INTRPT_NONE;
+      // if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->fg_ID)) intrpt = INTRPT_NONE;
+      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->fg_ID)) CInterrupt::removeFlag(INTRPT_CHANGE_FG);
 		}
 		return true;
 	}
@@ -156,9 +161,12 @@ bool CEditMap::handleGetSet(const SDL_Point* mouse)
 {
   // Click on "Change Tileset" button. This displays a prompt to change tilesets,
   // and the function within the loop performs a change if requested.
-	using namespace but_tset;
+	using namespace mapEngine::but_tset;
   if (SDL_PointInRect(mouse, &button))
   {
+    CTileset::Init();
+    // intrpt = INTRPT_CHANGE_TS;
+    CInterrupt::appendFlag(INTRPT_CHANGE_TS);
     return true;
   }
 
@@ -175,18 +183,20 @@ bool CEditMap::handleGetTile(const SDL_Point* mouse)
 {
   // Click on "Change Tile" buttons. A display of all tiles is rendered,
   // and clicking a tile will update the active tile to use the clicked tile.
-  using namespace but_t;
+  using namespace mapEngine::but_t;
 
   if (SDL_PointInRect(mouse, &bg_button))
   {
       CChangeTile::PickTile.Init(tset_w, tset_h);
-      intrpt = INTRPT_CHANGE_BG;
+      // intrpt = INTRPT_CHANGE_BG;
+      CInterrupt::appendFlag(INTRPT_CHANGE_BG);
       return true;
   }
   if (SDL_PointInRect(mouse, &fg_button))
   {
       CChangeTile::PickTile.Init(tset_w, tset_h);
-      intrpt = INTRPT_CHANGE_FG;
+      // intrpt = INTRPT_CHANGE_FG;
+      CInterrupt::appendFlag(INTRPT_CHANGE_FG);
       return true;
   }
   return false;
@@ -196,7 +206,7 @@ bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active background tile.
   // Changes the active tile to previous or next index.
-  using namespace disp_t;
+  using namespace mapEngine::disp_t;
   if (mouse->y >= bg_y && mouse->y < bg_y + TILE_SIZE)
   {
     // Left Arrow
@@ -221,7 +231,7 @@ bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active foreground tile.
   // Changes the active tile to previous or next index.
-  using namespace disp_t;
+  using namespace mapEngine::disp_t;
   if (mouse->y >= fg_y && mouse->y < fg_y + TILE_SIZE)
   {
     // Left Arrow
@@ -246,7 +256,7 @@ bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active tile type.
   // Changes the active tile type to previous or next type index.
-  using namespace disp_t;
+  using namespace mapEngine::disp_t;
   if (mouse->y >= ty_y && mouse->y < ty_y + TILE_SIZE)
   {
     // Left Arrow
@@ -271,7 +281,7 @@ bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile)
 {
   // Click on arrow LEFT or RIGHT of active collision.
   // Changes the active collision to previous or next collision index.
-  using namespace disp_t;
+  using namespace mapEngine::disp_t;
   if (mouse->y >= co_y && mouse->y < co_y + TILE_SIZE)
   {
     // Left Arrow
@@ -295,7 +305,7 @@ bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile)
 bool CEditMap::handleRemove_bg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Turn the background tile off.
-  using namespace but_rm;
+  using namespace mapEngine::but_rm;
   if (mouse->y >= bg_y && mouse->y < bg_y + SWITCH_SIZE)
   {
     if (mouse->x >= bg_x && mouse->x < bg_x + SWITCH_SIZE)
@@ -310,7 +320,7 @@ bool CEditMap::handleRemove_bg(const SDL_Point* mouse, CTile* EditTile)
 bool CEditMap::handleRemove_fg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Turn the foreground tile off.
-  using namespace but_rm;
+  using namespace mapEngine::but_rm;
   if (mouse->y >= fg_y && mouse->y < fg_y + SWITCH_SIZE)
   {
     if (mouse->x >= fg_x && mouse->x < fg_x + SWITCH_SIZE)
@@ -325,7 +335,7 @@ bool CEditMap::handleRemove_fg(const SDL_Point* mouse, CTile* EditTile)
 bool CEditMap::handleOpac_ty(const SDL_Point* mouse)
 {
   // Click on opacity bar for tile type overlay
-  using namespace opac;
+  using namespace mapEngine::opac;
 
   if (SDL_PointInRect(mouse, &typeBar))
   {
@@ -340,7 +350,7 @@ bool CEditMap::handleOpac_ty(const SDL_Point* mouse)
 bool CEditMap::handleOpac_co(const SDL_Point* mouse)
 {
   // Click on opacity bar for tile collision overlay
-  using namespace opac;
+  using namespace mapEngine::opac;
 
   if (SDL_PointInRect(mouse, &collBar))
   {
@@ -355,7 +365,7 @@ bool CEditMap::handleOpac_co(const SDL_Point* mouse)
 bool CEditMap::handleLayers(const SDL_Point* mouse)
 {
   // Click on View overlay buttons
-  using namespace view_flip;
+  using namespace mapEngine::view_flip;
   if (mouse->x >= x && mouse->x < x + SWITCH_SIZE)
   {
     int Yi = y;
@@ -389,7 +399,7 @@ bool CEditMap::handleLayers(const SDL_Point* mouse)
 bool CEditMap::handlePlace(const SDL_Point* mouse)
 {
   // Click on active tile attribute switches
-  using namespace place_flip;
+  using namespace mapEngine::place_flip;
   if (mouse->x >= x && mouse->x < x + SWITCH_SIZE)
   {
     int Yi = y;
@@ -430,7 +440,7 @@ bool CEditMap::handlePlace(const SDL_Point* mouse)
 
 bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active)
 {
-  using namespace but_act_t;
+  using namespace mapEngine::but_act_t;
 
   if (!SDL_PointInRect(mouse, &button)) return false;
 
@@ -441,7 +451,7 @@ bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active)
 
 bool CEditMap::handleQuadrant_lc(const SDL_Point* mouse)
 {
-  using namespace but_quad_t;
+  using namespace mapEngine::but_quad_t;
 
   if (mouse->x < left_x || mouse->x >= right_x + w || mouse->y < top_y || mouse->y >= bottom_y + h)
   {
@@ -479,7 +489,7 @@ bool CEditMap::handleQuadrant_lc(const SDL_Point* mouse)
 
 bool CEditMap::handleQuadrant_rc(const SDL_Point* mouse)
 {
-  using namespace but_quad_t;
+  using namespace mapEngine::but_quad_t;
 
   if (mouse->x < left_x || mouse->x >= right_x + w || mouse->y < top_y || mouse->y >= bottom_y + h)
   {

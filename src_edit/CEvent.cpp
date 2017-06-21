@@ -11,30 +11,6 @@ CEvent::~CEvent() {
 void CEvent::OnEvent(SDL_Event* Event) {
 	switch (Event->type)
 	{
-		/*case SDL_ACTIVEEVENT: {
-								  switch (Event->active.state) {
-								  case SDL_APPMOUSEFOCUS: {
-															  if (Event->active.gain)    OnMouseFocus();
-															  else                OnMouseBlur();
-
-															  break;
-								  }
-								  case SDL_APPINPUTFOCUS: {
-															  if (Event->active.gain)    OnInputFocus();
-															  else                OnInputBlur();
-
-															  break;
-								  }
-								  case SDL_APPACTIVE:    {
-															 if (Event->active.gain)    OnRestore();
-															 else                OnMinimize();
-
-															 break;
-								  }
-								  }
-								  break;
-		}*/
-
 		case SDL_KEYDOWN: {
 			OnKeyDown(Event->key.keysym.sym, Event->key.keysym.mod);
 			break;
@@ -110,14 +86,6 @@ void CEvent::OnEvent(SDL_Event* Event) {
 		case SDL_SYSWMEVENT: {
 			break;
 		}
-		/*	case SDL_VIDEORESIZE: {
-			OnResize(Event->resize.w, Event->resize.h);
-			break;
-		}
-		case SDL_VIDEOEXPOSE: {
-			OnExpose();
-			break;
-		}*/
 		default: {
 			OnUser(Event->user.type, Event->user.code, Event->user.data1, Event->user.data2);
 			break;
