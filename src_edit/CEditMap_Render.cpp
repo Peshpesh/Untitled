@@ -43,6 +43,10 @@ bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 		{
 			CChangeTile::PickTile.RenderTileset(interface, Tileset, mouse->x, mouse->y);
 		}
+		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
+		{
+			CTileset::OnRender();
+		}
 	}
 	return true;
 }
@@ -167,8 +171,9 @@ bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
 	if (!CAsset::drawButton(&button, bsiz, color)) return false;
 
 	// Write a button name for changing a tileset
-	Font::CenterWrite(FONT_MINI, "CHANGE", button.x + (button.w / 2), button.y + (button.h / 2) - MINI_CHAR_SIZE);
-	Font::CenterWrite(FONT_MINI, "TILESET", button.x + (button.w / 2), button.y + (button.h / 2) + MINI_CHAR_SIZE);
+	// Font::CenterWrite(FONT_MINI, "CHANGE TILESET", button.x + (button.w / 2), button.y + (button.h / 2) - MINI_CHAR_SIZE);
+	// Font::CenterWrite(FONT_MINI, "TILESET", button.x + (button.w / 2), button.y + (button.h / 2) + MINI_CHAR_SIZE);
+	Font::NewCenterWrite(FONT_MINI, "CHANGE TILESET", &button, F_RED);
 
 	return true;
 }

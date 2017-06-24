@@ -574,6 +574,139 @@ int Font::CenterWrite(const int& fontID, char const* message, const SDL_Rect* ds
 	return CenterWrite(fontID, message, centerX, centerY);
 }
 
+int Font::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR, int col)
+{
+	int centerX = dstR->x + (dstR->w / 2);
+	int centerY = dstR->y + (dstR->h / 2);
+
+	int msgWidth = 0;
+	int msgHeight = 0;
+	// getLineDims(fontID, message, msgWidth, msgHeight);
+
+	// int leftX = centerX - (msgWidth / 2);
+	// int topY = centerY - (msgHeight / 2);
+
+	// return Write(fontID, message, col, false, leftX, topY);
+	int lineW = 0;
+	int lineH = 0;
+	int h_spacing, v_spacing;
+	GetInfo(fontID, h_spacing, v_spacing);
+
+	msgHeight = getTextHeight(fontID, message, dstR->w);
+	int topY = centerY - (msgHeight / 2);
+
+	int i = 0;
+	std::string currentLine;
+	while (message[i] != '\0')
+	{
+		if (message[i] == '\n') i++;
+		currentLine = getLine(fontID, message, i, dstR->w);
+		getLineDims(fontID, currentLine.c_str(), lineW, lineH);
+		int leftX = centerX - (lineW / 2);
+		Write(fontID, currentLine.c_str(), col, false, leftX, topY);
+		topY += lineH + v_spacing;
+	}
+	return 0;
+}
+
+int Font::getTextHeight(const int& fontID, char const* message, int maxWidth)
+{
+	int h_spacing, v_spacing;
+	if (GetInfo(fontID, h_spacing, v_spacing) == NULL) return 0;
+	int Xo, Yo, W, lineH;
+
+	GetXY(fontID, 'A', Xo, Yo, W, lineH);
+
+	int tH = 0;
+	int i = 0;
+	while (message[i] != '\0')
+	{
+		if (message[i] == '\n') i++;
+		tH += lineH + ((bool)(i) * v_spacing);
+		getLine(fontID, message, i, maxWidth);
+	}
+	return tH;
+}
+
+std::string Font::getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth)
+{
+	int h_spacing, v_spacing;
+	if (GetInfo(fontID, h_spacing, v_spacing) == NULL) return "";
+
+	int i = iterator;
+	int Xo, Yo, W, H;
+	std::string lin;
+	std::string wrd;
+	int linWidth = 0;
+	int wrdWidth = 0;
+	while (true)
+	{
+		char sym = message[i];
+		if (sym == '\0' || sym == '\n')
+		{
+			if (wrd != " ")
+			{
+				lin += wrd;
+				linWidth += wrdWidth;
+			}
+			iterator = i;
+			break;
+		}
+
+		GetXY(fontID, sym, Xo, Yo, W, H);
+		if (linWidth + wrdWidth != 0) W += h_spacing;
+		if (linWidth + wrdWidth + W > maxWidth) break;
+
+		if (sym == ' ')
+		{
+			if (wrd != " ")
+			{
+				lin += wrd;
+				linWidth += wrdWidth;
+				iterator = i + 1;
+			}
+			wrd.clear();
+			wrdWidth = 0;
+		}
+		wrd.push_back(sym);
+		wrdWidth += W;
+
+		i++;
+	}
+	return lin;
+}
+
+int Font::NewCenterWrite(const int& fontID, char const* message, const SDL_Point* dstC, int col)
+{
+	int msgWidth = 0;
+	int msgHeight = 0;
+	getLineDims(fontID, message, msgWidth, msgHeight);
+
+	int leftX = dstC->x - (msgWidth / 2);
+	int topY = dstC->y - (msgHeight / 2);
+
+	return Write(fontID, message, col, false, leftX, topY);
+}
+
+void Font::getLineDims(const int& fontID, char const* message, int& msgWidth, int& msgHeight)
+{
+	int h_spacing, v_spacing;
+	if (GetInfo(fontID, h_spacing, v_spacing) == NULL) return;
+
+	int i = 0;
+	int Xo, Yo, W, H;
+	msgWidth = 0;
+	msgHeight = 0;
+
+	while (message[i] != '\0')
+	{
+		if (i > 0) msgWidth += h_spacing;
+		GetXY(fontID, message[i++], Xo, Yo, W, H);
+		msgWidth += W;
+		if (!msgHeight) msgHeight = H;
+	}
+}
+
 char Font::CenterBoxWrite(const int& fontID, char const* message,
 	int bX, int bY, int bW, int bH, int tX, int length, int page)
 {

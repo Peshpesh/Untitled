@@ -164,17 +164,13 @@ bool CEditMap::handleGetSet(const SDL_Point* mouse)
 	using namespace mapEngine::but_tset;
   if (SDL_PointInRect(mouse, &button))
   {
-    CTileset::Init();
-    // intrpt = INTRPT_CHANGE_TS;
+    // SDL_Texture* tmpset = CTileset::changeTileset();
+    // SDL_DestroyTexture(Tileset);
+    // Tileset = tmpset;
+    // CArea::AreaControl.OnLoad(Tileset);
     CInterrupt::appendFlag(INTRPT_CHANGE_TS);
     return true;
   }
-
-	// 		// if ((Tileset = CUI::UIControl.OnChange(Map_Interface, Tileset_Path)) != NULL)
-	// 		// {
-	// 		// 	CArea::AreaControl.ChangeSet(Tileset);
-	// 		// 	TileTL.bg_ID = 0;
-	// 		// 	QueryTileset();
 
   return false;
 }

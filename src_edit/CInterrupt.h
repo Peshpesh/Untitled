@@ -24,6 +24,9 @@ public:
   // turns on a bitwise flag in handle
   static void appendFlag(int flag);
 
+  // turns all flags off
+  static void resetFlags();
+
   // returns true if the flag is on in handle
   static bool isFlagOn(int flag);
 

@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <vector>
 #include <math.h>
+#include <string>
 #include "CSurface.h"
 #include "CFPS.h"
 
@@ -123,6 +124,14 @@ public:
 	static int CenterWrite(const int& fontID, char const* message, int Mx, int My);
 
 	static int CenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR);
+
+	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR, int col);
+
+	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Point* dstC, int col);
+
+	static void getLineDims(const int& fontID, char const* message, int& msgWidth, int& msgHeight);
+	static int getTextHeight(const int& fontID, char const* message, int maxWidth);
+	static std::string getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth);
 
 	static char CenterBoxWrite(const int& fontID, char const* message,
 		int bX, int bY, int bW, int bH, int tX, int length, int page);

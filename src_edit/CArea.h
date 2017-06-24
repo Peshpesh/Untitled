@@ -32,7 +32,6 @@ public:
 
 	/*	Loads an "empty" 1 x 1 map area.
 			param tileset : Tileset for the area.
-			^^; This function is incomplete.
 	*/
 	bool	OnLoad(SDL_Texture* tileset);
 
