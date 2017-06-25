@@ -10,7 +10,6 @@
 #include "CAsset.h"
 #include "CCamera.h"
 #include "CArea.h"
-#include "CUI.h"
 #include "CChangeTile.h"
 #include "CIO.h"
 #include "CEntityEdit.h"
@@ -45,9 +44,9 @@ namespace io_ui
     {520, 554, 70, 16}
   };
   const short bsiz = 2;
-  static const SDL_Point* engineOnCol = &color::cyan;
-  static const SDL_Point* engineOffCol = &color::gray;
-  static const SDL_Point* engineHvCol = &color::light_violet;
+  static const SDL_Point* engineOnCol = &palette::cyan;
+  static const SDL_Point* engineOffCol = &palette::gray;
+  static const SDL_Point* engineHvCol = &palette::light_violet;
 }
 
 namespace npc_editor

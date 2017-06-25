@@ -35,12 +35,12 @@ bool CApp::EventNPCedit(int mX, int mY)
 	{
 		if (mY >= but_nset::y && mY <= but_nset::y + SWITCH_SIZE)
 		{
-			int New_Table = CUI::UIControl.OnEntity(Map_Interface);
-			if (New_Table >= 0)
-			{
-				CEntityEdit::NPCControl.LoadTable(New_Table, Entity_Path);
-				return true;
-			}
+			// int New_Table = CUI::UIControl.OnEntity(Map_Interface);
+			// if (New_Table >= 0)
+			// {
+				// CEntityEdit::NPCControl.LoadTable(New_Table, Entity_Path);
+				// return true;
+			// }
 		}
 	}
 	return true;

@@ -4,11 +4,9 @@
 #include "CInterrupt.h"
 #include "CEvent.h"
 #include "CSurface.h"
+#include "CAsset.h"
 #include "CFont.h"
 #include "Define.h"
-
-// Change-tile interface definitions
-#define MAX_TILES 8
 
 class CChangeTile : public CEvent {
 public:
@@ -22,7 +20,9 @@ private:
 	// W: width of tileset (tiles)
 	// H: height of tileset (tiles)
 	int X, Y, W, H;
-	int dispX, dispY, dispW, dispH;
+	SDL_Rect disp;				// rectangle dims: tiles rendered
+	SDL_Rect frame;				// rectangle dims: display frame
+	// SDL_Rect dstarrowL
 
 public:
 	CChangeTile();
@@ -31,14 +31,16 @@ public:
 
   void OnEvent(SDL_Event* Event);
 
+	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+
 	void OnLButtonDown(int mX, int mY);
 
-	bool RenderTileset(SDL_Texture* interface, SDL_Texture* tileset, const int& mX, const int& mY);
+	bool RenderTileset(SDL_Texture* interface, SDL_Texture* tileset, const SDL_Point* m);
 
   void reqChange(int& ID);
 
 private:
-	bool RenderArrow(SDL_Texture* interface, const int& aX, const int& aY, char direction, const int& mX, const int& mY);
+	bool RenderArrow(SDL_Texture* interface, const int& aX, const int& aY, char direction, const SDL_Point* m);
 
 
 };

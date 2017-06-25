@@ -35,13 +35,11 @@ bool CEditMap::RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	// if (intrpt ^ INTRPT_NONE)
 	if (!CInterrupt::isNone())
 	{
-		// if (intrpt & INTRPT_CHANGE_BG || intrpt & INTRPT_CHANGE_FG)
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG) || CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
 		{
-			CChangeTile::PickTile.RenderTileset(interface, Tileset, mouse->x, mouse->y);
+			CChangeTile::PickTile.RenderTileset(interface, Tileset, mouse);
 		}
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
 		{
@@ -53,7 +51,6 @@ bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 
 bool CEditMap::drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos)
 {
-	// if (intrpt ^ INTRPT_NONE) return true;
 	if (!CInterrupt::isNone()) return true;
 
 	int tX = -CCamera::CameraControl.GetX() + (TILE_SIZE * (mapPos->x / TILE_SIZE));
@@ -168,7 +165,7 @@ bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
 
 	// const SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
 	const SDL_Point* color = SDL_PointInRect(mouse, &button) ? hoverColor : offCol;
-	if (!CAsset::drawButton(&button, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&button, bsiz, color)) return false;
 
 	// Write a button name for changing a tileset
 	Font::NewCenterWrite(FONT_MINI, "CHANGE TILESET", &button);
@@ -392,7 +389,7 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 		color = CInterrupt::isFlagOn(INTRPT_CHANGE_BG) ? onCol : offCol;
 	}
 
-	if (!CAsset::drawButton(&bg_button, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&bg_button, bsiz, color)) return false;
 
 	Font::NewCenterWrite(FONT_MINI, "CHANGE B.TILE", &bg_button);
 	return true;
@@ -415,7 +412,7 @@ bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 		color = CInterrupt::isFlagOn(INTRPT_CHANGE_FG) ? onCol : offCol;
 	}
 
-	if (!CAsset::drawButton(&fg_button, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&fg_button, bsiz, color)) return false;
 
 	Font::NewCenterWrite(FONT_MINI, "CHANGE F.TILE", &fg_button);
 
@@ -532,7 +529,7 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, 
 		color = active ? onhvCol : offhvCol;
 	}
 
-	if (!CAsset::drawButton(&button, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&button, bsiz, color)) return false;
 	Font::NewCenterWrite(FONT_MINI, name, &button);
 
 	return true;
@@ -561,7 +558,7 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 		color = editCol;
 	}
 
-	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&dstrect, bsiz, color)) return false;
 	Font::NewCenterWrite(FONT_MINI, name_TL, &pos);
 
 
@@ -577,7 +574,7 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 	{
 		color = editCol;
 	}
-	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&dstrect, bsiz, color)) return false;
 	Font::NewCenterWrite(FONT_MINI, name_TR, &pos);
 
 
@@ -593,7 +590,7 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 	{
 		color = editCol;
 	}
-	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&dstrect, bsiz, color)) return false;
 	Font::NewCenterWrite(FONT_MINI, name_BR, &pos);
 
 
@@ -609,7 +606,7 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 	{
 		color = editCol;
 	}
-	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
+	if (!CAsset::drawStrBox(&dstrect, bsiz, color)) return false;
 	Font::NewCenterWrite(FONT_MINI, name_BL, &pos);
 
 	return true;

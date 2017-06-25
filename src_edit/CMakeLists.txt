@@ -53,7 +53,6 @@ ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTileset.cpp
-${SRCDIR}/CUI.cpp
 )
 
 set(HEADER_FILES
@@ -80,7 +79,6 @@ ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CTileset.h
-${SRCDIR}/CUI.h
 ${SRCDIR}/Define.h
 )
 

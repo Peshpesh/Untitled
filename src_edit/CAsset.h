@@ -4,7 +4,43 @@
 #include "CSurface.h"
 #include "Define.h"
 
-namespace color
+namespace rgb
+{
+  const SDL_Color red      = {255, 10, 20};
+  const SDL_Color orange   = {255, 148, 21};
+  const SDL_Color yellow   = {255, 241, 0};
+  const SDL_Color green    = {0, 238, 33};
+  const SDL_Color cyan     = {0, 174, 239};
+  const SDL_Color blue     = {0, 98, 188};
+  const SDL_Color indigo   = {0, 6, 192};
+  const SDL_Color violet   = {185, 0, 179};
+  const SDL_Color magenta  = {255, 2, 84};
+  const SDL_Color gray     = {161, 161, 161};
+
+  const SDL_Color light_red     = {255, 91, 97};
+  const SDL_Color light_orange  = {255, 183, 98};
+  const SDL_Color light_yellow  = {255, 246, 84};
+  const SDL_Color light_green   = {73, 255, 98};
+  const SDL_Color light_cyan    = {73, 205, 255};
+  const SDL_Color light_blue    = {69, 149, 224};
+  const SDL_Color light_indigo  = {69, 74, 228};
+  const SDL_Color light_violet  = {222, 69, 217};
+  const SDL_Color light_magenta = {255, 85, 140};
+  const SDL_Color white         = {255, 255, 255};
+
+  const SDL_Color dark_red      = {170, 0, 7};
+  const SDL_Color dark_orange   = {178, 96, 0};
+  const SDL_Color dark_yellow   = {164, 154, 0};
+  const SDL_Color dark_green    = {0, 153, 21};
+  const SDL_Color dark_cyan     = {0, 111, 154};
+  const SDL_Color dark_blue     = {0, 63, 121};
+  const SDL_Color dark_indigo   = {0, 4, 123};
+  const SDL_Color dark_violet   = {119, 0, 114};
+  const SDL_Color dark_magenta  = {165, 0, 53};
+  const SDL_Color black         = {0, 0, 0};
+}
+
+namespace palette
 {
   const SDL_Point red      = {0, 0};
   const SDL_Point orange   = {1, 0};
@@ -48,7 +84,8 @@ class CAsset
 		static void OnCleanup();      // Termination function
 
 	private:
-		static SDL_Texture* palette;  // color palette
+		static SDL_Texture* paltex;  // color palette
+		static SDL_Texture* arrtex;   // arrows texture
 
   public:
     // returns a SDL_Rect struct for given X, Y, W, H. Ideal for drawing.
@@ -74,8 +111,13 @@ class CAsset
 		static bool drawBoxFill(const SDL_Rect* box, const SDL_Point* color);
     static bool drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color);
 
-    static bool drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color);
-    static bool drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col);
+    static bool drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* color);
+    static bool drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col);
+
+    static bool drawArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb);
+    static bool drawArrowFill(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb);
+    static bool drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb);
+    static bool drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb);
 
 };
 

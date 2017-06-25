@@ -8,18 +8,18 @@ namespace mapEngine
     // Change Tileset button info
     const SDL_Rect button = {665, 50, 50, 40};
     const short bsiz = 2;
-    const SDL_Point* offCol = &color::blue;
-    const SDL_Point* hoverColor = &color::light_blue;
-    const SDL_Point* onCol = &color::red;
+    const SDL_Point* offCol = &palette::blue;
+    const SDL_Point* hoverColor = &palette::light_blue;
+    const SDL_Point* onCol = &palette::red;
   }
   namespace but_t
   {
     const SDL_Rect bg_button = {325, 510, 100, 24};
     const SDL_Rect fg_button = {325, 534, 100, 24};
     const short bsiz = 2;
-    const SDL_Point* offCol = &color::blue;
-    const SDL_Point* hoverColor = &color::light_blue;
-    const SDL_Point* onCol = &color::red;
+    const SDL_Point* offCol = &palette::blue;
+    const SDL_Point* hoverColor = &palette::light_blue;
+    const SDL_Point* onCol = &palette::red;
   }
   namespace but_act_t
   {
@@ -27,10 +27,10 @@ namespace mapEngine
     const char* const offTitle = "idle";
     const SDL_Rect button = {260, 490, 48, 16};
     const short bsiz = 2;
-    const SDL_Point* offCol = &color::red;
-    const SDL_Point* offhvCol = &color::light_red;
-    const SDL_Point* onCol = &color::green;
-    const SDL_Point* onhvCol = &color::light_green;
+    const SDL_Point* offCol = &palette::red;
+    const SDL_Point* offhvCol = &palette::light_red;
+    const SDL_Point* onCol = &palette::green;
+    const SDL_Point* onhvCol = &palette::light_green;
   }
   namespace but_quad_t
   {
@@ -45,11 +45,11 @@ namespace mapEngine
     const short w = 24;             //
     const short h = 24;             //
     const short bsiz = 2;
-    const SDL_Point* offCol = &color::red;
-    const SDL_Point* offhvCol = &color::light_red;
-    const SDL_Point* onCol = &color::green;
-    const SDL_Point* onhvCol = &color::light_green;
-    const SDL_Point* editCol = &color::yellow;
+    const SDL_Point* offCol = &palette::red;
+    const SDL_Point* offhvCol = &palette::light_red;
+    const SDL_Point* onCol = &palette::green;
+    const SDL_Point* onhvCol = &palette::light_green;
+    const SDL_Point* editCol = &palette::yellow;
   }
   namespace disp_t
   {
@@ -73,8 +73,8 @@ namespace mapEngine
   {
     const SDL_Rect typeBar = {645, 390, 90, 4};
     const SDL_Rect collBar = {645, 460, 90, 4};
-    const SDL_Point* fillCol = &color::dark_green;
-    const SDL_Point* emptyCol = &color::black;
+    const SDL_Point* fillCol = &palette::dark_green;
+    const SDL_Point* emptyCol = &palette::black;
 
   }
   namespace but_rm

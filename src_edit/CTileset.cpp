@@ -9,10 +9,10 @@ namespace {
   const SDL_Rect infoBox      = {225,222,190,40};
   const SDL_Rect okButton     = {255,270,60,13};
   const SDL_Rect cancelButton = {325,270,60,13};
-  const SDL_Point* canvCol      = &color::black;
-  const SDL_Point* fnameBoxCol  = &color::white;
-  const SDL_Point* optCol       = &color::black;
-  const SDL_Point* bCol         = &color::white;
+  const SDL_Point* canvCol      = &palette::black;
+  const SDL_Point* fnameBoxCol  = &palette::white;
+  const SDL_Point* optCol       = &palette::black;
+  const SDL_Point* bCol         = &palette::white;
   const SDL_Color* textCol      = &fontrgb::white;
   const SDL_Color* fnameCol     = &fontrgb::black;
   const short bstrsiz = 2;
@@ -119,10 +119,10 @@ void CTileset::OnLButtonDown(int mX, int mY)
 
 bool CTileset::OnRender()
 {
-  CAsset::drawButton(&canv, cstrsiz, canvCol, bCol);
+  CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
   CAsset::drawBoxFill(&fnameBox, fnameBoxCol);
-  CAsset::drawButton(&okButton, bstrsiz, optCol, bCol);
-  CAsset::drawButton(&cancelButton, bstrsiz, optCol, bCol);
+  CAsset::drawStrBox(&okButton, bstrsiz, optCol, bCol);
+  CAsset::drawStrBox(&cancelButton, bstrsiz, optCol, bCol);
 
   Font::FontControl.SetFont(FONT_MINI);
   Font::NewCenterWrite(title, &titleBox, textCol);

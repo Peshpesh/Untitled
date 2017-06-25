@@ -8,25 +8,20 @@ CEditMap::CEditMap()
   Type_Tileset = NULL;    // Tileset showing tile type
   Coll_Tileset = NULL;    // Tileset showing collision type
 
-  TileTL.bg_ID = TileTL.fg_ID = -1;
-  TileTR.bg_ID = TileTR.fg_ID = -1;
-  TileBL.bg_ID = TileBL.fg_ID = -1;
-  TileBR.bg_ID = TileBR.fg_ID = -1;
-
   active_TL = true;
   active_TR = false;
   active_BL = false;
   active_BR = false;
 
   modifyTile = MODIFY_TILE_TL;
-  shadowColor = &color::light_blue;
+  shadowColor = &palette::light_blue;
   shadow_w = 2;
 
   rClickA = NULL;
   rClickB = NULL;
-  flexAreaColor = &color::yellow;
-  fixAreaColor = &color::red;
-  hoverAreaColor = &color::light_red;
+  flexAreaColor = &palette::yellow;
+  fixAreaColor = &palette::red;
+  hoverAreaColor = &palette::light_red;
   rc_area_w = 2;
 
 	show_fg = show_ty = show_co = true;
@@ -35,8 +30,6 @@ CEditMap::CEditMap()
 	coll_w = coll_h = type_w = type_h = tset_w = tset_h = 0;
 
   onTiles = ENABLE_BG | ENABLE_FG | ENABLE_TYPE | ENABLE_COLL;
-
-  // intrpt = 0;
 }
 
 bool CEditMap::OnInit()

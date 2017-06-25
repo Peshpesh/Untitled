@@ -44,6 +44,8 @@ public:
 
 public:
 	CTile();
+
+  void reset();
 };
 
 #endif

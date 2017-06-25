@@ -38,6 +38,7 @@ void CEditMap::handleChangeTS(SDL_Event* Event)
       Tileset = tmpset;
       queryTileDims(Tileset, tset_w, tset_h);
       CArea::AreaControl.OnLoad(Tileset);
+      TileTL.reset(); TileTR.reset(); TileBL.reset(); TileBR.reset();
     }
   }
 }

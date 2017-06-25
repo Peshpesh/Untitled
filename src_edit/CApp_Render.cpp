@@ -101,7 +101,7 @@ bool CApp::RenderEngine()
 	{
 		noHov = (!canHilight || !SDL_PointInRect(&mouse, &engineButton[i]));
 		color = (active_mod == i) ? engineOnCol : (noHov ? engineOffCol : engineHvCol);
-		CAsset::drawButton(&engineButton[i], bsiz, color);
+		CAsset::drawStrBox(&engineButton[i], bsiz, color);
 		Font::CenterWrite(FONT_MINI, engineName[i], &engineButton[i]);
 	}
 
