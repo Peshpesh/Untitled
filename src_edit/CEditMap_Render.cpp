@@ -45,7 +45,7 @@ bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 		}
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
 		{
-			CTileset::OnRender();
+			CTileset::PickTS.OnRender();
 		}
 	}
 	return true;

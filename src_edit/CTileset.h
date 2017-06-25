@@ -3,37 +3,42 @@
 
 #include <string>
 #include "CInterrupt.h"
+#include "CEvent.h"
 #include "CSurface.h"
 #include "CFont.h"
 #include "CAsset.h"
 
-class CTileset {
+class CTileset : public CEvent {
 private:
-  static std::string file;
-  static std::string newF;
-  static const char* const ts_path;
-  static const char* const extension;
+  std::string file;
+  std::string newF;
+  bool changeTS;
+
+public:
+  static CTileset PickTS;
 
 public:
 	CTileset();
 
-  static SDL_Texture* changeTileset();
+  SDL_Texture* changeTileset();
 
-  static void resetPath();
+  void resetPath();
 
-  static bool OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void OnEvent(SDL_Event* Event);
 
-	static bool OnLButtonDown(const SDL_Point* mouse);
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 
-  static bool OnRender();
+	void OnLButtonDown(int mX, int mY);
 
-  static std::string getFilePath();
+  bool OnRender();
+
+  std::string getFilePath();
+
+  bool reqChange();
 
 private:
-
-  static void backPath();
-
-  static void addToPath(char addChar);
+  void backPath();
+  void addToPath(char addChar);
 
 };
 

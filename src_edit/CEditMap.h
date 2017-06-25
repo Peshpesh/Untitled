@@ -3,22 +3,15 @@
 
 #include "CInterrupt.h"
 #include "CSurface.h"
+#include "CEvent.h"
 #include "CAsset.h"
 #include "CFont.h"
 #include "CArea.h"
+#include "CEntityEdit.h"
 #include "CCamera.h"
 #include "CChangeTile.h"
 #include "CTileset.h"
 #include "Define.h"
-
-// enum interrupts
-// {
-//   INTRPT_NONE = 0,
-//   INTRPT_CHANGE_BG = 0x00000001,		// intrpt via bg tile change
-//   INTRPT_CHANGE_FG = 0x00000002,		// intrpt via fg tile change
-//   INTRPT_MODEL = 0x00000004,
-//   INTRPT_CHANGE_TS = 0x00000008,
-// };
 
 enum
 {
@@ -132,7 +125,7 @@ namespace mapEngine
   }
 } // Map engine namespaces //
 
-class CEditMap {
+class CEditMap : public CEvent {
 public:
 	static CEditMap	MapEditor;
 
@@ -162,7 +155,6 @@ private:
   int tset_w, tset_h;  	// Tileset texture dimension (tiles)
 
   int onTiles;          // bitwise flag for tiles to place
-  // int intrpt;           // bitwise flag for interruptions
 
 private:
   SDL_Point* rClickA;
@@ -176,16 +168,31 @@ public:
   CEditMap();
 
   bool OnInit();
+  void queryTileDims(SDL_Texture* texture, int& w, int& h);
   void OnTerminate();
 
   bool RenderMap();
 
 public:
-  bool OnLClick(const SDL_Point* mouse);
+  void OnEvent(SDL_Event* Event);
+
+private:
+  bool handleInterr(SDL_Event* Event);
+  void handleChangeTS(SDL_Event* Event);
+  void handleChangeTile(SDL_Event* Event, int intrpt);
+  CTile* getModTile();
+
+public:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+
+private:
+  bool handleAreaModify(SDL_Keycode sym, Uint16 mod);
+
+public:
+  void OnLButtonDown(int mX, int mY);
 
 private:
   bool handlePlaceDomain(const SDL_Point* mouse);
-  bool handleInterr(const SDL_Point* mouse, CTile* EditTile);
   bool handleNewTile(const SDL_Point* mouse);
   bool handleGetSet(const SDL_Point* mouse);
   bool handleGetTile(const SDL_Point* mouse);
@@ -206,7 +213,7 @@ private:
   void placeBlock(const int& x, const int& y);
 
 public:
-  bool OnRClick(const SDL_Point* mouse);
+  void OnRButtonDown(int mX, int mY);
 
 private:
   bool handleMakeDomain(const SDL_Point* mouse);

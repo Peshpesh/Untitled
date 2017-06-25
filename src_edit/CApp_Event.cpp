@@ -3,69 +3,19 @@
 void CApp::OnEvent(SDL_Event* Event)
 {
 	CEvent::OnEvent(Event);
+	if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
 }
 
 // Handle key-press events
 void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 {
-		switch (sym)
-		{
-		case SDLK_d:
-			CArea::AreaControl.OnExpandRight(); break;
-		case SDLK_a:
-			CArea::AreaControl.OnExpandLeft();
-			CCamera::CameraControl.OnMove(MAP_WIDTH*TILE_SIZE, 0);  // Keeps the area from jerking around
-			for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-			{
-				if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-				CEntityEdit::NPCControl.EntityList[i].X += MAP_WIDTH*TILE_SIZE;
-			}	// This loop updates the position of our entities
-			// to prevent unwanted repositioning over the changed area
-			break;
-		case SDLK_s:
-			CArea::AreaControl.OnExpandDown(); break;
-		case SDLK_w:
-			CArea::AreaControl.OnExpandUp();
-			CCamera::CameraControl.OnMove(0, MAP_HEIGHT*TILE_SIZE);
-			for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-			{
-				if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-				CEntityEdit::NPCControl.EntityList[i].Y += MAP_HEIGHT*TILE_SIZE;
-			}
-			break;
+	if (!CInterrupt::isNone()) return;
 
-		case SDLK_l:
-			CArea::AreaControl.OnReduceRight(); break;
-		case SDLK_j:
-			if (CArea::AreaControl.OnReduceLeft())
-			{
-				CCamera::CameraControl.OnMove(-MAP_WIDTH*TILE_SIZE, 0);
-				for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-				{
-					if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-					CEntityEdit::NPCControl.EntityList[i].X -= MAP_WIDTH*TILE_SIZE;
-				}
-			}
-			break;
-		case SDLK_k:
-			CArea::AreaControl.OnReduceDown(); break;
-		case SDLK_i:
-			if (CArea::AreaControl.OnReduceUp())
-			{
-				CCamera::CameraControl.OnMove(0, -MAP_HEIGHT*TILE_SIZE);
-				for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-				{
-					if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-					CEntityEdit::NPCControl.EntityList[i].Y -= MAP_WIDTH*TILE_SIZE;
-				}
-			}
-			break;
-
-		case SDLK_ESCAPE:
-			OnExit(); break;
-		default:
-			break;
-		}
+  switch (sym)
+  {
+    case SDLK_ESCAPE: OnExit(); break;
+    default: break;
+  }
 }
 
 // Handle left-click events
@@ -93,11 +43,11 @@ void CApp::OnLButtonDown(int mX, int mY)
 		// returns false if error...
 		EventSCNedit(mX, mY);
 	}
-	else
-	{
-		// returns false if error...
-		CEditMap::MapEditor.OnLClick(&mouse);
-	}
+	// else
+	// {
+	// 	// returns false if error...
+	// 	CEditMap::MapEditor.OnLClick(&mouse);
+	// }
 }
 
 void CApp::OnRButtonDown(int mX, int mY)
@@ -114,11 +64,11 @@ void CApp::OnRButtonDown(int mX, int mY)
 		if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
 			OnExit();
 	}
-	if (active_mod == MODIFY_MAP)
-	{
-		// returns false if no event was processed
-		CEditMap::MapEditor.OnRClick(&mouse);
-	}
+	// if (active_mod == MODIFY_MAP)
+	// {
+	// 	// returns false if no event was processed
+	// 	CEditMap::MapEditor.OnRClick(&mouse);
+	// }
 }
 
 bool CApp::EventOPTS(int mX, int mY)

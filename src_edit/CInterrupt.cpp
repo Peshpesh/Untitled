@@ -29,10 +29,11 @@ bool CInterrupt::isFlagOn(int flag)
 
 bool CInterrupt::isFlagOff(int flag)
 {
-  return (handle & ~flag);
+  return !(handle & flag);
 }
 
 bool CInterrupt::isNone()
 {
-  return !isFlagOff(INTRPT_NONE);
+  return (handle == INTRPT_NONE);
+  // return !isFlagOff(INTRPT_NONE);
 }

@@ -1,45 +1,182 @@
 #include "CEditMap.h"
 
-bool CEditMap::OnLClick(const SDL_Point* mouse)
+void CEditMap::OnEvent(SDL_Event* Event)
+{
+  if (handleInterr(Event)) return;
+  CEvent::OnEvent(Event);
+}
+
+bool CEditMap::handleInterr(SDL_Event* Event)
+{
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
+  {
+    handleChangeTS(Event);
+    return true;
+  }
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG))
+  {
+    handleChangeTile(Event, INTRPT_CHANGE_BG);
+    return true;
+  }
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
+  {
+    handleChangeTile(Event, INTRPT_CHANGE_FG);
+    return true;
+  }
+  return false;
+}
+
+void CEditMap::handleChangeTS(SDL_Event* Event)
+{
+  CTileset::PickTS.OnEvent(Event);
+  if (CTileset::PickTS.reqChange())    // try to change tileset
+  {
+    SDL_Texture* tmpset = CTileset::PickTS.changeTileset();
+    if (tmpset != NULL)
+    {
+      SDL_DestroyTexture(Tileset);
+      Tileset = tmpset;
+      queryTileDims(Tileset, tset_w, tset_h);
+      CArea::AreaControl.OnLoad(Tileset);
+    }
+  }
+}
+
+void CEditMap::handleChangeTile(SDL_Event* Event, int intrpt)
+{
+  CChangeTile::PickTile.OnEvent(Event);
+
+  if (CInterrupt::isFlagOff(intrpt))
+  {
+    CTile* EditTile = getModTile();
+    CChangeTile::PickTile.reqChange((intrpt == INTRPT_CHANGE_BG) ? EditTile->bg_ID : EditTile->fg_ID);
+  }
+}
+
+CTile* CEditMap::getModTile()
 {
   CTile* EditTile;
+  switch (modifyTile)
+  {
+    case MODIFY_TILE_TL: EditTile = &TileTL; break;
+    case MODIFY_TILE_TR: EditTile = &TileTR; break;
+    case MODIFY_TILE_BL: EditTile = &TileBL; break;
+    case MODIFY_TILE_BR: EditTile = &TileBR; break;
+    default: break;
+  }
+  return EditTile;
+}
+
+void CEditMap::OnKeyDown(SDL_Keycode sym, Uint16 mod)
+{
+  if (handleAreaModify(sym, mod)) return;
+}
+
+void CEditMap::OnLButtonDown(int mX, int mY)
+{
+  const SDL_Point mouse = {mX, mY};
+
+  CTile* EditTile = getModTile();
   bool* active;
   switch (modifyTile)
   {
-    case MODIFY_TILE_TL: EditTile = &TileTL; active = &active_TL; break;
-    case MODIFY_TILE_TR: EditTile = &TileTR; active = &active_TR; break;
-    case MODIFY_TILE_BL: EditTile = &TileBL; active = &active_BL; break;
-    case MODIFY_TILE_BR: EditTile = &TileBR; active = &active_BR; break;
+    case MODIFY_TILE_TL: active = &active_TL; break;
+    case MODIFY_TILE_TR: active = &active_TR; break;
+    case MODIFY_TILE_BL: active = &active_BL; break;
+    case MODIFY_TILE_BR: active = &active_BR; break;
     default: break;
   }
 
-  if (handleInterr(mouse, EditTile)) return true;
-  if (handlePlaceDomain(mouse)) return true;
-  if (handleNewTile(mouse)) return true;
-  if (handleGetSet(mouse)) return true;
-  if (handleGetTile(mouse)) return true;
-  if (handleScroll_bg(mouse, EditTile)) return true;
-  if (handleScroll_fg(mouse, EditTile)) return true;
-  if (handleScroll_ty(mouse, EditTile)) return true;
-  if (handleScroll_co(mouse, EditTile)) return true;
-  if (handleRemove_bg(mouse, EditTile)) return true;
-  if (handleRemove_fg(mouse, EditTile)) return true;
-  if (handleOpac_ty(mouse)) return true;
-  if (handleOpac_co(mouse)) return true;
-  if (handleLayers(mouse)) return true;
-  if (handlePlace(mouse)) return true;
-  if (handleActTile(mouse, *active)) return true;
-  if (handleQuadrant_lc(mouse)) return true;
-
-	return false;
+  if (handlePlaceDomain(&mouse)) return;
+  if (handleNewTile(&mouse)) return;
+  if (handleGetSet(&mouse)) return;
+  if (handleGetTile(&mouse)) return;
+  if (handleScroll_bg(&mouse, EditTile)) return;
+  if (handleScroll_fg(&mouse, EditTile)) return;
+  if (handleScroll_ty(&mouse, EditTile)) return;
+  if (handleScroll_co(&mouse, EditTile)) return;
+  if (handleRemove_bg(&mouse, EditTile)) return;
+  if (handleRemove_fg(&mouse, EditTile)) return;
+  if (handleOpac_ty(&mouse)) return;
+  if (handleOpac_co(&mouse)) return;
+  if (handleLayers(&mouse)) return;
+  if (handlePlace(&mouse)) return;
+  if (handleActTile(&mouse, *active)) return;
+  if (handleQuadrant_lc(&mouse)) return;
 }
 
-bool CEditMap::OnRClick(const SDL_Point* mouse)
+void CEditMap::OnRButtonDown(int mX, int mY)
 {
-  if (handleMakeDomain(mouse)) return true;
-  if (handleQuadrant_rc(mouse)) return true;
+  if (!CInterrupt::isNone()) return;
 
-  return false;
+  const SDL_Point mouse = {mX, mY};
+
+  if (handleMakeDomain(&mouse)) return;
+  if (handleQuadrant_rc(&mouse)) return;
+}
+
+bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
+{
+  if (!CInterrupt::isNone()) return false;
+
+  switch (sym)
+  {
+  case SDLK_d:
+    CArea::AreaControl.OnExpandRight(); break;
+  case SDLK_a:
+    CArea::AreaControl.OnExpandLeft();
+    CCamera::CameraControl.OnMove(MAP_WIDTH*TILE_SIZE, 0);  // Keeps the area from jerking around
+    for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+    {
+      if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+      CEntityEdit::NPCControl.EntityList[i].X += MAP_WIDTH*TILE_SIZE;
+    }	// This loop updates the position of our entities
+    // to prevent unwanted repositioning over the changed area
+    break;
+  case SDLK_s:
+    CArea::AreaControl.OnExpandDown(); break;
+  case SDLK_w:
+    CArea::AreaControl.OnExpandUp();
+    CCamera::CameraControl.OnMove(0, MAP_HEIGHT*TILE_SIZE);
+    for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+    {
+      if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+      CEntityEdit::NPCControl.EntityList[i].Y += MAP_HEIGHT*TILE_SIZE;
+    }
+    break;
+
+  case SDLK_l:
+    CArea::AreaControl.OnReduceRight(); break;
+  case SDLK_j:
+    if (CArea::AreaControl.OnReduceLeft())
+    {
+      CCamera::CameraControl.OnMove(-MAP_WIDTH*TILE_SIZE, 0);
+      for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+      {
+        if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+        CEntityEdit::NPCControl.EntityList[i].X -= MAP_WIDTH*TILE_SIZE;
+      }
+    }
+    break;
+  case SDLK_k:
+    CArea::AreaControl.OnReduceDown(); break;
+  case SDLK_i:
+    if (CArea::AreaControl.OnReduceUp())
+    {
+      CCamera::CameraControl.OnMove(0, -MAP_HEIGHT*TILE_SIZE);
+      for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+      {
+        if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+        CEntityEdit::NPCControl.EntityList[i].Y -= MAP_WIDTH*TILE_SIZE;
+      }
+    }
+    break;
+
+  default:
+    break;
+  }
+
+  return true;
 }
 
 bool CEditMap::handleMakeDomain(const SDL_Point* mouse)
@@ -113,29 +250,6 @@ void CEditMap::resetRClick()
   }
 }
 
-bool CEditMap::handleInterr(const SDL_Point* mouse, CTile* EditTile)
-{
-  // Event is passed to intrpting prompts, if there are any
-	// if (intrpt & ~INTRPT_NONE)
-  if (!CInterrupt::isNone())
-	{
-		// if (intrpt & INTRPT_CHANGE_BG)
-    if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG))
-		{
-      // if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->bg_ID)) intrpt = INTRPT_NONE;
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->bg_ID)) CInterrupt::removeFlag(INTRPT_CHANGE_BG);
-		}
-		// if (intrpt & INTRPT_CHANGE_FG)
-    if (CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
-		{
-      // if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->fg_ID)) intrpt = INTRPT_NONE;
-      if (CChangeTile::PickTile.OnLClick(mouse->x, mouse->y, EditTile->fg_ID)) CInterrupt::removeFlag(INTRPT_CHANGE_FG);
-		}
-		return true;
-	}
-  return false;
-}
-
 bool CEditMap::handleNewTile(const SDL_Point* mouse)
 {
   // Place new tiles, if click is in the workspace
@@ -164,14 +278,9 @@ bool CEditMap::handleGetSet(const SDL_Point* mouse)
 	using namespace mapEngine::but_tset;
   if (SDL_PointInRect(mouse, &button))
   {
-    // SDL_Texture* tmpset = CTileset::changeTileset();
-    // SDL_DestroyTexture(Tileset);
-    // Tileset = tmpset;
-    // CArea::AreaControl.OnLoad(Tileset);
     CInterrupt::appendFlag(INTRPT_CHANGE_TS);
     return true;
   }
-
   return false;
 }
 
@@ -184,14 +293,12 @@ bool CEditMap::handleGetTile(const SDL_Point* mouse)
   if (SDL_PointInRect(mouse, &bg_button))
   {
       CChangeTile::PickTile.Init(tset_w, tset_h);
-      // intrpt = INTRPT_CHANGE_BG;
       CInterrupt::appendFlag(INTRPT_CHANGE_BG);
       return true;
   }
   if (SDL_PointInRect(mouse, &fg_button))
   {
       CChangeTile::PickTile.Init(tset_w, tset_h);
-      // intrpt = INTRPT_CHANGE_FG;
       CInterrupt::appendFlag(INTRPT_CHANGE_FG);
       return true;
   }

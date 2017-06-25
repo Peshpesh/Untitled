@@ -4,6 +4,8 @@ CChangeTile CChangeTile::PickTile;
 
 CChangeTile::CChangeTile()
 {
+	changeFlag = false;
+	pickID = 0;
 	X = Y = W = H = 0;
 	dispX = dispY = dispW = dispH = 0;
 }
@@ -23,78 +25,83 @@ void CChangeTile::Init(int W, int H)
 	dispY = (WHEIGHT - dispH) / 2;
 }
 
-bool CChangeTile::OnLClick(int mX, int mY, int& ID)
+void CChangeTile::OnEvent(SDL_Event* Event)
 {
-	bool retval = false;
-	// process clicks on the tileset. Return value of true (done processing events)
+	CEvent::OnEvent(Event);
+}
+
+void CChangeTile::OnLButtonDown(int mX, int mY)
+{
+	// process clicks on the tileset.
 	if (mX >= dispX && mX < dispX + dispW && mY >= dispY && mY < dispY + dispH)
 	{
 		int xrel = mX - dispX;
 		int yrel = mY - dispY;
 		int xtile = X + (xrel / TILE_SIZE);
 		int ytile = Y + (yrel / TILE_SIZE);
-		ID = (ytile * W) + xtile;
-		retval = true;
+		pickID = (ytile * W) + xtile;
+		changeFlag = true;
+		CInterrupt::removeFlag(INTRPT_CHANGE_BG);
+		CInterrupt::removeFlag(INTRPT_CHANGE_FG);
+		return;
 	}
 
-	// process clicks on cancel button. Return value of true (done processing events)
-	if (!retval)
+	// process clicks on cancel button.
+	int cX = dispX + dispW + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
+	int cY = dispY - TILETABLE_SIZ + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
+	if (mX >= cX && mX < cX + CANCEL_SZ && mY >= cY && mY < cY + CANCEL_SZ)
 	{
-		int cX = dispX + dispW + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
-		int cY = dispY - TILETABLE_SIZ + ((TILETABLE_SIZ - CANCEL_SZ) / 2);
-		if (mX >= cX && mX < cX + CANCEL_SZ && mY >= cY && mY < cY + CANCEL_SZ) retval = true;
+		CInterrupt::removeFlag(INTRPT_CHANGE_BG);
+		CInterrupt::removeFlag(INTRPT_CHANGE_FG);
+		return;
 	}
 
 	// Maybe an arrow was clicked?
-	if (!retval)
+	int aX, aY;
+	if (W > MAX_TILES)	// Left/right arrows are worth processing
 	{
-		int aX, aY;
-		if (W > MAX_TILES)	// Left/right arrows are worth processing
+		aY = dispY + (dispH / 2) - (ARR_SZ / 2);
+		if (X > 0) 							// Left arrow?
 		{
-			aY = dispY + (dispH / 2) - (ARR_SZ / 2);
-			if (X > 0) 							// Left arrow?
+			aX = dispX - (ARR_SZ + SYM_SPACING);
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 			{
-				aX = dispX - (ARR_SZ + SYM_SPACING);
-				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-				{
-					X--;
-					return retval;
-				}
-			}
-			if (X < W - MAX_TILES)	// Right arrow?
-			{
-				aX = dispX + dispW + SYM_SPACING;
-				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-				{
-					X++;
-					return retval;
-				}
+				X--;
+				return;
 			}
 		}
-		if (H > MAX_TILES)	// Up/down arrows are worth processing
+		if (X < W - MAX_TILES)	// Right arrow?
 		{
-			aX = dispX + (dispW / 2) - (ARR_SZ / 2);
-			if (Y > 0) 							// Up arrow?
+			aX = dispX + dispW + SYM_SPACING;
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
 			{
-				aY = dispY - (ARR_SZ + SYM_SPACING);
-				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-				{
-					Y--;
-					return retval;
-				}
-			}
-			if (Y < H - MAX_TILES)	// Down arrow?
-			{
-				aY = dispY + dispH + SYM_SPACING;
-				if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-				{
-					Y++;
-					return retval;
-				}
+				X++;
+				return;
 			}
 		}
 	}
-	return retval;
+	if (H > MAX_TILES)	// Up/down arrows are worth processing
+	{
+		aX = dispX + (dispW / 2) - (ARR_SZ / 2);
+		if (Y > 0) 							// Up arrow?
+		{
+			aY = dispY - (ARR_SZ + SYM_SPACING);
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
+			{
+				Y--;
+				return;
+			}
+		}
+		if (Y < H - MAX_TILES)	// Down arrow?
+		{
+			aY = dispY + dispH + SYM_SPACING;
+			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
+			{
+				Y++;
+				return;
+			}
+		}
+	}
 }
 
 bool CChangeTile::RenderTileset(SDL_Texture* interface, SDL_Texture* tileset, const int& mX, const int& mY)
@@ -222,4 +229,13 @@ bool CChangeTile::RenderArrow(SDL_Texture* interface, const int& aX, const int& 
 		else retval = CSurface::OnDraw(interface, aX, aY, D_ARR_GR_X, D_ARR_Y, ARR_SZ, ARR_SZ);
 	}
 	return retval;
+}
+
+void CChangeTile::reqChange(int& ID)
+{
+	if (changeFlag)
+	{
+		ID = pickID;
+		changeFlag = false;
+	}
 }

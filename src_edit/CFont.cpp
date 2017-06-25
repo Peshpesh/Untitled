@@ -18,6 +18,7 @@ bool Font::OnInit()
 
 	def_ID = FONT_MINI;
 	resetFontColor();
+	resetFontColor(FONT_DEFAULT);
 
 	return true;
 }
@@ -120,65 +121,6 @@ int Font::Write(const int& fontID, char const* message, const SDL_Point* pos, co
 
 	return retval;
 }
-
-// int Font::Write(const int& fontID, char const* message, int color, bool flicker, int Mx, int My)
-// {
-// 	SDL_Texture* font = NULL;
-// 	int h_spacing = 0;
-// 	int v_spacing = 0;
-// 	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL)
-// 	{
-// 		return -99;
-// 	}
-//
-// 	int i = 0;
-// 	int Xo, Yo, W, H;
-// 	int FirstMx = Mx;
-// 	static int alpha = 255;
-// 	static bool intensify = false;
-//
-// 	if (intensify) alpha += 5;
-// 	else alpha -= 5;
-//
-// 	switch (color)
-// 	{
-// 		case F_RED:		SDL_SetTextureColorMod(font, 237, 28, 36);	break;
-// 		case F_ORANGE:	SDL_SetTextureColorMod(font, 242, 101, 34); break;
-// 		case F_YELLOW:	SDL_SetTextureColorMod(font, 255, 242, 0);	break;
-// 		case F_GREEN:	SDL_SetTextureColorMod(font, 57, 181, 74);	break;
-// 		case F_CYAN:	SDL_SetTextureColorMod(font, 0, 174, 239);	break;
-// 		case F_BLUE:	SDL_SetTextureColorMod(font, 0, 84, 166);	break;
-// 		case F_INDIGO:	SDL_SetTextureColorMod(font, 46, 49, 146);	break;
-// 		case F_VIOLET:	SDL_SetTextureColorMod(font, 102, 45, 145); break;
-// 		case F_BLACK: SDL_SetTextureColorMod(font, 0, 0, 0); break;
-// 		default: break;
-// 	}
-// 	if (flicker) SDL_SetTextureAlphaMod(font, alpha);
-//
-// 	while (message[i] != '\0')
-// 	{
-// 		if (message[i] == '\n')
-// 		{
-// 			Mx = FirstMx;
-// 			My += v_spacing;
-// 			i++;
-// 			continue;
-// 		}
-// 		GetXY(fontID, message[i], Xo, Yo, W, H);
-// 		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
-// 			return 0;
-// 		Mx += W + h_spacing;
-// 		i++;
-// 	}
-//
-// 	if (alpha <= 150) intensify = true;
-// 	if (alpha >= 255) intensify = false;
-//
-// 	SDL_SetTextureColorMod(font, 255, 255, 255);
-// 	if (flicker) SDL_SetTextureAlphaMod(font, 255);
-//
-// 	return Mx - FirstMx - h_spacing;
-// }
 
 int Font::Write(const int& fontID, int number, int Mx, int My)
 {
@@ -540,6 +482,11 @@ std::string Font::getLine(const int& fontID, char const* message, int& iterator,
 		wrdWidth += symRec.w;
 
 		i++;
+	}
+	if (linWidth == 0)
+	{
+		lin = wrd;
+		iterator = i + 1;
 	}
 	return lin;
 }

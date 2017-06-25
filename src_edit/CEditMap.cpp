@@ -46,10 +46,7 @@ bool CEditMap::OnInit()
     return false;
   }
 
-  int PixWidth, PixHeight;
-  SDL_QueryTexture(Tileset, NULL, NULL, &PixWidth, &PixHeight);
-  tset_w = PixWidth / TILE_SIZE;
-  tset_h = PixHeight / TILE_SIZE;
+  queryTileDims(Tileset, tset_w, tset_h);
 
   if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL)
   {
@@ -57,9 +54,7 @@ bool CEditMap::OnInit()
   }
 
   SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
-  SDL_QueryTexture(Type_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-  type_w = PixWidth / TILE_SIZE;
-  type_h = PixHeight / TILE_SIZE;
+  queryTileDims(Type_Tileset, type_w, type_h);
 
   if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL)
   {
@@ -67,14 +62,20 @@ bool CEditMap::OnInit()
   }
 
   SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
-  SDL_QueryTexture(Coll_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-  coll_w = PixWidth / TILE_SIZE;
-  coll_h = PixHeight / TILE_SIZE;
+  queryTileDims(Type_Tileset, coll_w, coll_h);
 
   if (CArea::AreaControl.OnLoad(Tileset) == false)
 		return false;
 
   return true;
+}
+
+void CEditMap::queryTileDims(SDL_Texture* texture, int& w, int& h)
+{
+  int PixWidth, PixHeight;
+  SDL_QueryTexture(texture, NULL, NULL, &PixWidth, &PixHeight);
+  w = PixWidth / TILE_SIZE;
+  h = PixHeight / TILE_SIZE;
 }
 
 SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)

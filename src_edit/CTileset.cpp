@@ -1,26 +1,40 @@
 #include "CTileset.h"
 
-std::string CTileset::file = "default";
-std::string CTileset::newF = "";
-const char* const CTileset::ts_path = "../res_edit/tile/";
-const char* const CTileset::extension = ".png";
+CTileset CTileset::PickTS;
 
 namespace {
-  const SDL_Rect canv = {220,190,200,100};
-  const SDL_Rect txtBox = {225,210,190,11};
-  const SDL_Rect okButton = {255,270,60,13};
+  const SDL_Rect canv         = {220,190,200,100};
+  const SDL_Rect fnameBox     = {225,210,190,11};
+  const SDL_Rect titleBox     = {225,193,190,16};
+  const SDL_Rect infoBox      = {225,222,190,40};
+  const SDL_Rect okButton     = {255,270,60,13};
   const SDL_Rect cancelButton = {325,270,60,13};
-  const SDL_Point* canvCol = &color::black;
-  const SDL_Point* boxCol = &color::white;
-  const SDL_Point* optCol = &color::black;
-  const SDL_Point* bCol = &color::white;
+  const SDL_Point* canvCol      = &color::black;
+  const SDL_Point* fnameBoxCol  = &color::white;
+  const SDL_Point* optCol       = &color::black;
+  const SDL_Point* bCol         = &color::white;
+  const SDL_Color* textCol      = &fontrgb::white;
+  const SDL_Color* fnameCol     = &fontrgb::black;
   const short bstrsiz = 2;
   const short cstrsiz = 3;
+  const char* const ts_path = "../res_edit/tile/";
+  const char* const extension = ".png";
+  const char* const title = "Change Tileset";
+  const char* const info = "WARNING:\nSuccessfully changing the active tileset will reset the working Area and empty containers of entities and scenery.";
+  const char* const oktext = "OK";
+  const char* const canceltext = "Cancel";
 }
 
 CTileset::CTileset()
 {
-  //
+  changeTS = false;
+  file = "default";
+  newF = "";
+}
+
+void CTileset::OnEvent(SDL_Event* Event)
+{
+  CEvent::OnEvent(Event);
 }
 
 void CTileset::resetPath()
@@ -38,8 +52,7 @@ void CTileset::addToPath(char addChar)
   if (newF.size() < newF.max_size()) newF.push_back(addChar);
 }
 
-
-bool CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod)
+void CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 {
   switch (sym)
   {
@@ -83,27 +96,41 @@ bool CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod)
     case SDLK_MINUS: addToPath('-'); break;
     case SDLK_UNDERSCORE: addToPath('_'); break;
     case SDLK_BACKSPACE: backPath(); break;
-    case SDLK_RETURN: break;
-    case SDLK_ESCAPE: break;
+    case SDLK_RETURN: CInterrupt::removeFlag(INTRPT_CHANGE_TS); changeTS = true; break;
+    case SDLK_ESCAPE: CInterrupt::removeFlag(INTRPT_CHANGE_TS); resetPath(); break;
     default: break;
   }
-  return true;
 }
 
-bool CTileset::OnLButtonDown(const SDL_Point* mouse)
+void CTileset::OnLButtonDown(int mX, int mY)
 {
-  return true;
+  SDL_Point mouse = {mX, mY};
+  if (SDL_PointInRect(&mouse, &okButton))
+  {
+    CInterrupt::removeFlag(INTRPT_CHANGE_TS);
+    changeTS = true;
+  }
+  else if (SDL_PointInRect(&mouse, &cancelButton))
+  {
+    CInterrupt::removeFlag(INTRPT_CHANGE_TS);
+    resetPath();
+  }
 }
 
 bool CTileset::OnRender()
 {
   CAsset::drawButton(&canv, cstrsiz, canvCol, bCol);
-  CAsset::drawBoxFill(&txtBox, boxCol);
+  CAsset::drawBoxFill(&fnameBox, fnameBoxCol);
   CAsset::drawButton(&okButton, bstrsiz, optCol, bCol);
   CAsset::drawButton(&cancelButton, bstrsiz, optCol, bCol);
 
-  Font::NewCenterWrite(FONT_MINI, file.c_str(), &txtBox, &fontrgb::blue);
-  // Font::NewCenterWrite(FONT_MINI, "this is a crazy crazy crazy crazy crazy crazy test of", &txtBox, F_RED);
+  Font::FontControl.SetFont(FONT_MINI);
+  Font::NewCenterWrite(title, &titleBox, textCol);
+  Font::NewCenterWrite(newF.c_str(), &fnameBox, fnameCol);
+  Font::NewCenterWrite(info, &infoBox, textCol);
+  Font::NewCenterWrite(oktext, &okButton, textCol);
+  Font::NewCenterWrite(canceltext, &cancelButton, textCol);
+
   return true;
 }
 
@@ -113,18 +140,23 @@ std::string CTileset::getFilePath()
   return filepath;
 }
 
+bool CTileset::reqChange()
+{
+  return changeTS;
+}
+
 SDL_Texture* CTileset::changeTileset()
 {
   SDL_Texture* try_surf = NULL;
   std::string filepath = ts_path + newF + extension;
 
-  if ((try_surf = CSurface::OnLoad(filepath.c_str())) == 0)
+  if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0)
   {
-    return NULL;
+    file = newF;
   }
 
-  file = newF;
   resetPath();
+  changeTS = false;
 
   return try_surf;
 }
