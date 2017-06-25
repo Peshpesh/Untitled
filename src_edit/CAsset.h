@@ -55,6 +55,7 @@ class CAsset
   	static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
     static SDL_Rect getRect(const SDL_Point* A, const SDL_Point* B);
     static SDL_Rect getTileRect(const SDL_Point* A, const SDL_Point* B);
+    static SDL_Point getPos(int X, int Y);
 
     // returns a SDL_Rect struct with W and H equal to 1, given (X, Y).
     // Good for grabbing a pixel of a particular color.
@@ -75,7 +76,7 @@ class CAsset
 
     static bool drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color);
     static bool drawButton(const SDL_Rect* box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col);
-    
+
 };
 
 #endif

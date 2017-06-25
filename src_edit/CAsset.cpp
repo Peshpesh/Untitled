@@ -63,6 +63,14 @@ SDL_Rect CAsset::getTileRect(const SDL_Point* A, const SDL_Point* B)
   return rect;
 }
 
+SDL_Point CAsset::getPos(int X, int Y)
+{
+  SDL_Point pos;
+  pos.x = X;
+  pos.y = Y;
+  return pos;
+}
+
 SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 {
 	SDL_Rect rect;

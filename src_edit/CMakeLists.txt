@@ -30,7 +30,6 @@ ${SRCDIR}/CArea.cpp
 ${SRCDIR}/CAsset.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CChangeTile.cpp
-${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CEditMap.cpp
 ${SRCDIR}/CEditMap_Event.cpp
 ${SRCDIR}/CEditMap_Extern.cpp
@@ -42,11 +41,11 @@ ${SRCDIR}/CEntityInfo.cpp
 ${SRCDIR}/CEntityRes.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFont.cpp
+${SRCDIR}/CFont_Def.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CIO.cpp
 ${SRCDIR}/CMap.cpp
-${SRCDIR}/CMenu.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryEdit.cpp
 ${SRCDIR}/CSceneryMod.cpp
@@ -64,7 +63,6 @@ ${SRCDIR}/CArea.h
 ${SRCDIR}/CAsset.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CChangeTile.h
-${SRCDIR}/CConfig.h
 ${SRCDIR}/CEditMap.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityEdit.h
@@ -75,7 +73,6 @@ ${SRCDIR}/CFPS.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CIO.h
 ${SRCDIR}/CMap.h
-${SRCDIR}/CMenu.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryEdit.h
 ${SRCDIR}/CSceneryMod.h

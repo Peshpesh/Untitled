@@ -171,9 +171,7 @@ bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
 	if (!CAsset::drawButton(&button, bsiz, color)) return false;
 
 	// Write a button name for changing a tileset
-	// Font::CenterWrite(FONT_MINI, "CHANGE TILESET", button.x + (button.w / 2), button.y + (button.h / 2) - MINI_CHAR_SIZE);
-	// Font::CenterWrite(FONT_MINI, "TILESET", button.x + (button.w / 2), button.y + (button.h / 2) + MINI_CHAR_SIZE);
-	Font::NewCenterWrite(FONT_MINI, "CHANGE TILESET", &button, F_RED);
+	Font::NewCenterWrite(FONT_MINI, "CHANGE TILESET", &button);
 
 	return true;
 }
@@ -183,10 +181,10 @@ bool CEditMap::drawActiveTiles(SDL_Texture* interface)
 	// Draw complete active tile with dummy entity & outline (for depth clarity)
 	using namespace mapEngine::disp_t;
 
-	SDL_Rect srcR = {0, 0, TILE_SIZE, TILE_SIZE};
-	SDL_Rect dstR = {0, 0, TILE_SIZE, TILE_SIZE};
-
-	Font::CenterWrite(FONT_MINI, "SAMPLE", EWIDTH - 50, sample_y - name_offset);
+	SDL_Rect srcR = CAsset::getRect(0, 0, TILE_SIZE, TILE_SIZE);
+	SDL_Rect dstR = CAsset::getRect(0, 0, TILE_SIZE, TILE_SIZE);
+	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, sample_y - name_offset);
+	Font::NewCenterWrite(FONT_MINI, "SAMPLE", &tpos);
 
 	if (active_TL)
 	{
@@ -241,8 +239,10 @@ bool CEditMap::drawActive_bg(SDL_Texture* interface, CTile* ShowTile)
 {
 	using namespace mapEngine::disp_t;
 
+	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, bg_y - name_offset);
+
 	// Draws active background tile
-	Font::CenterWrite(FONT_MINI, "BACKGROUND", EWIDTH - 50, bg_y - name_offset);
+	Font::NewCenterWrite(FONT_MINI, "BACKGROUND", &tpos);
 
 	CSurface::OnDraw(Tileset, bg_x, bg_y,
 		(ShowTile->bg_ID % tset_w) * TILE_SIZE,
@@ -263,8 +263,10 @@ bool CEditMap::drawActive_fg(SDL_Texture* interface, CTile* ShowTile)
 {
 	using namespace mapEngine::disp_t;
 
+	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, fg_y - name_offset);
+
 	// Foreground tile header
-	Font::CenterWrite(FONT_MINI, "FOREGROUND", EWIDTH - 50, fg_y - name_offset);
+	Font::NewCenterWrite(FONT_MINI, "FOREGROUND", &tpos);
 
 	// Draws active foreground tile
 	CSurface::OnDraw(Tileset, fg_x, fg_y,
@@ -286,6 +288,8 @@ bool CEditMap::drawActive_ty(SDL_Texture* interface, CTile* ShowTile)
 {
 	using namespace mapEngine::disp_t;
 
+	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, ty_y - name_offset);
+
 	// Draws active tile type
 	CSurface::OnDraw(Type_Tileset, ty_x, ty_y,
 		(ShowTile->TypeID % type_w) * TILE_SIZE,
@@ -300,10 +304,10 @@ bool CEditMap::drawActive_ty(SDL_Texture* interface, CTile* ShowTile)
 	// Writes out the active type
 	switch (ShowTile->TypeID)
 	{
-		case TILE_TYPE_NORMAL: Font::CenterWrite(FONT_MINI, "NORMAL", EWIDTH - 50, ty_y - name_offset); break;
-		case TILE_TYPE_WATER: Font::CenterWrite(FONT_MINI, "WATER", EWIDTH - 50, ty_y - name_offset); break;
-		case TILE_TYPE_ICE: Font::CenterWrite(FONT_MINI, "ICE", EWIDTH - 50, ty_y - name_offset); break;
-		case TILE_TYPE_FIRE: Font::CenterWrite(FONT_MINI, "FIRE", EWIDTH - 50, ty_y - name_offset); break;
+		case TILE_TYPE_NORMAL: Font::NewCenterWrite(FONT_MINI, "NORMAL", &tpos); break;
+		case TILE_TYPE_WATER: Font::NewCenterWrite(FONT_MINI, "WATER", &tpos); break;
+		case TILE_TYPE_ICE: Font::NewCenterWrite(FONT_MINI, "ICE", &tpos); break;
+		case TILE_TYPE_FIRE: Font::NewCenterWrite(FONT_MINI, "FIRE", &tpos); break;
 		default: break;
 	}
 
@@ -313,6 +317,8 @@ bool CEditMap::drawActive_ty(SDL_Texture* interface, CTile* ShowTile)
 bool CEditMap::drawActive_co(SDL_Texture* interface, CTile* ShowTile)
 {
 	using namespace mapEngine::disp_t;
+
+	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, co_y - name_offset);
 
 	// Draws active collision tile
 	CSurface::OnDraw(Coll_Tileset, co_x, co_y,
@@ -328,16 +334,16 @@ bool CEditMap::drawActive_co(SDL_Texture* interface, CTile* ShowTile)
 	// Writes out the active collision type
 	switch (ShowTile->CollID)
 	{
-		case SOLID_NONE: Font::CenterWrite(FONT_MINI, "NONE", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_ALL: Font::CenterWrite(FONT_MINI, "FULL", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_U_BL_MR: Font::CenterWrite(FONT_MINI, "UBLMR", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_U_ML_TR: Font::CenterWrite(FONT_MINI, "UMLTR", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_U_TL_MR: Font::CenterWrite(FONT_MINI, "UTLMR", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_U_ML_BR: Font::CenterWrite(FONT_MINI, "UMLBR", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_A_BL_MR: Font::CenterWrite(FONT_MINI, "ABLMR", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_A_ML_TR: Font::CenterWrite(FONT_MINI, "AMLTR", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_A_TL_MR: Font::CenterWrite(FONT_MINI, "ATLMR", EWIDTH - 50, co_y - name_offset); break;
-		case SOLID_A_ML_BR: Font::CenterWrite(FONT_MINI, "AMLBR", EWIDTH - 50, co_y - name_offset); break;
+		case SOLID_NONE: Font::NewCenterWrite(FONT_MINI, "NONE", &tpos); break;
+		case SOLID_ALL: Font::NewCenterWrite(FONT_MINI, "FULL", &tpos); break;
+		case SOLID_U_BL_MR: Font::NewCenterWrite(FONT_MINI, "UBLMR", &tpos); break;
+		case SOLID_U_ML_TR: Font::NewCenterWrite(FONT_MINI, "UMLTR", &tpos); break;
+		case SOLID_U_TL_MR: Font::NewCenterWrite(FONT_MINI, "UTLMR", &tpos); break;
+		case SOLID_U_ML_BR: Font::NewCenterWrite(FONT_MINI, "UMLBR", &tpos); break;
+		case SOLID_A_BL_MR: Font::NewCenterWrite(FONT_MINI, "ABLMR", &tpos); break;
+		case SOLID_A_ML_TR: Font::NewCenterWrite(FONT_MINI, "AMLTR", &tpos); break;
+		case SOLID_A_TL_MR: Font::NewCenterWrite(FONT_MINI, "ATLMR", &tpos); break;
+		case SOLID_A_ML_BR: Font::NewCenterWrite(FONT_MINI, "AMLBR", &tpos); break;
 		default: break;
 	}
 
@@ -388,8 +394,7 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 
 	if (!CAsset::drawButton(&bg_button, bsiz, color)) return false;
 
-	Font::CenterWrite(FONT_MINI, "CHANGE B.TILE", bg_button.x + (bg_button.w / 2), bg_button.y + (bg_button.h / 2));
-
+	Font::NewCenterWrite(FONT_MINI, "CHANGE B.TILE", &bg_button);
 	return true;
 }
 
@@ -412,7 +417,7 @@ bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 
 	if (!CAsset::drawButton(&fg_button, bsiz, color)) return false;
 
-	Font::CenterWrite(FONT_MINI, "CHANGE F.TILE", fg_button.x + (fg_button.w / 2), fg_button.y + (fg_button.h / 2));
+	Font::NewCenterWrite(FONT_MINI, "CHANGE F.TILE", &fg_button);
 
 	return true;
 }
@@ -528,7 +533,7 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, 
 	}
 
 	if (!CAsset::drawButton(&button, bsiz, color)) return false;
-	Font::CenterWrite(FONT_MINI, name, button.x + (button.w / 2), button.y + (button.h / 2));
+	Font::NewCenterWrite(FONT_MINI, name, &button);
 
 	return true;
 }
@@ -537,15 +542,15 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	using namespace mapEngine::but_quad_t;
 
-	// bool canHilight = !(bool)(intrpt);
 	bool canHilight = CInterrupt::isNone();
 	bool noHov;
 	const SDL_Point* color = NULL;
+
 	SDL_Rect dstrect;
-
-
+	SDL_Point pos;
 
 	dstrect = CAsset::getRect(left_x, top_y, w, h);
+	pos = CAsset::getPos(left_x + (w / 2), top_y + (h / 2));
 	if (modifyTile != MODIFY_TILE_TL)
 	{
 		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
@@ -557,11 +562,12 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 	}
 
 	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
-	Font::CenterWrite(FONT_MINI, name_TL, left_x + (w / 2), top_y + (h / 2));
+	Font::NewCenterWrite(FONT_MINI, name_TL, &pos);
 
 
 
 	dstrect.x = right_x;
+	pos.x = right_x + (w / 2);
 	if (modifyTile != MODIFY_TILE_TR)
 	{
 		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
@@ -572,11 +578,12 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 		color = editCol;
 	}
 	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
-	Font::CenterWrite(FONT_MINI, name_TR, right_x + (w / 2), top_y + (h / 2));
+	Font::NewCenterWrite(FONT_MINI, name_TR, &pos);
 
 
 
 	dstrect.y = bottom_y;
+	pos.y = bottom_y + (h / 2);
 	if (modifyTile != MODIFY_TILE_BR)
 	{
 		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
@@ -587,11 +594,12 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 		color = editCol;
 	}
 	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
-	Font::CenterWrite(FONT_MINI, name_BR, right_x + (w / 2), bottom_y + (h / 2));
+	Font::NewCenterWrite(FONT_MINI, name_BR, &pos);
 
 
 
 	dstrect.x = left_x;
+	pos.x = left_x + (w / 2);
 	if (modifyTile != MODIFY_TILE_BL)
 	{
 		noHov = (!canHilight || !SDL_PointInRect(mouse, &dstrect));
@@ -602,7 +610,7 @@ bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
 		color = editCol;
 	}
 	if (!CAsset::drawButton(&dstrect, bsiz, color)) return false;
-	Font::CenterWrite(FONT_MINI, name_BL, left_x + (w / 2), bottom_y + (h / 2));
+	Font::NewCenterWrite(FONT_MINI, name_BL, &pos);
 
 	return true;
 }

@@ -51,6 +51,8 @@ class CSurface
 
 		static bool OnDraw(SDL_Texture* Surf_Src, const SDL_Rect* srcrect, const SDL_Rect* dstrect);
 
+		static bool OnDraw(SDL_Texture* Surf_Src, const SDL_Rect* srcrect, const SDL_Point* dstpos);
+
 };
 
 #endif

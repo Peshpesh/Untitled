@@ -102,7 +102,7 @@ bool CTileset::OnRender()
   CAsset::drawButton(&okButton, bstrsiz, optCol, bCol);
   CAsset::drawButton(&cancelButton, bstrsiz, optCol, bCol);
 
-  Font::NewCenterWrite(FONT_MINI, file.c_str(), &txtBox, F_RED);
+  Font::NewCenterWrite(FONT_MINI, file.c_str(), &txtBox, &fontrgb::blue);
   // Font::NewCenterWrite(FONT_MINI, "this is a crazy crazy crazy crazy crazy crazy test of", &txtBox, F_RED);
   return true;
 }
