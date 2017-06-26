@@ -115,13 +115,31 @@ namespace mapEngine
   }
   namespace view_flip
   {
+    extern const SDL_Point* onCol;
+    extern const SDL_Point* offCol;
     extern const short x;
     extern const short y;
+    extern const short w;
+    extern const short h;
+    extern const short bsiz;
+    extern const short col_h;
+    extern const short list_x;
+    extern const short list_y;
+    extern const char* labels[];
   }
   namespace place_flip
   {
+    extern const SDL_Point* onCol;
+    extern const SDL_Point* offCol;
     extern const short x;
     extern const short y;
+    extern const short w;
+    extern const short h;
+    extern const short bsiz;
+    extern const short col_h;
+    extern const short list_x;
+    extern const short list_y;
+    extern const char* labels[];
   }
 } // Map engine namespaces //
 

@@ -39,11 +39,11 @@ bool CEditMap::drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse)
 	{
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG) || CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
 		{
-			CChangeTile::PickTile.RenderTileset(interface, Tileset, mouse);
+			if (!CChangeTile::PickTile.OnRender(interface, Tileset, mouse)) return false;
 		}
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
 		{
-			CTileset::PickTS.OnRender();
+			if (!CTileset::PickTS.OnRender()) return false;
 		}
 	}
 	return true;
@@ -401,14 +401,12 @@ bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 
 	const SDL_Point* color = NULL;
 
-	// if (!(bool)(intrpt))
 	if (CInterrupt::isNone())
 	{
 		color = SDL_PointInRect(mouse, &fg_button) ? hoverColor : offCol;
 	}
 	else
 	{
-		// color = (intrpt & INTRPT_CHANGE_FG) ? onCol : offCol;
 		color = CInterrupt::isFlagOn(INTRPT_CHANGE_FG) ? onCol : offCol;
 	}
 
@@ -423,40 +421,21 @@ bool CEditMap::drawOverlayList(SDL_Texture* interface)
 {
 	using namespace mapEngine::view_flip;
 
+	const bool flags[] = {
+		show_fg,
+		show_ty,
+		show_co,
+	};
+
 	// Menu/Options list for viewing various overlays
-	int sY = y - (SWITCH_SIZE + SYM_SPACING);
-	int tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;
-	int tX_offset = SWITCH_SIZE + MINI_CHAR_SIZE;
-	Font::Write(FONT_MINI, "Overlay Switches", x, sY + tY_offset);
-	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(FONT_MINI, "Foreground", x + tX_offset, sY + tY_offset);
-	if (show_fg)
+	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
+	SDL_Point tPos = CAsset::getPos(list_x, list_y);
+	for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
 	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	else
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(FONT_MINI, "Tile Types", x + tX_offset, sY + tY_offset);
-	if (show_ty)
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	else
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(FONT_MINI, "Collisions", x + tX_offset, sY + tY_offset);
-	if (show_co)
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	else
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+		Font::Write(FONT_MINI, labels[i], &tPos);
+		CAsset::drawStrBox(&dstR, bsiz, flags[i] ? onCol : offCol);
+		dstR.y += col_h;
+		tPos.y += col_h;
 	}
 
 	return true;
@@ -466,48 +445,21 @@ bool CEditMap::drawPlacementList(SDL_Texture* interface)
 {
 	using namespace mapEngine::place_flip;
 
-	// Menu/Options list for active tile attributes on placement
-	int sY = y;
-	int tY_offset = (SWITCH_SIZE - MINI_CHAR_SIZE) / 2;
-	int tX_offset = SWITCH_SIZE + MINI_CHAR_SIZE;
-	Font::Write(FONT_MINI, "Use B.Tile", x + tX_offset, sY + tY_offset);
-	if (onTiles & ENABLE_BG)
+	const bool flags[] = {
+		(onTiles & ENABLE_BG),
+		(onTiles & ENABLE_FG),
+		(onTiles & ENABLE_TYPE),
+		(onTiles & ENABLE_COLL)
+	};
+
+	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
+	SDL_Point tPos = CAsset::getPos(list_x, list_y);
+	for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
 	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	else
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(FONT_MINI, "Use F.Tile", x + tX_offset, sY + tY_offset);
-	if (onTiles & ENABLE_FG)
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	else
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(FONT_MINI, "Use Type", x + tX_offset, sY + tY_offset);
-	if (onTiles & ENABLE_TYPE)
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	else
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	sY += SWITCH_SIZE + SYM_SPACING;
-	Font::Write(FONT_MINI, "Use Collision", x + tX_offset, sY + tY_offset);
-	if (onTiles & ENABLE_COLL)
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	ON_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
-	}
-	else
-	{
-		CSurface::OnDraw(interface, x, sY, SWITCH_XO,	OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+		Font::Write(FONT_MINI, labels[i], &tPos);
+		CAsset::drawStrBox(&dstR, bsiz, flags[i] ? onCol : offCol);
+		dstR.y += col_h;
+		tPos.y += col_h;
 	}
 	return true;
 }
@@ -519,7 +471,7 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, 
 	const char* name = active ? onTitle : offTitle;
 
 	const SDL_Point* color = NULL;
-	// if ((bool)(intrpt) || !SDL_PointInRect(mouse, &button))
+
 	if (!CInterrupt::isNone() || !SDL_PointInRect(mouse, &button))
 	{
 		color = active ? onCol : offCol;

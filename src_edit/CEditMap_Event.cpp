@@ -470,33 +470,23 @@ bool CEditMap::handleLayers(const SDL_Point* mouse)
 {
   // Click on View overlay buttons
   using namespace mapEngine::view_flip;
-  if (mouse->x >= x && mouse->x < x + SWITCH_SIZE)
-  {
-    int Yi = y;
-    int Yf = y + SWITCH_SIZE;
-    if (mouse->y >= Yi && mouse->y < Yf)
+
+  bool* flags[] = {
+		&show_fg,
+		&show_ty,
+		&show_co
+	};
+
+	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
+	for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
+	{
+    if (SDL_PointInRect(mouse, &dstR))
     {
-      if (show_fg) show_fg = false;
-      else show_fg = true;
+      *flags[i] = !(*flags[i]);
       return true;
     }
-    Yi = Yf + SYM_SPACING;
-    Yf = Yi + SWITCH_SIZE;
-    if (mouse->y >= Yi && mouse->y < Yf)
-    {
-      if (show_ty) show_ty = false;
-      else show_ty = true;
-      return true;
-    }
-    Yi = Yf + SYM_SPACING;
-    Yf = Yi + SWITCH_SIZE;
-    if (mouse->y >= Yi && mouse->y < Yf)
-    {
-      if (show_co) show_co = false;
-      else show_co = true;
-      return true;
-    }
-  }
+		dstR.y += col_h;
+	}
   return false;
 }
 
@@ -504,41 +494,25 @@ bool CEditMap::handlePlace(const SDL_Point* mouse)
 {
   // Click on active tile attribute switches
   using namespace mapEngine::place_flip;
-  if (mouse->x >= x && mouse->x < x + SWITCH_SIZE)
-  {
-    int Yi = y;
-    int Yf = y + SWITCH_SIZE;
-    if (mouse->y >= Yi && mouse->y < Yf)
+
+  const int bits[] = {
+		ENABLE_BG,
+		ENABLE_FG,
+		ENABLE_TYPE,
+		ENABLE_COLL
+	};
+
+	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
+	for (int i = 0; i < sizeof(bits) / sizeof(bits[0]); i++)
+	{
+    if (SDL_PointInRect(mouse, &dstR))
     {
-      if (onTiles & ENABLE_BG) onTiles ^= ENABLE_BG;
-      else onTiles |= ENABLE_BG;
+      if (onTiles & bits[i]) onTiles &= ~bits[i];
+      else onTiles |= bits[i];
       return true;
     }
-    Yi = Yf + SYM_SPACING;
-    Yf = Yi + SWITCH_SIZE;
-    if (mouse->y >= Yi && mouse->y < Yf)
-    {
-      if (onTiles & ENABLE_FG) onTiles ^= ENABLE_FG;
-      else onTiles |= ENABLE_FG;
-      return true;
-    }
-    Yi = Yf + SYM_SPACING;
-    Yf = Yi + SWITCH_SIZE;
-    if (mouse->y >= Yi && mouse->y < Yf)
-    {
-      if (onTiles & ENABLE_TYPE) onTiles ^= ENABLE_TYPE;
-      else onTiles |= ENABLE_TYPE;
-      return true;
-    }
-    Yi = Yf + SYM_SPACING;
-    Yf = Yi + SWITCH_SIZE;
-    if (mouse->y >= Yi && mouse->y < Yf)
-    {
-      if (onTiles & ENABLE_COLL) onTiles ^= ENABLE_COLL;
-      else onTiles |= ENABLE_COLL;
-      return true;
-    }
-  }
+		dstR.y += col_h;
+	}
   return false;
 }
 

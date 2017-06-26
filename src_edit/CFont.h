@@ -83,11 +83,12 @@ public:
 	* param Mx : x-position of left edge of message
 	* param My : y-position of top edge of message */
 	static int Write(const int& fontID, char const* message, int Mx, int My);
+	static int Write(const int& fontID, char const* message, const SDL_Point* pos);
+	static int Write(const int& fontID, char const* message, const SDL_Point* pos, const SDL_Color* col);
 
 	static int WriteLine(const int& fontID, char const* line, const SDL_Point* pos);
 
 	// static int Write(const int& fontID, char const* message, int color, bool flicker, int Mx, int My);
-	static int Write(const int& fontID, char const* message, const SDL_Point* pos, const SDL_Color* col);
 
 	/* BRIEF: Static function that writes a one-line message
 	***** using a loaded font as an SDL_Texture.
@@ -142,13 +143,9 @@ public:
 	static int NewCenterWrite(char const* message, const SDL_Rect* dstR);
 	static int NewCenterWrite(char const* message, const SDL_Point* dstC);
 
-
-
-
 	static void getLineDims(const int& fontID, char const* message, int& msgWidth);
 	static int getTextHeight(const int& fontID, char const* message, int maxWidth);
 	static std::string getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth);
-
-
+	static std::string intToStr(const int& val);
 };
 #endif

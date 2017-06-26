@@ -89,6 +89,36 @@ int Font::Write(const int& fontID, char const* message, int Mx, int My)
 	return Mx - FirstMx - h_spacing;
 }
 
+int Font::Write(const int& fontID, char const* message, const SDL_Point* pos)
+{
+	SDL_Texture* font = NULL;
+	int h_spacing = 0;
+	int v_spacing = 0;
+	int lineH = GetSymH(fontID);
+ 	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL) return -2;
+
+	int i = 0;
+	const int FirstMx = pos->x;
+
+	SDL_Point symPos = {pos->x, pos->y};
+	SDL_Rect symRec;
+
+	while (message[i] != '\0')
+	{
+		const char sym = message[i++];
+		if (sym == '\n')
+		{
+			symPos.x = FirstMx;
+			symPos.y += lineH + v_spacing;
+			continue;
+		}
+		GetXY(fontID, sym, symRec);
+		if (!CSurface::OnDraw(font, &symRec, &symPos)) return -1;
+		symPos.x += symRec.w + h_spacing;
+	}
+	return 0;
+}
+
 int Font::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 {
 	SDL_Texture* font = NULL;
@@ -116,7 +146,7 @@ int Font::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 int Font::Write(const int& fontID, char const* message, const SDL_Point* pos, const SDL_Color* col)
 {
 	changeFontColor(fontID, col);
-	int retval = WriteLine(fontID, message, pos);
+	int retval = Write(fontID, message, pos);
 	resetFontColor(fontID);
 
 	return retval;
@@ -505,4 +535,45 @@ void Font::getLineDims(const int& fontID, char const* message, int& msgWidth)
 		GetXY(fontID, message[i++], symRec);
 		msgWidth += symRec.w;
 	}
+}
+
+std::string Font::intToStr(const int& val)
+{
+	std::string retstr;
+	int magnitude = 1;
+
+	// How big is this number? (how many digits is key)
+	while (val / (magnitude * 10) != 0)
+	{
+		// if the loop condition is nonzero, then that means the denominator
+		// isn't large enough to reduce the fraction to zero...
+		// The fraction reduces to zero IF the denominator exceeds
+		// the numerator, which is what we're looking for.
+		// EX: First loop does N / 10. If zero, then abs(N) is less than 10 (Magnitude of 10^0, or 1).
+		//     Otherwise, next loop does N / 100. If zero, then abs(N) is less than 100. (Mag 10^1, or 10)
+		//     Next loop would be N / 1000... And on until the loop ends.
+		magnitude *= 10;
+	}
+
+	while (magnitude != 0)
+	{
+		// First, mod the number by current mag*10 to get rid of following digits.
+		// Second, divide the resulting number by mag to get rid of leading digits.
+		switch ((val % (magnitude * 10)) / magnitude)
+		{
+			case 0: retstr.push_back('0'); break;
+			case 1: retstr.push_back('1'); break;
+			case 2: retstr.push_back('2'); break;
+			case 3: retstr.push_back('3'); break;
+			case 4: retstr.push_back('4'); break;
+			case 5: retstr.push_back('5'); break;
+			case 6: retstr.push_back('6'); break;
+			case 7: retstr.push_back('7'); break;
+			case 8: retstr.push_back('8'); break;
+			case 9: retstr.push_back('9'); break;
+			default: break;
+		}
+		magnitude /= 10;
+	}
+	return retstr;
 }

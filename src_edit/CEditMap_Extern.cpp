@@ -73,9 +73,8 @@ namespace mapEngine
   {
     const SDL_Rect typeBar = {645, 390, 90, 4};
     const SDL_Rect collBar = {645, 460, 90, 4};
-    const SDL_Point* fillCol = &palette::dark_green;
+    const SDL_Point* fillCol = &palette::light_green;
     const SDL_Point* emptyCol = &palette::black;
-
   }
   namespace but_rm
   {
@@ -90,13 +89,40 @@ namespace mapEngine
   }
   namespace view_flip
   {
+    const SDL_Point* onCol = &palette::green;
+    const SDL_Point* offCol = &palette::red;
     const short x = 20;
     const short y = 510;
+    const short w = 12;
+    const short h = 12;
+    const short bsiz = 2;
+    const short col_h = 16;
+    const short list_x = x + 16;
+    const short list_y = y + ((h - Font::GetSymH(FONT_MINI)) / 2) + ((h - Font::GetSymH(FONT_MINI)) % 2);
+    const char* labels[] = {
+      "View FG",
+      "View Type",
+      "View Coll"
+    };
   }
   namespace place_flip
   {
+    const SDL_Point* onCol = &palette::green;
+    const SDL_Point* offCol = &palette::red;
     const short x = 150;
     const short y = 495;
+    const short w = 12;
+    const short h = 12;
+    const short bsiz = 2;
+    const short col_h = 16;
+    const short list_x = x + 16;
+    const short list_y = y + ((h - Font::GetSymH(FONT_MINI)) / 2) + ((h - Font::GetSymH(FONT_MINI)) % 2);
+    const char* labels[] = {
+      "Place BG",
+      "Place FG",
+      "Place Type",
+      "Place Coll"
+    };
   }
 }
 // Map engine namespaces //

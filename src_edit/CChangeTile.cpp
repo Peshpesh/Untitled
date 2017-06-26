@@ -2,7 +2,8 @@
 
 CChangeTile CChangeTile::PickTile;
 
-namespace {
+namespace
+{
 	const unsigned short Max_Tiles = 8;
 	const unsigned short Frame_Size = 24;
 	const unsigned short hilightSize = 2;
@@ -12,6 +13,8 @@ namespace {
 	const SDL_Color* arrDisable = &rgb::gray;
 	const SDL_Color* arrHover = &rgb::light_cyan;
 	const SDL_Color* arrStr = &rgb::black;
+	const std::string dispHeader = "Display Range: ";
+	const std::string tileHeader = "Tileset Info: ";
 }
 
 CChangeTile::CChangeTile()
@@ -21,6 +24,24 @@ CChangeTile::CChangeTile()
 	X = Y = W = H = 0;
 	disp.x = disp.y = disp.w = disp.h = 0;
 	frame.x = frame.y = frame.w = frame.h = 0;
+
+	dstArrL.x = 0;
+	dstArrR.x = 0;
+	dstArrU.y = 0;
+	dstArrD.y = 0;
+
+	dstArrL.y = dstArrR.y = (WHEIGHT - ARR_SZ) / 2;
+	dstArrU.x = dstArrD.x = (WWIDTH - ARR_SZ) / 2;
+
+	dstArrL.w = dstArrL.h = ARR_SZ;
+	dstArrR.w = dstArrR.h = ARR_SZ;
+	dstArrU.w = dstArrU.h = ARR_SZ;
+	dstArrD.w = dstArrD.h = ARR_SZ;
+
+	dstCancel.x = dstCancel.y = 0;
+	dstCancel.w = dstCancel.h = CANCEL_SZ;
+
+	x_Info = y_dInfo = y_tInfo = 0;
 }
 
 void CChangeTile::Init(int W, int H)
@@ -41,6 +62,18 @@ void CChangeTile::Init(int W, int H)
 	frame.y = disp.y - Frame_Size;
 	frame.w = disp.w + (Frame_Size * 2);
 	frame.h = disp.h + (Frame_Size * 2);
+
+	dstArrL.x = frame.x + ((Frame_Size - ARR_SZ) / 2) + ((Frame_Size - ARR_SZ) % 2);
+	dstArrU.y = frame.y + ((Frame_Size - ARR_SZ) / 2) + ((Frame_Size - ARR_SZ) % 2);
+	dstArrR.x = disp.x + disp.w + ((Frame_Size - ARR_SZ) / 2);
+	dstArrD.y = disp.y + disp.h + ((Frame_Size - ARR_SZ) / 2);
+
+	dstCancel.x = disp.x + disp.w + ((Frame_Size - CANCEL_SZ) / 2);
+	dstCancel.y = frame.y + ((Frame_Size - CANCEL_SZ) / 2);
+
+	x_Info = frame.x + 1;
+	y_dInfo = frame.y + 1;
+	y_tInfo = disp.y + disp.w + 1;
 }
 
 void CChangeTile::OnEvent(SDL_Event* Event)
@@ -87,9 +120,7 @@ void CChangeTile::OnLButtonDown(int mX, int mY)
 	}
 
 	// process clicks on cancel button.
-	int cX = disp.x + disp.w + ((Frame_Size - CANCEL_SZ) / 2);
-	int cY = disp.y - Frame_Size + ((Frame_Size - CANCEL_SZ) / 2);
-	if (mX >= cX && mX < cX + CANCEL_SZ && mY >= cY && mY < cY + CANCEL_SZ)
+	if (SDL_PointInRect(&m, &dstCancel))
 	{
 		CInterrupt::removeFlag(INTRPT_CHANGE_BG);
 		CInterrupt::removeFlag(INTRPT_CHANGE_FG);
@@ -97,132 +128,108 @@ void CChangeTile::OnLButtonDown(int mX, int mY)
 	}
 
 	// Maybe an arrow was clicked?
-	int aX, aY;
 	if (W > Max_Tiles)	// Left/right arrows are worth processing
 	{
-		aY = disp.y + (disp.h / 2) - (ARR_SZ / 2);
-		if (X > 0) 							// Left arrow?
+		if (X > 0 && SDL_PointInRect(&m, &dstArrL))	// Left arrow?
 		{
-			aX = disp.x - (ARR_SZ + SYM_SPACING);
-			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-			{
-				X--;
-				return;
-			}
+			X--; return;
 		}
-		if (X < W - Max_Tiles)	// Right arrow?
+		if (X < W - Max_Tiles && SDL_PointInRect(&m, &dstArrR))	// Right arrow?
 		{
-			aX = disp.x + disp.w + SYM_SPACING;
-			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-			{
-				X++;
-				return;
-			}
+			X++; return;
 		}
 	}
 	if (H > Max_Tiles)	// Up/down arrows are worth processing
 	{
-		aX = disp.x + (disp.w / 2) - (ARR_SZ / 2);
-		if (Y > 0) 							// Up arrow?
+		if (Y > 0 && SDL_PointInRect(&m, &dstArrU)) // Up arrow?
 		{
-			aY = disp.y - (ARR_SZ + SYM_SPACING);
-			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-			{
-				Y--;
-				return;
-			}
+			Y--; return;
 		}
-		if (Y < H - Max_Tiles)	// Down arrow?
+		if (Y < H - Max_Tiles && SDL_PointInRect(&m, &dstArrD))	// Down arrow?
 		{
-			aY = disp.y + disp.h + SYM_SPACING;
-			if (mX >= aX && mX < aX + ARR_SZ && mY >= aY && mY < aY + ARR_SZ)
-			{
-				Y++;
-				return;
-			}
+			Y++; return;
 		}
 	}
 }
 
-bool CChangeTile::RenderTileset(SDL_Texture* interface, SDL_Texture* tileset, const SDL_Point* m)
+bool CChangeTile::OnRender(SDL_Texture* interface, SDL_Texture* tileset, const SDL_Point* m)
 {
+	if (!RenderTileset(tileset, m)) return false;
+	if (!RenderInfo()) return false;
+
+	// Render clickable arrows
+	RenderArrow('L', &dstArrL, m);
+	RenderArrow('R', &dstArrR, m);
+	RenderArrow('U', &dstArrU, m);
+	RenderArrow('D', &dstArrD, m);
+
+	// Render cancel button
+	SDL_Rect srcR = CAsset::getRect(CANCEL_X, CANCEL_Y, CANCEL_SZ, CANCEL_SZ);
+	CSurface::OnDraw(interface, &srcR, &dstCancel);
+
+	return true;
+}
+
+bool CChangeTile::RenderTileset(SDL_Texture* tileset, const SDL_Point* m)
+{
+	if (tileset == NULL) return false;
+
 	// Render a "frame" for the tileset
 	CAsset::drawBoxFill(&frame, frameCol);
 	{
 		// Render the tileset (or part of it)
 		SDL_Rect srcR = CAsset::getRect(X * TILE_SIZE, Y * TILE_SIZE, disp.w, disp.h);
-		CSurface::OnDraw(tileset, &srcR, &disp);
+		if (!CSurface::OnDraw(tileset, &srcR, &disp)) return false;
 	}
 
+	// outline tile hovered by cursor
 	if (SDL_PointInRect(m, &disp))
 	{
 		int hX = disp.x + TILE_SIZE * ((m->x - disp.x) / TILE_SIZE);
 		int hY = disp.y + TILE_SIZE * ((m->y - disp.y) / TILE_SIZE);
 		SDL_Rect hilight = CAsset::getRect(hX, hY, TILE_SIZE, TILE_SIZE);
-		CAsset::drawBox(&hilight, hilightCol, hilightSize);
+		if (!CAsset::drawBox(&hilight, hilightCol, hilightSize)) return false;
 	}
-
-	// display text-based information in the table border
-	int retsiz = Font::GetVSpacing(FONT_MINI);
-	int xF = disp.x - Frame_Size + 1;
-	int yF = disp.y - Frame_Size + 1;
-	Font::Write(FONT_MINI, "Display Range:", xF, yF);
-	yF += retsiz;
-	xF += Font::Write(FONT_MINI, "X: ", xF, yF);
-	xF += Font::Write(FONT_MINI, X, xF, yF);
-	Font::Write(FONT_MINI, X + (disp.w / TILE_SIZE) - 1, xF, yF);
-	xF = disp.x - Frame_Size + 1;
-	yF += retsiz;
-	xF += Font::Write(FONT_MINI, "Y: ", xF, yF);
-	xF += Font::Write(FONT_MINI, Y, xF, yF);
-	Font::Write(FONT_MINI, Y + (disp.h / TILE_SIZE) - 1, xF, yF);
-
-	xF = disp.x - Frame_Size + 1;
-	yF = disp.y + disp.w + 1;
-	Font::Write(FONT_MINI, "Tileset Info:", xF, yF);
-	yF += retsiz;
-	xF += Font::Write(FONT_MINI, "Width: ", xF, yF);
-	Font::Write(FONT_MINI, W, xF, yF);
-	xF = disp.x - Frame_Size + 1;
-	yF += retsiz;
-	xF += Font::Write(FONT_MINI, "Height: ", xF, yF);
-	Font::Write(FONT_MINI, H, xF, yF);
-
-	// Render clickable arrows
-	int aX, aY;
-	aX = disp.x - (ARR_SZ + SYM_SPACING);
-	aY = disp.y + (disp.h / 2) - (ARR_SZ / 2);
-	RenderArrow(interface, aX, aY, 'L', m);
-	aX = disp.x + disp.w + SYM_SPACING;
-	RenderArrow(interface, aX, aY, 'R', m);
-	aX = disp.x + (disp.w / 2) - (ARR_SZ / 2);
-	aY = disp.y - (ARR_SZ + SYM_SPACING);
-	RenderArrow(interface, aX, aY, 'U', m);
-	aY = disp.y + disp.h + SYM_SPACING;
-	RenderArrow(interface, aX, aY, 'D', m);
-
-	// Render cancel button
-	int cX = disp.x + disp.w + ((Frame_Size - CANCEL_SZ) / 2);
-	int cY = disp.y - Frame_Size + ((Frame_Size - CANCEL_SZ) / 2);
-	CSurface::OnDraw(interface, cX, cY, CANCEL_X, CANCEL_Y, CANCEL_SZ, CANCEL_SZ);
 
 	return true;
 }
 
-bool CChangeTile::RenderArrow(SDL_Texture* interface, const int& aX, const int& aY, char direction, const SDL_Point* m)
+bool CChangeTile::RenderInfo()
 {
-	SDL_Rect dstR = CAsset::getRect(aX, aY, ARR_SZ, ARR_SZ);
-	bool hover = SDL_PointInRect(m, &dstR);
-	bool enable = false;
+	// display text-based information in the table border
+	const int Xf = X + (disp.w / TILE_SIZE) - 1;
+	const int Yf = Y + (disp.h / TILE_SIZE) - 1;
+	std::string dispLabX = "X: " + Font::intToStr(X) + "-" + Font::intToStr(Xf);
+	std::string dispLabY = "Y: " + Font::intToStr(Y) + "-" + Font::intToStr(Yf);
+	std::string tileLabW = "Width: " + Font::intToStr(W);
+	std::string tileLabH = "Height: " + Font::intToStr(H);
 
-	if (direction == 'L') enable = (X > 0);
-	if (direction == 'R') enable = (X < W - Max_Tiles);
-	if (direction == 'U') enable = (Y > 0);
-	if (direction == 'D') enable = (Y < H - Max_Tiles);
+	SDL_Point dstPos = {x_Info, y_dInfo};
+
+	std::string dispInfo = dispHeader + "\n" + dispLabX + "\n" + dispLabY;
+	Font::Write(FONT_MINI, dispInfo.c_str(), &dstPos);
+
+	dstPos.y = y_tInfo;
+
+	std::string tileInfo = tileHeader + "\n" + tileLabW + "\n" + tileLabH;
+	Font::Write(FONT_MINI, tileInfo.c_str(), &dstPos);
+
+	return true;
+}
+
+bool CChangeTile::RenderArrow(char dir, const SDL_Rect* dstR, const SDL_Point* m)
+{
+	bool hover = SDL_PointInRect(m, dstR);	// true if cursor is hovering arrow
+	bool enable = false;	// true if the arrow is responsive to events
+
+	if (dir == 'L') enable = (X > 0);
+	if (dir == 'R') enable = (X < W - Max_Tiles);
+	if (dir == 'U') enable = (Y > 0);
+	if (dir == 'D') enable = (Y < H - Max_Tiles);
 
 	const SDL_Color* arrCol = enable ? (hover ? arrHover : arrFill) : arrDisable;
 
-	return CAsset::drawStrArrow(&dstR, direction, arrCol, arrStr);
+	return CAsset::drawStrArrow(dstR, dir, arrCol, arrStr);
 }
 
 void CChangeTile::reqChange(int& ID)

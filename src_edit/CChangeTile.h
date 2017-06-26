@@ -15,6 +15,8 @@ public:
 private:
 	bool changeFlag;
 	int pickID;
+
+private:
 	// X: x-pos on tileset being viewed (tile coordinate)
 	// Y: y-pos on tileset being viewed (tile coordinate)
 	// W: width of tileset (tiles)
@@ -22,7 +24,9 @@ private:
 	int X, Y, W, H;
 	SDL_Rect disp;				// rectangle dims: tiles rendered
 	SDL_Rect frame;				// rectangle dims: display frame
-	// SDL_Rect dstarrowL
+	SDL_Rect dstArrL, dstArrR, dstArrU, dstArrD;
+	SDL_Rect dstCancel;
+	int x_Info, y_dInfo, y_tInfo;
 
 public:
 	CChangeTile();
@@ -35,12 +39,14 @@ public:
 
 	void OnLButtonDown(int mX, int mY);
 
-	bool RenderTileset(SDL_Texture* interface, SDL_Texture* tileset, const SDL_Point* m);
+	bool OnRender(SDL_Texture* interface, SDL_Texture* tileset, const SDL_Point* m);
 
   void reqChange(int& ID);
 
 private:
-	bool RenderArrow(SDL_Texture* interface, const int& aX, const int& aY, char direction, const SDL_Point* m);
+	bool RenderTileset(SDL_Texture* tileset, const SDL_Point* m);
+	bool RenderInfo();
+	bool RenderArrow(char dir, const SDL_Rect* dstR, const SDL_Point* m);
 
 
 };
