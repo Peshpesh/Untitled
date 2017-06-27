@@ -55,7 +55,7 @@ bool CEditMap::OnInit()
   }
 
   SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
-  queryTileDims(Type_Tileset, coll_w, coll_h);
+  queryTileDims(Coll_Tileset, coll_w, coll_h);
 
   if (CArea::AreaControl.OnLoad(Tileset) == false)
 		return false;
@@ -69,6 +69,20 @@ void CEditMap::queryTileDims(SDL_Texture* texture, int& w, int& h)
   SDL_QueryTexture(texture, NULL, NULL, &PixWidth, &PixHeight);
   w = PixWidth / TILE_SIZE;
   h = PixHeight / TILE_SIZE;
+}
+
+CTile* CEditMap::getModTile()
+{
+  CTile* modTile = NULL;
+  switch (modifyTile)
+  {
+    case MODIFY_TILE_TL: modTile = &TileTL; break;
+    case MODIFY_TILE_TR: modTile = &TileTR; break;
+    case MODIFY_TILE_BL: modTile = &TileBL; break;
+    case MODIFY_TILE_BR: modTile = &TileBR; break;
+    default: break;
+  }
+  return modTile;
 }
 
 SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)

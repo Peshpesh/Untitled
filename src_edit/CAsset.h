@@ -119,6 +119,11 @@ class CAsset
     static bool drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb);
     static bool drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb);
 
+    static bool drawArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb);
+    static bool drawArrowFill(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb);
+    static bool drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb);
+    static bool drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb);
+
 };
 
 #endif

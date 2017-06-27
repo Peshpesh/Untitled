@@ -231,7 +231,32 @@ bool CAsset::drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color
   return true;
 }
 
+bool CAsset::drawArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb)
+{
+  SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
+  return drawArrow(&dstR, dir, rgb);
+}
+
+bool CAsset::drawArrowFill(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb)
+{
+  SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
+  return drawArrowFill(&dstR, dir, rgb);
+}
+
+bool CAsset::drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb)
+{
+  SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
+  return drawStrArrow(&dstR, dir, rgb);
+}
+
+bool CAsset::drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb)
+{
+  SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
+  return drawStrArrow(&dstR, dir, rgb, str_rgb);
+}
+
 void CAsset::OnCleanup()
 {
   SDL_DestroyTexture(paltex);
+  SDL_DestroyTexture(arrtex);
 }

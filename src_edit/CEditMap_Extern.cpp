@@ -66,6 +66,13 @@ namespace mapEngine
     const short ty_y = 350;           //
     const short co_x = 674;           // "..." Tile collision info
     const short co_y = 420;           //
+    const SDL_Point bg_pos = {674, 210};
+    const SDL_Point fg_pos = {674, 280};
+    const SDL_Point ty_pos = {674, 350};
+    const SDL_Point co_pos = {674, 420};
+    const short arrSpac = 8;
+    const SDL_Color* arrCol = &rgb::dark_orange;
+    const SDL_Color* arrHovCol = &rgb::orange;
     const SDL_Rect dummyEntity = {522, 0, TILE_SIZE, TILE_SIZE};
     const SDL_Rect dummyOutline = {522, 32, TILE_SIZE, TILE_SIZE};
   }

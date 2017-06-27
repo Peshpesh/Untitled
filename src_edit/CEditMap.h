@@ -87,6 +87,13 @@ namespace mapEngine
     extern const short ty_y;           //
     extern const short co_x;           // "..." Tile collision info
     extern const short co_y;           //
+    extern const SDL_Point bg_pos;
+    extern const SDL_Point fg_pos;
+    extern const SDL_Point ty_pos;
+    extern const SDL_Point co_pos;
+    extern const short arrSpac;
+    extern const SDL_Color* arrCol;
+    extern const SDL_Color* arrHovCol;
     extern const SDL_Rect dummyEntity;
     extern const SDL_Rect dummyOutline;
   }
@@ -253,10 +260,11 @@ private:
   bool drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse);
   bool drawActiveTiles(SDL_Texture* interface);
   bool drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL_Rect* dstR);
-  bool drawActive_bg(SDL_Texture* interface, CTile* ShowTile);
-  bool drawActive_fg(SDL_Texture* interface, CTile* ShowTile);
-  bool drawActive_ty(SDL_Texture* interface, CTile* ShowTile);
-  bool drawActive_co(SDL_Texture* interface, CTile* ShowTile);
+  bool drawActive_bg(CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_fg(CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_ty(CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_co(CTile* ShowTile, const SDL_Point* mouse);
+  bool drawTileArrows(const SDL_Point* tPos, const SDL_Point* mouse);
   bool drawOpac_ty(SDL_Texture* interface);
   bool drawOpac_co(SDL_Texture* interface);
 

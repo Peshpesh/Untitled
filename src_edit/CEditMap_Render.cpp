@@ -115,22 +115,14 @@ bool CEditMap::drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos)
 
 bool CEditMap::RenderSidebar(SDL_Texture* interface, const SDL_Point* mouse)
 {
-	CTile* ShowTile;
-	switch (modifyTile)
-	{
-		case MODIFY_TILE_TL: 	ShowTile = &TileTL; break;
-		case MODIFY_TILE_TR: 	ShowTile = &TileTR; break;
-		case MODIFY_TILE_BL: 	ShowTile = &TileBL; break;
-		case MODIFY_TILE_BR: 	ShowTile = &TileBR; break;
-		default: 							ShowTile = &TileTL; break;
-	}
+	CTile* ShowTile = getModTile();
 
 	if (!drawButtonTileset(interface, mouse)) return false;
   if (!drawActiveTiles(interface)) return false;
-  if (!drawActive_bg(interface, ShowTile)) return false;
-  if (!drawActive_fg(interface, ShowTile)) return false;
-  if (!drawActive_ty(interface, ShowTile)) return false;
-  if (!drawActive_co(interface, ShowTile)) return false;
+  if (!drawActive_bg(ShowTile, mouse)) return false;
+  if (!drawActive_fg(ShowTile, mouse)) return false;
+  if (!drawActive_ty(ShowTile, mouse)) return false;
+  if (!drawActive_co(ShowTile, mouse)) return false;
   if (!drawOpac_ty(interface)) return false;
   if (!drawOpac_co(interface)) return false;
 
@@ -232,7 +224,7 @@ bool CEditMap::drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL
 	return true;
 }
 
-bool CEditMap::drawActive_bg(SDL_Texture* interface, CTile* ShowTile)
+bool CEditMap::drawActive_bg(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
@@ -241,22 +233,20 @@ bool CEditMap::drawActive_bg(SDL_Texture* interface, CTile* ShowTile)
 	// Draws active background tile
 	Font::NewCenterWrite(FONT_MINI, "BACKGROUND", &tpos);
 
-	CSurface::OnDraw(Tileset, bg_x, bg_y,
-		(ShowTile->bg_ID % tset_w) * TILE_SIZE,
-		(ShowTile->bg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	int tX = (ShowTile->bg_ID % tset_w) * TILE_SIZE;
+	int tY = (ShowTile->bg_ID / tset_w) * TILE_SIZE;
+	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+	CSurface::OnDraw(Tileset, &srcR, &bg_pos);
 
 	// Draws background tile arrows
-	CSurface::OnDraw(interface, bg_x - ((TILE_SIZE+ARR_SZ)/2),
-			bg_y + ((TILE_SIZE-ARR_SZ)/2), L_ARR_X, L_ARR_Y, ARR_SZ, ARR_SZ);
-	CSurface::OnDraw(interface, bg_x + TILE_SIZE + ((TILE_SIZE-ARR_SZ)/2),
-			bg_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
+	drawTileArrows(&bg_pos, mouse);
 
-  CSurface::OnDraw(interface, mapEngine::but_rm::bg_x, mapEngine::but_rm::bg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+  // CSurface::OnDraw(interface, mapEngine::but_rm::bg_x, mapEngine::but_rm::bg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 
 	return true;
 }
 
-bool CEditMap::drawActive_fg(SDL_Texture* interface, CTile* ShowTile)
+bool CEditMap::drawActive_fg(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
@@ -266,37 +256,33 @@ bool CEditMap::drawActive_fg(SDL_Texture* interface, CTile* ShowTile)
 	Font::NewCenterWrite(FONT_MINI, "FOREGROUND", &tpos);
 
 	// Draws active foreground tile
-	CSurface::OnDraw(Tileset, fg_x, fg_y,
-		(ShowTile->fg_ID % tset_w) * TILE_SIZE,
-		(ShowTile->fg_ID / tset_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	int tX = (ShowTile->fg_ID % tset_w) * TILE_SIZE;
+	int tY = (ShowTile->fg_ID / tset_w) * TILE_SIZE;
+	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+	CSurface::OnDraw(Tileset, &srcR, &fg_pos);
 
 	// Draws foreground tile arrows
-	CSurface::OnDraw(interface, fg_x - ((TILE_SIZE+ARR_SZ)/2),
-			fg_y + ((TILE_SIZE-ARR_SZ)/2), L_ARR_X, L_ARR_Y, ARR_SZ, ARR_SZ);
-	CSurface::OnDraw(interface, fg_x + TILE_SIZE + ((TILE_SIZE-ARR_SZ)/2),
-			fg_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
+	drawTileArrows(&fg_pos, mouse);
 
-  CSurface::OnDraw(interface, mapEngine::but_rm::fg_x, mapEngine::but_rm::fg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+  // CSurface::OnDraw(interface, mapEngine::but_rm::fg_x, mapEngine::but_rm::fg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 
 	return true;
 }
 
-bool CEditMap::drawActive_ty(SDL_Texture* interface, CTile* ShowTile)
+bool CEditMap::drawActive_ty(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
 	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, ty_y - name_offset);
 
 	// Draws active tile type
-	CSurface::OnDraw(Type_Tileset, ty_x, ty_y,
-		(ShowTile->TypeID % type_w) * TILE_SIZE,
-		(ShowTile->TypeID / type_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	int tX = (ShowTile->TypeID % type_w) * TILE_SIZE;
+	int tY = (ShowTile->TypeID / type_w) * TILE_SIZE;
+	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+	CSurface::OnDraw(Type_Tileset, &srcR, &ty_pos);
 
 	// Draws tile type arrows
-	CSurface::OnDraw(interface, ty_x - ((TILE_SIZE+ARR_SZ)/2),
-		ty_y + ((TILE_SIZE-ARR_SZ)/2), L_ARR_X, L_ARR_Y, ARR_SZ, ARR_SZ);
-	CSurface::OnDraw(interface, ty_x + TILE_SIZE + ((TILE_SIZE-ARR_SZ)/2),
-		ty_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
+	drawTileArrows(&ty_pos, mouse);
 
 	// Writes out the active type
 	switch (ShowTile->TypeID)
@@ -311,38 +297,58 @@ bool CEditMap::drawActive_ty(SDL_Texture* interface, CTile* ShowTile)
 	return true;
 }
 
-bool CEditMap::drawActive_co(SDL_Texture* interface, CTile* ShowTile)
+bool CEditMap::drawActive_co(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
-	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, co_y - name_offset);
-
 	// Draws active collision tile
-	CSurface::OnDraw(Coll_Tileset, co_x, co_y,
-		(ShowTile->CollID % coll_w) * TILE_SIZE,
-		(ShowTile->CollID / coll_w) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	int tX = (ShowTile->CollID % coll_w) * TILE_SIZE;
+	int tY = (ShowTile->CollID / coll_w) * TILE_SIZE;
+	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+	CSurface::OnDraw(Coll_Tileset, &srcR, &co_pos);
 
 	// Draws collision tile arrows
-	CSurface::OnDraw(interface, co_x - ((TILE_SIZE+ARR_SZ)/2),
-			co_y + ((TILE_SIZE-ARR_SZ)/2), L_ARR_X, L_ARR_Y, ARR_SZ, ARR_SZ);
-	CSurface::OnDraw(interface, co_x + TILE_SIZE + ((TILE_SIZE-ARR_SZ)/2),
-			co_y + ((TILE_SIZE-ARR_SZ)/2), R_ARR_X, R_ARR_Y, ARR_SZ, ARR_SZ);
+	drawTileArrows(&co_pos, mouse);
+
+	std::string tName;
 
 	// Writes out the active collision type
 	switch (ShowTile->CollID)
 	{
-		case SOLID_NONE: Font::NewCenterWrite(FONT_MINI, "NONE", &tpos); break;
-		case SOLID_ALL: Font::NewCenterWrite(FONT_MINI, "FULL", &tpos); break;
-		case SOLID_U_BL_MR: Font::NewCenterWrite(FONT_MINI, "UBLMR", &tpos); break;
-		case SOLID_U_ML_TR: Font::NewCenterWrite(FONT_MINI, "UMLTR", &tpos); break;
-		case SOLID_U_TL_MR: Font::NewCenterWrite(FONT_MINI, "UTLMR", &tpos); break;
-		case SOLID_U_ML_BR: Font::NewCenterWrite(FONT_MINI, "UMLBR", &tpos); break;
-		case SOLID_A_BL_MR: Font::NewCenterWrite(FONT_MINI, "ABLMR", &tpos); break;
-		case SOLID_A_ML_TR: Font::NewCenterWrite(FONT_MINI, "AMLTR", &tpos); break;
-		case SOLID_A_TL_MR: Font::NewCenterWrite(FONT_MINI, "ATLMR", &tpos); break;
-		case SOLID_A_ML_BR: Font::NewCenterWrite(FONT_MINI, "AMLBR", &tpos); break;
+		case SOLID_NONE: tName = "NONE"; break;
+		case SOLID_ALL: tName = "FULL"; break;
+		case SOLID_U_BL_MR: tName = "U-BL-MR"; break;
+		case SOLID_U_ML_TR: tName = "U-ML-TR"; break;
+		case SOLID_U_TL_MR: tName = "U-TL-MR"; break;
+		case SOLID_U_ML_BR: tName = "U-ML-BR"; break;
+		case SOLID_A_BL_MR: tName = "A-BL-MR"; break;
+		case SOLID_A_ML_TR: tName = "A-ML-TR"; break;
+		case SOLID_A_TL_MR: tName = "A-TL-MR"; break;
+		case SOLID_A_ML_BR: tName = "A-ML-BR"; break;
 		default: break;
 	}
+
+	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, co_y - name_offset);
+	Font::NewCenterWrite(FONT_MINI, tName.c_str(), &tpos);
+
+	return true;
+}
+
+bool CEditMap::drawTileArrows(const SDL_Point* tPos, const SDL_Point* mouse)
+{
+	using namespace mapEngine::disp_t;
+
+	// Draw left + right arrows next to active tile settings
+	bool noInt = CInterrupt::isNone();
+	SDL_Rect dstR;
+
+	dstR.x = tPos->x - (arrSpac + ARR_SZ);
+	dstR.y = tPos->y + (TILE_SIZE - ARR_SZ) / 2;
+	dstR.w = dstR.h = ARR_SZ;
+	CAsset::drawStrArrow(&dstR, 'L', noInt && SDL_PointInRect(mouse, &dstR) ? arrHovCol : arrCol);
+
+	dstR.x = tPos->x + TILE_SIZE + arrSpac;
+	CAsset::drawStrArrow(&dstR, 'R', noInt && SDL_PointInRect(mouse, &dstR) ? arrHovCol : arrCol);
 
 	return true;
 }
@@ -379,7 +385,6 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 
 	const SDL_Point* color = NULL;
 
-	// if (!(bool)(intrpt))
 	if (CInterrupt::isNone())
 	{
 		color = SDL_PointInRect(mouse, &bg_button) ? hoverColor : offCol;

@@ -54,20 +54,6 @@ void CEditMap::handleChangeTile(SDL_Event* Event, int intrpt)
   }
 }
 
-CTile* CEditMap::getModTile()
-{
-  CTile* EditTile;
-  switch (modifyTile)
-  {
-    case MODIFY_TILE_TL: EditTile = &TileTL; break;
-    case MODIFY_TILE_TR: EditTile = &TileTR; break;
-    case MODIFY_TILE_BL: EditTile = &TileBL; break;
-    case MODIFY_TILE_BR: EditTile = &TileBR; break;
-    default: break;
-  }
-  return EditTile;
-}
-
 void CEditMap::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 {
   if (handleAreaModify(sym, mod)) return;
