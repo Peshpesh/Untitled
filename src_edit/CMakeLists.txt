@@ -28,11 +28,12 @@ ${SRCDIR}/CApp_RenderScnEdit.cpp
 ${SRCDIR}/CApp_Terminate.cpp
 ${SRCDIR}/CArea.cpp
 ${SRCDIR}/CAsset.cpp
+${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CChangeTile.cpp
 ${SRCDIR}/CEditMap.cpp
 ${SRCDIR}/CEditMap_Event.cpp
-${SRCDIR}/CEditMap_Extern.cpp
+${SRCDIR}/CEditMap_Ext.cpp
 ${SRCDIR}/CEditMap_Render.cpp
 ${SRCDIR}/CEntity.cpp
 ${SRCDIR}/CEntityCol.cpp

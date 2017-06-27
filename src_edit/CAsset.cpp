@@ -115,6 +115,12 @@ bool CAsset::drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* c
   return true;
 }
 
+bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color)
+{
+  const int defThick = 1;
+  return drawBox(box, color, defThick);
+}
+
 bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thick)
 {
   if (box == NULL || color == NULL) return false;

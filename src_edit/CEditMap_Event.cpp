@@ -294,116 +294,143 @@ bool CEditMap::handleGetTile(const SDL_Point* mouse)
 
 bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile)
 {
-  // Click on arrow LEFT or RIGHT of active background tile.
-  // Changes the active tile to previous or next index.
   using namespace mapEngine::disp_t;
-  if (mouse->y >= bg_y && mouse->y < bg_y + TILE_SIZE)
+
+  // Check for click on arrow LEFT or RIGHT of active background tile.
+  // Changes the active tile to previous or next index.
+  const char arrDir = getScrollDir(&bg_pos, mouse);
+
+  if (arrDir == 'N') return false;
+
+  else if (arrDir == 'R')
   {
-    // Left Arrow
-    if (mouse->x >= bg_x - TILE_SIZE && mouse->x < bg_x)
-    {
-        if (EditTile->bg_ID > 0) EditTile->bg_ID -= 1;
-        else EditTile->bg_ID = (tset_w * tset_h) - 1;
-        return true;
-    }
-    // Right Arrow
-    if (mouse->x >= bg_x + TILE_SIZE && mouse->x < bg_x + (TILE_SIZE * 2))
-    {
-        if (EditTile->bg_ID < (tset_w * tset_h) - 1) EditTile->bg_ID += 1;
-        else EditTile->bg_ID = 0;
-        return true;
-    }
+    if (EditTile->bg_ID < (tset_w * tset_h) - 1) EditTile->bg_ID += 1;
+    else EditTile->bg_ID = 0;
+    return true;
   }
+  else if (arrDir == 'L')
+  {
+    if (EditTile->bg_ID > 0) EditTile->bg_ID -= 1;
+    else EditTile->bg_ID = (tset_w * tset_h) - 1;
+    return true;
+  }
+
   return false;
 }
 
 bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile)
 {
+  using namespace mapEngine::disp_t;
+
   // Click on arrow LEFT or RIGHT of active foreground tile.
   // Changes the active tile to previous or next index.
-  using namespace mapEngine::disp_t;
-  if (mouse->y >= fg_y && mouse->y < fg_y + TILE_SIZE)
+
+  const char arrDir = getScrollDir(&fg_pos, mouse);
+
+  if (arrDir == 'N') return false;
+
+  else if (arrDir == 'R')
   {
-    // Left Arrow
-    if (mouse->x >= fg_x - TILE_SIZE && mouse->x < fg_x)
-    {
-        if (EditTile->fg_ID > 0) EditTile->fg_ID -= 1;
-        else EditTile->fg_ID = (tset_w * tset_h) - 1;
-        return true;
-    }
-    // Right Arrow
-    if (mouse->x >= fg_x + TILE_SIZE && mouse->x < fg_x + (TILE_SIZE * 2))
-    {
-        if (EditTile->fg_ID < (tset_w * tset_h) - 1) EditTile->fg_ID += 1;
-        else EditTile->fg_ID = 0;
-        return true;
-    }
+    if (EditTile->fg_ID < (tset_w * tset_h) - 1) EditTile->fg_ID += 1;
+    else EditTile->fg_ID = 0;
+    return true;
   }
+  else if (arrDir == 'L')
+  {
+    if (EditTile->fg_ID > 0) EditTile->fg_ID -= 1;
+    else EditTile->fg_ID = (tset_w * tset_h) - 1;
+    return true;
+  }
+
   return false;
 }
 
 bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile)
 {
+  using namespace mapEngine::disp_t;
+
   // Click on arrow LEFT or RIGHT of active tile type.
   // Changes the active tile type to previous or next type index.
-  using namespace mapEngine::disp_t;
-  if (mouse->y >= ty_y && mouse->y < ty_y + TILE_SIZE)
+
+  const char arrDir = getScrollDir(&ty_pos, mouse);
+
+  if (arrDir == 'N') return false;
+
+  else if (arrDir == 'R')
   {
-    // Left Arrow
-    if (mouse->x >= ty_x - TILE_SIZE && mouse->x < ty_x)
-    {
-        if (EditTile->TypeID != 0) EditTile->TypeID -= 1;
-        else EditTile->TypeID = TILE_TYPE_FIRE;
-        return true;
-    }
-    // Right Arrow
-    if (mouse->x >= ty_x + TILE_SIZE && mouse->x < ty_x + (TILE_SIZE * 2))
-    {
-        if (EditTile->TypeID != TILE_TYPE_FIRE) EditTile->TypeID += 1;
-        else EditTile->TypeID = 0;
-        return true;
-    }
+    if (EditTile->TypeID != TILE_TYPE_FIRE) EditTile->TypeID += 1;
+    else EditTile->TypeID = 0;
+    return true;
   }
+  else if (arrDir == 'L')
+  {
+    if (EditTile->TypeID != 0) EditTile->TypeID -= 1;
+    else EditTile->TypeID = TILE_TYPE_FIRE;
+    return true;
+  }
+
   return false;
 }
 
 bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile)
 {
+  using namespace mapEngine::disp_t;
+
   // Click on arrow LEFT or RIGHT of active collision.
   // Changes the active collision to previous or next collision index.
-  using namespace mapEngine::disp_t;
-  if (mouse->y >= co_y && mouse->y < co_y + TILE_SIZE)
+
+  const char arrDir = getScrollDir(&co_pos, mouse);
+
+  if (arrDir == 'N') return false;
+
+  else if (arrDir == 'R')
   {
-    // Left Arrow
-    if (mouse->x >= co_x - TILE_SIZE && mouse->x < co_x)
-    {
-        if (EditTile->CollID != 0) EditTile->CollID -= 1;
-        else EditTile->CollID = SOLID_A_ML_BR;
-        return true;
-    }
-    // Right Arrow
-    if (mouse->x >= co_x + TILE_SIZE && mouse->x < co_x + (TILE_SIZE * 2))
-    {
-        if (EditTile->CollID != SOLID_A_ML_BR) EditTile->CollID += 1;
-        else EditTile->CollID = 0;
-        return true;
-    }
+    if (EditTile->CollID != SOLID_A_ML_BR) EditTile->CollID += 1;
+    else EditTile->CollID = 0;
+    return true;
   }
+  else if (arrDir == 'L')
+  {
+    if (EditTile->CollID != 0) EditTile->CollID -= 1;
+    else EditTile->CollID = SOLID_A_ML_BR;
+    return true;
+  }
+
   return false;
+}
+
+char CEditMap::getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse)
+{
+	using namespace mapEngine::disp_t;
+
+  char retDir = 'N';
+  if (tPos == NULL || mouse == NULL) return retDir;
+
+  SDL_Rect arrRec;
+
+  arrRec.x = tPos->x - (arrSpac + ARR_SZ);
+  arrRec.y = tPos->y + (TILE_SIZE - ARR_SZ) / 2;
+  arrRec.w = arrRec.h = ARR_SZ;
+  if (SDL_PointInRect(mouse, &arrRec)) retDir = 'L';
+
+  arrRec.x = tPos->x + TILE_SIZE + arrSpac;
+  if (SDL_PointInRect(mouse, &arrRec)) retDir = 'R';
+
+  return retDir;
 }
 
 bool CEditMap::handleRemove_bg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Turn the background tile off.
   using namespace mapEngine::but_rm;
-  if (mouse->y >= bg_y && mouse->y < bg_y + SWITCH_SIZE)
-  {
-    if (mouse->x >= bg_x && mouse->x < bg_x + SWITCH_SIZE)
-    {
-      EditTile->bg_ID = -1;
-      return true;
-    }
-  }
+  // if (mouse->y >= bg_y && mouse->y < bg_y + SWITCH_SIZE)
+  // {
+  //   if (mouse->x >= bg_x && mouse->x < bg_x + SWITCH_SIZE)
+  //   {
+  //     EditTile->bg_ID = -1;
+  //     return true;
+  //   }
+  // }
   return false;
 }
 
@@ -411,14 +438,14 @@ bool CEditMap::handleRemove_fg(const SDL_Point* mouse, CTile* EditTile)
 {
   // Turn the foreground tile off.
   using namespace mapEngine::but_rm;
-  if (mouse->y >= fg_y && mouse->y < fg_y + SWITCH_SIZE)
-  {
-    if (mouse->x >= fg_x && mouse->x < fg_x + SWITCH_SIZE)
-    {
-      EditTile->fg_ID = -1;
-      return true;
-    }
-  }
+  // if (mouse->y >= fg_y && mouse->y < fg_y + SWITCH_SIZE)
+  // {
+  //   if (mouse->x >= fg_x && mouse->x < fg_x + SWITCH_SIZE)
+  //   {
+  //     EditTile->fg_ID = -1;
+  //     return true;
+  //   }
+  // }
   return false;
 }
 

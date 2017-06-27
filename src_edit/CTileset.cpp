@@ -147,6 +147,12 @@ bool CTileset::reqChange()
 
 SDL_Texture* CTileset::changeTileset()
 {
+  if (newF == file)
+  {
+    resetPath();
+    return NULL;
+  }
+
   SDL_Texture* try_surf = NULL;
   std::string filepath = ts_path + newF + extension;
 

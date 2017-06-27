@@ -17,7 +17,7 @@ bool CEditMap::OnRender(SDL_Texture* interface, const SDL_Point* mouse)
 	CSurface::OnDraw(interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
 	CSurface::OnDraw(interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
   if (!RenderSidebar(interface, mouse)) return false;
-  if (!RenderBottom(interface, mouse)) return false;
+  if (!RenderBottom(mouse)) return false;
 
   return true;
 }
@@ -91,7 +91,6 @@ bool CEditMap::drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos)
 
 bool CEditMap::drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos)
 {
-	// if (intrpt ^ INTRPT_NONE) return true;
 	if (!CInterrupt::isNone()) return true;
 
 	if (rClickA != NULL)
@@ -117,19 +116,19 @@ bool CEditMap::RenderSidebar(SDL_Texture* interface, const SDL_Point* mouse)
 {
 	CTile* ShowTile = getModTile();
 
-	if (!drawButtonTileset(interface, mouse)) return false;
+	if (!drawButtonTileset(mouse)) return false;
   if (!drawActiveTiles(interface)) return false;
   if (!drawActive_bg(ShowTile, mouse)) return false;
   if (!drawActive_fg(ShowTile, mouse)) return false;
   if (!drawActive_ty(ShowTile, mouse)) return false;
   if (!drawActive_co(ShowTile, mouse)) return false;
-  if (!drawOpac_ty(interface)) return false;
-  if (!drawOpac_co(interface)) return false;
+  if (!drawOpac_ty()) return false;
+  if (!drawOpac_co()) return false;
 
   return true;
 }
 
-bool CEditMap::RenderBottom(SDL_Texture* interface, const SDL_Point* mouse)
+bool CEditMap::RenderBottom(const SDL_Point* mouse)
 {
 	bool activeTile = false;
 	switch (modifyTile)
@@ -141,21 +140,20 @@ bool CEditMap::RenderBottom(SDL_Texture* interface, const SDL_Point* mouse)
 		default: break;
 	}
 
-	if (!drawButton_bg(interface, mouse)) return false;
-  if (!drawButton_fg(interface, mouse)) return false;
-	if (!drawButtonActive(interface, mouse, activeTile)) return false;
-	if (!drawQuadrants(interface, mouse)) return false;
-  if (!drawOverlayList(interface)) return false;
-  if (!drawPlacementList(interface)) return false;
+	if (!drawButton_bg(mouse)) return false;
+  if (!drawButton_fg(mouse)) return false;
+	if (!drawButtonActive(mouse, activeTile)) return false;
+	if (!drawQuadrants(mouse)) return false;
+  if (!drawOverlayList()) return false;
+  if (!drawPlacementList()) return false;
 
   return true;
 }
 
-bool CEditMap::drawButtonTileset(SDL_Texture* interface, const SDL_Point* mouse)
+bool CEditMap::drawButtonTileset(const SDL_Point* mouse)
 {
 	using namespace mapEngine::but_tset;
 
-	// const SDL_Rect dstrect = CAsset::getRect(x, y, w, h);
 	const SDL_Point* color = SDL_PointInRect(mouse, &button) ? hoverColor : offCol;
 	if (!CAsset::drawStrBox(&button, bsiz, color)) return false;
 
@@ -172,7 +170,7 @@ bool CEditMap::drawActiveTiles(SDL_Texture* interface)
 
 	SDL_Rect srcR = CAsset::getRect(0, 0, TILE_SIZE, TILE_SIZE);
 	SDL_Rect dstR = CAsset::getRect(0, 0, TILE_SIZE, TILE_SIZE);
-	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, sample_y - name_offset);
+	SDL_Point tpos = CAsset::getPos(namePos_x, sample_y + nameOffset_y);
 	Font::NewCenterWrite(FONT_MINI, "SAMPLE", &tpos);
 
 	if (active_TL)
@@ -228,9 +226,12 @@ bool CEditMap::drawActive_bg(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
-	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, bg_y - name_offset);
-
-	Font::NewCenterWrite(FONT_MINI, "BACKGROUND", &tpos);
+	// Background tile header
+	{
+		const char* tName = "BACKGROUND";
+		SDL_Point tpos = CAsset::getPos(namePos_x, bg_pos.y + nameOffset_y);
+		Font::NewCenterWrite(FONT_MINI, tName, &tpos);
+	}
 
 	// Draws active background tile
 	{
@@ -252,10 +253,12 @@ bool CEditMap::drawActive_fg(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
-	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, fg_y - name_offset);
-
 	// Foreground tile header
-	Font::NewCenterWrite(FONT_MINI, "FOREGROUND", &tpos);
+	{
+		const char* tName = "FOREGROUND";
+		SDL_Point tpos = CAsset::getPos(namePos_x, fg_pos.y + nameOffset_y);
+		Font::NewCenterWrite(FONT_MINI, tName, &tpos);
+	}
 
 	// Draws active foreground tile
 	{
@@ -300,7 +303,7 @@ bool CEditMap::drawActive_ty(CTile* ShowTile, const SDL_Point* mouse)
 		default: break;
 	}
 
-	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, ty_y - name_offset);
+	SDL_Point tpos = CAsset::getPos(namePos_x, ty_pos.y + nameOffset_y);
 	Font::NewCenterWrite(FONT_MINI, tName.c_str(), &tpos);
 
 	return true;
@@ -339,7 +342,7 @@ bool CEditMap::drawActive_co(CTile* ShowTile, const SDL_Point* mouse)
 		default: break;
 	}
 
-	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, co_y - name_offset);
+	SDL_Point tpos = CAsset::getPos(namePos_x, co_pos.y + nameOffset_y);
 	Font::NewCenterWrite(FONT_MINI, tName.c_str(), &tpos);
 
 	return true;
@@ -364,7 +367,7 @@ bool CEditMap::drawTileArrows(const SDL_Point* tPos, const SDL_Point* mouse)
 	return true;
 }
 
-bool CEditMap::drawOpac_ty(SDL_Texture* interface)
+bool CEditMap::drawOpac_ty()
 {
 	using namespace mapEngine::opac;
 	// Draw an opacity meter for Type overlay
@@ -373,11 +376,12 @@ bool CEditMap::drawOpac_ty(SDL_Texture* interface)
 
 	CAsset::drawBoxFill(&typeBar, emptyCol);
 	CAsset::drawBoxFill(&fill, fillCol);
+	CAsset::drawBox(&typeBar, emptyCol);
 
 	return true;
 }
 
-bool CEditMap::drawOpac_co(SDL_Texture* interface)
+bool CEditMap::drawOpac_co()
 {
 	using namespace mapEngine::opac;
 	// Draw an opacity meter for Collision overlay
@@ -386,11 +390,12 @@ bool CEditMap::drawOpac_co(SDL_Texture* interface)
 
 	CAsset::drawBoxFill(&collBar, emptyCol);
 	CAsset::drawBoxFill(&fill, fillCol);
+	CAsset::drawBox(&collBar, emptyCol);
 
 	return true;
 }
 
-bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
+bool CEditMap::drawButton_bg(const SDL_Point* mouse)
 {
 	using namespace mapEngine::but_t;
 
@@ -411,7 +416,7 @@ bool CEditMap::drawButton_bg(SDL_Texture* interface, const SDL_Point* mouse)
 	return true;
 }
 
-bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
+bool CEditMap::drawButton_fg(const SDL_Point* mouse)
 {
 	using namespace mapEngine::but_t;
 
@@ -433,7 +438,7 @@ bool CEditMap::drawButton_fg(SDL_Texture* interface, const SDL_Point* mouse)
 	return true;
 }
 
-bool CEditMap::drawOverlayList(SDL_Texture* interface)
+bool CEditMap::drawOverlayList()
 {
 	using namespace mapEngine::view_flip;
 
@@ -457,7 +462,7 @@ bool CEditMap::drawOverlayList(SDL_Texture* interface)
 	return true;
 }
 
-bool CEditMap::drawPlacementList(SDL_Texture* interface)
+bool CEditMap::drawPlacementList()
 {
 	using namespace mapEngine::place_flip;
 
@@ -480,7 +485,7 @@ bool CEditMap::drawPlacementList(SDL_Texture* interface)
 	return true;
 }
 
-bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, bool active)
+bool CEditMap::drawButtonActive(const SDL_Point* mouse, bool active)
 {
 	using namespace mapEngine::but_act_t;
 
@@ -503,7 +508,7 @@ bool CEditMap::drawButtonActive(SDL_Texture* interface, const SDL_Point* mouse, 
 	return true;
 }
 
-bool CEditMap::drawQuadrants(SDL_Texture* interface, const SDL_Point* mouse)
+bool CEditMap::drawQuadrants(const SDL_Point* mouse)
 {
 	using namespace mapEngine::but_quad_t;
 

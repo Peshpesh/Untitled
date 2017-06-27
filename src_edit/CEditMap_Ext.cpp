@@ -53,19 +53,12 @@ namespace mapEngine
   }
   namespace disp_t
   {
-    const short name_offset = 10;
+    extern const short namePos_x = WWIDTH + (EWIDTH - WWIDTH) / 2;
+    extern const short nameOffset_y = -10;
     const short sample_x = 658;
     const short sample_y = 120;
     const short bgfg_x = 674;         // Displayed (current) Tile info
     const short bgfg_y = 140;         //
-    // const short bg_x = 674;           // "..." background Tile info
-    // const short bg_y = 210;           //
-    // const short fg_x = 674;           // "..." foreground Tile info
-    // const short fg_y = 280;           //
-    // const short ty_x = 674;           // "..." Tile type info
-    // const short ty_y = 350;           //
-    // const short co_x = 674;           // "..." Tile collision info
-    // const short co_y = 420;           //
     const SDL_Point bg_pos = {674, 210};
     const SDL_Point fg_pos = {674, 280};
     const SDL_Point ty_pos = {674, 350};
