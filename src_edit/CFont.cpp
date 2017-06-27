@@ -7,7 +7,7 @@ Font::Font()
 	CS_Font = NULL;
 	Mini_Font = NULL;
 
-	def_rgb = &fontrgb::black;
+	def_rgb = &rgb::black;
 	def_ID = 0;
 }
 

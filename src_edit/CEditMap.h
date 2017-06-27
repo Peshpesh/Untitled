@@ -74,19 +74,20 @@ namespace mapEngine
   }
   namespace disp_t
   {
-    extern const short name_offset;
+    extern const short namePos_x;
+    extern const short nameOffset_y;
     extern const short sample_x;
     extern const short sample_y;
     extern const short bgfg_x;         // Displayed (current) Tile info
     extern const short bgfg_y;         //
-    extern const short bg_x;           // "..." background Tile info
-    extern const short bg_y;           //
-    extern const short fg_x;           // "..." foreground Tile info
-    extern const short fg_y;           //
-    extern const short ty_x;           // "..." Tile type info
-    extern const short ty_y;           //
-    extern const short co_x;           // "..." Tile collision info
-    extern const short co_y;           //
+    // extern const short bg_x;           // "..." background Tile info
+    // extern const short bg_y;           //
+    // extern const short fg_x;           // "..." foreground Tile info
+    // extern const short fg_y;           //
+    // extern const short ty_x;           // "..." Tile type info
+    // extern const short ty_y;           //
+    // extern const short co_x;           // "..." Tile collision info
+    // extern const short co_y;           //
     extern const SDL_Point bg_pos;
     extern const SDL_Point fg_pos;
     extern const SDL_Point ty_pos;

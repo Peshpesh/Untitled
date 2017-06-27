@@ -230,13 +230,15 @@ bool CEditMap::drawActive_bg(CTile* ShowTile, const SDL_Point* mouse)
 
 	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, bg_y - name_offset);
 
-	// Draws active background tile
 	Font::NewCenterWrite(FONT_MINI, "BACKGROUND", &tpos);
 
-	int tX = (ShowTile->bg_ID % tset_w) * TILE_SIZE;
-	int tY = (ShowTile->bg_ID / tset_w) * TILE_SIZE;
-	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-	CSurface::OnDraw(Tileset, &srcR, &bg_pos);
+	// Draws active background tile
+	{
+		int tX = (ShowTile->bg_ID % tset_w) * TILE_SIZE;
+		int tY = (ShowTile->bg_ID / tset_w) * TILE_SIZE;
+		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+		CSurface::OnDraw(Tileset, &srcR, &bg_pos);
+	}
 
 	// Draws background tile arrows
 	drawTileArrows(&bg_pos, mouse);
@@ -256,10 +258,12 @@ bool CEditMap::drawActive_fg(CTile* ShowTile, const SDL_Point* mouse)
 	Font::NewCenterWrite(FONT_MINI, "FOREGROUND", &tpos);
 
 	// Draws active foreground tile
-	int tX = (ShowTile->fg_ID % tset_w) * TILE_SIZE;
-	int tY = (ShowTile->fg_ID / tset_w) * TILE_SIZE;
-	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-	CSurface::OnDraw(Tileset, &srcR, &fg_pos);
+	{
+		int tX = (ShowTile->fg_ID % tset_w) * TILE_SIZE;
+		int tY = (ShowTile->fg_ID / tset_w) * TILE_SIZE;
+		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+		CSurface::OnDraw(Tileset, &srcR, &fg_pos);
+	}
 
 	// Draws foreground tile arrows
 	drawTileArrows(&fg_pos, mouse);
@@ -273,26 +277,31 @@ bool CEditMap::drawActive_ty(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
-	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, ty_y - name_offset);
-
 	// Draws active tile type
-	int tX = (ShowTile->TypeID % type_w) * TILE_SIZE;
-	int tY = (ShowTile->TypeID / type_w) * TILE_SIZE;
-	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-	CSurface::OnDraw(Type_Tileset, &srcR, &ty_pos);
+	{
+		int tX = (ShowTile->TypeID % type_w) * TILE_SIZE;
+		int tY = (ShowTile->TypeID / type_w) * TILE_SIZE;
+		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+		CSurface::OnDraw(Type_Tileset, &srcR, &ty_pos);
+	}
 
 	// Draws tile type arrows
 	drawTileArrows(&ty_pos, mouse);
 
+	std::string tName;
+
 	// Writes out the active type
 	switch (ShowTile->TypeID)
 	{
-		case TILE_TYPE_NORMAL: Font::NewCenterWrite(FONT_MINI, "NORMAL", &tpos); break;
-		case TILE_TYPE_WATER: Font::NewCenterWrite(FONT_MINI, "WATER", &tpos); break;
-		case TILE_TYPE_ICE: Font::NewCenterWrite(FONT_MINI, "ICE", &tpos); break;
-		case TILE_TYPE_FIRE: Font::NewCenterWrite(FONT_MINI, "FIRE", &tpos); break;
+		case TILE_TYPE_NORMAL: 	tName = "NORMAL"; break;
+		case TILE_TYPE_WATER: 	tName = "WATER"; break;
+		case TILE_TYPE_ICE: 		tName = "ICE"; break;
+		case TILE_TYPE_FIRE: 		tName = "FIRE"; break;
 		default: break;
 	}
+
+	SDL_Point tpos = CAsset::getPos(EWIDTH - 50, ty_y - name_offset);
+	Font::NewCenterWrite(FONT_MINI, tName.c_str(), &tpos);
 
 	return true;
 }
@@ -301,11 +310,13 @@ bool CEditMap::drawActive_co(CTile* ShowTile, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
-	// Draws active collision tile
-	int tX = (ShowTile->CollID % coll_w) * TILE_SIZE;
-	int tY = (ShowTile->CollID / coll_w) * TILE_SIZE;
-	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-	CSurface::OnDraw(Coll_Tileset, &srcR, &co_pos);
+	{
+		// Draws active collision tile
+		int tX = (ShowTile->CollID % coll_w) * TILE_SIZE;
+		int tY = (ShowTile->CollID / coll_w) * TILE_SIZE;
+		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+		CSurface::OnDraw(Coll_Tileset, &srcR, &co_pos);
+	}
 
 	// Draws collision tile arrows
 	drawTileArrows(&co_pos, mouse);
@@ -315,8 +326,8 @@ bool CEditMap::drawActive_co(CTile* ShowTile, const SDL_Point* mouse)
 	// Writes out the active collision type
 	switch (ShowTile->CollID)
 	{
-		case SOLID_NONE: tName = "NONE"; break;
-		case SOLID_ALL: tName = "FULL"; break;
+		case SOLID_NONE: 		tName = "NONE"; break;
+		case SOLID_ALL: 		tName = "FULL"; break;
 		case SOLID_U_BL_MR: tName = "U-BL-MR"; break;
 		case SOLID_U_ML_TR: tName = "U-ML-TR"; break;
 		case SOLID_U_TL_MR: tName = "U-TL-MR"; break;
