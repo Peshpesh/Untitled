@@ -424,7 +424,7 @@ bool CEditMap::drawOverlayList(SDL_Texture* interface)
 	const bool flags[] = {
 		show_fg,
 		show_ty,
-		show_co,
+		show_co
 	};
 
 	// Menu/Options list for viewing various overlays
