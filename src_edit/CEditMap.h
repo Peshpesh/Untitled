@@ -27,6 +27,7 @@ namespace mapEngine
   namespace but_tset
   {
     // Change Tileset button info
+    extern const char* const label;
     extern const SDL_Rect button;
     extern const short bsiz;
     extern const SDL_Point* offCol;
@@ -35,6 +36,8 @@ namespace mapEngine
   }
   namespace but_t
   {
+    extern const char* const bg_label;
+    extern const char* const fg_label;
     extern const SDL_Rect bg_button;
     extern const SDL_Rect fg_button;
     extern const short bsiz;
@@ -55,16 +58,8 @@ namespace mapEngine
   }
   namespace but_quad_t
   {
-    extern const char* const name_TL;
-    extern const char* const name_TR;
-    extern const char* const name_BL;
-    extern const char* const name_BR;
-    extern const short left_x;       //
-    extern const short right_x;      //
-    extern const short top_y;        //
-    extern const short bottom_y;     //
-    extern const short w;             //
-    extern const short h;             //
+    extern const char* const labels[];
+    extern const SDL_Rect buttons[];
     extern const short bsiz;
     extern const SDL_Point* offCol;
     extern const SDL_Point* offhvCol;
@@ -76,10 +71,7 @@ namespace mapEngine
   {
     extern const short namePos_x;
     extern const short nameOffset_y;
-    extern const short sample_x;
-    extern const short sample_y;
-    extern const short bgfg_x;         // Displayed (current) Tile info
-    extern const short bgfg_y;         //
+    extern const SDL_Point stage_pos;
     extern const SDL_Point bg_pos;
     extern const SDL_Point fg_pos;
     extern const SDL_Point ty_pos;
@@ -245,23 +237,23 @@ private:
   void resetRClick();
 
 public:
-  bool OnRender(SDL_Texture* interface, const SDL_Point* mouse);
+  bool OnRender(const SDL_Point* mouse);
 
 private:
-  bool RenderWkspc(SDL_Texture* interface, const SDL_Point* mouse);
-  bool drawIntrpt(SDL_Texture* interface, const SDL_Point* mouse);
+  bool RenderWkspc(const SDL_Point* mouse);
+  bool drawIntrpt(const SDL_Point* mouse);
   bool drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos);
   bool drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos);
 
 private:
-  bool RenderSidebar(SDL_Texture* interface, const SDL_Point* mouse);
+  bool RenderSidebar(const SDL_Point* mouse);
   bool drawButtonTileset(const SDL_Point* mouse);
-  bool drawActiveTiles(SDL_Texture* interface);
-  bool drawSampleTile(SDL_Texture* interface, CTile* ShowTile, const SDL_Rect* dstR);
-  bool drawActive_bg(CTile* ShowTile, const SDL_Point* mouse);
-  bool drawActive_fg(CTile* ShowTile, const SDL_Point* mouse);
-  bool drawActive_ty(CTile* ShowTile, const SDL_Point* mouse);
-  bool drawActive_co(CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActiveTiles();
+  bool drawSampleTile(const CTile* ShowTile, const SDL_Rect* dstR);
+  bool drawActive_bg(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_co(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawTileArrows(const SDL_Point* tPos, const SDL_Point* mouse);
   bool drawOpac_ty();
   bool drawOpac_co();
@@ -272,9 +264,8 @@ private:
   bool drawButton_fg(const SDL_Point* mouse);
   bool drawOverlayList();
   bool drawPlacementList();
-  bool drawButtonActive(const SDL_Point* mouse, bool active);
+  bool drawButtonActive(const SDL_Point* mouse);
   bool drawQuadrants(const SDL_Point* mouse);
-
 };
 
 #endif

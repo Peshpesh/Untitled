@@ -88,7 +88,7 @@ namespace scn_editor
 class CApp : public CEvent {
 private:
 	SDL_Window* Map_Display;    // Edit Window
-	SDL_Texture* Map_Interface; // Bordering interface for editor
+	// SDL_Texture* Map_Interface; // Bordering interface for editor
 
 	bool Running;
 
@@ -142,12 +142,10 @@ public:
 	bool RenderSCNedit();
 	bool RenderSCNswitch();
 	bool RenderSCNdepth();
-	bool RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
+	// bool RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnTerminate();
-
-	// void QueryTileset();
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 

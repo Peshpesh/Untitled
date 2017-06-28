@@ -17,10 +17,10 @@ bool CApp::OnInit()
 		return false;
 	}
 
-	if ((Map_Interface = CSurface::OnLoad("../res_edit/interface_plain.png")) == NULL)
-	{
-		return false;
-	}
+	// if ((Map_Interface = CSurface::OnLoad("../res_edit/interface_plain.png")) == NULL)
+	// {
+	// 	return false;
+	// }
 
 	if (!CAsset::OnInit())
 	{

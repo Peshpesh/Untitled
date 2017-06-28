@@ -152,20 +152,20 @@ void CChangeTile::OnLButtonDown(int mX, int mY)
 	}
 }
 
-bool CChangeTile::OnRender(SDL_Texture* interface, SDL_Texture* tileset, const SDL_Point* m)
+bool CChangeTile::OnRender(SDL_Texture* tileset, const SDL_Point* m)
 {
+	// Render the field of tiles & tileset information
 	if (!RenderTileset(tileset, m)) return false;
 	if (!RenderInfo()) return false;
 
 	// Render clickable arrows
-	RenderArrow('L', &dstArrL, m);
-	RenderArrow('R', &dstArrR, m);
-	RenderArrow('U', &dstArrU, m);
-	RenderArrow('D', &dstArrD, m);
+	if (!RenderArrow('L', &dstArrL, m)) return false;
+	if (!RenderArrow('R', &dstArrR, m)) return false;
+	if (!RenderArrow('U', &dstArrU, m)) return false;
+	if (!RenderArrow('D', &dstArrD, m)) return false;
 
 	// Render cancel button
-	SDL_Rect srcR = CAsset::getRect(CANCEL_X, CANCEL_Y, CANCEL_SZ, CANCEL_SZ);
-	CSurface::OnDraw(interface, &srcR, &dstCancel);
+	if (!CAsset::drawCancel(&dstCancel)) return false;
 
 	return true;
 }

@@ -544,74 +544,37 @@ bool CEditMap::handleQuadrant_lc(const SDL_Point* mouse)
 {
   using namespace mapEngine::but_quad_t;
 
-  if (mouse->x < left_x || mouse->x >= right_x + w || mouse->y < top_y || mouse->y >= bottom_y + h)
+  for (int i = MODIFY_TILE_TL; i <= MODIFY_TILE_BR; i++)
   {
-    return false;
+    if (SDL_PointInRect(mouse, &buttons[i]))
+    {
+      modifyTile = i;
+      return true;
+    }
   }
 
-  if (mouse->y < top_y + h)
-  {
-    if (mouse->x < left_x + w)
-    {
-      // top left
-      modifyTile = MODIFY_TILE_TL;
-    }
-    else
-    {
-      // top right
-      modifyTile = MODIFY_TILE_TR;
-    }
-  }
-  else
-  {
-    if (mouse->x < left_x + w)
-    {
-      // bottom left
-      modifyTile = MODIFY_TILE_BL;
-    }
-    else
-    {
-      // bottom right
-      modifyTile = MODIFY_TILE_BR;
-    }
-  }
-  return true;
+  return false;
 }
 
 bool CEditMap::handleQuadrant_rc(const SDL_Point* mouse)
 {
   using namespace mapEngine::but_quad_t;
 
-  if (mouse->x < left_x || mouse->x >= right_x + w || mouse->y < top_y || mouse->y >= bottom_y + h)
+  bool* flags[] = {
+    &active_TL,
+    &active_TR,
+    &active_BL,
+    &active_BR
+  };
+
+  for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
   {
-    return false;
+    if (SDL_PointInRect(mouse, &buttons[i]))
+    {
+      *flags[i] = !(*flags[i]);
+      return true;
+    }
   }
 
-  if (mouse->y < top_y + h)
-  {
-    if (mouse->x < left_x + w)
-    {
-      // top left
-      active_TL = !active_TL;
-    }
-    else
-    {
-      // top right
-      active_TR = !active_TR;
-    }
-  }
-  else
-  {
-    if (mouse->x < left_x + w)
-    {
-      // bottom left
-      active_BL = !active_BL;
-    }
-    else
-    {
-      // bottom right
-      active_BR = !active_BR;
-    }
-  }
-  return true;
+  return false;
 }

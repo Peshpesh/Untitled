@@ -39,7 +39,7 @@ public:
 
 	void OnLButtonDown(int mX, int mY);
 
-	bool OnRender(SDL_Texture* interface, SDL_Texture* tileset, const SDL_Point* m);
+	bool OnRender(SDL_Texture* tileset, const SDL_Point* m);
 
   void reqChange(int& ID);
 

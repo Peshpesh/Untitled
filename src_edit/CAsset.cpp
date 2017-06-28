@@ -2,17 +2,28 @@
 
 SDL_Texture* CAsset::paltex = NULL;
 SDL_Texture* CAsset::arrtex = NULL;
+SDL_Texture* CAsset::interface = NULL;
 
-namespace
+namespace symbols
 {
+  // arrow fills
   const SDL_Rect f_AL = {15, 15, ARR_SZ, ARR_SZ};
   const SDL_Rect f_AR = {0,  15, ARR_SZ, ARR_SZ};
   const SDL_Rect f_AU = {15, 0,  ARR_SZ, ARR_SZ};
   const SDL_Rect f_AD = {0,  0,  ARR_SZ, ARR_SZ};
+  // arrow strokes
   const SDL_Rect s_AL = {45, 15, ARR_SZ, ARR_SZ};
   const SDL_Rect s_AR = {30, 15, ARR_SZ, ARR_SZ};
   const SDL_Rect s_AU = {45, 0,  ARR_SZ, ARR_SZ};
   const SDL_Rect s_AD = {30, 0,  ARR_SZ, ARR_SZ};
+  // exit/cancel button
+  const SDL_Rect srcXOut = {CANCEL_X, CANCEL_Y, CANCEL_SZ, CANCEL_SZ};
+}
+
+namespace dummies
+{
+  const SDL_Rect srcDummy = {522, 0, TILE_SIZE, TILE_SIZE};
+  const SDL_Rect srcDummyGhost = {522, 32, TILE_SIZE, TILE_SIZE};
 }
 
 CAsset::CAsset()
@@ -30,6 +41,10 @@ bool CAsset::OnInit()
 	{
 		return false;
 	}
+  if ((interface = CSurface::OnLoad("../res_edit/interface_plain.png")) == NULL)
+  {
+    return false;
+  }
 
 	return true;
 }
@@ -98,6 +113,14 @@ SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 	rect.h = 1;
 
 	return rect;
+}
+
+bool CAsset::drawAppFrame()
+{
+  if (!CSurface::OnDraw(interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT)) return false;
+  if (!CSurface::OnDraw(interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT)) return false;
+
+  return true;
 }
 
 bool CAsset::inWorkspace(const SDL_Point* pos)
@@ -187,6 +210,8 @@ bool CAsset::drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* 
 
 bool CAsset::drawArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb)
 {
+  using namespace symbols;
+
   bool retval = false;
 
   SDL_SetTextureColorMod(arrtex, rgb->r, rgb->g, rgb->b);
@@ -205,6 +230,8 @@ bool CAsset::drawArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* r
 
 bool CAsset::drawArrowFill(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb)
 {
+  using namespace symbols;
+
   bool retval = false;
 
   SDL_SetTextureColorMod(arrtex, rgb->r, rgb->g, rgb->b);
@@ -261,8 +288,39 @@ bool CAsset::drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Co
   return drawStrArrow(&dstR, dir, rgb, str_rgb);
 }
 
+bool CAsset::drawDummy(const SDL_Rect* dstR)
+{
+  return CSurface::OnDraw(interface, &dummies::srcDummy, dstR);
+}
+
+bool CAsset::drawDummy(const SDL_Point* dstPos)
+{
+  return CSurface::OnDraw(interface, &dummies::srcDummy, dstPos);
+}
+
+bool CAsset::drawDummyGhost(const SDL_Rect* dstR)
+{
+  return CSurface::OnDraw(interface, &dummies::srcDummyGhost, dstR);
+}
+
+bool CAsset::drawDummyGhost(const SDL_Point* dstPos)
+{
+  return CSurface::OnDraw(interface, &dummies::srcDummyGhost, dstPos);
+}
+
+bool CAsset::drawCancel(const SDL_Rect* dstR)
+{
+  return CSurface::OnDraw(interface, &symbols::srcXOut, dstR);
+}
+
+bool CAsset::drawCancel(const SDL_Point* dstPos)
+{
+  return CSurface::OnDraw(interface, &symbols::srcXOut, dstPos);
+}
+
 void CAsset::OnCleanup()
 {
   SDL_DestroyTexture(paltex);
   SDL_DestroyTexture(arrtex);
+  SDL_DestroyTexture(interface);
 }

@@ -84,8 +84,14 @@ class CAsset
 		static void OnCleanup();      // Termination function
 
 	private:
-		static SDL_Texture* paltex;  // color palette
-		static SDL_Texture* arrtex;   // arrows texture
+		static SDL_Texture* paltex;     // color palette
+		static SDL_Texture* arrtex;     // arrows texture
+    static SDL_Texture* interface;  // base interface texture
+
+  public:
+    static bool drawAppFrame();
+    static bool inWorkspace(const SDL_Point* pos);
+    static bool inWorkspace(const int& x, const int& y);
 
   public:
     // returns a SDL_Rect struct for given X, Y, W, H. Ideal for drawing.
@@ -97,10 +103,6 @@ class CAsset
     // returns a SDL_Rect struct with W and H equal to 1, given (X, Y).
     // Good for grabbing a pixel of a particular color.
 		static SDL_Rect getPixel(const SDL_Point* pix);
-
-  public:
-    static bool inWorkspace(const SDL_Point* pos);
-    static bool inWorkspace(const int& x, const int& y);
 
 	public:
     static bool drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
@@ -125,6 +127,13 @@ class CAsset
     static bool drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb);
     static bool drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb);
 
+    static bool drawDummy(const SDL_Rect* dstR);
+    static bool drawDummy(const SDL_Point* dstPos);
+    static bool drawDummyGhost(const SDL_Rect* dstR);
+    static bool drawDummyGhost(const SDL_Point* dstPos);
+
+    static bool drawCancel(const SDL_Rect* dstR);
+    static bool drawCancel(const SDL_Point* dstPos);
 };
 
 #endif

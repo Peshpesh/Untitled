@@ -106,10 +106,10 @@ bool CApp::EventOPTS(int mX, int mY)
 		// Save maps and entities
 		if (mY >= SAVE_BUT_Y && mY < SAVE_BUT_Y + IO_BUT_H)
 		{
-			char* Filename = CIO::IOControl.OnSave(Map_Interface);
-			CArea::AreaControl.SaveArea(Filename, Tileset_Path);
-			CEntityEdit::NPCControl.SaveList(Filename);
-			CSceneryEdit::ScnControl.SaveScenery(Filename);
+			// char* Filename = CIO::IOControl.OnSave(Map_Interface);
+			// CArea::AreaControl.SaveArea(Filename, Tileset_Path);
+			// CEntityEdit::NPCControl.SaveList(Filename);
+			// CSceneryEdit::ScnControl.SaveScenery(Filename);
 			return true;
 		}
 
@@ -117,14 +117,14 @@ bool CApp::EventOPTS(int mX, int mY)
 		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
 		if (mY >= LOAD_BUT_Y && mY < LOAD_BUT_Y + IO_BUT_H)
 		{
-			if (CIO::IOControl.OnLoad(Map_Interface, Tileset_Path))
-			{
-				// Main_Tileset = CSurface::OnLoad(Tileset_Path);
-				// active_bg = active_type = 0;
-				//
-				// QueryTileset();
-				// return true;
-			}
+			// if (CIO::IOControl.OnLoad(Map_Interface, Tileset_Path))
+			// {
+			// 	// Main_Tileset = CSurface::OnLoad(Tileset_Path);
+			// 	// active_bg = active_type = 0;
+			// 	//
+			// 	// QueryTileset();
+			// 	// return true;
+			// }
 		}
 	}
 	return true;

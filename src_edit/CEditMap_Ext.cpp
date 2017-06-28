@@ -6,6 +6,7 @@ namespace mapEngine
   namespace but_tset
   {
     // Change Tileset button info
+    const char* const label = "Change Tileset";
     const SDL_Rect button = {665, 50, 50, 40};
     const short bsiz = 2;
     const SDL_Point* offCol = &palette::blue;
@@ -14,6 +15,8 @@ namespace mapEngine
   }
   namespace but_t
   {
+    const char* const bg_label = "Grab Background";
+    const char* const fg_label = "Grab Foreground";
     const SDL_Rect bg_button = {325, 510, 100, 24};
     const SDL_Rect fg_button = {325, 534, 100, 24};
     const short bsiz = 2;
@@ -34,16 +37,18 @@ namespace mapEngine
   }
   namespace but_quad_t
   {
-    const char* const name_TL = "TL";
-    const char* const name_TR = "TR";
-    const char* const name_BL = "BL";
-    const char* const name_BR = "BR";
-    const short left_x = 260;       //
-    const short right_x = 284;      //
-    const short top_y = 510;        //
-    const short bottom_y = 534;     //
-    const short w = 24;             //
-    const short h = 24;             //
+    const char* const labels[] = {
+      "TL",
+      "TR",
+      "BL",
+      "BR"
+    };
+    const SDL_Rect buttons[] = {
+      {260, 510, 24, 24},
+      {284, 510, 24, 24},
+      {260, 534, 24, 24},
+      {284, 534, 24, 24}
+    };
     const short bsiz = 2;
     const SDL_Point* offCol = &palette::red;
     const SDL_Point* offhvCol = &palette::light_red;
@@ -53,19 +58,16 @@ namespace mapEngine
   }
   namespace disp_t
   {
-    extern const short namePos_x = WWIDTH + (EWIDTH - WWIDTH) / 2;
-    extern const short nameOffset_y = -10;
-    const short sample_x = 658;
-    const short sample_y = 120;
-    const short bgfg_x = 674;         // Displayed (current) Tile info
-    const short bgfg_y = 140;         //
+    const short namePos_x = WWIDTH + (EWIDTH - WWIDTH) / 2;
+    const short nameOffset_y = -10;
+    const SDL_Point stage_pos = {658, 120};
     const SDL_Point bg_pos = {674, 210};
     const SDL_Point fg_pos = {674, 280};
     const SDL_Point ty_pos = {674, 350};
     const SDL_Point co_pos = {674, 420};
     const short arrSpac = 8;
     const SDL_Color* arrCol = &rgb::dark_orange;
-    const SDL_Color* arrHovCol = &rgb::orange;
+    const SDL_Color* arrHovCol = &rgb::light_orange;
     const SDL_Rect dummyEntity = {522, 0, TILE_SIZE, TILE_SIZE};
     const SDL_Rect dummyOutline = {522, 32, TILE_SIZE, TILE_SIZE};
   }
