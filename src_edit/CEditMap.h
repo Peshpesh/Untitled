@@ -158,7 +158,7 @@ private:
   int type_alpha;						// Current Opacity of the Type overlay
   int coll_alpha;						// Current Opacity of the Collision overlay
 
-  bool show_fg, show_ty, show_co;
+  bool show_bg, show_fg, show_ty, show_co;
 
   int type_w, type_h;  	// Typeset texture dimension (tiles)
   int coll_w, coll_h; 	// Collset texture dimension (tiles)

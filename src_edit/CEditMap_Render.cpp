@@ -3,7 +3,7 @@
 bool CEditMap::RenderMap()
 {
   // Draw the working area
-	CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+	if (show_bg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
 	if (show_fg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
 	if (show_ty) CArea::AreaControl.OnRenderType(Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 	if (show_co) CArea::AreaControl.OnRenderColl(Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
@@ -431,6 +431,7 @@ bool CEditMap::drawOverlayList()
 	using namespace mapEngine::view_flip;
 
 	const bool flags[] = {
+		show_bg,
 		show_fg,
 		show_ty,
 		show_co

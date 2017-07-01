@@ -485,6 +485,7 @@ bool CEditMap::handleLayers(const SDL_Point* mouse)
   using namespace mapEngine::view_flip;
 
   bool* flags[] = {
+    &show_bg,
 		&show_fg,
 		&show_ty,
 		&show_co

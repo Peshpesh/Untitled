@@ -94,7 +94,7 @@ namespace mapEngine
     const SDL_Point* onCol = &palette::green;
     const SDL_Point* offCol = &palette::red;
     const short x = 20;
-    const short y = 510;
+    const short y = 495;
     const short w = 12;
     const short h = 12;
     const short bsiz = 2;
@@ -102,6 +102,7 @@ namespace mapEngine
     const short list_x = x + 16;
     const short list_y = y + ((h - Font::GetSymH(FONT_MINI)) / 2) + ((h - Font::GetSymH(FONT_MINI)) % 2);
     const char* labels[] = {
+      "View BG",
       "View FG",
       "View Type",
       "View Coll"
