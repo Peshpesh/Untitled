@@ -82,8 +82,7 @@ void CEditMap::OnLButtonDown(int mX, int mY)
   if (handleScroll_fg(&mouse, EditTile)) return;
   if (handleScroll_ty(&mouse, EditTile)) return;
   if (handleScroll_co(&mouse, EditTile)) return;
-  if (handleRemove_bg(&mouse, EditTile)) return;
-  if (handleRemove_fg(&mouse, EditTile)) return;
+  if (handleTileReset(&mouse, EditTile)) return;
   if (handleOpac_ty(&mouse)) return;
   if (handleOpac_co(&mouse)) return;
   if (handleLayers(&mouse)) return;
@@ -419,33 +418,43 @@ char CEditMap::getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse)
   return retDir;
 }
 
-bool CEditMap::handleRemove_bg(const SDL_Point* mouse, CTile* EditTile)
+bool CEditMap::handleTileReset(const SDL_Point* mouse, CTile* EditTile)
 {
-  // Turn the background tile off.
-  using namespace mapEngine::but_rm;
-  // if (mouse->y >= bg_y && mouse->y < bg_y + SWITCH_SIZE)
-  // {
-  //   if (mouse->x >= bg_x && mouse->x < bg_x + SWITCH_SIZE)
-  //   {
-  //     EditTile->bg_ID = -1;
-  //     return true;
-  //   }
-  // }
-  return false;
-}
+  using namespace mapEngine::disp_t;
 
-bool CEditMap::handleRemove_fg(const SDL_Point* mouse, CTile* EditTile)
-{
-  // Turn the foreground tile off.
-  using namespace mapEngine::but_rm;
-  // if (mouse->y >= fg_y && mouse->y < fg_y + SWITCH_SIZE)
-  // {
-  //   if (mouse->x >= fg_x && mouse->x < fg_x + SWITCH_SIZE)
-  //   {
-  //     EditTile->fg_ID = -1;
-  //     return true;
-  //   }
-  // }
+	SDL_Rect dstR;
+
+  dstR = CAsset::getRect(bg_pos.x + rmOffset_x, bg_pos.y + rmOffset_y, rm_sz, rm_sz);
+  if (SDL_PointInRect(mouse, &dstR))
+  {
+    EditTile->bg_ID = -1;
+    return true;
+  }
+
+  dstR.x = fg_pos.x + rmOffset_x;
+  dstR.y = fg_pos.y + rmOffset_y;
+  if (SDL_PointInRect(mouse, &dstR))
+  {
+    EditTile->fg_ID = -1;
+    return true;
+  }
+
+  dstR.x = ty_pos.x + rmOffset_x;
+  dstR.y = ty_pos.y + rmOffset_y;
+  if (SDL_PointInRect(mouse, &dstR))
+  {
+    EditTile->TypeID = TILE_TYPE_NORMAL;
+    return true;
+  }
+
+  dstR.x = co_pos.x + rmOffset_x;
+  dstR.y = co_pos.y + rmOffset_y;
+  if (SDL_PointInRect(mouse, &dstR))
+  {
+    EditTile->CollID = SOLID_NONE;
+    return true;
+  }
+
   return false;
 }
 

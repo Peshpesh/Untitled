@@ -66,10 +66,14 @@ namespace mapEngine
     const SDL_Point ty_pos = {674, 350};
     const SDL_Point co_pos = {674, 420};
     const short arrSpac = 8;
+    const short rmOffset_x = -28;
+    const short rmOffset_y = -15;
+    const short rm_sz = 10;
+    const short rm_bsiz = 1;
     const SDL_Color* arrCol = &rgb::dark_orange;
     const SDL_Color* arrHovCol = &rgb::light_orange;
-    const SDL_Rect dummyEntity = {522, 0, TILE_SIZE, TILE_SIZE};
-    const SDL_Rect dummyOutline = {522, 32, TILE_SIZE, TILE_SIZE};
+    const SDL_Point* rmCol = &palette::dark_red;
+    const SDL_Point* rmHovCol = &palette::light_red;
   }
   namespace opac    // opacity meters
   {

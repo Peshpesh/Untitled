@@ -230,9 +230,7 @@ bool CEditMap::drawActive_bg(const CTile* ShowTile, const SDL_Point* mouse)
 	}
 
 	// Draws background tile arrows
-	drawTileArrows(&bg_pos, mouse);
-
-  // CSurface::OnDraw(interface, mapEngine::but_rm::bg_x, mapEngine::but_rm::bg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
+	drawTileButtons(&bg_pos, mouse);
 
 	return true;
 }
@@ -257,7 +255,7 @@ bool CEditMap::drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse)
 	}
 
 	// Draws foreground tile arrows
-	drawTileArrows(&fg_pos, mouse);
+	drawTileButtons(&fg_pos, mouse);
 
   // CSurface::OnDraw(interface, mapEngine::but_rm::fg_x, mapEngine::but_rm::fg_y, SWITCH_XO, OFF_SWITCH_YO, SWITCH_SIZE, SWITCH_SIZE);
 
@@ -277,7 +275,7 @@ bool CEditMap::drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse)
 	}
 
 	// Draws tile type arrows
-	drawTileArrows(&ty_pos, mouse);
+	drawTileButtons(&ty_pos, mouse);
 
 	std::string tName;
 
@@ -310,7 +308,7 @@ bool CEditMap::drawActive_co(const CTile* ShowTile, const SDL_Point* mouse)
 	}
 
 	// Draws collision tile arrows
-	drawTileArrows(&co_pos, mouse);
+	drawTileButtons(&co_pos, mouse);
 
 	std::string tName;
 
@@ -336,7 +334,7 @@ bool CEditMap::drawActive_co(const CTile* ShowTile, const SDL_Point* mouse)
 	return true;
 }
 
-bool CEditMap::drawTileArrows(const SDL_Point* tPos, const SDL_Point* mouse)
+bool CEditMap::drawTileButtons(const SDL_Point* tPos, const SDL_Point* mouse)
 {
 	using namespace mapEngine::disp_t;
 
@@ -351,6 +349,10 @@ bool CEditMap::drawTileArrows(const SDL_Point* tPos, const SDL_Point* mouse)
 
 	dstR.x = tPos->x + TILE_SIZE + arrSpac;
 	CAsset::drawStrArrow(&dstR, 'R', noInt && SDL_PointInRect(mouse, &dstR) ? arrHovCol : arrCol);
+
+	// Draw reset button
+	dstR = CAsset::getRect(tPos->x + rmOffset_x, tPos->y + rmOffset_y, rm_sz, rm_sz);
+	CAsset::drawStrBox(&dstR, rm_bsiz, SDL_PointInRect(mouse, &dstR) ? rmHovCol : rmCol);
 
 	return true;
 }

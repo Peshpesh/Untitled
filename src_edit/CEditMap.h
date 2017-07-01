@@ -77,10 +77,15 @@ namespace mapEngine
     extern const SDL_Point ty_pos;
     extern const SDL_Point co_pos;
     extern const short arrSpac;
+    extern const short rmOffset_x;
+    extern const short rmOffset_y;
+    extern const short rm_sz;
+    extern const short rm_bsiz;
     extern const SDL_Color* arrCol;
     extern const SDL_Color* arrHovCol;
-    extern const SDL_Rect dummyEntity;
-    extern const SDL_Rect dummyOutline;
+    extern const SDL_Point* rmCol;
+    extern const SDL_Point* rmHovCol;
+
   }
   namespace opac    // opacity meters
   {
@@ -213,8 +218,7 @@ private:
   bool handleScroll_co(const SDL_Point* mouse, CTile* EditTile);
   char getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse);
 
-  bool handleRemove_bg(const SDL_Point* mouse, CTile* EditTile);
-  bool handleRemove_fg(const SDL_Point* mouse, CTile* EditTile);
+  bool handleTileReset(const SDL_Point* mouse, CTile* EditTile);
 
   bool handleOpac_ty(const SDL_Point* mouse);
   bool handleOpac_co(const SDL_Point* mouse);
@@ -254,7 +258,7 @@ private:
   bool drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawActive_co(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawTileArrows(const SDL_Point* tPos, const SDL_Point* mouse);
+  bool drawTileButtons(const SDL_Point* tPos, const SDL_Point* mouse);
   bool drawOpac_ty();
   bool drawOpac_co();
 
