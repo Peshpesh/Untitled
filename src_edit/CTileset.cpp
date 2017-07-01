@@ -12,9 +12,10 @@ namespace {
   const SDL_Point* canvCol      = &palette::black;
   const SDL_Point* fnameBoxCol  = &palette::white;
   const SDL_Point* optCol       = &palette::black;
+  const SDL_Point* optHovCol    = &palette::dark_green;
   const SDL_Point* bCol         = &palette::white;
   const SDL_Color* textCol      = &rgb::white;
-  const SDL_Color* fnameCol     = &rgb::black;
+  const SDL_Color* fnameCol     = &rgb::dark_yellow;
   const short bstrsiz = 2;
   const short cstrsiz = 3;
   const char* const ts_path = "../res_edit/tile/";
@@ -117,12 +118,12 @@ void CTileset::OnLButtonDown(int mX, int mY)
   }
 }
 
-bool CTileset::OnRender()
+bool CTileset::OnRender(const SDL_Point* m)
 {
   CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
   CAsset::drawBoxFill(&fnameBox, fnameBoxCol);
-  CAsset::drawStrBox(&okButton, bstrsiz, optCol, bCol);
-  CAsset::drawStrBox(&cancelButton, bstrsiz, optCol, bCol);
+  CAsset::drawStrBox(&okButton, bstrsiz, SDL_PointInRect(m, &okButton) ? optHovCol : optCol, bCol);
+  CAsset::drawStrBox(&cancelButton, bstrsiz, SDL_PointInRect(m, &cancelButton) ? optHovCol : optCol, bCol);
 
   Font::FontControl.SetFont(FONT_MINI);
   Font::NewCenterWrite(title, &titleBox, textCol);

@@ -82,23 +82,12 @@ namespace mapEngine
     const SDL_Point* fillCol = &palette::light_green;
     const SDL_Point* emptyCol = &palette::black;
   }
-  namespace but_rm
-  {
-    const short bg_x = 642;
-    const short bg_y = 192;
-    const short fg_x = 642;
-    const short fg_y = 262;
-    const short ty_x = 642;
-    const short ty_y = 332;
-    const short co_x = 642;
-    const short co_y = 402;
-  }
   namespace view_flip
   {
     const SDL_Point* onCol = &palette::green;
     const SDL_Point* offCol = &palette::red;
     const short x = 20;
-    const short y = 495;
+    const short y = 500;
     const short w = 12;
     const short h = 12;
     const short bsiz = 2;
@@ -117,7 +106,7 @@ namespace mapEngine
     const SDL_Point* onCol = &palette::green;
     const SDL_Point* offCol = &palette::red;
     const short x = 150;
-    const short y = 495;
+    const short y = 500;
     const short w = 12;
     const short h = 12;
     const short bsiz = 2;

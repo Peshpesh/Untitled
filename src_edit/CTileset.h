@@ -30,7 +30,7 @@ public:
 
 	void OnLButtonDown(int mX, int mY);
 
-  bool OnRender();
+  bool OnRender(const SDL_Point* m);
 
   std::string getFilePath();
 

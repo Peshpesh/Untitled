@@ -85,30 +85,13 @@ namespace mapEngine
     extern const SDL_Color* arrHovCol;
     extern const SDL_Point* rmCol;
     extern const SDL_Point* rmHovCol;
-
   }
   namespace opac    // opacity meters
   {
-    extern const short w;
-    extern const short h;
-    extern const short x;
-    extern const short ty_y;
-    extern const short co_y;
     extern const SDL_Rect typeBar;
     extern const SDL_Rect collBar;
     extern const SDL_Point* fillCol;
     extern const SDL_Point* emptyCol;
-  }
-  namespace but_rm
-  {
-    extern const short bg_x;
-    extern const short bg_y;
-    extern const short fg_x;
-    extern const short fg_y;
-    extern const short ty_x;
-    extern const short ty_y;
-    extern const short co_x;
-    extern const short co_y;
   }
   namespace view_flip
   {

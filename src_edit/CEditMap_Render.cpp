@@ -42,7 +42,7 @@ bool CEditMap::drawIntrpt(const SDL_Point* mouse)
 		}
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
 		{
-			if (!CTileset::PickTS.OnRender()) return false;
+			if (!CTileset::PickTS.OnRender(mouse)) return false;
 		}
 	}
 	return true;
