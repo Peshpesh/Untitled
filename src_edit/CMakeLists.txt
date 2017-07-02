@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-SET(TITLE TDME)
+SET(TITLE Editor)
 project(devProj)
 
 set(SDL2_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../inc)
@@ -41,6 +41,7 @@ ${SRCDIR}/CEntityEdit.cpp
 ${SRCDIR}/CEntityInfo.cpp
 ${SRCDIR}/CEntityRes.cpp
 ${SRCDIR}/CEvent.cpp
+${SRCDIR}/CFileIO.cpp
 ${SRCDIR}/CFont.cpp
 ${SRCDIR}/CFont_Def.cpp
 ${SRCDIR}/CFPS.cpp
@@ -69,6 +70,7 @@ ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityEdit.h
 ${SRCDIR}/CEntityRes.h
 ${SRCDIR}/CEvent.h
+${SRCDIR}/CFileIO.h
 ${SRCDIR}/CFont.h
 ${SRCDIR}/CFPS.h
 ${SRCDIR}/CInform.h

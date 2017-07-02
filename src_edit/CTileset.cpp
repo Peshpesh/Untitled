@@ -12,10 +12,10 @@ namespace {
   const SDL_Point* canvCol      = &palette::black;
   const SDL_Point* fnameBoxCol  = &palette::white;
   const SDL_Point* optCol       = &palette::black;
-  const SDL_Point* optHovCol    = &palette::dark_green;
+  const SDL_Point* optHovCol    = &palette::dark_indigo;
   const SDL_Point* bCol         = &palette::white;
   const SDL_Color* textCol      = &rgb::white;
-  const SDL_Color* fnameCol     = &rgb::dark_yellow;
+  const SDL_Color* fnameCol     = &rgb::dark_red;
   const short bstrsiz = 2;
   const short cstrsiz = 3;
   const char* const ts_path = "../res_edit/tile/";
