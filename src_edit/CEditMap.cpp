@@ -29,7 +29,7 @@ CEditMap::CEditMap()
 	coll_alpha = 55;
 	coll_w = coll_h = type_w = type_h = tset_w = tset_h = 0;
 
-  onTiles = ENABLE_BG | ENABLE_FG | ENABLE_TYPE | ENABLE_COLL;
+  onTiles = 0;
 }
 
 bool CEditMap::OnInit()

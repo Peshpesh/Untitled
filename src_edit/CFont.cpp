@@ -453,7 +453,6 @@ int Font::NewCenterWrite(char const* message, const SDL_Point* dstC)
 
 int Font::getTextHeight(const int& fontID, char const* message, int maxWidth)
 {
-	int h_spacing = GetHSpacing(fontID);
 	int v_spacing = GetVSpacing(fontID);
 	int lineH = GetSymH(fontID);
 
@@ -513,6 +512,7 @@ std::string Font::getLine(const int& fontID, char const* message, int& iterator,
 
 		i++;
 	}
+
 	if (linWidth == 0)
 	{
 		lin = wrd;
@@ -535,6 +535,23 @@ void Font::getLineDims(const int& fontID, char const* message, int& msgWidth)
 		GetXY(fontID, message[i++], symRec);
 		msgWidth += symRec.w;
 	}
+}
+
+int Font::getNumLines(const int& fontID, char const* message, int maxWidth)
+{
+	// int tH = 0;
+	int N = 0;
+	int i = 0;
+	while (message[i] != '\0')
+	{
+		if (message[i] == '\n') {
+			i++;
+		}
+		// tH += lineH + ((bool)(i) * v_spacing);
+		getLine(fontID, message, i, maxWidth);
+	}
+	// return tH;
+	return N;
 }
 
 std::string Font::intToStr(const int& val)

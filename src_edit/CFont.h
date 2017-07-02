@@ -15,21 +15,6 @@ enum FONT_NAMES
 	FONT_MINI,
 };
 
-// namespace fontrgb
-// {
-// 	extern const SDL_Color red;
-//   extern const SDL_Color orange;
-//   extern const SDL_Color yellow;
-//   extern const SDL_Color green;
-//   extern const SDL_Color cyan;
-//   extern const SDL_Color blue;
-//   extern const SDL_Color indigo;
-//   extern const SDL_Color violet;
-//   extern const SDL_Color gray;
-// 	extern const SDL_Color black;
-// 	extern const SDL_Color white;
-// }
-
 // Takes in a queried symbol, passes X and Y coords
 // where to find the queried symbol in font image
 class Font
@@ -146,6 +131,7 @@ public:
 
 	static void getLineDims(const int& fontID, char const* message, int& msgWidth);
 	static int getTextHeight(const int& fontID, char const* message, int maxWidth);
+	static int getNumLines(const int& fontID, char const* message, int maxWidth);
 	static std::string getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth);
 	static std::string intToStr(const int& val);
 };

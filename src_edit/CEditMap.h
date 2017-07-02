@@ -2,6 +2,7 @@
 #define _C_EDITMAP_H_
 
 #include "CInterrupt.h"
+#include "CInform.h"
 #include "CSurface.h"
 #include "CEvent.h"
 #include "CAsset.h"
