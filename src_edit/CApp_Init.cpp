@@ -17,11 +17,6 @@ bool CApp::OnInit()
 		return false;
 	}
 
-	// if ((Map_Interface = CSurface::OnLoad("../res_edit/interface_plain.png")) == NULL)
-	// {
-	// 	return false;
-	// }
-
 	if (!CAsset::OnInit())
 	{
 		return false;
@@ -48,20 +43,12 @@ bool CApp::OnInit()
 	if ((CEntityEdit::NPCControl.Table_ID = CEntityInfo::LoadUnique("../res/npc/debug.tbl")) < 0)
 		return false;
 
-	// if (CArea::AreaControl.OnLoad(Main_Tileset) == false)
-	// 	return false;
-
 	if (CEditMap::MapEditor.OnInit() == false)
 		return false;
 
+	///////////////////////
+	// Debugging section //
+	///////////////////////
+
 	return true;
 }
-
-// void CApp::QueryTileset()
-// {
-// 	int PixWidth, PixHeight;
-// 	SDL_QueryTexture(Main_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-//
-// 	tset_w = PixWidth / TILE_SIZE;
-// 	tset_h = PixHeight / TILE_SIZE;
-// }

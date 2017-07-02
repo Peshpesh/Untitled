@@ -6,9 +6,10 @@
 #include "CFont.h"
 
 class CInform {
-private:
-
+public:
   static CInform InfoControl;
+
+private:
 
   CInform();
 

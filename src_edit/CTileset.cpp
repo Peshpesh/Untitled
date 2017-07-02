@@ -148,18 +148,23 @@ bool CTileset::reqChange()
 
 SDL_Texture* CTileset::changeTileset()
 {
-  if (newF == file)
-  {
+  if (newF == file) {
+    CInform::InfoControl.pushInform("You are already using that tileset!\nNo changes were made.");
     resetPath();
+    changeTS = false;
+
     return NULL;
   }
 
   SDL_Texture* try_surf = NULL;
   std::string filepath = ts_path + newF + extension;
 
-  if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0)
-  {
+  if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
+    CInform::InfoControl.pushInform("Tileset changed successfully.\nArea is reset.");
     file = newF;
+  }
+  else {
+    CInform::InfoControl.pushInform("Could not load the tileset.\nNo changes were made.");
   }
 
   resetPath();

@@ -2,6 +2,7 @@
 #define _C_TILESET_H_
 
 #include <string>
+#include "CInform.h"
 #include "CInterrupt.h"
 #include "CEvent.h"
 #include "CSurface.h"

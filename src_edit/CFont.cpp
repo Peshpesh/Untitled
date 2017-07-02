@@ -539,18 +539,18 @@ void Font::getLineDims(const int& fontID, char const* message, int& msgWidth)
 
 int Font::getNumLines(const int& fontID, char const* message, int maxWidth)
 {
-	// int tH = 0;
 	int N = 0;
 	int i = 0;
-	while (message[i] != '\0')
-	{
-		if (message[i] == '\n') {
+
+	while (message[i] != '\0') {
+		while (message[i] == '\n') {
+			N++;
 			i++;
 		}
-		// tH += lineH + ((bool)(i) * v_spacing);
 		getLine(fontID, message, i, maxWidth);
+		N++;
 	}
-	// return tH;
+
 	return N;
 }
 

@@ -62,6 +62,8 @@ void CApp::OnRender()
 
 	RenderEngine();
 
+	CInform::InfoControl.OnRender();
+
 	//	DEBUGGING
 	if (debug)
 	{
@@ -69,28 +71,6 @@ void CApp::OnRender()
 	}
 	CSurface::Present();
 }
-
-// bool CApp::RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl)
-// {
-// 	bool but_glow = false;
-// 	if (hl)
-// 	{
-// 		if (mouseX >= X && mouseX < X + W)
-// 		{
-// 			if (mouseY >= Y && mouseY < Y + H)
-// 			{
-// 				but_glow = true;
-// 			}
-// 		}
-// 	}
-//
-// 	if (!CSurface::OnDraw(Map_Interface, X, Y, DARKS_X, COLOR_PURE_Y, 1, 1, W, H))
-// 		return false;
-// 	if (!CSurface::OnDraw(Map_Interface, X + bsiz, Y + bsiz, colX, colY - but_glow, 1, 1, W - (bsiz * 2), H - (bsiz * 2)))
-// 		return false;
-//
-// 	return true;
-// }
 
 bool CApp::RenderEngine()
 {
