@@ -1,5 +1,5 @@
-#ifndef _CTILE_H_
-#define _CTILE_H_
+#ifndef _C_TILE_H_
+#define _C_TILE_H_
 
 #include "Define.h"
 

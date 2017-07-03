@@ -20,13 +20,13 @@ char* CIO::OnSave(SDL_Texture* map_ui)
 			OnEvent(&Event);
 		}
 
-		// SDL_RenderClear(renderer);
 		CSurface::Clear();
+
 		CSurface::OnDraw(map_ui, (WWIDTH - UI_Width) / 2, (WHEIGHT - UI_Height) / 2,
 			0, WHEIGHT - UI_Height, UI_Width, UI_Height);
 		Font::CenterWrite(FONT_DEFAULT, "ENTER AN AREANAME", WWIDTH / 2, ((WHEIGHT - UI_Height) / 2) + 16);
 		Font::Write(FONT_DEFAULT, Areaname, ((WWIDTH - UI_Width) / 2) + 10, ((WHEIGHT - UI_Height) / 2) + 32);
-		// SDL_RenderPresent(renderer);
+
 		CSurface::Present();
 	}
 

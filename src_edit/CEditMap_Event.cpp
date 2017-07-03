@@ -8,18 +8,15 @@ void CEditMap::OnEvent(SDL_Event* Event)
 
 bool CEditMap::handleInterr(SDL_Event* Event)
 {
-  if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
-  {
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
     handleChangeTS(Event);
     return true;
   }
-  if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG))
-  {
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG)) {
     handleChangeTile(Event, INTRPT_CHANGE_BG);
     return true;
   }
-  if (CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
-  {
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_FG)) {
     handleChangeTile(Event, INTRPT_CHANGE_FG);
     return true;
   }
@@ -29,18 +26,25 @@ bool CEditMap::handleInterr(SDL_Event* Event)
 void CEditMap::handleChangeTS(SDL_Event* Event)
 {
   CTileset::PickTS.OnEvent(Event);
-  if (CTileset::PickTS.reqChange())    // try to change tileset
-  {
-    SDL_Texture* tmpset = CTileset::PickTS.changeTileset();
-    if (tmpset != NULL)
-    {
-      SDL_DestroyTexture(Tileset);
-      Tileset = tmpset;
-      queryTileDims(Tileset, tset_w, tset_h);
-      CArea::AreaControl.OnLoad(Tileset);
-      TileTL.reset(); TileTR.reset(); TileBL.reset(); TileBR.reset();
-    }
+
+  if (CInterrupt::isFlagOff(INTRPT_CHANGE_TS)) {
+    TileTL.reset();
+    TileTR.reset();
+    TileBL.reset();
+    TileBR.reset();
   }
+  // if (CTileset::PickTS.reqChange())    // try to change tileset
+  // {
+  //   SDL_Texture* tmpset = CTileset::PickTS.changeTileset();
+  //   if (tmpset != NULL)
+  //   {
+  //     SDL_DestroyTexture(Tileset);
+  //     Tileset = tmpset;
+  //     queryTileDims(Tileset, tset_w, tset_h);
+  //     CArea::AreaControl.OnLoad(Tileset);
+  //     TileTL.reset(); TileTR.reset(); TileBL.reset(); TileBR.reset();
+  //   }
+  // }
 }
 
 void CEditMap::handleChangeTile(SDL_Event* Event, int intrpt)
@@ -278,13 +282,13 @@ bool CEditMap::handleGetTile(const SDL_Point* mouse)
 
   if (SDL_PointInRect(mouse, &bg_button))
   {
-      CChangeTile::PickTile.Init(tset_w, tset_h);
+      CChangeTile::PickTile.Init(CTileset::PickTS.ts_w, CTileset::PickTS.ts_h);
       CInterrupt::appendFlag(INTRPT_CHANGE_BG);
       return true;
   }
   if (SDL_PointInRect(mouse, &fg_button))
   {
-      CChangeTile::PickTile.Init(tset_w, tset_h);
+      CChangeTile::PickTile.Init(CTileset::PickTS.ts_w, CTileset::PickTS.ts_h);
       CInterrupt::appendFlag(INTRPT_CHANGE_FG);
       return true;
   }
@@ -303,14 +307,14 @@ bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile)
 
   else if (arrDir == 'R')
   {
-    if (EditTile->bg_ID < (tset_w * tset_h) - 1) EditTile->bg_ID += 1;
+    if (EditTile->bg_ID < (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1) EditTile->bg_ID += 1;
     else EditTile->bg_ID = 0;
     return true;
   }
   else if (arrDir == 'L')
   {
     if (EditTile->bg_ID > 0) EditTile->bg_ID -= 1;
-    else EditTile->bg_ID = (tset_w * tset_h) - 1;
+    else EditTile->bg_ID = (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1;
     return true;
   }
 
@@ -330,14 +334,14 @@ bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile)
 
   else if (arrDir == 'R')
   {
-    if (EditTile->fg_ID < (tset_w * tset_h) - 1) EditTile->fg_ID += 1;
+    if (EditTile->fg_ID < (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1) EditTile->fg_ID += 1;
     else EditTile->fg_ID = 0;
     return true;
   }
   else if (arrDir == 'L')
   {
     if (EditTile->fg_ID > 0) EditTile->fg_ID -= 1;
-    else EditTile->fg_ID = (tset_w * tset_h) - 1;
+    else EditTile->fg_ID = (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1;
     return true;
   }
 

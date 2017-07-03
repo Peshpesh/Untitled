@@ -2,7 +2,7 @@
 
 CMap::CMap()
 {
-	Tex_Tileset = NULL;
+	// Tex_Tileset = NULL;
 }
 
 CTile* CMap::GetTile(int X, int Y)
@@ -60,15 +60,20 @@ void CMap::OnLoad()
 
 void CMap::OnRender(int MapX, int MapY, bool bg)
 {
-	if (Tex_Tileset == NULL) return;
+	// if (Tex_Tileset == NULL) return;
+	//
+	// int PixWidth;
+	// int PixHeight;
+	//
+	// SDL_QueryTexture(Tex_Tileset, NULL, NULL, &PixWidth, &PixHeight);
+	//
+	// int tset_w  = PixWidth / TILE_SIZE; // tiles
+	// int tset_h = PixHeight / TILE_SIZE; // tiles
 
-	int PixWidth;
-	int PixHeight;
+	if (CTileset::PickTS.tileset == NULL) return;
 
-	SDL_QueryTexture(Tex_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	int tset_w  = PixWidth / TILE_SIZE; // tiles
-	int tset_h = PixHeight / TILE_SIZE; // tiles
+	int tset_w = CTileset::PickTS.ts_w; // tiles
+	int tset_h = CTileset::PickTS.ts_h; // tiles
 
 	int ID = 0;
 
@@ -94,7 +99,7 @@ void CMap::OnRender(int MapX, int MapY, bool bg)
 			}
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			CSurface::OnDraw(Tex_Tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			CSurface::OnDraw(CTileset::PickTS.tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}

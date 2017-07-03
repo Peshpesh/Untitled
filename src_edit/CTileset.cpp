@@ -18,19 +18,39 @@ namespace {
   const SDL_Color* fnameCol     = &rgb::dark_red;
   const short bstrsiz = 2;
   const short cstrsiz = 3;
-  const char* const ts_path = "../res_edit/tile/";
+  const char* const ts_path = "../res/tile/";
   const char* const extension = ".png";
   const char* const title = "Change Tileset";
-  const char* const info = "WARNING:\nSuccessfully changing the active tileset will reset the working Area and empty containers of entities and scenery.";
+  const char* const mainInfo = "WARNING:\nSuccessfully changing the active tileset will reset the working Area and empty containers of entities and scenery.";
   const char* const oktext = "OK";
   const char* const canceltext = "Cancel";
+
+  const char* const inform[] = {
+    "Cancelled.\nNo changes were made.",
+    "Tileset changed successfully.\nThe area was reset.",
+    "You are already using that tileset!\nNo changes were made.",
+    "Failed to load tileset.\nNo changes were made."
+  };
+  enum {
+    I_CANCEL = 0,
+    I_CHANGE,
+    I_SAME,
+    I_FAIL,
+  };
 }
 
 CTileset::CTileset()
 {
-  changeTS = false;
-  file = "default";
+  tileset = NULL;
+  ts_w = ts_h = 0;
+
+  file = "";
   newF = "";
+}
+
+bool CTileset::OnInit()
+{
+  return changeTileset("default");
 }
 
 void CTileset::OnEvent(SDL_Event* Event)
@@ -97,8 +117,8 @@ void CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod)
     case SDLK_MINUS: addToPath('-'); break;
     case SDLK_UNDERSCORE: addToPath('_'); break;
     case SDLK_BACKSPACE: backPath(); break;
-    case SDLK_RETURN: CInterrupt::removeFlag(INTRPT_CHANGE_TS); changeTS = true; break;
-    case SDLK_ESCAPE: CInterrupt::removeFlag(INTRPT_CHANGE_TS); resetPath(); break;
+    case SDLK_RETURN: CInterrupt::removeFlag(INTRPT_CHANGE_TS); changeTileset(); break;
+    case SDLK_ESCAPE: CInterrupt::removeFlag(INTRPT_CHANGE_TS); pushInform(I_CANCEL); resetPath(); break;
     default: break;
   }
 }
@@ -109,10 +129,12 @@ void CTileset::OnLButtonDown(int mX, int mY)
   if (SDL_PointInRect(&mouse, &okButton))
   {
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
-    changeTS = true;
+    changeTileset();
+    // changeTS = true;
   }
   else if (SDL_PointInRect(&mouse, &cancelButton))
   {
+    pushInform(I_CANCEL);
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
     resetPath();
   }
@@ -128,7 +150,7 @@ bool CTileset::OnRender(const SDL_Point* m)
   Font::FontControl.SetFont(FONT_MINI);
   Font::NewCenterWrite(title, &titleBox, textCol);
   Font::NewCenterWrite(newF.c_str(), &fnameBox, fnameCol);
-  Font::NewCenterWrite(info, &infoBox, textCol);
+  Font::NewCenterWrite(mainInfo, &infoBox, textCol);
   Font::NewCenterWrite(oktext, &okButton, textCol);
   Font::NewCenterWrite(canceltext, &cancelButton, textCol);
 
@@ -141,34 +163,53 @@ std::string CTileset::getFilePath()
   return filepath;
 }
 
-bool CTileset::reqChange()
+bool CTileset::changeTileset(const char* fname)
 {
-  return changeTS;
+  SDL_Texture* try_surf = NULL;
+
+  std::string filepath = ts_path + std::string(fname) + extension;
+
+  if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
+    SDL_DestroyTexture(tileset);
+    tileset = try_surf;
+    CAsset::queryTileDims(tileset, ts_w, ts_h);
+    file = fname;
+  }
+  else {
+    return false;
+  }
+
+  return true;
 }
 
-SDL_Texture* CTileset::changeTileset()
+void CTileset::changeTileset()
 {
   if (newF == file) {
-    CInform::InfoControl.pushInform("You are already using that tileset!\nNo changes were made.");
+    pushInform(I_SAME);
     resetPath();
-    changeTS = false;
-
-    return NULL;
+    return;
   }
 
   SDL_Texture* try_surf = NULL;
   std::string filepath = ts_path + newF + extension;
 
   if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
-    CInform::InfoControl.pushInform("Tileset changed successfully.\nArea is reset.");
+    pushInform(I_CHANGE);
+    SDL_DestroyTexture(tileset);
+    tileset = try_surf;
+    CAsset::queryTileDims(tileset, ts_w, ts_h);
     file = newF;
   }
   else {
-    CInform::InfoControl.pushInform("Could not load the tileset.\nNo changes were made.");
+    pushInform(I_FAIL);
   }
 
   resetPath();
-  changeTS = false;
+}
 
-  return try_surf;
+void CTileset::pushInform(const int& ID)
+{
+  if (ID < I_CANCEL || ID > I_FAIL) return;
+
+  CInform::InfoControl.pushInform(inform[ID]);
 }

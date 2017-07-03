@@ -27,6 +27,11 @@ bool CApp::OnInit()
 		return false;
 	}
 
+  if (!CTileset::PickTS.OnInit())
+	{
+		return false;
+	}
+
 	if ((CEntityEdit::NPCControl.NPC_Tileset = CSurface::OnLoad(Entity_Path)) == NULL)
 	{
 		return false;

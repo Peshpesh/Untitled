@@ -2,8 +2,22 @@
 
 void CApp::OnEvent(SDL_Event* Event)
 {
+	if (handleInterr(Event)) return;
+
 	CEvent::OnEvent(Event);
+
 	if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
+}
+
+bool CApp::handleInterr(SDL_Event* Event)
+{
+	if (CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE))
+	{
+		CFileIO::IOhandle.OnEvent(Event);
+		return true;
+	}
+
+	return false;
 }
 
 // Handle key-press events
@@ -43,11 +57,6 @@ void CApp::OnLButtonDown(int mX, int mY)
 		// returns false if error...
 		EventSCNedit(mX, mY);
 	}
-	// else
-	// {
-	// 	// returns false if error...
-	// 	CEditMap::MapEditor.OnLClick(&mouse);
-	// }
 }
 
 void CApp::OnRButtonDown(int mX, int mY)
@@ -64,11 +73,6 @@ void CApp::OnRButtonDown(int mX, int mY)
 		if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
 			OnExit();
 	}
-	// if (active_mod == MODIFY_MAP)
-	// {
-	// 	// returns false if no event was processed
-	// 	CEditMap::MapEditor.OnRClick(&mouse);
-	// }
 }
 
 bool CApp::EventOPTS(int mX, int mY)
@@ -106,6 +110,7 @@ bool CApp::EventOPTS(int mX, int mY)
 		// Save maps and entities
 		if (mY >= SAVE_BUT_Y && mY < SAVE_BUT_Y + IO_BUT_H)
 		{
+			CInterrupt::appendFlag(INTRPT_SAVE);
 			// char* Filename = CIO::IOControl.OnSave(Map_Interface);
 			// CArea::AreaControl.SaveArea(Filename, Tileset_Path);
 			// CEntityEdit::NPCControl.SaveList(Filename);

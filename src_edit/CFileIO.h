@@ -6,6 +6,9 @@
 #include "CEvent.h"
 #include "CFont.h"
 #include "CAsset.h"
+#include "CArea.h"
+#include "CEntityEdit.h"
+#include "CSceneryEdit.h"
 
 class CFileIO : public CEvent {
 private:
@@ -24,9 +27,14 @@ public:
 
   bool OnRender(const SDL_Point* m);
 
+private:
+  bool loadData();
+  bool saveData();
+  void pushInform(const int& ID);
 
 private:
-  void addToPath(char addChar);
+  void backPath();
+  void addToPath(const char& addSym);
 };
 
 #endif

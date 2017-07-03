@@ -49,6 +49,14 @@ bool CAsset::OnInit()
 	return true;
 }
 
+void CAsset::queryTileDims(SDL_Texture* texture, int& w, int& h)
+{
+  int PixWidth, PixHeight;
+  SDL_QueryTexture(texture, NULL, NULL, &PixWidth, &PixHeight);
+  w = PixWidth / TILE_SIZE;
+  h = PixHeight / TILE_SIZE;
+}
+
 SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H)
 {
 	SDL_Rect rect;

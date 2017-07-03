@@ -13,7 +13,10 @@ class CTileset : public CEvent {
 private:
   std::string file;
   std::string newF;
-  bool changeTS;
+
+public:
+  SDL_Texture* tileset;
+  int ts_w, ts_h;
 
 public:
   static CTileset PickTS;
@@ -21,7 +24,10 @@ public:
 public:
 	CTileset();
 
-  SDL_Texture* changeTileset();
+  bool OnInit();
+
+  bool changeTileset(const char* fname);
+  void changeTileset();
 
   void resetPath();
 
@@ -35,12 +41,10 @@ public:
 
   std::string getFilePath();
 
-  bool reqChange();
-
 private:
   void backPath();
   void addToPath(char addChar);
-
+  void pushInform(const int& ID);
 };
 
 #endif

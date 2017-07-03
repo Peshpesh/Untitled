@@ -11,7 +11,8 @@
 #include "CCamera.h"
 #include "CArea.h"
 #include "CChangeTile.h"
-#include "CIO.h"
+#include "CFileIO.h"
+// #include "CIO.h"
 #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
 #include "Define.h"
@@ -110,6 +111,7 @@ public:
 	int OnExecute();
 
 	void OnEvent(SDL_Event* Event);
+  bool handleInterr(SDL_Event* Event);
 
 	bool EventOPTS(int mX, int mY);
 

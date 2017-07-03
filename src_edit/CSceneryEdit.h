@@ -2,10 +2,10 @@
 #define _C_SCENERYEDIT_H_
 
 #include "CScenery.h"
-// #include "CME_Resource.h"
 #include "Define.h"
 #include "CFont.h"
 #include <cstring>
+#include <string>
 #include <stdio.h>
 
 enum scn_texture

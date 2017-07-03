@@ -5,7 +5,7 @@ CArea CArea::AreaControl;
 CArea::CArea()
 {
 	AreaWidth = AreaHeight = 0;
-	Tex_Tileset = NULL;
+	// Tex_Tileset = NULL;
 }
 
 CMap* CArea::GetMap(int X, int Y)
@@ -37,21 +37,22 @@ CTile* CArea::GetTile(int X, int Y)
 
 bool CArea::OnLoad(char const* File)
 {
-	MapList.clear();
+	// try to load area/maps
+  std::string fpath = "../data/maps/";
+  std::string ext = ".area";
+  std::string fname = fpath + std::string(File) + ext;
 
-	FILE* FileHandle = fopen(File, "r");
+	FILE* FileHandle = fopen(fname.c_str(), "r");
 	if (FileHandle == NULL) return false;
+
 	char TilesetFile[255];
 	fscanf(FileHandle, "%s\n", TilesetFile);
 
-	if ((Tex_Tileset = CSurface::OnLoad(TilesetFile)) == false)
-	{
-		fclose(FileHandle);
-		return false;
-	}
+	if (!CTileset::PickTS.changeTileset(TilesetFile)) return false;
 
 	fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
 
+	MapList.clear();
 	for (int X = 0; X < AreaWidth; X++)
 	{
 		for (int Y = 0; Y < AreaHeight; Y++)
@@ -60,13 +61,12 @@ bool CArea::OnLoad(char const* File)
 			fscanf(FileHandle, "%s ", MapFile);
 
 			CMap tempMap;
-			if (tempMap.OnLoad(MapFile) == false)
-			{
+			if (tempMap.OnLoad(MapFile) == false) {
 				fclose(FileHandle);
 				return false;
 			}
 
-			tempMap.Tex_Tileset = Tex_Tileset;
+			// tempMap.Tex_Tileset = Tex_Tileset;
 
 			MapList.push_back(tempMap);
 		}
@@ -76,18 +76,20 @@ bool CArea::OnLoad(char const* File)
 	return true;
 }
 
-bool CArea::OnLoad(SDL_Texture* tileset)
-{
-	MapList.clear();
-	AreaHeight = AreaWidth = 1;
-
-	CMap tempMap;
-	tempMap.OnLoad();
-	tempMap.Tex_Tileset = tileset;
-
-	MapList.push_back(tempMap);
-	return true;
-}
+// bool CArea::OnLoad(SDL_Texture* tileset)
+// {
+// 	if (tileset == NULL) return false;
+//
+// 	MapList.clear();
+// 	AreaHeight = AreaWidth = 1;
+//
+// 	CMap tempMap;
+// 	tempMap.OnLoad();
+// 	// tempMap.Tex_Tileset = Tex_Tileset;
+//
+// 	MapList.push_back(tempMap);
+// 	return true;
+// }
 
 void CArea::OnRender(int CameraX, int CameraY, bool bg)
 {
@@ -215,7 +217,7 @@ void CArea::OnExpandRight()
 	{
 		CMap tempMap;
 		tempMap.OnLoad();
-		tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
+		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
 		MapList[i*AreaWidth - 1] = tempMap;
 	}
 }
@@ -245,7 +247,7 @@ void CArea::OnExpandLeft()
 	{
 		CMap tempMap;
 		tempMap.OnLoad();
-		tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
+		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
 		MapList[i*AreaWidth] = tempMap;
 	}
 }
@@ -274,7 +276,7 @@ void CArea::OnExpandUp()
 	{
 		CMap tempMap;
 		tempMap.OnLoad();
-		tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
+		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
 		MapList[i] = tempMap;
 	}
 }
@@ -293,7 +295,7 @@ void CArea::OnExpandDown()
 	{
 		CMap tempMap;
 		tempMap.OnLoad();
-		tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
+		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
 		MapList[i + AreaHeight * AreaWidth] = tempMap;
 	}
 	AreaHeight++;	// We "officially" make our Area's height one map larger
@@ -377,21 +379,10 @@ void CArea::ChangeSet(SDL_Texture* newset)
 	{
 		for (int Y = 0; Y < AreaHeight; Y++)
 		{
-			MapList[X + Y*AreaWidth].Tex_Tileset = newset;
+			// MapList[X + Y*AreaWidth].Tex_Tileset = newset;
 		}
 	}
 }
-
-// void CArea::ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles)
-// {
-// 	if (X < 0 || Y < 0 || X > AreaWidth * MAP_WIDTH * TILE_SIZE - 1 || Y > AreaHeight * MAP_HEIGHT * TILE_SIZE - 1)
-// 		return;
-//
-// 	int MapWidth = MAP_WIDTH * TILE_SIZE;
-// 	int MapHeight = MAP_HEIGHT * TILE_SIZE;
-// 	int ID = (X / MapWidth) + (Y / MapHeight) * AreaWidth;
-// 	MapList[ID].ChangeTile(X % MapWidth, Y % MapHeight, tile, fore, type, coll, usetiles);
-// }
 
 void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
 {
@@ -404,20 +395,28 @@ void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
 	MapList[ID].ChangeTile(X % mapWidth, Y % mapHeight, NewTile, useTiles);
 }
 
-void CArea::SaveArea(char const* areaname, char const* setpath)
+void CArea::SaveArea(char const* areaname)
 {
-	char pre[] = "../data/maps/";
-	char ext[] = ".area";
-	char* filename = new char[std::strlen(areaname) + std::strlen(pre) + std::strlen(ext) + 1];
-	std::strcpy(filename, pre);
-	std::strcat(filename, areaname);
-	std::strcat(filename, ext);
-	FILE* FileHandle = fopen(filename, "w");
+	// try to save area/maps
+  std::string fpath = "../data/maps/";
+  std::string ext = ".area";
+  std::string fname = fpath + std::string(areaname) + ext;
+	FILE* FileHandle = fopen(fname.c_str(), "w");
+
+	// char pre[] = "../data/maps/";
+	// char ext[] = ".area";
+	// char* filename = new char[std::strlen(areaname) + std::strlen(pre) + std::strlen(ext) + 1];
+	// std::strcpy(filename, pre);
+	// std::strcat(filename, areaname);
+	// std::strcat(filename, ext);
+	// FILE* FileHandle = fopen(filename, "w");
 
 	if (FileHandle == NULL)	return;
 
+	std::string setpath = CTileset::PickTS.getFilePath();
+
 	// Output the path to the tileset for the area
-	fprintf(FileHandle, setpath);
+	fprintf(FileHandle, setpath.c_str());
 	fprintf(FileHandle, "\n");
 
 	// Output AreaWidth & AreaHeight
@@ -429,16 +428,16 @@ void CArea::SaveArea(char const* areaname, char const* setpath)
 		{
 			int ID = X + Y * AreaWidth;
 			MapList[ID].SaveMap(ID, areaname);
-			fprintf(FileHandle, "%s%s%02d%s ", pre, areaname, ID, ".map");
+			fprintf(FileHandle, "%s%s%02d%s ", fpath.c_str(), areaname, ID, ".map");
 		}
 		fprintf(FileHandle, "\n");
 	}
 	fclose(FileHandle);
-	delete filename;
+	// delete filename;
 }
 
 void CArea::OnCleanup()
 {
-	if (Tex_Tileset) SDL_DestroyTexture(Tex_Tileset);
+	// if (Tex_Tileset) SDL_DestroyTexture(Tex_Tileset);
 	MapList.clear();
 }

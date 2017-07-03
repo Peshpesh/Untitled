@@ -89,6 +89,9 @@ class CAsset
     static SDL_Texture* interface;  // base interface texture
 
   public:
+    static void queryTileDims(SDL_Texture* texture, int& w, int& h);
+
+  public:
     static bool drawAppFrame();
     static bool inWorkspace(const SDL_Point* pos);
     static bool inWorkspace(const int& x, const int& y);

@@ -2,6 +2,7 @@
 #define _C_AREA_H_
 
 #include "CMap.h"
+#include <string>
 
 class CArea
 {
@@ -14,7 +15,7 @@ public:
 private:
 	int	AreaWidth;		// Maps
 	int	AreaHeight;		// Maps
-	SDL_Texture*	Tex_Tileset;
+	// SDL_Texture*	Tex_Tileset;
 
 public:
 	CArea();
@@ -33,7 +34,7 @@ public:
 	/*	Loads an "empty" 1 x 1 map area.
 			param tileset : Tileset for the area.
 	*/
-	bool	OnLoad(SDL_Texture* tileset);
+	// bool	OnLoad(SDL_Texture* tileset);
 
 	/*	Renders the area, or set of maps, to our renderer.
 			It will only render the maps that could possibly be visible
@@ -65,9 +66,8 @@ public:
 	void	OnReduceDown();
 
 	void	ChangeSet(SDL_Texture* newset);
-	// void	ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles);
-	void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
-	void	SaveArea(char const* areaname, char const* setpath);
+	void 	ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
+	void	SaveArea(char const* areaname);
 	void	OnCleanup();
 };
 #endif

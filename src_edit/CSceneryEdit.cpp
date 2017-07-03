@@ -28,7 +28,10 @@ bool CSceneryEdit::LoadScenery(char const* sceneryfile)
   // local texture IDs will be derived and recorded.
 
   // Try to open the .scn file
-	FILE* FileHandle = fopen(sceneryfile, "r");
+  std::string fpath = "../data/maps/";
+  std::string ext = ".scn";
+  std::string fname = fpath + std::string(sceneryfile) + ext;
+	FILE* FileHandle = fopen(fname.c_str(), "r");
 	if (FileHandle == NULL) return false;
 
 	// The first entry in the data file is always the number of

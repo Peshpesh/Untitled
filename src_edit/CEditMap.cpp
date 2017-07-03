@@ -4,7 +4,7 @@ CEditMap CEditMap::MapEditor;
 
 CEditMap::CEditMap()
 {
-  Tileset = NULL;    // The actual tileset in use
+  // Tileset = NULL;    // The actual tileset in use
   Type_Tileset = NULL;    // Tileset showing tile type
   Coll_Tileset = NULL;    // Tileset showing collision type
 
@@ -27,27 +27,21 @@ CEditMap::CEditMap()
 	show_bg = show_fg = show_ty = show_co = true;
 	type_alpha = 215;
 	coll_alpha = 55;
-	coll_w = coll_h = type_w = type_h = tset_w = tset_h = 0;
+	coll_w = coll_h = type_w = type_h = 0;
+  // tset_w = tset_h = 0;
 
   onTiles = 0;
 }
 
 bool CEditMap::OnInit()
 {
-  if ((Tileset = CSurface::OnLoad("../res/tile/default.png")) == NULL)
-  {
-    return false;
-  }
-
-  queryTileDims(Tileset, tset_w, tset_h);
-
   if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL)
   {
     return false;
   }
 
   SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
-  queryTileDims(Type_Tileset, type_w, type_h);
+  CAsset::queryTileDims(Type_Tileset, type_w, type_h);
 
   if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL)
   {
@@ -55,20 +49,12 @@ bool CEditMap::OnInit()
   }
 
   SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
-  queryTileDims(Coll_Tileset, coll_w, coll_h);
+  CAsset::queryTileDims(Coll_Tileset, coll_w, coll_h);
 
-  if (CArea::AreaControl.OnLoad(Tileset) == false)
-		return false;
+  // if (CArea::AreaControl.OnLoad(Tileset) == false)
+	// 	return false;
 
   return true;
-}
-
-void CEditMap::queryTileDims(SDL_Texture* texture, int& w, int& h)
-{
-  int PixWidth, PixHeight;
-  SDL_QueryTexture(texture, NULL, NULL, &PixWidth, &PixHeight);
-  w = PixWidth / TILE_SIZE;
-  h = PixHeight / TILE_SIZE;
 }
 
 CTile* CEditMap::getModTile()
@@ -123,7 +109,7 @@ SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)
 
 void CEditMap::OnTerminate()
 {
-  SDL_DestroyTexture(Tileset);
+  // SDL_DestroyTexture(Tileset);
   SDL_DestroyTexture(Type_Tileset);
   SDL_DestroyTexture(Coll_Tileset);
 }

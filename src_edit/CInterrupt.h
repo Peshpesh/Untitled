@@ -3,11 +3,13 @@
 
 enum interrupts
 {
-  INTRPT_NONE = 0,
-  INTRPT_CHANGE_BG = 0x00000001,		// intrpt via bg tile change
-  INTRPT_CHANGE_FG = 0x00000002,		// intrpt via fg tile change
-  INTRPT_MAP_MODEL = 0x00000004,
-  INTRPT_CHANGE_TS = 0x00000008,
+  INTRPT_NONE       = 0,
+  INTRPT_CHANGE_BG  = 0x00000001,		// intrpt via bg tile change
+  INTRPT_CHANGE_FG  = 0x00000002,		// intrpt via fg tile change
+  INTRPT_MAP_MODEL  = 0x00000004,
+  INTRPT_CHANGE_TS  = 0x00000008,
+  INTRPT_LOAD       = 0x00000010,
+  INTRPT_SAVE       = 0x00000020,
 };
 
 class CInterrupt {

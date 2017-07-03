@@ -40,24 +40,16 @@ void CApp::OnRender()
 
 	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
 	{
-		// Draws the surrounding interface containing current info and accessible buttons
-		// CSurface::OnDraw(Map_Interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
-		// CSurface::OnDraw(Map_Interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
 		CAsset::drawAppFrame();
 		RenderNPCedit();
 	}
 	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
-		// Draws the surrounding interface containing current info and accessible buttons
-		// CSurface::OnDraw(Map_Interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT);
-		// CSurface::OnDraw(Map_Interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT);
 		CAsset::drawAppFrame();
 		RenderSCNedit();
 	}
-	else
-	{
+	else {
 		CEditMap::MapEditor.OnRender(&mouse);
-		// CEditMap::MapEditor.OnRender(Map_Interface, &mouse);
 	}
 
 	RenderEngine();
@@ -69,6 +61,7 @@ void CApp::OnRender()
 	{
 		Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
+
 	CSurface::Present();
 }
 
