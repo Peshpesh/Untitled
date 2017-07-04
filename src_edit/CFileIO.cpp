@@ -16,6 +16,8 @@ namespace {
     "IO cancelled.",
     "Save successful.",
     "Load successful.",
+    "Save nothing... ?",
+    "Loaded nothing successfully.",
     "Failed to load Entity file.",
     "Failed to load Scenery file.",
     "Failed to save data."
@@ -24,6 +26,8 @@ namespace {
     I_CANCEL = 0,
     I_SAVE,
     I_LOAD,
+    I_SAVE_NOTHING,
+    I_LOAD_NOTHING,
     I_FAIL_ENTITY,
     I_FAIL_SCENERY,
     I_FAIL_SAVE,
@@ -111,12 +115,13 @@ void CFileIO::OnLButtonDown(int mX, int mY)
 void CFileIO::handleIOrequest()
 {
   if (CInterrupt::isFlagOn(INTRPT_LOAD)) {
-    loadData();
+    if (!newName.empty()) loadData();
+    else pushInform(I_LOAD_NOTHING);
   }
   else if (CInterrupt::isFlagOn(INTRPT_SAVE)) {
-    saveData();
+    if (!newName.empty()) saveData();
+    else pushInform(I_SAVE_NOTHING);
   }
-
   CInterrupt::removeFlag(INTRPT_LOAD | INTRPT_SAVE);
 }
 

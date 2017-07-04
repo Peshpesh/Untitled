@@ -198,7 +198,10 @@ void CArea::OnRender(int CameraX, int CameraY, bool bg)
 	int FirstID = -CameraX / MapWidth;
 	FirstID = FirstID + ((-CameraY / MapHeight) * AreaWidth);
 
-	for (int i = 0; i < 4; i++)
+	int maxMaps = 4;
+	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
+
+	for (int i = 0; i < loopMax; i++)
 	{
 		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
 		if (ID < 0 || ID >= MapList.size()) continue;
@@ -218,7 +221,10 @@ void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY)
 	int FirstID = -CameraX / MapWidth;
 	FirstID = FirstID + ((-CameraY / MapHeight) * AreaWidth);
 
-	for (int i = 0; i < 4; i++)
+	int maxMaps = 4;
+	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
+
+	for (int i = 0; i < loopMax; i++)
 	{
 		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
 		if (ID < 0 || ID >= MapList.size()) continue;
@@ -238,7 +244,10 @@ void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY)
 	int FirstID = -CameraX / MapWidth;
 	FirstID = FirstID + ((-CameraY / MapHeight) * AreaWidth);
 
-	for (int i = 0; i < 4; i++)
+	int maxMaps = 4;
+	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
+
+	for (int i = 0; i < loopMax; i++)
 	{
 		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
 		if (ID < 0 || ID >= MapList.size()) continue;
