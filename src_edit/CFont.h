@@ -25,6 +25,12 @@ public:
 	SDL_Texture* Mini_Font;
 
 private:
+	bool dynamicText;
+	short lastTime;
+	short cursTimer;
+	short cursAbsMaxTime;
+
+private:
 	const SDL_Color* def_rgb;
 	int def_ID;
 
@@ -35,6 +41,8 @@ public:
 
 	void SetFont(const int& fontID);
 	bool SetColor(const SDL_Color* col);
+	void setDynamic();
+	void renderCursor(const int& fontID, const SDL_Point* pos);
 
 public:
 	/*
@@ -128,6 +136,8 @@ public:
 	static int NewCenterWrite(char const* message, const SDL_Point* dstC, const SDL_Color* col);
 	static int NewCenterWrite(char const* message, const SDL_Rect* dstR);
 	static int NewCenterWrite(char const* message, const SDL_Point* dstC);
+
+	static int ActiveCenterWrite(char const* message, const SDL_Rect* dstR, const SDL_Color* col);
 
 	static void getLineDims(const int& fontID, char const* message, int& msgWidth);
 	static int getTextHeight(const int& fontID, char const* message, int maxWidth);

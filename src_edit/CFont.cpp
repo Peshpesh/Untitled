@@ -9,6 +9,11 @@ Font::Font()
 
 	def_rgb = &rgb::black;
 	def_ID = 0;
+
+	lastTime = 0;
+	cursTimer = 0;
+	cursAbsMaxTime = 500;
+	dynamicText = false;
 }
 
 bool Font::OnInit()
@@ -34,6 +39,29 @@ bool Font::SetColor(const SDL_Color* col)
 
 	def_rgb = col;
 	return true;
+}
+
+void Font::setDynamic()
+{
+	dynamicText = true;
+}
+
+void Font::renderCursor(const int& fontID, const SDL_Point* pos)
+{
+	SDL_Rect cursor = {pos->x, pos->y, GetHSpacing(fontID) * 2, GetSymH(fontID)};
+
+	if (cursTimer >= 0) {
+		CAsset::drawBoxFill(&cursor, &palette::white);
+	}
+
+	cursTimer += SDL_GetTicks() - lastTime;
+
+	if (cursTimer > cursAbsMaxTime) {
+		cursTimer = -cursAbsMaxTime;
+	}
+
+	lastTime = SDL_GetTicks();
+	dynamicText = false;
 }
 
 void Font::changeFontColor(const int& fontID, const SDL_Color* col)
@@ -138,6 +166,10 @@ int Font::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 		if (!CSurface::OnDraw(font, &symRec, &symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 		i++;
+	}
+	if (FontControl.dynamicText && line[i] == '\0')
+	{
+		FontControl.renderCursor(fontID, &symPos);
 	}
 
 	return (pos->x - FirstMx - h_spacing);
@@ -407,6 +439,11 @@ int Font::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect*
 		pos.x = centerX - (lineW / 2);
 		WriteLine(fontID, currentLine.c_str(), &pos);
 		pos.y += lineH + v_spacing;
+	}
+	if (FontControl.dynamicText && message[i] == '\0')
+	{
+		SDL_Point symPos = {centerX, centerY - (lineH / 2)};
+		FontControl.renderCursor(fontID, &symPos);
 	}
 
 	return 0;

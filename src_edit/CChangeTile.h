@@ -14,7 +14,7 @@ public:
 
 private:
 	bool changeFlag;
-	int pickID;
+	short pickID;
 
 private:
 	// X: x-pos on tileset being viewed (tile coordinate)
@@ -41,7 +41,7 @@ public:
 
 	bool OnRender(SDL_Texture* tileset, const SDL_Point* m);
 
-  void reqChange(int& ID);
+  void reqChange(short& ID);
 
 private:
 	bool RenderTileset(SDL_Texture* tileset, const SDL_Point* m);

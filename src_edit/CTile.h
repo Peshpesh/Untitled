@@ -37,10 +37,10 @@ enum
 class CTile
 {
 public:
-	int		bg_ID;			// Background tile (ID) drawn
-	int		fg_ID;			// Foreground tile (ID) drawn
-	int		TypeID;			// Tile characteristics
-	int		CollID;		  // Collision characteristics
+	short		bg_ID;			// Background tile (ID) drawn
+	short		fg_ID;			// Foreground tile (ID) drawn
+	short		TypeID;			// Tile characteristics
+	short		CollID;		  // Collision characteristics
 
 public:
 	CTile();

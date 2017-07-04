@@ -232,7 +232,7 @@ bool CChangeTile::RenderArrow(char dir, const SDL_Rect* dstR, const SDL_Point* m
 	return CAsset::drawStrArrow(dstR, dir, arrCol, arrStr);
 }
 
-void CChangeTile::reqChange(int& ID)
+void CChangeTile::reqChange(short& ID)
 {
 	if (changeFlag)
 	{
