@@ -11,6 +11,23 @@ namespace {
   const SDL_Rect fprevBox     = {prevTitleBox.x + prevTitleBox.w, prevTitleBox.y, canv.w - prevTitleBox.w - (cstrsiz * 2), 11};
   const SDL_Rect newTitleBox  = {canv.x + cstrsiz, prevTitleBox.y + prevTitleBox.h + cstrsiz, 90, 11};
   const SDL_Rect fnewBox      = {newTitleBox.x + newTitleBox.w, newTitleBox.y, canv.w - newTitleBox.w - (cstrsiz * 2), 11};
+
+  const char* const inform[] = {
+    "IO cancelled.",
+    "Save successful.",
+    "Load successful.",
+    "Failed to load Entity file.",
+    "Failed to load Scenery file.",
+    "Failed to save data."
+  };
+  enum {
+    I_CANCEL = 0,
+    I_SAVE,
+    I_LOAD,
+    I_FAIL_ENTITY,
+    I_FAIL_SCENERY,
+    I_FAIL_SAVE,
+  };
 }
 
 namespace render {
@@ -31,7 +48,7 @@ namespace render {
 CFileIO::CFileIO()
 {
   prevName = "testing";
-  newName = "testing";
+  newName = "";
 }
 
 void CFileIO::OnEvent(SDL_Event* Event)
@@ -80,8 +97,8 @@ void CFileIO::OnKeyDown(SDL_Keycode sym, Uint16 mod)
     case SDLK_y:	addToPath('y');	break;
     case SDLK_z:	addToPath('z');	break;
     case SDLK_BACKSPACE: backPath(); break;
-    case SDLK_RETURN: CInterrupt::removeFlag(INTRPT_LOAD | INTRPT_SAVE); break;
-    case SDLK_ESCAPE: CInterrupt::removeFlag(INTRPT_LOAD | INTRPT_SAVE); break;
+    case SDLK_RETURN: handleIOrequest(); break;
+    case SDLK_ESCAPE: pushInform(I_CANCEL); CInterrupt::removeFlag(INTRPT_LOAD | INTRPT_SAVE); newName.clear(); break;
     default: break;
   }
 }
@@ -89,6 +106,18 @@ void CFileIO::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 void CFileIO::OnLButtonDown(int mX, int mY)
 {
   //
+}
+
+void CFileIO::handleIOrequest()
+{
+  if (CInterrupt::isFlagOn(INTRPT_LOAD)) {
+    loadData();
+  }
+  else if (CInterrupt::isFlagOn(INTRPT_SAVE)) {
+    saveData();
+  }
+
+  CInterrupt::removeFlag(INTRPT_LOAD | INTRPT_SAVE);
 }
 
 bool CFileIO::OnRender(const SDL_Point* m)
@@ -104,7 +133,12 @@ bool CFileIO::OnRender(const SDL_Point* m)
   CAsset::drawBoxFill(&fnewBox, fnameBoxCol);
 
   Font::FontControl.SetFont(FONT_MINI);
-  Font::NewCenterWrite(saveTitle, &titleBox, textCol);
+  if (CInterrupt::isFlagOn(INTRPT_LOAD)) {
+    Font::NewCenterWrite(loadTitle, &titleBox, textCol);
+  }
+  else {
+    Font::NewCenterWrite(saveTitle, &titleBox, textCol);
+  }
   Font::NewCenterWrite(prevTitle, &prevTitleBox, fnameCol);
   Font::NewCenterWrite(newTitle, &newTitleBox, fnameCol);
   Font::NewCenterWrite(prevName.c_str(), &fprevBox, fnameCol);
@@ -123,44 +157,55 @@ void CFileIO::addToPath(const char& addSym)
   if (newName.size() < newName.max_size()) newName.push_back(addSym);
 }
 
-bool CFileIO::loadData()
+void CFileIO::loadData()
 {
-  if (!CArea::AreaControl.OnLoad(newName.c_str())) {
+  if (!CArea::AreaControl.NewLoad(newName.c_str())) {
     // problem loading the area
-    return false;
+    return;
   }
 
   if (!CEntityEdit::NPCControl.LoadList(newName.c_str())) {
     // problem loading entities
-    return false;
+    pushInform(I_FAIL_ENTITY);
+    return;
   }
 
   if (!CSceneryEdit::ScnControl.LoadScenery(newName.c_str())) {
     // problem loading 2.5D elements
-    return false;
+    pushInform(I_FAIL_SCENERY);
+    return;
   }
 
   prevName = newName;
   newName.clear();
 
-  return true;
+  pushInform(I_LOAD);
 }
 
-bool CFileIO::saveData()
+void CFileIO::saveData()
 {
-  CArea::AreaControl.SaveArea(newName.c_str());
-  CEntityEdit::NPCControl.SaveList(newName.c_str());
-  CSceneryEdit::ScnControl.SaveScenery(newName.c_str());
+  if (!CArea::AreaControl.NewSave(newName.c_str())) {
+    pushInform(I_FAIL_SAVE);
+    return;
+  }
+  if (!CEntityEdit::NPCControl.SaveList(newName.c_str())) {
+    pushInform(I_FAIL_SAVE);
+    return;
+  }
+  if (!CSceneryEdit::ScnControl.SaveScenery(newName.c_str())) {
+    pushInform(I_FAIL_SAVE);
+    return;
+  }
 
   prevName = newName;
   newName.clear();
 
-  return true;
+  pushInform(I_SAVE);
 }
 
 void CFileIO::pushInform(const int& ID)
 {
-  // if (ID < I_CANCEL || ID > I_FAIL) return;
+  if (ID < I_CANCEL || ID > I_FAIL_SAVE) return;
 
-  // CInform::InfoControl.pushInform(inform[ID]);
+  CInform::InfoControl.pushInform(inform[ID]);
 }

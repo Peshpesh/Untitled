@@ -8,12 +8,10 @@
 #include "CTile.h"
 #include "CTileset.h"
 #include "CSurface.h"
+#include "CInform.h"
 
 class CMap {
-public:
-	// SDL_Texture* Tex_Tileset;	// Pointer to the map tileset texture
 
-private:
 	std::vector<CTile> TileList;
 
 public:
@@ -22,6 +20,8 @@ public:
 
 
 public:
+	bool NewLoad(FILE* fhandle);
+	bool NewSave(FILE* fhandle);
 	bool OnLoad(char const* File);
 	void OnLoad();
 
@@ -32,6 +32,6 @@ public:
 
 	void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
 
-	void SaveMap(int ID, char const* areaname);
+	bool SaveMap(int ID, char const* areaname);
 };
 #endif

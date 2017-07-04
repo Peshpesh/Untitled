@@ -2,6 +2,7 @@
 #define _C_AREA_H_
 
 #include "CMap.h"
+#include "CInform.h"
 #include <string>
 
 class CArea
@@ -20,6 +21,8 @@ private:
 public:
 	CArea();
 
+	void OnInit();
+
 	CMap* GetMap(int X, int Y);
 	CTile* GetTile(int X, int Y);
 
@@ -30,6 +33,9 @@ public:
 			a tileset, which needs the renderer in use.
 	*/
 	bool	OnLoad(char const* File);
+	bool 	NewLoad(char const* File);
+	bool	NewSave(char const* File);
+
 
 	/*	Loads an "empty" 1 x 1 map area.
 			param tileset : Tileset for the area.
@@ -67,7 +73,7 @@ public:
 
 	void	ChangeSet(SDL_Texture* newset);
 	void 	ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
-	void	SaveArea(char const* areaname);
+	bool	SaveArea(char const* areaname);
 	void	OnCleanup();
 };
 #endif

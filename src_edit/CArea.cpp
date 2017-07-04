@@ -4,8 +4,18 @@ CArea CArea::AreaControl;
 
 CArea::CArea()
 {
-	AreaWidth = AreaHeight = 0;
-	// Tex_Tileset = NULL;
+	OnInit();
+}
+
+void CArea::OnInit()
+{
+	MapList.clear();
+	AreaHeight = AreaWidth = 1;
+
+	CMap tempMap;
+	tempMap.OnLoad();
+
+	MapList.push_back(tempMap);
 }
 
 CMap* CArea::GetMap(int X, int Y)
@@ -35,6 +45,104 @@ CTile* CArea::GetTile(int X, int Y)
 	return Map->GetTile(X, Y);
 }
 
+bool CArea::NewLoad(char const* File)
+{
+	// try to load area/maps
+  std::string fpath = "../data/maps/";
+  std::string ext = ".area";
+  std::string fname = fpath + std::string(File) + ext;
+
+	FILE* FileHandle = fopen(fname.c_str(), "r");
+	if (FileHandle == NULL) {
+		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open area file");
+		return false;
+	}
+
+	char TilesetFile[255];
+	fscanf(FileHandle, "%s\n", TilesetFile);
+
+	if (!CTileset::PickTS.changeTileset(TilesetFile)) {
+		CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
+		return false;
+	}
+
+	fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
+	fclose(FileHandle);
+
+	ext = ".maps";
+	fname = fpath + std::string(File) + ext;
+
+	FILE* MapsHandle = fopen(fname.c_str(), "rb");
+	if (MapsHandle == NULL) {
+		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open maps file");
+		return false;
+	}
+
+	MapList.clear();
+
+	for (int X = 0; X < AreaWidth; X++)
+	{
+		for (int Y = 0; Y < AreaHeight; Y++)
+		{
+			CMap tempMap;
+			if (tempMap.NewLoad(MapsHandle) == false) {
+				fclose(MapsHandle);
+				return false;
+			}
+			MapList.push_back(tempMap);
+		}
+	}
+	fclose(MapsHandle);
+	return true;
+}
+
+bool CArea::NewSave(char const* File)
+{
+	// try to save area/maps
+	std::string fpath = "../data/maps/";
+	std::string ext = ".area";
+	std::string fname = fpath + std::string(File) + ext;
+	FILE* FileHandle = fopen(fname.c_str(), "w");
+
+	if (FileHandle == NULL)	{
+		CInform::InfoControl.pushInform("---CAREA.NewSave---\nfailed to open new area file");
+		return false;
+	}
+
+	std::string setname = CTileset::PickTS.getFileName();
+
+	// Output the filename of the tileset for the area
+	fprintf(FileHandle, setname.c_str());
+	fprintf(FileHandle, "\n");
+
+	// Output AreaWidth & AreaHeight
+	fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
+
+	fclose(FileHandle);
+
+	ext = ".maps";
+	fname = fpath + std::string(File) + ext;
+	FileHandle = fopen(fname.c_str(), "wb");
+
+	if (FileHandle == NULL)	{
+		CInform::InfoControl.pushInform("---CAREA.NewSave---\nfailed to open new maps file");
+		return false;
+	}
+
+	// Output map data to .maps file
+	for (int Y = 0; Y < AreaHeight; Y++)
+	{
+		for (int X = 0; X < AreaWidth; X++)
+		{
+			int ID = X + (Y * AreaWidth);
+			if (!MapList[ID].NewSave(FileHandle)) return false;
+		}
+	}
+
+	fclose(FileHandle);
+	return true;
+}
+
 bool CArea::OnLoad(char const* File)
 {
 	// try to load area/maps
@@ -43,12 +151,18 @@ bool CArea::OnLoad(char const* File)
   std::string fname = fpath + std::string(File) + ext;
 
 	FILE* FileHandle = fopen(fname.c_str(), "r");
-	if (FileHandle == NULL) return false;
+	if (FileHandle == NULL) {
+		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open area file");
+		return false;
+	}
 
 	char TilesetFile[255];
 	fscanf(FileHandle, "%s\n", TilesetFile);
 
-	if (!CTileset::PickTS.changeTileset(TilesetFile)) return false;
+	if (!CTileset::PickTS.changeTileset(TilesetFile)) {
+		CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
+		return false;
+	}
 
 	fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
 
@@ -75,21 +189,6 @@ bool CArea::OnLoad(char const* File)
 	fclose(FileHandle);
 	return true;
 }
-
-// bool CArea::OnLoad(SDL_Texture* tileset)
-// {
-// 	if (tileset == NULL) return false;
-//
-// 	MapList.clear();
-// 	AreaHeight = AreaWidth = 1;
-//
-// 	CMap tempMap;
-// 	tempMap.OnLoad();
-// 	// tempMap.Tex_Tileset = Tex_Tileset;
-//
-// 	MapList.push_back(tempMap);
-// 	return true;
-// }
 
 void CArea::OnRender(int CameraX, int CameraY, bool bg)
 {
@@ -395,7 +494,7 @@ void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
 	MapList[ID].ChangeTile(X % mapWidth, Y % mapHeight, NewTile, useTiles);
 }
 
-void CArea::SaveArea(char const* areaname)
+bool CArea::SaveArea(char const* areaname)
 {
 	// try to save area/maps
   std::string fpath = "../data/maps/";
@@ -403,20 +502,12 @@ void CArea::SaveArea(char const* areaname)
   std::string fname = fpath + std::string(areaname) + ext;
 	FILE* FileHandle = fopen(fname.c_str(), "w");
 
-	// char pre[] = "../data/maps/";
-	// char ext[] = ".area";
-	// char* filename = new char[std::strlen(areaname) + std::strlen(pre) + std::strlen(ext) + 1];
-	// std::strcpy(filename, pre);
-	// std::strcat(filename, areaname);
-	// std::strcat(filename, ext);
-	// FILE* FileHandle = fopen(filename, "w");
+	if (FileHandle == NULL)	return false;
 
-	if (FileHandle == NULL)	return;
-
-	std::string setpath = CTileset::PickTS.getFilePath();
+	std::string setname = CTileset::PickTS.getFileName();
 
 	// Output the path to the tileset for the area
-	fprintf(FileHandle, setpath.c_str());
+	fprintf(FileHandle, setname.c_str());
 	fprintf(FileHandle, "\n");
 
 	// Output AreaWidth & AreaHeight
@@ -427,17 +518,17 @@ void CArea::SaveArea(char const* areaname)
 		for (int X = 0; X < AreaWidth; X++)
 		{
 			int ID = X + Y * AreaWidth;
-			MapList[ID].SaveMap(ID, areaname);
+			if (!MapList[ID].SaveMap(ID, areaname)) return false;
 			fprintf(FileHandle, "%s%s%02d%s ", fpath.c_str(), areaname, ID, ".map");
 		}
 		fprintf(FileHandle, "\n");
 	}
 	fclose(FileHandle);
 	// delete filename;
+	return true;
 }
 
 void CArea::OnCleanup()
 {
-	// if (Tex_Tileset) SDL_DestroyTexture(Tex_Tileset);
 	MapList.clear();
 }

@@ -336,7 +336,9 @@ bool CSceneryEdit::SaveScenery(char const* areaname)
   FILE* FileHandle = fopen(filename, "w");
   delete filename;
 
-  if (FileHandle == NULL)	return false;
+  if (FileHandle == NULL)	{
+    return false;
+  }
 
   // Output number of textures to load
   fprintf(FileHandle, "%d\n", TexList.size());

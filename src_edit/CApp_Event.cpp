@@ -122,6 +122,7 @@ bool CApp::EventOPTS(int mX, int mY)
 		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
 		if (mY >= LOAD_BUT_Y && mY < LOAD_BUT_Y + IO_BUT_H)
 		{
+			CInterrupt::appendFlag(INTRPT_LOAD);
 			// if (CIO::IOControl.OnLoad(Map_Interface, Tileset_Path))
 			// {
 			// 	// Main_Tileset = CSurface::OnLoad(Tileset_Path);

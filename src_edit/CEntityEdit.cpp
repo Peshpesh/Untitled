@@ -26,7 +26,7 @@ bool CEntityEdit::CWrite_Name(const int& fontID, int X, int Y)
 	return true;
 }
 
-void CEntityEdit::SaveList(char const* filename)
+bool CEntityEdit::SaveList(char const* filename)
 {
 	char pre[] = "../data/maps/";
 	char ext[] = ".ent";
@@ -37,8 +37,10 @@ void CEntityEdit::SaveList(char const* filename)
 
 	FILE* FileHandle = fopen(e_listname, "w");
 
-	if (FileHandle == NULL)
-		return;
+	if (FileHandle == NULL) {
+		delete e_listname;
+		return false;
+	}
 
 	// The very start of the file will be a number that
 	// indicates which table of entities we're using.
@@ -57,6 +59,7 @@ void CEntityEdit::SaveList(char const* filename)
 
 	fclose(FileHandle);
 	delete e_listname;
+	return true;
 }
 
 bool CEntityEdit::LoadList(char const* filename)

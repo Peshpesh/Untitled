@@ -56,6 +56,11 @@ void CApp::OnRender()
 
 	CInform::InfoControl.OnRender();
 
+	if (CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE))
+	{
+		CFileIO::IOhandle.OnRender(&mouse);
+	}
+
 	//	DEBUGGING
 	if (debug)
 	{

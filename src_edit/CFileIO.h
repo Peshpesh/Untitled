@@ -28,8 +28,9 @@ public:
   bool OnRender(const SDL_Point* m);
 
 private:
-  bool loadData();
-  bool saveData();
+  void handleIOrequest();
+  void loadData();
+  void saveData();
   void pushInform(const int& ID);
 
 private:

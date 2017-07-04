@@ -28,23 +28,11 @@ void CEditMap::handleChangeTS(SDL_Event* Event)
   CTileset::PickTS.OnEvent(Event);
 
   if (CInterrupt::isFlagOff(INTRPT_CHANGE_TS)) {
-    TileTL.reset();
-    TileTR.reset();
-    TileBL.reset();
-    TileBR.reset();
+    TileTL.bg_ID = TileTR.bg_ID = TileBL.bg_ID = TileBR.bg_ID = -1;
+    TileTL.fg_ID = TileTR.fg_ID = TileBL.fg_ID = TileBR.fg_ID = -1;
+    TileTL.TypeID = TileTR.TypeID = TileBL.TypeID = TileBR.TypeID = TILE_TYPE_NORMAL;
+    TileTL.CollID = TileTR.CollID = TileBL.CollID = TileBR.CollID = SOLID_NONE;
   }
-  // if (CTileset::PickTS.reqChange())    // try to change tileset
-  // {
-  //   SDL_Texture* tmpset = CTileset::PickTS.changeTileset();
-  //   if (tmpset != NULL)
-  //   {
-  //     SDL_DestroyTexture(Tileset);
-  //     Tileset = tmpset;
-  //     queryTileDims(Tileset, tset_w, tset_h);
-  //     CArea::AreaControl.OnLoad(Tileset);
-  //     TileTL.reset(); TileTR.reset(); TileBL.reset(); TileBR.reset();
-  //   }
-  // }
 }
 
 void CEditMap::handleChangeTile(SDL_Event* Event, int intrpt)

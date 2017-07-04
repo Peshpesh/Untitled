@@ -38,7 +38,7 @@ public:
 	void CWrite_Debug(const int& fontID, int X, int Y);
 
 	// Write out a list of entity information for the working area.
-	void SaveList(char const* filename);
+	bool SaveList(char const* filename);
 
 	// Load an existing list of entities for an area.
 	bool LoadList(char const* filename);

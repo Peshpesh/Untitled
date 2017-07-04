@@ -157,6 +157,11 @@ bool CTileset::OnRender(const SDL_Point* m)
   return true;
 }
 
+std::string CTileset::getFileName()
+{
+  return file;
+}
+
 std::string CTileset::getFilePath()
 {
   std::string filepath = ts_path + file + extension;

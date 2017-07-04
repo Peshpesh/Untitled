@@ -2,7 +2,7 @@
 
 CMap::CMap()
 {
-	// Tex_Tileset = NULL;
+	//
 }
 
 CTile* CMap::GetTile(int X, int Y)
@@ -18,12 +18,61 @@ CTile* CMap::GetTile(int X, int Y)
 	return &TileList[ID];
 }
 
+bool CMap::NewLoad(FILE* fhandle)
+{
+	if (fhandle == NULL) {
+		CInform::InfoControl.pushInform("---CMAP.Onload---\nmaps file is NULL");
+		return false;
+	}
+
+	TileList.clear();
+
+	for (int Y = 0; Y < MAP_HEIGHT; Y++)
+	{
+		for (int X = 0; X < MAP_WIDTH; X++)
+		{
+			CTile tempTile;
+			if (fread(&tempTile, sizeof(class CTile), 1, fhandle) != 1) {
+				CInform::InfoControl.pushInform("---CMAP.NewLoad---\nfailed to load binary tile data");
+				return false;
+			}
+			TileList.push_back(tempTile);
+		}
+	}
+	return true;
+}
+
+bool CMap::NewSave(FILE* fhandle)
+{
+	if (fhandle == NULL) {
+		CInform::InfoControl.pushInform("---CMAP.NewSave---\nfailed to access maps handle");
+		return false;
+	}
+
+	for (int Y = 0; Y < MAP_HEIGHT; Y++)
+	{
+		for (int X = 0; X < MAP_WIDTH; X++)
+		{
+			int ID = X + Y * MAP_WIDTH;
+			if (fwrite(&TileList[ID], sizeof(class CTile), 1, fhandle) != 1) {
+				CInform::InfoControl.pushInform("---CMAP.NewSave---\nfailed to write binary tile data");
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 bool CMap::OnLoad(char const* File)
 {
-	TileList.clear();
 	FILE* FileHandle = fopen(File, "r");
 
-	if (FileHandle == NULL) return false;
+	if (FileHandle == NULL) {
+		CInform::InfoControl.pushInform("---CMAP.Onload---\nfailed to open map file");
+		return false;
+	}
+
+	TileList.clear();
 
 	for (int Y = 0; Y < MAP_HEIGHT; Y++)
 	{
@@ -197,7 +246,7 @@ void CMap::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
 	if (useTiles & ENABLE_COLL)	TileList[ID].CollID = NewTile->CollID;
 }
 
-void CMap::SaveMap(int ID, char const* areaname)
+bool CMap::SaveMap(int ID, char const* areaname)
 {
 	int TensDigit = ID / 10;
 	int OnesDigit = ID % 10;
@@ -215,7 +264,10 @@ void CMap::SaveMap(int ID, char const* areaname)
 	std::strcat(filename, ext);
 
 	FILE* FileHandle = fopen(filename, "w");
-	if (FileHandle == NULL) return;
+	if (FileHandle == NULL) {
+		delete filename;
+		return false;
+	}
 
 	for (int Y = 0; Y < MAP_HEIGHT; Y++)
 	{
@@ -228,4 +280,5 @@ void CMap::SaveMap(int ID, char const* areaname)
 	}
 	fclose(FileHandle);
 	delete filename;
+	return true;
 }

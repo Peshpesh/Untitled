@@ -39,6 +39,7 @@ public:
 
   bool OnRender(const SDL_Point* m);
 
+  std::string getFileName();
   std::string getFilePath();
 
 private:
