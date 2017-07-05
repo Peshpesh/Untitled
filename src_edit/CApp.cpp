@@ -4,8 +4,6 @@ CApp::CApp()
 {
 	Running = true;
 	Map_Display = NULL;
-	// Map_Renderer = NULL;
-	// Map_Interface = NULL;
 	mouseX = mouseY = 0;
 	mouse.x = mouse.y = 0;
 

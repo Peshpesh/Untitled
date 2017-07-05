@@ -3,6 +3,7 @@
 void CApp::OnRender()
 {
 	static const bool debug = true;
+
 	CSurface::Clear();
 
 	// Draw background scenery
@@ -52,11 +53,12 @@ void CApp::OnRender()
 		CEditMap::MapEditor.OnRender(&mouse);
 	}
 
-	RenderEngine();
+	renderEngSwitch();
+	renderIOButtons();
 
 	CInform::InfoControl.OnRender();
 
-	if (CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE))
+	if (CInterrupt::isFlagOn(INTRPT_NEW) || CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE))
 	{
 		CFileIO::IOhandle.OnRender(&mouse);
 	}
@@ -70,11 +72,11 @@ void CApp::OnRender()
 	CSurface::Present();
 }
 
-bool CApp::RenderEngine()
+bool CApp::renderEngSwitch()
 {
-	using namespace io_ui;
+	using namespace engineSwitch;
 
-	bool canHilight = !(bool)(intrpt);
+	bool canHilight = CInterrupt::isNone();
 	bool noHov;
 
 	const SDL_Point* color = NULL;
@@ -85,6 +87,24 @@ bool CApp::RenderEngine()
 		CAsset::drawStrBox(&engineButton[i], bsiz, color);
 		Font::NewCenterWrite(FONT_MINI, engineName[i], &engineButton[i]);
 	}
+
+	return true;
+}
+
+bool CApp::renderIOButtons()
+{
+	using namespace io_ui;
+
+	bool hov = CInterrupt::isNone();
+
+	CAsset::drawStrBox(&newButton, bsiz, (hov && SDL_PointInRect(&mouse, &newButton)) ? newHovCol : newButCol);
+	CAsset::drawStrBox(&loadButton, bsiz, (hov && SDL_PointInRect(&mouse, &loadButton)) ? loadHovCol : loadButCol);
+	CAsset::drawStrBox(&saveButton, bsiz, (hov && SDL_PointInRect(&mouse, &saveButton)) ? saveHovCol : saveButCol);
+
+	Font::FontControl.SetFont(FONT_MINI);
+	Font::NewCenterWrite(new_label, &newButton);
+	Font::NewCenterWrite(load_label, &loadButton);
+	Font::NewCenterWrite(save_label, &saveButton);
 
 	return true;
 }

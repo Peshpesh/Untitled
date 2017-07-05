@@ -9,6 +9,11 @@ std::vector<int> CSceneryEdit::TexID_List;
 
 CSceneryEdit::CSceneryEdit()
 {
+  resetSettings();
+}
+
+void CSceneryEdit::resetSettings()
+{
   scn_ID = 0;
   Z = 1.00f;
   Zl = 0.00f;
@@ -16,6 +21,26 @@ CSceneryEdit::CSceneryEdit()
   hori_repeat = false;
   vert_repeat = false;
   permanent = false;
+}
+
+void CSceneryEdit::resetAll()
+{
+  resetSettings();
+
+  for (int i = 0; i < SceneList.size(); i++) {
+    delete SceneList[i];
+  }
+
+  SceneList.clear();
+
+  for (int i = 0; i < TexList.size(); i++) {
+    SDL_DestroyTexture(TexList[i]);
+  }
+
+  TexList.clear();
+
+  ScnID_List.clear();
+  TexID_List.clear();
 }
 
 bool CSceneryEdit::LoadScenery(char const* sceneryfile)
@@ -33,6 +58,8 @@ bool CSceneryEdit::LoadScenery(char const* sceneryfile)
   std::string fname = fpath + std::string(sceneryfile) + ext;
 	FILE* FileHandle = fopen(fname.c_str(), "r");
 	if (FileHandle == NULL) return false;
+
+  resetAll();
 
 	// The first entry in the data file is always the number of
   // textures to load.
@@ -89,8 +116,6 @@ bool CSceneryEdit::LoadScenery(char const* sceneryfile)
     tmp_scn = new CScenery;
     tmp_scn->OnLoad(TexList[loc_ID], Xo, Yo, W, H, MaxFrames);
     tmp_scn->OnPlace(X_loc, Y_loc, Zo, v_rep, h_rep, perm);
-    // SceneList.insert(SceneList.begin() + i, tmp_scn);
-    // ScnID_List.insert(ScnID_List.begin() + i, s_ID);
     SceneList.push_back(tmp_scn);
     ScnID_List.push_back(s_ID);
   }

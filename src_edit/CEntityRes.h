@@ -27,25 +27,6 @@ enum npc_debug // NPC_ID's from the Debug NPC table
 class CEntityRes
 {
 public:
-  // enum EntitySet
-	// {
-	// 	SET_DEBUG = 0
-	// };
-	// enum npc_common // NPC_ID order starts at 0 with commons
-	// {
-	// 	YOSHI = 0,
-	// 	MAINCHAR,
-	// 	EVILMAIN,
-	// 	BOMB,
-	// 	EXPLODE
-	// };
-	// enum npc_debug // NPC_ID's from the Debug NPC table
-	// {
-	// 	WSTAR = 0,
-	// 	BSTAR,
-	// 	BARS, BOX, SPIKEFALL, BLDSPK_UP,
-	// 	HEART, AMYTHYST, ACIDBALL, DOOR, SVPT, SIGN
-	// };
 
   CEntityRes();
 

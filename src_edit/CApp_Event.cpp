@@ -11,12 +11,10 @@ void CApp::OnEvent(SDL_Event* Event)
 
 bool CApp::handleInterr(SDL_Event* Event)
 {
-	if (CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE))
-	{
+	if (CInterrupt::isFlagOn(INTRPT_NEW) || CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE)) {
 		CFileIO::IOhandle.OnEvent(Event);
 		return true;
 	}
-
 	return false;
 }
 
@@ -35,16 +33,14 @@ void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 // Handle left-click events
 void CApp::OnLButtonDown(int mX, int mY)
 {
-	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) return;
+	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) {
+		return;
+	}
 
-	// Clicks on permanently-placed options buttons (independent of active_mod)
-	if (mX >= PERM_OPTS_X && mX < PERM_OPTS_X + PERM_OPTS_W)
 	{
-		if (mY >= PERM_OPTS_Y && mY < PERM_OPTS_Y + PERM_OPTS_H)
-		{
-			EventOPTS(mX, mY);
-			return;
-		}
+		const SDL_Point m = {mX, mY};
+		if (handleEngSwitch(&m)) return;
+		if (handleIO(&m)) return;
 	}
 
 	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
@@ -75,63 +71,37 @@ void CApp::OnRButtonDown(int mX, int mY)
 	}
 }
 
-bool CApp::EventOPTS(int mX, int mY)
+bool CApp::handleEngSwitch(const SDL_Point* m)
 {
-	using namespace io_ui;
-	// const SDL_Point mouse = {mX, mY};
+	using namespace engineSwitch;
+
 	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
 	for (int i = MODIFY_MAP; i <= REMOVE_SCENE; i++)
 	{
-		if (SDL_PointInRect(&mouse, &engineButton[i]))
-		{
+		if (SDL_PointInRect(m, &engineButton[i])) {
 			active_mod = i;
-			// break;
 			return true;
 		}
 	}
+	return false;
+}
 
-	// View Area Call (click on "MODEL")
-	if (mX >= MODEL_BUT_X && mX < MODEL_BUT_X + MODEL_BUT_W)
-	{
-		if (mY >= MODEL_BUT_Y && mY < MODEL_BUT_Y + MODEL_BUT_H)
-		{
-			// CArea::AreaControl.ViewArea(Map_Interface);
-			// SDL_RenderPresent(Map_Renderer);
-			// SDL_Event Event;
-			// SDL_WaitEvent(&Event);
-			// SDL_WaitEvent(&Event);
-			return true;
-		}
+bool CApp::handleIO(const SDL_Point* m)
+{
+	using namespace io_ui;
+
+	if (SDL_PointInRect(m, &newButton)) {
+		CInterrupt::appendFlag(INTRPT_NEW);
+		return true;
+	}
+	if (SDL_PointInRect(m, &loadButton)) {
+		CInterrupt::appendFlag(INTRPT_LOAD);
+		return true;
+	}
+	if (SDL_PointInRect(m, &saveButton)) {
+		CInterrupt::appendFlag(INTRPT_SAVE);
+		return true;
 	}
 
-	// Save and load functions
-	if (mX >= IO_BUT_X && mX < IO_BUT_X + IO_BUT_W)
-	{
-		// Save maps and entities
-		if (mY >= SAVE_BUT_Y && mY < SAVE_BUT_Y + IO_BUT_H)
-		{
-			CInterrupt::appendFlag(INTRPT_SAVE);
-			// char* Filename = CIO::IOControl.OnSave(Map_Interface);
-			// CArea::AreaControl.SaveArea(Filename, Tileset_Path);
-			// CEntityEdit::NPCControl.SaveList(Filename);
-			// CSceneryEdit::ScnControl.SaveScenery(Filename);
-			return true;
-		}
-
-		// Load maps and entities; update the current tileset if area is loaded successfully.
-		// Note that the functions to load entities is contained within the IOC.OnLoad function below.
-		if (mY >= LOAD_BUT_Y && mY < LOAD_BUT_Y + IO_BUT_H)
-		{
-			CInterrupt::appendFlag(INTRPT_LOAD);
-			// if (CIO::IOControl.OnLoad(Map_Interface, Tileset_Path))
-			// {
-			// 	// Main_Tileset = CSurface::OnLoad(Tileset_Path);
-			// 	// active_bg = active_type = 0;
-			// 	//
-			// 	// QueryTileset();
-			// 	// return true;
-			// }
-		}
-	}
-	return true;
+	return false;
 }

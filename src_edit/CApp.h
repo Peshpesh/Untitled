@@ -12,7 +12,6 @@
 #include "CArea.h"
 #include "CChangeTile.h"
 #include "CFileIO.h"
-// #include "CIO.h"
 #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
 #include "Define.h"
@@ -30,24 +29,30 @@ enum
 
 namespace io_ui
 {
-  static const char* engineName[] = {
-    "Map Editor",
-    "Npc Placer",
-    "Npc Culler",
-    "Scn Placer",
-    "Scn Culler"
-  };
-  static const SDL_Rect engineButton[] = {
-    {520, 490, 70, 16},
-    {520, 506, 70, 16},
-    {520, 522, 70, 16},
-    {520, 538, 70, 16},
-    {520, 554, 70, 16}
-  };
-  const short bsiz = 2;
-  static const SDL_Point* engineOnCol = &palette::cyan;
-  static const SDL_Point* engineOffCol = &palette::gray;
-  static const SDL_Point* engineHvCol = &palette::light_violet;
+  // IO button info
+  extern const char* const new_label;
+  extern const char* const load_label;
+  extern const char* const save_label;
+  extern const SDL_Rect newButton;
+  extern const SDL_Rect loadButton;
+  extern const SDL_Rect saveButton;
+  extern const SDL_Point* newButCol;
+  extern const SDL_Point* loadButCol;
+  extern const SDL_Point* saveButCol;
+  extern const SDL_Point* newHovCol;
+  extern const SDL_Point* loadHovCol;
+  extern const SDL_Point* saveHovCol;
+  extern const short bsiz;
+}
+
+namespace engineSwitch
+{
+  extern const char* engineName[];
+  extern const SDL_Rect engineButton[];
+  extern const SDL_Point* engineOnCol;
+  extern const SDL_Point* engineOffCol;
+  extern const SDL_Point* engineHvCol;
+  extern const short bsiz;
 }
 
 namespace npc_editor
@@ -89,7 +94,6 @@ namespace scn_editor
 class CApp : public CEvent {
 private:
 	SDL_Window* Map_Display;    // Edit Window
-	// SDL_Texture* Map_Interface; // Bordering interface for editor
 
 	bool Running;
 
@@ -113,7 +117,8 @@ public:
 	void OnEvent(SDL_Event* Event);
   bool handleInterr(SDL_Event* Event);
 
-	bool EventOPTS(int mX, int mY);
+	bool handleEngSwitch(const SDL_Point* m);
+  bool handleIO(const SDL_Point* m);
 
 	bool EventNPCedit(int mX, int mY);
 	void ModEntity(int mX, int mY);
@@ -138,7 +143,8 @@ public:
 
 	// Renders graphics
 	void OnRender();
-  bool RenderEngine();
+  bool renderEngSwitch();
+  bool renderIOButtons();
 
 	bool RenderNPCedit();
 	bool RenderSCNedit();

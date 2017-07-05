@@ -129,7 +129,6 @@ public:
 	static CEditMap	MapEditor;
 
 private:
-  // SDL_Texture* Tileset;       // The actual tileset in use
   SDL_Texture* Type_Tileset;  // Tileset showing tile type
   SDL_Texture* Coll_Tileset;	// Tileset showing collision type
 
@@ -151,7 +150,6 @@ private:
 
   int type_w, type_h;  	// Typeset texture dimension (tiles)
   int coll_w, coll_h; 	// Collset texture dimension (tiles)
-  // int tset_w, tset_h;  	// Tileset texture dimension (tiles)
 
   int onTiles;          // bitwise flag for tiles to place
 
@@ -167,7 +165,7 @@ public:
   CEditMap();
 
   bool OnInit();
-  
+
   void OnTerminate();
 
   bool RenderMap();

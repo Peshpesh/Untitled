@@ -26,9 +26,13 @@ public:
   void OnLButtonDown(int mX, int mY);
 
   bool OnRender(const SDL_Point* m);
+  bool renderResetMenu(const SDL_Point* m);
+  bool renderLoadMenu(const SDL_Point* m);
+  bool renderSaveMenu(const SDL_Point* m);
 
 private:
   void handleIOrequest();
+  void newData();
   void loadData();
   void saveData();
   void pushInform(const int& ID);

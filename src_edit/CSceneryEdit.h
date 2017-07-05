@@ -45,6 +45,10 @@ public:
 
   CSceneryEdit();
 
+  void resetSettings();
+
+  void resetAll();
+
   bool LoadScenery(char const* sceneryfile);
 
   void SwitchObj(int queryID);

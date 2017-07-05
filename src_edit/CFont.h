@@ -137,8 +137,6 @@ public:
 	static int NewCenterWrite(char const* message, const SDL_Rect* dstR);
 	static int NewCenterWrite(char const* message, const SDL_Point* dstC);
 
-	static int ActiveCenterWrite(char const* message, const SDL_Rect* dstR, const SDL_Color* col);
-
 	static void getLineDims(const int& fontID, char const* message, int& msgWidth);
 	static int getTextHeight(const int& fontID, char const* message, int maxWidth);
 	static int getNumLines(const int& fontID, char const* message, int maxWidth);

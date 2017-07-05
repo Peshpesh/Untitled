@@ -4,7 +4,6 @@ CEditMap CEditMap::MapEditor;
 
 CEditMap::CEditMap()
 {
-  // Tileset = NULL;    // The actual tileset in use
   Type_Tileset = NULL;    // Tileset showing tile type
   Coll_Tileset = NULL;    // Tileset showing collision type
 

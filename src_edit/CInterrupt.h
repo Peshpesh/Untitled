@@ -8,8 +8,9 @@ enum interrupts
   INTRPT_CHANGE_FG  = 0x00000002,		// intrpt via fg tile change
   INTRPT_MAP_MODEL  = 0x00000004,
   INTRPT_CHANGE_TS  = 0x00000008,
-  INTRPT_LOAD       = 0x00000010,
-  INTRPT_SAVE       = 0x00000020,
+  INTRPT_NEW        = 0x00000010,
+  INTRPT_LOAD       = 0x00000020,
+  INTRPT_SAVE       = 0x00000040,
 };
 
 class CInterrupt {

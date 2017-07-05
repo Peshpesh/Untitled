@@ -19,6 +19,7 @@ ${SRCDIR}/CApp.cpp
 ${SRCDIR}/CApp_Event.cpp
 ${SRCDIR}/CApp_EventNpcEdit.cpp
 ${SRCDIR}/CApp_EventScnEdit.cpp
+${SRCDIR}/CApp_Ext.cpp
 ${SRCDIR}/CApp_Init.cpp
 ${SRCDIR}/CApp_Loop.cpp
 ${SRCDIR}/CApp_Motion.cpp
@@ -47,7 +48,6 @@ ${SRCDIR}/CFont_Def.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
-${SRCDIR}/CIO.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryEdit.cpp
@@ -75,7 +75,6 @@ ${SRCDIR}/CFont.h
 ${SRCDIR}/CFPS.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
-${SRCDIR}/CIO.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryEdit.h

@@ -9,7 +9,14 @@ CEntityEdit::CEntityEdit()
 	NPC_ID = 0;
 	UseCommon = true;
 	Table_ID = DEBUG;
-	Speak_ID = 0;
+}
+
+void CEntityEdit::clearVectors()
+{
+	EntityList.clear();
+	CommonList.clear();
+	ID_List.clear();
+	NPC_ID = 0;
 }
 
 bool CEntityEdit::CWrite_Name(const int& fontID, int X, int Y)
@@ -104,10 +111,6 @@ bool CEntityEdit::LoadList(char const* filename)
 		CommonList.resize(CommonList.size() + 1);
 		ID_List.resize(ID_List.size() + 1);
 
-		// if (!EntityList[EntityList.size() - 1].OnLoad(ForwardSet(ID),
-		// 	CEntityInfo::EntityInfoList[ID].Xo, CEntityInfo::EntityInfoList[ID].Yo,
-		// 	CEntityInfo::EntityInfoList[ID].W, CEntityInfo::EntityInfoList[ID].H, ID)) return false;
-
 		if (com)
 		{
 			int Xt = CEntityInfo::Com_EntityInfo[ID].Xo;
@@ -141,7 +144,6 @@ bool CEntityEdit::LoadTable(int ID, char* &entitypath)
 {
 	switch (ID)
 	{
-	// case DEBUG: CEntityInfo::OnLoad("../res/npc/debug.tbl"); Table_ID = DEBUG; entitypath = "../res/npc/debug.png"; break;
 	case DEBUG: CEntityInfo::LoadUnique("../res/npc/debug.tbl"); Table_ID = DEBUG; entitypath = "../res/npc/debug.png"; break;
 	default: break;
 	}
@@ -156,9 +158,7 @@ bool CEntityEdit::LoadTable(int ID, char* &entitypath)
 
 SDL_Texture* CEntityEdit::ForwardSet()
 {
-//	if (CEntityInfo::EntityInfoList[NPC_ID].Common)
-	if (UseCommon)
-		return NPC_Common;
+	if (UseCommon) return NPC_Common;
 
 	return NPC_Tileset;
 }
@@ -167,9 +167,7 @@ SDL_Texture* CEntityEdit::ForwardSet()
 // or the unique (local) NPC texture.
 SDL_Texture* CEntityEdit::ForwardSet(int ID)
 {
-//	if (CEntityInfo::EntityInfoList[ID].Common)
-	if (CommonList[ID])
-		return NPC_Common;
+	if (CommonList[ID]) return NPC_Common;
 
 	return NPC_Tileset;
 }

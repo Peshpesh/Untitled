@@ -22,8 +22,6 @@ public:
 	std::vector<CEntity> EntityList; // Working list of entities
 	std::vector<bool> CommonList;		 // List bool, true for common entities, false for local
 	std::vector<int> ID_List;        // List of NPC_IDs that identify entities of equal index in EntityList
-	char Speak_List[255][50];		 // List of dialogue for each NPC that speaks
-	int Speak_ID;
 
 	int Table_ID;     // Working Table ID in Map Editor (starts at 0, aka DEBUG)
 	bool UseCommon;		// When true, NPC_ID is for common set. Otherwise, for unique
@@ -31,6 +29,8 @@ public:
 
 public:
 	CEntityEdit();
+
+	void clearVectors();
 
 	bool CWrite_Name(const int& fontID, int X, int Y);
 
