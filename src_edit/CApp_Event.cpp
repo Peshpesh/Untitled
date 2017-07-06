@@ -11,6 +11,10 @@ void CApp::OnEvent(SDL_Event* Event)
 
 bool CApp::handleInterr(SDL_Event* Event)
 {
+	if (CInterrupt::isFlagOn(INTRPT_MAP_MODEL)) {
+		CModel::Control.OnEvent(Event);
+		return true;
+	}
 	if (CInterrupt::isFlagOn(INTRPT_NEW) || CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE)) {
 		CFileIO::IOhandle.OnEvent(Event);
 		return true;
@@ -40,6 +44,7 @@ void CApp::OnLButtonDown(int mX, int mY)
 	{
 		const SDL_Point m = {mX, mY};
 		if (handleEngSwitch(&m)) return;
+		if (handleModelSwitch(&m)) return;
 		if (handleIO(&m)) return;
 	}
 
@@ -82,6 +87,18 @@ bool CApp::handleEngSwitch(const SDL_Point* m)
 			active_mod = i;
 			return true;
 		}
+	}
+	return false;
+}
+
+bool CApp::handleModelSwitch(const SDL_Point* m)
+{
+	using namespace modelSwitch;
+
+	if (SDL_PointInRect(m, &button)) {
+		CInterrupt::appendFlag(INTRPT_MAP_MODEL);
+		CModel::Control.OnInit();
+		return true;
 	}
 	return false;
 }

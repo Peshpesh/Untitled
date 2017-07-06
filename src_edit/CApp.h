@@ -14,6 +14,7 @@
 #include "CFileIO.h"
 #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
+#include "CModel.h"
 #include "Define.h"
 
 #include "CEditMap.h"
@@ -43,6 +44,16 @@ namespace io_ui
   extern const SDL_Point* loadHovCol;
   extern const SDL_Point* saveHovCol;
   extern const short bsiz;
+}
+
+namespace modelSwitch
+{
+  extern const SDL_Rect button;
+  extern const SDL_Point* offCol;
+  extern const SDL_Point* onCol;
+  extern const SDL_Point* hovCol;
+  extern const short bsiz;
+  extern const char* const label;
 }
 
 namespace engineSwitch
@@ -118,6 +129,7 @@ public:
   bool handleInterr(SDL_Event* Event);
 
 	bool handleEngSwitch(const SDL_Point* m);
+  bool handleModelSwitch(const SDL_Point* m);
   bool handleIO(const SDL_Point* m);
 
 	bool EventNPCedit(int mX, int mY);
@@ -144,6 +156,7 @@ public:
 	// Renders graphics
 	void OnRender();
   bool renderEngSwitch();
+  bool renderModelButton();
   bool renderIOButtons();
 
 	bool RenderNPCedit();

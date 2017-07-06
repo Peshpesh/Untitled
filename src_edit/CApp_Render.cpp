@@ -54,12 +54,17 @@ void CApp::OnRender()
 	}
 
 	renderEngSwitch();
+	renderModelButton();
 	renderIOButtons();
 
 	CInform::InfoControl.OnRender();
 
-	if (CInterrupt::isFlagOn(INTRPT_NEW) || CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE))
-	{
+	if (CInterrupt::isFlagOn(INTRPT_MAP_MODEL)) {
+		CModel::Control.OnRender(&mouse);
+	}
+
+	// if (CInterrupt::isFlagOn(INTRPT_NEW) || CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE)) {
+	if (CInterrupt::isFlagOn(INTRPT_NEW | INTRPT_LOAD | INTRPT_SAVE)) {
 		CFileIO::IOhandle.OnRender(&mouse);
 	}
 
@@ -87,6 +92,20 @@ bool CApp::renderEngSwitch()
 		CAsset::drawStrBox(&engineButton[i], bsiz, color);
 		Font::NewCenterWrite(FONT_MINI, engineName[i], &engineButton[i]);
 	}
+
+	return true;
+}
+
+bool CApp::renderModelButton()
+{
+	using namespace modelSwitch;
+
+	bool active = CInterrupt::isFlagOn(INTRPT_MAP_MODEL);
+	bool canHov = active ? false : CInterrupt::isNone();
+	bool hov = (!canHov) ? false : SDL_PointInRect(&mouse, &button);
+
+	CAsset::drawStrBox(&button, bsiz, active ? onCol : (hov ? hovCol : offCol));
+	Font::NewCenterWrite(FONT_MINI, label, &button);
 
 	return true;
 }

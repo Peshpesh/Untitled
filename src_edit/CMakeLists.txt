@@ -49,6 +49,7 @@ ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMap.cpp
+${SRCDIR}/CModel.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryEdit.cpp
 ${SRCDIR}/CSceneryMod.cpp
@@ -76,6 +77,7 @@ ${SRCDIR}/CFPS.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CMap.h
+${SRCDIR}/CModel.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryEdit.h
 ${SRCDIR}/CSceneryMod.h

@@ -236,7 +236,6 @@ void CMap::ViewMap(SDL_Texture* ui, int Xo, int Yo)
 	}
 }
 
-// void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int coll, int usetiles)
 void CMap::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
 {
 	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;

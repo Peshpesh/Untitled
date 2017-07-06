@@ -18,6 +18,16 @@ namespace io_ui
   const short bsiz = 2;
 }
 
+namespace modelSwitch
+{
+  const SDL_Rect button   = {605, 490, 21, 80};
+  const SDL_Point* offCol = &palette::gray;
+  const SDL_Point* onCol  = &palette::magenta;
+  const SDL_Point* hovCol = &palette::white;
+  const short bsiz = 2;
+  const char* const label = "M\nO\nD\nE\nL";
+}
+
 namespace engineSwitch
 {
   const char* engineName[] = {
@@ -28,11 +38,11 @@ namespace engineSwitch
     "Scn Culler"
   };
   const SDL_Rect engineButton[] = {
-    {520, 490, 70, 16},
-    {520, 506, 70, 16},
-    {520, 522, 70, 16},
-    {520, 538, 70, 16},
-    {520, 554, 70, 16}
+    {525, 490, 70, 16},
+    {525, 506, 70, 16},
+    {525, 522, 70, 16},
+    {525, 538, 70, 16},
+    {525, 554, 70, 16}
   };
   const SDL_Point* engineOnCol = &palette::cyan;
   const SDL_Point* engineOffCol = &palette::gray;

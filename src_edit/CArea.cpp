@@ -18,6 +18,12 @@ void CArea::OnInit()
 	MapList.push_back(tempMap);
 }
 
+void CArea::GetDims(int& mW, int& mH)
+{
+	mW = AreaWidth;
+	mH = AreaHeight;
+}
+
 CMap* CArea::GetMap(int X, int Y)
 {
 	int MapWidth = MAP_WIDTH * TILE_SIZE;

@@ -16,13 +16,13 @@ public:
 private:
 	int	AreaWidth;		// Maps
 	int	AreaHeight;		// Maps
-	// SDL_Texture*	Tex_Tileset;
 
 public:
 	CArea();
 
 	void OnInit();
 
+	void GetDims(int& mW, int& mH);
 	CMap* GetMap(int X, int Y);
 	CTile* GetTile(int X, int Y);
 
