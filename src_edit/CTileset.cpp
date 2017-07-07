@@ -157,6 +157,17 @@ bool CTileset::OnRender(const SDL_Point* m)
   return true;
 }
 
+SDL_Rect CTileset::getTileSrcR(const int& ID)
+{
+  SDL_Rect srcR = {0, 0, 0, 0};
+  if (ID < 0) return srcR;
+
+  srcR.x = (ID % ts_w) * TILE_SIZE;
+  srcR.y = (ID / ts_w) * TILE_SIZE;
+  srcR.w = srcR.h = TILE_SIZE;
+
+  return srcR;
+}
 std::string CTileset::getFileName()
 {
   return file;

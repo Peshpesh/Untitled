@@ -11,8 +11,7 @@ CTile* CMap::GetTile(int X, int Y)
 	ID = X / TILE_SIZE;
 	ID += (MAP_WIDTH * (Y / TILE_SIZE));
 
-	if (ID < 0 || ID >= TileList.size())
-	{
+	if (ID < 0 || ID >= TileList.size()) {
 		return NULL;
 	}
 	return &TileList[ID];
@@ -109,18 +108,14 @@ void CMap::OnLoad()
 
 void CMap::OnRender(int MapX, int MapY, bool bg)
 {
-	// if (Tex_Tileset == NULL) return;
-	//
-	// int PixWidth;
-	// int PixHeight;
-	//
-	// SDL_QueryTexture(Tex_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-	//
-	// int tset_w  = PixWidth / TILE_SIZE; // tiles
-	// int tset_h = PixHeight / TILE_SIZE; // tiles
-
 	if (CTileset::PickTS.tileset == NULL) return;
 
+	if (bg) {
+		const SDL_Point* emptyCol = &palette::dark_gray;
+		SDL_Rect dstmap = {MapX, MapY, MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE};
+		CAsset::drawBoxFill(&dstmap, emptyCol);
+	}
+	
 	int tset_w = CTileset::PickTS.ts_w; // tiles
 	int tset_h = CTileset::PickTS.ts_h; // tiles
 

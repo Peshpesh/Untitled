@@ -4,44 +4,15 @@
 #include "CSurface.h"
 #include "Define.h"
 
-namespace rgb
-{
-  extern const SDL_Color red;
-  extern const SDL_Color orange;
-  extern const SDL_Color yellow;
-  extern const SDL_Color green;
-  extern const SDL_Color cyan;
-  extern const SDL_Color blue;
-  extern const SDL_Color indigo;
-  extern const SDL_Color violet;
-  extern const SDL_Color magenta;
-  extern const SDL_Color gray;
-
-  extern const SDL_Color light_red;
-  extern const SDL_Color light_orange;
-  extern const SDL_Color light_yellow;
-  extern const SDL_Color light_green;
-  extern const SDL_Color light_cyan;
-  extern const SDL_Color light_blue;
-  extern const SDL_Color light_indigo;
-  extern const SDL_Color light_violet;
-  extern const SDL_Color light_magenta;
-  extern const SDL_Color white;
-
-  extern const SDL_Color dark_red;
-  extern const SDL_Color dark_orange;
-  extern const SDL_Color dark_yellow;
-  extern const SDL_Color dark_green;
-  extern const SDL_Color dark_cyan;
-  extern const SDL_Color dark_blue;
-  extern const SDL_Color dark_indigo;
-  extern const SDL_Color dark_violet;
-  extern const SDL_Color dark_magenta;
-  extern const SDL_Color black;
-}
-
 namespace palette
 {
+  extern const SDL_Point white      ;
+  extern const SDL_Point silver     ;
+  extern const SDL_Point light_gray ;
+  extern const SDL_Point gray       ;
+  extern const SDL_Point dark_gray  ;
+  extern const SDL_Point black      ;
+
   extern const SDL_Point red      ;
   extern const SDL_Point orange   ;
   extern const SDL_Point yellow   ;
@@ -51,7 +22,6 @@ namespace palette
   extern const SDL_Point indigo   ;
   extern const SDL_Point violet   ;
   extern const SDL_Point magenta  ;
-  extern const SDL_Point gray     ;
 
   extern const SDL_Point light_red     ;
   extern const SDL_Point light_orange  ;
@@ -62,7 +32,6 @@ namespace palette
   extern const SDL_Point light_indigo  ;
   extern const SDL_Point light_violet  ;
   extern const SDL_Point light_magenta ;
-  extern const SDL_Point white         ;
 
   extern const SDL_Point dark_red      ;
   extern const SDL_Point dark_orange   ;
@@ -73,8 +42,48 @@ namespace palette
   extern const SDL_Point dark_indigo   ;
   extern const SDL_Point dark_violet   ;
   extern const SDL_Point dark_magenta  ;
-  extern const SDL_Point black         ;
 }
+
+namespace rgb
+{
+  extern const SDL_Color white;
+  // extern const SDL_Color silver;
+  // extern const SDL_Color light_gray;
+  extern const SDL_Color gray;
+  // extern const SDL_Color dark_gray;
+  extern const SDL_Color black;
+
+  extern const SDL_Color red;
+  extern const SDL_Color orange;
+  extern const SDL_Color yellow;
+  extern const SDL_Color green;
+  extern const SDL_Color cyan;
+  extern const SDL_Color blue;
+  extern const SDL_Color indigo;
+  extern const SDL_Color violet;
+  extern const SDL_Color magenta;
+
+  extern const SDL_Color light_red;
+  extern const SDL_Color light_orange;
+  extern const SDL_Color light_yellow;
+  extern const SDL_Color light_green;
+  extern const SDL_Color light_cyan;
+  extern const SDL_Color light_blue;
+  extern const SDL_Color light_indigo;
+  extern const SDL_Color light_violet;
+  extern const SDL_Color light_magenta;
+
+  extern const SDL_Color dark_red;
+  extern const SDL_Color dark_orange;
+  extern const SDL_Color dark_yellow;
+  extern const SDL_Color dark_green;
+  extern const SDL_Color dark_cyan;
+  extern const SDL_Color dark_blue;
+  extern const SDL_Color dark_indigo;
+  extern const SDL_Color dark_violet;
+  extern const SDL_Color dark_magenta;
+}
+
 
 class CAsset
 {

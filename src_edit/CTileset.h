@@ -41,6 +41,7 @@ public:
 
   std::string getFileName();
   std::string getFilePath();
+  SDL_Rect getTileSrcR(const int& ID);
 
 private:
   void backPath();

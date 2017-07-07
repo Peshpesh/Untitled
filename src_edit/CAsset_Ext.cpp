@@ -3,6 +3,13 @@
 // Asset namespaces
 namespace palette
 {
+  const SDL_Point white       = {9, 0};
+  const SDL_Point silver      = {9, 1};
+  const SDL_Point light_gray  = {9, 2};
+  const SDL_Point gray        = {10, 0};
+  const SDL_Point dark_gray   = {10, 1};
+  const SDL_Point black       = {10, 2};
+
   const SDL_Point red      = {0, 0};
   const SDL_Point orange   = {1, 0};
   const SDL_Point yellow   = {2, 0};
@@ -12,7 +19,6 @@ namespace palette
   const SDL_Point indigo   = {6, 0};
   const SDL_Point violet   = {7, 0};
   const SDL_Point magenta  = {8, 0};
-  const SDL_Point gray     = {9, 0};
 
   const SDL_Point light_red     = {0, 1};
   const SDL_Point light_orange  = {1, 1};
@@ -23,7 +29,6 @@ namespace palette
   const SDL_Point light_indigo  = {6, 1};
   const SDL_Point light_violet  = {7, 1};
   const SDL_Point light_magenta = {8, 1};
-  const SDL_Point white         = {9, 1};
 
   const SDL_Point dark_red      = {0, 2};
   const SDL_Point dark_orange   = {1, 2};
@@ -34,7 +39,6 @@ namespace palette
   const SDL_Point dark_indigo   = {6, 2};
   const SDL_Point dark_violet   = {7, 2};
   const SDL_Point dark_magenta  = {8, 2};
-  const SDL_Point black         = {9, 2};
 }
 
 namespace rgb

@@ -15,7 +15,7 @@ bool CApp::handleInterr(SDL_Event* Event)
 		CModel::Control.OnEvent(Event);
 		return true;
 	}
-	if (CInterrupt::isFlagOn(INTRPT_NEW) || CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE)) {
+	if (CInterrupt::isFlagOn(INTRPT_NEW | INTRPT_LOAD | INTRPT_SAVE)) {
 		CFileIO::IOhandle.OnEvent(Event);
 		return true;
 	}

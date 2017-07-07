@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdio.h>
 #include <cstring>
+#include "CAsset.h"
 #include "CTile.h"
 #include "CTileset.h"
 #include "CSurface.h"
@@ -17,7 +18,6 @@ class CMap {
 public:
 	CMap();
 	CTile* GetTile(int X, int Y);
-
 
 public:
 	bool NewLoad(FILE* fhandle);
