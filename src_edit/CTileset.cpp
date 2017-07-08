@@ -168,6 +168,7 @@ SDL_Rect CTileset::getTileSrcR(const int& ID)
 
   return srcR;
 }
+
 std::string CTileset::getFileName()
 {
   return file;

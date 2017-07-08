@@ -3,7 +3,7 @@
 CModel CModel::Control;
 
 namespace model {
-  const short info_sz = 100;
+  const short info_sz = 200;
   const short mod_t_sz = 2;
   const short b_sz = 2;
   const SDL_Point* b_col = &palette::black;
@@ -82,7 +82,25 @@ bool CModel::OnRender(const SDL_Point* m) {
   if (!renderTypeWindow()) return false;
   if (!renderCollWindow()) return false;
 
-  renderArea();
+  if (!renderInfo()) return false;
+
+  if (!renderArea()) return false;
+
+  return true;
+}
+
+bool CModel::renderInfo() {
+  Font::FontControl.SetFont(FONT_MINI);
+
+  std::string info;
+  info += "Stage - " + CFileIO::IOhandle.getPrevName() + "\n\n";
+  info += "Tileset - " + CTileset::PickTS.getFileName() + "\n\n";
+  info += "Area Width - " + Font::intToStr(aW) + "\n\n";
+  info += "Area Height - " + Font::intToStr(aH) + "\n\n";
+  info += "Entities - " + Font::intToStr(CEntityEdit::NPCControl.EntityList.size()) + "\n\n";
+  info += "Scenery Objects - " + Font::intToStr(CSceneryEdit::ScnControl.SceneList.size());
+
+  Font::NewCenterWrite(info.c_str(), &infoCanvas);
 
   return true;
 }

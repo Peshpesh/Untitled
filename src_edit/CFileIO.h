@@ -30,6 +30,8 @@ public:
   bool renderLoadMenu(const SDL_Point* m);
   bool renderSaveMenu(const SDL_Point* m);
 
+  std::string getPrevName();
+
 private:
   void handleIOrequest();
   void newData();

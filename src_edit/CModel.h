@@ -8,6 +8,7 @@
 #include "CFont.h"
 #include "CArea.h"
 #include "CEntityEdit.h"
+#include "CFileIO.h"
 
 namespace model {
   extern const short info_sz;
@@ -53,6 +54,7 @@ private:
   bool renderCollWindow();
 
 private:
+  bool renderInfo();
   bool renderArea();
   bool renderMap(CMap* map, const int& x_rel, const int& y_rel);
 

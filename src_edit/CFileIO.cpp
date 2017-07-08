@@ -307,6 +307,10 @@ bool CFileIO::renderSaveMenu(const SDL_Point* m)
   return true;
 }
 
+std::string CFileIO::getPrevName()
+{
+  return prevName;
+}
 
 void CFileIO::backPath()
 {
