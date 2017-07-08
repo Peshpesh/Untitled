@@ -9,12 +9,34 @@
 #include "CArea.h"
 #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
+#include "CCamera.h"
 
 class CFileIO : public CEvent {
 private:
   CFileIO();
   std::string prevName;
   std::string newName;
+  void initMenus();
+
+private:
+  struct prompt {
+    const SDL_Point* canvCol;
+    const SDL_Point* titleBoxCol;
+    const SDL_Point* fBoxCol;
+    const SDL_Point* bCol;
+    const SDL_Color* textCol;
+    const SDL_Color* fnameCol;
+    const SDL_Point* optCol;
+    const SDL_Point* optHovCol;
+
+    const char* title;
+    const char* prevTitle;
+    const char* newTitle;
+    const char* okText;
+    const char* cancText;
+
+    const char* info;
+  } reset, load, save;
 
 public:
   static CFileIO IOhandle;
@@ -26,9 +48,8 @@ public:
   void OnLButtonDown(int mX, int mY);
 
   bool OnRender(const SDL_Point* m);
-  bool renderResetMenu(const SDL_Point* m);
-  bool renderLoadMenu(const SDL_Point* m);
-  bool renderSaveMenu(const SDL_Point* m);
+
+  bool renderMenu(const prompt& menu, const SDL_Point* m);
 
   std::string getPrevName();
 

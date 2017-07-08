@@ -18,17 +18,6 @@ namespace {
   const SDL_Rect okButton     = {canv.x + (canv.w / 2) - (bwid + bspac), infoBox.y + infoBox.h + bspac, bwid, 13};
   const SDL_Rect cancelButton = {canv.x + (canv.w / 2) + bspac, okButton.y, bwid, 13};
 
-  const char* const inform[] = {
-    "IO cancelled.",
-    "Save successful.",
-    "Load successful.",
-    "Save nothing... ?",
-    "Loaded nothing successfully.",
-    "All data reset.",
-    "Failed to load Entity file.",
-    "Failed to load Scenery file.",
-    "Failed to save data."
-  };
   enum {
     I_CANCEL = 0,
     I_SAVE,
@@ -40,97 +29,111 @@ namespace {
     I_FAIL_SCENERY,
     I_FAIL_SAVE,
   };
-}
 
-namespace render {
-  namespace reset {
-    const SDL_Point* canvCol      = &palette::green;
-    const SDL_Point* bCol         = &palette::black;
-    const SDL_Color* textCol      = &rgb::black;
-    const SDL_Color* fnameCol     = &rgb::white;
-    const SDL_Point* optCol       = &palette::white;
-    const SDL_Point* optHovCol    = &palette::red;
-
-    const char* const title       = "...New Stage...";
-    const char* const okText      = "Reset";
-    const char* const cancText    = "Cancel";
-
-    const char* const info = "\
-      Reset information\n\
-      --------------------\n\
-      All vectors for...\n\
-      \n\
-      - maps\n\
-      - entities\n\
-      - scenery\n\
-      \n\
-      ...will be cleared out and reset to default settings.";
-  }
-  namespace load {
-    const SDL_Point* canvCol      = &palette::cyan;
-    const SDL_Point* titleBoxCol  = &palette::black;
-    const SDL_Point* fBoxCol      = &palette::dark_violet;
-    const SDL_Point* bCol         = &palette::black;
-    const SDL_Color* textCol      = &rgb::black;
-    const SDL_Color* fnameCol     = &rgb::white;
-    const SDL_Point* optCol       = &palette::white;
-    const SDL_Point* optHovCol    = &palette::green;
-
-    const char* const title       = "...Load Stage...";
-    const char* const prevTitle   = "Previous Name";
-    const char* const newTitle    = "Target Name";
-    const char* const okText      = "Load";
-    const char* const cancText    = "Cancel";
-
-    const char* const info        = "\
-      Load information\n\
-      --------------------\n\
-      Enter a root filename to load area and associated files.\n\
-      A successful load will change...\n\
-      \n\
-      - The area and all maps\n\
-      - entities and entity sets\n\
-      - scenery and their textures\n\
-      \n\
-      All files will be loaded from the maps subdirectory in data.";
-  }
-  namespace save {
-    const SDL_Point* canvCol      = &palette::yellow;
-    const SDL_Point* titleBoxCol  = &palette::black;
-    const SDL_Point* fBoxCol      = &palette::dark_red;
-    const SDL_Point* bCol         = &palette::black;
-    const SDL_Color* textCol      = &rgb::black;
-    const SDL_Color* fnameCol     = &rgb::white;
-    const SDL_Point* optCol       = &palette::white;
-    const SDL_Point* optHovCol    = &palette::green;
-
-    const char* const title       = "...Save Stage...";
-    const char* const prevTitle   = "Previous Name";
-    const char* const newTitle    = "Target Name";
-    const char* const okText      = "Save";
-    const char* const cancText    = "Cancel";
-
-    const char* const info    = "\
-      Save information\n\
-      --------------------\n\
-      Enter a root filename to name all contributing files for the working area.\n\
-      A successful save will create...\n\
-      \n\
-      - ascii .area file\n\
-      - binary .maps file\n\
-      - ascii .ent file\n\
-      - ascii .scn file\n\
-      \n\
-      All files will be saved in the maps subdirectory in data.\n\
-      \n\
-      Note that any pre-existing files that share the root filename provided will be overwritten.";
-  }
+  const char* const inform[] = {
+    "IO cancelled.",
+    "Save successful.",
+    "Load successful.",
+    "Save nothing... ?",
+    "Loaded nothing successfully.",
+    "All data reset.",
+    "Failed to load Entity file.",
+    "Failed to load Scenery file.",
+    "Failed to save data."
+  };
 }
 
 CFileIO::CFileIO()
 {
   prevName = "";
   newName = "";
+  initMenus();
+}
+
+void CFileIO::initMenus()
+{
+  reset.canvCol     = &palette::green;
+  reset.titleBoxCol = &palette::black;
+  reset.fBoxCol     = &palette::black;
+  reset.bCol        = &palette::black;
+  reset.textCol     = &rgb::black;
+  reset.fnameCol    = &rgb::black;
+  reset.optCol      = &palette::white;
+  reset.optHovCol   = &palette::red;
+
+  reset.title       = "...New Stage...";
+  reset.prevTitle   = "";
+  reset.newTitle    = "";
+  reset.okText      = "Reset";
+  reset.cancText    = "Cancel";
+
+  load.canvCol     = &palette::cyan;
+  load.titleBoxCol = &palette::black;
+  load.fBoxCol     = &palette::dark_violet;
+  load.bCol        = &palette::black;
+  load.textCol     = &rgb::black;
+  load.fnameCol    = &rgb::white;
+  load.optCol      = &palette::white;
+  load.optHovCol   = &palette::green;
+
+  load.title       = "...Load Stage...";
+  load.prevTitle   = "Previous Name";
+  load.newTitle    = "Target Name";
+  load.okText      = "Load";
+  load.cancText    = "Cancel";
+
+  save.canvCol     = &palette::yellow;
+  save.titleBoxCol = &palette::black;
+  save.fBoxCol     = &palette::dark_red;
+  save.bCol        = &palette::black;
+  save.textCol     = &rgb::black;
+  save.fnameCol    = &rgb::white;
+  save.optCol      = &palette::white;
+  save.optHovCol   = &palette::green;
+
+  save.title       = "...Save Stage...";
+  save.prevTitle   = "Previous Name";
+  save.newTitle    = "Target Name";
+  save.okText      = "Save";
+  save.cancText    = "Cancel";
+
+  reset.info       = "\
+    Reset information\n\
+    --------------------\n\
+    All vectors for...\n\
+    \n\
+    - maps\n\
+    - entities\n\
+    - scenery\n\
+    \n\
+    ...will be cleared out and reset to default settings.";
+
+  load.info        = "\
+    Load information\n\
+    --------------------\n\
+    Enter a root filename to load area and associated files.\n\
+    A successful load will change...\n\
+    \n\
+    - The area and all maps\n\
+    - entities and entity sets\n\
+    - scenery and their textures\n\
+    \n\
+    All files will be loaded from the maps subdirectory in data.";
+
+  save.info        = "\
+    Save information\n\
+    --------------------\n\
+    Enter a root filename to name all contributing files for the working area.\n\
+    A successful save will create...\n\
+    \n\
+    - ascii .area file\n\
+    - binary .maps file\n\
+    - ascii .ent file\n\
+    - ascii .scn file\n\
+    \n\
+    All files will be saved in the maps subdirectory in data.\n\
+    \n\
+    Note that any pre-existing files that share the root filename provided will be overwritten.";
 }
 
 void CFileIO::OnEvent(SDL_Event* Event)
@@ -219,92 +222,43 @@ void CFileIO::handleIOrequest()
 bool CFileIO::OnRender(const SDL_Point* m)
 {
   if (CInterrupt::isFlagOn(INTRPT_NEW)) {
-    renderResetMenu(m);
+    renderMenu(reset, m);
   }
   else if (CInterrupt::isFlagOn(INTRPT_LOAD)) {
-    renderLoadMenu(m);
+    renderMenu(load, m);
   }
   else if (CInterrupt::isFlagOn(INTRPT_SAVE)) {
-    renderSaveMenu(m);
+    renderMenu(save, m);
   }
   return true;
 }
 
-bool CFileIO::renderResetMenu(const SDL_Point* m)
+bool CFileIO::renderMenu(const prompt& menu, const SDL_Point* m)
 {
-  using namespace render::reset;
+  CAsset::drawStrBox(&canv, cstrsiz, menu.canvCol, menu.bCol);
 
-  CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
+  CAsset::drawBoxFill(&prevTitleBox, menu.titleBoxCol);
+  CAsset::drawBoxFill(&newTitleBox, menu.titleBoxCol);
 
-  CAsset::drawStrBox(&okButton, bstrsiz, SDL_PointInRect(m, &okButton) ? optHovCol : optCol, bCol);
-  CAsset::drawStrBox(&cancelButton, bstrsiz, SDL_PointInRect(m, &cancelButton) ? optHovCol : optCol, bCol);
+  CAsset::drawBoxFill(&fprevBox, menu.fBoxCol);
+  CAsset::drawBoxFill(&fnewBox, menu.fBoxCol);
 
-  Font::NewCenterWrite(cancText, &cancelButton, textCol);
-  Font::NewCenterWrite(title, &titleBox, textCol);
-  Font::NewCenterWrite(info, &infoBox, textCol);
-  Font::NewCenterWrite(okText, &okButton, textCol);
+  CAsset::drawStrBox(&okButton, bstrsiz, SDL_PointInRect(m, &okButton) ? menu.optHovCol : menu.optCol, menu.bCol);
+  CAsset::drawStrBox(&cancelButton, bstrsiz, SDL_PointInRect(m, &cancelButton) ? menu.optHovCol : menu.optCol, menu.bCol);
 
-  return true;
-}
+  if (!CInterrupt::isFlagOn(INTRPT_NEW)) {
+    Font::NewCenterWrite(menu.prevTitle, &prevTitleBox, menu.fnameCol);
+    Font::NewCenterWrite(menu.newTitle, &newTitleBox, menu.fnameCol);
+    Font::NewCenterWrite(prevName.c_str(), &fprevBox, menu.fnameCol);
 
-bool CFileIO::renderLoadMenu(const SDL_Point* m)
-{
-  using namespace render::load;
+    Font::FontControl.setDynamic();
+    Font::NewCenterWrite(newName.c_str(), &fnewBox, menu.fnameCol);
+  }
 
-  CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
-
-  CAsset::drawBoxFill(&prevTitleBox, titleBoxCol);
-  CAsset::drawBoxFill(&newTitleBox, titleBoxCol);
-
-  CAsset::drawBoxFill(&fprevBox, fBoxCol);
-  CAsset::drawBoxFill(&fnewBox, fBoxCol);
-
-  CAsset::drawStrBox(&okButton, bstrsiz, SDL_PointInRect(m, &okButton) ? optHovCol : optCol, bCol);
-  CAsset::drawStrBox(&cancelButton, bstrsiz, SDL_PointInRect(m, &cancelButton) ? optHovCol : optCol, bCol);
-
-  Font::NewCenterWrite(prevTitle, &prevTitleBox, fnameCol);
-  Font::NewCenterWrite(newTitle, &newTitleBox, fnameCol);
-  Font::NewCenterWrite(prevName.c_str(), &fprevBox, fnameCol);
-
-  Font::FontControl.setDynamic();
-  Font::NewCenterWrite(newName.c_str(), &fnewBox, fnameCol);
-
-  Font::NewCenterWrite(cancText, &cancelButton, textCol);
-  Font::NewCenterWrite(title, &titleBox, textCol);
-  Font::NewCenterWrite(info, &infoBox, textCol);
-  Font::NewCenterWrite(okText, &okButton, textCol);
-
-  return true;
-}
-
-bool CFileIO::renderSaveMenu(const SDL_Point* m)
-{
-  using namespace render::save;
-
-  CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
-
-  CAsset::drawBoxFill(&prevTitleBox, titleBoxCol);
-  CAsset::drawBoxFill(&newTitleBox, titleBoxCol);
-
-  CAsset::drawBoxFill(&fprevBox, fBoxCol);
-  CAsset::drawBoxFill(&fnewBox, fBoxCol);
-
-  CAsset::drawStrBox(&okButton, bstrsiz, SDL_PointInRect(m, &okButton) ? optHovCol : optCol, bCol);
-  CAsset::drawStrBox(&cancelButton, bstrsiz, SDL_PointInRect(m, &cancelButton) ? optHovCol : optCol, bCol);
-
-  Font::NewCenterWrite(prevTitle, &prevTitleBox, fnameCol);
-  Font::NewCenterWrite(newTitle, &newTitleBox, fnameCol);
-  Font::NewCenterWrite(prevName.c_str(), &fprevBox, fnameCol);
-
-  Font::FontControl.setDynamic();
-  Font::NewCenterWrite(newName.c_str(), &fnewBox, fnameCol);
-
-  Font::NewCenterWrite(cancText, &cancelButton, textCol);
-  Font::NewCenterWrite(title, &titleBox, textCol);
-  Font::NewCenterWrite(info, &infoBox, textCol);
-  Font::NewCenterWrite(okText, &okButton, textCol);
-
-  return true;
+  Font::NewCenterWrite(menu.cancText, &cancelButton, menu.textCol);
+  Font::NewCenterWrite(menu.title, &titleBox, menu.textCol);
+  Font::NewCenterWrite(menu.info, &infoBox, menu.textCol);
+  Font::NewCenterWrite(menu.okText, &okButton, menu.textCol);
 }
 
 std::string CFileIO::getPrevName()
@@ -327,6 +281,7 @@ void CFileIO::addToPath(const char& addSym)
 void CFileIO::newData()
 {
   CArea::AreaControl.OnInit();
+	CCamera::CameraControl.SetPos(0, 0);
 
   if ((CEntityEdit::NPCControl.NPC_Tileset = CSurface::OnLoad("../res/npc/debug.png")) == NULL) {
 		return;
