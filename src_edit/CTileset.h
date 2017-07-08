@@ -17,9 +17,10 @@ private:
 public:
   SDL_Texture* tileset;
   int ts_w, ts_h;
+  bool succ;
 
 public:
-  static CTileset PickTS;
+  static CTileset TSControl;
 
 public:
 	CTileset();
@@ -42,6 +43,8 @@ public:
   std::string getFileName();
   std::string getFilePath();
   SDL_Rect getTileSrcR(const int& ID);
+
+  bool wasSuccess();
 
 private:
   void backPath();

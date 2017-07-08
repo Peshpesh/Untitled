@@ -309,6 +309,8 @@ void CFileIO::loadData()
     return;
   }
 
+  CCamera::CameraControl.SetPos(0, 0);
+
   if (!CEntityEdit::NPCControl.LoadList(newName.c_str())) {
     // problem loading entities
     pushInform(I_FAIL_ENTITY);

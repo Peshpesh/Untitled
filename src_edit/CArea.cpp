@@ -67,7 +67,7 @@ bool CArea::NewLoad(char const* File)
 	char TilesetFile[255];
 	fscanf(FileHandle, "%s\n", TilesetFile);
 
-	if (!CTileset::PickTS.changeTileset(TilesetFile)) {
+	if (!CTileset::TSControl.changeTileset(TilesetFile)) {
 		CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
 		return false;
 	}
@@ -115,7 +115,7 @@ bool CArea::NewSave(char const* File)
 		return false;
 	}
 
-	std::string setname = CTileset::PickTS.getFileName();
+	std::string setname = CTileset::TSControl.getFileName();
 
 	// Output the filename of the tileset for the area
 	fprintf(FileHandle, setname.c_str());
@@ -165,7 +165,7 @@ bool CArea::OnLoad(char const* File)
 	char TilesetFile[255];
 	fscanf(FileHandle, "%s\n", TilesetFile);
 
-	if (!CTileset::PickTS.changeTileset(TilesetFile)) {
+	if (!CTileset::TSControl.changeTileset(TilesetFile)) {
 		CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
 		return false;
 	}
@@ -519,7 +519,7 @@ bool CArea::SaveArea(char const* areaname)
 
 	if (FileHandle == NULL)	return false;
 
-	std::string setname = CTileset::PickTS.getFileName();
+	std::string setname = CTileset::TSControl.getFileName();
 
 	// Output the path to the tileset for the area
 	fprintf(FileHandle, setname.c_str());

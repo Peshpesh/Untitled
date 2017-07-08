@@ -94,7 +94,7 @@ bool CModel::renderInfo() {
 
   std::string info;
   info += "Stage - " + CFileIO::IOhandle.getPrevName() + "\n\n";
-  info += "Tileset - " + CTileset::PickTS.getFileName() + "\n\n";
+  info += "Tileset - " + CTileset::TSControl.getFileName() + "\n\n";
   info += "Area Width - " + Font::intToStr(aW) + "\n\n";
   info += "Area Height - " + Font::intToStr(aH) + "\n\n";
   info += "Entities - " + Font::intToStr(CEntityEdit::NPCControl.EntityList.size()) + "\n\n";
@@ -157,11 +157,11 @@ bool CModel::drawVisTile(const int& x_rel, const int& y_rel, const int& bg_ID, c
   SDL_Rect srcR;
   SDL_Rect dstR = {visCanvas.x + x_rel, visCanvas.y + y_rel, mod_t_sz, mod_t_sz};
 
-  srcR = CTileset::PickTS.getTileSrcR(bg_ID);
-  CSurface::OnDraw(CTileset::PickTS.tileset, &srcR, &dstR);
+  srcR = CTileset::TSControl.getTileSrcR(bg_ID);
+  CSurface::OnDraw(CTileset::TSControl.tileset, &srcR, &dstR);
 
-  srcR = CTileset::PickTS.getTileSrcR(fg_ID);
-  CSurface::OnDraw(CTileset::PickTS.tileset, &srcR, &dstR);
+  srcR = CTileset::TSControl.getTileSrcR(fg_ID);
+  CSurface::OnDraw(CTileset::TSControl.tileset, &srcR, &dstR);
 
   return true;
 }

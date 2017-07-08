@@ -1,6 +1,6 @@
 #include "CTileset.h"
 
-CTileset CTileset::PickTS;
+CTileset CTileset::TSControl;
 
 namespace {
   const SDL_Rect canv         = {220,190,200,100};
@@ -12,7 +12,7 @@ namespace {
   const SDL_Point* canvCol      = &palette::black;
   const SDL_Point* fnameBoxCol  = &palette::white;
   const SDL_Point* optCol       = &palette::black;
-  const SDL_Point* optHovCol    = &palette::dark_indigo;
+  const SDL_Point* optHovCol    = &palette::light_indigo;
   const SDL_Point* bCol         = &palette::white;
   const SDL_Color* textCol      = &rgb::white;
   const SDL_Color* fnameCol     = &rgb::dark_red;
@@ -41,6 +41,8 @@ namespace {
 
 CTileset::CTileset()
 {
+  succ = false;
+
   tileset = NULL;
   ts_w = ts_h = 0;
 
@@ -118,7 +120,7 @@ void CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod)
     case SDLK_UNDERSCORE: addToPath('_'); break;
     case SDLK_BACKSPACE: backPath(); break;
     case SDLK_RETURN: CInterrupt::removeFlag(INTRPT_CHANGE_TS); changeTileset(); break;
-    case SDLK_ESCAPE: CInterrupt::removeFlag(INTRPT_CHANGE_TS); pushInform(I_CANCEL); resetPath(); break;
+    case SDLK_ESCAPE: CInterrupt::removeFlag(INTRPT_CHANGE_TS); succ = false; pushInform(I_CANCEL); resetPath(); break;
     default: break;
   }
 }
@@ -130,10 +132,10 @@ void CTileset::OnLButtonDown(int mX, int mY)
   {
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
     changeTileset();
-    // changeTS = true;
   }
   else if (SDL_PointInRect(&mouse, &cancelButton))
   {
+    succ = false;
     pushInform(I_CANCEL);
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
     resetPath();
@@ -180,6 +182,11 @@ std::string CTileset::getFilePath()
   return filepath;
 }
 
+bool CTileset::wasSuccess()
+{
+  return succ;
+}
+
 bool CTileset::changeTileset(const char* fname)
 {
   SDL_Texture* try_surf = NULL;
@@ -187,21 +194,23 @@ bool CTileset::changeTileset(const char* fname)
   std::string filepath = ts_path + std::string(fname) + extension;
 
   if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
+    succ = true;
     SDL_DestroyTexture(tileset);
     tileset = try_surf;
     CAsset::queryTileDims(tileset, ts_w, ts_h);
     file = fname;
   }
   else {
-    return false;
+    succ = false;
   }
 
-  return true;
+  return succ;
 }
 
 void CTileset::changeTileset()
 {
   if (newF == file) {
+    succ = false;
     pushInform(I_SAME);
     resetPath();
     return;
@@ -211,6 +220,7 @@ void CTileset::changeTileset()
   std::string filepath = ts_path + newF + extension;
 
   if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
+    succ = true;
     pushInform(I_CHANGE);
     SDL_DestroyTexture(tileset);
     tileset = try_surf;
@@ -218,6 +228,7 @@ void CTileset::changeTileset()
     file = newF;
   }
   else {
+    succ = false;
     pushInform(I_FAIL);
   }
 

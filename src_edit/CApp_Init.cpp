@@ -27,7 +27,7 @@ bool CApp::OnInit()
 		return false;
 	}
 
-  if (!CTileset::PickTS.OnInit())
+  if (!CTileset::TSControl.OnInit())
 	{
 		return false;
 	}

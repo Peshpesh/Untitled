@@ -108,7 +108,7 @@ void CMap::OnLoad()
 
 void CMap::OnRender(int MapX, int MapY, bool bg)
 {
-	if (CTileset::PickTS.tileset == NULL) return;
+	if (CTileset::TSControl.tileset == NULL) return;
 
 	if (bg) {
 		const SDL_Point* emptyCol = &palette::dark_gray;
@@ -116,8 +116,8 @@ void CMap::OnRender(int MapX, int MapY, bool bg)
 		CAsset::drawBoxFill(&dstmap, emptyCol);
 	}
 	
-	int tset_w = CTileset::PickTS.ts_w; // tiles
-	int tset_h = CTileset::PickTS.ts_h; // tiles
+	int tset_w = CTileset::TSControl.ts_w; // tiles
+	int tset_h = CTileset::TSControl.ts_h; // tiles
 
 	int ID = 0;
 
@@ -143,7 +143,7 @@ void CMap::OnRender(int MapX, int MapY, bool bg)
 			}
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			CSurface::OnDraw(CTileset::PickTS.tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			CSurface::OnDraw(CTileset::TSControl.tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}

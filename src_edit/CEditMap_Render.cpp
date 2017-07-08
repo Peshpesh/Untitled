@@ -39,11 +39,11 @@ bool CEditMap::drawIntrpt(const SDL_Point* mouse)
 	{
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG) || CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
 		{
-			if (!CChangeTile::PickTile.OnRender(CTileset::PickTS.tileset, mouse)) return false;
+			if (!CChangeTile::PickTile.OnRender(CTileset::TSControl.tileset, mouse)) return false;
 		}
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
 		{
-			if (!CTileset::PickTS.OnRender(mouse)) return false;
+			if (!CTileset::TSControl.OnRender(mouse)) return false;
 		}
 	}
 	return true;
@@ -198,14 +198,14 @@ bool CEditMap::drawSampleTile(const CTile* ShowTile, const SDL_Rect* dstR)
 
 	SDL_Rect srcR = {0, 0, TILE_SIZE, TILE_SIZE};
 
-	srcR.x = (ShowTile->bg_ID % CTileset::PickTS.ts_w) * TILE_SIZE;
-	srcR.y = (ShowTile->bg_ID / CTileset::PickTS.ts_w) * TILE_SIZE;
-	if (!CSurface::OnDraw(CTileset::PickTS.tileset, &srcR, dstR)) return false;
+	srcR.x = (ShowTile->bg_ID % CTileset::TSControl.ts_w) * TILE_SIZE;
+	srcR.y = (ShowTile->bg_ID / CTileset::TSControl.ts_w) * TILE_SIZE;
+	if (!CSurface::OnDraw(CTileset::TSControl.tileset, &srcR, dstR)) return false;
 	if (!CAsset::drawDummy(dstR)) return false;
 
-	srcR.x = (ShowTile->fg_ID % CTileset::PickTS.ts_w) * TILE_SIZE;
-	srcR.y = (ShowTile->fg_ID / CTileset::PickTS.ts_w) * TILE_SIZE;
-	if (!CSurface::OnDraw(CTileset::PickTS.tileset, &srcR, dstR)) return false;
+	srcR.x = (ShowTile->fg_ID % CTileset::TSControl.ts_w) * TILE_SIZE;
+	srcR.y = (ShowTile->fg_ID / CTileset::TSControl.ts_w) * TILE_SIZE;
+	if (!CSurface::OnDraw(CTileset::TSControl.tileset, &srcR, dstR)) return false;
 	if (!CAsset::drawDummyGhost(dstR)) return false;
 
 	return true;
@@ -224,10 +224,10 @@ bool CEditMap::drawActive_bg(const CTile* ShowTile, const SDL_Point* mouse)
 
 	// Draws active background tile
 	{
-		int tX = (ShowTile->bg_ID % CTileset::PickTS.ts_w) * TILE_SIZE;
-		int tY = (ShowTile->bg_ID / CTileset::PickTS.ts_w) * TILE_SIZE;
+		int tX = (ShowTile->bg_ID % CTileset::TSControl.ts_w) * TILE_SIZE;
+		int tY = (ShowTile->bg_ID / CTileset::TSControl.ts_w) * TILE_SIZE;
 		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-		CSurface::OnDraw(CTileset::PickTS.tileset, &srcR, &bg_pos);
+		CSurface::OnDraw(CTileset::TSControl.tileset, &srcR, &bg_pos);
 	}
 
 	// Draws background tile arrows
@@ -249,10 +249,10 @@ bool CEditMap::drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse)
 
 	// Draws active foreground tile
 	{
-		int tX = (ShowTile->fg_ID % CTileset::PickTS.ts_w) * TILE_SIZE;
-		int tY = (ShowTile->fg_ID / CTileset::PickTS.ts_w) * TILE_SIZE;
+		int tX = (ShowTile->fg_ID % CTileset::TSControl.ts_w) * TILE_SIZE;
+		int tY = (ShowTile->fg_ID / CTileset::TSControl.ts_w) * TILE_SIZE;
 		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-		CSurface::OnDraw(CTileset::PickTS.tileset, &srcR, &fg_pos);
+		CSurface::OnDraw(CTileset::TSControl.tileset, &srcR, &fg_pos);
 	}
 
 	// Draws foreground tile arrows

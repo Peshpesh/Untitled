@@ -25,9 +25,9 @@ bool CEditMap::handleInterr(SDL_Event* Event)
 
 void CEditMap::handleChangeTS(SDL_Event* Event)
 {
-  CTileset::PickTS.OnEvent(Event);
+  CTileset::TSControl.OnEvent(Event);
 
-  if (CInterrupt::isFlagOff(INTRPT_CHANGE_TS)) {
+  if (CInterrupt::isFlagOff(INTRPT_CHANGE_TS) && CTileset::TSControl.wasSuccess()) {
     TileTL.bg_ID = TileTR.bg_ID = TileBL.bg_ID = TileBR.bg_ID = -1;
     TileTL.fg_ID = TileTR.fg_ID = TileBL.fg_ID = TileBR.fg_ID = -1;
     TileTL.TypeID = TileTR.TypeID = TileBL.TypeID = TileBR.TypeID = TILE_TYPE_NORMAL;
@@ -270,13 +270,13 @@ bool CEditMap::handleGetTile(const SDL_Point* mouse)
 
   if (SDL_PointInRect(mouse, &bg_button))
   {
-      CChangeTile::PickTile.Init(CTileset::PickTS.ts_w, CTileset::PickTS.ts_h);
+      CChangeTile::PickTile.Init(CTileset::TSControl.ts_w, CTileset::TSControl.ts_h);
       CInterrupt::appendFlag(INTRPT_CHANGE_BG);
       return true;
   }
   if (SDL_PointInRect(mouse, &fg_button))
   {
-      CChangeTile::PickTile.Init(CTileset::PickTS.ts_w, CTileset::PickTS.ts_h);
+      CChangeTile::PickTile.Init(CTileset::TSControl.ts_w, CTileset::TSControl.ts_h);
       CInterrupt::appendFlag(INTRPT_CHANGE_FG);
       return true;
   }
@@ -295,14 +295,14 @@ bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile)
 
   else if (arrDir == 'R')
   {
-    if (EditTile->bg_ID < (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1) EditTile->bg_ID += 1;
+    if (EditTile->bg_ID < (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1) EditTile->bg_ID += 1;
     else EditTile->bg_ID = 0;
     return true;
   }
   else if (arrDir == 'L')
   {
     if (EditTile->bg_ID > 0) EditTile->bg_ID -= 1;
-    else EditTile->bg_ID = (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1;
+    else EditTile->bg_ID = (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1;
     return true;
   }
 
@@ -322,14 +322,14 @@ bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile)
 
   else if (arrDir == 'R')
   {
-    if (EditTile->fg_ID < (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1) EditTile->fg_ID += 1;
+    if (EditTile->fg_ID < (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1) EditTile->fg_ID += 1;
     else EditTile->fg_ID = 0;
     return true;
   }
   else if (arrDir == 'L')
   {
     if (EditTile->fg_ID > 0) EditTile->fg_ID -= 1;
-    else EditTile->fg_ID = (CTileset::PickTS.ts_w * CTileset::PickTS.ts_h) - 1;
+    else EditTile->fg_ID = (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1;
     return true;
   }
 
