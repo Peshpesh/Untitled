@@ -39,6 +39,10 @@ ${SRCDIR}/CEditMap_Render.cpp
 ${SRCDIR}/CEntity.cpp
 ${SRCDIR}/CEntityCol.cpp
 ${SRCDIR}/CEntityEdit.cpp
+${SRCDIR}/CEntityEditor.cpp
+${SRCDIR}/CEntityEditor_Event.cpp
+${SRCDIR}/CEntityEditor_Ext.cpp
+${SRCDIR}/CEntityEditor_Render.cpp
 ${SRCDIR}/CEntityInfo.cpp
 ${SRCDIR}/CEntityRes.cpp
 ${SRCDIR}/CEvent.cpp
@@ -69,6 +73,7 @@ ${SRCDIR}/CChangeTile.h
 ${SRCDIR}/CEditMap.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityEdit.h
+${SRCDIR}/CEntityEditor.h
 ${SRCDIR}/CEntityRes.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFileIO.h

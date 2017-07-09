@@ -159,7 +159,7 @@ private:
   const SDL_Point* flexAreaColor;
   const SDL_Point* fixAreaColor;
   const SDL_Point* hoverAreaColor;
-  unsigned int rc_area_w;
+  unsigned short rc_area_w;
 
 public:
   CEditMap();

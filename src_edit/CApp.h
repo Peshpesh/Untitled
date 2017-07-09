@@ -18,6 +18,7 @@
 #include "Define.h"
 
 #include "CEditMap.h"
+#include "CEntityEditor.h"
 
 enum
 {

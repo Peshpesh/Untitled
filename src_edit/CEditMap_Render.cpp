@@ -2,7 +2,6 @@
 
 bool CEditMap::RenderMap()
 {
-
   // Draw the working area
 	if (show_bg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
 	if (show_fg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
