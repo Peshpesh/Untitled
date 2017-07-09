@@ -3,12 +3,12 @@
 CTileset CTileset::TSControl;
 
 namespace {
-  const SDL_Rect canv         = {220,190,200,100};
-  const SDL_Rect fnameBox     = {225,210,190,11};
-  const SDL_Rect titleBox     = {225,193,190,16};
-  const SDL_Rect infoBox      = {225,222,190,40};
-  const SDL_Rect okButton     = {255,270,60,13};
-  const SDL_Rect cancelButton = {325,270,60,13};
+  const SDL_Rect canv           = {220,190,200,100};
+  const SDL_Rect fnameBox       = {225,210,190,11};
+  const SDL_Rect titleBox       = {225,193,190,16};
+  const SDL_Rect infoBox        = {225,222,190,40};
+  const SDL_Rect okButton       = {255,270,60,13};
+  const SDL_Rect cancelButton   = {325,270,60,13};
   const SDL_Point* canvCol      = &palette::black;
   const SDL_Point* fnameBoxCol  = &palette::white;
   const SDL_Point* optCol       = &palette::black;

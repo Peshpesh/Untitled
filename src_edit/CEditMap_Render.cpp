@@ -2,7 +2,7 @@
 
 bool CEditMap::RenderMap()
 {
-	
+
   // Draw the working area
 	if (show_bg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
 	if (show_fg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
@@ -37,9 +37,15 @@ bool CEditMap::drawIntrpt(const SDL_Point* mouse)
 {
 	if (!CInterrupt::isNone())
 	{
-		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG) || CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
+		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG))
 		{
-			if (!CChangeTile::PickTile.OnRender(CTileset::TSControl.tileset, mouse)) return false;
+			if (!CChangeTile::PickTile.OnRender(mouse)) return false;
+			CChangeTile::PickTile.hilightID(TileTL.bg_ID, TileTR.bg_ID, TileBL.bg_ID, TileBR.bg_ID);
+		}
+		if (CInterrupt::isFlagOn(INTRPT_CHANGE_FG))
+		{
+			if (!CChangeTile::PickTile.OnRender(mouse)) return false;
+			CChangeTile::PickTile.hilightID(TileTL.fg_ID, TileTR.fg_ID, TileBL.fg_ID, TileBR.fg_ID);
 		}
 		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS))
 		{
@@ -116,7 +122,6 @@ bool CEditMap::RenderSidebar(const SDL_Point* mouse)
 {
 	const CTile* ShowTile = getModTile();
 
-	if (!drawButtonTileset(mouse)) return false;
   if (!drawActiveTiles()) return false;
   if (!drawActive_bg(ShowTile, mouse)) return false;
   if (!drawActive_fg(ShowTile, mouse)) return false;
@@ -132,6 +137,7 @@ bool CEditMap::RenderBottom(const SDL_Point* mouse)
 {
 	if (!drawButton_bg(mouse)) return false;
   if (!drawButton_fg(mouse)) return false;
+	if (!drawButtonTileset(mouse)) return false;
 	if (!drawButtonActive(mouse)) return false;
 	if (!drawQuadrants(mouse)) return false;
   if (!drawOverlayList()) return false;

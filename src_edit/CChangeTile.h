@@ -6,6 +6,7 @@
 #include "CSurface.h"
 #include "CAsset.h"
 #include "CFont.h"
+#include "CTileset.h"
 #include "Define.h"
 
 class CChangeTile : public CEvent {
@@ -39,12 +40,14 @@ public:
 
 	void OnLButtonDown(int mX, int mY);
 
-	bool OnRender(SDL_Texture* tileset, const SDL_Point* m);
+	bool OnRender(const SDL_Point* m);
+
+	void hilightID(const short& TL_ID, const short& TR_ID, const short& BL_ID, const short& BR_ID);
 
   void reqChange(short& ID);
 
 private:
-	bool RenderTileset(SDL_Texture* tileset, const SDL_Point* m);
+	bool RenderTileset(const SDL_Point* m);
 	bool RenderInfo();
 	bool RenderArrow(char dir, const SDL_Rect* dstR, const SDL_Point* m);
 

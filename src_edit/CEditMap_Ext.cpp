@@ -7,7 +7,7 @@ namespace mapEngine
   {
     // Change Tileset button info
     const char* const label = "Change Tileset";
-    const SDL_Rect button = {665, 50, 50, 40};
+    const SDL_Rect button = {435, 510, 50, 48};
     const short bsiz = 2;
     const SDL_Point* offCol = &palette::blue;
     const SDL_Point* hoverColor = &palette::light_blue;

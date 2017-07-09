@@ -4,7 +4,7 @@ CChangeTile CChangeTile::PickTile;
 
 namespace
 {
-	const unsigned short Max_Tiles = 8;
+	const unsigned short Max_Tiles = 12;
 	const unsigned short Frame_Size = 24;
 	const unsigned short hilightSize = 2;
 	const SDL_Point* frameCol = &palette::gray;
@@ -152,10 +152,10 @@ void CChangeTile::OnLButtonDown(int mX, int mY)
 	}
 }
 
-bool CChangeTile::OnRender(SDL_Texture* tileset, const SDL_Point* m)
+bool CChangeTile::OnRender(const SDL_Point* m)
 {
 	// Render the field of tiles & tileset information
-	if (!RenderTileset(tileset, m)) return false;
+	if (!RenderTileset(m)) return false;
 	if (!RenderInfo()) return false;
 
 	// Render clickable arrows
@@ -170,8 +170,48 @@ bool CChangeTile::OnRender(SDL_Texture* tileset, const SDL_Point* m)
 	return true;
 }
 
-bool CChangeTile::RenderTileset(SDL_Texture* tileset, const SDL_Point* m)
+void CChangeTile::hilightID(const short& TL_ID, const short& TR_ID, const short& BL_ID, const short& BR_ID)
 {
+	const SDL_Point* col[] = {
+		&palette::light_blue,
+		&palette::light_red,
+		&palette::light_green,
+		&palette::light_yellow
+	};
+
+	short ID[] = {
+		TL_ID,
+		TR_ID,
+		BL_ID,
+		BR_ID
+	};
+
+	short box_sz = TILE_SIZE / 6;
+
+	for (int i = 0; i < sizeof(ID) / sizeof(ID[0]); i++)
+	{
+		if (ID[i] < 0) continue;
+
+		int xT = ID[i] % W;
+		int yT = ID[i] / W;
+
+		if (xT < X || xT >= X + (disp.w / TILE_SIZE)) continue;
+		if (yT < Y || yT >= Y + (disp.h / TILE_SIZE)) continue;
+
+		int Xo = disp.x + ((xT - X) * TILE_SIZE) + i * box_sz;
+		int Yo = disp.y + ((yT - Y) * TILE_SIZE);
+
+		SDL_Rect hilight = {Xo, Yo, box_sz, box_sz};
+
+		CAsset::drawBox(&hilight, col[i], hilightSize);
+		CAsset::drawBox(&hilight, &palette::black, hilightSize - 1);
+	}
+}
+
+bool CChangeTile::RenderTileset(const SDL_Point* m)
+{
+	SDL_Texture* tileset = CTileset::TSControl.tileset;
+
 	if (tileset == NULL) return false;
 
 	// Render a "frame" for the tileset
