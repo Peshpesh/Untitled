@@ -18,8 +18,11 @@ void CEntityEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
 void CEntityEditor::OnLButtonDown(int mX, int mY) {
   SDL_Point m = {mX, mY};
+
+  // click in workspace attempts to add/subtract entity data
 }
 
 void CEntityEditor::OnRButtonDown(int mX, int mY) {
   SDL_Point m = {mX, mY};
+
 }

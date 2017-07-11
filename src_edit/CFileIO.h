@@ -7,7 +7,7 @@
 #include "CFont.h"
 #include "CAsset.h"
 #include "CArea.h"
-#include "CEntityEdit.h"
+// #include "CEntityEdit.h"
 #include "CSceneryEdit.h"
 #include "CCamera.h"
 

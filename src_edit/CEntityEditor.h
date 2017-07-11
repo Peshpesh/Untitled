@@ -4,40 +4,11 @@
 #include "CEvent.h"
 #include "CAsset.h"
 #include "CFont.h"
+#include "CEntity.h"
 #include "CInterrupt.h"
 #include "CInform.h"
-#include "CEntity.h"
 #include "CCamera.h"
 #include "Define.h"
-
-namespace Entity_ID {
-  namespace global {
-    enum {
-      PLAYER = 0,
-      HEART,
-      AMYTHYST,
-      YOSHI,
-      EVILPLAYER,
-      BOMB,
-      BLAST
-    };
-    extern const char* const name[];
-  };  // namespace global
-
-  namespace caves {
-    enum {
-      BARS = 0,
-      BOX,
-      SPIKEFALL,
-      BLDSPK_UP,
-      ACIDBALL,
-      DOOR,
-      SVPT,
-      SIGN
-    };
-    extern const char* const name[];
-  }; // namespace caves
-}; // namespace Entity_ID
 
 class CEntityEditor : public CEvent {
 private:
@@ -51,6 +22,7 @@ private:
 public:
   static CEntityEditor Control;
 
+public:
   bool OnInit();
   void OnTerminate();
 

@@ -110,11 +110,11 @@ bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
 
       // This loop updates the position of our entities
       // to prevent unwanted repositioning over the changed area
-      for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-      {
-        if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-        CEntityEdit::NPCControl.EntityList[i].X += MAP_WIDTH * TILE_SIZE;
-      }
+      // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+      // {
+      //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+      //   CEntityEdit::NPCControl.EntityList[i].X += MAP_WIDTH * TILE_SIZE;
+      // }
       break;
     }
     case SDLK_s: {
@@ -124,11 +124,11 @@ bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
     case SDLK_w: {
       CArea::AreaControl.OnExpandUp();
       CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
-      for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-      {
-        if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-        CEntityEdit::NPCControl.EntityList[i].Y += MAP_HEIGHT * TILE_SIZE;
-      }
+      // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+      // {
+      //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+      //   CEntityEdit::NPCControl.EntityList[i].Y += MAP_HEIGHT * TILE_SIZE;
+      // }
       break;
     }
     case SDLK_l: {
@@ -139,11 +139,11 @@ bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
       if (CArea::AreaControl.OnReduceLeft())
       {
         CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
-        for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-        {
-          if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-          CEntityEdit::NPCControl.EntityList[i].X -= MAP_WIDTH * TILE_SIZE;
-        }
+        // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+        // {
+        //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+        //   CEntityEdit::NPCControl.EntityList[i].X -= MAP_WIDTH * TILE_SIZE;
+        // }
       }
       break;
     }
@@ -155,11 +155,11 @@ bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
       if (CArea::AreaControl.OnReduceUp())
       {
         CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
-        for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-        {
-          if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-          CEntityEdit::NPCControl.EntityList[i].Y -= MAP_WIDTH * TILE_SIZE;
-        }
+        // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
+        // {
+        //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
+        //   CEntityEdit::NPCControl.EntityList[i].Y -= MAP_WIDTH * TILE_SIZE;
+        // }
       }
       break;
     }

@@ -12,7 +12,6 @@
 #include "CArea.h"
 #include "CChangeTile.h"
 #include "CFileIO.h"
-#include "CEntityEdit.h"
 #include "CSceneryEdit.h"
 #include "CModel.h"
 #include "Define.h"
@@ -133,10 +132,10 @@ public:
   bool handleModelSwitch(const SDL_Point* m);
   bool handleIO(const SDL_Point* m);
 
-	bool EventNPCedit(int mX, int mY);
-	void ModEntity(int mX, int mY);
-	bool AddEntity(int Xo, int Yo);
-	bool SubEntity(int Xo, int Yo);
+	// bool EventNPCedit(int mX, int mY);
+	// void ModEntity(int mX, int mY);
+	// bool AddEntity(int Xo, int Yo);
+	// bool SubEntity(int Xo, int Yo);
 
 	bool EventSCNedit(int mX, int mY);
 	bool CheckZup(const int& mX);
@@ -160,11 +159,10 @@ public:
   bool renderModelButton();
   bool renderIOButtons();
 
-	bool RenderNPCedit();
+	// bool RenderNPCedit();
 	bool RenderSCNedit();
 	bool RenderSCNswitch();
 	bool RenderSCNdepth();
-	// bool RenderButton(int X, int Y, int W, int H, int bsiz, int colX, int colY, bool hl);
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnTerminate();

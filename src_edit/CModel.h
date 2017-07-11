@@ -1,13 +1,14 @@
 #ifndef _C_MODEL_H_
 #define _C_MODEL_H_
 
+#include "CEntity.h"
 #include "CEvent.h"
 #include "CInform.h"
 #include "CInterrupt.h"
 #include "CAsset.h"
 #include "CFont.h"
 #include "CArea.h"
-#include "CEntityEdit.h"
+
 #include "CFileIO.h"
 
 namespace model {

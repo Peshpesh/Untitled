@@ -51,7 +51,7 @@ void CApp::OnLButtonDown(int mX, int mY)
 	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
 	{
 		// returns false if error...
-		EventNPCedit(mX, mY);
+		// EventNPCedit(mX, mY);
 	}
 	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
@@ -71,8 +71,8 @@ void CApp::OnRButtonDown(int mX, int mY)
 		int Xo = mX + CCamera::CameraControl.GetX();
 		int Yo = mY + CCamera::CameraControl.GetY();
 
-		if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
-			OnExit();
+		// if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
+		// 	OnExit();
 	}
 }
 

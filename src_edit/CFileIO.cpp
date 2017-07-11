@@ -283,15 +283,14 @@ void CFileIO::newData()
   CArea::AreaControl.OnInit();
 	CCamera::CameraControl.SetPos(0, 0);
 
-  if ((CEntityEdit::NPCControl.NPC_Tileset = CSurface::OnLoad("../res/npc/debug.png")) == NULL) {
-		return;
-	}
-
-	if ((CEntityEdit::NPCControl.Table_ID = CEntityInfo::LoadUnique("../res/npc/debug.tbl")) < 0) {
-		return;
-  }
-
-  CEntityEdit::NPCControl.clearVectors();
+  // if ((CEntityEdit::NPCControl.NPC_Tileset = CSurface::OnLoad("../res/npc/debug.png")) == NULL) {
+	// 	return;
+	// }
+  //
+	// if ((CEntityEdit::NPCControl.Table_ID = CEntityInfo::LoadUnique("../res/npc/debug.tbl")) < 0) {
+	// 	return;
+  // }
+  // CEntityEdit::NPCControl.clearVectors();
 
   CSceneryEdit::ScnControl.resetAll();
 
@@ -311,12 +310,12 @@ void CFileIO::loadData()
 
   CCamera::CameraControl.SetPos(0, 0);
 
-  if (!CEntityEdit::NPCControl.LoadList(newName.c_str())) {
-    // problem loading entities
-    pushInform(I_FAIL_ENTITY);
-    newName.clear();
-    return;
-  }
+  // if (!CEntityEdit::NPCControl.LoadList(newName.c_str())) {
+  //   // problem loading entities
+  //   pushInform(I_FAIL_ENTITY);
+  //   newName.clear();
+  //   return;
+  // }
 
   if (!CSceneryEdit::ScnControl.LoadScenery(newName.c_str())) {
     // problem loading 2.5D elements
@@ -337,10 +336,10 @@ void CFileIO::saveData()
     pushInform(I_FAIL_SAVE);
     return;
   }
-  if (!CEntityEdit::NPCControl.SaveList(newName.c_str())) {
-    pushInform(I_FAIL_SAVE);
-    return;
-  }
+  // if (!CEntityEdit::NPCControl.SaveList(newName.c_str())) {
+  //   pushInform(I_FAIL_SAVE);
+  //   return;
+  // }
   if (!CSceneryEdit::ScnControl.SaveScenery(newName.c_str())) {
     pushInform(I_FAIL_SAVE);
     return;
