@@ -25,6 +25,11 @@ class CEntity {
 public:
   static std::vector<EntityTexInfo> textureList;
   static std::vector<CEntity> entityList;
+  static bool OnInit();
+  static SDL_Texture* getSrcTexture(const int& group);
+
+private:
+  static SDL_Texture* loadTexInfo(const int& group);
 
 public:
   SDL_Texture* sprtSrc;

@@ -7,9 +7,6 @@ CApp::CApp()
 	mouseX = mouseY = 0;
 	mouse.x = mouse.y = 0;
 
-	Tileset_Path = "../res/tile/default.png";
-	Entity_Path = "../res/npc/debug.png";
-
 	active_mod = MODIFY_MAP;
 	intrpt = INTRPT_NONE;
 	tabl_name_W = 0;

@@ -19,6 +19,9 @@ private:
   unsigned short entity_alpha;
   unsigned short hitbox_alpha;
 
+  int group_ID;
+  int entity_ID;
+
 public:
   static CEntityEditor Control;
 
@@ -37,6 +40,7 @@ private:
 public:
   bool OnRender(const SDL_Point* m);
   bool drawEntities();
+  bool drawWorkingEntity(const SDL_Point* m);
   bool drawHitboxes();
 };
 

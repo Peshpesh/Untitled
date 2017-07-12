@@ -32,8 +32,7 @@ namespace engineSwitch
 {
   const char* engineName[] = {
     "Map Editor",
-    "Npc Placer",
-    "Npc Culler",
+    "Npc Editor",
     "Scn Placer",
     "Scn Culler"
   };
@@ -41,8 +40,7 @@ namespace engineSwitch
     {525, 490, 70, 16},
     {525, 506, 70, 16},
     {525, 522, 70, 16},
-    {525, 538, 70, 16},
-    {525, 554, 70, 16}
+    {525, 538, 70, 16}
   };
   const SDL_Point* engineOnCol = &palette::cyan;
   const SDL_Point* engineOffCol = &palette::gray;

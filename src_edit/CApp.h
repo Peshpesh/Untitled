@@ -23,7 +23,6 @@ enum
 {
   MODIFY_MAP = 0,
   MODIFY_NPC,
-  REMOVE_NPC,
   MODIFY_SCENE,
   REMOVE_SCENE,
 };
@@ -113,9 +112,6 @@ private:
 	int mouseY;
 
 public:
-	char* Tileset_Path;
-	char* Entity_Path;
-
 	int active_mod;
 	int intrpt;
 	int tabl_name_W;

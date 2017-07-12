@@ -50,9 +50,6 @@ bool CEditMap::OnInit()
   SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
   CAsset::queryTileDims(Coll_Tileset, coll_w, coll_h);
 
-  // if (CArea::AreaControl.OnLoad(Tileset) == false)
-	// 	return false;
-
   return true;
 }
 
@@ -108,7 +105,7 @@ SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)
 
 void CEditMap::OnTerminate()
 {
-  // SDL_DestroyTexture(Tileset);
+  CTileset::TSControl.OnTerminate();
   SDL_DestroyTexture(Type_Tileset);
   SDL_DestroyTexture(Coll_Tileset);
 }

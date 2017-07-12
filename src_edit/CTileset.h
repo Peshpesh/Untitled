@@ -26,6 +26,7 @@ public:
 	CTileset();
 
   bool OnInit();
+  void OnTerminate();
 
   bool changeTileset(const char* fname);
   void changeTileset();

@@ -26,16 +26,6 @@ namespace Entities {
       "Live Bomb",
       "Blast"
     };
-    // namespace src {
-    //   const SDL_Rect r[] = {
-    //     {,,,},
-    //     {,,,},
-    //     {,,,},
-    //     {,,,},
-    //     {,,,},
-    //     {,,,}
-    //   };
-    // };
   };  // namespace global
   namespace caves {
     const char* const name[] = {
@@ -50,6 +40,11 @@ namespace Entities {
     };
   }; // namespace caves
 }; // namespace Entity_ID
+
+namespace path {
+  const char* const imgdir = "../res/npc/";
+  const char* const imgtype = ".png";
+};
 
 CEntityData::CEntityData() {
   //
@@ -68,8 +63,9 @@ SDL_Texture* CEntityData::loadSrcTexture(const int& group) {
   }
 
   if (!filename.empty()) {
-    std::string path = "../res/npc/" + filename + ".png";
-    entity_tex = CSurface::OnLoad(path.c_str());
+    using namespace path;
+    std::string filepath = imgdir + filename + imgtype;
+    entity_tex = CSurface::OnLoad(filepath.c_str());
   }
 
   return entity_tex;

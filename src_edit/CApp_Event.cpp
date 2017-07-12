@@ -7,6 +7,7 @@ void CApp::OnEvent(SDL_Event* Event)
 	CEvent::OnEvent(Event);
 
 	if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
+	if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
 }
 
 bool CApp::handleInterr(SDL_Event* Event)
@@ -48,12 +49,7 @@ void CApp::OnLButtonDown(int mX, int mY)
 		if (handleIO(&m)) return;
 	}
 
-	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
-	{
-		// returns false if error...
-		// EventNPCedit(mX, mY);
-	}
-	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
+	if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
 		// returns false if error...
 		EventSCNedit(mX, mY);

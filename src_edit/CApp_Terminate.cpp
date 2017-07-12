@@ -11,4 +11,5 @@ void CApp::OnTerminate()
 	CSurface::OnCleanup();
 	CAsset::OnCleanup();
 	CEditMap::MapEditor.OnTerminate();
+	CEntityEditor::Control.OnTerminate();
 }

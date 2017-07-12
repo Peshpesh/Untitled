@@ -241,3 +241,8 @@ void CTileset::pushInform(const int& ID)
 
   CInform::InfoControl.pushInform(inform[ID]);
 }
+
+void CTileset::OnTerminate()
+{
+  SDL_DestroyTexture(tileset);
+}

@@ -36,6 +36,10 @@ bool CApp::OnInit()
 		return false;
 	}
 
+	if (CEntityEditor::Control.OnInit() == false) {
+		return false;
+	}
+
 	///////////////////////
 	// Debugging section //
 	///////////////////////

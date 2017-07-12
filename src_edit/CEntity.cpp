@@ -11,6 +11,13 @@ CEntity::CEntity(int group, int entity, const SDL_Point* m) {
   dstP      = CCamera::CameraControl.GetCamRelPoint(m);
 }
 
+bool CEntity::OnInit() {
+  if (loadTexInfo(Entities::groups::GLOBAL) == NULL) {
+    return false;
+  }
+  return true;
+}
+
 bool CEntity::OnRender() {
   SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(&dstP);
   return CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
@@ -26,9 +33,21 @@ SDL_Texture* CEntity::getSrcTexture(const int& group) {
     }
   }
 
-  if (retval == NULL) {
-    retval = CEntityData::loadSrcTexture(group);
-  }
+  if (retval == NULL) retval = loadTexInfo(group);
 
   return retval;
+}
+
+SDL_Texture* CEntity::loadTexInfo(const int& group) {
+  SDL_Texture* entity_tex = NULL;
+  entity_tex = CEntityData::loadSrcTexture(group);
+
+  if (entity_tex != NULL) {
+    EntityTexInfo newInfo;
+    newInfo.group_ID = group;
+    newInfo.img = entity_tex;
+    textureList.push_back(newInfo);
+  }
+
+  return entity_tex;
 }

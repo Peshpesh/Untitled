@@ -23,7 +23,7 @@ void CApp::OnRender()
 	CEditMap::MapEditor.RenderMap();
 
 	// Draw the entities in the area
-	// ...
+	CEntityEditor::Control.drawEntities();
 
 	// Draw foreground scenery
 	while (s_i < CSceneryEdit::SceneList.size())
@@ -36,10 +36,9 @@ void CApp::OnRender()
 		s_i++;
 	}
 
-	if (active_mod == MODIFY_NPC || active_mod == REMOVE_NPC)
+	if (active_mod == MODIFY_NPC)
 	{
-		CAsset::drawAppFrame();
-		// RenderNPCedit();
+		CEntityEditor::Control.OnRender(&mouse);
 	}
 	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
