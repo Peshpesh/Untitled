@@ -11,6 +11,8 @@ enum interrupts
   INTRPT_NEW        = 0x00000010,
   INTRPT_LOAD       = 0x00000020,
   INTRPT_SAVE       = 0x00000040,
+  INTRPT_CH_ENTITY  = 0x00000080,
+  INTRPT_CH_ENTGRP  = 0x00000100,
 };
 
 class CInterrupt {

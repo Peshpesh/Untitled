@@ -84,7 +84,6 @@ namespace rgb
   extern const SDL_Color dark_magenta;
 }
 
-
 class CAsset
 {
 	public:

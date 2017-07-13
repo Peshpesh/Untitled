@@ -154,7 +154,8 @@ bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color)
 
 bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thick)
 {
-  if (box == NULL || color == NULL) return false;
+  if (box == NULL || color == NULL || thick < 0) return false;
+  if (thick == 0) return true;
 
   SDL_Rect srcR = getPixel(color);
   SDL_Rect dstR;

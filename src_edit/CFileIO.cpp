@@ -283,15 +283,6 @@ void CFileIO::newData()
   CArea::AreaControl.OnInit();
 	CCamera::CameraControl.SetPos(0, 0);
 
-  // if ((CEntityEdit::NPCControl.NPC_Tileset = CSurface::OnLoad("../res/npc/debug.png")) == NULL) {
-	// 	return;
-	// }
-  //
-	// if ((CEntityEdit::NPCControl.Table_ID = CEntityInfo::LoadUnique("../res/npc/debug.tbl")) < 0) {
-	// 	return;
-  // }
-  // CEntityEdit::NPCControl.clearVectors();
-
   CSceneryEdit::ScnControl.resetAll();
 
   prevName = newName;

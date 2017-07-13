@@ -8,7 +8,6 @@
 #include "CAsset.h"
 #include "CFont.h"
 #include "CArea.h"
-// #include "CEntityEdit.h"
 #include "CCamera.h"
 #include "CChangeTile.h"
 #include "CTileset.h"

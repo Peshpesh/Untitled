@@ -28,6 +28,7 @@ ${SRCDIR}/CApp_Terminate.cpp
 ${SRCDIR}/CArea.cpp
 ${SRCDIR}/CAsset.cpp
 ${SRCDIR}/CAsset_Ext.cpp
+${SRCDIR}/CButton.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CChangeTile.cpp
 ${SRCDIR}/CEditMap.cpp
@@ -48,6 +49,7 @@ ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMap.cpp
+${SRCDIR}/CMeter.cpp
 ${SRCDIR}/CModel.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryEdit.cpp
@@ -63,6 +65,7 @@ ${SRCDIR}/CAnimation.h
 ${SRCDIR}/CApp.h
 ${SRCDIR}/CArea.h
 ${SRCDIR}/CAsset.h
+${SRCDIR}/CButton.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CChangeTile.h
 ${SRCDIR}/CEditMap.h
@@ -76,6 +79,7 @@ ${SRCDIR}/CFPS.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CMap.h
+${SRCDIR}/CMeter.h
 ${SRCDIR}/CModel.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryEdit.h
