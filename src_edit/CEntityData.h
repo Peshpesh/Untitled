@@ -11,6 +11,7 @@ namespace Entities {
       GLOBAL      = 0,
       CAVES       = 1,
     };
+    extern const short num;
     extern const char* const name[];
   }; // namespace groups
 
@@ -23,6 +24,7 @@ namespace Entities {
       BOMB        = 4,
       BLAST       = 5,
     };
+    extern const short num;
     extern const char* const name[];
     // namespace src {
     //   extern const SDL_Rect r[];
@@ -40,6 +42,7 @@ namespace Entities {
       SVPT        = 6,
       SIGN        = 7,
     };
+    extern const short num;
     extern const char* const name[];
     // namespace src {
     //   extern const SDL_Rect r[];
@@ -50,6 +53,10 @@ namespace Entities {
 class CEntityData {
 
   CEntityData();
+
+public:
+  static short getNumGroups();
+  static short getNumEntities(const int& group);
 
 public:
   static SDL_Texture* loadSrcTexture(const int& group);

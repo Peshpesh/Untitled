@@ -2,7 +2,6 @@
 
 namespace meter_defaults {
   const short lab_y_offset  = -10;
-  // const int fontID          = FONT_MINI;
   const short bsiz          = 1;
   const SDL_Point* fillCol  = &palette::light_green;
   const SDL_Point* emptyCol = &palette::black;
@@ -28,7 +27,6 @@ CMeter::CMeter(const SDL_Rect& dstR) {
 
 void CMeter::setDefaults() {
   lab_y_offset  = meter_defaults::lab_y_offset;
-  // fontID        = meter_defaults::fontID;
   bsiz          = meter_defaults::bsiz;
   fillCol       = meter_defaults::fillCol;
   emptyCol      = meter_defaults::emptyCol;
@@ -51,16 +49,7 @@ bool CMeter::clickPos(const SDL_Point* m, double& fraction) {
 }
 
 bool CMeter::OnRender(const double& fractFill, const char* label) {
-  if (fractFill < 0.0) return false;
-
-  int fill_w = (dstR.w - (bsiz * 2)) * fractFill;
-  if (fill_w < 0) return false;
-
-  SDL_Rect fill = {dstR.x + bsiz, dstR.y, fill_w, dstR.h};
-
-  CAsset::drawBoxFill(&dstR, emptyCol);
-  CAsset::drawBoxFill(&fill, fillCol);
-  CAsset::drawBox(&dstR, emptyCol);
+  if (!OnRender(fractFill)) return false;
 
   const SDL_Point labelPos = {dstR.x + (dstR.w / 2), dstR.y + lab_y_offset};
   Font::NewCenterWrite(label, &labelPos);

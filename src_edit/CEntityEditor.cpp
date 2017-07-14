@@ -6,8 +6,10 @@ CEntityEditor::CEntityEditor()
 {
   showEntity = true;
   showHitbox = true;
+  showWorkEntity = true;
+  showWorkHitbox = true;
   entity_alpha = MAX_RGBA;
-  hitbox_alpha = MAX_RGBA / 4;
+  hitbox_alpha = MAX_RGBA;
 
   group_ID  = Entities::groups::GLOBAL;
   entity_ID = Entities::global::PLAYER;
@@ -15,6 +17,12 @@ CEntityEditor::CEntityEditor()
 
 bool CEntityEditor::OnInit() {
   if (!CEntity::OnInit()) return false;
+
+  using namespace entityEngine::misc::entityButtons;
+  for (int i = 0; i < CEntityData::getNumEntities(Entities::groups::GLOBAL); i++)
+  {
+    // add buttons
+  }
 
   return true;
 }

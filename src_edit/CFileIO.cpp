@@ -331,6 +331,10 @@ void CFileIO::saveData()
   //   pushInform(I_FAIL_SAVE);
   //   return;
   // }
+  if (!CEntity::OnSave(newName.c_str())) {
+    pushInform(I_FAIL_SAVE);
+    return;
+  }
   if (!CSceneryEdit::ScnControl.SaveScenery(newName.c_str())) {
     pushInform(I_FAIL_SAVE);
     return;

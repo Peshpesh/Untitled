@@ -1,8 +1,6 @@
 #ifndef _C_METER_H_
 #define _C_METER_H_
 
-// #include <string>
-
 #include "CAsset.h"
 #include "CFont.h"
 #include "CSurface.h"

@@ -12,12 +12,14 @@
 
 namespace Entities {
   namespace groups {
+    const short num = 2;
     const char* const name[] = {
       "Global",
       "Caves"
     };
   };  // namespace groups
   namespace global {
+    const short num = 6;
     const char* const name[] = {
       "Player",
       "Heart",
@@ -28,6 +30,7 @@ namespace Entities {
     };
   };  // namespace global
   namespace caves {
+    const short num = 8;
     const char* const name[] = {
       "Metal Bars",
       "Wooden Box",
@@ -48,6 +51,22 @@ namespace path {
 
 CEntityData::CEntityData() {
   //
+}
+
+short CEntityData::getNumGroups() {
+  return Entities::groups::num;
+}
+
+short CEntityData::getNumEntities(const int& group) {
+  using namespace Entities::groups;
+
+  short N = 0;
+  switch (group) {
+    case GLOBAL: N = Entities::global::num; break;
+    case CAVES:  N = Entities::caves::num;  break;
+  }
+
+  return N;
 }
 
 SDL_Texture* CEntityData::loadSrcTexture(const int& group) {

@@ -3,6 +3,11 @@
 std::vector<EntityTexInfo> CEntity::textureList;
 std::vector<CEntity> CEntity::entityList;
 
+namespace {
+  const std::string io_path = "../data/maps/";
+  const std::string io_ext = ".ent";
+}
+
 CEntity::CEntity(int group, int entity, const SDL_Point* m) {
   sprtSrc   = getSrcTexture(group);
   group_ID  = group;
@@ -15,6 +20,23 @@ bool CEntity::OnInit() {
   if (loadTexInfo(Entities::groups::GLOBAL) == NULL) {
     return false;
   }
+  return true;
+}
+
+bool CEntity::OnSave(const char* fname) {
+  std::string filePath = io_path + fname + io_ext;
+  FILE* FileHandle = fopen(filePath.c_str(), "w");
+
+	if (FileHandle == NULL)	{
+		CInform::InfoControl.pushInform("---CENTITY.OnSave---\nfailed to open new file");
+		return false;
+	}
+
+  for (int i = 0; i < entityList.size(); i++) {
+    // Output entity info
+    fprintf(FileHandle, "%d:%d:%d:%d\n", entityList[i].group_ID, entityList[i].entity_ID, entityList[i].dstP.x, entityList[i].dstP.y);
+  }
+  fclose(FileHandle);
   return true;
 }
 

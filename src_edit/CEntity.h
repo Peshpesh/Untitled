@@ -1,6 +1,8 @@
 #ifndef _C_ENTITY_H_
 #define _C_ENTITY_H_
 
+#include <stdio.h>
+#include <string>
 #include <vector>
 
 #include "CAsset.h"
@@ -26,6 +28,7 @@ public:
   static std::vector<EntityTexInfo> textureList;
   static std::vector<CEntity> entityList;
   static bool OnInit();
+  static bool OnSave(const char* fname);
   static SDL_Texture* getSrcTexture(const int& group);
 
 private:
