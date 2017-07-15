@@ -6,9 +6,17 @@ bool CEntityEditor::OnRender(const SDL_Point* m) {
   if (!CAsset::drawAppFrame()) return false;
   if (!drawChGroup(m)) return false;
   if (!drawChEntity(m)) return false;
+  if (!drawEntityList(m)) return false;
   if (!drawOpacEntity()) return false;
   if (!drawOpacHitbox()) return false;
   if (!drawSwitchView()) return false;
+
+  // using namespace entityEngine::buttons::placeRelPos;
+  //
+  // for (int i = 0; i < 9; i++) {
+  //   buttons[i].OnRender(false);
+  // }
+
   return true;
 }
 
@@ -54,6 +62,17 @@ bool CEntityEditor::drawChEntity(const SDL_Point* m) {
     return false;
   }
   Font::NewCenterWrite(FONT_MINI, label, &button.dstR);
+  return true;
+}
+
+bool CEntityEditor::drawEntityList(const SDL_Point* m) {
+  Font::FontControl.SetFont(FONT_MINI);
+  std::string name;
+  for (int i = 0; i < entityButtons.size(); i++) {
+    if (!entityButtons[i].OnRender(m, (i != entity_ID), (i == entity_ID))) return false;
+    name = CEntityData::getEntityName(group_ID, i);
+    Font::NewCenterWrite(name.c_str(), &entityButtons[i].dstR);
+  }
   return true;
 }
 

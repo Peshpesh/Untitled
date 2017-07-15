@@ -27,6 +27,12 @@ namespace entityEngine
       extern const char* const label;
       extern CButton button;
     }
+    namespace placeRelPos {
+      extern const short x;
+      extern const short y;
+      extern const short sz;
+      extern CButton buttons[];
+    }
   }
   namespace switches {
     extern const short sz;
@@ -63,6 +69,19 @@ namespace entityEngine
       extern const short button_h;
       extern const short max_buttons;
     }
+    namespace placeRelPos {
+      enum {
+        TOP_LEFT = 0,
+        TOP_CENTER,
+        TOP_RIGHT,
+        LEFT,
+        CENTER,
+        RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_CENTER,
+        BOTTOM_RIGHT
+      };
+    }
   }
 } // Entity engine namespaces //
 
@@ -92,18 +111,22 @@ public:
 
 public:
   void OnEvent(SDL_Event* Event);
+
 private:
-  bool handleInterr(SDL_Event* Event);
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void OnLButtonDown(int mX, int mY);
+
   bool handleAddEntity(const SDL_Point* m);
   bool handleChEntity(const SDL_Point* m);
   bool handleChGroup(const SDL_Point* m);
   bool handleEntityMeter(const SDL_Point* m);
   bool handleHitboxMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
+  bool handleEntityList(const SDL_Point* m);
 
   void OnRButtonDown(int mX, int mY);
+
+  bool handleInterr(SDL_Event* Event);
 
 public:
   bool OnRender(const SDL_Point* m);
@@ -114,6 +137,7 @@ public:
 private:
   bool drawChGroup(const SDL_Point* m);
   bool drawChEntity(const SDL_Point* m);
+  bool drawEntityList(const SDL_Point* m);
   bool drawOpacEntity();
   bool drawOpacHitbox();
   bool drawSwitchView();

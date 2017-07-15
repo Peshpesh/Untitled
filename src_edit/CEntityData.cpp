@@ -94,14 +94,28 @@ SDL_Rect CEntityData::getEntityDims(const int& group, const int& entity) {
   using namespace Entities::groups;
 
   SDL_Rect srcRect = {0,0,0,0};
+  if (group < 0 || group >= num || entity < 0) return srcRect;
 
   switch (group) {
     case GLOBAL:  getDims_global(entity, srcRect);   break;
     case CAVES:   getDims_caves(entity, srcRect);    break;
     default:      break;
   }
-
   return srcRect;
+}
+
+std::string CEntityData::getEntityName(const int& group, const int& entity) {
+  using namespace Entities::groups;
+
+  std::string retval = "";
+  if (group < 0 || group >= num || entity < 0) return retval;
+
+  switch (group) {
+    case GLOBAL:  getName_global(entity, retval); break;
+    case CAVES:   getName_caves(entity, retval);  break;
+    default:      break;
+  }
+  return retval;
 }
 
 void CEntityData::getDims_global(const int& entity, SDL_Rect& srcRect) {
@@ -131,5 +145,17 @@ void CEntityData::getDims_caves(const int& entity, SDL_Rect& srcRect) {
     case SVPT:        srcRect = CAsset::getRect(0, 0, 32, 32); break;
     case SIGN:        srcRect = CAsset::getRect(0, 0, 32, 32); break;
     default:          break;
+  }
+}
+
+void CEntityData::getName_global(const int& entity, std::string& str) {
+  if (entity < Entities::global::num) {
+    str = Entities::global::name[entity];
+  }
+}
+
+void CEntityData::getName_caves(const int& entity, std::string& str) {
+  if (entity < Entities::caves::num) {
+    str = Entities::caves::name[entity];
   }
 }

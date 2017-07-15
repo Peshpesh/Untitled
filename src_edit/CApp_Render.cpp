@@ -7,17 +7,17 @@ void CApp::OnRender()
 	CSurface::Clear();
 
 	// Draw background scenery
-	int s_i = 0;
-	while (s_i < CSceneryEdit::SceneList.size())
-	{
-		float Z = CSceneryEdit::SceneList[s_i]->Z;
-		if (Z <= 1.0f) break;
-		if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
-		{
-			CSceneryEdit::SceneList[s_i]->OnRender();
-		}
-		s_i++;
-	}
+	// int s_i = 0;
+	// while (s_i < CSceneryEdit::SceneList.size())
+	// {
+	// 	float Z = CSceneryEdit::SceneList[s_i]->Z;
+	// 	if (Z <= 1.0f) break;
+	// 	if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
+	// 	{
+	// 		CSceneryEdit::SceneList[s_i]->OnRender();
+	// 	}
+	// 	s_i++;
+	// }
 
 	// Draw the working area
 	CEditMap::MapEditor.RenderMap();
@@ -26,24 +26,24 @@ void CApp::OnRender()
 	CEntityEditor::Control.drawEntities();
 
 	// Draw foreground scenery
-	while (s_i < CSceneryEdit::SceneList.size())
-	{
-		float Z = CSceneryEdit::SceneList[s_i]->Z;
-		if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
-		{
-			CSceneryEdit::SceneList[s_i]->OnRender();
-		}
-		s_i++;
-	}
+	// while (s_i < CSceneryEdit::SceneList.size())
+	// {
+	// 	float Z = CSceneryEdit::SceneList[s_i]->Z;
+	// 	if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
+	// 	{
+	// 		CSceneryEdit::SceneList[s_i]->OnRender();
+	// 	}
+	// 	s_i++;
+	// }
 
+	// CAsset::drawAppFrame(); 	// REMOVE ME AFTER FINDING LEAK
 	if (active_mod == MODIFY_NPC)
 	{
 		CEntityEditor::Control.OnRender(&mouse);
 	}
 	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
 	{
-		CAsset::drawAppFrame();
-		RenderSCNedit();
+		// RenderSCNedit();
 	}
 	else {
 		CEditMap::MapEditor.OnRender(&mouse);
@@ -59,7 +59,6 @@ void CApp::OnRender()
 		CModel::Control.OnRender(&mouse);
 	}
 
-	// if (CInterrupt::isFlagOn(INTRPT_NEW) || CInterrupt::isFlagOn(INTRPT_LOAD) || CInterrupt::isFlagOn(INTRPT_SAVE)) {
 	if (CInterrupt::isFlagOn(INTRPT_NEW | INTRPT_LOAD | INTRPT_SAVE)) {
 		CFileIO::IOhandle.OnRender(&mouse);
 	}
@@ -118,6 +117,7 @@ bool CApp::renderIOButtons()
 
 	Font::FontControl.SetFont(FONT_MINI);
 	Font::NewCenterWrite(new_label, &newButton);
+	// Font::NewCenterWrite("PISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISS", &newButton);
 	Font::NewCenterWrite(load_label, &loadButton);
 	Font::NewCenterWrite(save_label, &saveButton);
 

@@ -31,6 +31,7 @@ void CEntityEditor::OnLButtonDown(int mX, int mY) {
   if (handleEntityMeter(&m)) return;
   if (handleHitboxMeter(&m)) return;
   if (handleSwitchView(&m)) return;
+  if (handleEntityList(&m)) return;
 }
 
 bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
@@ -108,6 +109,18 @@ bool CEntityEditor::handleSwitchView(const SDL_Point* m) {
       return true;
     }
   }
+  return false;
+}
+
+bool CEntityEditor::handleEntityList(const SDL_Point* m) {
+
+  for (int i = 0; i < entityButtons.size(); i++) {
+    if (SDL_PointInRect(m, &entityButtons[i].dstR)) {
+      entity_ID = i;
+      return true;
+    }
+  }
+
   return false;
 }
 

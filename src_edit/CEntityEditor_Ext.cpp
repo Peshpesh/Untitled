@@ -13,6 +13,22 @@ namespace entityEngine
       const char* const label = "Entity Menu";
       CButton button(325, 510, 100, 24);
     }
+    namespace placeRelPos {
+      const short x = 0;
+      const short y = 0;
+      const short sz = 25;
+      CButton buttons[] = {
+        CButton(CAsset::getRect(x, y, sz, sz)),
+        CButton(CAsset::getRect(x + sz, y, sz, sz)),
+        CButton(CAsset::getRect(x + sz + sz, y, sz, sz)),
+        CButton(CAsset::getRect(x, y + sz, sz, sz)),
+        CButton(CAsset::getRect(x + sz, y + sz, sz, sz)),
+        CButton(CAsset::getRect(x + sz + sz, y + sz, sz, sz)),
+        CButton(CAsset::getRect(x, y + sz + sz, sz, sz)),
+        CButton(CAsset::getRect(x + sz, y + sz + sz, sz, sz)),
+        CButton(CAsset::getRect(x + sz + sz, y + sz + sz, sz, sz))
+      };
+    }
   }
   namespace switches {
     const short sz = 11;
@@ -50,10 +66,10 @@ namespace entityEngine
   }
   namespace misc {
     namespace entityButtons {
-      const SDL_Point* offCol = &palette::gray;
+      const SDL_Point* offCol = &palette::silver;
       const SDL_Point* onCol = &palette::green;
-      const SDL_Point* hovCol = &palette::yellow;
-      const short list_x = 90;
+      const SDL_Point* hovCol = &palette::light_yellow;
+      const short list_x = 645;
       const short list_y = 20;
       const short button_w = 90;
       const short button_h = 20;

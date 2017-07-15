@@ -61,10 +61,15 @@ public:
 public:
   static SDL_Texture* loadSrcTexture(const int& group);
   static SDL_Rect getEntityDims(const int& group, const int& entity);
+  static std::string getEntityName(const int& group, const int& entity);
 
 private:
   static void getDims_global(const int& entity, SDL_Rect& srcRect);
   static void getDims_caves(const int& entity, SDL_Rect& srcRect);
+
+private:
+  static void getName_global(const int& entity, std::string& str);
+  static void getName_caves(const int& entity, std::string& str);
 };
 
 #endif

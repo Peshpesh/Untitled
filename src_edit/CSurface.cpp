@@ -18,7 +18,7 @@ bool CSurface::OnInit(SDL_Window* window)
 
 void CSurface::Clear()
 {
-	SDL_RenderClear(Win_Renderer);
+	if (SDL_RenderClear(Win_Renderer) != 0) SDL_Delay(5000);
 }
 
 void CSurface::Present()

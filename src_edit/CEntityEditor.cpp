@@ -22,8 +22,12 @@ bool CEntityEditor::OnInit() {
   for (int i = 0; i < CEntityData::getNumEntities(Entities::groups::GLOBAL); i++)
   {
     // add buttons
+    CButton button(list_x, list_y + (i * button_h), button_w, button_h);
+    button.defCol = offCol;
+    button.onCol  = onCol;
+    button.hovCol = hovCol;
+    entityButtons.push_back(button);
   }
-
   return true;
 }
 
@@ -33,5 +37,4 @@ void CEntityEditor::OnTerminate() {
   for (int i = 0; i < CEntity::textureList.size(); i++) {
     SDL_DestroyTexture(CEntity::textureList[i].img);
   } CEntity::textureList.clear();
-
 }

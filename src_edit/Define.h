@@ -14,8 +14,6 @@
 #define EWIDTH 740      // pixels
 #define EHEIGHT 580     // pixels
 
-
-
 //---------  Application structural constants ----------//
 
 // Permanent option buttons (image/interface static)

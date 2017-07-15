@@ -154,6 +154,7 @@ int Font::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 	int v_spacing = 0;
 	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL) return -2;
 
+
 	int i = 0;
 
 	const int FirstMx = pos->x;
@@ -163,6 +164,7 @@ int Font::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 	while (line[i] != '\0' && line[i] != '\n')
 	{
 		GetXY(fontID, line[i], symRec);
+		// if (!CSurface::OnDraw(FontControl.Mini_Font, &symRec, &symPos)) return -1;
 		if (!CSurface::OnDraw(font, &symRec, &symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 		i++;
@@ -171,7 +173,6 @@ int Font::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 	{
 		FontControl.renderCursor(fontID, &symPos);
 	}
-
 	return (pos->x - FirstMx - h_spacing);
 }
 
