@@ -6,12 +6,12 @@ namespace entityEngine
     namespace chGroup
     { // Change entity group button
       const char* const label = "Group Menu";
-      CButton button(325, 534, 100, 24);
+      CButton button(355, 534, 100, 24);
     }
     namespace chEntity
     { // Change entity button
       const char* const label = "Entity Menu";
-      CButton button(325, 510, 100, 24);
+      CButton button(355, 510, 100, 24);
     }
     namespace placeRelPos {
       const SDL_Point* offCol = &palette::silver;
@@ -40,7 +40,7 @@ namespace entityEngine
     namespace view {
       const SDL_Point* offCol = &palette::red;
       const SDL_Point* onCol  = &palette::green;
-      const short x = 120;
+      const short x = 100;
       const char* const labels[] = {
         "View Entities",
         "View Hitboxes",
@@ -52,6 +52,19 @@ namespace entityEngine
         CButton(CAsset::getRect(x, 515, sz, sz), offCol, onCol),
         CButton(CAsset::getRect(x, 530, sz, sz), offCol, onCol),
         CButton(CAsset::getRect(x, 545, sz, sz), offCol, onCol)
+      };
+    }
+    namespace place {
+      const SDL_Point* offCol = &palette::red;
+      const SDL_Point* onCol  = &palette::green;
+      const short x = 235;
+      const char* const labels[] = {
+        "Place by Hitbox",
+        "Snap to Tile"
+      };
+      CButton buttons[] = {
+        CButton(CAsset::getRect(x, 500, sz, sz), offCol, onCol),
+        CButton(CAsset::getRect(x, 515, sz, sz), offCol, onCol)
       };
     }
   }

@@ -48,6 +48,13 @@ namespace entityEngine
       extern const char* const labels[];
       extern CButton buttons[];
     }
+    namespace place {
+      extern const SDL_Point* offCol;
+      extern const SDL_Point* onCol;
+      extern const short x;
+      extern const char* const labels[];
+      extern CButton buttons[];
+    }
   }
   namespace meters {
     namespace opacEntity
@@ -104,6 +111,8 @@ private:
   short group_ID;
   short entity_ID;
   short placePos;
+  bool place_hitbox;
+  bool snap_tile;
 
 public:
   static CEntityEditor Control;
@@ -128,6 +137,7 @@ private:
   bool handleEntityMeter(const SDL_Point* m);
   bool handleHitboxMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
+  bool handleSwitchPlace(const SDL_Point* m);
   bool handleEntityList(const SDL_Point* m);
   bool handlePlaceRelPos(const SDL_Point* m);
 
@@ -149,6 +159,10 @@ private:
   bool drawOpacEntity();
   bool drawOpacHitbox();
   bool drawSwitchView();
+  bool drawSwitchPlace();
+
+private:
+  void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& entR);
 };
 
 #endif

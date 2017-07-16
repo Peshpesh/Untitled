@@ -13,6 +13,7 @@ bool CEntityEditor::OnRender(const SDL_Point* m) {
   if (!drawOpacEntity()) return false;
   if (!drawOpacHitbox()) return false;
   if (!drawSwitchView()) return false;
+  if (!drawSwitchPlace()) return false;
 
   return true;
 }
@@ -31,17 +32,12 @@ bool CEntityEditor::drawEntities() {
 
 bool CEntityEditor::drawWorkingEntity(const SDL_Point* m) {
   if (!showWorkEntity) return true;
-  using namespace entityEngine::misc::placeRelPos;
 
   SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
 
-  int x_placeCell = placePos % numpos_x;
-  int y_placeCell = placePos / numpos_x;
-
-  if (y_placeCell >= numpos_y) return false;
-
-  int disp_x = -(((x_placeCell * srcR.w) / 2) - (x_placeCell / 2));
-  int disp_y = -(((y_placeCell * srcR.h) / 2) - (y_placeCell / 2));
+  int disp_x = 0;
+  int disp_y = 0;
+  getPosDisplace(disp_x, disp_y, m, srcR);
 
   SDL_Rect dstR = {m->x + disp_x, m->y + disp_y, srcR.w, srcR.h};
 
@@ -115,6 +111,24 @@ bool CEntityEditor::drawSwitchView() {
     showHitbox,
     showWorkEntity,
     showWorkHitbox
+  };
+
+  for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
+    if (!buttons[i].OnRender(flags[i])) return false;
+
+    const SDL_Point tPos = {buttons[i].dstR.x + lab_x_offset, buttons[i].dstR.y + lab_y_offset};
+    Font::Write(FONT_MINI, labels[i], &tPos);
+  }
+  return true;
+}
+
+bool CEntityEditor::drawSwitchPlace() {
+  using namespace entityEngine::switches;
+  using namespace entityEngine::switches::place;
+
+  const bool flags[] = {
+    place_hitbox,
+    snap_tile
   };
 
   for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {

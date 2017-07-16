@@ -31,15 +31,24 @@ void CEntityEditor::OnLButtonDown(int mX, int mY) {
   if (handleEntityMeter(&m)) return;
   if (handleHitboxMeter(&m)) return;
   if (handleSwitchView(&m)) return;
+  if (handleSwitchPlace(&m)) return;
   if (handleEntityList(&m)) return;
   if (handlePlaceRelPos(&m)) return;
 }
 
 bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
   if (!CAsset::inWorkspace(m)) return false;
-
   // click in workspace attempts to add entity data
-  CEntity newEntity(group_ID, entity_ID, m);
+
+  int disp_x = 0;
+  int disp_y = 0;
+  {
+    SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
+    getPosDisplace(disp_x, disp_y, m, srcR);
+  }
+
+  const SDL_Point dstP = {m->x + disp_x, m->y + disp_y};
+  CEntity newEntity(group_ID, entity_ID, &dstP);
   CEntity::entityList.push_back(newEntity);
 
   return true;
@@ -113,6 +122,23 @@ bool CEntityEditor::handleSwitchView(const SDL_Point* m) {
   return false;
 }
 
+bool CEntityEditor::handleSwitchPlace(const SDL_Point* m) {
+  using namespace entityEngine::switches::place;
+
+  bool* flags[] = {
+    &place_hitbox,
+    &snap_tile
+  };
+
+  for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
+    if (SDL_PointInRect(m, &buttons[i].dstR)) {
+      *flags[i] = !(*flags[i]);
+      return true;
+    }
+  }
+  return false;
+}
+
 bool CEntityEditor::handleEntityList(const SDL_Point* m) {
   for (int i = 0; i < entityButtons.size(); i++) {
     if (SDL_PointInRect(m, &entityButtons[i].dstR)) {
@@ -139,5 +165,4 @@ bool CEntityEditor::handlePlaceRelPos(const SDL_Point* m) {
 
 void CEntityEditor::OnRButtonDown(int mX, int mY) {
   SDL_Point m = {mX, mY};
-
 }
