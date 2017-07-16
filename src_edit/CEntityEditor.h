@@ -28,6 +28,9 @@ namespace entityEngine
       extern CButton button;
     }
     namespace placeRelPos {
+      extern const SDL_Point* offCol;
+      extern const SDL_Point* hovCol;
+      extern const SDL_Point* onCol;
       extern const short x;
       extern const short y;
       extern const short sz;
@@ -70,6 +73,8 @@ namespace entityEngine
       extern const short max_buttons;
     }
     namespace placeRelPos {
+      extern const short numpos_x;
+      extern const short numpos_y;
       enum {
         TOP_LEFT = 0,
         TOP_CENTER,
@@ -96,8 +101,9 @@ private:
   unsigned short entity_alpha;
   unsigned short hitbox_alpha;
 
-  int group_ID;
-  int entity_ID;
+  short group_ID;
+  short entity_ID;
+  short placePos;
 
 public:
   static CEntityEditor Control;
@@ -123,6 +129,7 @@ private:
   bool handleHitboxMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
   bool handleEntityList(const SDL_Point* m);
+  bool handlePlaceRelPos(const SDL_Point* m);
 
   void OnRButtonDown(int mX, int mY);
 
@@ -135,9 +142,10 @@ public:
   bool drawHitboxes();
 
 private:
-  bool drawChGroup(const SDL_Point* m);
-  bool drawChEntity(const SDL_Point* m);
-  bool drawEntityList(const SDL_Point* m);
+  bool drawChGroup(const SDL_Point* m, const bool& hov);
+  bool drawChEntity(const SDL_Point* m, const bool& hov);
+  bool drawEntityList(const SDL_Point* m, const bool& hov);
+  bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
   bool drawOpacEntity();
   bool drawOpacHitbox();
   bool drawSwitchView();

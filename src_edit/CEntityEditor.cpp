@@ -13,6 +13,7 @@ CEntityEditor::CEntityEditor()
 
   group_ID  = Entities::groups::GLOBAL;
   entity_ID = Entities::global::PLAYER;
+  placePos  = entityEngine::misc::placeRelPos::TOP_LEFT;
 }
 
 bool CEntityEditor::OnInit() {

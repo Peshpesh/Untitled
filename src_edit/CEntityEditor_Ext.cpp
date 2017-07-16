@@ -14,19 +14,22 @@ namespace entityEngine
       CButton button(325, 510, 100, 24);
     }
     namespace placeRelPos {
-      const short x = 0;
-      const short y = 0;
-      const short sz = 25;
+      const SDL_Point* offCol = &palette::silver;
+      const SDL_Point* hovCol = &palette::light_yellow;
+      const SDL_Point* onCol  = &palette::green;
+      const short x = 20;
+      const short y = 500;
+      const short sz = 20;
       CButton buttons[] = {
-        CButton(CAsset::getRect(x, y, sz, sz)),
-        CButton(CAsset::getRect(x + sz, y, sz, sz)),
-        CButton(CAsset::getRect(x + sz + sz, y, sz, sz)),
-        CButton(CAsset::getRect(x, y + sz, sz, sz)),
-        CButton(CAsset::getRect(x + sz, y + sz, sz, sz)),
-        CButton(CAsset::getRect(x + sz + sz, y + sz, sz, sz)),
-        CButton(CAsset::getRect(x, y + sz + sz, sz, sz)),
-        CButton(CAsset::getRect(x + sz, y + sz + sz, sz, sz)),
-        CButton(CAsset::getRect(x + sz + sz, y + sz + sz, sz, sz))
+        CButton(CAsset::getRect(x,            y,            sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x + sz,       y,            sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x + sz + sz,  y,            sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x,            y + sz,       sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x + sz,       y + sz,       sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x + sz + sz,  y + sz,       sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x,            y + sz + sz,  sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x + sz,       y + sz + sz,  sz, sz), offCol, hovCol, onCol),
+        CButton(CAsset::getRect(x + sz + sz,  y + sz + sz,  sz, sz), offCol, hovCol, onCol)
       };
     }
   }
@@ -37,7 +40,7 @@ namespace entityEngine
     namespace view {
       const SDL_Point* offCol = &palette::red;
       const SDL_Point* onCol  = &palette::green;
-      const short x = 20;
+      const short x = 120;
       const char* const labels[] = {
         "View Entities",
         "View Hitboxes",
@@ -74,6 +77,10 @@ namespace entityEngine
       const short button_w = 90;
       const short button_h = 20;
       const short max_buttons = 20;
+    }
+    namespace placeRelPos {
+      const short numpos_x = 3;
+      const short numpos_y = 3;
     }
   }
 } // Entity engine namespaces //
