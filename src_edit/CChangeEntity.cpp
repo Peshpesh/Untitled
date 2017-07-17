@@ -3,13 +3,19 @@
 CChangeEntity CChangeEntity::Control;
 
 namespace defs {
-  const SDL_Rect canv           = CAsset::getWinCentRect(400, 300);
+  const SDL_Rect canv           = CAsset::getWinCentRect(440, 320);
   const short but_w             = 90;
   const short but_h             = 20;
   const short grList_x          = canv.x + ((canv.w / 2) - but_w) / 2;
-  const short grList_y          = canv.y + 15;
+  const short grList_y          = canv.y + 30;
   const short enList_x          = canv.x + (canv.w / 2) + ((canv.w / 2) - but_w) / 2;
-  const short enList_y          = canv.y + 15;
+  const short enList_y          = canv.y + 30;
+
+  const SDL_Rect title_bar      = CAsset::getRect(canv.x, canv.y + 9, canv.w, 11);
+  const SDL_Rect tbar_group     = CAsset::getRect(title_bar.x,                    title_bar.y, title_bar.w / 2, title_bar.h);
+  const SDL_Rect tbar_entity    = CAsset::getRect(title_bar.x + title_bar.w / 2,  title_bar.y, title_bar.w / 2, title_bar.h);
+  const char* const titleGroup  = "Groups";
+  const char* const titleEntity = "Group Entities";
 
   const short d_spac            = 30;
   const short d_y               = (canv.y + canv.h) - 30;
@@ -27,6 +33,8 @@ namespace defs {
   const SDL_Point* activeCol    = &palette::magenta;
   const SDL_Point* hovCol       = &palette::light_yellow;
   const SDL_Point* confirmCol   = &palette::green;
+  const SDL_Point* titleCol     = &palette::black;
+  const SDL_Color* titletextCol = &rgb::white;
 }
 
 CChangeEntity::CChangeEntity() {
@@ -134,6 +142,10 @@ bool CChangeEntity::OnRender(const SDL_Point* m) {
   if (!drawGroupButtons(m)) return false;
   if (!drawEntityButtons(m)) return false;
   if (!drawConfirmButtons(m)) return false;
+
+  CAsset::drawBoxFill(&defs::title_bar, defs::titleCol);
+  Font::NewCenterWrite(defs::titleGroup, &defs::tbar_group, defs::titletextCol);
+  Font::NewCenterWrite(defs::titleEntity, &defs::tbar_entity, defs::titletextCol);
   return true;
 }
 
