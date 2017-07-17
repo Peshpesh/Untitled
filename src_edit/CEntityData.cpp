@@ -104,6 +104,11 @@ SDL_Rect CEntityData::getEntityDims(const int& group, const int& entity) {
   return srcRect;
 }
 
+std::string CEntityData::getGroupName(const int& group) {
+  if (group < 0 || group >= Entities::groups::num) return "";
+  return Entities::groups::name[group];
+}
+
 std::string CEntityData::getEntityName(const int& group, const int& entity) {
   using namespace Entities::groups;
 

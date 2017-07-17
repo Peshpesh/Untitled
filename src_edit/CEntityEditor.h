@@ -9,6 +9,7 @@
 #include "CAsset.h"
 #include "CFont.h"
 #include "CEntity.h"
+#include "CChangeEntity.h"
 #include "CInterrupt.h"
 #include "CInform.h"
 #include "CCamera.h"
@@ -17,11 +18,11 @@
 namespace entityEngine
 {
   namespace buttons {
-    namespace chGroup
-    { // Change entity group button
-      extern const char* const label;
-      extern CButton button;
-    }
+    // namespace chGroup
+    // { // Change entity group button
+    //   extern const char* const label;
+    //   extern CButton button;
+    // }
     namespace chEntity
     { // Change entity button
       extern const char* const label;
@@ -133,7 +134,7 @@ private:
 
   bool handleAddEntity(const SDL_Point* m);
   bool handleChEntity(const SDL_Point* m);
-  bool handleChGroup(const SDL_Point* m);
+  // bool handleChGroup(const SDL_Point* m);
   bool handleEntityMeter(const SDL_Point* m);
   bool handleHitboxMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
@@ -152,7 +153,7 @@ public:
   bool drawHitboxes();
 
 private:
-  bool drawChGroup(const SDL_Point* m, const bool& hov);
+  // bool drawChGroup(const SDL_Point* m, const bool& hov);
   bool drawChEntity(const SDL_Point* m, const bool& hov);
   bool drawEntityList(const SDL_Point* m, const bool& hov);
   bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
@@ -160,9 +161,11 @@ private:
   bool drawOpacHitbox();
   bool drawSwitchView();
   bool drawSwitchPlace();
+  bool drawIntrpt(const SDL_Point* m);
 
 private:
   void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& entR);
+  void updateEntityButtons();
 };
 
 #endif

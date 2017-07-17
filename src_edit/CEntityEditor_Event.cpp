@@ -7,11 +7,13 @@ void CEntityEditor::OnEvent(SDL_Event* Event) {
 }
 
 bool CEntityEditor::handleInterr(SDL_Event* Event) {
-  if (CInterrupt::isFlagOn(INTRPT_CH_ENTITY)) {
-    //
-  }
-  else if (CInterrupt::isFlagOn(INTRPT_CH_ENTGRP)) {
-    //
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_EN)) {
+    CChangeEntity::Control.OnEvent(Event);
+    if (CInterrupt::isFlagOff(INTRPT_CHANGE_EN)) {
+      CChangeEntity::Control.handleChanges(group_ID, entity_ID);
+      updateEntityButtons();
+    }
+    return true;
   }
   return false;
 }
@@ -25,15 +27,14 @@ void CEntityEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 void CEntityEditor::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
 
-  if (handleAddEntity(&m)) return;
   if (handleChEntity(&m)) return;
-  if (handleChGroup(&m)) return;
   if (handleEntityMeter(&m)) return;
   if (handleHitboxMeter(&m)) return;
   if (handleSwitchView(&m)) return;
   if (handleSwitchPlace(&m)) return;
   if (handleEntityList(&m)) return;
   if (handlePlaceRelPos(&m)) return;
+  if (handleAddEntity(&m)) return;
 }
 
 bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
@@ -58,21 +59,22 @@ bool CEntityEditor::handleChEntity(const SDL_Point* m) {
   using namespace entityEngine::buttons::chEntity;
 
   if (SDL_PointInRect(m, &button.dstR)) {
-    CInterrupt::appendFlag(INTRPT_CH_ENTITY);
+    CChangeEntity::Control.OnInit(group_ID, entity_ID);
+    CInterrupt::appendFlag(INTRPT_CHANGE_EN);
     return true;
   }
   return false;
 }
 
-bool CEntityEditor::handleChGroup(const SDL_Point* m) {
-  using namespace entityEngine::buttons::chGroup;
-
-  if (SDL_PointInRect(m, &button.dstR)) {
-    CInterrupt::appendFlag(INTRPT_CH_ENTGRP);
-    return true;
-  }
-  return false;
-}
+// bool CEntityEditor::handleChGroup(const SDL_Point* m) {
+//   using namespace entityEngine::buttons::chGroup;
+//
+//   if (SDL_PointInRect(m, &button.dstR)) {
+//     CInterrupt::appendFlag(INTRPT_CHANGE_EN);
+//     return true;
+//   }
+//   return false;
+// }
 
 bool CEntityEditor::handleEntityMeter(const SDL_Point* m) {
   using namespace entityEngine::meters::opacEntity;

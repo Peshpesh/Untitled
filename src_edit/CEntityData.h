@@ -61,6 +61,7 @@ public:
 public:
   static SDL_Texture* loadSrcTexture(const int& group);
   static SDL_Rect getEntityDims(const int& group, const int& entity);
+  static std::string getGroupName(const int& group);
   static std::string getEntityName(const int& group, const int& entity);
 
 private:

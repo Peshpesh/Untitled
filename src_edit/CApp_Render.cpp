@@ -68,7 +68,6 @@ void CApp::OnRender()
 	{
 		std::string fps_str = Font::intToStr(CFPS::FPSControl.GetFPS()) + " fps";
 		Font::Write(FONT_MINI, fps_str.c_str(), WWIDTH + 5, 1);
-		// Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
 
 	CSurface::Present();
@@ -119,7 +118,6 @@ bool CApp::renderIOButtons()
 
 	Font::FontControl.SetFont(FONT_MINI);
 	Font::NewCenterWrite(new_label, &newButton);
-	// Font::NewCenterWrite("PISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISSPISSASS PISS PISS", &newButton);
 	Font::NewCenterWrite(load_label, &loadButton);
 	Font::NewCenterWrite(save_label, &saveButton);
 

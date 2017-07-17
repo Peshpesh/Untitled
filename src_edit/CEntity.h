@@ -29,10 +29,12 @@ public:
   static std::vector<CEntity> entityList;
   static bool OnInit();
   static bool OnSave(const char* fname);
+  static bool isGroupUsed(const int& group);
+  static bool isEntityUsed(const int& group, const int& entity);
+  static bool isTextureLoaded(const int& group);
   static SDL_Texture* getSrcTexture(const int& group);
-
-private:
   static SDL_Texture* loadTexInfo(const int& group);
+  static void purgeStaleTextures();
 
 public:
   SDL_Texture* sprtSrc;

@@ -82,7 +82,9 @@ SDL_Rect CAsset::getRect(const SDL_Point* A, const SDL_Point* B)
 SDL_Rect CAsset::getWinCentRect(const unsigned int& w, const unsigned int& h) {
   int X = (WWIDTH - w) / 2;
   int Y = (WHEIGHT - h) / 2;
-  if (X < 0 || Y < 0) return CAsset::getRect(0,0,0,0);
+  if (X < 0 || Y < 0) {
+    return CAsset::getRect(0,0,0,0);
+  }
   return CAsset::getRect(X, Y, w, h);
 }
 

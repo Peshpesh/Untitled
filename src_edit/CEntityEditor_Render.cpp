@@ -1,20 +1,23 @@
 #include "CEntityEditor.h"
 
 bool CEntityEditor::OnRender(const SDL_Point* m) {
-  bool hov = CInterrupt::isNone();
+  bool no_intrpt = CInterrupt::isNone();
 
   if (!drawHitboxes()) return false;
-  if (!drawWorkingEntity(m)) return false;
+  if (no_intrpt) {
+    if (!drawWorkingEntity(m)) return false;
+  }
   if (!CAsset::drawAppFrame()) return false;
-  if (!drawChGroup(m, hov)) return false;
-  if (!drawChEntity(m, hov)) return false;
-  if (!drawEntityList(m, hov)) return false;
-  if (!drawPlaceRelPos(m, hov)) return false;
+  if (!drawChEntity(m, no_intrpt)) return false;
+  if (!drawEntityList(m, no_intrpt)) return false;
+  if (!drawPlaceRelPos(m, no_intrpt)) return false;
   if (!drawOpacEntity()) return false;
   if (!drawOpacHitbox()) return false;
   if (!drawSwitchView()) return false;
   if (!drawSwitchPlace()) return false;
-
+  if (!no_intrpt) {
+    if (!drawIntrpt(m)) return false;
+  }
   return true;
 }
 
@@ -50,20 +53,10 @@ bool CEntityEditor::drawHitboxes() {
   return true;
 }
 
-bool CEntityEditor::drawChGroup(const SDL_Point* m, const bool& hov) {
-  using namespace entityEngine::buttons::chGroup;
-
-  if (!button.OnRender(m, hov, CInterrupt::isFlagOn(INTRPT_CH_ENTGRP))) {
-    return false;
-  }
-  Font::NewCenterWrite(FONT_MINI, label, &button.dstR);
-  return true;
-}
-
 bool CEntityEditor::drawChEntity(const SDL_Point* m, const bool& hov) {
   using namespace entityEngine::buttons::chEntity;
 
-  if (!button.OnRender(m, hov, CInterrupt::isFlagOn(INTRPT_CH_ENTITY))) {
+  if (!button.OnRender(m, hov, CInterrupt::isFlagOn(INTRPT_CHANGE_EN))) {
     return false;
   }
   Font::NewCenterWrite(FONT_MINI, label, &button.dstR);
@@ -138,4 +131,13 @@ bool CEntityEditor::drawSwitchPlace() {
     Font::Write(FONT_MINI, labels[i], &tPos);
   }
   return true;
+}
+
+bool CEntityEditor::drawIntrpt(const SDL_Point* m)
+{
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_EN))
+	{
+		if (!CChangeEntity::Control.OnRender(m)) return false;
+	}
+	return true;
 }

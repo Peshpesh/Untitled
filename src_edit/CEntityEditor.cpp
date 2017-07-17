@@ -21,16 +21,8 @@ CEntityEditor::CEntityEditor()
 bool CEntityEditor::OnInit() {
   if (!CEntity::OnInit()) return false;
 
-  using namespace entityEngine::misc::entityButtons;
-  for (int i = 0; i < CEntityData::getNumEntities(Entities::groups::GLOBAL); i++)
-  {
-    // add buttons
-    CButton button(list_x, list_y + (i * button_h), button_w, button_h);
-    button.defCol = offCol;
-    button.onCol  = onCol;
-    button.hovCol = hovCol;
-    entityButtons.push_back(button);
-  }
+  updateEntityButtons();
+
   return true;
 }
 
@@ -50,6 +42,21 @@ void CEntityEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const S
 
   dx += -(((x_placeCell * entR.w) / 2) - (x_placeCell + 1 == numpos_x));
   dy += -(((y_placeCell * entR.h) / 2) - (y_placeCell + 1 == numpos_y));
+}
+
+void CEntityEditor::updateEntityButtons() {
+  using namespace entityEngine::misc::entityButtons;
+
+  entityButtons.clear();
+  for (int i = 0; i < CEntityData::getNumEntities(group_ID); i++)
+  {
+    // add buttons
+    CButton button(list_x, list_y + (i * button_h), button_w, button_h);
+    button.defCol = offCol;
+    button.onCol  = onCol;
+    button.hovCol = hovCol;
+    entityButtons.push_back(button);
+  }
 }
 
 void CEntityEditor::OnTerminate() {

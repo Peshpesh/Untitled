@@ -6,13 +6,12 @@ enum interrupts
   INTRPT_NONE       = 0,
   INTRPT_CHANGE_BG  = 0x00000001,		// intrpt via bg tile change
   INTRPT_CHANGE_FG  = 0x00000002,		// intrpt via fg tile change
-  INTRPT_MAP_MODEL  = 0x00000004,
-  INTRPT_CHANGE_TS  = 0x00000008,
-  INTRPT_NEW        = 0x00000010,
-  INTRPT_LOAD       = 0x00000020,
-  INTRPT_SAVE       = 0x00000040,
-  INTRPT_CH_ENTITY  = 0x00000080,
-  INTRPT_CH_ENTGRP  = 0x00000100,
+  INTRPT_MAP_MODEL  = 0x00000004,   // show a simple model of the area
+  INTRPT_CHANGE_TS  = 0x00000008,   // change tileset
+  INTRPT_CHANGE_EN  = 0x00000010,   // change/explore entity groups
+  INTRPT_NEW        = 0x00000020,   // reset stage prompt
+  INTRPT_LOAD       = 0x00000040,   // load stage prompt
+  INTRPT_SAVE       = 0x00000080,   // save stage prompt
 };
 
 class CInterrupt {

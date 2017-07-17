@@ -40,24 +40,44 @@ bool CEntity::OnSave(const char* fname) {
   return true;
 }
 
+bool CEntity::isGroupUsed(const int& group) {
+  for (int i = 0; i < entityList.size(); i++) {
+    if (group == entityList[i].group_ID) return true;
+  }
+  return false;
+}
+
+bool CEntity::isEntityUsed(const int& group, const int& entity) {
+  for (int i = 0; i < entityList.size(); i++) {
+    if (group == entityList[i].group_ID && entity == entityList[i].entity_ID) return true;
+  }
+  return false;
+}
+
+bool CEntity::isTextureLoaded(const int& group) {
+  for (int i = 0; i < textureList.size(); i++) {
+    if (group == textureList[i].group_ID) return true;
+  }
+  return false;
+}
+
 bool CEntity::OnRender() {
   SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(&dstP);
   return CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
 }
 
 SDL_Texture* CEntity::getSrcTexture(const int& group) {
-  SDL_Texture* retval = NULL;
-
   for (int i = 0; i < textureList.size(); i++) {
     if (group == textureList[i].group_ID) {
       return textureList[i].img;
     }
   }
   return NULL;
-  // return loadTexInfo(group);
 }
 
 SDL_Texture* CEntity::loadTexInfo(const int& group) {
+  if (isTextureLoaded(group)) return getSrcTexture(group);
+  
   SDL_Texture* entity_tex = NULL;
   entity_tex = CEntityData::loadSrcTexture(group);
 
@@ -67,6 +87,16 @@ SDL_Texture* CEntity::loadTexInfo(const int& group) {
     newInfo.img = entity_tex;
     textureList.push_back(newInfo);
   }
-
   return entity_tex;
+}
+
+void CEntity::purgeStaleTextures() {
+  for (int i = textureList.size() - 1; i >= 0; i--)
+  {
+    if (!isGroupUsed(textureList[i].group_ID))
+    {
+      SDL_DestroyTexture(textureList[i].img);
+      textureList.erase(textureList.begin() + i);
+    }
+  }
 }
