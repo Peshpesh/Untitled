@@ -66,7 +66,9 @@ void CApp::OnRender()
 	//	DEBUGGING
 	if (debug)
 	{
-		Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
+		std::string fps_str = Font::intToStr(CFPS::FPSControl.GetFPS()) + " fps";
+		Font::Write(FONT_MINI, fps_str.c_str(), WWIDTH + 5, 1);
+		// Font::Write(FONT_MINI, CFPS::FPSControl.GetFPS(), WWIDTH + 1, 1);
 	}
 
 	CSurface::Present();

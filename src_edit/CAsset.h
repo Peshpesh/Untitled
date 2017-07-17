@@ -108,6 +108,7 @@ class CAsset
     // returns a SDL_Rect struct for given X, Y, W, H. Ideal for drawing.
   	static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
     static SDL_Rect getRect(const SDL_Point* A, const SDL_Point* B);
+    static SDL_Rect getWinCentRect(const unsigned int& w, const unsigned int& h);
     static SDL_Rect getTileRect(const SDL_Point* A, const SDL_Point* B);
     static SDL_Point getPos(int X, int Y);
 

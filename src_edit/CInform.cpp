@@ -47,7 +47,6 @@ void CInform::OnLoop()
   else {
     info.clear();
   }
-
 }
 
 bool CInform::OnRender()

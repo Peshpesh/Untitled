@@ -50,14 +50,11 @@ SDL_Texture* CEntity::getSrcTexture(const int& group) {
 
   for (int i = 0; i < textureList.size(); i++) {
     if (group == textureList[i].group_ID) {
-      retval = textureList[i].img;
-      break;
+      return textureList[i].img;
     }
   }
-
-  if (retval == NULL) retval = loadTexInfo(group);
-
-  return retval;
+  return NULL;
+  // return loadTexInfo(group);
 }
 
 SDL_Texture* CEntity::loadTexInfo(const int& group) {

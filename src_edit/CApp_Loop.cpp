@@ -2,7 +2,7 @@
 
 void CApp::OnLoop()
 {
-	// CInform::InfoControl.OnLoop();
+	CInform::InfoControl.OnLoop();
 
 	int mX, mY;
 	int tX = 0, tY = 0;

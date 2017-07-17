@@ -30,6 +30,7 @@ ${SRCDIR}/CAsset.cpp
 ${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CButton.cpp
 ${SRCDIR}/CCamera.cpp
+${SRCDIR}/CChangeEntity.cpp
 ${SRCDIR}/CChangeTile.cpp
 ${SRCDIR}/CEditMap.cpp
 ${SRCDIR}/CEditMap_Event.cpp
@@ -67,6 +68,7 @@ ${SRCDIR}/CArea.h
 ${SRCDIR}/CAsset.h
 ${SRCDIR}/CButton.h
 ${SRCDIR}/CCamera.h
+${SRCDIR}/CChangeEntity.h
 ${SRCDIR}/CChangeTile.h
 ${SRCDIR}/CEditMap.h
 ${SRCDIR}/CEntity.h

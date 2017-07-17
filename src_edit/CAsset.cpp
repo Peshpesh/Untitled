@@ -45,7 +45,6 @@ bool CAsset::OnInit()
   {
     return false;
   }
-
 	return true;
 }
 
@@ -60,12 +59,10 @@ void CAsset::queryTileDims(SDL_Texture* texture, int& w, int& h)
 SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H)
 {
 	SDL_Rect rect;
-
 	rect.x = X;
 	rect.y = Y;
 	rect.w = W;
 	rect.h = H;
-
 	return rect;
 }
 
@@ -79,8 +76,14 @@ SDL_Rect CAsset::getRect(const SDL_Point* A, const SDL_Point* B)
   int h = ymax - ymin + 1;
 
   SDL_Rect rect = {xmin, ymin, w, h};
-
   return rect;
+}
+
+SDL_Rect CAsset::getWinCentRect(const unsigned int& w, const unsigned int& h) {
+  int X = (WWIDTH - w) / 2;
+  int Y = (WHEIGHT - h) / 2;
+  if (X < 0 || Y < 0) return CAsset::getRect(0,0,0,0);
+  return CAsset::getRect(X, Y, w, h);
 }
 
 SDL_Rect CAsset::getTileRect(const SDL_Point* A, const SDL_Point* B)
