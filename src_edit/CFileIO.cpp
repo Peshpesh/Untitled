@@ -301,12 +301,10 @@ void CFileIO::loadData()
 
   CCamera::CameraControl.SetPos(0, 0);
 
-  // if (!CEntityEdit::NPCControl.LoadList(newName.c_str())) {
-  //   // problem loading entities
-  //   pushInform(I_FAIL_ENTITY);
-  //   newName.clear();
-  //   return;
-  // }
+  if (!CEntity::OnLoad(newName.c_str())) {
+    pushInform(I_FAIL_ENTITY);
+    return;
+  }
 
   if (!CSceneryEdit::ScnControl.LoadScenery(newName.c_str())) {
     // problem loading 2.5D elements
@@ -327,10 +325,6 @@ void CFileIO::saveData()
     pushInform(I_FAIL_SAVE);
     return;
   }
-  // if (!CEntityEdit::NPCControl.SaveList(newName.c_str())) {
-  //   pushInform(I_FAIL_SAVE);
-  //   return;
-  // }
   if (!CEntity::OnSave(newName.c_str())) {
     pushInform(I_FAIL_SAVE);
     return;

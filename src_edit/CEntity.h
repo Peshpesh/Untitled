@@ -28,6 +28,7 @@ public:
   static std::vector<EntityTexInfo> textureList;
   static std::vector<CEntity> entityList;
   static bool OnInit();
+  static bool OnLoad(const char* fname);
   static bool OnSave(const char* fname);
   static bool isGroupUsed(const int& group);
   static bool isEntityUsed(const int& group, const int& entity);

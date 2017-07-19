@@ -33,6 +33,7 @@ public:
 
 private:
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+
 	void OnLButtonDown(int mX, int mY);
   bool handleConfirm(const SDL_Point* m);
   bool handleCancel(const SDL_Point* m);
@@ -41,9 +42,11 @@ private:
 
 public:
 	bool OnRender(const SDL_Point* m);
+  bool drawTitle();
   bool drawGroupButtons(const SDL_Point* m);
   bool drawEntityButtons(const SDL_Point* m);
   bool drawConfirmButtons(const SDL_Point* m);
+	bool drawSampleEntity(const SDL_Point* m);
 
 private:
   SDL_Texture* updateTexture();

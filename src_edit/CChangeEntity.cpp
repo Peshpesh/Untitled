@@ -4,18 +4,26 @@ CChangeEntity CChangeEntity::Control;
 
 namespace defs {
   const SDL_Rect canv           = CAsset::getWinCentRect(440, 320);
-  const short but_w             = 90;
-  const short but_h             = 20;
-  const short grList_x          = canv.x + ((canv.w / 2) - but_w) / 2;
+  const short subcanv_w         = canv.w / 3;
+  const short but_w             = 120;
+  const short but_h             = 11;
+  const short grList_x          = canv.x + (subcanv_w - but_w) / 2;
   const short grList_y          = canv.y + 30;
-  const short enList_x          = canv.x + (canv.w / 2) + ((canv.w / 2) - but_w) / 2;
+  const short enList_x          = canv.x + subcanv_w + (subcanv_w - but_w) / 2;
   const short enList_y          = canv.y + 30;
+  const short samp_sz           = 128;
+  const SDL_Rect sampleCanv     = CAsset::getRect(canv.x + (2 * subcanv_w) + (subcanv_w - samp_sz) / 2,
+                                                  canv.y + (canv.h - samp_sz) / 2,
+                                                  samp_sz,
+                                                  samp_sz);
 
   const SDL_Rect title_bar      = CAsset::getRect(canv.x, canv.y + 9, canv.w, 11);
-  const SDL_Rect tbar_group     = CAsset::getRect(title_bar.x,                    title_bar.y, title_bar.w / 2, title_bar.h);
-  const SDL_Rect tbar_entity    = CAsset::getRect(title_bar.x + title_bar.w / 2,  title_bar.y, title_bar.w / 2, title_bar.h);
+  const SDL_Rect tbar_group     = CAsset::getRect(title_bar.x,                      title_bar.y, title_bar.w / 3, title_bar.h);
+  const SDL_Rect tbar_entity    = CAsset::getRect(tbar_group.x  + title_bar.w / 3,  title_bar.y, title_bar.w / 3, title_bar.h);
+  const SDL_Rect tbar_sample    = CAsset::getRect(tbar_entity.x + title_bar.w / 3,  title_bar.y, title_bar.w / 3, title_bar.h);
   const char* const titleGroup  = "Groups";
   const char* const titleEntity = "Group Entities";
+  const char* const titleSample = "Sample";
 
   const short d_spac            = 30;
   const short d_y               = (canv.y + canv.h) - 30;
@@ -28,6 +36,7 @@ namespace defs {
 
   const short b_sz              = 2;
   const SDL_Point* canvCol      = &palette::dark_cyan;
+  const SDL_Point* sampCanvCol  = &palette::dark_gray;
   const SDL_Point* idleCol      = &palette::silver;
   const SDL_Point* usedCol      = &palette::light_green;
   const SDL_Point* activeCol    = &palette::magenta;
@@ -139,13 +148,20 @@ bool CChangeEntity::OnRender(const SDL_Point* m) {
   Font::FontControl.SetFont(FONT_MINI);
   CAsset::drawStrBox(&defs::canv, defs::b_sz, defs::canvCol);
 
+  if (!drawTitle()) return false;
   if (!drawGroupButtons(m)) return false;
   if (!drawEntityButtons(m)) return false;
+  if (!drawSampleEntity(m)) return false;
   if (!drawConfirmButtons(m)) return false;
 
-  CAsset::drawBoxFill(&defs::title_bar, defs::titleCol);
+  return true;
+}
+
+bool CChangeEntity::drawTitle() {
+  if (!CAsset::drawBoxFill(&defs::title_bar, defs::titleCol)) return false;
   Font::NewCenterWrite(defs::titleGroup, &defs::tbar_group, defs::titletextCol);
   Font::NewCenterWrite(defs::titleEntity, &defs::tbar_entity, defs::titletextCol);
+  Font::NewCenterWrite(defs::titleSample, &defs::tbar_sample, defs::titletextCol);
   return true;
 }
 
@@ -186,6 +202,28 @@ bool CChangeEntity::drawConfirmButtons(const SDL_Point* m) {
   Font::NewCenterWrite(caText, &caButton);
 
   return true;
+}
+
+bool CChangeEntity::drawSampleEntity(const SDL_Point* m) {
+  CAsset::drawBoxFill(&defs::sampleCanv, defs::sampCanvCol);
+
+  SDL_Rect tRec = {defs::enList_x, defs::enList_y, defs::but_w, entityButtons.size() * defs::but_h};
+  if (SDL_PointInRect(m, &tRec)) {
+    for (int i = 0; i < entityButtons.size(); i++) {
+      if (SDL_PointInRect(m, &entityButtons[i])) {
+        tRec = CEntityData::getEntityDims(group_ID, i);
+      }
+    }
+  }
+  else {
+    tRec = CEntityData::getEntityDims(group_ID, entity_ID);
+  }
+  if (tRec.w > defs::samp_sz) tRec.w = defs::samp_sz;
+  if (tRec.h > defs::samp_sz) tRec.h = defs::samp_sz;
+
+  const SDL_Point dstP = {defs::sampleCanv.x, defs::sampleCanv.y};
+
+  return CSurface::OnDraw(Group_Tex, &tRec, &dstP);
 }
 
 SDL_Texture* CChangeEntity::updateTexture() {

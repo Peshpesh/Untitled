@@ -23,18 +23,54 @@ bool CEntity::OnInit() {
   return true;
 }
 
+bool CEntity::OnLoad(const char* fname) {
+  std::string filePath = io_path + fname + io_ext;
+  FILE* FileHandle = fopen(filePath.c_str(), "rb");
+
+	if (FileHandle == NULL)	{
+		CInform::InfoControl.pushInform("---CENTITY.OnLoad---\nfailed to open new file");
+		return false;
+	}
+
+  entityList.clear();
+
+  int N;
+  fread(&N, sizeof(int), 1, FileHandle);
+  for (int i = 0; i < N; i++) {
+    // read entity info
+    int entry[4];
+    fread(entry, sizeof(int), sizeof(entry)/sizeof(entry[0]), FileHandle);
+    const int group_ID = entry[0];
+    if (!isTextureLoaded(group_ID)) loadTexInfo(group_ID);
+    const int entity_ID = entry[1];
+    const SDL_Point dstP = {entry[2], entry[3]};
+    CEntity newEntity(group_ID, entity_ID, &dstP);
+    entityList.push_back(newEntity);
+  }
+  fclose(FileHandle);
+  return true;
+}
+
 bool CEntity::OnSave(const char* fname) {
   std::string filePath = io_path + fname + io_ext;
-  FILE* FileHandle = fopen(filePath.c_str(), "w");
+  FILE* FileHandle = fopen(filePath.c_str(), "wb");
 
 	if (FileHandle == NULL)	{
 		CInform::InfoControl.pushInform("---CENTITY.OnSave---\nfailed to open new file");
 		return false;
 	}
 
+  const int N = entityList.size();
+  fwrite(&N, sizeof(int), 1, FileHandle);
   for (int i = 0; i < entityList.size(); i++) {
     // Output entity info
-    fprintf(FileHandle, "%d:%d:%d:%d\n", entityList[i].group_ID, entityList[i].entity_ID, entityList[i].dstP.x, entityList[i].dstP.y);
+    int entry[] = {
+      entityList[i].group_ID,
+      entityList[i].entity_ID,
+      entityList[i].dstP.x,
+      entityList[i].dstP.y
+    };
+    fwrite(entry, sizeof(int), sizeof(entry)/sizeof(entry[0]), FileHandle);
   }
   fclose(FileHandle);
   return true;
@@ -77,7 +113,7 @@ SDL_Texture* CEntity::getSrcTexture(const int& group) {
 
 SDL_Texture* CEntity::loadTexInfo(const int& group) {
   if (isTextureLoaded(group)) return getSrcTexture(group);
-  
+
   SDL_Texture* entity_tex = NULL;
   entity_tex = CEntityData::loadSrcTexture(group);
 

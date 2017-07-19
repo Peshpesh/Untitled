@@ -66,16 +66,6 @@ bool CEntityEditor::handleChEntity(const SDL_Point* m) {
   return false;
 }
 
-// bool CEntityEditor::handleChGroup(const SDL_Point* m) {
-//   using namespace entityEngine::buttons::chGroup;
-//
-//   if (SDL_PointInRect(m, &button.dstR)) {
-//     CInterrupt::appendFlag(INTRPT_CHANGE_EN);
-//     return true;
-//   }
-//   return false;
-// }
-
 bool CEntityEditor::handleEntityMeter(const SDL_Point* m) {
   using namespace entityEngine::meters::opacEntity;
 
@@ -148,7 +138,6 @@ bool CEntityEditor::handleEntityList(const SDL_Point* m) {
       return true;
     }
   }
-
   return false;
 }
 
@@ -167,4 +156,20 @@ bool CEntityEditor::handlePlaceRelPos(const SDL_Point* m) {
 
 void CEntityEditor::OnRButtonDown(int mX, int mY) {
   SDL_Point m = {mX, mY};
+  if (handleRmEntity(&m)) return;
+}
+
+bool CEntityEditor::handleRmEntity(const SDL_Point* m) {
+  const SDL_Point mAbs = CCamera::CameraControl.GetCamRelPoint(m);
+  for (int i = CEntity::entityList.size() - 1; i >= 0; i--) {
+    const SDL_Rect dstR = { CEntity::entityList[i].dstP.x,
+                            CEntity::entityList[i].dstP.y,
+                            CEntity::entityList[i].srcR.w,
+                            CEntity::entityList[i].srcR.h  };
+    if (SDL_PointInRect(&mAbs, &dstR)) {
+      CEntity::entityList.erase(CEntity::entityList.begin() + i);
+      return true;
+    }
+  }
+  return false;
 }

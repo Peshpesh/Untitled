@@ -134,7 +134,6 @@ private:
 
   bool handleAddEntity(const SDL_Point* m);
   bool handleChEntity(const SDL_Point* m);
-  // bool handleChGroup(const SDL_Point* m);
   bool handleEntityMeter(const SDL_Point* m);
   bool handleHitboxMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
@@ -143,6 +142,7 @@ private:
   bool handlePlaceRelPos(const SDL_Point* m);
 
   void OnRButtonDown(int mX, int mY);
+	bool handleRmEntity(const SDL_Point* m);
 
   bool handleInterr(SDL_Event* Event);
 
@@ -153,7 +153,6 @@ public:
   bool drawHitboxes();
 
 private:
-  // bool drawChGroup(const SDL_Point* m, const bool& hov);
   bool drawChEntity(const SDL_Point* m, const bool& hov);
   bool drawEntityList(const SDL_Point* m, const bool& hov);
   bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
