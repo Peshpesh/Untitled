@@ -42,11 +42,14 @@ public:
   int group_ID;
   int entity_ID;
   SDL_Rect srcR;
+  SDL_Rect hitR;
   SDL_Point dstP;
 
   CEntity(int group, int entity, const SDL_Point* m);
 
   bool OnRender();
+
+  bool OnRenderHitbox();
 };
 
 #endif

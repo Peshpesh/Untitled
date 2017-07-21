@@ -2,8 +2,11 @@
 #define _C_ENTITYDATA_H_
 
 #include <string>
+#include <vector>
+#include <stdio.h>
 #include "CAsset.h"
 #include "CSurface.h"
+#include "CInform.h"
 
 namespace Entities {
   namespace groups {
@@ -50,9 +53,20 @@ namespace Entities {
   }; // namespace caves
 }; // namespace Entity_ID
 
+struct HitboxData {
+  short group;
+  short entity;
+  SDL_Rect hitR;
+};
+
 class CEntityData {
 
   CEntityData();
+  static std::vector<HitboxData> hitboxList;
+
+public:
+  static bool init();
+  static bool load_phb(const int& group);
 
 public:
   static short getNumGroups();
@@ -61,6 +75,7 @@ public:
 public:
   static SDL_Texture* loadSrcTexture(const int& group);
   static SDL_Rect getEntityDims(const int& group, const int& entity);
+  static SDL_Rect getHitboxDims(const int& group, const int& entity);
   static std::string getGroupName(const int& group);
   static std::string getEntityName(const int& group, const int& entity);
 

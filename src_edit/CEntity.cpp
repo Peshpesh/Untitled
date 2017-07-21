@@ -13,6 +13,7 @@ CEntity::CEntity(int group, int entity, const SDL_Point* m) {
   group_ID  = group;
   entity_ID = entity;
   srcR      = CEntityData::getEntityDims(group, entity);
+  hitR      = CEntityData::getHitboxDims(group, entity);
   dstP      = CCamera::CameraControl.GetCamRelPoint(m);
 }
 
@@ -100,6 +101,13 @@ bool CEntity::isTextureLoaded(const int& group) {
 bool CEntity::OnRender() {
   SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(&dstP);
   return CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
+}
+
+bool CEntity::OnRenderHitbox() {
+  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(&dstP);
+  SDL_Rect dstR = {dstWinPos.x + hitR.x, dstWinPos.y + hitR.y, hitR.w, hitR.h};
+  return CAsset::drawBox(&dstR, &palette::red);
+  // return CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
 }
 
 SDL_Texture* CEntity::getSrcTexture(const int& group) {

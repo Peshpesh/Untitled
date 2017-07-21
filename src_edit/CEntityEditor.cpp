@@ -20,6 +20,7 @@ CEntityEditor::CEntityEditor()
 
 bool CEntityEditor::OnInit() {
   if (!CEntity::OnInit()) return false;
+  if (!CEntityData::init()) return false;
 
   updateEntityButtons();
 

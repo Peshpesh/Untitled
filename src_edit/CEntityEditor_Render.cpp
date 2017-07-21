@@ -50,6 +50,12 @@ bool CEntityEditor::drawWorkingEntity(const SDL_Point* m) {
 bool CEntityEditor::drawHitboxes() {
   if (!showHitbox) return true;
 
+  for (int i = 0; i < CEntity::entityList.size(); i++) {
+    if (!CEntity::entityList[i].OnRenderHitbox()) {
+      CInform::InfoControl.pushInform("Problem rendering hitbox");
+      return false;
+    }
+  }
   return true;
 }
 

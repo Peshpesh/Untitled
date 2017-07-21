@@ -1,5 +1,7 @@
 #include "CEntityData.h"
 
+std::vector<HitboxData> CEntityData::hitboxList;
+
 // The CEntityData class should describe all essential
 // information that identifies a given Entity, such as...
 //
@@ -14,8 +16,8 @@ namespace Entities {
   namespace groups {
     const short num = 2;
     const char* const name[] = {
-      "Global",
-      "Caves"
+      "global",
+      "caves"
     };
   };  // namespace groups
   namespace global {
@@ -45,12 +47,49 @@ namespace Entities {
 }; // namespace Entity_ID
 
 namespace path {
-  const char* const imgdir = "../res/npc/";
+  const char* const dir = "../res/npc/";
   const char* const imgtype = ".png";
+  const char* const hittype = ".phb";
 };
 
 CEntityData::CEntityData() {
   //
+}
+
+bool CEntityData::init() {
+  for (int i = 0; i < Entities::groups::num; i++) {
+    if (!load_phb(i)) return false;
+  }
+  return true;
+}
+
+bool CEntityData::load_phb(const int& group) {
+  using namespace Entities::groups;
+
+  std::string filename;
+  int N = 0;
+
+  if (group >= 0 && group < num) {
+    filename = name[group];
+    N = getNumEntities(group);
+  }
+
+  if (!filename.empty()) {
+    using namespace path;
+    std::string filepath = dir + filename + hittype;
+    FILE* FileHandle = fopen(filepath.c_str(), "rb");
+    if (FileHandle == NULL) { //could not open binary hitbox data file
+      CInform::InfoControl.pushInform("--warning--\ncould not open hitbox data");
+      for (int i = 0; i < N; i++) {
+        HitboxData newdata = {group, i, getEntityDims(group, i)};
+        hitboxList.push_back(newdata);
+      }
+    }
+    else {  // opened binary hitbox data
+      fclose(FileHandle);
+    }
+  }
+  return true;
 }
 
 short CEntityData::getNumGroups() {
@@ -65,7 +104,6 @@ short CEntityData::getNumEntities(const int& group) {
     case GLOBAL: N = Entities::global::num; break;
     case CAVES:  N = Entities::caves::num;  break;
   }
-
   return N;
 }
 
@@ -75,15 +113,13 @@ SDL_Texture* CEntityData::loadSrcTexture(const int& group) {
   SDL_Texture* entity_tex = NULL;
   std::string filename;
 
-  switch (group) {
-    case GLOBAL:  filename = "global";  break;
-    case CAVES:   filename = "caves";   break;
-    default:      break;
+  if (group >= 0 && group < num) {
+    filename = name[group];
   }
 
   if (!filename.empty()) {
     using namespace path;
-    std::string filepath = imgdir + filename + imgtype;
+    std::string filepath = dir + filename + imgtype;
     entity_tex = CSurface::OnLoad(filepath.c_str());
   }
 
@@ -100,6 +136,23 @@ SDL_Rect CEntityData::getEntityDims(const int& group, const int& entity) {
     case GLOBAL:  getDims_global(entity, srcRect);   break;
     case CAVES:   getDims_caves(entity, srcRect);    break;
     default:      break;
+  }
+  return srcRect;
+}
+
+SDL_Rect CEntityData::getHitboxDims(const int& group, const int& entity) {
+  using namespace Entities::groups;
+
+  SDL_Rect srcRect = {0,0,0,0};
+  if (group < 0 || group >= num || entity < 0) return srcRect;
+
+  for (int i = 0; i < hitboxList.size(); i++) {
+    if (group > hitboxList[i].group) continue;
+    if (group < hitboxList[i].group) break;
+    if (entity == hitboxList[i].entity) {
+      srcRect = hitboxList[i].hitR;
+      break;
+    }
   }
   return srcRect;
 }
