@@ -2,10 +2,12 @@
 
 void CApp::OnEvent(SDL_Event* Event)
 {
-	if (handleInterr(Event)) return;
-
-	CEvent::OnEvent(Event);
-
+	if (CInterrupt::isNone()) {
+		CEvent::OnEvent(Event);
+	}
+	else {
+		if (handleInterr(Event)) return;
+	}
 	if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
 	if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
 }

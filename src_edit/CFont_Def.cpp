@@ -222,6 +222,7 @@ void Font::GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H)
 				case '-': X = 246; 	break;
 				// case '!!!': X = 252; break;
 				case ' ': X = 258; 	break;
+				case '+': X = 264;	break;
 				default:  X = 0; W = 0; H = 0; break;
 			}
 			break;

@@ -106,6 +106,7 @@ bool CChangeEntity::handleConfirm(const SDL_Point* m) {
   if (SDL_PointInRect(m, &defs::okButton)) {
     CInterrupt::removeFlag(INTRPT_CHANGE_EN);
     succ = true;
+    entityButtons.clear();
     return true;
   }
   return false;
@@ -115,6 +116,7 @@ bool CChangeEntity::handleCancel(const SDL_Point* m) {
   if (SDL_PointInRect(m, &defs::caButton)) {
     CInterrupt::removeFlag(INTRPT_CHANGE_EN);
     succ = false;
+    entityButtons.clear();
     return true;
   }
   return false;

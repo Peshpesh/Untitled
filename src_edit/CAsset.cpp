@@ -146,6 +146,10 @@ bool CAsset::inWorkspace(const int& x, const int& y)
   return (x >= 0 && x < WWIDTH && y >= 0 && y < WHEIGHT);
 }
 
+bool CAsset::compRect(const SDL_Rect& A, const SDL_Rect& B) {
+  return (A.x == B.x && A.y == B.y && A.w == B.w && A.h == B.h);
+}
+
 bool CAsset::drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick)
 {
   return true;

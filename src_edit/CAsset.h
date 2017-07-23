@@ -103,6 +103,7 @@ class CAsset
     static bool drawAppFrame();
     static bool inWorkspace(const SDL_Point* pos);
     static bool inWorkspace(const int& x, const int& y);
+    static bool compRect(const SDL_Rect& A, const SDL_Rect& B);
 
   public:
     // returns a SDL_Rect struct for given X, Y, W, H. Ideal for drawing.
