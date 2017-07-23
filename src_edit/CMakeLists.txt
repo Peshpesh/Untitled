@@ -47,6 +47,7 @@ ${SRCDIR}/CFileIO.cpp
 ${SRCDIR}/CFont.cpp
 ${SRCDIR}/CFont_Def.cpp
 ${SRCDIR}/CFPS.cpp
+${SRCDIR}/CHitboxEditor.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMap.cpp
@@ -78,6 +79,7 @@ ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFileIO.h
 ${SRCDIR}/CFont.h
 ${SRCDIR}/CFPS.h
+${SRCDIR}/CHitboxEditor.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CMap.h

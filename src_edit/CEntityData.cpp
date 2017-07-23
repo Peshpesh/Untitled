@@ -73,6 +73,9 @@ bool CEntityData::load_phb(const int& group) {
     filename = name[group];
     N = getNumEntities(group);
   }
+  else {
+    return false;
+  }
 
   if (!filename.empty()) {
     using namespace path;
@@ -86,10 +89,62 @@ bool CEntityData::load_phb(const int& group) {
       }
     }
     else {  // opened binary hitbox data
+      int X, Y, W, H;
+      for (int i = 0; i < N; i++) {
+        X = Y = W = H = 0;
+        fread(&X, sizeof(int), 1, FileHandle);
+        fread(&Y, sizeof(int), 1, FileHandle);
+        fread(&W, sizeof(int), 1, FileHandle);
+        fread(&H, sizeof(int), 1, FileHandle);
+        HitboxData newdata = {group, i, CAsset::getRect(X, Y, W, H)};
+        hitboxList.push_back(newdata);
+      }
       fclose(FileHandle);
     }
   }
   return true;
+}
+
+void CEntityData::save_phb(const int& group) {
+  using namespace Entities::groups;
+  if (group < 0 || group >= num) return;
+
+  std::string filename;
+  int N = 0;
+
+  filename = name[group];
+  N = getNumEntities(group);
+
+  if (!filename.empty()) {
+    using namespace path;
+    std::string filepath = dir + filename + hittype;
+    FILE* FileHandle = fopen(filepath.c_str(), "wb");
+    if (FileHandle != NULL) {
+      int i_init = 0;
+      while (true) {
+        if (i_init >= hitboxList.size()) {
+          CInform::InfoControl.pushInform("save failed\ncannot find entity group");
+          return;
+        }
+        if (group == hitboxList[i_init].group) break;
+        ++i_init;
+      }
+      for (int i = 0; i < N; i++) {
+        // Output hitbox info
+        int entry[] = {
+          hitboxList[i_init + i].hitR.x,
+          hitboxList[i_init + i].hitR.y,
+          hitboxList[i_init + i].hitR.w,
+          hitboxList[i_init + i].hitR.h
+        };
+        fwrite(entry, sizeof(int), sizeof(entry)/sizeof(entry[0]), FileHandle);
+      }
+      fclose(FileHandle);
+    }
+    else {  //could not open binary hitbox data file
+      CInform::InfoControl.pushInform("--error--\ncould not open hitbox data");
+    }
+  }
 }
 
 short CEntityData::getNumGroups() {
@@ -122,7 +177,6 @@ SDL_Texture* CEntityData::loadSrcTexture(const int& group) {
     std::string filepath = dir + filename + imgtype;
     entity_tex = CSurface::OnLoad(filepath.c_str());
   }
-
   return entity_tex;
 }
 

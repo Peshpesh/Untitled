@@ -10,6 +10,7 @@
 #include "CFont.h"
 #include "CEntity.h"
 #include "CChangeEntity.h"
+#include "CHitboxEditor.h"
 #include "CInterrupt.h"
 #include "CInform.h"
 #include "CCamera.h"
@@ -18,13 +19,13 @@
 namespace entityEngine
 {
   namespace buttons {
-    // namespace chGroup
-    // { // Change entity group button
-    //   extern const char* const label;
-    //   extern CButton button;
-    // }
     namespace chEntity
     { // Change entity button
+      extern const char* const label;
+      extern CButton button;
+    }
+    namespace editHitbox
+    { // edit hitbox button
       extern const char* const label;
       extern CButton button;
     }
@@ -134,6 +135,7 @@ private:
 
   bool handleAddEntity(const SDL_Point* m);
   bool handleChEntity(const SDL_Point* m);
+  bool handleEditHitbox(const SDL_Point* m);
   bool handleEntityMeter(const SDL_Point* m);
   bool handleHitboxMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
@@ -154,6 +156,7 @@ public:
 
 private:
   bool drawChEntity(const SDL_Point* m, const bool& hov);
+  bool drawEditHitbox(const SDL_Point* m, const bool& hov);
   bool drawEntityList(const SDL_Point* m, const bool& hov);
   bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
   bool drawOpacEntity();

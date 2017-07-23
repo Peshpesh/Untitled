@@ -9,9 +9,10 @@ enum interrupts
   INTRPT_MAP_MODEL  = 0x00000004,   // show a simple model of the area
   INTRPT_CHANGE_TS  = 0x00000008,   // change tileset
   INTRPT_CHANGE_EN  = 0x00000010,   // change/explore entity groups
-  INTRPT_NEW        = 0x00000020,   // reset stage prompt
-  INTRPT_LOAD       = 0x00000040,   // load stage prompt
-  INTRPT_SAVE       = 0x00000080,   // save stage prompt
+  INTRPT_MODIFY_HB  = 0x00000020,   // modify primary hitbox within active entity group
+  INTRPT_NEW        = 0x00000040,   // reset stage prompt
+  INTRPT_LOAD       = 0x00000080,   // load stage prompt
+  INTRPT_SAVE       = 0x00000100,   // save stage prompt
 };
 
 class CInterrupt {
@@ -39,7 +40,5 @@ public:
 
   // returns true if there are no interruptions
   static bool isNone();
-
 };
-
 #endif

@@ -9,6 +9,7 @@ bool CEntityEditor::OnRender(const SDL_Point* m) {
   }
   if (!CAsset::drawAppFrame()) return false;
   if (!drawChEntity(m, no_intrpt)) return false;
+  if (!drawEditHitbox(m, no_intrpt)) return false;
   if (!drawEntityList(m, no_intrpt)) return false;
   if (!drawPlaceRelPos(m, no_intrpt)) return false;
   if (!drawOpacEntity()) return false;
@@ -63,6 +64,16 @@ bool CEntityEditor::drawChEntity(const SDL_Point* m, const bool& hov) {
   using namespace entityEngine::buttons::chEntity;
 
   if (!button.OnRender(m, hov, CInterrupt::isFlagOn(INTRPT_CHANGE_EN))) {
+    return false;
+  }
+  Font::NewCenterWrite(FONT_MINI, label, &button.dstR);
+  return true;
+}
+
+bool CEntityEditor::drawEditHitbox(const SDL_Point* m, const bool& hov) {
+  using namespace entityEngine::buttons::editHitbox;
+
+  if (!button.OnRender(m, hov, CInterrupt::isFlagOn(INTRPT_MODIFY_HB))) {
     return false;
   }
   Font::NewCenterWrite(FONT_MINI, label, &button.dstR);
@@ -141,9 +152,11 @@ bool CEntityEditor::drawSwitchPlace() {
 
 bool CEntityEditor::drawIntrpt(const SDL_Point* m)
 {
-  if (CInterrupt::isFlagOn(INTRPT_CHANGE_EN))
-	{
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_EN)) {
 		if (!CChangeEntity::Control.OnRender(m)) return false;
 	}
+  if (CInterrupt::isFlagOn(INTRPT_MODIFY_HB)) {
+    if (!CHitboxEditor::Control.OnRender(m)) return false;
+  }
 	return true;
 }

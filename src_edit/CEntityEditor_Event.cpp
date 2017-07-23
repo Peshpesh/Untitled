@@ -15,6 +15,10 @@ bool CEntityEditor::handleInterr(SDL_Event* Event) {
     }
     return true;
   }
+  if (CInterrupt::isFlagOn(INTRPT_MODIFY_HB)) {
+    CHitboxEditor::Control.OnEvent(Event);
+    return true;
+  }
   return false;
 }
 
@@ -28,6 +32,7 @@ void CEntityEditor::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
 
   if (handleChEntity(&m)) return;
+  if (handleEditHitbox(&m)) return;
   if (handleEntityMeter(&m)) return;
   if (handleHitboxMeter(&m)) return;
   if (handleSwitchView(&m)) return;
@@ -61,6 +66,22 @@ bool CEntityEditor::handleChEntity(const SDL_Point* m) {
   if (SDL_PointInRect(m, &button.dstR)) {
     CChangeEntity::Control.OnInit(group_ID, entity_ID);
     CInterrupt::appendFlag(INTRPT_CHANGE_EN);
+    return true;
+  }
+  return false;
+}
+
+bool CEntityEditor::handleEditHitbox(const SDL_Point* m) {
+  using namespace entityEngine::buttons::editHitbox;
+
+  if (SDL_PointInRect(m, &button.dstR)) {
+    if (!CHitboxEditor::Control.OnInit(group_ID, entity_ID)) {
+      // problem
+      CInform::InfoControl.pushInform("---error---\nhitbox editor init failed");
+    }
+    else {
+      CInterrupt::appendFlag(INTRPT_MODIFY_HB);
+    }
     return true;
   }
   return false;

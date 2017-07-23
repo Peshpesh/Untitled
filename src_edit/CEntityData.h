@@ -66,7 +66,8 @@ class CEntityData {
 
 public:
   static bool init();
-  static bool load_phb(const int& group);
+  static bool load_phb(const int& group); // load primary hitboxes
+  static void save_phb(const int& group); // save primary hitboxes
 
 public:
   static short getNumGroups();

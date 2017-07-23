@@ -3,16 +3,15 @@
 namespace entityEngine
 {
   namespace buttons {
-    // namespace chGroup
-    // { // Change entity group button
-    //   const char* const label = "Group Menu";
-    //   CButton button(355, 534, 100, 24);
-    // }
     namespace chEntity
     { // Change entity button
       const char* const label = "Entity Menu";
-      CButton button(355, 522, 100, 24);
-      // CButton button(355, 510, 100, 24);
+      CButton button(355, 510, 100, 24);
+    }
+    namespace editHitbox
+    { // edit hitbox button
+      const char* const label = "Edit Hitbox";
+      CButton button(355, 534, 100, 24);
     }
     namespace placeRelPos {
       const SDL_Point* offCol = &palette::silver;
