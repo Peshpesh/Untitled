@@ -20,6 +20,34 @@ namespace {
   const SDL_Point* onCol        = &palette::dark_green;
   const SDL_Point* editCol      = &palette::light_violet;
   const SDL_Point* hovCol       = &palette::light_cyan;
+}
+namespace anchor {
+  const short h_label_x = 0;
+  const short v_label_x = 100;
+  const short label_y = canv.y + canv.h - 60;
+  const short label_w = 44;
+  const short label_h = 11;
+  const short button_sz = 11;
+  const char* const hTitle = "H Align";
+  const char* const vTitle = "V Align";
+  const SDL_Rect hAnchors[] = {
+    {h_label_x                  , label_y, button_sz, button_sz},
+    {h_label_x + (button_sz)    , label_y, button_sz, button_sz},
+    {h_label_x + (button_sz) * 2, label_y, button_sz, button_sz},
+    {h_label_x + (button_sz) * 3, label_y, button_sz, button_sz}
+  };
+  const SDL_Rect vAnchors[] = {
+    {v_label_x                  , label_y, button_sz, button_sz},
+    {v_label_x + (button_sz)    , label_y, button_sz, button_sz},
+    {v_label_x + (button_sz) * 2, label_y, button_sz, button_sz},
+    {v_label_x + (button_sz) * 3, label_y, button_sz, button_sz}
+  };
+  const char* const anchInfo[] = {
+    "X",    // No alignment
+    "L",    // left-aligned
+    "C",    // center-aligned
+    "R"     // right-aligned
+  };
   enum {
     ANCHOR_LEFT     = 0x01,
     ANCHOR_RIGHT    = 0x02,
@@ -190,14 +218,20 @@ void CHitboxEditor::increaseY() {
 }
 
 void CHitboxEditor::increaseW() {
-  if (hitboxList[entity_ID].x + hitboxList[entity_ID].w < spriteR.w) {
+  if (hitboxList[entity_ID].w < spriteR.w) {
     hitboxList[entity_ID].w++;
+    if (hitboxList[entity_ID].x + hitboxList[entity_ID].w > spriteR.w) {
+      hitboxList[entity_ID].x--;
+    }
   }
 }
 
 void CHitboxEditor::increaseH() {
-  if (hitboxList[entity_ID].y + hitboxList[entity_ID].h < spriteR.h) {
+  if (hitboxList[entity_ID].h < spriteR.h) {
     hitboxList[entity_ID].h++;
+    if (hitboxList[entity_ID].y + hitboxList[entity_ID].h > spriteR.h) {
+      hitboxList[entity_ID].y--;
+    }
   }
 }
 
@@ -221,7 +255,7 @@ void CHitboxEditor::decreaseW() {
 
 void CHitboxEditor::decreaseH() {
   if (hitboxList[entity_ID].h > 0) {
-    hitboxList[entity_ID].h--;  
+    hitboxList[entity_ID].h--;
   }
 }
 
