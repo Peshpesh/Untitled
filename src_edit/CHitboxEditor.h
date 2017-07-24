@@ -17,6 +17,7 @@ class CHitboxEditor : public CEvent {
   SDL_Texture* Group_Tex;
   std::vector<SDL_Rect> hitboxList;
   std::vector<SDL_Rect> entityList;
+  SDL_Rect spriteR;
   int group_ID;
   int entity_ID;
   int anchors;
@@ -25,12 +26,24 @@ public:
   static CHitboxEditor Control;
 
   bool OnInit(const int& group, const int& entity);
+  void updateEntity();
 
   void OnEvent(SDL_Event* Event);
 
 private:
   void OnLButtonDown(int mX, int mY);
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  bool handleDims(const SDL_Point* m);
+
+private:
+  void increaseX();
+  void increaseY();
+  void increaseW();
+  void increaseH();
+  void decreaseX();
+  void decreaseY();
+  void decreaseW();
+  void decreaseH();
 
 public:
   bool OnRender(const SDL_Point* m);
