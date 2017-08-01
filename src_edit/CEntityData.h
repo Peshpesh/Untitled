@@ -68,6 +68,7 @@ public:
   static bool init();
   static bool load_phb(const int& group); // load primary hitboxes
   static void save_phb(const int& group); // save primary hitboxes
+  static void updateHitbox(const int& group, const int& entity, const SDL_Rect& newR);
 
 public:
   static short getNumGroups();

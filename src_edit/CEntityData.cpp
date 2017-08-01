@@ -147,6 +147,15 @@ void CEntityData::save_phb(const int& group) {
   }
 }
 
+void CEntityData::updateHitbox(const int& group, const int& entity, const SDL_Rect& newR) {
+  for (int i = 0; i < hitboxList.size(); i++) {
+    if (group == hitboxList[i].group && entity == hitboxList[i].entity) {
+      hitboxList[i].hitR = newR;
+      return;
+    }
+  }
+}
+
 short CEntityData::getNumGroups() {
   return Entities::groups::num;
 }

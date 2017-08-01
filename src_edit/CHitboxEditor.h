@@ -20,22 +20,34 @@ class CHitboxEditor : public CEvent {
   SDL_Rect spriteR;
   int group_ID;
   int entity_ID;
-  int anchors;
+  int hAnchor;
+  int vAnchor;
+  bool repos;
 
 public:
   static CHitboxEditor Control;
 
   bool OnInit(const int& group, const int& entity);
+
+  void resetLists(const int& group);
   void updateEntity();
 
   void OnEvent(SDL_Event* Event);
 
 private:
-  void OnLButtonDown(int mX, int mY);
-  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
-  bool handleDims(const SDL_Point* m);
+  void save();
+  void terminate();
 
 private:
+  void OnLButtonDown(int mX, int mY);
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  bool handleList(const SDL_Point* m);
+  bool handleDims(const SDL_Point* m);
+  bool handleAnchors(const SDL_Point* m);
+  bool handleOptions(const SDL_Point* m);
+
+private:
+  void reposHitbox();
   void increaseX();
   void increaseY();
   void increaseW();
@@ -52,6 +64,8 @@ private:
   bool drawEntity();
   bool drawHitbox();
   bool drawDials(const SDL_Point* m);
+  bool drawAnchors(const SDL_Point* m);
+  bool drawOptions(const SDL_Point* m);
 };
 
 #endif
