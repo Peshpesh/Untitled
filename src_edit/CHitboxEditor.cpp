@@ -209,8 +209,10 @@ void CHitboxEditor::save() {
   for (int i = 0; i < hitboxList.size(); i++) {
     if (!CAsset::compRect(hitboxList[i], CEntityData::getHitboxDims(group_ID, i))) {
       CEntityData::updateHitbox(group_ID, i, hitboxList[i]);
+      CEntity::updateHitboxes(group_ID, i);
     }
   }
+
   CEntityData::save_phb(group_ID);
 }
 

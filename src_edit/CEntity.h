@@ -35,6 +35,7 @@ public:
   static bool isTextureLoaded(const int& group);
   static SDL_Texture* getSrcTexture(const int& group);
   static SDL_Texture* loadTexInfo(const int& group);
+  static void updateHitboxes(const int& group, const int& entity);
   static void purgeStaleTextures();
 
 public:

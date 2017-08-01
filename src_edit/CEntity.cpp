@@ -133,6 +133,14 @@ SDL_Texture* CEntity::loadTexInfo(const int& group) {
   return entity_tex;
 }
 
+void CEntity::updateHitboxes(const int& group, const int& entity) {
+  for (int i = 0; i < entityList.size(); i++) {
+    if (group == entityList[i].group_ID && entity == entityList[i].entity_ID) {
+      entityList[i].hitR = CEntityData::getHitboxDims(group, entity);
+    }
+  }
+}
+
 void CEntity::purgeStaleTextures() {
   for (int i = textureList.size() - 1; i >= 0; i--)
   {
