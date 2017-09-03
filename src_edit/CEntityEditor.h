@@ -152,6 +152,7 @@ public:
   bool OnRender(const SDL_Point* m);
   bool drawEntities();
   bool drawWorkingEntity(const SDL_Point* m);
+  bool drawWorkingHitbox(const SDL_Point* m);
   bool drawHitboxes();
 
 private:
@@ -166,7 +167,7 @@ private:
   bool drawIntrpt(const SDL_Point* m);
 
 private:
-  void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& entR);
+  void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR);
   void updateEntityButtons();
 };
 

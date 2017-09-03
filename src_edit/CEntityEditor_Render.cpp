@@ -6,6 +6,7 @@ bool CEntityEditor::OnRender(const SDL_Point* m) {
   if (!drawHitboxes()) return false;
   if (no_intrpt) {
     if (!drawWorkingEntity(m)) return false;
+    if (!drawWorkingHitbox(m)) return false;
   }
   if (!CAsset::drawAppFrame()) return false;
   if (!drawChEntity(m, no_intrpt)) return false;
@@ -38,14 +39,30 @@ bool CEntityEditor::drawWorkingEntity(const SDL_Point* m) {
   if (!showWorkEntity) return true;
 
   SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
+  SDL_Rect hitR = CEntityData::getHitboxDims(group_ID, entity_ID);
 
-  int disp_x = 0;
-  int disp_y = 0;
-  getPosDisplace(disp_x, disp_y, m, srcR);
+  int X = place_hitbox ? m->x - hitR.x : m->x;
+  int Y = place_hitbox ? m->y - hitR.y : m->y;
 
-  SDL_Rect dstR = {m->x + disp_x, m->y + disp_y, srcR.w, srcR.h};
+  getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
+  SDL_Rect dstR = {X, Y, srcR.w, srcR.h};
 
   return CSurface::OnDraw(CEntity::getSrcTexture(group_ID), &srcR, &dstR);
+}
+
+bool CEntityEditor::drawWorkingHitbox(const SDL_Point* m) {
+  if (!showWorkHitbox) return true;
+
+  SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
+  SDL_Rect hitR = CEntityData::getHitboxDims(group_ID, entity_ID);
+
+  int X = place_hitbox ? m->x : m->x + hitR.x;
+  int Y = place_hitbox ? m->y : m->y + hitR.y;
+
+  getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
+  SDL_Rect dstR = {X, Y, hitR.w, hitR.h};
+
+  return CAsset::drawBox(&dstR, &palette::red);
 }
 
 bool CEntityEditor::drawHitboxes() {

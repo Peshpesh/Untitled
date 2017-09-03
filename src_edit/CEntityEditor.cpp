@@ -28,7 +28,7 @@ bool CEntityEditor::OnInit() {
 }
 
 
-void CEntityEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& entR) {
+void CEntityEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR) {
   using namespace entityEngine::misc::placeRelPos;
 
   int x_placeCell = placePos % numpos_x;
@@ -40,9 +40,8 @@ void CEntityEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const S
     dx += (x_placeCell * TILE_SIZE / 2) - (x_placeCell + 1 == numpos_x) - (map_m.x % TILE_SIZE);
     dy += (y_placeCell * TILE_SIZE / 2) - (y_placeCell + 1 == numpos_y) - (map_m.y % TILE_SIZE);
   }
-
-  dx += -(((x_placeCell * entR.w) / 2) - (x_placeCell + 1 == numpos_x));
-  dy += -(((y_placeCell * entR.h) / 2) - (y_placeCell + 1 == numpos_y));
+  dx += -(((x_placeCell * dstR.w) / 2) - (x_placeCell + 1 == numpos_x));
+  dy += -(((y_placeCell * dstR.h) / 2) - (y_placeCell + 1 == numpos_y));
 }
 
 void CEntityEditor::updateEntityButtons() {

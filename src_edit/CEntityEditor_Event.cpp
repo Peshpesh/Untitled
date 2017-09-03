@@ -46,14 +46,14 @@ bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
   if (!CAsset::inWorkspace(m)) return false;
   // click in workspace attempts to add entity data
 
-  int disp_x = 0;
-  int disp_y = 0;
-  {
-    SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
-    getPosDisplace(disp_x, disp_y, m, srcR);
-  }
+  SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
+  SDL_Rect hitR = CEntityData::getHitboxDims(group_ID, entity_ID);
 
-  const SDL_Point dstP = {m->x + disp_x, m->y + disp_y};
+  int X = place_hitbox ? m->x - hitR.x : m->x;
+  int Y = place_hitbox ? m->y - hitR.y : m->y;
+
+  getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
+  const SDL_Point dstP = {X, Y};
   CEntity newEntity(group_ID, entity_ID, &dstP);
   CEntity::entityList.push_back(newEntity);
 

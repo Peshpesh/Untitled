@@ -212,7 +212,6 @@ void CHitboxEditor::save() {
       CEntity::updateHitboxes(group_ID, i);
     }
   }
-
   CEntityData::save_phb(group_ID);
 }
 
