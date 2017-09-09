@@ -28,6 +28,7 @@ public:
   static std::vector<EntityTexInfo> textureList;
   static std::vector<CEntity> entityList;
   static bool OnInit();
+  static void CheckCollide();
   static bool OnLoad(const char* fname);
   static bool OnSave(const char* fname);
   static bool isGroupUsed(const int& group);
@@ -45,12 +46,15 @@ public:
   SDL_Rect srcR;
   SDL_Rect hitR;
   SDL_Point dstP;
+  bool coll;
 
   CEntity(int group, int entity, const SDL_Point* m);
 
   bool OnRender();
 
   bool OnRenderHitbox();
+
+  bool Collides(const SDL_Point& oP, const SDL_Rect& oR);
 };
 
 #endif

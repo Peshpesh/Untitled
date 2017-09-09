@@ -56,6 +56,7 @@ bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
   const SDL_Point dstP = {X, Y};
   CEntity newEntity(group_ID, entity_ID, &dstP);
   CEntity::entityList.push_back(newEntity);
+  CEntity::CheckCollide();
 
   return true;
 }
@@ -189,6 +190,7 @@ bool CEntityEditor::handleRmEntity(const SDL_Point* m) {
                             CEntity::entityList[i].srcR.h  };
     if (SDL_PointInRect(&mAbs, &dstR)) {
       CEntity::entityList.erase(CEntity::entityList.begin() + i);
+      CEntity::CheckCollide();
       return true;
     }
   }

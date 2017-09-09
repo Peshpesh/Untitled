@@ -62,7 +62,7 @@ bool CEntityEditor::drawWorkingHitbox(const SDL_Point* m) {
   getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
   SDL_Rect dstR = {X, Y, hitR.w, hitR.h};
 
-  return CAsset::drawBox(&dstR, &palette::red);
+  return CAsset::drawBox(&dstR, &palette::green);
 }
 
 bool CEntityEditor::drawHitboxes() {

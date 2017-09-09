@@ -4,6 +4,8 @@ std::vector<EntityTexInfo> CEntity::textureList;
 std::vector<CEntity> CEntity::entityList;
 
 namespace {
+  const SDL_Point* hb_nocol = &palette::green;
+  const SDL_Point* hb_col   = &palette::red;
   const std::string io_path = "../data/maps/";
   const std::string io_ext = ".ent";
 }
@@ -15,6 +17,7 @@ CEntity::CEntity(int group, int entity, const SDL_Point* m) {
   srcR      = CEntityData::getEntityDims(group, entity);
   hitR      = CEntityData::getHitboxDims(group, entity);
   dstP      = CCamera::CameraControl.GetCamRelPoint(m);
+  coll      = false;
 }
 
 bool CEntity::OnInit() {
@@ -22,6 +25,25 @@ bool CEntity::OnInit() {
     return false;
   }
   return true;
+}
+
+void CEntity::CheckCollide() {
+  for (int i = 0; i < entityList.size(); i++) {
+    entityList[i].coll = false;
+  }
+
+  for (int i = 0; i < entityList.size(); i++) {
+    if (!entityList[i].coll) {
+      for (int j = 0; j < entityList.size(); j++) {
+        if (i == j) continue;
+        if (entityList[i].Collides(entityList[j].dstP, entityList[j].hitR)) {
+          entityList[i].coll = true;
+          entityList[j].coll = true;
+          break;
+        }
+      }
+    }
+  }
 }
 
 bool CEntity::OnLoad(const char* fname) {
@@ -106,7 +128,29 @@ bool CEntity::OnRender() {
 bool CEntity::OnRenderHitbox() {
   SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(&dstP);
   SDL_Rect dstR = {dstWinPos.x + hitR.x, dstWinPos.y + hitR.y, hitR.w, hitR.h};
-  return CAsset::drawBox(&dstR, &palette::red);
+  return CAsset::drawBox(&dstR, coll ? hb_col : hb_nocol);
+}
+
+bool CEntity::Collides(const SDL_Point& oP, const SDL_Rect& oR)
+{
+  // positions of sides of hitbox passed into function
+  int oXl = oP.x + oR.x;
+  int oXr = oXl + oR.w - 1;
+  int oYt = oP.y + oR.y;
+  int oYb = oYt + oR.h - 1;
+
+  // positions of sides of hitbox from THIS entity
+	int Xl = dstP.x + hitR.x;
+  int Xr = Xl + hitR.w - 1;
+	int Yt = dstP.y + hitR.y;
+  int Yb = Yt + hitR.h - 1;
+
+	if (Yb < oYt) return false;
+	if (oYb < Yt) return false;
+	if (Xr < oXl) return false;
+	if (oXr < Xl) return false;
+
+	return true;
 }
 
 SDL_Texture* CEntity::getSrcTexture(const int& group) {
