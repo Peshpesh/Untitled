@@ -66,6 +66,12 @@ void Font::GetXY(const int& fontID, char symbol, SDL_Rect& symRec)
   GetXY(fontID, symbol, symRec.x, symRec.y, symRec.w, symRec.h);
 }
 
+// Special character request, which is triggered with a '$' preceding a code symbol
+void Font::GetXY_spec(const int& fontID, char symbol, SDL_Rect& symRec)
+{
+	GetXY_spec(fontID, symbol, symRec.x, symRec.y, symRec.w, symRec.h);
+}
+
 // Takes in a queried symbol, passes X and Y coords
 // where to find the queried symbol in a font texture
 void Font::GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H)
@@ -223,6 +229,37 @@ void Font::GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H)
 				// case '!!!': X = 252; break;
 				case ' ': X = 258; 	break;
 				case '+': X = 264;	break;
+				default:  X = 0; W = 0; H = 0; break;
+			}
+			break;
+		}
+		default: X = 0; Y = 0; W = 0; H = 0; break;
+	}
+}
+
+void Font::GetXY_spec(const int& fontID, char symbol, int& X, int& Y, int& W, int& H)
+{
+  H = GetSymH(fontID);
+	switch (fontID)
+	{
+		case FONT_DEFAULT:
+		{
+			switch (symbol)
+			{
+				default:  X = 0;  Y = 0;   W = 0;  H = 0;  break;
+			}
+			break;
+		}
+		case FONT_MINI:
+		{
+			// All symbols in minifont are the same width and on one line
+			Y = 0; W = 5;
+			switch (symbol)
+			{
+				case 'U': X = 270; break;	// Up arrow
+				case 'D': X = 276; break;	// Down arrow
+				case 'L': X = 282; break;	// Left arrow
+				case 'R': X = 288; break;	// Right arrow
 				default:  X = 0; W = 0; H = 0; break;
 			}
 			break;

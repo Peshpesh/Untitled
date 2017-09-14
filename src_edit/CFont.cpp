@@ -96,6 +96,7 @@ int Font::Write(const int& fontID, char const* message, int Mx, int My)
 	int i = 0;
 	int Xo, Yo, W, H;
 	const int FirstMx = Mx;
+	bool spec_req = false;
 
 	while (message[i] != '\0')
 	{
@@ -106,11 +107,17 @@ int Font::Write(const int& fontID, char const* message, int Mx, int My)
 			i++;
 			continue;
 		}
-		GetXY(fontID, message[i], Xo, Yo, W, H);
-		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H))
-		{
-			return 0;
+		if (message[i] == '$') {
+			spec_req = true;
+			i++;
+			continue;
 		}
+		if (!spec_req) GetXY(fontID, message[i], Xo, Yo, W, H);
+		else {
+			GetXY_spec(fontID, message[i], Xo, Yo, W, H);
+			spec_req = false;
+		}
+		if (!CSurface::OnDraw(font, Mx, My, Xo, Yo, W, H)) return 0;
 		Mx += W + h_spacing;
 		i++;
 	}
@@ -127,6 +134,7 @@ int Font::Write(const int& fontID, char const* message, const SDL_Point* pos)
 
 	int i = 0;
 	const int FirstMx = pos->x;
+	bool spec_req = false;
 
 	SDL_Point symPos = {pos->x, pos->y};
 	SDL_Rect symRec;
@@ -134,13 +142,20 @@ int Font::Write(const int& fontID, char const* message, const SDL_Point* pos)
 	while (message[i] != '\0')
 	{
 		const char sym = message[i++];
-		if (sym == '\n')
-		{
+		if (sym == '\n') {
 			symPos.x = FirstMx;
 			symPos.y += lineH + v_spacing;
 			continue;
 		}
-		GetXY(fontID, sym, symRec);
+		if (sym == '$') {
+			spec_req = true;
+			continue;
+		}
+		if (!spec_req) GetXY(fontID, sym, symRec);
+		else {
+			GetXY_spec(fontID, sym, symRec);
+			spec_req = false;
+		}
 		if (!CSurface::OnDraw(font, &symRec, &symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 	}
@@ -154,17 +169,24 @@ int Font::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 	int v_spacing = 0;
 	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL) return -2;
 
-
 	int i = 0;
-
 	const int FirstMx = pos->x;
+	bool spec_req = false;
 	SDL_Point symPos = {pos->x, pos->y};
 	SDL_Rect symRec;
 
 	while (line[i] != '\0' && line[i] != '\n')
 	{
-		GetXY(fontID, line[i], symRec);
-		// if (!CSurface::OnDraw(FontControl.Mini_Font, &symRec, &symPos)) return -1;
+		if (line[i] == '$') {
+			spec_req = true;
+			i++;
+			continue;
+		}
+		if (!spec_req) GetXY(fontID, line[i], symRec);
+		else {
+			GetXY_spec(fontID, line[i], symRec);
+			spec_req = false;
+		}
 		if (!CSurface::OnDraw(font, &symRec, &symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 		i++;
@@ -516,6 +538,7 @@ std::string Font::getLine(const int& fontID, char const* message, int& iterator,
 	std::string wrd;
 	int linWidth = 0;
 	int wrdWidth = 0;
+	bool spec_req = false;
 	while (true)
 	{
 		char sym = message[i];
@@ -530,24 +553,37 @@ std::string Font::getLine(const int& fontID, char const* message, int& iterator,
 			break;
 		}
 
-		GetXY(fontID, sym, symRec);
-		if (linWidth + wrdWidth != 0) symRec.w += h_spacing;
-		if (linWidth + wrdWidth + symRec.w > maxWidth) break;
+		if (!spec_req) {
+			if (sym == '$') spec_req = true;
+			else {
+				GetXY(fontID, sym, symRec);
+				if (linWidth + wrdWidth != 0) symRec.w += h_spacing;
+				if (linWidth + wrdWidth + symRec.w > maxWidth) break;
 
-		if (sym == ' ')
-		{
-			if (wrd != " ")
-			{
-				lin += wrd;
-				linWidth += wrdWidth;
-				iterator = i + 1;
+				if (sym == ' ') {
+					if (wrd != " ")
+					{
+						lin += wrd;
+						linWidth += wrdWidth;
+						iterator = i + 1;
+					}
+					wrd.clear();
+					wrdWidth = 0;
+				}
+				wrd.push_back(sym);
+				wrdWidth += symRec.w;
 			}
-			wrd.clear();
-			wrdWidth = 0;
 		}
-		wrd.push_back(sym);
-		wrdWidth += symRec.w;
+		else {
+			GetXY_spec(fontID, sym, symRec);
+			if (linWidth + wrdWidth != 0) symRec.w += h_spacing;
+			if (linWidth + wrdWidth + symRec.w > maxWidth) break;
 
+			wrd.push_back('$');
+			wrd.push_back(sym);
+			wrdWidth += symRec.w;
+			spec_req = false;
+		}
 		i++;
 	}
 
@@ -566,11 +602,20 @@ void Font::getLineDims(const int& fontID, char const* message, int& msgWidth)
 	int i = 0;
 	SDL_Rect symRec;
 	msgWidth = 0;
+	bool spec_req = false;
 
 	while (message[i] != '\0')
 	{
 		if (i > 0) msgWidth += h_spacing;
-		GetXY(fontID, message[i++], symRec);
+		if (message[i] == '$') {
+			if (message[++i] != '\0')	spec_req = true;
+			else break;
+		}
+		if (!spec_req) GetXY(fontID, message[i++], symRec);
+		else {
+			GetXY_spec(fontID, message[i++], symRec);
+			spec_req = false;
+		}
 		msgWidth += symRec.w;
 	}
 }

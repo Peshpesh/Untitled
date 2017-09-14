@@ -67,6 +67,8 @@ private:
 public:
 	static void GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H);
 	static void GetXY(const int& fontID, char symbol, SDL_Rect& symRec);
+	static void GetXY_spec(const int& fontID, char symbol, int& X, int& Y, int& W, int& H);
+	static void GetXY_spec(const int& fontID, char symbol, SDL_Rect& symRec);
 
 	/* BRIEF: Static function that writes a one-line message
 	***** using a loaded font as an SDL_Texture.

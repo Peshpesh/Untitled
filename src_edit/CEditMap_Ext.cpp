@@ -15,7 +15,7 @@ namespace mapEngine
   }
   namespace but_t
   {
-    const char* const bg_label = "Grab Background";
+    const char* const bg_label = "Grab $L$R$U$D Background";
     const char* const fg_label = "Grab Foreground";
     const SDL_Rect bg_button = {325, 510, 100, 24};
     const SDL_Rect fg_button = {325, 534, 100, 24};
