@@ -97,6 +97,9 @@ class CAsset
     static SDL_Texture* interface;  // base interface texture
 
   public:
+    static void paletteAlpha(const short& a);
+
+  public:
     static void queryTileDims(SDL_Texture* texture, int& w, int& h);
 
   public:

@@ -62,19 +62,27 @@ bool CEntityEditor::drawWorkingHitbox(const SDL_Point* m) {
   getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
   SDL_Rect dstR = {X, Y, hitR.w, hitR.h};
 
-  return CAsset::drawBox(&dstR, &palette::green);
+  CAsset::paletteAlpha(hitbox_alpha);
+  bool retval = CAsset::drawBox(&dstR, &palette::green);
+  CAsset::paletteAlpha(MAX_RGBA);
+  return retval;
 }
 
 bool CEntityEditor::drawHitboxes() {
   if (!showHitbox) return true;
 
+  bool retval = true;
+  CAsset::paletteAlpha(hitbox_alpha);
+
   for (int i = 0; i < CEntity::entityList.size(); i++) {
     if (!CEntity::entityList[i].OnRenderHitbox()) {
       CInform::InfoControl.pushInform("Problem rendering hitbox");
-      return false;
+      retval = false;
+      break;
     }
   }
-  return true;
+  CAsset::paletteAlpha(MAX_RGBA);
+  return retval;
 }
 
 bool CEntityEditor::drawChEntity(const SDL_Point* m, const bool& hov) {

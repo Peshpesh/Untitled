@@ -45,6 +45,7 @@ bool CAsset::OnInit()
   {
     return false;
   }
+  SDL_SetTextureBlendMode(paltex, SDL_BLENDMODE_BLEND);
 	return true;
 }
 
@@ -54,6 +55,13 @@ void CAsset::queryTileDims(SDL_Texture* texture, int& w, int& h)
   SDL_QueryTexture(texture, NULL, NULL, &PixWidth, &PixHeight);
   w = PixWidth / TILE_SIZE;
   h = PixHeight / TILE_SIZE;
+}
+
+void CAsset::paletteAlpha(const short& a)
+{
+  if (a >= 0 && a <= MAX_RGBA) {
+    SDL_SetTextureAlphaMod(paltex, a);
+  }
 }
 
 SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H)
