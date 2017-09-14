@@ -100,75 +100,83 @@ bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
 
   switch (sym)
   {
-    case SDLK_d: {
-      CArea::AreaControl.OnExpandRight();
-      break;
-    }
-    case SDLK_a: {
-      CArea::AreaControl.OnExpandLeft();
-      CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);  // Keeps the area from jerking around
-
-      // This loop updates the position of our entities
-      // to prevent unwanted repositioning over the changed area
-      // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-      // {
-      //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-      //   CEntityEdit::NPCControl.EntityList[i].X += MAP_WIDTH * TILE_SIZE;
-      // }
-      break;
-    }
-    case SDLK_s: {
-      CArea::AreaControl.OnExpandDown();
-      break;
-    }
-    case SDLK_w: {
-      CArea::AreaControl.OnExpandUp();
-      CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
-      // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-      // {
-      //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-      //   CEntityEdit::NPCControl.EntityList[i].Y += MAP_HEIGHT * TILE_SIZE;
-      // }
-      break;
-    }
-    case SDLK_l: {
-      CArea::AreaControl.OnReduceRight();
-      break;
-    }
-    case SDLK_j: {
-      if (CArea::AreaControl.OnReduceLeft())
-      {
-        CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
-        // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-        // {
-        //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-        //   CEntityEdit::NPCControl.EntityList[i].X -= MAP_WIDTH * TILE_SIZE;
-        // }
-      }
-      break;
-    }
-    case SDLK_k: {
-      CArea::AreaControl.OnReduceDown();
-      break;
-    }
-    case SDLK_i: {
-      if (CArea::AreaControl.OnReduceUp())
-      {
-        CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
-        // for (int i = 0; i < CEntityEdit::NPCControl.EntityList.size(); i++)
-        // {
-        //   if (&CEntityEdit::NPCControl.EntityList[i] == NULL) continue;
-        //   CEntityEdit::NPCControl.EntityList[i].Y -= MAP_WIDTH * TILE_SIZE;
-        // }
-      }
-      break;
-    }
-    default: {
-      retval = false;
-      break;
-    }
+    case SDLK_d:  extendMap_R();  break;
+    case SDLK_a:  extendMap_L();  break;
+    case SDLK_s:  extendMap_D();  break;
+    case SDLK_w:  extendMap_U();  break;
+    case SDLK_l:  removeMap_R();  break;
+    case SDLK_j:  removeMap_L();  break;
+    case SDLK_k:  removeMap_D();  break;
+    case SDLK_i:  removeMap_U();  break;
+    default:      retval = false; break;
   }
   return retval;
+}
+
+void CEditMap::extendMap_R() {
+  CArea::AreaControl.OnExpandRight();
+}
+
+void CEditMap::extendMap_L() {
+  CArea::AreaControl.OnExpandLeft();
+
+  // Keep camera focused on same spot (relative to the area prior to expansion)
+  CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);
+
+  // This loop updates the position of our entities
+  // to prevent unintended "movement" over the changed area
+  for (int i = 0; i < CEntity::entityList.size(); i++) {
+    CEntity::entityList[i].dstP.x += MAP_WIDTH * TILE_SIZE;
+  }
+}
+
+void CEditMap::extendMap_D() {
+  CArea::AreaControl.OnExpandDown();
+}
+
+void CEditMap::extendMap_U() {
+  CArea::AreaControl.OnExpandUp();
+
+  // Keep camera focused on same spot
+  CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
+
+  // Update entity positions relative to new area size
+  for (int i = 0; i < CEntity::entityList.size(); i++) {
+    CEntity::entityList[i].dstP.y += MAP_HEIGHT * TILE_SIZE;
+  }
+}
+
+void CEditMap::removeMap_R() {
+  CArea::AreaControl.OnReduceRight();
+}
+
+void CEditMap::removeMap_L() {
+  // adjustments to pre-existing objects on the map (e.g., entities)
+  // are only necessary if a reduction in map area is possible
+  if (CArea::AreaControl.OnReduceLeft()) {
+    CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
+
+    for (int i = 0; i < CEntity::entityList.size(); i++) {
+      CEntity::entityList[i].dstP.x -= MAP_WIDTH * TILE_SIZE;
+    }
+  }
+}
+
+void CEditMap::removeMap_D() {
+  CArea::AreaControl.OnReduceDown();
+}
+
+void CEditMap::removeMap_U() {
+  // adjustments to pre-existing objects on the map (e.g., entities)
+  // are only necessary if a reduction in map area is possible
+  if (CArea::AreaControl.OnReduceUp())
+  {
+    CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
+
+    for (int i = 0; i < CEntity::entityList.size(); i++) {
+      CEntity::entityList[i].dstP.y -= MAP_HEIGHT * TILE_SIZE;
+    }
+  }
 }
 
 bool CEditMap::handleMakeDomain(const SDL_Point* mouse)

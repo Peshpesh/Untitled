@@ -8,6 +8,7 @@
 #include "CAsset.h"
 #include "CFont.h"
 #include "CArea.h"
+#include "CEntity.h"
 #include "CCamera.h"
 #include "CChangeTile.h"
 #include "CTileset.h"
@@ -171,6 +172,16 @@ public:
 
 public:
   void OnEvent(SDL_Event* Event);
+
+private:
+  void extendMap_R();
+  void extendMap_L();
+  void extendMap_D();
+  void extendMap_U();
+  void removeMap_R();
+  void removeMap_L();
+  void removeMap_D();
+  void removeMap_U();
 
 private:
   bool handleInterr(SDL_Event* Event);
