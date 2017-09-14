@@ -219,6 +219,7 @@ void CHitboxEditor::terminate() {
   CInterrupt::removeFlag(INTRPT_MODIFY_HB);
   hitboxList.clear();
   entityList.clear();
+  CEntity::CheckCollide();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
