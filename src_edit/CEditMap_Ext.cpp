@@ -3,6 +3,28 @@
 // Map engine namespaces //
 namespace mapEngine
 {
+  namespace but_quad_map
+  {
+    const char* const labels[] = {
+      "$L$L",
+      "$R$R",
+      "$U$U",
+      "$D$D"
+    };
+    const short w = 25;
+    const short h = 25;
+    const short Xl = WWIDTH + ((EWIDTH - WWIDTH - (w * 3)) / 2);
+    const short Yt = 24;
+    const SDL_Rect buttons[] = {
+      {Xl, Yt + h, w, h},
+      {Xl + w + w, Yt + h, w, h},
+      {Xl + w, Yt, w, h},
+      {Xl + w, Yt + h + h, w, h}
+    };
+    const short bsiz = 2;
+    const SDL_Point* col    = &palette::cyan;
+    const SDL_Point* hvCol  = &palette::light_cyan;
+  }
   namespace but_tset
   {
     // Change Tileset button info
@@ -15,7 +37,7 @@ namespace mapEngine
   }
   namespace but_t
   {
-    const char* const bg_label = "Grab $L$R$U$D Background";
+    const char* const bg_label = "Grab Background";
     const char* const fg_label = "Grab Foreground";
     const SDL_Rect bg_button = {325, 510, 100, 24};
     const SDL_Rect fg_button = {325, 534, 100, 24};

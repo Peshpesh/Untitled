@@ -66,6 +66,7 @@ void CEditMap::OnLButtonDown(int mX, int mY)
     default: break;
   }
 
+  if (handleAreaExtend(&mouse)) return;
   if (handlePlaceDomain(&mouse)) return;
   if (handleNewTile(&mouse)) return;
   if (handleGetSet(&mouse)) return;
@@ -89,6 +90,7 @@ void CEditMap::OnRButtonDown(int mX, int mY)
 
   const SDL_Point mouse = {mX, mY};
 
+  if (handleAreaRemove(&mouse)) return;
   if (handleMakeDomain(&mouse)) return;
   if (handleQuadrant_rc(&mouse)) return;
 }
@@ -111,6 +113,52 @@ bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
     default:      retval = false; break;
   }
   return retval;
+}
+
+bool CEditMap::handleAreaExtend(const SDL_Point* mouse)
+{
+  using namespace mapEngine::but_quad_map;
+
+  if (SDL_PointInRect(mouse, &buttons[LEFT])) {
+    extendMap_L();
+    return true;
+  }
+  if (SDL_PointInRect(mouse, &buttons[RIGHT])) {
+    extendMap_R();
+    return true;
+  }
+  if (SDL_PointInRect(mouse, &buttons[UP])) {
+    extendMap_U();
+    return true;
+  }
+  if (SDL_PointInRect(mouse, &buttons[DOWN])) {
+    extendMap_D();
+    return true;
+  }
+  return false;
+}
+
+bool CEditMap::handleAreaRemove(const SDL_Point* mouse)
+{
+  using namespace mapEngine::but_quad_map;
+
+  if (SDL_PointInRect(mouse, &buttons[LEFT])) {
+    removeMap_L();
+    return true;
+  }
+  if (SDL_PointInRect(mouse, &buttons[RIGHT])) {
+    removeMap_R();
+    return true;
+  }
+  if (SDL_PointInRect(mouse, &buttons[UP])) {
+    removeMap_U();
+    return true;
+  }
+  if (SDL_PointInRect(mouse, &buttons[DOWN])) {
+    removeMap_D();
+    return true;
+  }
+  return false;
 }
 
 void CEditMap::extendMap_R() {

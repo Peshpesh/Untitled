@@ -25,6 +25,22 @@ enum
 // Map engine namespaces //
 namespace mapEngine
 {
+  namespace but_quad_map
+  {
+    enum {
+      LEFT = 0,
+      RIGHT, UP, DOWN,
+    };
+    extern const char* const labels[];
+    extern const short w;
+    extern const short h;
+    extern const short Xl;
+    extern const short Yt;
+    extern const SDL_Rect buttons[];
+    extern const short bsiz;
+    extern const SDL_Point* col;
+    extern const SDL_Point* hvCol;
+  }
   namespace but_tset
   {
     // Change Tileset button info
@@ -199,6 +215,7 @@ public:
   void OnLButtonDown(int mX, int mY);
 
 private:
+  bool handleAreaExtend(const SDL_Point* mouse);
   bool handlePlaceDomain(const SDL_Point* mouse);
   bool handleNewTile(const SDL_Point* mouse);
   bool handleGetSet(const SDL_Point* mouse);
@@ -227,6 +244,7 @@ public:
   void OnRButtonDown(int mX, int mY);
 
 private:
+  bool handleAreaRemove(const SDL_Point* mouse);
   bool handleMakeDomain(const SDL_Point* mouse);
   bool handleQuadrant_rc(const SDL_Point* mouse);
   SDL_Rect getTileDomain(const SDL_Point* A, const SDL_Point* B);
@@ -243,7 +261,7 @@ private:
 
 private:
   bool RenderSidebar(const SDL_Point* mouse);
-  bool drawButtonTileset(const SDL_Point* mouse);
+  bool drawAreaExpand(const SDL_Point* mouse);
   bool drawActiveTiles();
   bool drawSampleTile(const CTile* ShowTile, const SDL_Rect* dstR);
   bool drawActive_bg(const CTile* ShowTile, const SDL_Point* mouse);
@@ -256,6 +274,7 @@ private:
 
 private:
   bool RenderBottom(const SDL_Point* mouse);
+  bool drawButtonTileset(const SDL_Point* mouse);
   bool drawButton_bg(const SDL_Point* mouse);
   bool drawButton_fg(const SDL_Point* mouse);
   bool drawOverlayList();

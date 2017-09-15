@@ -121,6 +121,7 @@ bool CEditMap::RenderSidebar(const SDL_Point* mouse)
 {
 	const CTile* ShowTile = getModTile();
 
+	if (!drawAreaExpand(mouse)) return false;
   if (!drawActiveTiles()) return false;
   if (!drawActive_bg(ShowTile, mouse)) return false;
   if (!drawActive_fg(ShowTile, mouse)) return false;
@@ -143,6 +144,21 @@ bool CEditMap::RenderBottom(const SDL_Point* mouse)
   if (!drawPlacementList()) return false;
 
   return true;
+}
+
+bool CEditMap::drawAreaExpand(const SDL_Point* mouse)
+{
+	using namespace mapEngine::but_quad_map;
+
+	for (int i = 0; i <= DOWN; i++)
+	{
+		if (!CAsset::drawStrBox(&buttons[i], bsiz, SDL_PointInRect(mouse, &buttons[i]) ? hvCol : col)) {
+			return false;
+		}
+		Font::NewCenterWrite(FONT_MINI, labels[i], &buttons[i]);
+	}
+
+	return true;
 }
 
 bool CEditMap::drawButtonTileset(const SDL_Point* mouse)
