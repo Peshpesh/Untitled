@@ -21,12 +21,32 @@ struct SceneryTexInfo {
 };
 
 class CScenery {
-public:
-  static std::vector<CScenery> sceneryList;
-  static std::vector<SceneryTexInfo> textureList;
+  static bool OnInit();
+  static bool OnLoad(const char* fname);
+  static bool OnSave(const char* fname);
+  static bool isGroupUsed(const int& group);
+  static bool isTextureLoaded(const int& group);
+  static SDL_Texture* loadTexInfo(const int& group);
+  static SDL_Texture* fetchTexture(const int& group);
+  static void purgeStaleTextures();
 
 public:
-  CScenery();
+  static std::vector<SceneryTexInfo>  textureList;    // contains loaded texture info
+  static std::vector<CScenery>        sceneryList;    // contains placed scenery info
+  static std::vector<unsigned double> Z;              // contains layer depths
+
+public:
+  SDL_Texture*   imgSrc;      // pointer to image source
+  int            group_ID;    // scenery group ID number
+  int            decor_ID;    // decoration ID in group
+  SDL_Rect       srcR;        // source frame size & position
+  SDL_Point      truePos;     // "true" position in area
+  unsigned short layer;       // assigned Z layer index
+
+public:
+  CScenery(int group, int decor, const SDL_Point* m, unsigned short layer);
+
+  bool OnRender();
 };
 
 #endif
