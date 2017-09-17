@@ -7,17 +7,7 @@ void CApp::OnRender()
 	CSurface::Clear();
 
 	// Draw background scenery
-	// int s_i = 0;
-	// while (s_i < CSceneryEdit::SceneList.size())
-	// {
-	// 	float Z = CSceneryEdit::SceneList[s_i]->Z;
-	// 	if (Z <= 1.0f) break;
-	// 	if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
-	// 	{
-	// 		CSceneryEdit::SceneList[s_i]->OnRender();
-	// 	}
-	// 	s_i++;
-	// }
+	CSceneryEditor::control.drawBackground();
 
 	// Draw the working area
 	CEditMap::MapEditor.RenderMap();
@@ -26,27 +16,13 @@ void CApp::OnRender()
 	CEntityEditor::Control.drawEntities();
 
 	// Draw foreground scenery
-	// while (s_i < CSceneryEdit::SceneList.size())
-	// {
-	// 	float Z = CSceneryEdit::SceneList[s_i]->Z;
-	// 	if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
-	// 	{
-	// 		CSceneryEdit::SceneList[s_i]->OnRender();
-	// 	}
-	// 	s_i++;
-	// }
+	CSceneryEditor::control.drawForeground();
 
-	// CAsset::drawAppFrame(); 	// REMOVE ME AFTER FINDING LEAK
-	if (active_mod == MODIFY_NPC)
-	{
-		CEntityEditor::Control.OnRender(&mouse);
-	}
-	else if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
-	{
-		// RenderSCNedit();
-	}
-	else {
-		CEditMap::MapEditor.OnRender(&mouse);
+	switch (active_mod) {
+		case MODIFY_MAP:		CEditMap::MapEditor.OnRender(&mouse); 		break;
+		case MODIFY_NPC:		CEntityEditor::Control.OnRender(&mouse); 	break;
+		case MODIFY_SCENE:	CSceneryEditor::control.OnRender(&mouse); break;
+		default:						break;
 	}
 
 	renderEngSwitch();
@@ -69,7 +45,6 @@ void CApp::OnRender()
 		std::string fps_str = Font::intToStr(CFPS::FPSControl.GetFPS()) + " fps";
 		Font::Write(FONT_MINI, fps_str.c_str(), WWIDTH + 5, 1);
 	}
-
 	CSurface::Present();
 }
 
@@ -81,7 +56,7 @@ bool CApp::renderEngSwitch()
 	bool noHov;
 
 	const SDL_Point* color = NULL;
-	for (int i = MODIFY_MAP; i <= REMOVE_SCENE; i++)
+	for (int i = MODIFY_MAP; i <= MODIFY_SCENE; i++)
 	{
 		noHov = (!canHilight || !SDL_PointInRect(&mouse, &engineButton[i]));
 		color = (active_mod == i) ? engineOnCol : (noHov ? engineOffCol : engineHvCol);

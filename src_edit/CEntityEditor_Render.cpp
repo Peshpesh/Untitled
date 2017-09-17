@@ -3,7 +3,6 @@
 bool CEntityEditor::OnRender(const SDL_Point* m) {
   bool no_intrpt = CInterrupt::isNone();
 
-  if (!drawHitboxes()) return false;
   if (no_intrpt) {
     if (!drawWorkingEntity(m)) return false;
     if (!drawWorkingHitbox(m)) return false;
@@ -32,6 +31,12 @@ bool CEntityEditor::drawEntities() {
       return false;
     }
   }
+
+  if (!drawHitboxes()) {
+    CInform::InfoControl.pushInform("Problem rendering hitbox");
+    return false;
+  }
+
   return true;
 }
 

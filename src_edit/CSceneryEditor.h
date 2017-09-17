@@ -13,19 +13,25 @@ namespace sceneryEngine {
 };
 
 class CSceneryEditor : public CEvent {
-
-  static CSceneryEditor control;
   CSceneryEditor();
 
 public:
+  static CSceneryEditor control;
   bool OnInit();
-  void OnEvent(SDL_Event* Event);
+  bool drawBackground();
+  bool drawForeground();
   void OnTerminate();
+
+public:
+  void OnEvent(SDL_Event* Event);
 
 private:
 
+public:
+  bool OnRender(const SDL_Point* m);
 
-
+private:
+  bool drawIntrpt(const SDL_Point* m);
 };
 
 #endif

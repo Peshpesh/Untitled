@@ -10,6 +10,7 @@ void CApp::OnEvent(SDL_Event* Event)
 	}
 	if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
 	if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
+	if (active_mod == MODIFY_SCENE) CSceneryEditor::control.OnEvent(Event);
 }
 
 bool CApp::handleInterr(SDL_Event* Event)
@@ -51,10 +52,10 @@ void CApp::OnLButtonDown(int mX, int mY)
 		if (handleIO(&m)) return;
 	}
 
-	if (active_mod == MODIFY_SCENE || active_mod == REMOVE_SCENE)
+	if (active_mod == MODIFY_SCENE)
 	{
 		// returns false if error...
-		EventSCNedit(mX, mY);
+		// EventSCNedit(mX, mY);
 	}
 }
 
@@ -79,7 +80,7 @@ bool CApp::handleEngSwitch(const SDL_Point* m)
 	using namespace engineSwitch;
 
 	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
-	for (int i = MODIFY_MAP; i <= REMOVE_SCENE; i++)
+	for (int i = MODIFY_MAP; i <= MODIFY_SCENE; i++)
 	{
 		if (SDL_PointInRect(m, &engineButton[i])) {
 			active_mod = i;

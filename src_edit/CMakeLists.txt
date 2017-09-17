@@ -57,6 +57,8 @@ ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryEdit.cpp
 ${SRCDIR}/CSceneryEditor.cpp
 ${SRCDIR}/CSceneryEditor_Event.cpp
+${SRCDIR}/CSceneryEditor_Ext.cpp
+${SRCDIR}/CSceneryEditor_Render.cpp
 ${SRCDIR}/CSceneryMod.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
