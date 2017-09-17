@@ -22,8 +22,8 @@ namespace mapEngine
       {Xl + w, Yt + h + h, w, h}
     };
     const short bsiz = 2;
-    const SDL_Point* col    = &palette::cyan;
-    const SDL_Point* hvCol  = &palette::light_cyan;
+    const SDL_Point* col    = &palette::blue;
+    const SDL_Point* hvCol  = &palette::light_blue;
   }
   namespace but_tset
   {

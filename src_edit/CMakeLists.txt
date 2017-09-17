@@ -55,6 +55,8 @@ ${SRCDIR}/CMeter.cpp
 ${SRCDIR}/CModel.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryEdit.cpp
+${SRCDIR}/CSceneryEditor.cpp
+${SRCDIR}/CSceneryEditor_Event.cpp
 ${SRCDIR}/CSceneryMod.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
@@ -87,6 +89,7 @@ ${SRCDIR}/CMeter.h
 ${SRCDIR}/CModel.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryEdit.h
+${SRCDIR}/CSceneryEditor.h
 ${SRCDIR}/CSceneryMod.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
