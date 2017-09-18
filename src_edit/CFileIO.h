@@ -8,7 +8,7 @@
 #include "CAsset.h"
 #include "CArea.h"
 #include "CEntity.h"
-#include "CSceneryEdit.h"
+// #include "CSceneryEdit.h"
 #include "CCamera.h"
 
 class CFileIO : public CEvent {

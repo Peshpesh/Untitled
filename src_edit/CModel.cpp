@@ -98,8 +98,8 @@ bool CModel::renderInfo() {
   info += "Area Width - " + Font::intToStr(aW) + "\n\n";
   info += "Area Height - " + Font::intToStr(aH) + "\n\n";
   info += "Entities - " + Font::intToStr(CEntity::entityList.size()) + "\n\n";
-  info += "Scenery Objects - " + Font::intToStr(CSceneryEdit::ScnControl.SceneList.size());
-
+  // info += "Scenery Objects - " + Font::intToStr(CSceneryEdit::ScnControl.SceneList.size());
+  info += "Scenery Objects - " + Font::intToStr(0);
   Font::NewCenterWrite(info.c_str(), &infoCanvas);
 
   return true;

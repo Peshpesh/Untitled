@@ -283,7 +283,7 @@ void CFileIO::newData()
   CArea::AreaControl.OnInit();
 	CCamera::CameraControl.SetPos(0, 0);
 
-  CSceneryEdit::ScnControl.resetAll();
+  // CSceneryEdit::ScnControl.resetAll();
 
   prevName = newName;
   newName.clear();
@@ -306,12 +306,12 @@ void CFileIO::loadData()
     return;
   }
 
-  if (!CSceneryEdit::ScnControl.LoadScenery(newName.c_str())) {
-    // problem loading 2.5D elements
-    pushInform(I_FAIL_SCENERY);
-    newName.clear();
-    return;
-  }
+  // if (!CSceneryEdit::ScnControl.LoadScenery(newName.c_str())) {
+  //   // problem loading 2.5D elements
+  //   pushInform(I_FAIL_SCENERY);
+  //   newName.clear();
+  //   return;
+  // }
 
   pushInform(I_LOAD);
 
@@ -329,10 +329,10 @@ void CFileIO::saveData()
     pushInform(I_FAIL_SAVE);
     return;
   }
-  if (!CSceneryEdit::ScnControl.SaveScenery(newName.c_str())) {
-    pushInform(I_FAIL_SAVE);
-    return;
-  }
+  // if (!CSceneryEdit::ScnControl.SaveScenery(newName.c_str())) {
+  //   pushInform(I_FAIL_SAVE);
+  //   return;
+  // }
 
   prevName = newName;
   newName.clear();

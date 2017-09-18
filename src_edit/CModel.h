@@ -8,7 +8,6 @@
 #include "CAsset.h"
 #include "CFont.h"
 #include "CArea.h"
-
 #include "CFileIO.h"
 
 namespace model {

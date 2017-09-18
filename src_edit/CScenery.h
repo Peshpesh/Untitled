@@ -5,6 +5,7 @@
 #include "CSurface.h"
 // #include "CAnimation.h"
 #include "CCamera.h"
+#include "CSceneryData.h"
 #include "Define.h"
 
 //////////////////////////////////////////////////////////////
@@ -25,15 +26,18 @@ class CScenery {
   static bool OnLoad(const char* fname);
   static bool OnSave(const char* fname);
   static bool isGroupUsed(const int& group);
+  static bool isLayerUsed(const int& layer);
   static bool isTextureLoaded(const int& group);
   static SDL_Texture* loadTexInfo(const int& group);
   static SDL_Texture* fetchTexture(const int& group);
   static void purgeStaleTextures();
+  static void purgeStaleLayers();
+  static void removeLayerIndex(const int& idx);
 
 public:
-  static std::vector<SceneryTexInfo>  textureList;    // contains loaded texture info
+  static std::vector<SceneryTexInfo>  texList;        // contains loaded texture info
   static std::vector<CScenery>        sceneryList;    // contains placed scenery info
-  static std::vector<unsigned double> Z;              // contains layer depths
+  static std::vector<double> Z;                       // contains layer depths
 
 public:
   SDL_Texture*   imgSrc;      // pointer to image source
