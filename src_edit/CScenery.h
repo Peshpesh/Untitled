@@ -22,6 +22,7 @@ struct SceneryTexInfo {
 };
 
 class CScenery {
+public:
   static bool OnInit();
   static bool OnLoad(const char* fname);
   static bool OnSave(const char* fname);

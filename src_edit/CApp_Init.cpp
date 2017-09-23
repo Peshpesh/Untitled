@@ -40,6 +40,10 @@ bool CApp::OnInit()
 		return false;
 	}
 
+	if (CSceneryEditor::control.OnInit() == false) {
+		return false;
+	}
+
 	///////////////////////
 	// Debugging section //
 	///////////////////////

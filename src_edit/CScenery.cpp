@@ -1,8 +1,8 @@
 #include "CScenery.h"
 
-std::vector<SceneryTexInfo>  CScenery::texList;        // contains loaded texture info
-std::vector<CScenery>        CScenery::sceneryList;    // contains placed scenery info
-std::vector<double> CScenery::Z;                       // contains layer depths
+std::vector<SceneryTexInfo>   CScenery::texList;        // contains loaded texture info
+std::vector<CScenery>         CScenery::sceneryList;    // contains placed scenery info
+std::vector<double>           CScenery::Z;              // contains layer depths
 
 CScenery::CScenery(int group, int decor, const SDL_Point* m, unsigned short layer) {
   if ((imgSrc = fetchTexture(group)) == NULL) {
