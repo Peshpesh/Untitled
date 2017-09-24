@@ -28,6 +28,7 @@ public:
   static bool OnSave(const char* fname);
   static bool isGroupUsed(const int& group);
   static bool isLayerUsed(const int& layer);
+  static bool isSceneryUsed(const int& group, const int& decor);
   static bool isTextureLoaded(const int& group);
   static SDL_Texture* loadTexInfo(const int& group);
   static SDL_Texture* fetchTexture(const int& group);
@@ -38,7 +39,7 @@ public:
 public:
   static std::vector<SceneryTexInfo>  texList;        // contains loaded texture info
   static std::vector<CScenery>        sceneryList;    // contains placed scenery info
-  static std::vector<double> Z;                       // contains layer depths
+  static std::vector<double>          layerList;      // contains layer info
 
 public:
   SDL_Texture*   imgSrc;      // pointer to image source

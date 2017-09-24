@@ -5,13 +5,13 @@ CSceneryEditor CSceneryEditor::control;
 CSceneryEditor::CSceneryEditor() {
   layer = 0;
 
-  showScenery = true;
+  showScenery     = true;
   showWorkScenery = true;
-  layer_alpha = MAX_RGBA;
-  other_alpha = MAX_RGBA;
+  layer_alpha     = MAX_RGBA;
+  other_alpha     = MAX_RGBA;
 
   group_ID = Decorations::groups::GLOBAL;
-  scene_ID = Decorations::global::NOTHING;
+  decor_ID = Decorations::global::NOTHING;
   placePos = sceneryEngine::misc::placeRelPos::TOP_LEFT;
   snap_scenery = false;
 }

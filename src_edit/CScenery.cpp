@@ -2,7 +2,7 @@
 
 std::vector<SceneryTexInfo>   CScenery::texList;        // contains loaded texture info
 std::vector<CScenery>         CScenery::sceneryList;    // contains placed scenery info
-std::vector<double>           CScenery::Z;              // contains layer depths
+std::vector<double>           CScenery::layerList;      // contains layer info
 
 CScenery::CScenery(int group, int decor, const SDL_Point* m, unsigned short layer) {
   if ((imgSrc = fetchTexture(group)) == NULL) {
@@ -42,6 +42,13 @@ bool CScenery::isGroupUsed(const int& group) {
 bool CScenery::isLayerUsed(const int& layer) {
   for (int i = 0; i < sceneryList.size(); i++) {
     if (layer == sceneryList[i].layer) return true;
+  }
+  return false;
+}
+
+bool CScenery::isSceneryUsed(const int& group, const int& decor) {
+  for (int i = 0; i < sceneryList.size(); i++) {
+    if (group == sceneryList[i].group_ID && decor == sceneryList[i].decor_ID) return true;
   }
   return false;
 }
@@ -87,7 +94,7 @@ void CScenery::purgeStaleTextures() {
 }
 
 void CScenery::purgeStaleLayers() {
-  for (int i = Z.size() - 1; i >= 0; i--) {
+  for (int i = layerList.size() - 1; i >= 0; i--) {
     if (!isLayerUsed(i)) removeLayerIndex(i);
   }
 }
@@ -97,5 +104,5 @@ void CScenery::removeLayerIndex(const int& idx) {
     if (sceneryList[i].layer > idx) --sceneryList[i].layer;
     else if (sceneryList[i].layer == idx) sceneryList.erase(sceneryList.begin() + i);
   }
-  Z.erase(Z.begin() + idx);
+  layerList.erase(layerList.begin() + idx);
 }

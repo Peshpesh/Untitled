@@ -8,6 +8,11 @@ namespace sceneryEngine
       const char* const label = "Scenery Menu";
       CButton button(355, 510, 100, 24);
     }
+    namespace chLayer
+    { // Change layer button
+      const char* const label = "Layers Menu";
+      CButton button(355, 534, 100, 24);
+    }
     namespace placeRelPos {
       const SDL_Point* offCol = &palette::silver;
       const SDL_Point* hovCol = &palette::light_yellow;

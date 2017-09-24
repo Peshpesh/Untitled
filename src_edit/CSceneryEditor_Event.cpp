@@ -1,7 +1,21 @@
 #include "CSceneryEditor.h"
 
 void CSceneryEditor::OnEvent(SDL_Event* Event) {
+  if (handleInterr(Event)) return;
+
   CEvent::OnEvent(Event);
+}
+
+bool CSceneryEditor::handleInterr(SDL_Event* Event) {
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_SC)) {
+    CChangeScenery::Control.OnEvent(Event);
+    if (CInterrupt::isFlagOff(INTRPT_CHANGE_SC)) {
+      CChangeScenery::Control.handleChanges(group_ID, decor_ID);
+      updateSceneryButtons();
+    }
+    return true;
+  }
+  return false;
 }
 
 void CSceneryEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
@@ -14,6 +28,7 @@ void CSceneryEditor::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
 
   if (handleChScenery(&m)) return;
+  if (handleChLayer(&m)) return;
   if (handleLayerMeter(&m)) return;
   if (handleOtherMeter(&m)) return;
   if (handleSwitchView(&m)) return;
@@ -27,14 +42,14 @@ bool CSceneryEditor::handleAddScenery(const SDL_Point* m) {
   if (!CAsset::inWorkspace(m)) return false;
   // click in workspace attempts to add scenery data
 
-  SDL_Rect srcR = CSceneryData::getDecorDims(group_ID, scene_ID);
+  SDL_Rect srcR = CSceneryData::getDecorDims(group_ID, decor_ID);
 
   int X = m->x;
   int Y = m->y;
 
   getPosDisplace(X, Y, m, srcR);
   const SDL_Point dstP = {X, Y};
-  CScenery newDecor(group_ID, scene_ID, &dstP, layer);
+  CScenery newDecor(group_ID, decor_ID, &dstP, layer);
   CScenery::sceneryList.push_back(newDecor);
 
   return true;
@@ -44,8 +59,19 @@ bool CSceneryEditor::handleChScenery(const SDL_Point* m) {
   using namespace sceneryEngine::buttons::chScenery;
 
   if (SDL_PointInRect(m, &button.dstR)) {
-    // CChangeScenery::Control.OnInit(group_ID, scene_ID);
-    // CInterrupt::appendFlag(INTRPT_CHANGE_SC);
+    CChangeScenery::Control.OnInit(group_ID, decor_ID);
+    CInterrupt::appendFlag(INTRPT_CHANGE_SC);
+    return true;
+  }
+  return false;
+}
+
+bool CSceneryEditor::handleChLayer(const SDL_Point* m) {
+  using namespace sceneryEngine::buttons::chLayer;
+
+  if (SDL_PointInRect(m, &button.dstR)) {
+    // CChangeScenery::Control.OnInit(group_ID, decor_ID);
+    // CInterrupt::appendFlag(INTRPT_CHANGE_LA);
     return true;
   }
   return false;
@@ -119,7 +145,7 @@ bool CSceneryEditor::handleSwitchPlace(const SDL_Point* m) {
 bool CSceneryEditor::handleSceneryList(const SDL_Point* m) {
   for (int i = 0; i < sceneryButtons.size(); i++) {
     if (SDL_PointInRect(m, &sceneryButtons[i].dstR)) {
-      scene_ID = i;
+      decor_ID = i;
       return true;
     }
   }

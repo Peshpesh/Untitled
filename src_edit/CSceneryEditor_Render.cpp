@@ -4,10 +4,11 @@ bool CSceneryEditor::OnRender(const SDL_Point* m) {
   bool no_intrpt = CInterrupt::isNone();
 
   if (no_intrpt) {
-    // if (!drawWorkingScenery(m)) return false;
+    if (!drawWorkingScenery(m)) return false;
   }
   if (!CAsset::drawAppFrame()) return false;
   if (!drawChScenery(m, no_intrpt)) return false;
+  if (!drawChLayer(m, no_intrpt)) return false;
   if (!drawSceneryList(m, no_intrpt)) return false;
   if (!drawPlaceRelPos(m, no_intrpt)) return false;
   if (!drawOpacLayer()) return false;
@@ -56,6 +57,20 @@ bool CSceneryEditor::drawForeground() {
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
+bool CSceneryEditor::drawWorkingScenery(const SDL_Point* m) {
+  if (!showWorkScenery) return true;
+
+  SDL_Rect srcR = CSceneryData::getDecorDims(group_ID, decor_ID);
+
+  int X = m->x;
+  int Y = m->y;
+
+  getPosDisplace(X, Y, m, srcR);
+  SDL_Rect dstR = {X, Y, srcR.w, srcR.h};
+
+  return CSurface::OnDraw(CScenery::fetchTexture(group_ID), &srcR, &dstR);
+}
+
 bool CSceneryEditor::drawChScenery(const SDL_Point* m, const bool& hov) {
   using namespace sceneryEngine::buttons::chScenery;
 
@@ -66,11 +81,21 @@ bool CSceneryEditor::drawChScenery(const SDL_Point* m, const bool& hov) {
   return true;
 }
 
+bool CSceneryEditor::drawChLayer(const SDL_Point* m, const bool& hov) {
+  using namespace sceneryEngine::buttons::chLayer;
+
+  if (!button.OnRender(m, hov, CInterrupt::isFlagOn(INTRPT_CHANGE_LA))) {
+    return false;
+  }
+  Font::NewCenterWrite(FONT_MINI, label, &button.dstR);
+  return true;
+}
+
 bool CSceneryEditor::drawSceneryList(const SDL_Point* m, const bool& hov) {
   Font::FontControl.SetFont(FONT_MINI);
   std::string name;
   for (int i = 0; i < sceneryButtons.size(); i++) {
-    if (!sceneryButtons[i].OnRender(m, (hov && i != scene_ID), (i == scene_ID))) return false;
+    if (!sceneryButtons[i].OnRender(m, (hov && i != decor_ID), (i == decor_ID))) return false;
     name = CSceneryData::getDecorName(group_ID, i);
     Font::NewCenterWrite(name.c_str(), &sceneryButtons[i].dstR);
   }
@@ -134,7 +159,7 @@ bool CSceneryEditor::drawSwitchPlace() {
 
 bool CSceneryEditor::drawIntrpt(const SDL_Point* m) {
   if (CInterrupt::isFlagOn(INTRPT_CHANGE_SC)) {
-    // if (!CChangeScenery::Control.OnRender(m)) return false;
+    if (!CChangeScenery::Control.OnRender(m)) return false;
   }
   return true;
 }

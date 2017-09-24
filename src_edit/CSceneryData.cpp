@@ -90,6 +90,7 @@ std::string CSceneryData::getDecorName(const int& group, const int& decor) {
 void CSceneryData::getDims_global(const int& decor, SDL_Rect& srcRect) {
   using namespace Decorations::global;
   switch (decor) {
+    case NOTHING: srcRect = CAsset::getRect(0, 0, 64, 64); break;
     default:  break;
   }
 }

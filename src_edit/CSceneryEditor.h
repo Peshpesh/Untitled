@@ -11,12 +11,18 @@
 #include "CSurface.h"
 #include "CScenery.h"
 #include "CSceneryData.h"
+#include "CChangeScenery.h"
 
 namespace sceneryEngine
 {
   namespace buttons {
     namespace chScenery
     { // Change scenery button
+      extern const char* const label;
+      extern CButton button;
+    }
+    namespace chLayer
+    { // Change layer button
       extern const char* const label;
       extern CButton button;
     }
@@ -90,7 +96,6 @@ namespace sceneryEngine
   }
 } // Scenery engine namespaces //
 
-
 class CSceneryEditor : public CEvent {
   CSceneryEditor();
 
@@ -100,7 +105,7 @@ class CSceneryEditor : public CEvent {
   unsigned short layer_alpha;
   unsigned short other_alpha;
   short group_ID;
-  short scene_ID;
+  short decor_ID;
   short placePos;
   bool snap_scenery;
 
@@ -125,8 +130,10 @@ private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void OnLButtonDown(int mX, int mY);
 
+  bool handleInterr(SDL_Event* Event);
   bool handleAddScenery(const SDL_Point* m);
   bool handleChScenery(const SDL_Point* m);
+  bool handleChLayer(const SDL_Point* m);
   bool handleLayerMeter(const SDL_Point* m);
   bool handleOtherMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
@@ -138,7 +145,9 @@ public:
   bool OnRender(const SDL_Point* m);
 
 private:
+  bool drawWorkingScenery(const SDL_Point* m);
   bool drawChScenery(const SDL_Point* m, const bool& hov);
+  bool drawChLayer(const SDL_Point* m, const bool& hov);
   bool drawSceneryList(const SDL_Point* m, const bool& hov);
   bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
   bool drawOpacLayer();
