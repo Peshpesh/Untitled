@@ -12,6 +12,7 @@
 #include "CScenery.h"
 #include "CSceneryData.h"
 #include "CChangeScenery.h"
+#include "CLayerEditor.h"
 
 namespace sceneryEngine
 {

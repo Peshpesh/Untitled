@@ -7,7 +7,7 @@ std::vector<double>           CScenery::layerList;      // contains layer info
 CScenery::CScenery(int group, int decor, const SDL_Point* m, unsigned short layer) {
   if ((imgSrc = fetchTexture(group)) == NULL) {
     //
-  };
+  }
 
   group_ID = group;
   decor_ID = decor;
@@ -21,6 +21,12 @@ bool CScenery::OnInit() {
   if (loadTexInfo(Decorations::groups::GLOBAL) == NULL) {
     return false;
   }
+  // testing
+  layerList.push_back(double(1.7530));
+  layerList.push_back(double(1.300));
+  layerList.push_back(double(1.0030));
+  layerList.push_back(double(10.1501));
+  layerList.push_back(double(0.01921));
   return true;
 }
 

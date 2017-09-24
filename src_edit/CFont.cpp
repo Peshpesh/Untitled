@@ -677,3 +677,23 @@ std::string Font::intToStr(const int& val)
 	}
 	return retstr;
 }
+
+std::string Font::doubleToStr(const double& val, const unsigned int& precision) {
+	std::string retstr;
+	if (precision != 0) {
+		std::string intPart = intToStr((int)(val));
+
+		int O = 1;		// big O
+		for (int i = 1; i <= precision; i++) O *= 10;
+
+		double truncVal = val - (int)(val);
+		std::string truncPart = intToStr((int)(truncVal * O));
+		while (truncPart.size() < precision) truncPart = "0" + truncPart;
+		
+		retstr = intPart + "." + truncPart;
+	}
+	else {
+		retstr = intToStr((int)(val));
+	}
+	return retstr;
+}

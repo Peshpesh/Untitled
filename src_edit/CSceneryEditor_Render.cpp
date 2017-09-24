@@ -161,5 +161,8 @@ bool CSceneryEditor::drawIntrpt(const SDL_Point* m) {
   if (CInterrupt::isFlagOn(INTRPT_CHANGE_SC)) {
     if (!CChangeScenery::Control.OnRender(m)) return false;
   }
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_LA)) {
+    if (!CLayerEditor::Control.OnRender(m)) return false;
+  }
   return true;
 }

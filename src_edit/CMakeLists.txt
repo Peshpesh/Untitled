@@ -49,6 +49,7 @@ ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CHitboxEditor.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
+${SRCDIR}/CLayerEditor.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMeter.cpp
 ${SRCDIR}/CModel.cpp
@@ -85,6 +86,7 @@ ${SRCDIR}/CFPS.h
 ${SRCDIR}/CHitboxEditor.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
+${SRCDIR}/CLayerEditor.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMeter.h
 ${SRCDIR}/CModel.h

@@ -15,6 +15,10 @@ bool CSceneryEditor::handleInterr(SDL_Event* Event) {
     }
     return true;
   }
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_LA)) {
+    CLayerEditor::Control.OnEvent(Event);
+    return true;
+  }
   return false;
 }
 
@@ -70,8 +74,8 @@ bool CSceneryEditor::handleChLayer(const SDL_Point* m) {
   using namespace sceneryEngine::buttons::chLayer;
 
   if (SDL_PointInRect(m, &button.dstR)) {
-    // CChangeScenery::Control.OnInit(group_ID, decor_ID);
-    // CInterrupt::appendFlag(INTRPT_CHANGE_LA);
+    CLayerEditor::Control.OnInit();
+    CInterrupt::appendFlag(INTRPT_CHANGE_LA);
     return true;
   }
   return false;
