@@ -14,6 +14,7 @@ class CLayerEditor : public CEvent {
   std::vector<SDL_Rect> layerList;
   std::vector<SDL_Rect> depthList;
 
+  unsigned short list_pg;
   bool makeLayer;
   std::string z_string;
 
@@ -33,7 +34,7 @@ private:
   void enterZval(SDL_Keycode sym);
   void addToZ(const char& sym);
   void delFromZ();
-  void newLayer();
+  void makeNewLayer();
 
 private:
   void OnLButtonDown(int mX, int mY);
@@ -41,7 +42,9 @@ private:
 
 private:
   bool drawCanvas();
+  bool drawTitle();
   bool drawList(const SDL_Point* m);
+  bool drawNewLayer(const SDL_Point* m);
   bool drawOptions(const SDL_Point* m);
 };
 

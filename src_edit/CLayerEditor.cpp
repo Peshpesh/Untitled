@@ -3,18 +3,56 @@
 CLayerEditor CLayerEditor::Control;
 
 namespace {
-  const SDL_Rect canv           = CAsset::getWinCentRect(600, 440);
+  const SDL_Rect canv           = CAsset::getWinCentRect(440, 320);
+  const short subcanv_w         = canv.w / 3;
   const short b_sz              = 2;
-  const SDL_Point* canvCol      = &palette::dark_violet;
-  const short layer_w           = 25;
-  const short depth_w           = 109;
-  const short but_h             = 11;
-  const short list_x            = canv.x + (canv.w - (layer_w + depth_w)) / 2;
-  const short list_y            = canv.y + 30;
-  const SDL_Point* butCol       = &palette::silver;
-  const SDL_Point* onCol        = &palette::dark_green;
-  const SDL_Point* hovCol       = &palette::light_cyan;
+  const SDL_Point* canvCol      = &palette::dark_cyan;
+
+  const short title_y           = canv.y + 9;
+  const short title_h           = 11;
+  const SDL_Rect tbar_layer     = CAsset::getRect(canv.x,                    title_y, subcanv_w, title_h);
+  const SDL_Rect tbar_option    = CAsset::getRect(tbar_layer.x + subcanv_w,  title_y, subcanv_w, title_h);
+  const SDL_Rect tbar_new       = CAsset::getRect(tbar_option.x + subcanv_w, title_y, subcanv_w, title_h);
+  const char* const titleLayer  = "Active Layers";
+  const char* const titleOption = "Layer Options";
+  const char* const titleNew    = "Make New Layer";
+  const SDL_Point* tbarCol      = &palette::black;
+  const SDL_Color* titletextCol = &rgb::white;
   const short z_precision       = 4;
+
+  namespace list {
+    const short layer_w           = 25;
+    const short depth_w           = 109;
+    const short b_h               = 11;
+    const short l_x               = canv.x + (subcanv_w - (layer_w + depth_w)) / 2;
+    const short l_y               = canv.y + 30;
+    const short l_max             = 20;
+    const SDL_Point* butCol       = &palette::silver;
+    const SDL_Point* onCol        = &palette::dark_green;
+    const SDL_Point* hovCol       = &palette::light_cyan;
+  };
+  namespace newLayer {
+    const short b_w               = 120;
+    const short b_h               = 21;
+    const short f_w               = 120;
+    const short f_h               = 11;
+    const short buff_h            = 5;
+
+    const short b_x               = canv.x + (subcanv_w * 2) + (subcanv_w - b_w) / 2;
+    const short f_x               = canv.x + (subcanv_w * 2) + (subcanv_w - f_w) / 2;
+    const short b_y               = canv.y + (canv.h - (b_h + f_h + buff_h)) / 2;
+    const short f_y               = b_y + b_h + buff_h;
+
+    const SDL_Rect newbut         = CAsset::getRect(b_x, b_y, b_w, b_h);
+    const SDL_Rect zfield         = CAsset::getRect(f_x, f_y, f_w, f_h);
+    const SDL_Point* butCol       = &palette::silver;
+    const SDL_Point* onCol        = &palette::dark_green;
+    const SDL_Point* hovCol       = &palette::light_green;
+    const SDL_Point* fCol         = &palette::dark_indigo;
+    const SDL_Color* ftextCol     = &rgb::white;
+
+    const char* const title       = "Create Layer";
+  };
 }
 
 CLayerEditor::CLayerEditor() {
@@ -24,16 +62,18 @@ CLayerEditor::CLayerEditor() {
 void CLayerEditor::OnInit() {
   makeLayer = false;
   z_string  = "";
+  list_pg   = 0;
   resetLists();
 }
 
 void CLayerEditor::resetLists() {
+  using namespace list;
   if (!layerList.empty()) layerList.clear();
   if (!depthList.empty()) depthList.clear();
 
   for (int i = 0; i < CScenery::layerList.size(); i++) {
-    layerList.push_back(CAsset::getRect(list_x, list_y + (i * but_h), layer_w, but_h));
-    depthList.push_back(CAsset::getRect(list_x + layer_w, list_y + (i * but_h), depth_w, but_h));
+    layerList.push_back(CAsset::getRect(l_x, l_y + (i * b_h), layer_w, b_h));
+    depthList.push_back(CAsset::getRect(l_x + layer_w, l_y + (i * b_h), depth_w, b_h));
   }
 }
 
@@ -70,7 +110,7 @@ void CLayerEditor::enterZval(SDL_Keycode sym) {
     case SDLK_9:	        addToZ('9');	      break;
     case SDLK_PERIOD:     addToZ('.');        break;
     case SDLK_BACKSPACE:  delFromZ();         break;
-    case SDLK_RETURN:     newLayer();         break;
+    case SDLK_RETURN:     makeNewLayer();     break;
     case SDLK_ESCAPE:     makeLayer = false;  break;
     default:              break;
   }
@@ -118,7 +158,7 @@ void CLayerEditor::delFromZ() {
   else if (z_string.size() > 0) z_string.erase(z_string.end() - 1);
 }
 
-void CLayerEditor::newLayer() {
+void CLayerEditor::makeNewLayer() {
   if (z_string.empty()) return;
 
   int i = 0;
@@ -132,30 +172,67 @@ void CLayerEditor::newLayer() {
 bool CLayerEditor::OnRender(const SDL_Point* m) {
   if (m == NULL) return false;
 
+  Font::FontControl.SetFont(FONT_MINI);
+
   if (!drawCanvas())    return false;
+  if (!drawTitle())     return false;
   if (!drawList(m))     return false;
+  if (!drawNewLayer(m)) return false;
   if (!drawOptions(m))  return false;
 
   return true;
 }
 
 bool CLayerEditor::drawCanvas() {
-  Font::FontControl.SetFont(FONT_MINI);
   if (!CAsset::drawStrBox(&canv, b_sz, canvCol)) return false;
   return true;
 }
 
+bool CLayerEditor::drawTitle() {
+  using namespace list;
+  if (!CAsset::drawBoxFill(&tbar_layer, tbarCol))   return false;
+  if (!CAsset::drawBoxFill(&tbar_new, tbarCol))     return false;
+  if (!CAsset::drawBoxFill(&tbar_option, tbarCol))  return false;
+
+  Font::NewCenterWrite(titleLayer, &tbar_layer, titletextCol);
+  Font::NewCenterWrite(titleNew, &tbar_new, titletextCol);
+  Font::NewCenterWrite(titleOption, &tbar_option, titletextCol);
+
+  return true;
+}
+
 bool CLayerEditor::drawList(const SDL_Point* m) {
+  using namespace list;
+
   std::string N;
   std::string Z;
-  for (int i = 0; i < layerList.size(); i++) {
-    if (!CAsset::drawStrBox(&layerList[i], b_sz, butCol)) return false;
-    if (!CAsset::drawStrBox(&depthList[i], b_sz, butCol)) return false;
+
+  for (int i = list_pg * l_max; i < (layerList.size() <= l_max ? layerList.size() : l_max * (list_pg + 1)); i++) {
+    const SDL_Point* col = (SDL_PointInRect(m, &depthList[i]) ||
+                            SDL_PointInRect(m, &layerList[i])) ?
+                            hovCol : butCol;
+
+    if (!CAsset::drawStrBox(&layerList[i], b_sz, col)) return false;
+    if (!CAsset::drawStrBox(&depthList[i], b_sz, col)) return false;
     N = Font::intToStr(i);
     Z = Font::doubleToStr(CScenery::layerList[i], z_precision);
     Font::NewCenterWrite(N.c_str(), &layerList[i]);
     Font::NewCenterWrite(Z.c_str(), &depthList[i]);
   }
+  return true;
+}
+
+bool CLayerEditor::drawNewLayer(const SDL_Point* m) {
+  using namespace newLayer;
+
+  const SDL_Point* col = SDL_PointInRect(m, &newbut) ? hovCol : butCol;
+
+  if (!CAsset::drawStrBox(&newbut, b_sz, col)) return false;
+  if (!CAsset::drawBoxFill(&zfield, fCol)) return false;
+
+  Font::NewCenterWrite(title, &newbut);
+  Font::NewCenterWrite("ass", &zfield, ftextCol);
+
   return true;
 }
 
