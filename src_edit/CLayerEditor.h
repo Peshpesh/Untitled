@@ -35,10 +35,13 @@ private:
   void addToZ(const char& sym);
   void delFromZ();
   void makeNewLayer();
+  void resetNewLayer();
 
 private:
   void OnLButtonDown(int mX, int mY);
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  bool handleChangeLayer(const SDL_Point* m);
+  bool handleNewLayer(const SDL_Point* m);
 
 private:
   bool drawCanvas();

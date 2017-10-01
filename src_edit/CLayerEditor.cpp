@@ -32,19 +32,28 @@ namespace {
     const SDL_Point* hovCol       = &palette::light_cyan;
   };
   namespace newLayer {
-    const short b_w               = 120;
+    const short b_w               = 120;                    // b_ for "button"
     const short b_h               = 21;
-    const short f_w               = 120;
+    const short f_w               = 120;                    // f_ for "float"
     const short f_h               = 11;
-    const short buff_h            = 5;
+    const short buff_h            = 6;
+    const short buff_w            = 6;
+    const short d_w               = (b_w - buff_w) / 2;     // d_ for "decision"
+    const short d_h               = 13;
 
     const short b_x               = canv.x + (subcanv_w * 2) + (subcanv_w - b_w) / 2;
     const short f_x               = canv.x + (subcanv_w * 2) + (subcanv_w - f_w) / 2;
+    const short confirm_x         = canv.x + (subcanv_w * 2) + (subcanv_w - (d_w * 2) - buff_w) / 2;
+    const short cancel_x          = confirm_x + d_w + buff_w;
     const short b_y               = canv.y + (canv.h - (b_h + f_h + buff_h)) / 2;
     const short f_y               = b_y + b_h + buff_h;
+    const short d_y               = f_y + f_h + buff_h;
 
     const SDL_Rect newbut         = CAsset::getRect(b_x, b_y, b_w, b_h);
     const SDL_Rect zfield         = CAsset::getRect(f_x, f_y, f_w, f_h);
+    const SDL_Rect b_confirm      = CAsset::getRect(confirm_x, d_y, d_w, d_h);
+    const SDL_Rect b_cancel       = CAsset::getRect(cancel_x, d_y, d_w, d_h);
+
     const SDL_Point* butCol       = &palette::silver;
     const SDL_Point* onCol        = &palette::dark_green;
     const SDL_Point* hovCol       = &palette::light_green;
@@ -52,6 +61,9 @@ namespace {
     const SDL_Color* ftextCol     = &rgb::white;
 
     const char* const title       = "Create Layer";
+    const char* const info        = "Enter Z value";
+    const char* const s_confirm   = "Create";
+    const char* const s_cancel    = "Cancel";
   };
 }
 
@@ -82,7 +94,10 @@ void CLayerEditor::OnEvent(SDL_Event* Event) {
 }
 
 void CLayerEditor::OnLButtonDown(int mX, int mY) {
+  const SDL_Point m = {mX, mY};
 
+  if (handleChangeLayer(&m)) return;
+  if (handleNewLayer(&m)) return;
 }
 
 void CLayerEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
@@ -94,6 +109,28 @@ void CLayerEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       default: break;
     }
   }
+}
+
+bool CLayerEditor::handleChangeLayer(const SDL_Point* m) {
+  return false;
+}
+
+bool CLayerEditor::handleNewLayer(const SDL_Point* m) {
+  using namespace newLayer;
+  if (!makeLayer) {
+    return makeLayer = SDL_PointInRect(m, &newbut);
+  }
+  else {
+    if (SDL_PointInRect(m, &b_confirm)) {
+      makeNewLayer();
+      return true;
+    }
+    if (SDL_PointInRect(m, &b_cancel)) {
+      resetNewLayer();
+      return true;
+    }
+  }
+  return false;
 }
 
 void CLayerEditor::enterZval(SDL_Keycode sym) {
@@ -111,7 +148,7 @@ void CLayerEditor::enterZval(SDL_Keycode sym) {
     case SDLK_PERIOD:     addToZ('.');        break;
     case SDLK_BACKSPACE:  delFromZ();         break;
     case SDLK_RETURN:     makeNewLayer();     break;
-    case SDLK_ESCAPE:     makeLayer = false;  break;
+    case SDLK_ESCAPE:     resetNewLayer();    break;
     default:              break;
   }
 }
@@ -159,14 +196,35 @@ void CLayerEditor::delFromZ() {
 }
 
 void CLayerEditor::makeNewLayer() {
-  if (z_string.empty()) return;
+  if (z_string.empty()) {
+    makeLayer = false;
+    return;
+  }
 
+  // Ensure that the string represents a non-zero value
+  // If any character in the string is not a '0' or floating point,
+  // the string is valid for making a new layer
   int i = 0;
   while (true) {
     if (z_string[i] != '0' && z_string[i] != '.') break;
-    if (z_string.size() <= ++i) return;
+    if (z_string.size() <= ++i) {     // invalid string
+      resetNewLayer();
+      return;
+    }
   }
+
   // make new layer
+  double testDBL = CAsset::strToDouble(z_string);
+  std::string testSTR = Font::doubleToStr(testDBL, 4);
+
+  CInform::InfoControl.pushInform(testSTR.c_str());
+
+  resetNewLayer();
+}
+
+void CLayerEditor::resetNewLayer() {
+  z_string.clear();
+  makeLayer = false;
 }
 
 bool CLayerEditor::OnRender(const SDL_Point* m) {
@@ -225,14 +283,20 @@ bool CLayerEditor::drawList(const SDL_Point* m) {
 bool CLayerEditor::drawNewLayer(const SDL_Point* m) {
   using namespace newLayer;
 
-  const SDL_Point* col = SDL_PointInRect(m, &newbut) ? hovCol : butCol;
+  const SDL_Point* col = makeLayer ? onCol : (SDL_PointInRect(m, &newbut) ? hovCol : butCol);
 
   if (!CAsset::drawStrBox(&newbut, b_sz, col)) return false;
-  if (!CAsset::drawBoxFill(&zfield, fCol)) return false;
+  Font::NewCenterWrite(makeLayer ? info : title, &newbut);
 
-  Font::NewCenterWrite(title, &newbut);
-  Font::NewCenterWrite("ass", &zfield, ftextCol);
+  if (makeLayer) {
+    if (!CAsset::drawBoxFill(&zfield, fCol)) return false;
+    if (!CAsset::drawStrBox(&b_confirm, b_sz, SDL_PointInRect(m, &b_confirm) ? hovCol : butCol)) return false;
+    if (!CAsset::drawStrBox(&b_cancel, b_sz, SDL_PointInRect(m, &b_cancel) ? hovCol : butCol)) return false;
 
+    Font::NewCenterWrite(z_string.c_str(), &zfield, ftextCol);
+    Font::NewCenterWrite(s_confirm, &b_confirm);
+    Font::NewCenterWrite(s_cancel, &b_cancel);
+  }
   return true;
 }
 

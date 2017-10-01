@@ -1,6 +1,7 @@
 #ifndef _C_ASSET_H_
 #define _C_ASSET_H_
 
+#include <string>
 #include "CSurface.h"
 #include "Define.h"
 
@@ -150,6 +151,11 @@ class CAsset
 
     static bool drawCancel(const SDL_Rect* dstR);
     static bool drawCancel(const SDL_Point* dstPos);
+
+public:
+    static bool isInt(const char& c);
+    static int charToInt(const char& c);
+    static double strToDouble(const std::string& str);
 };
 
 #endif
