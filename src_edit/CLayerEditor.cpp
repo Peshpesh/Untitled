@@ -214,11 +214,8 @@ void CLayerEditor::makeNewLayer() {
   }
 
   // make new layer
-  double testDBL = CAsset::strToDouble(z_string);
-  std::string testSTR = Font::doubleToStr(testDBL, 4);
-
-  CInform::InfoControl.pushInform(testSTR.c_str());
-
+  CScenery::addLayer(CAsset::strToDouble(z_string));
+  resetLists();
   resetNewLayer();
 }
 

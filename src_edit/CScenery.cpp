@@ -22,36 +22,11 @@ bool CScenery::OnInit() {
     return false;
   }
   // testing
-  layerList.push_back(double(1.7530));
-  layerList.push_back(double(1.300));
-  layerList.push_back(double(1.0030));
-  layerList.push_back(double(10.1501));
   layerList.push_back(double(0.01921));
-  layerList.push_back(double(1.7530));
-  layerList.push_back(double(1.300));
   layerList.push_back(double(1.0030));
+  layerList.push_back(double(1.300));
+  layerList.push_back(double(1.7530));
   layerList.push_back(double(10.1501));
-  layerList.push_back(double(0.01921));
-  layerList.push_back(double(1.7530));
-  layerList.push_back(double(1.300));
-  layerList.push_back(double(1.0030));
-  layerList.push_back(double(10.1501));
-  layerList.push_back(double(0.01921));
-  layerList.push_back(double(1.7530));
-  layerList.push_back(double(1.300));
-  layerList.push_back(double(1.0030));
-  // layerList.push_back(double(10.1501));
-  // layerList.push_back(double(0.01921));
-  // layerList.push_back(double(1.7530));
-  // layerList.push_back(double(1.300));
-  // layerList.push_back(double(1.0030));
-  // layerList.push_back(double(10.1501));
-  // layerList.push_back(double(0.01921));
-  // layerList.push_back(double(1.7530));
-  // layerList.push_back(double(1.300));
-  // layerList.push_back(double(1.0030));
-  // layerList.push_back(double(10.1501));
-  // layerList.push_back(double(0.01921));
   return true;
 }
 
@@ -136,4 +111,22 @@ void CScenery::removeLayerIndex(const int& idx) {
     else if (sceneryList[i].layer == idx) sceneryList.erase(sceneryList.begin() + i);
   }
   layerList.erase(layerList.begin() + idx);
+}
+
+void CScenery::addLayer(const double& Z) {
+  if (Z <= 0.0) return;
+
+  // locate index destination in layer (z) container
+  int i = 0;
+  while (i < layerList.size()) {
+    if (Z < layerList[i]) break;
+    i++;
+  }
+
+  // place the new depth value in the layer container
+  layerList.insert(layerList.begin() + i, Z);
+  // update the layer indices of scenery with greater (farther) depth
+  for (int j = 0; j < sceneryList.size(); j++) {
+    if (sceneryList[j].layer >= i) sceneryList[j].layer++;
+  }
 }

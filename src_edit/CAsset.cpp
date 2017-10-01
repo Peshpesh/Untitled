@@ -426,8 +426,7 @@ double CAsset::strToDouble(const std::string& str) {
   return neg ? -val : val;
 }
 
-void CAsset::OnCleanup()
-{
+void CAsset::OnCleanup() {
   SDL_DestroyTexture(paltex);
   SDL_DestroyTexture(arrtex);
   SDL_DestroyTexture(interface);

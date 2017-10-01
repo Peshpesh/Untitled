@@ -35,6 +35,7 @@ public:
   static void purgeStaleTextures();
   static void purgeStaleLayers();
   static void removeLayerIndex(const int& idx);
+  static void addLayer(const double& Z);
 
 public:
   static std::vector<SceneryTexInfo>  texList;        // contains loaded texture info
