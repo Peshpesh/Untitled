@@ -15,13 +15,14 @@ class CLayerEditor : public CEvent {
   std::vector<SDL_Rect> depthList;
 
   unsigned short list_pg;
-  bool makeLayer;
+  short q_layer;
+  bool adjLayer, makeLayer;
   std::string z_string;
 
 public:
   static CLayerEditor Control;
 
-  void OnInit();
+  void OnInit(const short& layer);
 
   void OnEvent(SDL_Event* Event);
 

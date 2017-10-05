@@ -74,7 +74,7 @@ bool CSceneryEditor::handleChLayer(const SDL_Point* m) {
   using namespace sceneryEngine::buttons::chLayer;
 
   if (SDL_PointInRect(m, &button.dstR)) {
-    CLayerEditor::Control.OnInit();
+    CLayerEditor::Control.OnInit(layer);
     CInterrupt::appendFlag(INTRPT_CHANGE_LA);
     return true;
   }

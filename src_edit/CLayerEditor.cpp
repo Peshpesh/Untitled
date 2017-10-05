@@ -28,9 +28,45 @@ namespace {
     const short l_y               = canv.y + 30;
     const short l_max             = 20;
     const SDL_Point* butCol       = &palette::silver;
-    const SDL_Point* onCol        = &palette::dark_green;
+    const SDL_Point* onCol        = &palette::dark_cyan;
     const SDL_Point* hovCol       = &palette::light_cyan;
   };
+
+  namespace options {
+    const short b_w               = 120;                    // b_ for "button"
+    const short b_h               = 21;
+    const short buff_h            = 6;
+    const short buff_w            = 6;
+    const short d_w               = (b_w - buff_w) / 2;     // d_ for "decision"
+    const short d_h               = 13;
+
+    const short b_x               = canv.x + subcanv_w + (subcanv_w - b_w) / 2;
+    const short confirm_x         = canv.x + subcanv_w + (subcanv_w - (d_w * 2) - buff_w) / 2;
+    const short cancel_x          = confirm_x + d_w + buff_w;
+    const short adjust_y          = canv.y + (canv.h - (((b_h + buff_h) * 2) + d_h)) / 2;
+    const short delete_y          = adjust_y + b_h + buff_h;
+    const short d_y               = delete_y + b_h + buff_h;
+
+    const SDL_Rect delete_but     = CAsset::getRect(b_x, delete_y, b_w, b_h);
+    const SDL_Rect adjust_but     = CAsset::getRect(b_x, adjust_y, b_w, b_h);
+    const SDL_Rect b_confirm      = CAsset::getRect(confirm_x, d_y, d_w, d_h);
+    const SDL_Rect b_cancel       = CAsset::getRect(cancel_x, d_y, d_w, d_h);
+
+    const SDL_Point* butCol       = &palette::silver;
+    const SDL_Point* onCol        = &palette::dark_green;
+    const SDL_Point* offCol       = &palette::dark_gray;
+    const SDL_Point* hovCol       = &palette::light_green;
+    const SDL_Point* del_hovCol   = &palette::light_red;
+    const SDL_Point* fCol         = &palette::dark_indigo;
+    const SDL_Color* ftextCol     = &rgb::white;
+
+    const char* const del_title   = "Delete Layer";
+    const char* const adj_title   = "Adjust Z";
+    const char* const info        = "Enter Z value";
+    const char* const s_confirm   = "Save";
+    const char* const s_cancel    = "Cancel";
+  };
+
   namespace newLayer {
     const short b_w               = 120;                    // b_ for "button"
     const short b_h               = 21;
@@ -68,13 +104,15 @@ namespace {
 }
 
 CLayerEditor::CLayerEditor() {
-  OnInit();
+  OnInit(0);
 }
 
-void CLayerEditor::OnInit() {
+void CLayerEditor::OnInit(const short& layer) {
+  adjLayer  = false;
   makeLayer = false;
   z_string  = "";
   list_pg   = 0;
+  q_layer   = layer;
   resetLists();
 }
 
@@ -112,6 +150,13 @@ void CLayerEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 }
 
 bool CLayerEditor::handleChangeLayer(const SDL_Point* m) {
+  using namespace list;
+  for (int i = list_pg * l_max; i < (layerList.size() <= l_max ? layerList.size() : l_max * (list_pg + 1)); i++) {
+    if (SDL_PointInRect(m, &layerList[i]) || SDL_PointInRect(m, &depthList[i])) {
+      q_layer = i;
+      return true;
+    }
+  }
   return false;
 }
 
@@ -263,9 +308,9 @@ bool CLayerEditor::drawList(const SDL_Point* m) {
   std::string Z;
 
   for (int i = list_pg * l_max; i < (layerList.size() <= l_max ? layerList.size() : l_max * (list_pg + 1)); i++) {
-    const SDL_Point* col = (SDL_PointInRect(m, &depthList[i]) ||
-                            SDL_PointInRect(m, &layerList[i])) ?
-                            hovCol : butCol;
+    const SDL_Point* col = (i == q_layer) ? onCol : (
+                            (SDL_PointInRect(m, &depthList[i]) || SDL_PointInRect(m, &layerList[i])) ?
+                            hovCol : butCol);
 
     if (!CAsset::drawStrBox(&layerList[i], b_sz, col)) return false;
     if (!CAsset::drawStrBox(&depthList[i], b_sz, col)) return false;
@@ -298,6 +343,28 @@ bool CLayerEditor::drawNewLayer(const SDL_Point* m) {
 }
 
 bool CLayerEditor::drawOptions(const SDL_Point* m) {
+  using namespace options;
+  const SDL_Point* col;
+
+  col = adjLayer ? onCol : (
+        makeLayer ? offCol : (
+        SDL_PointInRect(m, &adjust_but) ? hovCol : butCol));
+  if (!CAsset::drawStrBox(&adjust_but, b_sz, col)) return false;
+  Font::NewCenterWrite(adj_title, &adjust_but);
+
+  col = (adjLayer || makeLayer) ? offCol : (SDL_PointInRect(m, &delete_but) ? del_hovCol : butCol);
+  if (!CAsset::drawStrBox(&delete_but, b_sz, col)) return false;
+  Font::NewCenterWrite(del_title, &delete_but);
+
+  if (adjLayer) {
+    // if (!CAsset::drawBoxFill(&zfield, fCol)) return false;
+    if (!CAsset::drawStrBox(&b_confirm, b_sz, SDL_PointInRect(m, &b_confirm) ? hovCol : butCol)) return false;
+    if (!CAsset::drawStrBox(&b_cancel, b_sz, SDL_PointInRect(m, &b_cancel) ? hovCol : butCol)) return false;
+
+    // Font::NewCenterWrite(z_string.c_str(), &zfield, ftextCol);
+    Font::NewCenterWrite(s_confirm, &b_confirm);
+    Font::NewCenterWrite(s_cancel, &b_cancel);
+  }
   return true;
 }
 

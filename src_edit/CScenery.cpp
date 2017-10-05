@@ -21,12 +21,6 @@ bool CScenery::OnInit() {
   if (loadTexInfo(Decorations::groups::GLOBAL) == NULL) {
     return false;
   }
-  // testing
-  layerList.push_back(double(0.01921));
-  layerList.push_back(double(1.0030));
-  layerList.push_back(double(1.300));
-  layerList.push_back(double(1.7530));
-  layerList.push_back(double(10.1501));
   return true;
 }
 
