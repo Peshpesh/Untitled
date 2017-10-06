@@ -260,6 +260,7 @@ void Font::GetXY_spec(const int& fontID, char symbol, int& X, int& Y, int& W, in
 				case 'D': X = 276; break;	// Down arrow
 				case 'L': X = 282; break;	// Left arrow
 				case 'R': X = 288; break;	// Right arrow
+				case 'C': X = 294; break; // Fill (cursor)
 				default:  X = 0; W = 0; H = 0; break;
 			}
 			break;

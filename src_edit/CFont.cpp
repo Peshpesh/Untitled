@@ -48,10 +48,13 @@ void Font::setDynamic()
 
 void Font::renderCursor(const int& fontID, const SDL_Point* pos)
 {
-	SDL_Rect cursor = {pos->x, pos->y, GetHSpacing(fontID) * 2, GetSymH(fontID)};
-
 	if (cursTimer >= 0) {
-		CAsset::drawBoxFill(&cursor, &palette::white);
+		SDL_Texture* font = GetFont(fontID);
+		if (font != NULL) {
+			SDL_Rect symRec;
+			GetXY_spec(fontID, 'C', symRec);
+			CSurface::OnDraw(GetFont(fontID), &symRec, pos);
+		}
 	}
 
 	cursTimer += SDL_GetTicks() - lastTime;
@@ -689,7 +692,7 @@ std::string Font::doubleToStr(const double& val, const unsigned int& precision) 
 		double truncVal = val - (int)(val);
 		std::string truncPart = intToStr((int)(truncVal * O));
 		while (truncPart.size() < precision) truncPart = "0" + truncPart;
-		
+
 		retstr = intPart + "." + truncPart;
 	}
 	else {

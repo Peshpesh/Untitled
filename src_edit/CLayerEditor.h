@@ -16,7 +16,7 @@ class CLayerEditor : public CEvent {
 
   unsigned short list_pg;
   short q_layer;
-  bool adjLayer, makeLayer;
+  bool delLayer, adjLayer, makeLayer;
   std::string z_string;
 
 public:
@@ -35,6 +35,8 @@ private:
   void enterZval(SDL_Keycode sym);
   void addToZ(const char& sym);
   void delFromZ();
+  void deleteLayer();
+  void adjustLayer();
   void makeNewLayer();
   void resetNewLayer();
 
@@ -42,6 +44,8 @@ private:
   void OnLButtonDown(int mX, int mY);
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   bool handleChangeLayer(const SDL_Point* m);
+  bool handleDeleteLayer(const SDL_Point* m);
+  bool handleAdjustLayer(const SDL_Point* m);
   bool handleNewLayer(const SDL_Point* m);
 
 private:

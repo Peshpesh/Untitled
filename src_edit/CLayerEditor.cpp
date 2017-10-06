@@ -28,27 +28,32 @@ namespace {
     const short l_y               = canv.y + 30;
     const short l_max             = 20;
     const SDL_Point* butCol       = &palette::silver;
-    const SDL_Point* onCol        = &palette::dark_cyan;
+    const SDL_Point* onCol        = &palette::cyan;
     const SDL_Point* hovCol       = &palette::light_cyan;
   };
 
   namespace options {
     const short b_w               = 120;                    // b_ for "button"
     const short b_h               = 21;
+    const short f_w               = 120;                    // f_ for "float"
+    const short f_h               = 11;
     const short buff_h            = 6;
     const short buff_w            = 6;
     const short d_w               = (b_w - buff_w) / 2;     // d_ for "decision"
     const short d_h               = 13;
 
     const short b_x               = canv.x + subcanv_w + (subcanv_w - b_w) / 2;
+    const short f_x               = canv.x + subcanv_w + (subcanv_w - f_w) / 2;
     const short confirm_x         = canv.x + subcanv_w + (subcanv_w - (d_w * 2) - buff_w) / 2;
     const short cancel_x          = confirm_x + d_w + buff_w;
-    const short adjust_y          = canv.y + (canv.h - (((b_h + buff_h) * 2) + d_h)) / 2;
-    const short delete_y          = adjust_y + b_h + buff_h;
-    const short d_y               = delete_y + b_h + buff_h;
+    const short delete_y          = canv.y + (canv.h - (((b_h + buff_h) * 2) + (f_h + buff_h) + d_h)) / 2;
+    const short adjust_y          = delete_y + b_h + buff_h;
+    const short f_y               = adjust_y + b_h + buff_h;
+    const short d_y               = f_y + f_h + buff_h;
 
     const SDL_Rect delete_but     = CAsset::getRect(b_x, delete_y, b_w, b_h);
     const SDL_Rect adjust_but     = CAsset::getRect(b_x, adjust_y, b_w, b_h);
+    const SDL_Rect zfield         = CAsset::getRect(f_x, f_y, f_w, f_h);
     const SDL_Rect b_confirm      = CAsset::getRect(confirm_x, d_y, d_w, d_h);
     const SDL_Rect b_cancel       = CAsset::getRect(cancel_x, d_y, d_w, d_h);
 
@@ -57,13 +62,14 @@ namespace {
     const SDL_Point* offCol       = &palette::dark_gray;
     const SDL_Point* hovCol       = &palette::light_green;
     const SDL_Point* del_hovCol   = &palette::light_red;
-    const SDL_Point* fCol         = &palette::dark_indigo;
-    const SDL_Color* ftextCol     = &rgb::white;
+    const SDL_Point* fCol         = &palette::white;
+    const SDL_Color* ftextCol     = &rgb::black;
 
     const char* const del_title   = "Delete Layer";
-    const char* const adj_title   = "Adjust Z";
-    const char* const info        = "Enter Z value";
-    const char* const s_confirm   = "Save";
+    const char* const del_confirm = "Are You Sure?";
+    const char* const adj_title   = "Adjust Depth";
+    const char* const adj_info    = "Enter Z value";
+    const char* const s_confirm   = "Confirm";
     const char* const s_cancel    = "Cancel";
   };
 
@@ -93,8 +99,8 @@ namespace {
     const SDL_Point* butCol       = &palette::silver;
     const SDL_Point* onCol        = &palette::dark_green;
     const SDL_Point* hovCol       = &palette::light_green;
-    const SDL_Point* fCol         = &palette::dark_indigo;
-    const SDL_Color* ftextCol     = &rgb::white;
+    const SDL_Point* fCol         = &palette::white;
+    const SDL_Color* ftextCol     = &rgb::black;
 
     const char* const title       = "Create Layer";
     const char* const info        = "Enter Z value";
@@ -108,6 +114,7 @@ CLayerEditor::CLayerEditor() {
 }
 
 void CLayerEditor::OnInit(const short& layer) {
+  delLayer  = false;
   adjLayer  = false;
   makeLayer = false;
   z_string  = "";
@@ -135,11 +142,13 @@ void CLayerEditor::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
 
   if (handleChangeLayer(&m)) return;
+  if (handleDeleteLayer(&m)) return;
+  if (handleAdjustLayer(&m)) return;
   if (handleNewLayer(&m)) return;
 }
 
 void CLayerEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
-  if (makeLayer) enterZval(sym);
+  if (makeLayer || adjLayer) enterZval(sym);
   else {
     switch (sym) {
       case SDLK_RETURN: terminate(); break;
@@ -160,12 +169,47 @@ bool CLayerEditor::handleChangeLayer(const SDL_Point* m) {
   return false;
 }
 
+bool CLayerEditor::handleDeleteLayer(const SDL_Point* m) {
+  using namespace options;
+
+  if (delLayer) {
+    if (SDL_PointInRect(m, &b_confirm)) {
+      deleteLayer();
+      return true;
+    }
+    if (SDL_PointInRect(m, &b_cancel)) {
+      delLayer = false;
+      return true;
+    }
+  }
+  else if (!(makeLayer || adjLayer)) {
+    return delLayer = SDL_PointInRect(m, &delete_but);
+  }
+  return false;
+}
+
+bool CLayerEditor::handleAdjustLayer(const SDL_Point* m) {
+  using namespace options;
+
+  if (adjLayer) {
+    if (SDL_PointInRect(m, &b_confirm)) {
+      adjustLayer();
+      return true;
+    }
+    if (SDL_PointInRect(m, &b_cancel)) {
+      resetNewLayer();
+      return true;
+    }
+  }
+  else if (!(makeLayer || delLayer)) {
+    return adjLayer = SDL_PointInRect(m, &adjust_but);
+  }
+  return false;
+}
+
 bool CLayerEditor::handleNewLayer(const SDL_Point* m) {
   using namespace newLayer;
-  if (!makeLayer) {
-    return makeLayer = SDL_PointInRect(m, &newbut);
-  }
-  else {
+  if (makeLayer) {
     if (SDL_PointInRect(m, &b_confirm)) {
       makeNewLayer();
       return true;
@@ -174,6 +218,9 @@ bool CLayerEditor::handleNewLayer(const SDL_Point* m) {
       resetNewLayer();
       return true;
     }
+  }
+  else if (!(delLayer || adjLayer)) {
+    return makeLayer = SDL_PointInRect(m, &newbut);
   }
   return false;
 }
@@ -192,8 +239,8 @@ void CLayerEditor::enterZval(SDL_Keycode sym) {
     case SDLK_9:	        addToZ('9');	      break;
     case SDLK_PERIOD:     addToZ('.');        break;
     case SDLK_BACKSPACE:  delFromZ();         break;
-    case SDLK_RETURN:     makeNewLayer();     break;
     case SDLK_ESCAPE:     resetNewLayer();    break;
+    case SDLK_RETURN:     makeLayer ? makeNewLayer() : adjustLayer(); break;
     default:              break;
   }
 }
@@ -240,6 +287,18 @@ void CLayerEditor::delFromZ() {
   else if (z_string.size() > 0) z_string.erase(z_string.end() - 1);
 }
 
+void CLayerEditor::deleteLayer() {
+  delLayer = false;
+  CScenery::removeLayerIndex(q_layer);
+  resetLists();
+}
+
+void CLayerEditor::adjustLayer() {
+  // CScenery::adjustLayerDepth();
+  resetLists();
+  resetNewLayer();
+}
+
 void CLayerEditor::makeNewLayer() {
   if (z_string.empty()) {
     makeLayer = false;
@@ -266,7 +325,7 @@ void CLayerEditor::makeNewLayer() {
 
 void CLayerEditor::resetNewLayer() {
   z_string.clear();
-  makeLayer = false;
+  makeLayer = adjLayer = false;
 }
 
 bool CLayerEditor::OnRender(const SDL_Point* m) {
@@ -335,6 +394,7 @@ bool CLayerEditor::drawNewLayer(const SDL_Point* m) {
     if (!CAsset::drawStrBox(&b_confirm, b_sz, SDL_PointInRect(m, &b_confirm) ? hovCol : butCol)) return false;
     if (!CAsset::drawStrBox(&b_cancel, b_sz, SDL_PointInRect(m, &b_cancel) ? hovCol : butCol)) return false;
 
+    Font::FontControl.setDynamic();
     Font::NewCenterWrite(z_string.c_str(), &zfield, ftextCol);
     Font::NewCenterWrite(s_confirm, &b_confirm);
     Font::NewCenterWrite(s_cancel, &b_cancel);
@@ -348,20 +408,26 @@ bool CLayerEditor::drawOptions(const SDL_Point* m) {
 
   col = adjLayer ? onCol : (
         makeLayer ? offCol : (
-        SDL_PointInRect(m, &adjust_but) ? hovCol : butCol));
+        !delLayer && SDL_PointInRect(m, &adjust_but) ? hovCol : butCol));
   if (!CAsset::drawStrBox(&adjust_but, b_sz, col)) return false;
-  Font::NewCenterWrite(adj_title, &adjust_but);
 
-  col = (adjLayer || makeLayer) ? offCol : (SDL_PointInRect(m, &delete_but) ? del_hovCol : butCol);
+  col = delLayer ? onCol : (
+        (adjLayer || makeLayer) ? offCol : (
+        SDL_PointInRect(m, &delete_but) ? del_hovCol : butCol));
   if (!CAsset::drawStrBox(&delete_but, b_sz, col)) return false;
-  Font::NewCenterWrite(del_title, &delete_but);
 
-  if (adjLayer) {
-    // if (!CAsset::drawBoxFill(&zfield, fCol)) return false;
+  Font::NewCenterWrite(del_title, &delete_but);
+  Font::NewCenterWrite(!delLayer ? (adjLayer ? adj_info : adj_title) : del_confirm, &adjust_but);
+
+  if (adjLayer || delLayer) {
+    if (adjLayer) {
+      if (!CAsset::drawBoxFill(&zfield, fCol)) return false;
+      Font::FontControl.setDynamic();
+      Font::NewCenterWrite(z_string.c_str(), &zfield, ftextCol);
+    }
     if (!CAsset::drawStrBox(&b_confirm, b_sz, SDL_PointInRect(m, &b_confirm) ? hovCol : butCol)) return false;
     if (!CAsset::drawStrBox(&b_cancel, b_sz, SDL_PointInRect(m, &b_cancel) ? hovCol : butCol)) return false;
 
-    // Font::NewCenterWrite(z_string.c_str(), &zfield, ftextCol);
     Font::NewCenterWrite(s_confirm, &b_confirm);
     Font::NewCenterWrite(s_cancel, &b_cancel);
   }

@@ -100,6 +100,8 @@ void CScenery::purgeStaleLayers() {
 }
 
 void CScenery::removeLayerIndex(const int& idx) {
+  if (idx < 0 || idx >= layerList.size()) return;
+
   for (int i = sceneryList.size() - 1; i >= 0; i--) {
     if (sceneryList[i].layer > idx) --sceneryList[i].layer;
     else if (sceneryList[i].layer == idx) sceneryList.erase(sceneryList.begin() + i);
