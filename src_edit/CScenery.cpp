@@ -99,6 +99,49 @@ void CScenery::purgeStaleLayers() {
   }
 }
 
+int CScenery::adjustLayerDepth(const int& idx, const double& new_Z) {
+  if (idx < 0 || idx >= layerList.size() || new_Z <= 0.0) return -1;
+
+  // locate destination idx in layer (z) container
+  // Pretend that we temporarily "remove" the adjusted layer,
+  // and then we find the index where the layer would be if it were
+  // added to the layers list as new
+  int d_idx = 0;
+  while (d_idx < layerList.size() - 1) {
+    if (new_Z < layerList[(d_idx >= idx) ? (d_idx + 1) : d_idx]) break;
+    d_idx++;
+  }
+
+  if (d_idx < idx) {
+    // the destination index is less than the layer's original index.
+    // update true positions of affected objects first
+
+    // All layers with (index >= d_idx && index < idx) will have their
+    // index "pushed up" one.
+    int i = idx;
+    while (i > d_idx) {
+      layerList[i] = layerList[--i];
+    }
+  }
+  else if (d_idx > idx) {
+    // the destination index is greater than the layer's original index.
+    // update true positions of affected objects first
+
+    // All layers with (index > idx && index =< d_idx) will have their
+    // index "pushed down" one.
+    int i = idx;
+    while (i < d_idx) {
+      layerList[i] = layerList[++i];
+    }
+  }
+  else {
+    // update true positions of affected objects first
+    // finally update the layer depth; no layer swapping necessary
+  }
+  layerList[d_idx] = new_Z;
+  return d_idx;
+}
+
 void CScenery::removeLayerIndex(const int& idx) {
   if (idx < 0 || idx >= layerList.size()) return;
 
@@ -109,8 +152,8 @@ void CScenery::removeLayerIndex(const int& idx) {
   layerList.erase(layerList.begin() + idx);
 }
 
-void CScenery::addLayer(const double& Z) {
-  if (Z <= 0.0) return;
+int CScenery::addLayer(const double& Z) {
+  if (Z <= 0.0) return -1;
 
   // locate index destination in layer (z) container
   int i = 0;
@@ -125,4 +168,5 @@ void CScenery::addLayer(const double& Z) {
   for (int j = 0; j < sceneryList.size(); j++) {
     if (sceneryList[j].layer >= i) sceneryList[j].layer++;
   }
+  return i;
 }

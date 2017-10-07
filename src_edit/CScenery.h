@@ -34,8 +34,9 @@ public:
   static SDL_Texture* fetchTexture(const int& group);
   static void purgeStaleTextures();
   static void purgeStaleLayers();
+  static int adjustLayerDepth(const int& idx, const double& new_Z);
   static void removeLayerIndex(const int& idx);
-  static void addLayer(const double& Z);
+  static int addLayer(const double& Z);
 
 public:
   static std::vector<SceneryTexInfo>  texList;        // contains loaded texture info

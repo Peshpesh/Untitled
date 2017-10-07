@@ -291,10 +291,16 @@ void CLayerEditor::deleteLayer() {
   delLayer = false;
   CScenery::removeLayerIndex(q_layer);
   resetLists();
+  if (q_layer >= layerList.size()) q_layer = layerList.size() - 1;
 }
 
 void CLayerEditor::adjustLayer() {
-  // CScenery::adjustLayerDepth();
+  q_layer = CScenery::adjustLayerDepth(q_layer, CAsset::strToDouble(z_string));
+  if (q_layer < 0) {
+    // ERROR
+    CInform::InfoControl.pushInform("Error in depth adjustment");
+    q_layer = 0;
+  }
   resetLists();
   resetNewLayer();
 }
@@ -318,7 +324,12 @@ void CLayerEditor::makeNewLayer() {
   }
 
   // make new layer
-  CScenery::addLayer(CAsset::strToDouble(z_string));
+  q_layer = CScenery::addLayer(CAsset::strToDouble(z_string));
+  if (q_layer < 0) {
+    // ERROR
+    CInform::InfoControl.pushInform("Error in creating layer");
+    q_layer = 0;
+  }
   resetLists();
   resetNewLayer();
 }
