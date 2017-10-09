@@ -25,6 +25,7 @@ public:
 	bool OnLoad(char const* File);
 	void OnLoad();
 
+	void OnRenderFill(int MapX, int MapY);
 	void OnRender(int MapX, int MapY, bool bg);
 	void OnRenderType(SDL_Texture* tileset, int MapX, int MapY);
 	void OnRenderColl(SDL_Texture* tileset, int MapX, int MapY);

@@ -196,6 +196,29 @@ bool CArea::OnLoad(char const* File)
 	return true;
 }
 
+void CArea::OnRenderFill(int CameraX, int CameraY)
+{
+	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
+	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
+
+	int FirstID = -CameraX / MapWidth;
+	FirstID = FirstID + ((-CameraY / MapHeight) * AreaWidth);
+
+	int maxMaps = 4;
+	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
+
+	for (int i = 0; i < loopMax; i++)
+	{
+		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
+		if (ID < 0 || ID >= MapList.size()) continue;
+
+		int X = ((ID % AreaWidth) * MapWidth) + CameraX;
+		int Y = ((ID / AreaWidth) * MapHeight) + CameraY;
+
+		MapList[ID].OnRenderFill(X, Y);
+	}
+}
+
 void CArea::OnRender(int CameraX, int CameraY, bool bg)
 {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels

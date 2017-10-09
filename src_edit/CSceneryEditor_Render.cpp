@@ -21,35 +21,23 @@ bool CSceneryEditor::OnRender(const SDL_Point* m) {
   return true;
 }
 
-bool CSceneryEditor::drawBackground() {
+bool CSceneryEditor::drawBackground(int& N) {
   // Draw background scenery
-	// int s_i = 0;
-	// while (s_i < CSceneryEdit::SceneList.size())
-	// {
-	// 	float Z = CSceneryEdit::SceneList[s_i]->Z;
-	// 	if (Z <= 1.0f) break;
-	// 	if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
-	// 	{
-	// 		CSceneryEdit::SceneList[s_i]->OnRender();
-	// 	}
-	// 	s_i++;
-	// }
-
+  while (N > 0) {
+    if (CScenery::layerList[CScenery::sceneryList[N-1].layer] < 1.0) break;
+    if (!CScenery::sceneryList[N-1].OnRender()) return false;
+    N--;
+  }
   return true;
 }
 
-bool CSceneryEditor::drawForeground() {
+bool CSceneryEditor::drawForeground(int& N) {
   // Draw foreground scenery
-	// while (s_i < CSceneryEdit::SceneList.size())
-	// {
-	// 	float Z = CSceneryEdit::SceneList[s_i]->Z;
-	// 	if (active_mod != REMOVE_SCENE || ((Z >= CSceneryEdit::ScnControl.Zl) && (Z <= CSceneryEdit::ScnControl.Zu)))
-	// 	{
-	// 		CSceneryEdit::SceneList[s_i]->OnRender();
-	// 	}
-	// 	s_i++;
-	// }
-
+  while (N > 0) {
+    if (CScenery::layerList[CScenery::sceneryList[N-1].layer] > 1.0) break;
+    if (!CScenery::sceneryList[N-1].OnRender()) return false;
+    N--;
+  }
   return true;
 }
 

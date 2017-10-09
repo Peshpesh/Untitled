@@ -4,17 +4,21 @@ std::vector<SceneryTexInfo>   CScenery::texList;        // contains loaded textu
 std::vector<CScenery>         CScenery::sceneryList;    // contains placed scenery info
 std::vector<double>           CScenery::layerList;      // contains layer info
 
-CScenery::CScenery(int group, int decor, const SDL_Point* m, unsigned short layer) {
-  if ((imgSrc = fetchTexture(group)) == NULL) {
-    //
-  }
+CScenery::CScenery(int group, int decor, const SDL_Point* p, unsigned short layer) {
+  imgSrc          = fetchTexture(group);
+  group_ID        = group;
+  decor_ID        = decor;
+  this->layer     = layer;
+  srcR            = CSceneryData::getDecorDims(group, decor);
 
-  group_ID = group;
-  decor_ID = decor;
-  this->layer = layer;
+  SDL_Point r_pos = CCamera::CameraControl.GetCamRelPoint(p);
+  truePos         = CCamera::CameraControl.ConvertToTrue(&r_pos, layerList[layer]);
+}
 
-  srcR      = CSceneryData::getDecorDims(group, decor);
-  // truePos   = CCamera::CameraControl.GetCamRelPoint(m);
+bool CScenery::OnRender() {
+  SDL_Point r_pos = CCamera::CameraControl.ConvertToRel(&truePos, layerList[layer]);
+  SDL_Point w_pos = CCamera::CameraControl.GetWinRelPoint(&r_pos);
+  return CSurface::OnDraw(imgSrc, &srcR, &w_pos);
 }
 
 bool CScenery::OnInit() {
@@ -211,6 +215,23 @@ void CScenery::removeLayerIndex(const int& idx) {
     else if (sceneryList[i].layer == idx) sceneryList.erase(sceneryList.begin() + i);
   }
   layerList.erase(layerList.begin() + idx);
+}
+
+bool CScenery::addScenery(int group, int decor, const SDL_Point* p, unsigned short layer) {
+  if (p == NULL) return false;
+
+  CScenery newDecor(group, decor, p, layer);
+  if (newDecor.imgSrc == NULL) return false;
+
+  // locate index destination in scenery container;
+  // place new scenery object at the "end" of objects sharing the same layer
+  int i = 0;
+  while (i < sceneryList.size()) {
+    if (layer < sceneryList[i].layer) break;
+    i++;
+  }
+  sceneryList.insert(sceneryList.begin() + i, newDecor);
+  return true;
 }
 
 int CScenery::addLayer(const double& Z) {

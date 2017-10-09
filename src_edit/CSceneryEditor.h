@@ -120,8 +120,8 @@ private:
 
 public:
   bool OnInit();
-  bool drawBackground();
-  bool drawForeground();
+  bool drawBackground(int& N);
+  bool drawForeground(int& N);
   void OnTerminate();
 
 public:

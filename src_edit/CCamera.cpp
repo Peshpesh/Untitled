@@ -76,8 +76,8 @@ SDL_Point CCamera::ConvertToRel(const SDL_Point* t_pos, const double& Z) {
   double cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
 
   // relative X, Y positions
-  r_pos.x = (t_pos->x - (cX * (1 - Z))) / Z;
-  r_pos.y = (t_pos->y - (cY * (1 - Z))) / Z;
+  r_pos.x = (t_pos->x - (cX * (1.0 - Z))) / Z;
+  r_pos.y = (t_pos->y - (cY * (1.0 - Z))) / Z;
 
 	return r_pos;
 }
@@ -91,8 +91,8 @@ SDL_Point CCamera::ConvertToTrue(const SDL_Point* r_pos, const double& Z) {
   double cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
 
 	// true X, Y positions
-  t_pos.x = (cX * (1 - Z)) + (r_pos->x * Z);
-  t_pos.y = (cY * (1 - Z)) + (r_pos->y * Z);
+  t_pos.x = (cX * (1.0 - Z)) + (r_pos->x * Z);
+  t_pos.y = (cY * (1.0 - Z)) + (r_pos->y * Z);
 
 	return t_pos;
 }

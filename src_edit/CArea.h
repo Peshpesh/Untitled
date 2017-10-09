@@ -50,6 +50,7 @@ public:
 			param CameraY		:	Camera's Y position (increasing UP)
 			param bg			:	Flag to draw foreground or middleground
 	*/
+	void 	OnRenderFill(int CameraX, int CameraY);
 	void	OnRender(int CameraX, int CameraY, bool bg);
 	void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
 	void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);

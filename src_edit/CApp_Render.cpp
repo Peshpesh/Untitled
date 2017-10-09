@@ -6,8 +6,13 @@ void CApp::OnRender()
 
 	CSurface::Clear();
 
+	// Draw working background
+	CArea::AreaControl.OnRenderFill(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+
+	int scn_N = CScenery::sceneryList.size();
+
 	// Draw background scenery
-	CSceneryEditor::control.drawBackground();
+	CSceneryEditor::control.drawBackground(scn_N);
 
 	// Draw the working area
 	CEditMap::MapEditor.RenderMap();
@@ -16,7 +21,7 @@ void CApp::OnRender()
 	CEntityEditor::Control.drawEntities();
 
 	// Draw foreground scenery
-	CSceneryEditor::control.drawForeground();
+	CSceneryEditor::control.drawForeground(scn_N);
 
 	switch (active_mod) {
 		case MODIFY_MAP:		CEditMap::MapEditor.OnRender(&mouse); 		break;

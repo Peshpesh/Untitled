@@ -37,6 +37,7 @@ public:
   static int adjustLayerDepth(const int& idx, const double& new_Z);
   static void swapLayerIndex(const int& idx, const int& d_idx);
   static void removeLayerIndex(const int& idx);
+  static bool addScenery(int group, int decor, const SDL_Point* p, unsigned short layer);
   static int addLayer(const double& Z);
 
 public:
@@ -53,7 +54,7 @@ public:
   unsigned short layer;       // assigned Z layer index
 
 public:
-  CScenery(int group, int decor, const SDL_Point* m, unsigned short layer);
+  CScenery(int group, int decor, const SDL_Point* p, unsigned short layer);
 
   bool OnRender();
 };

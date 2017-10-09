@@ -53,8 +53,11 @@ bool CSceneryEditor::handleAddScenery(const SDL_Point* m) {
 
   getPosDisplace(X, Y, m, srcR);
   const SDL_Point dstP = {X, Y};
-  CScenery newDecor(group_ID, decor_ID, &dstP, layer);
-  CScenery::sceneryList.push_back(newDecor);
+
+  if (!CScenery::addScenery(group_ID, decor_ID, &dstP, layer)) {
+    // error
+    CInform::InfoControl.pushInform("Error\ncould not add scenery");
+  }
 
   return true;
 }
