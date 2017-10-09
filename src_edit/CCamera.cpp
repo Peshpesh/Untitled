@@ -67,6 +67,36 @@ void CCamera::MakeWinRel(int& X, int& Y)
 	Y -= GetY();
 }
 
+SDL_Point CCamera::ConvertToRel(const SDL_Point* t_pos, const double& Z) {
+	SDL_Point r_pos;
+	if (t_pos == NULL || Z <= 0.0) return r_pos;
+
+	// window center positions
+  double cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
+  double cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
+
+  // relative X, Y positions
+  r_pos.x = (t_pos->x - (cX * (1 - Z))) / Z;
+  r_pos.y = (t_pos->y - (cY * (1 - Z))) / Z;
+
+	return r_pos;
+}
+
+SDL_Point CCamera::ConvertToTrue(const SDL_Point* r_pos, const double& Z) {
+	SDL_Point t_pos;
+	if (r_pos == NULL || Z <= 0.0) return t_pos;
+
+	// window center positions
+  double cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
+  double cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);
+
+	// true X, Y positions
+  t_pos.x = (cX * (1 - Z)) + (r_pos->x * Z);
+  t_pos.y = (cY * (1 - Z)) + (r_pos->y * Z);
+
+	return t_pos;
+}
+
 void CCamera::SetPos(int X, int Y)
 {
 	this->X = X;

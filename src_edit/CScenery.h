@@ -35,6 +35,7 @@ public:
   static void purgeStaleTextures();
   static void purgeStaleLayers();
   static int adjustLayerDepth(const int& idx, const double& new_Z);
+  static void swapLayerIndex(const int& idx, const int& d_idx);
   static void removeLayerIndex(const int& idx);
   static int addLayer(const double& Z);
 

@@ -140,8 +140,6 @@ void CSceneryEdit::SwitchObj(int queryID)
 
 void CSceneryEdit::ConvertToTrue(const int& rX, const int& rY, const double& oZ, double& tX, double& tY)
 {
-  // rX = X_win + CamX
-  // X_win = rX - CamX
   // window center positions
   double cX = CCamera::CameraControl.GetX() + ((WWIDTH - 1) / 2.0);
   double cY = CCamera::CameraControl.GetY() + ((WHEIGHT - 1) / 2.0);

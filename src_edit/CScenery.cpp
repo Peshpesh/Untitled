@@ -112,34 +112,95 @@ int CScenery::adjustLayerDepth(const int& idx, const double& new_Z) {
     d_idx++;
   }
 
-  if (d_idx < idx) {
-    // the destination index is less than the layer's original index.
-    // update true positions of affected objects first
+  // Update true positions of affected objects (preserve relative position)
+  for (int i = 0; i < sceneryList.size(); i++) {
+    if (sceneryList[i].layer == idx) {
+      SDL_Point r_pos = CCamera::CameraControl.ConvertToRel(&sceneryList[i].truePos, layerList[idx]);
+      sceneryList[i].truePos = CCamera::CameraControl.ConvertToTrue(&r_pos, new_Z);
+    }
+  }
 
-    // All layers with (index >= d_idx && index < idx) will have their
-    // index "pushed up" one.
+  if (d_idx != idx) {
     int i = idx;
-    while (i > d_idx) {
-      layerList[i] = layerList[--i];
+    if (d_idx < idx) {
+      // the destination index is less than the layer's original index.
+      // All layers with (index >= d_idx && index < idx) will have their
+      // index "pushed up" one.
+      while (i > d_idx) layerList[i] = layerList[--i];
+    }
+    else if (d_idx > idx) {
+      // the destination index is greater than the layer's original index.
+      // All layers with (index > idx && index =< d_idx) will have their
+      // index "pushed down" one.
+      while (i < d_idx) layerList[i] = layerList[++i];
+    }
+    swapLayerIndex(idx, d_idx);
+  }
+  // update the layer depth
+  layerList[d_idx] = new_Z;
+  return d_idx;
+}
+
+void CScenery::swapLayerIndex(const int& idx, const int& d_idx) {
+  if (idx < 0                    ||
+      d_idx < 0                  ||
+      idx >= layerList.size()    ||
+      d_idx >= layerList.size()  ||
+      idx == d_idx)              return;
+
+  // Purpose: swap the layer index of objects with index "idx" with
+  //          "d_idx". Rearrange the sceneryList vector such that the
+  //          lowest layer-index objects are at the front of the container.
+  // P. S.  : this is ASS
+
+  std::vector<CScenery> swapList;
+  int src_init  = -1;
+  int dest_init = -1;
+  int N = 0;
+  for (int i = 0; i < sceneryList.size(); i++) {
+    if (dest_init < 0 && sceneryList[i].layer >= d_idx) dest_init = i;
+    if (sceneryList[i].layer == idx) {
+      if (src_init < 0) src_init = i;
+      swapList.push_back(sceneryList[i]);
+      swapList[N++].layer = d_idx;
+    }
+  }
+  // if src_init is still -1, then there are no objects to swap.
+  // if src_init == dest_init, then no swapping of objects is necessary
+  // (i.e., the objects are already at their destination in sceneryList)
+  if (src_init < 0 || src_init == dest_init) return;
+
+  if (d_idx < idx) {
+    // swapped layer's objects are destined for lower i in the container.
+    // All objects at and ahead of dest_init must be "pushed forward" to "make room"
+    // for the swapped objects. They are pushed forward by the number of swapped objects.
+    // Note that if there are objects to swap but no objects to swap WITH,
+    // then src_init == dest_init because d_idx < idx (which results in "return" above)
+    int i = src_init + N - 1; // start with the end of the swapping region
+    while (i >= dest_init + N) {
+      sceneryList[i] = sceneryList[i - N];
+      i--;
     }
   }
   else if (d_idx > idx) {
-    // the destination index is greater than the layer's original index.
-    // update true positions of affected objects first
-
-    // All layers with (index > idx && index =< d_idx) will have their
-    // index "pushed down" one.
-    int i = idx;
-    while (i < d_idx) {
-      layerList[i] = layerList[++i];
+    // swapped layer's objects are destined for higher (or equal) i in the container.
+    // All objects at and ahead of src_init AND behind dest_init
+    // must be "pushed backward" to "make room" for the swapped objects.
+    // They are pushed backward by the number of swapped objects.
+    // Note: it may be possible that no dest_init was ever detected, which means
+    //       there are no objects with layer >= d_idx. However, there may still
+    //       be objects *ahead* of the swapped objects, which would have a layer index
+    //       less than d_idx. In this case, swapping is still necessary; swapped
+    //       objects are placed at the end of the sceneryList container.
+    if (dest_init < 0) dest_init = sceneryList.size() - N;
+    int i = src_init;     // start with the beginning of the swapping region
+    while (i < dest_init) {
+      sceneryList[i] = sceneryList[i + N];
+      i++;
     }
   }
-  else {
-    // update true positions of affected objects first
-    // finally update the layer depth; no layer swapping necessary
-  }
-  layerList[d_idx] = new_Z;
-  return d_idx;
+  for (int i = 0; i < N; i++) sceneryList[dest_init + i] = swapList[i];
+  swapList.clear();
 }
 
 void CScenery::removeLayerIndex(const int& idx) {

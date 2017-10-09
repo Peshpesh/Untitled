@@ -38,6 +38,11 @@ public:
 	void MakeWinRel(int& X, int& Y);
 
 public:
+	// 2.5D projection functions
+	SDL_Point ConvertToRel(const SDL_Point* t_pos, const double& Z);
+	SDL_Point ConvertToTrue(const SDL_Point* r_pos, const double& Z);
+
+public:
 	void SetPos(int X, int Y);
 	void SetTarget(float* X, float* Y);
 };
