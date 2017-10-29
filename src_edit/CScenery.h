@@ -50,7 +50,7 @@ public:
   int            group_ID;    // scenery group ID number
   int            decor_ID;    // decoration ID in group
   SDL_Rect       srcR;        // source frame size & position
-  SDL_Point      truePos;     // "true" position in area
+  double         true_x, true_y;
   unsigned short layer;       // assigned Z layer index
 
 public:

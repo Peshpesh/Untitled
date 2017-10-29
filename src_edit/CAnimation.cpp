@@ -1,7 +1,6 @@
 #include "CAnimation.h"
 
-CAnimation::CAnimation()
-{
+CAnimation::CAnimation() {
 	CurrentFrame	= 0;
 	MaxFrames			= 0;
 	FrameInc			= 1;

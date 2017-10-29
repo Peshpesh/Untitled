@@ -12,12 +12,15 @@ CScenery::CScenery(int group, int decor, const SDL_Point* p, unsigned short laye
   srcR            = CSceneryData::getDecorDims(group, decor);
 
   SDL_Point r_pos = CCamera::CameraControl.GetCamRelPoint(p);
-  truePos         = CCamera::CameraControl.ConvertToTrue(&r_pos, layerList[layer]);
+  true_x          = CCamera::CameraControl.relXToTrue(r_pos.x, layerList[layer]);
+  true_y          = CCamera::CameraControl.relYToTrue(r_pos.y, layerList[layer]);
 }
 
 bool CScenery::OnRender() {
-  SDL_Point r_pos = CCamera::CameraControl.ConvertToRel(&truePos, layerList[layer]);
-  SDL_Point w_pos = CCamera::CameraControl.GetWinRelPoint(&r_pos);
+  // SDL_Point r_pos = CCamera::CameraControl.ConvertToRel(&truePos, layerList[layer]);
+  double rel_x = CCamera::CameraControl.trueXToRel(true_x, layerList[layer]);
+  double rel_y = CCamera::CameraControl.trueYToRel(true_y, layerList[layer]);
+  SDL_Point w_pos = CCamera::CameraControl.GetWinRelPoint(rel_x, rel_y);
   return CSurface::OnDraw(imgSrc, &srcR, &w_pos);
 }
 
@@ -119,8 +122,10 @@ int CScenery::adjustLayerDepth(const int& idx, const double& new_Z) {
   // Update true positions of affected objects (preserve relative position)
   for (int i = 0; i < sceneryList.size(); i++) {
     if (sceneryList[i].layer == idx) {
-      SDL_Point r_pos = CCamera::CameraControl.ConvertToRel(&sceneryList[i].truePos, layerList[idx]);
-      sceneryList[i].truePos = CCamera::CameraControl.ConvertToTrue(&r_pos, new_Z);
+      double rel_x = CCamera::CameraControl.trueXToRel(sceneryList[i].true_x, layerList[idx]);
+      double rel_y = CCamera::CameraControl.trueYToRel(sceneryList[i].true_y, layerList[idx]);
+      sceneryList[i].true_x = CCamera::CameraControl.relXToTrue(rel_x, new_Z);
+      sceneryList[i].true_y = CCamera::CameraControl.relYToTrue(rel_y, new_Z);
     }
   }
 

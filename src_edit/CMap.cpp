@@ -117,12 +117,6 @@ void CMap::OnRender(int MapX, int MapY, bool bg)
 {
 	if (CTileset::TSControl.tileset == NULL) return;
 
-	// if (bg) {
-	// 	const SDL_Point* emptyCol = &palette::dark_gray;
-	// 	SDL_Rect dstmap = {MapX, MapY, MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE};
-	// 	CAsset::drawBoxFill(&dstmap, emptyCol);
-	// }
-
 	int tset_w = CTileset::TSControl.ts_w; // tiles
 	int tset_h = CTileset::TSControl.ts_h; // tiles
 
