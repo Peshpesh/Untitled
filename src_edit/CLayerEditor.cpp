@@ -149,6 +149,7 @@ void CLayerEditor::OnLButtonDown(int mX, int mY) {
 
 void CLayerEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   if (makeLayer || adjLayer) enterZval(sym);
+  else if (delLayer) handleDeleteLayer(sym);
   else {
     switch (sym) {
       case SDLK_RETURN: terminate(); break;
@@ -182,10 +183,20 @@ bool CLayerEditor::handleDeleteLayer(const SDL_Point* m) {
       return true;
     }
   }
-  else if (!(makeLayer || adjLayer)) {
+  else if (!(makeLayer || adjLayer) && CScenery::layerList.size() > 0) {
     return delLayer = SDL_PointInRect(m, &delete_but);
   }
   return false;
+}
+
+void CLayerEditor::handleDeleteLayer(SDL_Keycode sym) {
+  if (CScenery::layerList.size() > 0) {
+    switch (sym) {
+      case SDLK_RETURN: deleteLayer();
+      case SDLK_ESCAPE: delLayer = false;
+      default:          break;
+    }
+  }
 }
 
 bool CLayerEditor::handleAdjustLayer(const SDL_Point* m) {
@@ -201,7 +212,7 @@ bool CLayerEditor::handleAdjustLayer(const SDL_Point* m) {
       return true;
     }
   }
-  else if (!(makeLayer || delLayer)) {
+  else if (!(makeLayer || delLayer) && CScenery::layerList.size() > 0) {
     return adjLayer = SDL_PointInRect(m, &adjust_but);
   }
   return false;
@@ -417,13 +428,15 @@ bool CLayerEditor::drawOptions(const SDL_Point* m) {
   using namespace options;
   const SDL_Point* col;
 
+  bool anyLayers = CScenery::layerList.size();
+
   col = adjLayer ? onCol : (
-        makeLayer ? offCol : (
+        (makeLayer || !anyLayers) ? offCol : (
         !delLayer && SDL_PointInRect(m, &adjust_but) ? hovCol : butCol));
   if (!CAsset::drawStrBox(&adjust_but, b_sz, col)) return false;
 
   col = delLayer ? onCol : (
-        (adjLayer || makeLayer) ? offCol : (
+        (adjLayer || makeLayer || !anyLayers) ? offCol : (
         SDL_PointInRect(m, &delete_but) ? del_hovCol : butCol));
   if (!CAsset::drawStrBox(&delete_but, b_sz, col)) return false;
 
@@ -449,4 +462,8 @@ void CLayerEditor::terminate() {
   CInterrupt::removeFlag(INTRPT_CHANGE_LA);
   layerList.clear();
   depthList.clear();
+}
+
+unsigned short CLayerEditor::getRecentLayer() {
+  return (q_layer < 0) ? 0 : q_layer;
 }

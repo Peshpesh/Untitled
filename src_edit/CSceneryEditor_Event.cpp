@@ -17,6 +17,9 @@ bool CSceneryEditor::handleInterr(SDL_Event* Event) {
   }
   if (CInterrupt::isFlagOn(INTRPT_CHANGE_LA)) {
     CLayerEditor::Control.OnEvent(Event);
+    if (CInterrupt::isFlagOff(INTRPT_CHANGE_LA)) {
+      layer = CLayerEditor::Control.getRecentLayer();
+    }
     return true;
   }
   return false;
@@ -45,6 +48,11 @@ void CSceneryEditor::OnLButtonDown(int mX, int mY) {
 bool CSceneryEditor::handleAddScenery(const SDL_Point* m) {
   if (!CAsset::inWorkspace(m)) return false;
   // click in workspace attempts to add scenery data
+
+  if (CScenery::layerList.size() == 0) {
+    CInform::InfoControl.pushInform("Cannot add scenery--\nNo Layers exist");
+    return false;
+  }
 
   SDL_Rect srcR = CSceneryData::getDecorDims(group_ID, decor_ID);
 

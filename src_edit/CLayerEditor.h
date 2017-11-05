@@ -30,6 +30,8 @@ public:
 
   void terminate();
 
+  unsigned short getRecentLayer();
+
 private:
   void resetLists();
   void enterZval(SDL_Keycode sym);
@@ -45,6 +47,7 @@ private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   bool handleChangeLayer(const SDL_Point* m);
   bool handleDeleteLayer(const SDL_Point* m);
+  void handleDeleteLayer(SDL_Keycode sym);
   bool handleAdjustLayer(const SDL_Point* m);
   bool handleNewLayer(const SDL_Point* m);
 
