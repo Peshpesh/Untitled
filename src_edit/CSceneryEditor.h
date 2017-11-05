@@ -79,6 +79,22 @@ namespace sceneryEngine
       extern const short button_h;
       extern const short max_buttons;
     }
+    namespace layerBrief {
+      extern const SDL_Point* fieldCol;
+      extern const SDL_Point* butCol;
+      extern const SDL_Point* hovCol;
+      extern const short list_x;
+      extern const short list_y;
+      extern const short field_w;
+      extern const short field_h;
+      extern const short buffer_h;
+      extern const short num_fields;
+      extern const short button_sz;
+      extern const SDL_Rect fields[];
+      extern const char* const labels[];
+      extern const SDL_Rect l_button;
+      extern const SDL_Rect r_button;
+    }
     namespace placeRelPos {
       extern const short numpos_x;
       extern const short numpos_y;
@@ -135,6 +151,7 @@ private:
   bool handleAddScenery(const SDL_Point* m);
   bool handleChScenery(const SDL_Point* m);
   bool handleChLayer(const SDL_Point* m);
+  bool handleBriefChange(const SDL_Point* m);
   bool handleLayerMeter(const SDL_Point* m);
   bool handleOtherMeter(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
@@ -149,6 +166,7 @@ private:
   bool drawWorkingScenery(const SDL_Point* m);
   bool drawChScenery(const SDL_Point* m, const bool& hov);
   bool drawChLayer(const SDL_Point* m, const bool& hov);
+  bool drawLayerBrief(const SDL_Point* m, const bool& hov);
   bool drawSceneryList(const SDL_Point* m, const bool& hov);
   bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
   bool drawOpacLayer();

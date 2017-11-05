@@ -31,6 +31,7 @@ public:
   void terminate();
 
   unsigned short getRecentLayer();
+  unsigned short getZPrecision();
 
 private:
   void resetLists();

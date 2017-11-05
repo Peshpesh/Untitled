@@ -36,6 +36,7 @@ void CSceneryEditor::OnLButtonDown(int mX, int mY) {
 
   if (handleChScenery(&m)) return;
   if (handleChLayer(&m)) return;
+  if (handleBriefChange(&m)) return;
   if (handleLayerMeter(&m)) return;
   if (handleOtherMeter(&m)) return;
   if (handleSwitchView(&m)) return;
@@ -87,6 +88,22 @@ bool CSceneryEditor::handleChLayer(const SDL_Point* m) {
   if (SDL_PointInRect(m, &button.dstR)) {
     CLayerEditor::Control.OnInit(layer);
     CInterrupt::appendFlag(INTRPT_CHANGE_LA);
+    return true;
+  }
+  return false;
+}
+
+bool CSceneryEditor::handleBriefChange(const SDL_Point* m) {
+  using namespace sceneryEngine::misc::layerBrief;
+  if (CScenery::layerList.size() == 0) return false;
+
+  if (SDL_PointInRect(m, &l_button)) {
+    if (layer == 0) layer = CScenery::layerList.size() - 1;
+    else layer--;
+    return true;
+  }
+  if (SDL_PointInRect(m, &r_button)) {
+    if (++layer >= CScenery::layerList.size()) layer = 0;
     return true;
   }
   return false;

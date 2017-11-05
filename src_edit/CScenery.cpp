@@ -257,3 +257,7 @@ int CScenery::addLayer(const double& Z) {
   }
   return i;
 }
+
+double CScenery::getLayerZ(unsigned short layer) {
+  return (layer >= layerList.size()) ? 0.0 : layerList[layer];
+}

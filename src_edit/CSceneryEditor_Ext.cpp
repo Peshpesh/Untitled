@@ -4,12 +4,12 @@ namespace sceneryEngine
 {
   namespace buttons {
     namespace chScenery
-    { // Change entity button
+    { // Change scenery button
       const char* const label = "Scenery Menu";
-      CButton button(355, 510, 100, 24);
+      CButton button(645, 20, 90, 24);
     }
     namespace chLayer
-    { // Change layer button
+    { // Change layer buttons
       const char* const label = "Layers Menu";
       CButton button(355, 534, 100, 24);
     }
@@ -80,10 +80,34 @@ namespace sceneryEngine
       const SDL_Point* onCol  = &palette::green;
       const SDL_Point* hovCol = &palette::light_yellow;
       const short list_x = 645;
-      const short list_y = 20;
+      const short list_y = 50;
       const short button_w = 90;
       const short button_h = 20;
       const short max_buttons = 20;
+    }
+    namespace layerBrief {
+      const SDL_Point* fieldCol = &palette::silver;
+      const SDL_Point* butCol = &palette::blue;
+      const SDL_Point* hovCol = &palette::light_blue;
+      const short list_x = 355;
+      const short list_y = 494;
+      const short field_w = 100;
+      const short field_h = 11;
+      const short buffer_h = 2;
+      const short num_fields = 3;
+      const short button_sz = field_h;
+      const SDL_Rect fields[] = {
+        CAsset::getRect(list_x, list_y                           , field_w, field_h),
+        CAsset::getRect(list_x, list_y + (field_h + buffer_h)    , field_w, field_h),
+        CAsset::getRect(list_x, list_y + (field_h + buffer_h) * 2, field_w, field_h),
+      };
+      const char* const labels[] = {
+        "Layers - ",
+        "Active - ",
+        "Z - ",
+      };
+      const SDL_Rect l_button = CAsset::getRect(fields[1].x, fields[1].y, button_sz, button_sz);
+      const SDL_Rect r_button = CAsset::getRect(fields[1].x + field_w - button_sz, fields[1].y, button_sz, button_sz);
     }
     namespace placeRelPos {
       const short numpos_x = 3;

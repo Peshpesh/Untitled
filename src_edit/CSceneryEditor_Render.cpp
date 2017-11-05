@@ -9,6 +9,7 @@ bool CSceneryEditor::OnRender(const SDL_Point* m) {
   if (!CAsset::drawAppFrame()) return false;
   if (!drawChScenery(m, no_intrpt)) return false;
   if (!drawChLayer(m, no_intrpt)) return false;
+  if (!drawLayerBrief(m, no_intrpt)) return false;
   if (!drawSceneryList(m, no_intrpt)) return false;
   if (!drawPlaceRelPos(m, no_intrpt)) return false;
   if (!drawOpacLayer()) return false;
@@ -76,6 +77,30 @@ bool CSceneryEditor::drawChLayer(const SDL_Point* m, const bool& hov) {
     return false;
   }
   Font::NewCenterWrite(FONT_MINI, label, &button.dstR);
+  return true;
+}
+
+bool CSceneryEditor::drawLayerBrief(const SDL_Point* m, const bool& hov) {
+  using namespace sceneryEngine::misc::layerBrief;
+
+  std::string vals[] = {
+    Font::intToStr(CScenery::layerList.size()),
+    Font::intToStr(layer),
+    Font::doubleToStr(CScenery::getLayerZ(layer), CLayerEditor::Control.getZPrecision())
+  };
+
+  Font::FontControl.SetFont(FONT_MINI);
+  for (int i = 0; i < num_fields; i++) {
+    CAsset::drawBoxFill(&fields[i], fieldCol);
+    vals[i] = labels[i] + vals[i];
+    Font::NewCenterWrite(vals[i].c_str(), &fields[i]);
+  }
+
+  CAsset::drawBoxFill(&l_button, SDL_PointInRect(m, &l_button) ? hovCol : butCol);
+  CAsset::drawBoxFill(&r_button, SDL_PointInRect(m, &r_button) ? hovCol : butCol);
+  Font::NewCenterWrite("$L", &l_button);
+  Font::NewCenterWrite("$R", &r_button);
+
   return true;
 }
 

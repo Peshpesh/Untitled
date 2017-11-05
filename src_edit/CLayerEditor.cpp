@@ -467,3 +467,7 @@ void CLayerEditor::terminate() {
 unsigned short CLayerEditor::getRecentLayer() {
   return (q_layer < 0) ? 0 : q_layer;
 }
+
+unsigned short CLayerEditor::getZPrecision() {
+  return (z_precision < 0) ? 0 : z_precision;
+}

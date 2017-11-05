@@ -39,6 +39,7 @@ public:
   static void removeLayerIndex(const int& idx);
   static bool addScenery(int group, int decor, const SDL_Point* p, unsigned short layer);
   static int addLayer(const double& Z);
+  static double getLayerZ(unsigned short layer);
 
 public:
   static std::vector<SceneryTexInfo>  texList;        // contains loaded texture info
