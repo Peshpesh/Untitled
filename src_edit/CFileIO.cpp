@@ -345,6 +345,5 @@ void CFileIO::saveData()
 void CFileIO::pushInform(const int& ID)
 {
   if (ID < I_CANCEL || ID > I_FAIL_SAVE) return;
-
   CInform::InfoControl.pushInform(inform[ID]);
 }

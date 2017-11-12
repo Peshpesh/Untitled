@@ -32,7 +32,6 @@ CScenery::CScenery(int group, int decor, const double& X, const double& Y, unsig
 }
 
 bool CScenery::OnRender() {
-  // SDL_Point r_pos = CCamera::CameraControl.ConvertToRel(&truePos, layerList[layer]);
   double rel_x = CCamera::CameraControl.trueXToRel(true_x, layerList[layer]);
   double rel_y = CCamera::CameraControl.trueYToRel(true_y, layerList[layer]);
   SDL_Point w_pos = CCamera::CameraControl.GetWinRelPoint(rel_x, rel_y);
@@ -48,7 +47,7 @@ bool CScenery::OnInit() {
   if (loadTexInfo(Decorations::groups::GLOBAL) == NULL) {
     return false;
   }
-  
+
   return true;
 }
 
