@@ -9,6 +9,8 @@ CSceneryEditor::CSceneryEditor() {
   showWorkScenery = true;
   layer_alpha     = MAX_RGBA;
   other_alpha     = MAX_RGBA;
+  render_active   = false;
+  has_rendered_active = false;
 
   group_ID = Decorations::groups::GLOBAL;
   decor_ID = Decorations::global::NOTHING;
@@ -53,6 +55,12 @@ void CSceneryEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const 
   }
   dx += -(((x_placeCell * dstR.w) / 2) - (x_placeCell + 1 == numpos_x));
   dy += -(((y_placeCell * dstR.h) / 2) - (y_placeCell + 1 == numpos_y));
+}
+
+void CSceneryEditor::setOpacity(const unsigned short& A) {
+  for (int i = 0; i < CScenery::texList.size(); i++) {
+    SDL_SetTextureAlphaMod(CScenery::texList[i].img, A);
+  }
 }
 
 void CSceneryEditor::OnTerminate() {

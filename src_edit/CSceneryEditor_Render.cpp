@@ -23,22 +23,57 @@ bool CSceneryEditor::OnRender(const SDL_Point* m) {
 }
 
 bool CSceneryEditor::drawBackground(int& N) {
+  if (!showScenery) return true;
+
   // Draw background scenery
+  setOpacity(other_alpha);
+
   while (N > 0) {
     if (CScenery::layerList[CScenery::sceneryList[N-1].layer] < 1.0) break;
-    if (!CScenery::sceneryList[N-1].OnRender()) return false;
     N--;
+
+    if (!has_rendered_active) {
+      if (!render_active && CScenery::sceneryList[N].layer == layer) {
+        setOpacity(layer_alpha);
+        render_active = true;
+      }
+      else if (render_active && CScenery::sceneryList[N].layer != layer) {
+        setOpacity(other_alpha);
+        render_active = false;
+        has_rendered_active = true;
+      }
+    }
+    if (!CScenery::sceneryList[N].OnRender()) return false;
   }
   return true;
 }
 
 bool CSceneryEditor::drawForeground(int& N) {
   // Draw foreground scenery
-  while (N > 0) {
-    if (CScenery::layerList[CScenery::sceneryList[N-1].layer] > 1.0) break;
-    if (!CScenery::sceneryList[N-1].OnRender()) return false;
-    N--;
+  if (showScenery) {
+    while (N > 0) {
+      if (CScenery::layerList[CScenery::sceneryList[N-1].layer] > 1.0) break;
+      N--;
+
+      if (!has_rendered_active) {
+        if (!render_active && CScenery::sceneryList[N].layer == layer) {
+          setOpacity(layer_alpha);
+          render_active = true;
+        }
+        else if (render_active && CScenery::sceneryList[N].layer != layer) {
+          setOpacity(other_alpha);
+          render_active = false;
+          has_rendered_active = true;
+        }
+      }
+      if (!CScenery::sceneryList[N].OnRender()) return false;
+    }
   }
+
+  setOpacity(layer_alpha);
+  render_active = false;
+  has_rendered_active = false;
+
   return true;
 }
 

@@ -21,9 +21,14 @@ CEntity::CEntity(int group, int entity, const SDL_Point* m) {
 }
 
 bool CEntity::OnInit() {
+  entityList.clear();
+  purgeStaleTextures();
+  textureList.clear();
+
   if (loadTexInfo(Entities::groups::GLOBAL) == NULL) {
     return false;
   }
+  
   return true;
 }
 
@@ -51,7 +56,7 @@ bool CEntity::OnLoad(const char* fname) {
   FILE* FileHandle = fopen(filePath.c_str(), "rb");
 
 	if (FileHandle == NULL)	{
-		CInform::InfoControl.pushInform("---CENTITY.OnLoad---\nfailed to open new file");
+		CInform::InfoControl.pushInform("---CENTITY.OnLoad---\nfailed to open file");
 		return false;
 	}
 

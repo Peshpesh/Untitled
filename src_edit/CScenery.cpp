@@ -4,6 +4,11 @@ std::vector<SceneryTexInfo>   CScenery::texList;        // contains loaded textu
 std::vector<CScenery>         CScenery::sceneryList;    // contains placed scenery info
 std::vector<double>           CScenery::layerList;      // contains layer info
 
+namespace {
+  const std::string io_path = "../data/maps/";
+  const std::string io_ext = ".scn";
+}
+
 CScenery::CScenery(int group, int decor, const SDL_Point* p, unsigned short layer) {
   imgSrc          = fetchTexture(group);
   group_ID        = group;
@@ -16,6 +21,16 @@ CScenery::CScenery(int group, int decor, const SDL_Point* p, unsigned short laye
   true_y          = CCamera::CameraControl.relYToTrue(r_pos.y, layerList[layer]);
 }
 
+CScenery::CScenery(int group, int decor, const double& X, const double& Y, unsigned short layer) {
+  imgSrc          = fetchTexture(group);
+  group_ID        = group;
+  decor_ID        = decor;
+  this->layer     = layer;
+  srcR            = CSceneryData::getDecorDims(group, decor);
+  true_x          = X;
+  true_y          = Y;
+}
+
 bool CScenery::OnRender() {
   // SDL_Point r_pos = CCamera::CameraControl.ConvertToRel(&truePos, layerList[layer]);
   double rel_x = CCamera::CameraControl.trueXToRel(true_x, layerList[layer]);
@@ -25,17 +40,105 @@ bool CScenery::OnRender() {
 }
 
 bool CScenery::OnInit() {
+  sceneryList.clear();
+  layerList.clear();
+  purgeStaleTextures();
+  texList.clear();
+
   if (loadTexInfo(Decorations::groups::GLOBAL) == NULL) {
     return false;
   }
+  
   return true;
 }
 
 bool CScenery::OnLoad(const char* fname) {
+  std::string filePath = io_path + fname + io_ext;
+  FILE* FileHandle = fopen(filePath.c_str(), "rb");
+
+	if (FileHandle == NULL)	{
+		CInform::InfoControl.pushInform("---CScenery.OnLoad---\nfailed to open file");
+		return false;
+	}
+
+  sceneryList.clear();
+  layerList.clear();
+
+  int N, L;
+  fread(&N, sizeof(int), 1, FileHandle);
+  fread(&L, sizeof(int), 1, FileHandle);
+
+  for (int i = 0; i < N; i++) {
+    // read scenery info
+    int IDs[2];
+    fread(IDs, sizeof(int), sizeof(IDs)/sizeof(IDs[0]), FileHandle);
+    const int group_ID = IDs[0];
+    if (!isTextureLoaded(group_ID)) loadTexInfo(group_ID);
+    const int decor_ID = IDs[1];
+
+    double true_pos[2];
+    fread(true_pos, sizeof(double), sizeof(true_pos)/sizeof(true_pos[0]), FileHandle);
+    const double true_x = true_pos[0];
+    const double true_y = true_pos[1];
+
+    int layer_info[1];
+    fread(layer_info, sizeof(int), sizeof(layer_info)/sizeof(layer_info[0]), FileHandle);
+    const int layer = layer_info[0];
+
+    CScenery newScenery(group_ID, decor_ID, true_x, true_y, layer);
+    sceneryList.push_back(newScenery);
+  }
+
+  double Z;
+  for (int i = 0; i < L; i++) {
+    // read layer details
+    fread(&Z, sizeof(double), 1, FileHandle);
+    if (Z > 0.0) layerList.push_back(Z);
+  }
+
+  fclose(FileHandle);
   return true;
 }
 
 bool CScenery::OnSave(const char* fname) {
+  std::string filePath = io_path + fname + io_ext;
+  FILE* FileHandle = fopen(filePath.c_str(), "wb");
+
+  if (FileHandle == NULL) {
+    CInform::InfoControl.pushInform("---CSCENERY.OnSave---\nfailed to open new file");
+    return false;
+  }
+
+  const int N = sceneryList.size();
+  const int L = layerList.size();
+  fwrite(&N, sizeof(int), 1, FileHandle);
+  fwrite(&L, sizeof(int), 1, FileHandle);
+
+  for (int i = 0; i < N; i++) {
+    // Output scenery info
+    int IDs[] = {
+      sceneryList[i].group_ID,
+      sceneryList[i].decor_ID,
+    };
+    double true_pos[] = {
+      sceneryList[i].true_x,
+      sceneryList[i].true_y,
+    };
+    int layer_info[] = {
+      sceneryList[i].layer,
+    };
+    fwrite(IDs, sizeof(int), sizeof(IDs)/sizeof(IDs[0]), FileHandle);
+    fwrite(true_pos, sizeof(double), sizeof(true_pos)/sizeof(true_pos[0]), FileHandle);
+    fwrite(layer_info, sizeof(int), sizeof(layer_info)/sizeof(layer_info[0]), FileHandle);
+  }
+
+  for (int i = 0; i < L; i++) {
+    // Output layer details
+    const double Z = layerList[i];
+    fwrite(&Z, sizeof(double), 1, FileHandle);
+  }
+
+  fclose(FileHandle);
   return true;
 }
 

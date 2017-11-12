@@ -5,6 +5,7 @@
 #include "CSurface.h"
 // #include "CAnimation.h"
 #include "CCamera.h"
+#include "CInform.h"
 #include "CSceneryData.h"
 #include "Define.h"
 
@@ -56,6 +57,7 @@ public:
 
 public:
   CScenery(int group, int decor, const SDL_Point* p, unsigned short layer);
+  CScenery(int group, int decor, const double& X, const double& Y, unsigned short layer);
 
   bool OnRender();
 };

@@ -121,6 +121,7 @@ class CSceneryEditor : public CEvent {
   unsigned short layer;
   unsigned short layer_alpha;
   unsigned short other_alpha;
+  bool render_active, has_rendered_active;
   short group_ID;
   short decor_ID;
   short placePos;
@@ -133,6 +134,7 @@ private:
   std::vector<CButton> sceneryButtons;
   void updateSceneryButtons();
   void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR);
+  void setOpacity(const unsigned short& A);
 
 public:
   bool OnInit();
