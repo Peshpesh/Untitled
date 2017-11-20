@@ -46,6 +46,12 @@ void CSceneryEditor::OnLButtonDown(int mX, int mY) {
   if (handleAddScenery(&m)) return;
 }
 
+void CSceneryEditor::OnRButtonDown(int mX, int mY) {
+  const SDL_Point m = {mX, mY};
+
+  if (handleRemoveScenery(&m)) return;
+}
+
 bool CSceneryEditor::handleAddScenery(const SDL_Point* m) {
   if (!CAsset::inWorkspace(m)) return false;
   // click in workspace attempts to add scenery data
@@ -68,6 +74,33 @@ bool CSceneryEditor::handleAddScenery(const SDL_Point* m) {
     CInform::InfoControl.pushInform("Error\ncould not add scenery");
   }
 
+  return true;
+}
+
+bool CSceneryEditor::handleRemoveScenery(const SDL_Point* m) {
+  if (!CAsset::inWorkspace(m)) return false;
+  // click in workspace attempts to remove scenery data
+
+  if (CScenery::layerList.size() == 0) return false;
+  if (CScenery::sceneryList.size() == 0) return false;
+
+  for (int i = CScenery::sceneryList.size() - 1; i >= 0; i--) {
+    if (layer == CScenery::sceneryList[i].layer) {
+      double true_x = CScenery::sceneryList[i].true_x;
+      double true_y = CScenery::sceneryList[i].true_y;
+      double z = CScenery::layerList[layer];
+      double rel_x = CCamera::CameraControl.trueXToRel(true_x, z);
+      double rel_y = CCamera::CameraControl.trueYToRel(true_y, z);
+      int w = CScenery::sceneryList[i].srcR.w;
+      int h = CScenery::sceneryList[i].srcR.h;
+      SDL_Point w_pos = CCamera::CameraControl.GetWinRelPoint(rel_x, rel_y);
+      SDL_Rect w_rec = CAsset::getRect(w_pos.x, w_pos.y, w, h);
+      if (SDL_PointInRect(m, &w_rec)) {
+        CScenery::sceneryList.erase(CScenery::sceneryList.begin() + i);
+        break;
+      }
+    }
+  }
   return true;
 }
 

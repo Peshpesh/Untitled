@@ -148,9 +148,11 @@ public:
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void OnLButtonDown(int mX, int mY);
+  void OnRButtonDown(int mX, int mY);
 
   bool handleInterr(SDL_Event* Event);
   bool handleAddScenery(const SDL_Point* m);
+  bool handleRemoveScenery(const SDL_Point* m);
   bool handleChScenery(const SDL_Point* m);
   bool handleChLayer(const SDL_Point* m);
   bool handleBriefChange(const SDL_Point* m);
