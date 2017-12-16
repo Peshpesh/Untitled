@@ -40,9 +40,9 @@ enum track
   // Character/Boss Tracks
   MUS_I_GEN_ACT_I,          MUS_L_GEN_ACT_I,    //  Generic bosses near the story's beginning (Act I)
   MUS_I_GEN_ACT_II,         MUS_L_GEN_ACT_II,   //  Generic bosses near the start of conflict (Act II)
-  MUS_I_GEN_ACT_III,        MUS_L_GEN_ACT_III,  //  Generic bosses in the middle of the story (Act III)
-  MUS_I_GEN_ACT_IV,         MUS_L_GEN_ACT_IV,   //  Generic bosses near the end of the story (Act IV)
-  MUS_I_GEN_ACT_V,          MUS_L_GEN_ACT_V,    //  Generic bosses after the end of the story (Act V)
+  MUS_I_GEN_ACT_III,        MUS_L_GEN_ACT_III,  //  Generic bosses in the middle of the main story (Act III)
+  MUS_I_GEN_ACT_IV,         MUS_L_GEN_ACT_IV,   //  Generic bosses near the end of the main story (Act IV)
+  MUS_I_GEN_ACT_V,          MUS_L_GEN_ACT_V,    //  Generic bosses after the end of the main story (Act V)
   MUS_I_EARTH,              MUS_L_EARTH,        //  Earth phoenix
   MUS_I_WATER,              MUS_L_WATER,        //  Water phoenix
   MUS_I_FIRE,               MUS_L_FIRE,         //  Fire phoenix

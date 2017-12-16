@@ -16,6 +16,8 @@ namespace {
                                                   canv.y + (canv.h - samp_sz) / 2,
                                                   samp_sz,
                                                   samp_sz);
+  const SDL_Rect sample_w       = CAsset::getRect(sampleCanv.x, sampleCanv.y + samp_sz, samp_sz, but_h);
+  const SDL_Rect sample_h       = CAsset::getRect(sample_w.x, sample_w.y + but_h, samp_sz, but_h);
 
   const SDL_Rect title_bar      = CAsset::getRect(canv.x, canv.y + 9, canv.w, 11);
   const SDL_Rect tbar_group     = CAsset::getRect(title_bar.x,                      title_bar.y, title_bar.w / 3, title_bar.h);
@@ -207,6 +209,8 @@ bool CChangeScenery::drawConfirmButtons(const SDL_Point* m) {
 }
 
 bool CChangeScenery::drawSampleScenery(const SDL_Point* m) {
+  std::string dims = "";
+
   CAsset::drawBoxFill(&sampleCanv, sampCanvCol);
 
   SDL_Rect tRec = {scList_x, scList_y, but_w, decorButtons.size() * but_h};
@@ -220,6 +224,10 @@ bool CChangeScenery::drawSampleScenery(const SDL_Point* m) {
   else {
     tRec = CSceneryData::getDecorDims(group_ID, decor_ID);
   }
+
+  dims = "Width - " + Font::intToStr(tRec.w); Font::NewCenterWrite(dims.c_str(), &sample_w);
+  dims = "Height - " + Font::intToStr(tRec.h); Font::NewCenterWrite(dims.c_str(), &sample_h);
+
   if (tRec.w > samp_sz) tRec.w = samp_sz;
   if (tRec.h > samp_sz) tRec.h = samp_sz;
 
