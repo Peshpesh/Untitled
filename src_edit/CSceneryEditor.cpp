@@ -15,7 +15,8 @@ CSceneryEditor::CSceneryEditor() {
   group_ID = Decorations::groups::GLOBAL;
   decor_ID = Decorations::global::NOTHING;
   placePos = sceneryEngine::misc::placeRelPos::TOP_LEFT;
-  snap_scenery = false;
+  use_anchor = false;
+  anchor = NULL;
 }
 
 bool CSceneryEditor::OnInit() {
@@ -48,7 +49,7 @@ void CSceneryEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const 
   int y_placeCell = placePos / numpos_x;
   if (y_placeCell >= numpos_y) return;
 
-  if (snap_scenery) {
+  if (use_anchor) {
     // SDL_Point map_m = CCamera::CameraControl.GetCamRelPoint(m);
     // dx += (x_placeCell * TILE_SIZE / 2) - (x_placeCell + 1 == numpos_x) - (map_m.x % TILE_SIZE);
     // dy += (y_placeCell * TILE_SIZE / 2) - (y_placeCell + 1 == numpos_y) - (map_m.y % TILE_SIZE);

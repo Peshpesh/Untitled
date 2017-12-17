@@ -56,18 +56,24 @@ CButton::CButton(const SDL_Rect& dstR, const SDL_Point* defCol, const SDL_Point*
 }
 
 bool CButton::OnRender(const SDL_Point* m, const bool& useHov, const bool& on) {
+  if (!m) return OnRender(on);
+
   return CAsset::drawStrBox(&dstR,
                             bsiz,
                             on ? onCol : ((useHov && SDL_PointInRect(m, &dstR)) ? hovCol : defCol));
 }
 
 bool CButton::OnRender(const SDL_Point* m, const bool& useHov) {
+  if (!m) return CAsset::drawStrBox(&dstR, bsiz, defCol);
+
   return CAsset::drawStrBox(&dstR,
                             bsiz,
                             (useHov && SDL_PointInRect(m, &dstR)) ? hovCol : defCol);
 }
 
 bool CButton::OnRender(const SDL_Point* m) {
+  if (!m) return CAsset::drawStrBox(&dstR, bsiz, defCol);
+
   return CAsset::drawStrBox(&dstR,
                             bsiz,
                             SDL_PointInRect(m, &dstR) ? hovCol : defCol);

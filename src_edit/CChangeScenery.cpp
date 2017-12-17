@@ -56,8 +56,6 @@ CChangeScenery::CChangeScenery() {
 }
 
 void CChangeScenery::OnInit(const short& group_ID, const short& decor_ID) {
-  // using namespace defs;
-
   this->group_ID  = group_ID;
   Group_Tex = CScenery::fetchTexture(group_ID);
   updateSceneryButtons();
@@ -198,8 +196,6 @@ bool CChangeScenery::drawSceneryButtons(const SDL_Point* m) {
 }
 
 bool CChangeScenery::drawConfirmButtons(const SDL_Point* m) {
-  // using namespace defs;
-
   if (!CAsset::drawStrBox(&okButton, b_sz, SDL_PointInRect(m, &okButton) ? confirmCol : idleCol)) return false;
   if (!CAsset::drawStrBox(&caButton, b_sz, SDL_PointInRect(m, &caButton) ? confirmCol : idleCol)) return false;
   Font::NewCenterWrite(okText, &okButton);
@@ -248,7 +244,6 @@ SDL_Texture* CChangeScenery::updateTexture() {
 }
 
 void CChangeScenery::updateSceneryButtons() {
-  // using namespace defs;
   decorButtons.clear();
   for (int i = 0; i < CSceneryData::getNumDecor(group_ID); i++) {
     decorButtons.push_back(CAsset::getRect(scList_x, scList_y + (i * but_h), but_w, but_h));

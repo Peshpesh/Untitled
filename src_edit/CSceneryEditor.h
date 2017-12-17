@@ -56,6 +56,18 @@ namespace sceneryEngine
       extern CButton buttons[];
     }
   }
+  namespace anchor {
+    extern const short x_grab;
+    extern const short y_grab;
+    extern const short x_make;
+    extern const short y_make;
+    extern const short but_w;
+    extern const short but_h;
+    extern CButton grab_anch;
+    extern const char* const label_grab;
+    extern CButton make_anch;
+    extern const char* const label_make;
+  }
   namespace meters {
     namespace opacLayer
     {
@@ -125,7 +137,8 @@ class CSceneryEditor : public CEvent {
   short group_ID;
   short decor_ID;
   short placePos;
-  bool snap_scenery;
+  bool use_anchor;
+  CScenery* anchor;
 
 public:
   static CSceneryEditor control;
@@ -177,6 +190,7 @@ private:
   bool drawOpacOther();
   bool drawSwitchView();
   bool drawSwitchPlace();
+  bool drawAnchor(const SDL_Point* m);
   bool drawIntrpt(const SDL_Point* m);
 };
 

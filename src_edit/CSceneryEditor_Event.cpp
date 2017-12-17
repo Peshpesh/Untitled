@@ -195,7 +195,7 @@ bool CSceneryEditor::handleSwitchPlace(const SDL_Point* m) {
   using namespace sceneryEngine::switches::place;
 
   bool* flags[] = {
-    &snap_scenery
+    &use_anchor
   };
 
   for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {

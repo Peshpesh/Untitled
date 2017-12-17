@@ -12,9 +12,10 @@ enum interrupts
   INTRPT_CHANGE_SC  = 0x00000020,   // change/explore scenery groups
   INTRPT_CHANGE_LA  = 0x00000040,   // change/make scenery layers
   INTRPT_MODIFY_HB  = 0x00000080,   // modify primary hitbox within active entity group
-  INTRPT_NEW        = 0x00000100,   // reset stage prompt
-  INTRPT_LOAD       = 0x00000200,   // load stage prompt
-  INTRPT_SAVE       = 0x00000400,   // save stage prompt
+  INTRPT_GRAB_ANCH  = 0x00000100,   // click on scenery (grab) to use as anchor for placement
+  INTRPT_NEW        = 0x00000200,   // reset stage prompt
+  INTRPT_LOAD       = 0x00000400,   // load stage prompt
+  INTRPT_SAVE       = 0x00000800,   // save stage prompt
 };
 
 class CInterrupt {

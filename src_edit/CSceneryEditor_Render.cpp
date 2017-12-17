@@ -1,21 +1,23 @@
 #include "CSceneryEditor.h"
 
 bool CSceneryEditor::OnRender(const SDL_Point* m) {
+  Font::FontControl.SetFont(FONT_MINI);
   bool no_intrpt = CInterrupt::isNone();
 
   if (no_intrpt) {
     if (!drawWorkingScenery(m)) return false;
   }
   if (!CAsset::drawAppFrame()) return false;
-  if (!drawChScenery(m, no_intrpt)) return false;
-  if (!drawChLayer(m, no_intrpt)) return false;
-  if (!drawLayerBrief(m, no_intrpt)) return false;
-  if (!drawSceneryList(m, no_intrpt)) return false;
-  if (!drawPlaceRelPos(m, no_intrpt)) return false;
+  if (!drawChScenery(no_intrpt ? m : NULL, no_intrpt)) return false;
+  if (!drawChLayer(no_intrpt ? m : NULL, no_intrpt)) return false;
+  if (!drawLayerBrief(no_intrpt ? m : NULL, no_intrpt)) return false;
+  if (!drawSceneryList(no_intrpt ? m : NULL, no_intrpt)) return false;
+  if (!drawPlaceRelPos(no_intrpt ? m : NULL, no_intrpt)) return false;
   if (!drawOpacLayer()) return false;
   if (!drawOpacOther()) return false;
   if (!drawSwitchView()) return false;
   if (!drawSwitchPlace()) return false;
+  if (!drawAnchor(no_intrpt ? m : NULL)) return false;
   if (!no_intrpt) {
     if (!drawIntrpt(m)) return false;
   }
@@ -131,8 +133,13 @@ bool CSceneryEditor::drawLayerBrief(const SDL_Point* m, const bool& hov) {
     Font::NewCenterWrite(vals[i].c_str(), &fields[i]);
   }
 
-  CAsset::drawBoxFill(&l_button, SDL_PointInRect(m, &l_button) ? hovCol : butCol);
-  CAsset::drawBoxFill(&r_button, SDL_PointInRect(m, &r_button) ? hovCol : butCol);
+  if (m) {
+    CAsset::drawBoxFill(&l_button, SDL_PointInRect(m, &l_button) ? hovCol : butCol);
+    CAsset::drawBoxFill(&r_button, SDL_PointInRect(m, &r_button) ? hovCol : butCol);
+  } else {
+    CAsset::drawBoxFill(&l_button, butCol);
+    CAsset::drawBoxFill(&r_button, butCol);
+  }
   Font::NewCenterWrite("$L", &l_button);
   Font::NewCenterWrite("$R", &r_button);
 
@@ -140,7 +147,6 @@ bool CSceneryEditor::drawLayerBrief(const SDL_Point* m, const bool& hov) {
 }
 
 bool CSceneryEditor::drawSceneryList(const SDL_Point* m, const bool& hov) {
-  Font::FontControl.SetFont(FONT_MINI);
   std::string name;
   for (int i = 0; i < sceneryButtons.size(); i++) {
     if (!sceneryButtons[i].OnRender(m, (hov && i != decor_ID), (i == decor_ID))) return false;
@@ -193,7 +199,7 @@ bool CSceneryEditor::drawSwitchPlace() {
   using namespace sceneryEngine::switches::place;
 
   const bool flags[] = {
-    snap_scenery
+    use_anchor
   };
 
   for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
@@ -202,6 +208,17 @@ bool CSceneryEditor::drawSwitchPlace() {
     const SDL_Point tPos = {buttons[i].dstR.x + lab_x_offset, buttons[i].dstR.y + lab_y_offset};
     Font::Write(FONT_MINI, labels[i], &tPos);
   }
+  return true;
+}
+
+bool CSceneryEditor::drawAnchor(const SDL_Point* m) {
+  using namespace sceneryEngine::anchor;
+
+  if (!grab_anch.OnRender(m)) return false;
+  Font::NewCenterWrite(label_grab, &grab_anch.dstR);
+  if (!make_anch.OnRender(m)) return false;
+  Font::NewCenterWrite(label_make, &make_anch.dstR);
+
   return true;
 }
 

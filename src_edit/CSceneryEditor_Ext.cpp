@@ -55,12 +55,24 @@ namespace sceneryEngine
       const SDL_Point* onCol  = &palette::green;
       const short x = 235;
       const char* const labels[] = {
-        "Snap to Scenery"
+        "Use Anchor"
       };
       CButton buttons[] = {
         CButton(CAsset::getRect(x, 500, sz, sz), offCol, onCol),
       };
     }
+  }
+  namespace anchor {
+    const short but_w = 50;
+    const short but_h = 24;
+    const short x_grab = 100;
+    const short y_grab = 530;
+    const short x_make = x_grab + but_w;
+    const short y_make = y_grab;
+    CButton grab_anch(x_grab, y_grab, but_w, but_h);
+    const char* const label_grab = "Grab Anchor";
+    CButton make_anch(x_make, y_make, but_w, but_h);
+    const char* const label_make = "Make Anchor";
   }
   namespace meters {
     namespace opacLayer
