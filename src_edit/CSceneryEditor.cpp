@@ -16,7 +16,7 @@ CSceneryEditor::CSceneryEditor() {
   decor_ID = Decorations::global::NOTHING;
   placePos = sceneryEngine::misc::placeRelPos::TOP_LEFT;
   use_anchor = false;
-  anchor = NULL;
+  show_anchor = false;
 }
 
 bool CSceneryEditor::OnInit() {

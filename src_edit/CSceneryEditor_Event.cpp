@@ -22,6 +22,10 @@ bool CSceneryEditor::handleInterr(SDL_Event* Event) {
     }
     return true;
   }
+  if (CInterrupt::isFlagOn(INTRPT_GRAB_ANCH | INTRPT_MAKE_ANCH)) {
+    CAnchorScenery::Control.OnEvent(Event);
+    return true;
+  }
   return false;
 }
 
@@ -43,6 +47,9 @@ void CSceneryEditor::OnLButtonDown(int mX, int mY) {
   if (handleSwitchPlace(&m)) return;
   if (handleSceneryList(&m)) return;
   if (handlePlaceRelPos(&m)) return;
+  if (handleGrabAnchor(&m)) return;
+  if (handleMakeAnchor(&m)) return;
+  if (handleAdvAnchor(&m)) return;
   if (handleAddScenery(&m)) return;
 }
 
@@ -147,12 +154,7 @@ bool CSceneryEditor::handleLayerMeter(const SDL_Point* m) {
 
   if (SDL_PointInRect(m, &meter.dstR)) {
     double fract = 0.0;
-    if (meter.clickPos(m, fract)) {
-      layer_alpha = fract * MAX_RGBA;
-      // for (int i = 0; i < CScenery::textureList.size(); i++) {
-      //   SDL_SetTextureAlphaMod(CScenery::textureList[i].img, layer_alpha);
-      // }
-    }
+    if (meter.clickPos(m, fract)) layer_alpha = fract * MAX_RGBA;
     return true;
   }
   return false;
@@ -163,12 +165,7 @@ bool CSceneryEditor::handleOtherMeter(const SDL_Point* m) {
 
   if (SDL_PointInRect(m, &meter.dstR)) {
     double fract = 0.0;
-    if (meter.clickPos(m, fract)) {
-      other_alpha = fract * MAX_RGBA;
-      // for (int i = 0; i < CScenery::textureList.size(); i++) {
-      //   SDL_SetTextureAlphaMod(CScenery::textureList[i].img, layer_alpha);
-      // }
-    }
+    if (meter.clickPos(m, fract)) other_alpha = fract * MAX_RGBA;
     return true;
   }
   return false;
@@ -195,7 +192,8 @@ bool CSceneryEditor::handleSwitchPlace(const SDL_Point* m) {
   using namespace sceneryEngine::switches::place;
 
   bool* flags[] = {
-    &use_anchor
+    &use_anchor,
+    &show_anchor
   };
 
   for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
@@ -226,6 +224,38 @@ bool CSceneryEditor::handlePlaceRelPos(const SDL_Point* m) {
       placePos = i;
       return true;
     }
+  }
+  return false;
+}
+
+bool CSceneryEditor::handleGrabAnchor(const SDL_Point* m) {
+  using namespace sceneryEngine::anchor;
+
+  if (!CScenery::sceneryList.empty() && SDL_PointInRect(m, &grab_anch.dstR)) {
+    CAnchorScenery::Control.OnInit(layer);
+    CInterrupt::appendFlag(INTRPT_GRAB_ANCH);
+    return true;
+  }
+  return false;
+}
+
+bool CSceneryEditor::handleMakeAnchor(const SDL_Point* m) {
+  using namespace sceneryEngine::anchor;
+
+  if (!CScenery::layerList.empty() && SDL_PointInRect(m, &make_anch.dstR)) {
+    CAnchorScenery::Control.OnInit(layer);
+    CInterrupt::appendFlag(INTRPT_MAKE_ANCH);
+    return true;
+  }
+  return false;
+}
+
+bool CSceneryEditor::handleAdvAnchor(const SDL_Point* m) {
+  using namespace sceneryEngine::anchor;
+
+  if (SDL_PointInRect(m, &adv_anch.dstR)) {
+    CAnchorScenery::Control.advanceAnchor();
+    return true;
   }
   return false;
 }

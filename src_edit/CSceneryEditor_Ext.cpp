@@ -11,7 +11,7 @@ namespace sceneryEngine
     namespace chLayer
     { // Change layer buttons
       const char* const label = "Layers Menu";
-      CButton button(355, 534, 100, 24);
+      CButton button(405, 534, 100, 24);
     }
     namespace placeRelPos {
       const SDL_Point* offCol = &palette::silver;
@@ -55,10 +55,12 @@ namespace sceneryEngine
       const SDL_Point* onCol  = &palette::green;
       const short x = 235;
       const char* const labels[] = {
-        "Use Anchor"
+        "Use Anchor",
+        "Show Anchor",
       };
       CButton buttons[] = {
         CButton(CAsset::getRect(x, 500, sz, sz), offCol, onCol),
+        CButton(CAsset::getRect(x, 515, sz, sz), offCol, onCol),
       };
     }
   }
@@ -66,13 +68,17 @@ namespace sceneryEngine
     const short but_w = 50;
     const short but_h = 24;
     const short x_grab = 100;
-    const short y_grab = 530;
+    const short y_grab = 534;
     const short x_make = x_grab + but_w;
     const short y_make = y_grab;
+    const short x_adv = x_make + but_w;
+    const short y_adv = y_make;
     CButton grab_anch(x_grab, y_grab, but_w, but_h);
     const char* const label_grab = "Grab Anchor";
     CButton make_anch(x_make, y_make, but_w, but_h);
     const char* const label_make = "Make Anchor";
+    CButton adv_anch(x_adv, y_adv, but_w, but_h);
+    const char* const label_adv = "Advance Anchor";
   }
   namespace meters {
     namespace opacLayer
@@ -101,7 +107,7 @@ namespace sceneryEngine
       const SDL_Point* fieldCol = &palette::silver;
       const SDL_Point* butCol = &palette::blue;
       const SDL_Point* hovCol = &palette::light_blue;
-      const short list_x = 355;
+      const short list_x = 405;
       const short list_y = 494;
       const short field_w = 100;
       const short field_h = 11;

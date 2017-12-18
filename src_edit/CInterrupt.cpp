@@ -35,5 +35,4 @@ bool CInterrupt::isFlagOff(int flag)
 bool CInterrupt::isNone()
 {
   return (handle == INTRPT_NONE);
-  // return !isFlagOff(INTRPT_NONE);
 }

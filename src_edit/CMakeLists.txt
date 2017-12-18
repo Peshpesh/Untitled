@@ -14,6 +14,7 @@ include_directories(${SDL2_INCLUDE_DIR})
 set(SRCDIR ${PROJECT_SOURCE_DIR})
 
 set(SOURCE_FILES
+${SRCDIR}/CAnchorScenery.cpp
 ${SRCDIR}/CAnimation.cpp
 ${SRCDIR}/CApp.cpp
 ${SRCDIR}/CApp_Event.cpp
@@ -66,6 +67,7 @@ ${SRCDIR}/CTileset.cpp
 )
 
 set(HEADER_FILES
+${SRCDIR}/CAnchorScenery.h
 ${SRCDIR}/CAnimation.h
 ${SRCDIR}/CApp.h
 ${SRCDIR}/CArea.h

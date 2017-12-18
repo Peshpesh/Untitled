@@ -199,7 +199,8 @@ bool CSceneryEditor::drawSwitchPlace() {
   using namespace sceneryEngine::switches::place;
 
   const bool flags[] = {
-    use_anchor
+    use_anchor,
+    show_anchor
   };
 
   for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
@@ -214,10 +215,16 @@ bool CSceneryEditor::drawSwitchPlace() {
 bool CSceneryEditor::drawAnchor(const SDL_Point* m) {
   using namespace sceneryEngine::anchor;
 
-  if (!grab_anch.OnRender(m)) return false;
+  if (show_anchor) {
+    if (!CAnchorScenery::Control.OnRender()) return false;
+  }
+
+  if (!grab_anch.OnRender(m, true, CInterrupt::isFlagOn(INTRPT_GRAB_ANCH))) return false;
   Font::NewCenterWrite(label_grab, &grab_anch.dstR);
-  if (!make_anch.OnRender(m)) return false;
+  if (!make_anch.OnRender(m, true, CInterrupt::isFlagOn(INTRPT_MAKE_ANCH))) return false;
   Font::NewCenterWrite(label_make, &make_anch.dstR);
+  if (!adv_anch.OnRender(m, true)) return false;
+  Font::NewCenterWrite(label_adv, &adv_anch.dstR);
 
   return true;
 }

@@ -12,6 +12,7 @@
 #include "CScenery.h"
 #include "CSceneryData.h"
 #include "CChangeScenery.h"
+#include "CAnchorScenery.h"
 #include "CLayerEditor.h"
 
 namespace sceneryEngine
@@ -61,12 +62,16 @@ namespace sceneryEngine
     extern const short y_grab;
     extern const short x_make;
     extern const short y_make;
+    extern const short x_adv;
+    extern const short y_adv;
     extern const short but_w;
     extern const short but_h;
     extern CButton grab_anch;
     extern const char* const label_grab;
     extern CButton make_anch;
     extern const char* const label_make;
+    extern CButton adv_anch;
+    extern const char* const label_adv;
   }
   namespace meters {
     namespace opacLayer
@@ -138,7 +143,7 @@ class CSceneryEditor : public CEvent {
   short decor_ID;
   short placePos;
   bool use_anchor;
-  CScenery* anchor;
+  bool show_anchor;
 
 public:
   static CSceneryEditor control;
@@ -175,6 +180,9 @@ private:
   bool handleSwitchPlace(const SDL_Point* m);
   bool handleSceneryList(const SDL_Point* m);
   bool handlePlaceRelPos(const SDL_Point* m);
+  bool handleGrabAnchor(const SDL_Point* m);
+  bool handleMakeAnchor(const SDL_Point* m);
+  bool handleAdvAnchor(const SDL_Point* m);
 
 public:
   bool OnRender(const SDL_Point* m);
