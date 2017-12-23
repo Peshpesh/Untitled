@@ -13,7 +13,7 @@ class CAnchorScenery : public CEvent {
 
 public:
   double anch_x, anch_y, anch_z;
-  double disp_x, disp_y;
+  int disp_x, disp_y;
   unsigned short layer;
 
 public:

@@ -72,6 +72,22 @@ namespace sceneryEngine
     extern const char* const label_make;
     extern CButton adv_anch;
     extern const char* const label_adv;
+    namespace disp {
+      extern const short field_w;
+      extern const short field_h;
+      extern const short lr_but_sz;
+      extern const short x_disp;
+      extern const short y_h_disp;
+      extern const short y_v_disp;
+      extern const SDL_Point* fieldCol;
+      extern const SDL_Point* butCol;
+      extern const SDL_Point* hovCol;
+      extern const SDL_Rect field_h_disp;
+      extern const SDL_Rect field_v_disp;
+      extern const char* const label_h_disp;
+      extern const char* const label_v_disp;
+      extern const SDL_Rect lr_buttons[];
+    }
   }
   namespace meters {
     namespace opacLayer
@@ -199,6 +215,7 @@ private:
   bool drawSwitchView();
   bool drawSwitchPlace();
   bool drawAnchor(const SDL_Point* m);
+  bool drawAnchDisplace(const SDL_Point* m);
   bool drawIntrpt(const SDL_Point* m);
 };
 

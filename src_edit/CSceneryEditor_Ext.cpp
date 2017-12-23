@@ -79,6 +79,28 @@ namespace sceneryEngine
     const char* const label_make = "Make Anchor";
     CButton adv_anch(x_adv, y_adv, but_w, but_h);
     const char* const label_adv = "Advance Anchor";
+
+    namespace disp {
+      const short field_w = 100;
+      const short field_h = 12;
+      const short lr_but_sz = 12;
+      const short x_disp = x_adv + but_w + lr_but_sz;
+      const short y_h_disp = y_adv;
+      const short y_v_disp = y_adv + (but_h / 2);
+      const SDL_Point* fieldCol = &palette::silver;
+      const SDL_Point* butCol = &palette::blue;
+      const SDL_Point* hovCol = &palette::light_blue;
+      const SDL_Rect field_h_disp = CAsset::getRect(x_disp, y_h_disp, field_w, field_h);
+      const SDL_Rect field_v_disp = CAsset::getRect(x_disp, y_v_disp, field_w, field_h);
+      const char* const label_h_disp = "X Disp - ";
+      const char* const label_v_disp = "Y Disp - ";
+      const SDL_Rect lr_buttons[] = {
+        CAsset::getRect(x_disp - lr_but_sz, y_h_disp, lr_but_sz, lr_but_sz),
+        CAsset::getRect(x_disp + field_w, y_h_disp, lr_but_sz, lr_but_sz),
+        CAsset::getRect(x_disp - lr_but_sz, y_v_disp, lr_but_sz, lr_but_sz),
+        CAsset::getRect(x_disp + field_w, y_v_disp, lr_but_sz, lr_but_sz),
+      };
+    }
   }
   namespace meters {
     namespace opacLayer
