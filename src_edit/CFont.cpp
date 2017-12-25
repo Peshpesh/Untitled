@@ -645,6 +645,11 @@ std::string Font::intToStr(const int& val)
 	std::string retstr;
 	int magnitude = 1;
 
+	if (val < 0) {
+		retstr = "-";
+		magnitude = -magnitude;
+	}
+
 	// How big is this number? (how many digits is key)
 	while (val / (magnitude * 10) != 0)
 	{

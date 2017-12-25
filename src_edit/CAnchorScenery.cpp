@@ -10,7 +10,7 @@ namespace {
 CAnchorScenery::CAnchorScenery() {
   anch_x = anch_y = 0.0;
   anch_z = 1.0;
-  disp_x = disp_y = 64;
+  disp_x = disp_y = 10;
   layer = 0;
 }
 
