@@ -233,23 +233,6 @@ bool CSceneryEditor::drawAnchor(const SDL_Point* m) {
 bool CSceneryEditor::drawAnchDisplace(const SDL_Point* m) {
   using namespace sceneryEngine::anchor::disp;
 
-  // std::string vals[] = {
-  //   Font::intToStr(CScenery::layerList.size()),
-  //   Font::intToStr(layer),
-  //   Font::doubleToStr(CScenery::getLayerZ(layer), CLayerEditor::Control.getZPrecision())
-  // };
-  //
-  // const SDL_Rect field_h_disp = CAsset::getRect(x_disp, y_h_disp, field_w, field_h);
-  // const SDL_Rect field_v_disp = CAsset::getRect(x_disp, y_v_disp, field_w, field_h);
-  // const char* const label_h_disp = "X Disp - ";
-  // const char* const label_v_disp = "Y Disp - ";
-  // const SDL_Rect lr_buttons[] = {
-  //   CAsset::getRect(x_disp - lr_but_sz, y_h_disp, lr_but_sz, lr_but_sz),
-  //   CAsset::getRect(x_disp + field_w, y_h_disp, lr_but_sz, lr_but_sz),
-  //   CAsset::getRect(x_disp - lr_but_sz, y_v_disp, lr_but_sz, lr_but_sz),
-  //   CAsset::getRect(x_disp + field_w, y_v_disp, lr_but_sz, lr_but_sz),
-  // };
-
   bool hov[] = {
     m ? SDL_PointInRect(m, &lr_buttons[0]) : false,
     m ? SDL_PointInRect(m, &lr_buttons[1]) : false,
@@ -273,7 +256,6 @@ bool CSceneryEditor::drawAnchDisplace(const SDL_Point* m) {
 
   return true;
 }
-
 
 bool CSceneryEditor::drawIntrpt(const SDL_Point* m) {
   if (CInterrupt::isFlagOn(INTRPT_CHANGE_SC)) {

@@ -87,6 +87,12 @@ namespace sceneryEngine
       extern const char* const label_h_disp;
       extern const char* const label_v_disp;
       extern const SDL_Rect lr_buttons[];
+      enum {
+        X_MINUS = 0,
+        X_PLUS,
+        Y_MINUS,
+        Y_PLUS
+      };
     }
   }
   namespace meters {
@@ -199,6 +205,7 @@ private:
   bool handleGrabAnchor(const SDL_Point* m);
   bool handleMakeAnchor(const SDL_Point* m);
   bool handleAdvAnchor(const SDL_Point* m);
+  bool handleArchDisplace(const SDL_Point* m);
 
 public:
   bool OnRender(const SDL_Point* m);

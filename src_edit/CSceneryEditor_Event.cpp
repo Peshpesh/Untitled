@@ -50,6 +50,7 @@ void CSceneryEditor::OnLButtonDown(int mX, int mY) {
   if (handleGrabAnchor(&m)) return;
   if (handleMakeAnchor(&m)) return;
   if (handleAdvAnchor(&m)) return;
+  if (handleArchDisplace(&m)) return;
   if (handleAddScenery(&m)) return;
 }
 
@@ -256,6 +257,25 @@ bool CSceneryEditor::handleAdvAnchor(const SDL_Point* m) {
   if (SDL_PointInRect(m, &adv_anch.dstR)) {
     CAnchorScenery::Control.advanceAnchor();
     return true;
+  }
+  return false;
+}
+
+bool CSceneryEditor::handleArchDisplace(const SDL_Point* m) {
+  using namespace sceneryEngine::anchor::disp;
+
+  // Buttons are oriented left-to-right, top-to-bottom in order.
+  for (int i = X_MINUS; i <= Y_PLUS; i++) {
+    if (SDL_PointInRect(m, &lr_buttons[i])) {
+      switch (i) {
+        case X_MINUS: CAnchorScenery::Control.disp_x--; break;
+        case X_PLUS:  CAnchorScenery::Control.disp_x++; break;
+        case Y_MINUS: CAnchorScenery::Control.disp_y--; break;
+        case Y_PLUS:  CAnchorScenery::Control.disp_y++; break;
+        default: break;
+      }
+      return true;
+    }
   }
   return false;
 }
