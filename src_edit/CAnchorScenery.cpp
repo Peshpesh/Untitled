@@ -47,6 +47,14 @@ void CAnchorScenery::advanceAnchor() {
   anch_y = CCamera::CameraControl.relYToTrue(rel_y, anch_z);
 }
 
+double CAnchorScenery::getRelX() {
+  return CCamera::CameraControl.trueXToRel(anch_x, anch_z);
+}
+
+double CAnchorScenery::getRelY() {
+  return CCamera::CameraControl.trueYToRel(anch_y, anch_z);
+}
+
 void CAnchorScenery::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   switch (sym) {
     case SDLK_RETURN: CInterrupt::removeFlag(INTRPT_GRAB_ANCH | INTRPT_MAKE_ANCH); break;

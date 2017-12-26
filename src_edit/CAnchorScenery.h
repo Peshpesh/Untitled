@@ -29,6 +29,8 @@ public:
 
 public:
   void advanceAnchor();
+  double getRelX();
+  double getRelY();
 
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);

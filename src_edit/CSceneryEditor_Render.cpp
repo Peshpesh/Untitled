@@ -92,7 +92,7 @@ bool CSceneryEditor::drawWorkingScenery(const SDL_Point* m) {
   int X = m->x;
   int Y = m->y;
 
-  getPosDisplace(X, Y, m, srcR);
+  getPosDisplace(X, Y, srcR);
   SDL_Rect dstR = {X, Y, srcR.w, srcR.h};
 
   return CSurface::OnDraw(CScenery::fetchTexture(group_ID), &srcR, &dstR);

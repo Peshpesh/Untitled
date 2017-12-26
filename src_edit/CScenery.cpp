@@ -341,6 +341,25 @@ bool CScenery::addScenery(int group, int decor, const SDL_Point* p, unsigned sho
   return true;
 }
 
+bool CScenery::addScenery(int group, int decor, const double& rel_X, const double& rel_Y, unsigned short layer) {
+  if (layer >= layerList.size()) return false;
+  double true_X = CCamera::CameraControl.relXToTrue(rel_X, layerList[layer]);
+  double true_Y = CCamera::CameraControl.relYToTrue(rel_Y, layerList[layer]);
+
+  CScenery newDecor(group, decor, true_X, true_Y, layer);
+  if (newDecor.imgSrc == NULL) return false;
+
+  // locate index destination in scenery container;
+  // place new scenery object at the "end" of objects sharing the same layer
+  int i = 0;
+  while (i < sceneryList.size()) {
+    if (layer < sceneryList[i].layer) break;
+    i++;
+  }
+  sceneryList.insert(sceneryList.begin() + i, newDecor);
+  return true;
+}
+
 int CScenery::addLayer(const double& Z) {
   if (Z <= 0.0) return -1;
 

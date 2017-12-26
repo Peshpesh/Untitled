@@ -71,15 +71,24 @@ bool CSceneryEditor::handleAddScenery(const SDL_Point* m) {
 
   SDL_Rect srcR = CSceneryData::getDecorDims(group_ID, decor_ID);
 
-  int X = m->x;
-  int Y = m->y;
+  if (use_anchor) {
+    double X = CAnchorScenery::Control.getRelX();
+    double Y = CAnchorScenery::Control.getRelY();
+    getPosDisplace(X, Y, srcR);
+    if (!CScenery::addScenery(group_ID, decor_ID, X, Y, layer)) {
+      // error
+      CInform::InfoControl.pushInform("Error\ncould not add scenery");
+    }
+  } else {
+    int X = m->x;
+    int Y = m->y;
+    getPosDisplace(X, Y, srcR);
 
-  getPosDisplace(X, Y, m, srcR);
-  const SDL_Point dstP = {X, Y};
-
-  if (!CScenery::addScenery(group_ID, decor_ID, &dstP, layer)) {
-    // error
-    CInform::InfoControl.pushInform("Error\ncould not add scenery");
+    const SDL_Point dstP = {X, Y};
+    if (!CScenery::addScenery(group_ID, decor_ID, &dstP, layer)) {
+      // error
+      CInform::InfoControl.pushInform("Error\ncould not add scenery");
+    }
   }
 
   return true;

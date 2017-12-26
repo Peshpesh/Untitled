@@ -173,7 +173,8 @@ public:
 private:
   std::vector<CButton> sceneryButtons;
   void updateSceneryButtons();
-  void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR);
+  void getPosDisplace(int& dx, int& dy, const SDL_Rect& dstR);
+  void getPosDisplace(double& dx, double& dy, const SDL_Rect& dstR);
   void setOpacity(const unsigned short& A);
 
 public:

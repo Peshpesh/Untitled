@@ -39,6 +39,7 @@ public:
   static void swapLayerIndex(const int& idx, const int& d_idx);
   static void removeLayerIndex(const int& idx);
   static bool addScenery(int group, int decor, const SDL_Point* p, unsigned short layer);
+  static bool addScenery(int group, int decor, const double& rel_X, const double& rel_Y, unsigned short layer);
   static int addLayer(const double& Z);
   static double getLayerZ(unsigned short layer);
 

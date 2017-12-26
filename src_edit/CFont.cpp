@@ -686,8 +686,14 @@ std::string Font::intToStr(const int& val)
 	return retstr;
 }
 
-std::string Font::doubleToStr(const double& val, const unsigned int& precision) {
+std::string Font::doubleToStr(double val, const unsigned int& precision) {
 	std::string retstr;
+
+	if (val < 0.0) {
+		retstr = "-";
+		val = -val;
+	}
+
 	if (precision != 0) {
 		std::string intPart = intToStr((int)(val));
 

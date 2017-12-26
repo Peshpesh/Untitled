@@ -144,6 +144,6 @@ public:
 	static int getNumLines(const int& fontID, char const* message, int maxWidth);
 	static std::string getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth);
 	static std::string intToStr(const int& val);
-	static std::string doubleToStr(const double& val, const unsigned int& precision);
+	static std::string doubleToStr(double val, const unsigned int& precision);
 };
 #endif

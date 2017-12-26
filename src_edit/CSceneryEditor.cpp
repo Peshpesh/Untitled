@@ -42,20 +42,26 @@ void CSceneryEditor::updateSceneryButtons() {
   }
 }
 
-void CSceneryEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR) {
+void CSceneryEditor::getPosDisplace(int& dx, int& dy, const SDL_Rect& dstR) {
   using namespace sceneryEngine::misc::placeRelPos;
 
   int x_placeCell = placePos % numpos_x;
   int y_placeCell = placePos / numpos_x;
   if (y_placeCell >= numpos_y) return;
 
-  if (use_anchor) {
-    // SDL_Point map_m = CCamera::CameraControl.GetCamRelPoint(m);
-    // dx += (x_placeCell * TILE_SIZE / 2) - (x_placeCell + 1 == numpos_x) - (map_m.x % TILE_SIZE);
-    // dy += (y_placeCell * TILE_SIZE / 2) - (y_placeCell + 1 == numpos_y) - (map_m.y % TILE_SIZE);
-  }
   dx += -(((x_placeCell * dstR.w) / 2) - (x_placeCell + 1 == numpos_x));
   dy += -(((y_placeCell * dstR.h) / 2) - (y_placeCell + 1 == numpos_y));
+}
+
+void CSceneryEditor::getPosDisplace(double& dx, double& dy, const SDL_Rect& dstR) {
+  using namespace sceneryEngine::misc::placeRelPos;
+
+  int x_placeCell = placePos % numpos_x;
+  int y_placeCell = placePos / numpos_x;
+  if (y_placeCell >= numpos_y) return;
+
+  dx += -(((x_placeCell * dstR.w) / 2.0) - (x_placeCell + 1 == numpos_x));
+  dy += -(((y_placeCell * dstR.h) / 2.0) - (y_placeCell + 1 == numpos_y));
 }
 
 void CSceneryEditor::setOpacity(const unsigned short& A) {
