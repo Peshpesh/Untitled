@@ -14,6 +14,7 @@
 #include "CFileIO.h"
 // #include "CSceneryEdit.h"
 #include "CModel.h"
+#include "CTerminate.h"
 #include "Define.h"
 
 #include "CEditMap.h"
@@ -128,13 +129,6 @@ public:
 	bool handleEngSwitch(const SDL_Point* m);
   bool handleModelSwitch(const SDL_Point* m);
   bool handleIO(const SDL_Point* m);
-
-	bool EventSCNedit(int mX, int mY);
-	bool CheckZup(const int& mX);
-	bool CheckZdown(const int& mX);
-	float GetZincrement(const int& mX, const int& Xo);
-	bool CheckSCNswitch(const int& mY);
-	bool CheckSCNchange(const int& mX);
 
 	bool OnInit();
 	void OnExit();

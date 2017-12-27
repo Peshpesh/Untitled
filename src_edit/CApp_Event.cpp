@@ -23,6 +23,13 @@ bool CApp::handleInterr(SDL_Event* Event)
 		CFileIO::IOhandle.OnEvent(Event);
 		return true;
 	}
+	if (CInterrupt::isFlagOn(INTRPT_EXIT)) {
+		CTerminate::control.OnEvent(Event);
+		if (CTerminate::control.willTerminate()) {
+			OnExit();
+		}
+		return true;
+	}
 	return false;
 }
 
@@ -33,7 +40,7 @@ void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 
   switch (sym)
   {
-    case SDLK_ESCAPE: OnExit(); break;
+    case SDLK_ESCAPE: CInterrupt::appendFlag(INTRPT_EXIT); break;
     default: break;
   }
 }
@@ -45,34 +52,15 @@ void CApp::OnLButtonDown(int mX, int mY)
 		return;
 	}
 
-	{
-		const SDL_Point m = {mX, mY};
-		if (handleEngSwitch(&m)) return;
-		if (handleModelSwitch(&m)) return;
-		if (handleIO(&m)) return;
-	}
-
-	if (active_mod == MODIFY_SCENE)
-	{
-		// returns false if error...
-		// EventSCNedit(mX, mY);
-	}
+	const SDL_Point m = {mX, mY};
+	if (handleEngSwitch(&m)) return;
+	if (handleModelSwitch(&m)) return;
+	if (handleIO(&m)) return;
 }
 
 void CApp::OnRButtonDown(int mX, int mY)
 {
 	if (mX < 0 || mY < 0 || mX > EWIDTH || mY > EHEIGHT) return;
-
-	// If we're trying to do stuff with NPCs ... This places the NPC at the X, Y
-	// coordinates of the map tile clicked upon (good for doors, save points, etc.)
-	if (active_mod == MODIFY_NPC && mX < WWIDTH && mY < WHEIGHT)
-	{
-		int Xo = mX + CCamera::CameraControl.GetX();
-		int Yo = mY + CCamera::CameraControl.GetY();
-
-		// if (!AddEntity(Xo - (Xo % TILE_SIZE), Yo - (Yo % TILE_SIZE)))
-		// 	OnExit();
-	}
 }
 
 bool CApp::handleEngSwitch(const SDL_Point* m)

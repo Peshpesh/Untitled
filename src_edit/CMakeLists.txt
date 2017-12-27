@@ -62,6 +62,7 @@ ${SRCDIR}/CSceneryEditor_Ext.cpp
 ${SRCDIR}/CSceneryEditor_Render.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
+${SRCDIR}/CTerminate.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTileset.cpp
 )
@@ -97,6 +98,7 @@ ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryEditor.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
+${SRCDIR}/CTerminate.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CTileset.h
 ${SRCDIR}/Define.h

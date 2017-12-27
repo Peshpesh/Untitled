@@ -71,5 +71,10 @@ void CSceneryEditor::setOpacity(const unsigned short& A) {
 }
 
 void CSceneryEditor::OnTerminate() {
-  //
+  CScenery::sceneryList.clear();
+  CScenery::layerList.clear();
+
+  for (int i = 0; i < CScenery::texList.size(); i++) {
+    SDL_DestroyTexture(CScenery::texList[i].img);
+  } CScenery::texList.clear();
 }

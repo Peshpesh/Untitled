@@ -17,6 +17,7 @@ enum interrupts
   INTRPT_NEW        = 0x00000400,   // reset stage prompt
   INTRPT_LOAD       = 0x00000800,   // load stage prompt
   INTRPT_SAVE       = 0x00001000,   // save stage prompt
+  INTRPT_EXIT       = 0x00002000,   // escape program (exit)
 };
 
 class CInterrupt {

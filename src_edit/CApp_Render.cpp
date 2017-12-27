@@ -44,6 +44,10 @@ void CApp::OnRender()
 		CFileIO::IOhandle.OnRender(&mouse);
 	}
 
+	if (CInterrupt::isFlagOn(INTRPT_EXIT)) {
+		CTerminate::control.OnRender(mouse);
+	}
+
 	//	DEBUGGING
 	if (debug)
 	{

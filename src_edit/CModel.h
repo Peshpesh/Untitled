@@ -2,6 +2,7 @@
 #define _C_MODEL_H_
 
 #include "CEntity.h"
+#include "CScenery.h"
 #include "CEvent.h"
 #include "CInform.h"
 #include "CInterrupt.h"
