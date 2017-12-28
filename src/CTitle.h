@@ -42,4 +42,5 @@ public:
 	void OnRender(SDL_Renderer* renderer);
 	void RenderStats(SDL_Renderer* renderer);
 };
+
 #endif

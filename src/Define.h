@@ -9,7 +9,4 @@
 #define WWIDTH 640		// pixels
 #define WHEIGHT 480		// pixels
 
-#define EWIDTH 740      // pixels
-#define EHEIGHT 580     // pixels
-
 #endif

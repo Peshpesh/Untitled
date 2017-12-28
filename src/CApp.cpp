@@ -46,6 +46,6 @@ int CApp::OnExecute()
 
 int main(int argc, char* argv[])
 {
-	CApp theApp;
-	return theApp.OnExecute();
+	CApp game;
+	return game.OnExecute();
 }

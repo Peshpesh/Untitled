@@ -4,23 +4,26 @@ bool CApp::OnInit()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
-	if ((Win_Display = SDL_CreateWindow("f9iunhdsufdsF(*#$JR#(JR(@#R(J@(J#RJ(Ej9fgdsfSD(JGJ",
-		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		WWIDTH, WHEIGHT, SDL_WINDOW_SHOWN)) == NULL)
-	{
+
+	if ((Win_Display = SDL_CreateWindow("abc",
+																			SDL_WINDOWPOS_CENTERED,
+																			SDL_WINDOWPOS_CENTERED,
+																			WWIDTH,
+																			WHEIGHT,
+																			SDL_WINDOW_SHOWN)) == NULL) return false;
+
+	if (!CSurface::OnInit(Win_Display)) {
 		return false;
 	}
-	if ((Win_Renderer = SDL_CreateRenderer(Win_Display, -1,
-		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)) == NULL)
-	{
+
+	if (!CAsset::OnInit()) {
 		return false;
 	}
+
 	if (Font::FontControl.OnInit(Win_Renderer) == false)
 		return false;
 	if (CHUD::HUDControl.OnInit(Win_Renderer) == false)
 		return false;
-	// if (CEntityMod::EntityControl.OnInit(Win_Renderer) == false)
-	// 	return false;
 	if (!CEntityInfo::LoadCommon())
 		return false;
 	if (CEntityRes::OnInit(Win_Renderer) == false)

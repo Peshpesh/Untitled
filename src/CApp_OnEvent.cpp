@@ -2,6 +2,27 @@
 
 void CApp::OnEvent(SDL_Event* Event)
 {
+	// if (CInterrupt::isNone()) {
+	// 	CEvent::OnEvent(Event);
+	// }
+	// else {
+	// 	if (handleInterr(Event)) return;
+	// }
+	// if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
+	// if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
+	// if (active_mod == MODIFY_SCENE) CSceneryEditor::control.OnEvent(Event);
+
+	if (CMode::isFlagOn(APP_MODE_GAME)) {
+
+
+
+	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
+
+
+		
+	} else if (CMode::isFlagOn(APP_MODE_FATAL)) {
+		//
+	}
 	CEvent::OnEvent(Event);
 }
 

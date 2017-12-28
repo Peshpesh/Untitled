@@ -3,7 +3,19 @@
 void CApp::OnRender()
 {
 	bool DEBUG = true;
-	SDL_RenderClear(Win_Renderer);
+
+	CSurface::Clear();
+	// SDL_RenderClear(Win_Renderer);
+
+	if (CMode::isFlagOn(APP_MODE_GAME)) {
+		// CGame::control.OnRender();
+	} else if (CMode::isFlagOn(APP_MODE_TITLE) && !CTitle::control.OnRender()) {
+    // error
+	}	else if (CMode::isFlagOn(APP_MODE_FATAL)) {
+		//
+	}
+
+	CSurface::Present();
 
 	// Title Screen Rendering
 	if (CTitle::MainMenu.Active)
@@ -79,5 +91,6 @@ void CApp::OnRender()
 			}
 		}
 	}
-	SDL_RenderPresent(Win_Renderer);
+	CSurface::Present();
+	// SDL_RenderPresent(Win_Renderer);
 }

@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 
+#include "CMode.h"
 #include "Define.h"
 #include "CArea.h"
 #include "CCamera.h"
@@ -25,15 +26,12 @@
 #include "CSceneryMod.h"
 #include "CSound.h"
 
-// #include "CMapEdit.h"
-
 class CApp : public CEvent
 {
 private:
 	bool	Running;
 	bool	Paused;
 	bool	Suspend;			// gameplay loop suspension (frozen)
-//	bool	Killgame;			// call to end the game
 	SDL_Window* Win_Display;    // Main Window
 	SDL_Renderer* Win_Renderer; // Main Renderer
 
@@ -49,8 +47,6 @@ public:
 	int	OnExecute();
 
 public:
-
-//	CAnimation Yoshi;
 
 	// Initializes SDL, main window and renderer, and test/introductory graphics
 	bool OnInit();
@@ -75,8 +71,6 @@ public:
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnCleanup();
-
-	// const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 	void OnKeyUp(SDL_Keycode sym, Uint16 mod);
