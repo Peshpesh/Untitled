@@ -123,13 +123,13 @@ SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 	return rect;
 }
 
-bool CAsset::drawAppFrame()
-{
-  if (!CSurface::OnDraw(interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT)) return false;
-  if (!CSurface::OnDraw(interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT)) return false;
-
-  return true;
-}
+// bool CAsset::drawAppFrame()
+// {
+//   if (!CSurface::OnDraw(interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT)) return false;
+//   if (!CSurface::OnDraw(interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT)) return false;
+//
+//   return true;
+// }
 
 bool CAsset::inWorkspace(const SDL_Point* pos)
 {
@@ -386,5 +386,5 @@ double CAsset::strToDouble(const std::string& str) {
 void CAsset::OnCleanup() {
   SDL_DestroyTexture(paltex);
   SDL_DestroyTexture(arrtex);
-  SDL_DestroyTexture(interface);
+  // SDL_DestroyTexture(interface);
 }

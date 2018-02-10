@@ -4,11 +4,14 @@
 CApp::CApp()
 {
 	Win_Display = NULL;
-	Win_Renderer = NULL;
+	// Win_Renderer = NULL;
 
 	Running = true;
-	Paused = false;
-	Suspend = false;
+	// Paused = false;
+	// Suspend = false;
+
+	esc_init = 0;
+	// esc_time = 0;
 
 	// debugging
 	DEBUG_TEXTURE = NULL;
@@ -36,7 +39,6 @@ int CApp::OnExecute()
 		{
 			OnEvent(&Event);
 		}
-		OnMotion();
 		OnLoop();      // Perform necessary manipulations (gameplay)
 		OnRender();    // Render updated info
 	}

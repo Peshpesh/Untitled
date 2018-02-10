@@ -4,6 +4,4 @@
 #include "CSurface.h"
 #include "CType.h"
 
-
-
 #endif
