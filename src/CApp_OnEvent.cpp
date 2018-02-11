@@ -15,6 +15,7 @@ void CApp::OnEvent(SDL_Event* Event) {
 		// Process events during gameplay
 	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
 		// Process events at title screen
+		CTitle::control.OnEvent(Event);
 	} else if (CMode::isFlagOn(APP_MODE_FATAL)) {
 		// Process events during a fatal error
 	}

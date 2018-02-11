@@ -2,12 +2,12 @@
 
 CType CType::control;
 
-CType::CType()
-{
+CType::CType() {
 	CS_Font = NULL;
 	Mini_Font = NULL;
 
 	def_rgb = &rgb::black;
+	def_a = MAX_RGBA;
 	def_ID = 0;
 
 	lastTime = 0;
@@ -41,6 +41,14 @@ bool CType::SetColor(const SDL_Color* col)
 	return true;
 }
 
+bool CType::SetOpacity(const short& A) {
+	if (A < 0 || A > MAX_RGBA) return false;
+
+	def_a = A;
+	changeFontAlpha(control.def_ID, A);
+	return true;
+}
+
 void CType::setDynamic()
 {
 	dynamicText = true;
@@ -53,7 +61,7 @@ void CType::renderCursor(const int& fontID, const SDL_Point* pos)
 		if (font != NULL) {
 			SDL_Rect symRec;
 			GetXY_spec(fontID, 'C', symRec);
-			CSurface::OnDraw(GetFont(fontID), &symRec, pos);
+			CSurface::OnDraw(GetFont(fontID), symRec, pos);
 		}
 	}
 
@@ -73,20 +81,32 @@ void CType::changeFontColor(const int& fontID, const SDL_Color* col)
 	SDL_Texture* font = GetFont(fontID);
 	if (font != NULL) SDL_SetTextureColorMod(font, col->r, col->g, col->b);
 }
-
 void CType::resetFontColor(const int& fontID)
 {
 	changeFontColor(fontID, control.def_rgb);
 }
-
 void CType::changeFontColor(const SDL_Color* col)
 {
 	changeFontColor(control.def_ID, col);
 }
-
 void CType::resetFontColor()
 {
 	resetFontColor(control.def_ID);
+}
+
+void CType::changeFontAlpha(const int& fontID, const short& A) {
+	if (A < 0 || A > MAX_RGBA) return;
+	SDL_Texture* font = GetFont(fontID);
+	if (font != NULL) SDL_SetTextureAlphaMod(font, A);
+}
+void CType::resetFontAlpha(const int& fontID) {
+	changeFontAlpha(fontID, control.def_a);
+}
+void CType::changeFontAlpha(const short& A) {
+	changeFontAlpha(control.def_ID, A);
+}
+void CType::resetFontAlpha() {
+	resetFontAlpha(control.def_ID);
 }
 
 int CType::Write(const int& fontID, char const* message, int Mx, int My)
@@ -159,7 +179,7 @@ int CType::Write(const int& fontID, char const* message, const SDL_Point* pos)
 			GetXY_spec(fontID, sym, symRec);
 			spec_req = false;
 		}
-		if (!CSurface::OnDraw(font, &symRec, &symPos)) return -1;
+		if (!CSurface::OnDraw(font, symRec, &symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 	}
 	return 0;
@@ -190,7 +210,7 @@ int CType::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 			GetXY_spec(fontID, line[i], symRec);
 			spec_req = false;
 		}
-		if (!CSurface::OnDraw(font, &symRec, &symPos)) return -1;
+		if (!CSurface::OnDraw(font, symRec, &symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 		i++;
 	}
@@ -415,14 +435,14 @@ int CType::CenterWrite(const int& fontID, char const* message, int Mx, int My)
 	return Length;
 }
 
-int CType::CenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR)
+int CType::CenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR)
 {
-	int centerX = dstR->x + (dstR->w / 2);
-	int centerY = dstR->y + (dstR->h / 2);
+	int centerX = dstR.x + (dstR.w / 2);
+	int centerY = dstR.y + (dstR.h / 2);
 	return CenterWrite(fontID, message, centerX, centerY);
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR, const SDL_Color* col)
+int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR, const SDL_Color* col)
 {
 	changeFontColor(fontID, col);
 	int retval = NewCenterWrite(fontID, message, dstR);
@@ -440,13 +460,13 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Poin
 	return retval;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR)
+int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR)
 {
-	int centerX = dstR->x + (dstR->w / 2);
-	int centerY = dstR->y + (dstR->h / 2);
+	int centerX = dstR.x + (dstR.w / 2);
+	int centerY = dstR.y + (dstR.h / 2);
 
 	int msgWidth = 0;
-	int msgHeight = getTextHeight(fontID, message, dstR->w);
+	int msgHeight = getTextHeight(fontID, message, dstR.w);
 
 	int lineW = 0;
 	int lineH = GetSymH(fontID);
@@ -460,7 +480,7 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect
 	while (message[i] != '\0')
 	{
 		if (message[i] == '\n') i++;
-		currentLine = getLine(fontID, message, i, dstR->w);
+		currentLine = getLine(fontID, message, i, dstR.w);
 		getLineDims(fontID, currentLine.c_str(), lineW);
 		pos.x = centerX - (lineW / 2);
 		WriteLine(fontID, currentLine.c_str(), &pos);
@@ -486,7 +506,7 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Poin
 	return WriteLine(fontID, message, &pos);
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Rect* dstR, const SDL_Color* col)
+int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col)
 {
 	changeFontColor(col);
 	int retval = NewCenterWrite(message, dstR);
@@ -504,7 +524,7 @@ int CType::NewCenterWrite(char const* message, const SDL_Point* dstC, const SDL_
 	return retval;
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Rect* dstR)
+int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR)
 {
 	return NewCenterWrite(control.def_ID, message, dstR);
 }
@@ -710,4 +730,9 @@ std::string CType::doubleToStr(double val, const unsigned int& precision) {
 		retstr = intToStr((int)(val));
 	}
 	return retstr;
+}
+
+void CType::OnCleanup() {
+	SDL_DestroyTexture(CS_Font);
+	SDL_DestroyTexture(Mini_Font);
 }

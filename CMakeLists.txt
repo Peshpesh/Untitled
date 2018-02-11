@@ -15,6 +15,7 @@ set(SRCDIR ${PROJECT_SOURCE_DIR}/src)
 
 set(SOURCE_FILES
 ${SRCDIR}/CApp.cpp
+${SRCDIR}/CApp_ext.cpp
 ${SRCDIR}/CApp_OnCleanup.cpp
 ${SRCDIR}/CApp_OnEvent.cpp
 ${SRCDIR}/CApp_OnInit.cpp
@@ -28,6 +29,10 @@ ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CMode.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
+${SRCDIR}/CTitle.cpp
+${SRCDIR}/CTitle_ext.cpp
+${SRCDIR}/CType.cpp
+${SRCDIR}/CType_def.cpp
 )
 
 set(HEADER_FILES
@@ -39,6 +44,8 @@ ${SRCDIR}/CFPS.h
 ${SRCDIR}/CMode.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
+${SRCDIR}/CTitle.h
+${SRCDIR}/CType.h
 ${SRCDIR}/Define.h
 )
 

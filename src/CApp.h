@@ -1,17 +1,30 @@
 #ifndef _C_APP_H_
 #define _C_APP_H_
 
+// Critical dependencies
 #include <SDL.h>
-
-#include "CAsset.h"
-
-#include "CMode.h"
 #include "Define.h"
-// #include "CArea.h"
-#include "CCamera.h"
-// #include "CEntity.h"
-#include "CSurface.h"
+
+// Systematic dependencies
 #include "CEvent.h"
+#include "CSurface.h"
+#include "CSound.h"
+
+// Utility dependencies
+#include "CAsset.h"
+#include "CType.h"
+
+// Mechanical dependencies
+#include "CCamera.h"
+
+// Structural dependencies
+#include "CMode.h"
+#include "CTitle.h"
+
+
+// #include "CArea.h"
+// #include "CEntity.h"
+
 // #include "CAnimation.h"
 // #include "CPlayer.h"
 // #include "CHUD.h"
@@ -20,13 +33,17 @@
 // #include "CTransport.h"
 // #include "CGamedata.h"
 // #include "CMenu.h"
-// #include "CTitle.h"
 // #include "Config.h"
 // #include "CInventory.h"
 // #include "CPause.h"
 // #include "CEntityRes.h"
 // #include "CSceneryMod.h"
-#include "CSound.h"
+
+namespace gen {
+	extern const short quit_msg_f;
+	extern const SDL_Point quit_msg_p;
+	extern const SDL_Color* quit_msg_c;
+}
 
 class CApp : public CEvent
 {
@@ -77,5 +94,7 @@ public:
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 	void OnKeyUp(SDL_Keycode sym, Uint16 mod);
+
+	void drawQuitMsg();
 };
 #endif

@@ -3,9 +3,11 @@
 void CApp::OnCleanup() {
 	SDL_DestroyWindow(Win_Display);
 
+	CType::control.OnCleanup();
+	CAsset::OnCleanup();
 	CSurface::OnCleanup();
 
-	SDL_Quit();
+	// SDL_Quit();
 }
 
 // void CApp::OnCleanup()

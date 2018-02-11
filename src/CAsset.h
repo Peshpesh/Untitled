@@ -122,20 +122,20 @@ class CAsset
 	public:
     static bool drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 
-    static bool drawBox(const SDL_Rect* box, const SDL_Point* color);
-    static bool drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thick);
+    static bool drawBox(const SDL_Rect& box, const SDL_Point* color);
+    static bool drawBox(const SDL_Rect& box, const SDL_Point* color, const int& thick);
     static bool drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 
-		static bool drawBoxFill(const SDL_Rect* box, const SDL_Point* color);
+		static bool drawBoxFill(const SDL_Rect& box, const SDL_Point* color);
     static bool drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color);
 
-    static bool drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* color);
-    static bool drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col);
+    static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color);
+    static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col);
 
-    static bool drawArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb);
-    static bool drawArrowFill(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb);
-    static bool drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb);
-    static bool drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb);
+    static bool drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb);
+    static bool drawArrowFill(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb);
+    static bool drawStrArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb);
+    static bool drawStrArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb);
 
     static bool drawArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb);
     static bool drawArrowFill(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb);

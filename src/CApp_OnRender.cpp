@@ -7,13 +7,24 @@ void CApp::OnRender() {
 
 	if (CMode::isFlagOn(APP_MODE_GAME)) {
 		// CGame::control.OnRender();
-	} else if (CMode::isFlagOn(APP_MODE_TITLE)/*&& !CTitle::control.OnRender()*/) {
-    // error
+	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
+    CTitle::control.OnRender();
 	}	else if (CMode::isFlagOn(APP_MODE_FATAL)) {
 		//
 	}
 
+	if (esc_init) drawQuitMsg();
+
 	CSurface::Present();
+}
+
+void CApp::drawQuitMsg() {
+	using namespace gen;
+	int msg_A = ((double)(SDL_GetTicks() - esc_init) / ESC_THRESH) * MAX_RGBA;
+	if (CType::control.SetOpacity(msg_A)) {
+		CType::Write(quit_msg_f, "Quitting...", &quit_msg_p, quit_msg_c);
+	}
+	CType::control.SetOpacity(MAX_RGBA);
 }
 
 // void CApp::OnRender()

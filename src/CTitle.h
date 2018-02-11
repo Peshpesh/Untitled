@@ -1,46 +1,76 @@
-#ifndef _CTITLE_H_
-#define _CTITLE_H_
+#ifndef _C_TITLE_H_
+#define _C_TITLE_H_
 
-#include "Font.h"
-#include "Config.h"
-#include "CGamedata.h"
-#include "Define.h"
+// #include "CConfig.h"
+#include "CEvent.h"
+#include "CAsset.h"
+#include "CType.h"
+#include "CSound.h"
 
-enum MAIN_OPTIONS
-{
-	NEW_GAME = 0,
-	LOAD_GAME,
-	STATISTICS,
-	OPTIONS,
-	QUIT_GAME,
-	// MAP_EDITOR,
+namespace Title {
+  extern const SDL_Color* f_def;
+  extern const SDL_Color* f_hov;
+  extern const SDL_Color* f_lock;
+  extern const SDL_Point* o_def;
+  extern const SDL_Point* o_hov;
+  extern const SDL_Point* o_lock;
+  extern const short num_options;
+  extern const short w;
+  extern const short h;
+  extern const short dx;
+  extern const short dy;
+  extern const short x;
+  extern const short y;
+  extern const short stroke_w;
+  extern const char* const opt_list[];
+  enum menus {
+    MAIN = 0,
+    NEW_GAME,
+    LOAD_GAME,
+    OPTIONS,
+  };
+  namespace new_game {
+    //
+  };
+  namespace load_game {
+    //
+  };
+  namespace options {
+    //
+  };
 };
 
-class CTitle
-{
-public:
-	static CTitle		MainMenu;
+class CTitle : public CEvent {
+  CTitle();
 
-	bool Active;
-	bool Submit;
-	bool selectGame;
-	char sfile;
-	bool showstats;
-	unsigned short hilight;
-	char* options;
+  short menu_kind;
+  short pos;
 
 public:
 
-	CTitle();
+  static CTitle control;
 
-	bool OnInit();
+  void OnInit();
 
-	void OnEvent(SDL_Keycode sym);
+  void OnEvent(SDL_Event* Event);
 
-	void OnLoop();
+  bool OnRender();
 
-	void OnRender(SDL_Renderer* renderer);
-	void RenderStats(SDL_Renderer* renderer);
+  void OnLoop();
+
+  void OnCleanup();
+
+private:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+
+private:
+  bool drawMainMenu();
+  bool drawNewGame();
+  bool drawLoadGame();
+  bool drawOptions();
+
+private:
+  short getNumOptions();
 };
 
 #endif

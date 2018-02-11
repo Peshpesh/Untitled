@@ -125,22 +125,22 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect* srcrect, const SDL_Rect* dstrect)
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Rect& dstrect)
 {
-	if (Surf_Src == NULL || srcrect == NULL || dstrect == NULL)
+	if (Surf_Src == NULL)
 		return false;
 
-	SDL_RenderCopy(Win_Renderer, Surf_Src, srcrect, dstrect);
+	SDL_RenderCopy(Win_Renderer, Surf_Src, &srcrect, &dstrect);
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect* srcrect, const SDL_Point* dstpos)
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Point* dstpos)
 {
-	if (Surf_Src == NULL || srcrect == NULL || dstpos == NULL)
+	if (Surf_Src == NULL || dstpos == NULL)
 		return false;
 
-	SDL_Rect DestR = {dstpos->x, dstpos->y, srcrect->w, srcrect->h};
+	SDL_Rect DestR = {dstpos->x, dstpos->y, srcrect.w, srcrect.h};
 
-	SDL_RenderCopy(Win_Renderer, Surf_Src, srcrect, &DestR);
+	SDL_RenderCopy(Win_Renderer, Surf_Src, &srcrect, &DestR);
 	return true;
 }

@@ -8,6 +8,7 @@
 #include "CSurface.h"
 #include "CAsset.h"
 #include "CFPS.h"
+#include "Define.h"
 
 enum FONT_NAMES
 {
@@ -32,15 +33,19 @@ private:
 
 private:
 	const SDL_Color* def_rgb;
+	short def_a;
 	int def_ID;
 
 public:
-	Font();
+	CType();
 
 	bool OnInit();
 
+	void OnCleanup();
+
 	void SetFont(const int& fontID);
 	bool SetColor(const SDL_Color* col);
+	bool SetOpacity(const short& A);
 	void setDynamic();
 	void renderCursor(const int& fontID, const SDL_Point* pos);
 
@@ -63,6 +68,11 @@ private:
 	static void resetFontColor(const int& fontID);
 	static void changeFontColor(const SDL_Color* col);
 	static void resetFontColor();
+	static void changeFontAlpha(const int& fontID, const short& A);
+	static void resetFontAlpha(const int& fontID);
+	static void changeFontAlpha(const short& A);
+	static void resetFontAlpha();
+
 
 public:
 	static void GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H);
@@ -128,15 +138,15 @@ public:
 	* param My : y-position of message center */
 	static int CenterWrite(const int& fontID, char const* message, int Mx, int My);
 
-	static int CenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR);
+	static int CenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR);
 
-	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR, const SDL_Color* col);
+	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR, const SDL_Color* col);
 	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Point* dstC, const SDL_Color* col);
-	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Rect* dstR);
+	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR);
 	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Point* dstC);
-	static int NewCenterWrite(char const* message, const SDL_Rect* dstR, const SDL_Color* col);
+	static int NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col);
 	static int NewCenterWrite(char const* message, const SDL_Point* dstC, const SDL_Color* col);
-	static int NewCenterWrite(char const* message, const SDL_Rect* dstR);
+	static int NewCenterWrite(char const* message, const SDL_Rect& dstR);
 	static int NewCenterWrite(char const* message, const SDL_Point* dstC);
 
 	static void getLineDims(const int& fontID, char const* message, int& msgWidth);

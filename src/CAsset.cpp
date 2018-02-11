@@ -150,35 +150,35 @@ bool CAsset::drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* c
   return true;
 }
 
-bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color)
+bool CAsset::drawBox(const SDL_Rect& box, const SDL_Point* color)
 {
   const int defThick = 1;
   return drawBox(box, color, defThick);
 }
 
-bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thick)
+bool CAsset::drawBox(const SDL_Rect& box, const SDL_Point* color, const int& thick)
 {
-  if (box == NULL || color == NULL || thick < 0) return false;
+  if (color == NULL || thick < 0) return false;
   if (thick == 0) return true;
 
   SDL_Rect srcR = getPixel(color);
   SDL_Rect dstR;
 
   // top side
-  dstR = getRect(box->x, box->y, box->w, thick);
-  CSurface::OnDraw(paltex, &srcR, &dstR);
+  dstR = getRect(box.x, box.y, box.w, thick);
+  CSurface::OnDraw(paltex, srcR, dstR);
 
   // bottom side
-  dstR = getRect(box->x, box->y + box->h - thick, box->w, thick);
-  CSurface::OnDraw(paltex, &srcR, &dstR);
+  dstR = getRect(box.x, box.y + box.h - thick, box.w, thick);
+  CSurface::OnDraw(paltex, srcR, dstR);
 
   // left side
-  dstR = getRect(box->x, box->y, thick, box->h);
-  CSurface::OnDraw(paltex, &srcR, &dstR);
+  dstR = getRect(box.x, box.y, thick, box.h);
+  CSurface::OnDraw(paltex, srcR, dstR);
 
   // right side
-  dstR = getRect(box->x + box->w - thick, box->y, thick, box->h);
-  CSurface::OnDraw(paltex, &srcR, &dstR);
+  dstR = getRect(box.x + box.w - thick, box.y, thick, box.h);
+  CSurface::OnDraw(paltex, srcR, dstR);
 
   return true;
 }
@@ -186,15 +186,15 @@ bool CAsset::drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thi
 bool CAsset::drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick)
 {
   SDL_Rect box = getRect(A, B);
-  return drawBox(&box, color, thick);
+  return drawBox(box, color, thick);
 }
 
-bool CAsset::drawBoxFill(const SDL_Rect* box, const SDL_Point* color)
+bool CAsset::drawBoxFill(const SDL_Rect& box, const SDL_Point* color)
 {
-  if (box == NULL || color == NULL) return false;
+  if (color == NULL) return false;
 
   SDL_Rect srcR = getPixel(color);
-  if (!CSurface::OnDraw(paltex, &srcR, box)) return false;
+  if (!CSurface::OnDraw(paltex, srcR, box)) return false;
 
   return true;
 }
@@ -202,10 +202,10 @@ bool CAsset::drawBoxFill(const SDL_Rect* box, const SDL_Point* color)
 bool CAsset::drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color)
 {
   SDL_Rect dstR = getRect(A, B);
-  return drawBoxFill(&dstR, color);
+  return drawBoxFill(dstR, color);
 }
 
-bool CAsset::drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* color)
+bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color)
 {
   if (!drawBoxFill(box, color)) return false;
   if (!drawBox(box, &palette::black, str_w)) return false;
@@ -213,7 +213,7 @@ bool CAsset::drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* 
   return true;
 }
 
-bool CAsset::drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col)
+bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col)
 {
   if (!drawBoxFill(box, color)) return false;
   if (!drawBox(box, str_col, str_w)) return false;
@@ -221,7 +221,7 @@ bool CAsset::drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* 
   return true;
 }
 
-bool CAsset::drawArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb)
+bool CAsset::drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb)
 {
   using namespace symbols;
 
@@ -231,17 +231,17 @@ bool CAsset::drawArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* r
 
   switch (dir)
   {
-    case 'L': retval = CSurface::OnDraw(arrtex, &s_AL, dstR); break;
-    case 'R': retval = CSurface::OnDraw(arrtex, &s_AR, dstR); break;
-    case 'U': retval = CSurface::OnDraw(arrtex, &s_AU, dstR); break;
-    case 'D': retval = CSurface::OnDraw(arrtex, &s_AD, dstR); break;
+    case 'L': retval = CSurface::OnDraw(arrtex, s_AL, dstR); break;
+    case 'R': retval = CSurface::OnDraw(arrtex, s_AR, dstR); break;
+    case 'U': retval = CSurface::OnDraw(arrtex, s_AU, dstR); break;
+    case 'D': retval = CSurface::OnDraw(arrtex, s_AD, dstR); break;
     default: break;
   }
 
   return retval;
 }
 
-bool CAsset::drawArrowFill(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb)
+bool CAsset::drawArrowFill(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb)
 {
   using namespace symbols;
 
@@ -251,17 +251,17 @@ bool CAsset::drawArrowFill(const SDL_Rect* dstR, const char& dir, const SDL_Colo
 
   switch (dir)
   {
-    case 'L': retval = CSurface::OnDraw(arrtex, &f_AL, dstR); break;
-    case 'R': retval = CSurface::OnDraw(arrtex, &f_AR, dstR); break;
-    case 'U': retval = CSurface::OnDraw(arrtex, &f_AU, dstR); break;
-    case 'D': retval = CSurface::OnDraw(arrtex, &f_AD, dstR); break;
+    case 'L': retval = CSurface::OnDraw(arrtex, f_AL, dstR); break;
+    case 'R': retval = CSurface::OnDraw(arrtex, f_AR, dstR); break;
+    case 'U': retval = CSurface::OnDraw(arrtex, f_AU, dstR); break;
+    case 'D': retval = CSurface::OnDraw(arrtex, f_AD, dstR); break;
     default: break;
   }
 
   return retval;
 }
 
-bool CAsset::drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb)
+bool CAsset::drawStrArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb)
 {
   if (!drawArrowFill(dstR, dir, rgb))       return false;
   if (!drawArrow(dstR, dir, &rgb::black))   return false;
@@ -269,7 +269,7 @@ bool CAsset::drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color
   return true;
 }
 
-bool CAsset::drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb)
+bool CAsset::drawStrArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb)
 {
   if (!drawArrowFill(dstR, dir, rgb))   return false;
   if (!drawArrow(dstR, dir, str_rgb))   return false;
@@ -280,25 +280,25 @@ bool CAsset::drawStrArrow(const SDL_Rect* dstR, const char& dir, const SDL_Color
 bool CAsset::drawArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb)
 {
   SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
-  return drawArrow(&dstR, dir, rgb);
+  return drawArrow(dstR, dir, rgb);
 }
 
 bool CAsset::drawArrowFill(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb)
 {
   SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
-  return drawArrowFill(&dstR, dir, rgb);
+  return drawArrowFill(dstR, dir, rgb);
 }
 
 bool CAsset::drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb)
 {
   SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
-  return drawStrArrow(&dstR, dir, rgb);
+  return drawStrArrow(dstR, dir, rgb);
 }
 
 bool CAsset::drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb)
 {
   SDL_Rect dstR = {dstPos->x, dstPos->y, ARR_SZ, ARR_SZ};
-  return drawStrArrow(&dstR, dir, rgb, str_rgb);
+  return drawStrArrow(dstR, dir, rgb, str_rgb);
 }
 
 bool CAsset::isInt(const char& c) {
@@ -386,5 +386,4 @@ double CAsset::strToDouble(const std::string& str) {
 void CAsset::OnCleanup() {
   SDL_DestroyTexture(paltex);
   SDL_DestroyTexture(arrtex);
-  // SDL_DestroyTexture(interface);
 }
