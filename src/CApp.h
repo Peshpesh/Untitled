@@ -16,6 +16,7 @@
 
 // Mechanical dependencies
 #include "CControls.h"
+#include "CConfig.h"
 #include "CCamera.h"
 
 // Structural dependencies

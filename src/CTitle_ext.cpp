@@ -31,7 +31,7 @@ namespace Title {
   namespace options {
     const SDL_Color* f_def = &rgb::black;
     const SDL_Color* f_hov = &rgb::black;
-    const SDL_Color* f_act = &rgb::red;
+    const SDL_Color* f_act = &rgb::black;
     const SDL_Point* o_def = &palette::white;
     const SDL_Point* o_hov = &palette::light_green;
     const SDL_Point* o_act = &palette::light_red;
@@ -56,9 +56,10 @@ namespace Title {
       CON_DOWN,
       CON_PAUSE,
     };
-    // const char* const config_list[] = {
-    //   "",
-    // };
+    const char* const config_list[] = {
+      "SFX Volume",
+      "BGM Volume",
+    };
 
     const short dx = 0;       // horizontal offset for each menu option
     const short dy = 20;      // vertical offset for each menu option

@@ -55,7 +55,7 @@ namespace Title {
     extern const short num_options;
     extern const char* const controls_list[];
     extern const Gamecon key_list[];
-    // extern const char* const config_list[];
+    extern const char* const config_list[];
     extern const short dx;
     extern const short dy;
     extern const short name_w;
@@ -77,7 +77,9 @@ class CTitle : public CEvent {
 public:
 
   static CTitle control;
+  bool call_terminate;
 
+public:
   void OnInit();
 
   void OnEvent(SDL_Event* Event);

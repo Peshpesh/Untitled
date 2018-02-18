@@ -11,6 +11,7 @@
 
 #define ARR_SZ 15
 #define MAX_RGBA 255
+#define MAX_VOLUME 128
 
 /* "Escape Threshold":  amount of time the user has to hold down the ESC key  */
 /*                      to terminate the application                          */

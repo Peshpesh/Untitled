@@ -26,7 +26,6 @@ struct ControlKey {
 };
 
 class CControls : public CEvent {
-
   CControls();
   ControlKey key;
 
@@ -39,7 +38,7 @@ public:
 
 private:
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
-	bool ValidKey(SDL_Keycode sym, Uint16 mod);
+	bool validKey(SDL_Keycode sym, Uint16 mod);
 
 public:
 	Gamecon getAction(SDL_Keycode sym, Uint16 mod);
@@ -47,8 +46,8 @@ public:
 
 private:
 	bool OnInit();
-	void Reset();
-	void Save();
+	void reset();
+	void save();
 };
 
 #endif

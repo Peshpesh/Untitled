@@ -10,8 +10,8 @@ CControls::CControls() {
 	con_change = CON_NONE;
 
   if (!OnInit()) {
-    Reset();
-    Save();
+    reset();
+    save();
   }
 }
 
@@ -24,7 +24,12 @@ bool CControls::OnInit() {
     return false;
   }
 
-  fread(&key, sizeof(ControlKey), 1, FileHandle);
+  if (fread(&key, sizeof(ControlKey), 1, FileHandle) != 1) {
+    fclose(FileHandle);
+    return false;
+  }
+  // fread(&key, sizeof(ControlKey), 1, FileHandle);
+
   fclose(FileHandle);
   return true;
 }
@@ -38,7 +43,7 @@ void CControls::OnEvent(SDL_Event* Event) {
 }
 
 void CControls::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
-  if (!ValidKey(sym, mod)) return;
+  if (!validKey(sym, mod)) return;
   switch (con_change) {
     case CON_ATTACK:    key.c_attack = sym;   break;
     case CON_JUMP:      key.c_jump = sym;     break;
@@ -50,10 +55,10 @@ void CControls::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
     default:            break;
   }
   con_change = CON_NONE;
-  Save();
+  save();
 }
 
-bool CControls::ValidKey(SDL_Keycode sym, Uint16 mod) {
+bool CControls::validKey(SDL_Keycode sym, Uint16 mod) {
   // checks if the entered key is eligible for controls
   // For example, the ESC key cannot be a game control
   // because it's reserved for quitting the game, so
@@ -92,7 +97,7 @@ SDL_Keycode CControls::getAssignKey(const Gamecon& action) {
   return SDLK_ESCAPE;
 }
 
-void CControls::Reset() {
+void CControls::reset() {
   // reset control key to default settings
   key.c_attack  = SDLK_z;
   key.c_jump    = SDLK_SPACE;
@@ -103,16 +108,22 @@ void CControls::Reset() {
   key.c_pause   = SDLK_p;
 }
 
-void CControls::Save() {
+void CControls::save() {
   // save control key file
   // const char* const key_path = "../data/game/controls.key";
   FILE* FileHandle = fopen(key_path, "wb");
 
   if (FileHandle == NULL) {
-    // CInform::InfoControl.pushInform("---CSCENERY.OnSave---\nfailed to open new file");
+    // CInform::InfoControl.pushInform("---CSCENERY.Onsave---\nfailed to open new file");
     return;
   }
 
-  fwrite(&key, sizeof(ControlKey), 1, FileHandle);
+  if (fwrite(&key, sizeof(ControlKey), 1, FileHandle) != 1) {
+    // write error
+    fclose(FileHandle);
+    return;
+  }
+  // fwrite(&key, sizeof(ControlKey), 1, FileHandle);
+
   fclose(FileHandle);
 }

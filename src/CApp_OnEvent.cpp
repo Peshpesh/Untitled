@@ -16,6 +16,7 @@ void CApp::OnEvent(SDL_Event* Event) {
 	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
 		// Process events at title screen
 		CTitle::control.OnEvent(Event);
+		if (CTitle::control.call_terminate) Running = false;
 	} else if (CMode::isFlagOn(APP_MODE_FATAL)) {
 		// Process events during a fatal error
 	}

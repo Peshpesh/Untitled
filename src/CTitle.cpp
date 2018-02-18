@@ -3,6 +3,7 @@
 CTitle CTitle::control;
 
 CTitle::CTitle() {
+  call_terminate = false;
   OnInit();
 }
 
@@ -69,24 +70,22 @@ void CTitle::eventTitle(const Gamecon& action) {
     case CON_UP:   if (--pos < 0) pos = getNumOptions() - 1; break;
     case CON_ATTACK: {
       switch (pos) {
-        case decision::DEC_NEW:     menu_kind = Title::NEW_GAME;  break;
-        case decision::DEC_LOAD:    menu_kind = Title::LOAD_GAME; break;
-        case decision::DEC_OPTIONS: menu_kind = Title::OPTIONS;   break;
-        case decision::DEC_QUIT:    break;
-        default:          break;
+        case decision::DEC_NEW:     menu_kind = Title::NEW_GAME;  pos = 0; break;
+        case decision::DEC_LOAD:    menu_kind = Title::LOAD_GAME; pos = 0; break;
+        case decision::DEC_OPTIONS: menu_kind = Title::OPTIONS;   pos = 0; break;
+        case decision::DEC_QUIT:    call_terminate = true;        break;
+        default:                    break;
       }
-      pos = 0;
       break;
     }
     case CON_PAUSE: {
       switch (pos) {
-        case decision::DEC_NEW:     menu_kind = Title::NEW_GAME;  break;
-        case decision::DEC_LOAD:    menu_kind = Title::LOAD_GAME; break;
-        case decision::DEC_OPTIONS: menu_kind = Title::OPTIONS;   break;
-        case decision::DEC_QUIT:    break;
+        case decision::DEC_NEW:     menu_kind = Title::NEW_GAME;  pos = 0; break;
+        case decision::DEC_LOAD:    menu_kind = Title::LOAD_GAME; pos = 0; break;
+        case decision::DEC_OPTIONS: menu_kind = Title::OPTIONS;   pos = 0; break;
+        case decision::DEC_QUIT:    call_terminate = true;        break;
         default:                    break;
       }
-      pos = 0;
       break;
     }
     default: break;
@@ -106,10 +105,12 @@ void CTitle::eventOptions(const Gamecon& action) {
     case CON_UP:   if (--pos < 0) pos = getNumOptions() - 1; break;
     case CON_ATTACK: {
       if (pos < num_controls) CControls::handler.con_change = key_list[pos];
+      else; // config ;
       break;
     }
     case CON_PAUSE: {
       if (pos < num_controls) CControls::handler.con_change = key_list[pos];
+      else; // config ;
       break;
     }
     case CON_JUMP: menu_kind = Title::MAIN; pos = 0; break;
@@ -154,12 +155,13 @@ bool CTitle::drawOptions() {
   SDL_Rect r_bar = {x + name_w, y, val_w, dy};
 
   for (int i = 0; i < num_options; i++) {
-    CAsset::drawStrBox(l_bar, stroke_w, (i != pos) ? o_def : o_hov);
-    CAsset::drawStrBox(r_bar, stroke_w, (i != pos) ? o_def : o_hov);
-    CType::NewCenterWrite(controls_list[i], l_bar, (i != pos) ? f_def : f_hov);
+    const SDL_Color* f_col = (i != pos) ? f_def : ((CControls::handler.con_change != CON_NONE) ? f_act : f_hov);
+    const SDL_Point* o_col = (i != pos) ? o_def : ((CControls::handler.con_change != CON_NONE) ? o_act : o_hov);
+    CAsset::drawStrBox(l_bar, stroke_w, o_col);
+    CAsset::drawStrBox(r_bar, stroke_w, o_col);
+    CType::NewCenterWrite(controls_list[i], l_bar, f_col);
     CType::NewCenterWrite(
-      (char*)(SDL_GetKeyName(CControls::handler.getAssignKey(key_list[i]))),
-      r_bar, (i != pos) ? f_def : f_hov);
+      (char*)(SDL_GetKeyName(CControls::handler.getAssignKey(key_list[i]))), r_bar, f_col);
     l_bar.x += dx; r_bar.x += dx;
     l_bar.y += dy; r_bar.y += dy;
   }
