@@ -22,7 +22,7 @@ void CApp::drawQuitMsg() {
 	using namespace gen;
 	int msg_A = ((double)(SDL_GetTicks() - esc_init) / ESC_THRESH) * MAX_RGBA;
 	if (CType::control.SetOpacity(msg_A)) {
-		CType::Write(quit_msg_f, "Quitting...", &quit_msg_p, quit_msg_c);
+		CType::Write(quit_msg_f, quit_msg, &quit_msg_p, quit_msg_c);
 	}
 	CType::control.SetOpacity(MAX_RGBA);
 }

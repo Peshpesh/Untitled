@@ -24,6 +24,7 @@ ${SRCDIR}/CApp_OnRender.cpp
 ${SRCDIR}/CAsset.cpp
 ${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CCamera.cpp
+${SRCDIR}/CControls.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CMode.cpp
@@ -39,6 +40,7 @@ set(HEADER_FILES
 ${SRCDIR}/CApp.h
 ${SRCDIR}/CAsset.h
 ${SRCDIR}/CCamera.h
+${SRCDIR}/CControls.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFPS.h
 ${SRCDIR}/CMode.h

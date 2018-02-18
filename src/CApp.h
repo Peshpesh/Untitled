@@ -15,6 +15,7 @@
 #include "CType.h"
 
 // Mechanical dependencies
+#include "CControls.h"
 #include "CCamera.h"
 
 // Structural dependencies
@@ -40,6 +41,7 @@
 // #include "CSceneryMod.h"
 
 namespace gen {
+	extern const char* const quit_msg;
 	extern const short quit_msg_f;
 	extern const SDL_Point quit_msg_p;
 	extern const SDL_Color* quit_msg_c;
