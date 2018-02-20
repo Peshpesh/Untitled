@@ -1,11 +1,13 @@
 #ifndef _C_TITLE_H_
 #define _C_TITLE_H_
 
-#include "CControls.h"
 #include "CEvent.h"
 #include "CAsset.h"
 #include "CType.h"
 #include "CSound.h"
+
+#include "CControls.h"
+#include "CConfig.h"
 
 namespace Title {
   extern const SDL_Color* f_def;
@@ -53,9 +55,10 @@ namespace Title {
     extern const short num_controls;
     extern const short num_config;
     extern const short num_options;
-    extern const char* const controls_list[];
-    extern const Gamecon key_list[];
-    extern const char* const config_list[];
+    extern const char* const controls_text[];
+    extern const Gamecon controls_list[];
+    extern const char* const config_text[];
+    extern const Configflag config_list[];
     extern const short dx;
     extern const short dy;
     extern const short name_w;

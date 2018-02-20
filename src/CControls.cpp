@@ -64,9 +64,18 @@ bool CControls::validKey(SDL_Keycode sym, Uint16 mod) {
   // because it's reserved for quitting the game, so
   // setting the ESC to "attack/confirm" should
   // not be allowed.
-  if (sym == SDLK_ESCAPE) return false;
-  if (getAction(sym, mod) != CON_NONE) return false;
-  return true;
+  bool retval = false;
+
+  if (sym == SDLK_ESCAPE) return retval;
+
+  switch (getAction(sym, mod)) {
+    case CON_ATTACK: con_change = CON_NONE; break;
+    case CON_JUMP:   con_change = CON_NONE; break;
+    case CON_PAUSE:  con_change = CON_NONE; break;
+    case CON_NONE:   retval = true; break;
+    default: break;
+  }
+  return retval;
 }
 
 Gamecon CControls::getAction(SDL_Keycode sym, Uint16 mod) {

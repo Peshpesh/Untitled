@@ -36,9 +36,9 @@ namespace Title {
     const SDL_Point* o_hov = &palette::light_green;
     const SDL_Point* o_act = &palette::light_red;
     const short num_controls = 7;
-    const short num_config = 0;
+    const short num_config = 3;
     const short num_options = num_controls + num_config;
-    const char* const controls_list[] = {
+    const char* const controls_text[] = {
       "Confirm - Attack",
       "Back - Jump",
       "Left",
@@ -47,7 +47,7 @@ namespace Title {
       "Down - Examine",
       "Pause",
     };
-    const Gamecon key_list[] = {
+    const Gamecon controls_list[] = {
       CON_ATTACK,
       CON_JUMP,
       CON_LEFT,
@@ -56,11 +56,16 @@ namespace Title {
       CON_DOWN,
       CON_PAUSE,
     };
-    const char* const config_list[] = {
+    const char* const config_text[] = {
       "SFX Volume",
       "BGM Volume",
+      "Type Volume",
     };
-
+    const Configflag config_list[] = {
+      CONFIG_SFX,
+      CONFIG_BGM,
+      CONFIG_TEX,
+    };
     const short dx = 0;       // horizontal offset for each menu option
     const short dy = 20;      // vertical offset for each menu option
     const short name_w = 150; // option name width

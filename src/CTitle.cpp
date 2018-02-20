@@ -16,6 +16,9 @@ void CTitle::OnEvent(SDL_Event* Event) {
   if (CControls::handler.con_change != CON_NONE) {
     CControls::handler.OnEvent(Event);
     return;
+  } else if (CConfig::control.con_change != CONFIG_NONE) {
+    CConfig::control.OnEvent(Event);
+    return;
   }
   CEvent::OnEvent(Event);
 }
@@ -104,13 +107,13 @@ void CTitle::eventOptions(const Gamecon& action) {
     case CON_DOWN: if (++pos >= getNumOptions()) pos = 0;    break;
     case CON_UP:   if (--pos < 0) pos = getNumOptions() - 1; break;
     case CON_ATTACK: {
-      if (pos < num_controls) CControls::handler.con_change = key_list[pos];
-      else; // config ;
+      if (pos < num_controls) CControls::handler.con_change = controls_list[pos];
+      else CConfig::control.con_change = config_list[pos - num_controls];
       break;
     }
     case CON_PAUSE: {
-      if (pos < num_controls) CControls::handler.con_change = key_list[pos];
-      else; // config ;
+      if (pos < num_controls) CControls::handler.con_change = controls_list[pos];
+      else CConfig::control.con_change = config_list[pos - num_controls];
       break;
     }
     case CON_JUMP: menu_kind = Title::MAIN; pos = 0; break;
@@ -154,14 +157,34 @@ bool CTitle::drawOptions() {
   SDL_Rect l_bar = {x, y, name_w, dy};
   SDL_Rect r_bar = {x + name_w, y, val_w, dy};
 
-  for (int i = 0; i < num_options; i++) {
-    const SDL_Color* f_col = (i != pos) ? f_def : ((CControls::handler.con_change != CON_NONE) ? f_act : f_hov);
-    const SDL_Point* o_col = (i != pos) ? o_def : ((CControls::handler.con_change != CON_NONE) ? o_act : o_hov);
+  for (int i = 0; i < num_controls; i++) {
+    bool modify = CControls::handler.con_change != CON_NONE;
+    const SDL_Color* f_col = (i != pos) ? f_def : (modify ? f_act : f_hov);
+    const SDL_Point* o_col = (i != pos) ? o_def : (modify ? o_act : o_hov);
     CAsset::drawStrBox(l_bar, stroke_w, o_col);
     CAsset::drawStrBox(r_bar, stroke_w, o_col);
-    CType::NewCenterWrite(controls_list[i], l_bar, f_col);
+    CType::NewCenterWrite(controls_text[i], l_bar, f_col);
     CType::NewCenterWrite(
-      (char*)(SDL_GetKeyName(CControls::handler.getAssignKey(key_list[i]))), r_bar, f_col);
+      (char*)(SDL_GetKeyName(CControls::handler.getAssignKey(controls_list[i]))), r_bar, f_col);
+    l_bar.x += dx; r_bar.x += dx;
+    l_bar.y += dy; r_bar.y += dy;
+  }
+
+  for (int i = 0; i < num_config; i++) {
+    bool modify = CConfig::control.con_change != CONFIG_NONE;
+    const SDL_Color* f_col = (i != pos - num_controls) ? f_def : (modify ? f_act : f_hov);
+    const SDL_Point* o_col = (i != pos - num_controls) ? o_def : (modify ? o_act : o_hov);
+    CAsset::drawStrBox(l_bar, stroke_w, o_col);
+    CAsset::drawStrBox(r_bar, stroke_w, o_col);
+    CType::NewCenterWrite(config_text[i], l_bar, f_col);
+    std::string val;
+    switch (config_list[i]) {
+      case CONFIG_SFX: val = CType::intToStr(CConfig::control.getVolume(config_list[i])); break;
+      case CONFIG_BGM: val = CType::intToStr(CConfig::control.getVolume(config_list[i])); break;
+      case CONFIG_TEX: val = CType::intToStr(CConfig::control.getVolume(config_list[i])); break;
+      default: break;
+    }
+    CType::NewCenterWrite(val.c_str(), r_bar, f_col);
     l_bar.x += dx; r_bar.x += dx;
     l_bar.y += dy; r_bar.y += dy;
   }
