@@ -52,6 +52,7 @@ namespace Title {
     extern const SDL_Point* o_def;
     extern const SDL_Point* o_hov;
     extern const SDL_Point* o_act;
+    extern const SDL_Point* fill_col;
     extern const short num_controls;
     extern const short num_config;
     extern const short num_options;

@@ -11,6 +11,8 @@ struct ConfigKey {
   unsigned short sfx_volume;
   unsigned short bgm_volume;
   unsigned short tex_volume;
+  bool stereo;
+  bool fullscreen;
 };
 
 enum Configflag {
@@ -18,6 +20,8 @@ enum Configflag {
   CONFIG_SFX,
   CONFIG_BGM,
   CONFIG_TEX,
+  CONFIG_AUDIOOUT,
+  CONFIG_DISPLAY,
 };
 
 class CConfig : public CEvent {
@@ -43,8 +47,12 @@ private:
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 private:
   void handleVolume(unsigned short& vol, const Gamecon& action);
+  void handleAudioOut(const Gamecon& action);
+  void handleDisplay(const Gamecon& action);
 public:
   short getVolume(const Configflag& vol_type);
+  bool isStereo();
+  bool isFullscreen();
 };
 
 #endif

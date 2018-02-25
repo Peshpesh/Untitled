@@ -177,14 +177,20 @@ bool CTitle::drawOptions() {
     CAsset::drawStrBox(l_bar, stroke_w, o_col);
     CAsset::drawStrBox(r_bar, stroke_w, o_col);
     CType::NewCenterWrite(config_text[i], l_bar, f_col);
+
     std::string val;
-    switch (config_list[i]) {
-      case CONFIG_SFX: val = CType::intToStr(CConfig::control.getVolume(config_list[i])); break;
-      case CONFIG_BGM: val = CType::intToStr(CConfig::control.getVolume(config_list[i])); break;
-      case CONFIG_TEX: val = CType::intToStr(CConfig::control.getVolume(config_list[i])); break;
-      default: break;
-    }
-    CType::NewCenterWrite(val.c_str(), r_bar, f_col);
+    if (config_list[i] == CONFIG_SFX || config_list[i] == CONFIG_BGM || config_list[i] == CONFIG_TEX) {
+      double fill_fract = CConfig::control.getVolume(config_list[i]) / (double)(MAX_VOLUME);
+      SDL_Rect bar_fill = {r_bar.x + stroke_w, r_bar.y + stroke_w, fill_fract * (r_bar.w - (stroke_w * 2)), r_bar.h - (stroke_w * 2)};
+      CAsset::drawBoxFill(bar_fill, fill_col);
+      val = CType::intToStr(CConfig::control.getVolume(config_list[i]));
+    } else if (config_list[i] == CONFIG_AUDIOOUT) {
+      if (CConfig::control.isStereo()) val = "Stereo";
+      else val = "Mono";
+    } else if (config_list[i] == CONFIG_DISPLAY) {
+      if (CConfig::control.isFullscreen()) val = "Fullscreen";
+      else val = "Windowed";
+    } CType::NewCenterWrite(val.c_str(), r_bar, f_col);
     l_bar.x += dx; r_bar.x += dx;
     l_bar.y += dy; r_bar.y += dy;
   }

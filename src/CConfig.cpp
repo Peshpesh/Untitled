@@ -4,6 +4,7 @@ CConfig CConfig::control;
 
 namespace {
   const char* const key_path = "../data/game/config.key";
+  unsigned short def_volume = 100;
 };
 
 CConfig::CConfig() {
@@ -38,13 +39,14 @@ void CConfig::reset_all() {
 }
 
 void CConfig::reset_audio() {
-  key.sfx_volume = MAX_VOLUME;
-  key.bgm_volume = MAX_VOLUME;
-  key.tex_volume = MAX_VOLUME;
+  key.sfx_volume = def_volume;
+  key.bgm_volume = def_volume;
+  key.tex_volume = def_volume;
+  key.stereo = true;
 }
 
 void CConfig::reset_video() {
-  //
+  key.fullscreen = false;
 }
 
 void CConfig::save() {
@@ -74,10 +76,12 @@ void CConfig::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
   if (action != CON_NONE) {
     switch (con_change) {
-      case CONFIG_SFX: handleVolume(key.sfx_volume, action); break;
-      case CONFIG_BGM: handleVolume(key.bgm_volume, action); break;
-      case CONFIG_TEX: handleVolume(key.tex_volume, action); break;
-      default: break;
+      case CONFIG_SFX:      handleVolume(key.sfx_volume, action); break;
+      case CONFIG_BGM:      handleVolume(key.bgm_volume, action); break;
+      case CONFIG_TEX:      handleVolume(key.tex_volume, action); break;
+      case CONFIG_AUDIOOUT: handleAudioOut(action);               break;
+      case CONFIG_DISPLAY:  handleDisplay(action);                break;
+      default:              break;
     }
   }
 }
@@ -93,6 +97,24 @@ void CConfig::handleVolume(unsigned short& vol, const Gamecon& action) {
   }
 }
 
+void CConfig::handleAudioOut(const Gamecon& action) {
+  if (action == CON_LEFT || action == CON_DOWN || action == CON_RIGHT || action == CON_UP) {
+    key.stereo = !(key.stereo);
+  } else if (action == CON_ATTACK || action == CON_PAUSE) {
+    con_change = CONFIG_NONE;
+    save();
+  }
+}
+
+void CConfig::handleDisplay(const Gamecon& action) {
+  if (action == CON_LEFT || action == CON_DOWN || action == CON_RIGHT || action == CON_UP) {
+    key.fullscreen = !(key.fullscreen);
+  } else if (action == CON_ATTACK || action == CON_PAUSE) {
+    con_change = CONFIG_NONE;
+    save();
+  }
+}
+
 short CConfig::getVolume(const Configflag& vol_type) {
   short val = -1;
   switch (vol_type) {
@@ -101,4 +123,12 @@ short CConfig::getVolume(const Configflag& vol_type) {
     case CONFIG_TEX: val = key.tex_volume; break;
   }
   return val;
+}
+
+bool CConfig::isStereo() {
+  return key.stereo;
+}
+
+bool CConfig::isFullscreen() {
+  return key.fullscreen;
 }

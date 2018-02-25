@@ -35,8 +35,9 @@ namespace Title {
     const SDL_Point* o_def = &palette::white;
     const SDL_Point* o_hov = &palette::light_green;
     const SDL_Point* o_act = &palette::light_red;
+    const SDL_Point* fill_col = &palette::cyan;
     const short num_controls = 7;
-    const short num_config = 3;
+    const short num_config = 5;
     const short num_options = num_controls + num_config;
     const char* const controls_text[] = {
       "Confirm - Attack",
@@ -60,20 +61,24 @@ namespace Title {
       "SFX Volume",
       "BGM Volume",
       "Type Volume",
+      "Audio Output",
+      "Video Display",
     };
     const Configflag config_list[] = {
       CONFIG_SFX,
       CONFIG_BGM,
       CONFIG_TEX,
+      CONFIG_AUDIOOUT,
+      CONFIG_DISPLAY,
     };
     const short dx = 0;       // horizontal offset for each menu option
     const short dy = 20;      // vertical offset for each menu option
     const short name_w = 150; // option name width
-    const short val_w = 100;  // option value width
+    const short stroke_w = 2;
+    const short val_w = MAX_VOLUME + (stroke_w * 2);     // option value width
     const short w = name_w + val_w;     // menu width
     const short h = dy * num_options;   // menu height
     const short x = (WWIDTH - w) / 2;   // menu x position
     const short y = (WHEIGHT - h) / 2;  // menu y position
-    const short stroke_w = 2;
   };
 };
