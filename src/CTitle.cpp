@@ -207,7 +207,7 @@ bool CTitle::drawMainMenu() {
   SDL_Rect bar = {x, y, w, dy};
 
   for (int i = 0; i < num_options; i++) {
-    CAsset::drawStrBox(bar, stroke_w, (i != pos) ? o_def : o_hov);
+    if (!CAsset::drawStrBox(bar, stroke_w, (i != pos) ? o_def : o_hov)) return false;
     CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
     bar.x += dx;
     bar.y += dy;
@@ -262,13 +262,35 @@ bool CTitle::drawGameInfo() {
 bool CTitle::drawDifficulty(const short& slot) {
   using namespace Title::pick_game::difficulty;
 
+  // check if the chosen slot already has saved game data
+  if (true && !drawOverwriteWarn()) return false;
+
   SDL_Rect bar = {x, y, opt_w, opt_h};
   for (int i = 0; i < num; i++) {
-    CAsset::drawStrBox(bar, stroke_w, (i != difficulty) ? o_diff[i] : h_diff[i]);
-    CType::NewCenterWrite(list[i], bar, (i != difficulty) ? f_def : f_hov);
+    if (i != difficulty) {
+      if (!CAsset::drawStrBox(bar, stroke_w, o_diff[i])) return false;
+      CType::NewCenterWrite(list[i], bar, f_def);
+    } else {
+      SDL_Rect info_bar = {bar.x + opt_w, bar.y, info_w, info_h};
+      if (!CAsset::drawStrBox(bar, stroke_w, h_diff[i])) return false;
+      if (!CAsset::drawStrBox(info_bar, stroke_w, h_diff[i])) return false;
+      CType::NewCenterWrite(list[i], bar, f_hov);
+      CType::NewCenterWrite(info[i], info_bar, f_hov);
+    }
     bar.x += dx;
     bar.y += dy;
   }
+  return true;
+}
+
+bool CTitle::drawOverwriteWarn() {
+  using namespace Title::pick_game::overwrite;
+
+  SDL_Rect bar = {x, y, w, h};
+  if (!CAsset::drawStrBox(bar, stroke_w, o_col)) return false;
+  CType::NewCenterWrite(info, bar, f_col);
+
+  return true;
 }
 
 bool CTitle::drawControls() {

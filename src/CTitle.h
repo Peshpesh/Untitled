@@ -65,15 +65,11 @@ namespace Title {
     namespace difficulty {
       extern const SDL_Color* f_def;
       extern const SDL_Color* f_hov;
-      extern const SDL_Point* o_easy;
-      extern const SDL_Point* o_norm;
-      extern const SDL_Point* o_hard;
-      extern const SDL_Point* h_easy;
-      extern const SDL_Point* h_norm;
-      extern const SDL_Point* h_hard;
       extern const short num;
       extern const short opt_w;
       extern const short opt_h;
+      extern const short info_w;
+      extern const short info_h;
       extern const short dx;
       extern const short dy;
       extern const short w;
@@ -81,9 +77,20 @@ namespace Title {
       extern const short x;
       extern const short y;
       extern const char* const list[];
+      extern const char* const info[];
       extern const SDL_Point* o_diff[];
       extern const SDL_Point* h_diff[];
       extern const short stroke_w;
+    };
+    namespace overwrite {
+      extern const SDL_Color* f_col;
+      extern const SDL_Point* o_col;
+      extern const short w;
+      extern const short h;
+      extern const short x;
+      extern const short y;
+      extern const short stroke_w;
+      extern const char* const info;
     };
   };
   namespace options {
@@ -158,6 +165,7 @@ private:
 
 private:
   bool drawDifficulty(const short& slot);
+  bool drawOverwriteWarn();
   bool drawGameInfo();
   bool drawControls();
   bool drawConfig();

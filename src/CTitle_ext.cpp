@@ -49,12 +49,14 @@ namespace Title {
     namespace difficulty {
       const SDL_Color* f_def = &rgb::black;
       const SDL_Color* f_hov = &rgb::black;
-      const short num = 3;
+      const short num = 4;
       const short opt_w = 130;
-      const short opt_h = 40;
+      const short opt_h = 60;
+      const short info_w = 260;
+      const short info_h = 60;
       const short dx = 0;                 // horizontal offset for each menu option
       const short dy = opt_h;             // vertical offset for each menu option
-      const short w = opt_w;                      // menu width
+      const short w = opt_w + info_w;             // menu width
       const short h = opt_h * num;                // menu height
       const short x = (WWIDTH - w) / 2;           // menu x position
       const short y = (WHEIGHT - h) / 2;          // menu y position
@@ -62,18 +64,43 @@ namespace Title {
         "Easy",
         "Normal",
         "Hard",
+        "Brutal",
+      };
+      const char* const info[] = {
+        "An easy-going experience, ideal for less familiar players and gamers.",
+        "A casual, balanced level of gameplay suitable for most players looking for a fair challenge.",
+        "An unforgiving mode that demands persistence and determination. Little will pass easily.",
+        "You are not meant to succeed here."
       };
       const SDL_Point* o_diff[] = {
         &palette::dark_cyan,
         &palette::dark_yellow,
         &palette::dark_magenta,
+        &palette::dark_violet,
       };
       const SDL_Point* h_diff[] = {
         &palette::light_cyan,
         &palette::light_yellow,
         &palette::light_magenta,
+        &palette::light_violet,
       };
       const short stroke_w = 2;
+    };
+    namespace overwrite {
+      const SDL_Color* f_col = &rgb::black;
+      const SDL_Point* o_col = &palette::red;
+      const short w = 260;
+      const short h = 100;
+      const short x = (WWIDTH - w) / 2;
+      const short y = 320;
+      const short stroke_w = 2;
+      const char* const info = "\
+        WARNING\n\
+        --------------\n\n\
+        The slot you have chosen\n\
+        already has data saved to it.\n\n\
+        That data will be OVERWRITTEN AND LOST\n\
+        if you save your game at any point.";
     };
   };
   namespace options {

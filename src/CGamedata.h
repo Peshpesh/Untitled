@@ -5,6 +5,7 @@ enum Difficulty {
   EASY    = 0,
   NORMAL  = 1,
   HARD    = 2,
+  BRUTAL  = 3,
 };
 
 // class CGamedata {
