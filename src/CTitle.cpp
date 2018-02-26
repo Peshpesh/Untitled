@@ -8,6 +8,8 @@ CTitle::CTitle() {
 }
 
 void CTitle::OnInit() {
+  difficulty = 0;
+  sel_difficulty = false;
   menu_kind = Title::MAIN;
   pos = 0;
 }
@@ -94,12 +96,55 @@ void CTitle::eventTitle(const Gamecon& action) {
     default: break;
   }
 }
+
 void CTitle::eventNewGame(const Gamecon& action) {
-  //
+  using namespace Title::pick_game;
+
+  if (sel_difficulty) {
+    if (handleDifficulty(action)) {
+      // make new game with current difficulty value
+    }
+    return;
+  }
+
+  switch (action) {
+    case CON_DOWN:    if (++pos >= getNumOptions()) pos = 0;    break;
+    case CON_UP:      if (--pos < 0) pos = getNumOptions() - 1; break;
+    case CON_ATTACK:  {
+      if (pos < num_slots) sel_difficulty = true;
+      else returnToMain();
+      break;
+    }
+    case CON_PAUSE:   {
+      if (pos < num_slots) sel_difficulty = true;
+      else returnToMain();
+      break;
+    }
+    case CON_JUMP:    returnToMain(); break;
+    default:          break;
+  }
 }
+
 void CTitle::eventLoadGame(const Gamecon& action) {
-  //
+  using namespace Title::pick_game;
+  switch (action) {
+    case CON_DOWN:    if (++pos >= getNumOptions()) pos = 0;    break;
+    case CON_UP:      if (--pos < 0) pos = getNumOptions() - 1; break;
+    case CON_ATTACK:  {
+      if (pos < num_slots) sel_difficulty = true;
+      else returnToMain();
+      break;
+    }
+    case CON_PAUSE:   {
+      if (pos < num_slots) sel_difficulty = true;
+      else returnToMain();
+      break;
+    }
+    case CON_JUMP:    returnToMain(); break;
+    default:          break;
+  }
 }
+
 void CTitle::eventOptions(const Gamecon& action) {
   using namespace Title::options;
 
@@ -116,9 +161,38 @@ void CTitle::eventOptions(const Gamecon& action) {
       else CConfig::control.con_change = config_list[pos - num_controls];
       break;
     }
-    case CON_JUMP: menu_kind = Title::MAIN; pos = 0; break;
+    case CON_JUMP: returnToMain(); break;
     default: break;
   }
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+//                                                                            //
+//                                                                            //
+//                                                                            //
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+bool CTitle::handleDifficulty(const Gamecon& action) {
+  using namespace Title::pick_game::difficulty;
+  bool retval = false;
+
+  switch (action) {
+    case CON_DOWN:    if (++difficulty >= num) difficulty = 0;    break;
+    case CON_UP:      if (--difficulty < 0) difficulty = num - 1; break;
+    case CON_ATTACK:  {
+      retval = true;
+      sel_difficulty = false;
+      break;
+    }
+    case CON_PAUSE:   {
+      retval = true;
+      sel_difficulty = false;
+      break;
+    }
+    case CON_JUMP:    sel_difficulty = false; break;
+    default:          break;
+  }
+  return retval;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -142,20 +216,66 @@ bool CTitle::drawMainMenu() {
 }
 
 bool CTitle::drawNewGame() {
-  using namespace Title::new_game;
+  if (!drawGameInfo()) return false;
+
+  if (sel_difficulty && !drawDifficulty(pos)) {
+    return false;
+  }
+
   return true;
 }
 
 bool CTitle::drawLoadGame() {
-  using namespace Title::load_game;
+  if (!drawGameInfo()) return false;
+
   return true;
 }
 
 bool CTitle::drawOptions() {
+  if (!drawControls()) return false;
+  if (!drawConfig()) return false;
+
+  return true;
+}
+
+bool CTitle::drawGameInfo() {
+  using namespace Title::pick_game;
+
+  SDL_Rect slot = {x, y, slot_w, slot_h};
+  for (int i = 0; i < num_slots; i++) {
+    if (!CAsset::drawStrBox(slot, stroke_w, (i != pos) ? o_def : o_hov)) return false;
+    CType::NewCenterWrite("$R$R Game Data Here $L$L", slot, (i != pos) ? f_def : f_hov);
+    slot.x += dx;
+    slot.y += dy;
+  }
+
+  SDL_Rect bar = {x, slot.y, opt_w, opt_h};
+  for (int i = 0; i < num_other; i++) {
+    if (!CAsset::drawStrBox(bar, stroke_w, (i != pos - num_slots) ? o_def : o_hov)) return false;
+    CType::NewCenterWrite(other_list[i], bar, (i != pos - num_slots) ? f_def : f_hov);
+    bar.x += dx;
+    bar.y += dy;
+  }
+  return true;
+}
+
+bool CTitle::drawDifficulty(const short& slot) {
+  using namespace Title::pick_game::difficulty;
+
+  SDL_Rect bar = {x, y, opt_w, opt_h};
+  for (int i = 0; i < num; i++) {
+    CAsset::drawStrBox(bar, stroke_w, (i != difficulty) ? o_diff[i] : h_diff[i]);
+    CType::NewCenterWrite(list[i], bar, (i != difficulty) ? f_def : f_hov);
+    bar.x += dx;
+    bar.y += dy;
+  }
+}
+
+bool CTitle::drawControls() {
   using namespace Title::options;
 
-  SDL_Rect l_bar = {x, y, name_w, dy};
-  SDL_Rect r_bar = {x + name_w, y, val_w, dy};
+  SDL_Rect l_bar = {x, y_control, name_w, dy};
+  SDL_Rect r_bar = {x + name_w, y_control, val_w, dy};
 
   for (int i = 0; i < num_controls; i++) {
     bool modify = CControls::handler.con_change != CON_NONE;
@@ -169,20 +289,28 @@ bool CTitle::drawOptions() {
     l_bar.x += dx; r_bar.x += dx;
     l_bar.y += dy; r_bar.y += dy;
   }
+  return true;
+}
+
+bool CTitle::drawConfig() {
+  using namespace Title::options;
+
+  SDL_Rect l_bar = {x, y_config, name_w, dy};
+  SDL_Rect r_bar = {x + name_w, y_config, val_w, dy};
 
   for (int i = 0; i < num_config; i++) {
     bool modify = CConfig::control.con_change != CONFIG_NONE;
     const SDL_Color* f_col = (i != pos - num_controls) ? f_def : (modify ? f_act : f_hov);
     const SDL_Point* o_col = (i != pos - num_controls) ? o_def : (modify ? o_act : o_hov);
-    CAsset::drawStrBox(l_bar, stroke_w, o_col);
-    CAsset::drawStrBox(r_bar, stroke_w, o_col);
+    if (!CAsset::drawStrBox(l_bar, stroke_w, o_col)) return false;
+    if (!CAsset::drawStrBox(r_bar, stroke_w, o_col)) return false;
     CType::NewCenterWrite(config_text[i], l_bar, f_col);
 
     std::string val;
     if (config_list[i] == CONFIG_SFX || config_list[i] == CONFIG_BGM || config_list[i] == CONFIG_TEX) {
       double fill_fract = CConfig::control.getVolume(config_list[i]) / (double)(MAX_VOLUME);
       SDL_Rect bar_fill = {r_bar.x + stroke_w, r_bar.y + stroke_w, fill_fract * (r_bar.w - (stroke_w * 2)), r_bar.h - (stroke_w * 2)};
-      CAsset::drawBoxFill(bar_fill, fill_col);
+      if (!CAsset::drawBoxFill(bar_fill, fill_col)) return false;
       val = CType::intToStr(CConfig::control.getVolume(config_list[i]));
     } else if (config_list[i] == CONFIG_AUDIOOUT) {
       if (CConfig::control.isStereo()) val = "Stereo";
@@ -194,7 +322,6 @@ bool CTitle::drawOptions() {
     l_bar.x += dx; r_bar.x += dx;
     l_bar.y += dy; r_bar.y += dy;
   }
-
   return true;
 }
 
@@ -204,12 +331,16 @@ bool CTitle::drawOptions() {
 //                                                                            //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
+void CTitle::returnToMain() {
+  menu_kind = Title::MAIN; pos = 0;
+}
+
 short CTitle::getNumOptions() {
   short val = 0;
   switch (menu_kind) {
     case Title::MAIN:       val = Title::num_options; break;
-    case Title::NEW_GAME:   break;
-    case Title::LOAD_GAME:  break;
+    case Title::NEW_GAME:   val = Title::pick_game::num_options; break;
+    case Title::LOAD_GAME:  val = Title::pick_game::num_options; break;
     case Title::OPTIONS:    val = Title::options::num_options; break;
   }
   return val;

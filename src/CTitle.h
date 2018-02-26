@@ -39,11 +39,52 @@ namespace Title {
       DEC_QUIT,
     };
   };
-  namespace new_game {
-    //
-  };
-  namespace load_game {
-    //
+  namespace pick_game {
+    extern const SDL_Color* f_def;
+    extern const SDL_Color* f_hov;
+    extern const SDL_Color* f_lock;
+    extern const SDL_Point* o_def;
+    extern const SDL_Point* o_hov;
+    extern const SDL_Point* o_lock;
+    extern const short num_slots;
+    extern const short num_other;
+    extern const short num_options;
+    extern const char* const other_list[];
+    extern const char* const diff_list[];
+    extern const short slot_w;
+    extern const short slot_h;
+    extern const short opt_w;
+    extern const short opt_h;
+    extern const short dx;
+    extern const short dy;
+    extern const short w;
+    extern const short h;
+    extern const short x;
+    extern const short y;
+    extern const short stroke_w;
+    namespace difficulty {
+      extern const SDL_Color* f_def;
+      extern const SDL_Color* f_hov;
+      extern const SDL_Point* o_easy;
+      extern const SDL_Point* o_norm;
+      extern const SDL_Point* o_hard;
+      extern const SDL_Point* h_easy;
+      extern const SDL_Point* h_norm;
+      extern const SDL_Point* h_hard;
+      extern const short num;
+      extern const short opt_w;
+      extern const short opt_h;
+      extern const short dx;
+      extern const short dy;
+      extern const short w;
+      extern const short h;
+      extern const short x;
+      extern const short y;
+      extern const char* const list[];
+      extern const SDL_Point* o_diff[];
+      extern const SDL_Point* h_diff[];
+      extern const short stroke_w;
+    };
   };
   namespace options {
     extern const SDL_Color* f_def;
@@ -67,7 +108,8 @@ namespace Title {
     extern const short w;
     extern const short h;
     extern const short x;
-    extern const short y;
+    extern const short y_control;
+    extern const short y_config;
     extern const short stroke_w;
   };
 };
@@ -77,6 +119,8 @@ class CTitle : public CEvent {
 
   short menu_kind;
   short pos;
+  bool sel_difficulty;
+  short difficulty;
 
 public:
 
@@ -104,12 +148,22 @@ private:
   void eventOptions(const Gamecon& action);
 
 private:
+  bool handleDifficulty(const Gamecon& action);
+
+private:
   bool drawMainMenu();
   bool drawNewGame();
   bool drawLoadGame();
   bool drawOptions();
 
 private:
+  bool drawDifficulty(const short& slot);
+  bool drawGameInfo();
+  bool drawControls();
+  bool drawConfig();
+
+private:
+  void returnToMain();
   short getNumOptions();
 };
 
