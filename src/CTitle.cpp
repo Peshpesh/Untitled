@@ -204,13 +204,13 @@ bool CTitle::handleDifficulty(const Gamecon& action) {
 bool CTitle::drawMainMenu() {
   using namespace Title;
 
-  SDL_Rect bar = {x, y, w, dy};
+  SDL_Rect bar = {x, y, opt_w, opt_h};
 
   for (int i = 0; i < num_options; i++) {
     if (!CAsset::drawStrBox(bar, stroke_w, (i != pos) ? o_def : o_hov)) return false;
     CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
     bar.x += dx;
-    bar.y += dy;
+    bar.y += dy + opt_h;
   }
   return true;
 }

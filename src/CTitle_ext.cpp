@@ -14,12 +14,14 @@ namespace Title {
     "Options",
     "Quit",
   };
+  const short opt_w = 200;
+  const short opt_h = 30;
   const short dx = 5;       // horizontal offset for each menu option
-  const short dy = 30;      // vertical offset for each menu option
-  const short w = 200;                // menu width
-  const short h = dy * num_options;   // menu height
+  const short dy = 10;      // vertical offset for each menu option
+  const short w = opt_w + (dx * (num_options - 1));                   // menu width
+  const short h = (opt_h * num_options) + (dy * (num_options - 1));   // menu height
   const short x = WWIDTH - (w + dy + (dx * num_options));   // menu x position
-  const short y = WHEIGHT - (h + dy); // menu y position
+  const short y = WHEIGHT - (h + dy + opt_h);   // menu y position
   const short stroke_w = 2;
 
   namespace pick_game {
@@ -59,7 +61,7 @@ namespace Title {
       const short w = opt_w + info_w;             // menu width
       const short h = opt_h * num;                // menu height
       const short x = (WWIDTH - w) / 2;           // menu x position
-      const short y = (WHEIGHT - h) / 2;          // menu y position
+      const short y = ((2 * WHEIGHT / 3) - h) / 2;          // menu y position
       const char* const list[] = {
         "Easy",
         "Normal",
@@ -69,7 +71,7 @@ namespace Title {
       const char* const info[] = {
         "An easy-going experience, ideal for less familiar players and gamers.",
         "A casual, balanced level of gameplay suitable for most players looking for a fair challenge.",
-        "An unforgiving mode that demands persistence and determination. Little will pass easily.",
+        "An unforgiving mode that demands persistence and determination.\nLittle will pass easily.",
         "You are not meant to succeed here."
       };
       const SDL_Point* o_diff[] = {
@@ -92,7 +94,7 @@ namespace Title {
       const short w = 260;
       const short h = 100;
       const short x = (WWIDTH - w) / 2;
-      const short y = 320;
+      const short y = (2 * WHEIGHT / 3);
       const short stroke_w = 2;
       const char* const info = "\
         WARNING\n\

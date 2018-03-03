@@ -6,8 +6,7 @@
 #include <cstring>
 #include <SDL.h>
 
-enum AreaID
-{
+enum AreaID {
 	AREA_1 = 0,
 	AREA_3,
 	ARENA,

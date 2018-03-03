@@ -9,6 +9,8 @@
 #include "CControls.h"
 #include "CConfig.h"
 
+#include "CGlobal.h"
+
 namespace Title {
   extern const SDL_Color* f_def;
   extern const SDL_Color* f_hov;
@@ -17,6 +19,8 @@ namespace Title {
   extern const SDL_Point* o_hov;
   extern const SDL_Point* o_lock;
   extern const short num_options;
+  extern const short opt_w;
+  extern const short opt_h;
   extern const short w;
   extern const short h;
   extern const short dx;

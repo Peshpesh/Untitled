@@ -28,6 +28,8 @@ ${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CControls.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
+${SRCDIR}/CGameIO.cpp
+${SRCDIR}/CGlobal.cpp
 ${SRCDIR}/CMode.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
@@ -45,6 +47,8 @@ ${SRCDIR}/CConfig.h
 ${SRCDIR}/CControls.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFPS.h
+${SRCDIR}/CGameIO.h
+${SRCDIR}/CGlobal.h
 ${SRCDIR}/CMode.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
