@@ -10,6 +10,7 @@
 #include "CConfig.h"
 
 #include "CGlobal.h"
+#include "CGameinfo.h"
 
 namespace Title {
   extern const SDL_Color* f_def;
@@ -44,19 +45,23 @@ namespace Title {
     };
   };
   namespace pick_game {
+    namespace slot {
+      extern const short num;
+      extern const short w;
+      extern const short h;
+      extern const SDL_Point diff_pos;
+      extern const SDL_Point time_pos;
+    };
     extern const SDL_Color* f_def;
     extern const SDL_Color* f_hov;
     extern const SDL_Color* f_lock;
     extern const SDL_Point* o_def;
     extern const SDL_Point* o_hov;
     extern const SDL_Point* o_lock;
-    extern const short num_slots;
     extern const short num_other;
     extern const short num_options;
     extern const char* const other_list[];
     extern const char* const diff_list[];
-    extern const short slot_w;
-    extern const short slot_h;
     extern const short opt_w;
     extern const short opt_h;
     extern const short dx;
@@ -168,6 +173,7 @@ private:
   bool drawOptions();
 
 private:
+  bool drawGameSlot(const CGameinfo& info, const SDL_Rect& slot);
   bool drawDifficulty(const short& slot);
   bool drawOverwriteWarn();
   bool drawGameInfo();

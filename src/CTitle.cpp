@@ -111,12 +111,12 @@ void CTitle::eventNewGame(const Gamecon& action) {
     case CON_DOWN:    if (++pos >= getNumOptions()) pos = 0;    break;
     case CON_UP:      if (--pos < 0) pos = getNumOptions() - 1; break;
     case CON_ATTACK:  {
-      if (pos < num_slots) sel_difficulty = true;
+      if (pos < slot::num) sel_difficulty = true;
       else returnToMain();
       break;
     }
     case CON_PAUSE:   {
-      if (pos < num_slots) sel_difficulty = true;
+      if (pos < slot::num) sel_difficulty = true;
       else returnToMain();
       break;
     }
@@ -131,12 +131,12 @@ void CTitle::eventLoadGame(const Gamecon& action) {
     case CON_DOWN:    if (++pos >= getNumOptions()) pos = 0;    break;
     case CON_UP:      if (--pos < 0) pos = getNumOptions() - 1; break;
     case CON_ATTACK:  {
-      if (pos < num_slots) sel_difficulty = true;
+      if (pos < slot::num) sel_difficulty = true;
       else returnToMain();
       break;
     }
     case CON_PAUSE:   {
-      if (pos < num_slots) sel_difficulty = true;
+      if (pos < slot::num) sel_difficulty = true;
       else returnToMain();
       break;
     }
@@ -238,21 +238,43 @@ bool CTitle::drawOptions() {
   return true;
 }
 
+bool CTitle::drawGameSlot(const CGameinfo& info, const SDL_Rect& slot) {
+  using namespace Title::pick_game::slot;
+  std::string str;
+  SDL_Point pos;
+  if (info.diff == EASY || info.diff == NORMAL || info.diff == HARD || info.diff == BRUTAL) {
+    str = Title::pick_game::difficulty::list[info.diff];
+  }
+  pos.x = slot.x + diff_pos.x; pos.y = slot.y + diff_pos.y;
+  CType::NewCenterWrite(str.c_str(), &pos);
+
+  str = CAsset::msToHHMMSS(info.time);
+  pos.x = slot.x + time_pos.x; pos.y = slot.y + time_pos.y;
+  CType::NewCenterWrite(str.c_str(), &pos);
+  // CType::NewCenterWrite(str.c_str(), slot, (i != pos) ? f_def : f_hov);
+
+  return true;
+}
+
 bool CTitle::drawGameInfo() {
   using namespace Title::pick_game;
 
-  SDL_Rect slot = {x, y, slot_w, slot_h};
-  for (int i = 0; i < num_slots; i++) {
+  SDL_Rect slot = {x, y, slot::w, slot::h};
+  for (int i = 0; i < slot::num; i++) {
     if (!CAsset::drawStrBox(slot, stroke_w, (i != pos) ? o_def : o_hov)) return false;
-    CType::NewCenterWrite("$R$R Game Data Here $L$L", slot, (i != pos) ? f_def : f_hov);
+    if (CGameinfo::infolist[i]) {
+      if (!drawGameSlot(*CGameinfo::infolist[i], slot)) return false;
+    } else {
+      CType::NewCenterWrite("$R$R No Data $L$L", slot, (i != pos) ? f_def : f_hov);
+    }
     slot.x += dx;
     slot.y += dy;
   }
 
   SDL_Rect bar = {x, slot.y, opt_w, opt_h};
   for (int i = 0; i < num_other; i++) {
-    if (!CAsset::drawStrBox(bar, stroke_w, (i != pos - num_slots) ? o_def : o_hov)) return false;
-    CType::NewCenterWrite(other_list[i], bar, (i != pos - num_slots) ? f_def : f_hov);
+    if (!CAsset::drawStrBox(bar, stroke_w, (i != pos - slot::num) ? o_def : o_hov)) return false;
+    CType::NewCenterWrite(other_list[i], bar, (i != pos - slot::num) ? f_def : f_hov);
     bar.x += dx;
     bar.y += dy;
   }
@@ -333,7 +355,7 @@ bool CTitle::drawConfig() {
       double fill_fract = CConfig::control.getVolume(config_list[i]) / (double)(MAX_VOLUME);
       SDL_Rect bar_fill = {r_bar.x + stroke_w, r_bar.y + stroke_w, fill_fract * (r_bar.w - (stroke_w * 2)), r_bar.h - (stroke_w * 2)};
       if (!CAsset::drawBoxFill(bar_fill, fill_col)) return false;
-      val = CType::intToStr(CConfig::control.getVolume(config_list[i]));
+      val = CAsset::intToStr(CConfig::control.getVolume(config_list[i]));
     } else if (config_list[i] == CONFIG_AUDIOOUT) {
       if (CConfig::control.isStereo()) val = "Stereo";
       else val = "Mono";

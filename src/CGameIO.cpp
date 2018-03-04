@@ -3,29 +3,33 @@
 CGameIO CGameIO::control;
 
 namespace {
-  const char* const glob_path = "../data/game/glo.bin";
+  const char* const path = "../data/game/";
+  const short num_games = 3;
+  const char* const game_file[] = {
+    "alpha.bin",
+    "beta.bin",
+    "gamma.bin",
+  };
+  const char* const glob_file = "glo.bin";
 };
 
-CGameinfo::CGameinfo() {
-  // hero;
-  // inv;
-  diff = NORMAL;
-  N_load = 0;
-  N_save = 0;
-  N_death = 0;
-  time = 0;
+CGameIO::CGameIO() {
+  //
 }
 
-CGameIO::CGameIO() {
+bool CGameIO::init() {
   if (!loadGlobal()) {
     // inform user of missing data?
     saveGlobal();
   }
+  loadAllGameinfo();
+  return true;
 }
 
 bool CGameIO::loadGlobal() {
   // load global data file if it exists
-  FILE* FileHandle = fopen(glob_path, "rb");
+  std::string file = std::string(path) + std::string(glob_file);
+  FILE* FileHandle = fopen(file.c_str(), "rb");
 
   if (FileHandle == NULL)	{
     // CInform::InfoControl.pushInform("---CScenery.OnLoad---\nfailed to open file");
@@ -45,8 +49,8 @@ bool CGameIO::loadGlobal() {
 }
 
 void CGameIO::saveGlobal() {
-  // save config key file
-  FILE* FileHandle = fopen(glob_path, "wb");
+  std::string file = std::string(path) + std::string(glob_file);
+  FILE* FileHandle = fopen(file.c_str(), "rb");
 
   if (FileHandle == NULL) {
     // CInform::InfoControl.pushInform("---CSCENERY.Onsave---\nfailed to open new file");
@@ -55,6 +59,54 @@ void CGameIO::saveGlobal() {
 
   CGlobinfo data = CGlobal::control.pull_data(); data.uptime += SDL_GetTicks();
   if (fwrite(&data, sizeof(CGlobinfo), 1, FileHandle) != 1) {
+    // write error
+    fclose(FileHandle);
+    return;
+  }
+
+  fclose(FileHandle);
+}
+
+void CGameIO::loadAllGameinfo() {
+  for (int i = 0; i < num_games; i++) {
+    std::string file = std::string(path) + std::string(game_file[i]);
+    FILE* FileHandle = fopen(file.c_str(), "rb");
+
+    if (FileHandle == NULL) {
+      // CInform::InfoControl.pushInform("---CSCENERY.Onsave---\nfailed to open new file");
+      CGameinfo::infolist.push_back(NULL);
+      DEBUG_makeDummyData(i);
+      continue;
+    }
+
+    CGameinfo *data = new CGameinfo;
+    if (fread(data, sizeof(CGameinfo), 1, FileHandle) != 1) {
+      CGameinfo::infolist.push_back(NULL);
+      fclose(FileHandle);
+      continue;
+    }
+    CGameinfo::infolist.push_back(data);
+    fclose(FileHandle);
+  }
+}
+
+bool CGameIO::saveGameinfo() {
+  return true;
+}
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+void CGameIO::DEBUG_makeDummyData(short game_num) {
+  CGameinfo data;
+  std::string file = std::string(path) + std::string(game_file[game_num]);
+  FILE* FileHandle = fopen(file.c_str(), "wb");
+
+  if (FileHandle == NULL) return;
+
+  if (fwrite(&data, sizeof(CGameinfo), 1, FileHandle) != 1) {
     // write error
     fclose(FileHandle);
     return;

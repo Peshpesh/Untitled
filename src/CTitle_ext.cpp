@@ -25,26 +25,30 @@ namespace Title {
   const short stroke_w = 2;
 
   namespace pick_game {
+    namespace slot {
+      const short num = 3;
+      const short w = 260;    // slot width
+      const short h = 60;     // slot height
+      const SDL_Point diff_pos = {w / 5, h / 3};
+      const SDL_Point time_pos = {w / 5, 2 * h / 3};
+    };
     const SDL_Color* f_def = &rgb::black;
     const SDL_Color* f_hov = &rgb::black;
     const SDL_Color* f_lock = &rgb::gray;
     const SDL_Point* o_def = &palette::white;
     const SDL_Point* o_hov = &palette::light_green;
     const SDL_Point* o_lock = &palette::light_gray;
-    const short num_slots = 3;
     const short num_other = 1;
-    const short num_options = num_slots + num_other;
+    const short num_options = slot::num + num_other;
     const char* const other_list[] = {
       "Back",
     };
-    const short slot_w = 260;
-    const short slot_h = 60;
-    const short opt_w = slot_w / 2;
-    const short opt_h = slot_h / 2;
+    const short opt_w = slot::w / 2;
+    const short opt_h = slot::h / 2;
     const short dx = 0;                 // horizontal offset for each menu option
-    const short dy = slot_h + 15;       // vertical offset for each menu option
-    const short w = slot_w;             // menu width
-    const short h = (dy * num_slots) + opt_h;   // menu height
+    const short dy = slot::h + 10;       // vertical offset for each menu option
+    const short w = slot::w;             // menu width
+    const short h = (dy * slot::num) + opt_h;   // menu height
     const short x = (WWIDTH - w) / 2;   // menu x position
     const short y = (WHEIGHT - h) / 2;  // menu y position
     const short stroke_w = 2;

@@ -17,7 +17,9 @@ bool CApp::OnInit()
 	if (!CAsset::OnInit()) 									return false;
 
 	if (!CType::control.OnInit()) 					return false;
-	
+
+	if (!CGameIO::control.init()) 					return false;
+
  	// if (!Font::FontControl.OnInit()) 				return false;
 	// if (!CHUD::HUDControl.OnInit()) 				return false;
 	// if (!CEntityInfo::LoadCommon()) 				return false;

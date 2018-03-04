@@ -1,15 +1,10 @@
 #ifndef _C_GAMEIO_H_
 #define _C_GAMEIO_H_
 
+#include <string>
 #include <stdio.h>
+#include "CGameinfo.h"
 #include "CGlobal.h"
-
-enum Difficulty {
-  EASY    = 0,
-  NORMAL  = 1,
-  HARD    = 2,
-  BRUTAL  = 3,
-};
 
 // This class should handle files describing each game's status/progress.
 // Namely, this should be able to output/load game data.
@@ -32,28 +27,21 @@ enum Difficulty {
 // gameplay or when a game is loaded.
 // This is mainly to prevent complicated and circular dependencies.
 
-struct CGameinfo {
-  CGameinfo();
-private:
-  // CPlayer hero;
-  // CInventory inv;
-  Difficulty diff;
-  unsigned int N_load;
-  unsigned int N_save;
-  unsigned int N_death;
-  unsigned long long time;
-  // more ...
-};
-
 class CGameIO {
   CGameIO();
 
 public:
   static CGameIO control;
 
+  bool init();
+
   bool loadGlobal();
-
   void saveGlobal();
-};
 
+  void loadAllGameinfo();
+  bool saveGameinfo();
+
+private:
+  void DEBUG_makeDummyData(short game_num);
+};
 #endif

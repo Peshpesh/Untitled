@@ -20,6 +20,7 @@
 #include "CCamera.h"
 
 // Structural dependencies
+#include "CGameIO.h"
 #include "CMode.h"
 #include "CTitle.h"
 
