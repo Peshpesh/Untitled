@@ -4,6 +4,7 @@
 #include <string>
 #include <stdio.h>
 #include "CGameinfo.h"
+#include "CGamedata.h"
 #include "CGlobal.h"
 
 // This class should handle files describing each game's status/progress.
@@ -29,6 +30,7 @@
 
 class CGameIO {
   CGameIO();
+  unsigned short active_slot;
 
 public:
   static CGameIO control;
@@ -40,6 +42,12 @@ public:
 
   void loadAllGameinfo();
   bool saveGameinfo();
+
+  bool newGamedata(const short& slot);
+  bool loadGamedata(const short& slot);
+  bool saveGamedata();
+
+  short getActiveSlot();
 
 private:
   void DEBUG_makeDummyData(short game_num);

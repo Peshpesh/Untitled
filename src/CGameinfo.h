@@ -1,6 +1,12 @@
 #ifndef _C_GAMEINFO_H_
 #define _C_GAMEINFO_H_
 
+// This class contains the data that "describes" a
+// given game file. It is meant to be a brief
+// representation of the general info in a game---
+// it does not contain specific data (e.g., progress in
+// the story), which goes in the CGamedata class.
+
 #include <vector>
 
 enum Difficulty {
@@ -14,6 +20,9 @@ class CGameinfo {
 public:
   static std::vector<CGameinfo*> infolist;
   CGameinfo();
+  CGameinfo(Difficulty diff);
+  void reset();
+  void reset(Difficulty diff);
 
 public:
   Difficulty diff;

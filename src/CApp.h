@@ -23,6 +23,7 @@
 #include "CGameIO.h"
 #include "CMode.h"
 #include "CTitle.h"
+#include "CGame.h"
 
 
 // #include "CArea.h"

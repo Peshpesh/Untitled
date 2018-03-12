@@ -13,6 +13,7 @@ void CApp::OnEvent(SDL_Event* Event) {
 
 	if (CMode::isFlagOn(APP_MODE_GAME)) {
 		// Process events during gameplay
+		CGame::control.OnEvent(Event);
 	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
 		// Process events at title screen
 		CTitle::control.OnEvent(Event);

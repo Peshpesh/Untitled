@@ -103,6 +103,9 @@ void CTitle::eventNewGame(const Gamecon& action) {
   if (sel_difficulty) {
     if (handleDifficulty(action)) {
       // make new game with current difficulty value
+      if (!handleNewGame()) {
+        // error
+      }
     }
     return;
   }
@@ -131,12 +134,16 @@ void CTitle::eventLoadGame(const Gamecon& action) {
     case CON_DOWN:    if (++pos >= getNumOptions()) pos = 0;    break;
     case CON_UP:      if (--pos < 0) pos = getNumOptions() - 1; break;
     case CON_ATTACK:  {
-      if (pos < slot::num) sel_difficulty = true;
+      if (pos < slot::num && !handleLoadGame()) {
+
+      } // this will execute if the load failed
       else returnToMain();
       break;
     }
     case CON_PAUSE:   {
-      if (pos < slot::num) sel_difficulty = true;
+      if (pos < slot::num && !handleLoadGame()) {
+
+      } // this will execute if the load failed
       else returnToMain();
       break;
     }
@@ -195,6 +202,15 @@ bool CTitle::handleDifficulty(const Gamecon& action) {
   return retval;
 }
 
+bool CTitle::handleNewGame() {
+  return CGameIO::control.newGamedata(pos);
+}
+
+bool CTitle::handleLoadGame() {
+  return CGameIO::control.loadGamedata(pos);
+}
+
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //                                                                            //
 //                                                                            //
@@ -218,7 +234,7 @@ bool CTitle::drawMainMenu() {
 bool CTitle::drawNewGame() {
   if (!drawGameInfo()) return false;
 
-  if (sel_difficulty && !drawDifficulty(pos)) {
+  if (sel_difficulty && (!drawDifficulty() || !drawOverwriteWarn(pos))) {
     return false;
   }
 
@@ -265,7 +281,7 @@ bool CTitle::drawGameInfo() {
     if (CGameinfo::infolist[i]) {
       if (!drawGameSlot(*CGameinfo::infolist[i], slot)) return false;
     } else {
-      CType::NewCenterWrite("$R$R No Data $L$L", slot, (i != pos) ? f_def : f_hov);
+      CType::NewCenterWrite(empty_text, slot, (i != pos) ? f_def : f_hov);
     }
     slot.x += dx;
     slot.y += dy;
@@ -281,11 +297,8 @@ bool CTitle::drawGameInfo() {
   return true;
 }
 
-bool CTitle::drawDifficulty(const short& slot) {
+bool CTitle::drawDifficulty() {
   using namespace Title::pick_game::difficulty;
-
-  // check if the chosen slot already has saved game data
-  if (true && !drawOverwriteWarn()) return false;
 
   SDL_Rect bar = {x, y, opt_w, opt_h};
   for (int i = 0; i < num; i++) {
@@ -305,12 +318,14 @@ bool CTitle::drawDifficulty(const short& slot) {
   return true;
 }
 
-bool CTitle::drawOverwriteWarn() {
+bool CTitle::drawOverwriteWarn(const short& slot) {
   using namespace Title::pick_game::overwrite;
 
-  SDL_Rect bar = {x, y, w, h};
-  if (!CAsset::drawStrBox(bar, stroke_w, o_col)) return false;
-  CType::NewCenterWrite(info, bar, f_col);
+  if (CGameinfo::infolist[slot]) {
+    SDL_Rect bar = {x, y, w, h};
+    if (!CAsset::drawStrBox(bar, stroke_w, o_col)) return false;
+    CType::NewCenterWrite(info, bar, f_col);
+  }
 
   return true;
 }

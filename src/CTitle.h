@@ -1,6 +1,7 @@
 #ifndef _C_TITLE_H_
 #define _C_TITLE_H_
 
+#include "CMode.h"
 #include "CEvent.h"
 #include "CAsset.h"
 #include "CType.h"
@@ -9,8 +10,7 @@
 #include "CControls.h"
 #include "CConfig.h"
 
-#include "CGlobal.h"
-#include "CGameinfo.h"
+#include "CGameIO.h"
 
 namespace Title {
   extern const SDL_Color* f_def;
@@ -71,6 +71,7 @@ namespace Title {
     extern const short x;
     extern const short y;
     extern const short stroke_w;
+    extern const char* const empty_text;
     namespace difficulty {
       extern const SDL_Color* f_def;
       extern const SDL_Color* f_hov;
@@ -165,6 +166,8 @@ private:
 
 private:
   bool handleDifficulty(const Gamecon& action);
+  bool handleNewGame();
+  bool handleLoadGame();
 
 private:
   bool drawMainMenu();
@@ -174,8 +177,8 @@ private:
 
 private:
   bool drawGameSlot(const CGameinfo& info, const SDL_Rect& slot);
-  bool drawDifficulty(const short& slot);
-  bool drawOverwriteWarn();
+  bool drawDifficulty();
+  bool drawOverwriteWarn(const short& slot);
   bool drawGameInfo();
   bool drawControls();
   bool drawConfig();

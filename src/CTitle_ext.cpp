@@ -52,6 +52,7 @@ namespace Title {
     const short x = (WWIDTH - w) / 2;   // menu x position
     const short y = (WHEIGHT - h) / 2;  // menu y position
     const short stroke_w = 2;
+    const char* const empty_text = "$R$R No Data $L$L";
     namespace difficulty {
       const SDL_Color* f_def = &rgb::black;
       const SDL_Color* f_hov = &rgb::black;

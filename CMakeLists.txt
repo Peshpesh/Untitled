@@ -28,7 +28,9 @@ ${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CControls.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
+${SRCDIR}/CGame.cpp
 ${SRCDIR}/CGameinfo.cpp
+${SRCDIR}/CGamedata.cpp
 ${SRCDIR}/CGameIO.cpp
 ${SRCDIR}/CGlobal.cpp
 ${SRCDIR}/CMode.cpp
@@ -48,7 +50,9 @@ ${SRCDIR}/CConfig.h
 ${SRCDIR}/CControls.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFPS.h
+${SRCDIR}/CGame.h
 ${SRCDIR}/CGameinfo.h
+${SRCDIR}/CGamedata.h
 ${SRCDIR}/CGameIO.h
 ${SRCDIR}/CGlobal.h
 ${SRCDIR}/CMode.h

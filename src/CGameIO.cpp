@@ -50,7 +50,7 @@ bool CGameIO::loadGlobal() {
 
 void CGameIO::saveGlobal() {
   std::string file = std::string(path) + std::string(glob_file);
-  FILE* FileHandle = fopen(file.c_str(), "rb");
+  FILE* FileHandle = fopen(file.c_str(), "wb");
 
   if (FileHandle == NULL) {
     // CInform::InfoControl.pushInform("---CSCENERY.Onsave---\nfailed to open new file");
@@ -75,7 +75,7 @@ void CGameIO::loadAllGameinfo() {
     if (FileHandle == NULL) {
       // CInform::InfoControl.pushInform("---CSCENERY.Onsave---\nfailed to open new file");
       CGameinfo::infolist.push_back(NULL);
-      DEBUG_makeDummyData(i);
+      // DEBUG_makeDummyData(i);
       continue;
     }
 
@@ -92,6 +92,44 @@ void CGameIO::loadAllGameinfo() {
 
 bool CGameIO::saveGameinfo() {
   return true;
+}
+
+bool CGameIO::newGamedata(const short& slot) {
+  if (CGameinfo::infolist[slot]) {
+    CGameinfo::infolist[slot]->reset();
+  } else {
+    CGameinfo::infolist[slot] = new CGameinfo;
+  }
+  return true;
+}
+
+bool CGameIO::loadGamedata(const short& slot) {
+  std::string file = std::string(path) + std::string(game_file[slot]);
+  FILE* FileHandle = fopen(file.c_str(), "rb");
+
+  if (FileHandle == NULL) {
+    // CInform::InfoControl.pushInform("---CSCENERY.Onsave---\nfailed to open new file");
+    return false;
+  }
+
+  fseek(FileHandle, sizeof(CGameinfo), SEEK_SET);
+
+  if (fread(&CGamedata::control, sizeof(CGamedata), 1, FileHandle) != 1) {
+    fclose(FileHandle);
+    return false;
+  }
+
+  active_slot = slot;
+  fclose(FileHandle);
+  return true;
+}
+
+bool CGameIO::saveGamedata() {
+  return true;
+}
+
+short CGameIO::getActiveSlot() {
+  return active_slot;
 }
 
 ////////////////////////////////////////////////////////////////
