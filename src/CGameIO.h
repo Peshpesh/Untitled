@@ -30,7 +30,6 @@
 
 class CGameIO {
   CGameIO();
-  unsigned short active_slot;
 
 public:
   static CGameIO control;
@@ -41,12 +40,10 @@ public:
   void saveGlobal();
 
   void loadAllGameinfo();
-  bool saveGameinfo();
 
-  bool newGamedata(const short& slot);
+  bool newGamedata(const short& slot, const Difficulty& d);
   bool loadGamedata(const short& slot);
-  bool saveGamedata();
-
+  bool saveGame();
   short getActiveSlot();
 
 private:

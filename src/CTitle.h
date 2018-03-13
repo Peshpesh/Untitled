@@ -86,6 +86,7 @@ namespace Title {
       extern const short h;
       extern const short x;
       extern const short y;
+      extern const Difficulty d_list[];
       extern const char* const list[];
       extern const char* const info[];
       extern const SDL_Point* o_diff[];

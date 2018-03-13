@@ -90,15 +90,23 @@ void CGameIO::loadAllGameinfo() {
   }
 }
 
-bool CGameIO::saveGameinfo() {
-  return true;
-}
-
-bool CGameIO::newGamedata(const short& slot) {
-  if (CGameinfo::infolist[slot]) {
-    CGameinfo::infolist[slot]->reset();
-  } else {
-    CGameinfo::infolist[slot] = new CGameinfo;
+bool CGameIO::newGamedata(const short& slot, const Difficulty& d) {
+  for (int i = 0; i < num_games; i++) {
+    if (i != slot && CGameinfo::infolist[i]) {
+      // get rid of gameinfo that we won't need
+      delete CGameinfo::infolist[i];
+      CGameinfo::infolist[i] = NULL;  // fix dangling pointer
+    } else {
+      if (CGameinfo::infolist[slot]) {
+        // gameinfo has already been loaded into the requested slot;
+        // reset the gameinfo structure for the new game
+        CGameinfo::infolist[slot]->reset(d);
+      } else {
+        // no game info has been loaded into the requested slot;
+        // construct a new gameinfo structure for the slot
+        CGameinfo::infolist[slot] = new CGameinfo(d);
+      }
+    }
   }
   return true;
 }
@@ -119,17 +127,37 @@ bool CGameIO::loadGamedata(const short& slot) {
     return false;
   }
 
-  active_slot = slot;
   fclose(FileHandle);
   return true;
 }
 
-bool CGameIO::saveGamedata() {
+bool CGameIO::saveGame() {
+  short slot = getActiveSlot();
+  std::string file = std::string(path) + std::string(game_file[slot]);
+  FILE* FileHandle = fopen(file.c_str(), "wb");
+
+  if (FileHandle == NULL) return false;
+
+  if (fwrite(&CGameinfo::infolist[slot], sizeof(CGameinfo), 1, FileHandle) != 1) {
+    // error: failed to output gameinfo
+    fclose(FileHandle);
+    return false;
+  }
+  if (fwrite(&CGamedata::control, sizeof(CGamedata), 1, FileHandle) != 1) {
+    // error: failed to output gamedata
+    fclose(FileHandle);
+    return false;
+  }
+  fclose(FileHandle);
   return true;
 }
 
 short CGameIO::getActiveSlot() {
-  return active_slot;
+  short i = 0;
+  while (i < num_games) {
+    if (CGameinfo::infolist[i]) break;
+    i++;
+  } return i;
 }
 
 ////////////////////////////////////////////////////////////////

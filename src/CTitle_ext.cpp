@@ -9,10 +9,7 @@ namespace Title {
   const SDL_Point* o_lock = &palette::light_gray;
   const short num_options = 4;
   const char* const opt_list[] = {
-    "New",
-    "Load",
-    "Options",
-    "Quit",
+    "New", "Load", "Options", "Quit",
   };
   const short opt_w = 200;
   const short opt_h = 30;
@@ -67,17 +64,17 @@ namespace Title {
       const short h = opt_h * num;                // menu height
       const short x = (WWIDTH - w) / 2;           // menu x position
       const short y = ((2 * WHEIGHT / 3) - h) / 2;          // menu y position
+      const Difficulty d_list[] = {
+        EASY, NORMAL, HARD, BRUTAL,
+      };
       const char* const list[] = {
-        "Easy",
-        "Normal",
-        "Hard",
-        "Brutal",
+        "Easy", "Normal", "Hard", "Brutal",
       };
       const char* const info[] = {
         "An easy-going experience, ideal for less familiar players and gamers.",
         "A casual, balanced level of gameplay suitable for most players looking for a fair challenge.",
         "An unforgiving mode that demands persistence and determination.\nLittle will pass easily.",
-        "You are not meant to succeed here."
+        "You are not meant to succeed.",
       };
       const SDL_Point* o_diff[] = {
         &palette::dark_cyan,
