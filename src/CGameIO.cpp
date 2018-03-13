@@ -138,16 +138,18 @@ bool CGameIO::saveGame() {
 
   if (FileHandle == NULL) return false;
 
-  if (fwrite(&CGameinfo::infolist[slot], sizeof(CGameinfo), 1, FileHandle) != 1) {
+  if (fwrite(CGameinfo::infolist[slot], sizeof(CGameinfo), 1, FileHandle) != 1) {
     // error: failed to output gameinfo
     fclose(FileHandle);
     return false;
   }
+
   if (fwrite(&CGamedata::control, sizeof(CGamedata), 1, FileHandle) != 1) {
     // error: failed to output gamedata
     fclose(FileHandle);
     return false;
   }
+
   fclose(FileHandle);
   return true;
 }

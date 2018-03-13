@@ -206,7 +206,7 @@ bool CTitle::handleDifficulty(const Gamecon& action) {
 
 bool CTitle::handleNewGame() {
   if (CGameIO::control.newGamedata(pos, Title::pick_game::difficulty::d_list[difficulty])) {
-    CMode::changeFlag(APP_MODE_GAME);
+    // CMode::changeFlag(APP_MODE_GAME);
     return true;
   } return false;
 }

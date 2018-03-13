@@ -5,6 +5,12 @@
 // except this contains the data specific to
 // progress (etc.) in a game file.
 
+struct CHeroData {
+  short health;
+  short max_health;
+  CHeroData();
+};
+
 struct CLevelAData {
   bool adventure_ready;
   CLevelAData();
@@ -16,13 +22,19 @@ struct CLevelBData {
   CLevelBData();
 };
 
+struct CMiscData {
+  CMiscData();
+};
+
 class CGamedata {
   CGamedata();
 
 public:
   static CGamedata control;
+  CHeroData data_hero;
   CLevelAData data_levelA;
   CLevelBData data_levelB;
+  // CMiscData data_misc;
   void reset();
 };
 
