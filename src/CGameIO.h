@@ -30,10 +30,10 @@
 
 class CGameIO {
   CGameIO();
+  short numSavedGames;
 
 public:
   static CGameIO control;
-
   bool init();
 
   bool loadGlobal();
@@ -45,6 +45,7 @@ public:
   bool loadGamedata(const short& slot);
   bool saveGame();
   short getActiveSlot();
+  short getNumSavedGames();
 
 private:
   void DEBUG_makeDummyData(short game_num);

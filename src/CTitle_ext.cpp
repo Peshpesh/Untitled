@@ -3,10 +3,10 @@
 namespace Title {
   const SDL_Color* f_def = &rgb::black;
   const SDL_Color* f_hov = &rgb::black;
-  const SDL_Color* f_lock = &rgb::gray;
+  const SDL_Color* f_lock = &rgb::white;
   const SDL_Point* o_def = &palette::white;
   const SDL_Point* o_hov = &palette::light_green;
-  const SDL_Point* o_lock = &palette::light_gray;
+  const SDL_Point* o_lock = &palette::gray;
   const short num_options = 4;
   const char* const opt_list[] = {
     "New", "Load", "Options", "Quit",

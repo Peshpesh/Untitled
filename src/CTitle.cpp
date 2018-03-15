@@ -71,8 +71,16 @@ void CTitle::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 void CTitle::eventTitle(const Gamecon& action) {
   using namespace Title;
   switch (action) {
-    case CON_DOWN: if (++pos >= getNumOptions()) pos = 0;    break;
-    case CON_UP:   if (--pos < 0) pos = getNumOptions() - 1; break;
+    case CON_DOWN: {
+      if (++pos >= getNumOptions()) pos = 0;
+      else if (pos == decision::DEC_LOAD && !CGameIO::control.getNumSavedGames()) ++pos;
+      break;
+    }
+    case CON_UP: {
+      if (--pos < 0) pos = getNumOptions() - 1;
+      else if (pos == decision::DEC_LOAD && !CGameIO::control.getNumSavedGames()) --pos;
+      break;
+    }
     case CON_ATTACK: {
       switch (pos) {
         case decision::DEC_NEW:     menu_kind = Title::NEW_GAME;  pos = 0; break;
@@ -231,8 +239,13 @@ bool CTitle::drawMainMenu() {
   SDL_Rect bar = {x, y, opt_w, opt_h};
 
   for (int i = 0; i < num_options; i++) {
-    if (!CAsset::drawStrBox(bar, stroke_w, (i != pos) ? o_def : o_hov)) return false;
-    CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
+    if (i == decision::DEC_LOAD && !CGameIO::control.getNumSavedGames()) {
+      if (!CAsset::drawStrBox(bar, stroke_w, o_lock)) return false;
+      CType::NewCenterWrite(opt_list[i], bar, f_lock);
+    } else {
+      if (!CAsset::drawStrBox(bar, stroke_w, (i != pos) ? o_def : o_hov)) return false;
+      CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
+    }
     bar.x += dx;
     bar.y += dy + opt_h;
   }

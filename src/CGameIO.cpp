@@ -14,7 +14,7 @@ namespace {
 };
 
 CGameIO::CGameIO() {
-  //
+  numSavedGames = 0;
 }
 
 bool CGameIO::init() {
@@ -68,6 +68,7 @@ void CGameIO::saveGlobal() {
 }
 
 void CGameIO::loadAllGameinfo() {
+  numSavedGames = 0;
   for (int i = 0; i < num_games; i++) {
     std::string file = std::string(path) + std::string(game_file[i]);
     FILE* FileHandle = fopen(file.c_str(), "rb");
@@ -85,6 +86,7 @@ void CGameIO::loadAllGameinfo() {
       fclose(FileHandle);
       continue;
     }
+    numSavedGames++;
     CGameinfo::infolist.push_back(data);
     fclose(FileHandle);
   }
@@ -160,6 +162,10 @@ short CGameIO::getActiveSlot() {
     if (CGameinfo::infolist[i]) break;
     i++;
   } return i;
+}
+
+short CGameIO::getNumSavedGames() {
+  return numSavedGames;
 }
 
 ////////////////////////////////////////////////////////////////

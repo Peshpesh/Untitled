@@ -33,6 +33,8 @@ ${SRCDIR}/CGameinfo.cpp
 ${SRCDIR}/CGamedata.cpp
 ${SRCDIR}/CGameIO.cpp
 ${SRCDIR}/CGlobal.cpp
+${SRCDIR}/CInform.cpp
+${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMode.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
@@ -55,6 +57,8 @@ ${SRCDIR}/CGameinfo.h
 ${SRCDIR}/CGamedata.h
 ${SRCDIR}/CGameIO.h
 ${SRCDIR}/CGlobal.h
+${SRCDIR}/CInform.h
+${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CMode.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h

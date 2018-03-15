@@ -21,18 +21,6 @@ enum
 	ENTITY_TYPE_ITEM,					// Item types are those that the player can gather via collision.
 	ENTITY_TYPE_COIN,					// Coin types are those that add to the player's purse via collision.
 };
-
-enum Status {
-	STAT_NONE = 0,								// No abilities
-	STAT_INVIN 	= 0x00000001,			// Invincibility
-	STAT_INVIS 	= 0x00000002,			// Invisibility
-	STAT_HASTE 	= 0x00000004,			// Increased speed
-	STAT_WINGS 	= 0x00000008,			// Ability to fly
-	STAT_GILLS 	= 0x00000010,			// Infinite breath underwater
-	STAT_TOXIC 	= 0x00000020,			// Poisoned
-	STAT_SLOW 	= 0x00000040,			// Decreased speed
-};
-
 enum
 {
 	// Summary:
@@ -69,6 +57,7 @@ public:
 	int		Height; // sprite height
 	bool	MoveLeft;
 	bool	MoveRight;
+//	int	AnimState;
 
 public:
 	int		Health;	// How much HP the entity has
