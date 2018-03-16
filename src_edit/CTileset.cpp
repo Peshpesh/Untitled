@@ -29,13 +29,15 @@ namespace {
     "Cancelled.\nNo changes were made.",
     "Tileset changed successfully.\nThe area was reset.",
     "You are already using that tileset!\nNo changes were made.",
-    "Failed to load tileset.\nNo changes were made."
+    "Failed to load tileset.\nNo changes were made.",
+    "The requested tileset ID was not found.\nNo changes were made."
   };
   enum {
     I_CANCEL = 0,
     I_CHANGE,
     I_SAME,
     I_FAIL,
+    I_NOTFOUND,
   };
 }
 
@@ -52,7 +54,8 @@ CTileset::CTileset()
 
 bool CTileset::OnInit()
 {
-  return changeTileset("default");
+  using namespace Tileset_ID;
+  return changeTileset(name[TS_DEFAULT]);
 }
 
 void CTileset::OnEvent(SDL_Event* Event)
@@ -182,23 +185,42 @@ std::string CTileset::getFilePath()
   return filepath;
 }
 
+short CTileset::getFileID(const std::string& fname) {
+  using namespace Tileset_ID;
+  short i = 0;
+  while (i < num) {
+    if (fname == name[i]) break;
+    i++;
+  }
+  if (i == num) i = -1;
+  return i;
+}
+
+short CTileset::getFileID() {
+  return getFileID(file);
+}
+
 bool CTileset::wasSuccess()
 {
   return succ;
 }
 
-bool CTileset::changeTileset(const char* fname)
-{
-  SDL_Texture* try_surf = NULL;
+bool CTileset::changeTileset(const short& fID) {
+  using namespace Tileset_ID;
+  if (fID < 0 || fID >= num) {
+    succ = false;
+    return succ;
+  }
 
-  std::string filepath = ts_path + std::string(fname) + extension;
+  SDL_Texture* try_surf = NULL;
+  std::string filepath = ts_path + name[fID] + extension;
 
   if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
     succ = true;
     SDL_DestroyTexture(tileset);
     tileset = try_surf;
     CAsset::queryTileDims(tileset, ts_w, ts_h);
-    file = fname;
+    file = name[fID];
   }
   else {
     succ = false;
@@ -207,8 +229,40 @@ bool CTileset::changeTileset(const char* fname)
   return succ;
 }
 
+bool CTileset::changeTileset(const std::string& fname)
+{
+  return changeTileset(getFileID(fname));
+  // if (getFileID(fname) < 0) {
+  //   succ = false;
+  //   return succ;
+  // }
+  //
+  // SDL_Texture* try_surf = NULL;
+  //
+  // std::string filepath = ts_path + fname + extension;
+  //
+  // if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
+  //   succ = true;
+  //   SDL_DestroyTexture(tileset);
+  //   tileset = try_surf;
+  //   CAsset::queryTileDims(tileset, ts_w, ts_h);
+  //   file = fname;
+  // }
+  // else {
+  //   succ = false;
+  // }
+  //
+  // return succ;
+}
+
 void CTileset::changeTileset()
 {
+  if (getFileID(newF) < 0) {
+    succ = false;
+    pushInform(I_NOTFOUND);
+    resetPath();
+    return;
+  }
   if (newF == file) {
     succ = false;
     pushInform(I_SAME);

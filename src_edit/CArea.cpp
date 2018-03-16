@@ -2,8 +2,7 @@
 
 CArea CArea::AreaControl;
 
-CArea::CArea()
-{
+CArea::CArea() {
 	OnInit();
 }
 
@@ -58,31 +57,45 @@ bool CArea::NewLoad(char const* File)
   std::string ext = ".area";
   std::string fname = fpath + std::string(File) + ext;
 
-	FILE* FileHandle = fopen(fname.c_str(), "r");
+	// FILE* FileHandle = fopen(fname.c_str(), "r");
+	FILE* FileHandle = fopen(fname.c_str(), "rb");
 	if (FileHandle == NULL) {
 		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open area file");
 		return false;
 	}
 
-	char TilesetFile[255];
-	fscanf(FileHandle, "%s\n", TilesetFile);
+	// Grab the ID of the tileset for the area
+	short setID;
+	fread(&setID, sizeof(short), 1, FileHandle);
 
-	if (!CTileset::TSControl.changeTileset(TilesetFile)) {
+	// Output AreaWidth & AreaHeight
+	fread(&AreaWidth, sizeof(int), 1, FileHandle);
+	fread(&AreaHeight, sizeof(int), 1, FileHandle);
+
+	if (!CTileset::TSControl.changeTileset(setID)) {
 		CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
 		return false;
 	}
 
-	fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
-	fclose(FileHandle);
-
-	ext = ".maps";
-	fname = fpath + std::string(File) + ext;
-
-	FILE* MapsHandle = fopen(fname.c_str(), "rb");
-	if (MapsHandle == NULL) {
-		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open maps file");
-		return false;
-	}
+	// char TilesetFile[255];
+	// fscanf(FileHandle, "%s\n", TilesetFile);
+	//
+	// if (!CTileset::TSControl.changeTileset(TilesetFile)) {
+	// 	CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
+	// 	return false;
+	// }
+	//
+	// fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
+	// fclose(FileHandle);
+	//
+	// ext = ".maps";
+	// fname = fpath + std::string(File) + ext;
+	//
+	// FILE* MapsHandle = fopen(fname.c_str(), "rb");
+	// if (MapsHandle == NULL) {
+	// 	CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open maps file");
+	// 	return false;
+	// }
 
 	MapList.clear();
 
@@ -91,14 +104,14 @@ bool CArea::NewLoad(char const* File)
 		for (int Y = 0; Y < AreaHeight; Y++)
 		{
 			CMap tempMap;
-			if (tempMap.NewLoad(MapsHandle) == false) {
-				fclose(MapsHandle);
+			if (tempMap.NewLoad(FileHandle) == false) {
+				fclose(FileHandle);
 				return false;
 			}
 			MapList.push_back(tempMap);
 		}
 	}
-	fclose(MapsHandle);
+	fclose(FileHandle);
 	return true;
 }
 
@@ -108,34 +121,23 @@ bool CArea::NewSave(char const* File)
 	std::string fpath = "../data/maps/";
 	std::string ext = ".area";
 	std::string fname = fpath + std::string(File) + ext;
-	FILE* FileHandle = fopen(fname.c_str(), "w");
+	// FILE* FileHandle = fopen(fname.c_str(), "w");
+	FILE* FileHandle = fopen(fname.c_str(), "wb");
 
 	if (FileHandle == NULL)	{
 		CInform::InfoControl.pushInform("---CAREA.NewSave---\nfailed to open new area file");
 		return false;
 	}
 
-	std::string setname = CTileset::TSControl.getFileName();
-
-	// Output the filename of the tileset for the area
-	fprintf(FileHandle, setname.c_str());
-	fprintf(FileHandle, "\n");
+	// Output the ID of the tileset for the area
+	short setID = CTileset::TSControl.getFileID();
+	fwrite(&setID, sizeof(short), 1, FileHandle);
 
 	// Output AreaWidth & AreaHeight
-	fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
+	fwrite(&AreaWidth, sizeof(int), 1, FileHandle);
+	fwrite(&AreaHeight, sizeof(int), 1, FileHandle);
 
-	fclose(FileHandle);
-
-	ext = ".maps";
-	fname = fpath + std::string(File) + ext;
-	FileHandle = fopen(fname.c_str(), "wb");
-
-	if (FileHandle == NULL)	{
-		CInform::InfoControl.pushInform("---CAREA.NewSave---\nfailed to open new maps file");
-		return false;
-	}
-
-	// Output map data to .maps file
+	// Output map data to .area file
 	for (int Y = 0; Y < AreaHeight; Y++)
 	{
 		for (int X = 0; X < AreaWidth; X++)
@@ -147,6 +149,25 @@ bool CArea::NewSave(char const* File)
 
 	fclose(FileHandle);
 	return true;
+	// std::string setname = CTileset::TSControl.getFileName();
+
+	// Output the filename of the tileset for the area
+	// fprintf(FileHandle, setname.c_str());
+	// fprintf(FileHandle, "\n");
+
+	// Output AreaWidth & AreaHeight
+	// fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
+
+	// fclose(FileHandle);
+
+	// ext = ".maps";
+	// fname = fpath + std::string(File) + ext;
+	// FileHandle = fopen(fname.c_str(), "wb");
+
+	// if (FileHandle == NULL)	{
+		// CInform::InfoControl.pushInform("---CAREA.NewSave---\nfailed to open new maps file");
+		// return false;
+	// }
 }
 
 bool CArea::OnLoad(char const* File)

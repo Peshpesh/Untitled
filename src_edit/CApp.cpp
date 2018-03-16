@@ -8,8 +8,8 @@ CApp::CApp()
 	mouse.x = mouse.y = 0;
 
 	active_mod = MODIFY_MAP;
-	intrpt = INTRPT_NONE;
-	tabl_name_W = 0;
+	// intrpt = INTRPT_NONE;
+	// tabl_name_W = 0;
 }
 
 /* This is the executable member that contains the editor's

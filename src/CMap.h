@@ -10,7 +10,7 @@
 
 class CMap {
 public:
-	SDL_Texture* Tex_Tileset;	// Pointer to the map tileset texture
+	// SDL_Texture* Tex_Tileset;	// Pointer to the map tileset texture
 
 private:
 	std::vector<CTile> TileList;

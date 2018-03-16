@@ -9,6 +9,16 @@
 #include "CFont.h"
 #include "CAsset.h"
 
+namespace Tileset_ID {
+  const short num = 1;
+  enum {
+    TS_DEFAULT = 0,
+  };
+  const std::string name[] = {
+    "default",
+  };
+};
+
 class CTileset : public CEvent {
 private:
   std::string file;
@@ -28,7 +38,8 @@ public:
   bool OnInit();
   void OnTerminate();
 
-  bool changeTileset(const char* fname);
+  bool changeTileset(const short& fID);
+  bool changeTileset(const std::string& fname);
   void changeTileset();
 
   void resetPath();
@@ -43,6 +54,8 @@ public:
 
   std::string getFileName();
   std::string getFilePath();
+  short getFileID(const std::string& fname);
+  short getFileID();
   SDL_Rect getTileSrcR(const int& ID);
 
   bool wasSuccess();

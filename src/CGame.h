@@ -6,6 +6,8 @@
 #include "CConfig.h"
 #include "CGameIO.h"
 #include "CInterrupt.h"
+
+#include "CArea.h"
 // #include "CHero.h"
 
 class CGame : public CEvent {
