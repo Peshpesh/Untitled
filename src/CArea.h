@@ -4,6 +4,7 @@
 #include <string>
 #include "CAsset.h"
 #include "CMap.h"
+// #include "CTransition.h"
 
 namespace Tileset {
   const short num = 1;
@@ -38,6 +39,8 @@ public:
 	void GetDims(int& mW, int& mH);
 	CMap* GetMap(int X, int Y);
 	CTile* GetTile(int X, int Y);
+
+  // void OnLoop();
 
 	void OnRender(int CameraX, int CameraY, bool bg);
 	void ShowAreaMap();

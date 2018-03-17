@@ -43,6 +43,7 @@ ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTitle.cpp
 ${SRCDIR}/CTitle_ext.cpp
+${SRCDIR}/CTransition.cpp
 ${SRCDIR}/CType.cpp
 ${SRCDIR}/CType_def.cpp
 )
@@ -69,6 +70,7 @@ ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CTitle.h
+${SRCDIR}/CTransition.h
 ${SRCDIR}/CType.h
 ${SRCDIR}/Define.h
 )

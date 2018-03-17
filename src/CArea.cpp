@@ -9,7 +9,7 @@ CArea::CArea() {
 void CArea::OnInit() {
 	MapList.clear();
 	AreaHeight = AreaWidth = 1;
-	tileset_ID = Tileset::TS_DEFAULT;
+	tileset_ID = -1;	 // will want to change this to some tileset used on title screen
 
 	CMap tempMap;
 	// tempMap.OnLoad();
@@ -114,6 +114,12 @@ CTile* CArea::GetTile(int X, int Y) {
 	Y = Y % MapHeight;
 	return Map->GetTile(X, Y);
 }
+
+// void CArea::OnLoop() {
+// 	if (CTransition::control.activated) {
+//
+// 	}
+// }
 
 void CArea::OnRender(int CameraX, int CameraY, bool bg) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels

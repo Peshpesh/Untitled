@@ -6,11 +6,15 @@ void CApp::OnRender() {
 	CSurface::Clear();
 
 	if (CMode::isFlagOn(APP_MODE_GAME)) {
-		// CGame::control.OnRender();
+		CGame::control.OnRender();
 	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
     CTitle::control.OnRender();
 	}	else if (CMode::isFlagOn(APP_MODE_FATAL)) {
 		//
+	}
+
+	if (!CTransition::control.OnRender()) {
+		// ERROR
 	}
 
 	if (esc_init) drawQuitMsg();

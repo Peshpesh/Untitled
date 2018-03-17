@@ -11,6 +11,7 @@
 #include "CConfig.h"
 
 #include "CGameIO.h"
+#include "CTransition.h"
 
 namespace Title {
   extern const SDL_Color* f_def;

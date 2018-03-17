@@ -1,12 +1,20 @@
 #include "CApp.h"
 
 void CApp::OnLoop() {
+	if (CMode::isFlagOn(APP_MODE_GAME)) {
+		CGame::control.OnLoop();
+	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
+		CTitle::control.OnLoop();
+	} else if (CMode::isFlagOn(APP_MODE_FATAL)) {
+		//
+	}
+
+	// CFPS::FPSControl.OnLoop();
+
 	if (esc_init && (SDL_GetTicks() - esc_init) >= ESC_THRESH) {
 		// call to terminate game
 		Running = false;
 	}
-
-	// CFPS::FPSControl.OnLoop();
 }
 
 // void CApp::OnLoop()

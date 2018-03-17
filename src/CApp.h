@@ -24,7 +24,7 @@
 #include "CMode.h"
 #include "CTitle.h"
 #include "CGame.h"
-
+#include "CTransition.h"
 
 // #include "CArea.h"
 // #include "CEntity.h"

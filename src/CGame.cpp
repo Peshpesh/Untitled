@@ -46,11 +46,18 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
 }
 
 void CGame::OnLoop() {
-
+	CTransition::control.OnLoop();
+	if (CTransition::control.activated) {     // complete transition
+    using namespace location;
+    if (!CArea::control.Load(abbrname[DEFAULT])) {
+      // ERROR
+    }
+    CTransition::control.activated = false;
+	}
 }
 
 void CGame::OnRender() {
-
+  CArea::control.OnRender(0, 0, true);
 }
 
 void CGame::OnCleanup() {

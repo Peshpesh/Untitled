@@ -41,7 +41,7 @@ bool CTitle::OnRender() {
 }
 
 void CTitle::OnLoop() {
-
+	CTransition::control.OnLoop();
 }
 
 void CTitle::OnCleanup() {
@@ -214,7 +214,8 @@ bool CTitle::handleDifficulty(const Gamecon& action) {
 
 bool CTitle::handleNewGame() {
   if (CGameIO::control.newGamedata(pos, Title::pick_game::difficulty::d_list[difficulty])) {
-    // CMode::changeFlag(APP_MODE_GAME);
+    CTransition::control.reqTrans(location::DEFAULT, 0, 0);
+    CTransition::control.reqMode(APP_MODE_GAME);
     return true;
   } return false;
 }
