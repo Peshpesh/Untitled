@@ -1,12 +1,12 @@
 #include "CMap.h"
 
-CMap::CMap()
-{
-	Tex_Tileset = NULL;
+CMap_Tileset CMap::Tileset;
+
+CMap::CMap() {
+	//
 }
 
-CTile* CMap::GetTile(int X, int Y)
-{
+CTile* CMap::GetTile(int X, int Y) {
 	int ID = 0;
 	ID = X / TILE_SIZE;
 	ID += (MAP_WIDTH * (Y / TILE_SIZE));
@@ -18,53 +18,39 @@ CTile* CMap::GetTile(int X, int Y)
 	return &TileList[ID];
 }
 
-bool CMap::OnLoad(char const* File)
-{
-	TileList.clear();
-	FILE* FileHandle = fopen(File, "r");
+bool CMap::Load(FILE* fhandle) {
+	if (fhandle == NULL) {
+		// CInform::InfoControl.pushInform("---CMAP.Onload---\nmaps file is NULL");
+		return false;
+	}
 
-	if (FileHandle == NULL) return false;
+	TileList.clear();
 
 	for (int Y = 0; Y < MAP_HEIGHT; Y++)
 	{
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			CTile tempTile;
-			fscanf(FileHandle, "%d:%d:%d:%d ", &tempTile.TileID, &tempTile.ForeID, &tempTile.TypeID, &tempTile.CollID);
+			if (fread(&tempTile, sizeof(class CTile), 1, fhandle) != 1) {
+				// CInform::InfoControl.pushInform("---CMAP.NewLoad---\nfailed to load binary tile data");
+				return false;
+			}
 			TileList.push_back(tempTile);
 		}
-		fscanf(FileHandle, "\n");
 	}
-	fclose(FileHandle);
 	return true;
 }
 
-void CMap::OnLoad()
+void CMap::OnRender(int MapX, int MapY, bool bg)
 {
-	TileList.clear();
+	// if (CTileset::TSControl.tileset == NULL) return;
+	//
+	// int tset_w = CTileset::TSControl.ts_w; // tiles
+	// int tset_h = CTileset::TSControl.ts_h; // tiles
 
-	CTile tempTile;
-
-	for (int Y = 0; Y < MAP_HEIGHT; Y++)
-	{
-		for (int X = 0; X < MAP_WIDTH; X++)
-		{
-			TileList.push_back(tempTile);
-		}
-	}
-}
-
-void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
-{
-	if (Tex_Tileset == NULL) return;
-
-	int PixWidth;
-	int PixHeight;
-
-	SDL_QueryTexture(Tex_Tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	int TilesetWidth  = PixWidth / TILE_SIZE; // tiles
-	int TilesetHeight = PixHeight / TILE_SIZE; // tiles
+	if (Tileset.img == NULL) return;
+	int tset_w = Tileset.w; // tiles
+	int tset_h = Tileset.h; // tiles
 
 	int ID = 0;
 
@@ -73,15 +59,15 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
 		for (int X = 0; X < MAP_WIDTH; X++)
 		{
 			int TilesetX = 0, TilesetY = 0;
-			if (bg && TileList[ID].TileID >= 0)
+			if (bg && TileList[ID].bg_ID >= 0)
 			{
-				TilesetX = (TileList[ID].TileID % TilesetWidth) * TILE_SIZE;
-				TilesetY = (TileList[ID].TileID / TilesetWidth) * TILE_SIZE;
+				TilesetX = (TileList[ID].bg_ID % Tileset.w) * TILE_SIZE;
+				TilesetY = (TileList[ID].bg_ID / Tileset.w) * TILE_SIZE;
 			}
-			else if (!bg && TileList[ID].ForeID >= 0)
+			else if (!bg && TileList[ID].fg_ID >= 0)
 			{
-				TilesetX = (TileList[ID].ForeID % TilesetWidth) * TILE_SIZE;
-				TilesetY = (TileList[ID].ForeID / TilesetWidth) * TILE_SIZE;
+				TilesetX = (TileList[ID].fg_ID % Tileset.w) * TILE_SIZE;
+				TilesetY = (TileList[ID].fg_ID / Tileset.w) * TILE_SIZE;
 			}
 			else
 			{
@@ -90,50 +76,17 @@ void CMap::OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg)
 			}
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			CSurface::OnDraw(renderer, Tex_Tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			CSurface::OnDraw(Tileset.img, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}
 }
 
-void CMap::ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo)
-{
-	if (ui == NULL)	return;
-
-	int VTileSize = 2; // Pixels
-	int ID = 0;
-
-	for (int Y = 0; Y < MAP_HEIGHT; Y++)
-	{
-		for (int X = 0; X < MAP_WIDTH; X++)
-		{
-			int VTileY = 350; // 350 px is where the 2 x 2 tiles start for the editor.
-			if (TileList[ID].TileID < 0)
-			{
-				// Do Nothing
-			}
-			else
-			{
-				switch (TileList[ID].TypeID)
-				{
-					case TILE_TYPE_NORMAL: VTileY += VTileSize; break;
-					case TILE_TYPE_WATER: VTileY += VTileSize * 2; break;
-					case TILE_TYPE_ICE: VTileY += VTileSize * 3; break;
-					case TILE_TYPE_FIRE: VTileY += VTileSize * 4; break;
-					default: break;
-				}
-			}
-			CSurface::OnDraw(renderer, ui, Xo + X * VTileSize, Yo + Y * VTileSize, 0, VTileY, VTileSize, VTileSize);
-			ID++;
-		}
-	}
-}
-
-void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int coll)
-{
-	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
-	TileList[ID].TileID = tile;
-	TileList[ID].ForeID = fore;
-	TileList[ID].TypeID = type;
-	TileList[ID].CollID = coll;
-}
+// void CMap::ChangeTile(int X, int Y, int tile, int fore, int type, int coll)
+// {
+// 	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
+// 	TileList[ID].TileID = tile;
+// 	TileList[ID].ForeID = fore;
+// 	TileList[ID].TypeID = type;
+// 	TileList[ID].CollID = coll;
+// }

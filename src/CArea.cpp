@@ -12,7 +12,7 @@ void CArea::OnInit() {
 	tileset_ID = Tileset::TS_DEFAULT;
 
 	CMap tempMap;
-	tempMap.OnLoad();
+	// tempMap.OnLoad();
 
 	MapList.push_back(tempMap);
 }
@@ -64,7 +64,7 @@ bool CArea::Load(char const* File) {
 bool CArea::ChangeTileset(const short& fID) {
 	using namespace Tileset;
 
-	if (setID < 0 || setID >= num) {
+	if (fID < 0 || fID >= num) {
 		// invalid tileset ID
 		return false;
 	}
@@ -73,9 +73,9 @@ bool CArea::ChangeTileset(const short& fID) {
 	std::string filepath = path + name[fID] + extension;
 
 	if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
-		SDL_DestroyTexture(Tex_Tileset);
-		Tex_Tileset = try_surf;
-		// CAsset::queryTileDims(tileset, ts_w, ts_h);
+		SDL_DestroyTexture(CMap::Tileset.img);
+		CMap::Tileset.img = try_surf;
+		CAsset::queryTileDims(CMap::Tileset.img, CMap::Tileset.w, CMap::Tileset.h);
 		tileset_ID = fID;
 	}
 	else {
@@ -115,7 +115,6 @@ CTile* CArea::GetTile(int X, int Y) {
 	return Map->GetTile(X, Y);
 }
 
-
 void CArea::OnRender(int CameraX, int CameraY, bool bg) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
@@ -142,15 +141,15 @@ void CArea::ShowAreaMap() {
 
 }
 
-void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles) {
-	if (X < 0 || Y < 0 || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE))
-		return;
-
-	int mapWidth = MAP_WIDTH * TILE_SIZE;
-	int mapHeight = MAP_HEIGHT * TILE_SIZE;
-	int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
-	MapList[ID].ChangeTile(X % mapWidth, Y % mapHeight, NewTile, useTiles);
-}
+// void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles) {
+// 	if (X < 0 || Y < 0 || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE))
+// 		return;
+//
+// 	int mapWidth = MAP_WIDTH * TILE_SIZE;
+// 	int mapHeight = MAP_HEIGHT * TILE_SIZE;
+// 	int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
+// 	MapList[ID].ChangeTile(X % mapWidth, Y % mapHeight, NewTile, useTiles);
+// }
 
 void CArea::OnCleanup() {
 	MapList.clear();

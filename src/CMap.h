@@ -1,5 +1,5 @@
-#ifndef _CMAP_H_
-#define _CMAP_H_
+#ifndef _C_MAP_H_
+#define _C_MAP_H_
 
 #include <SDL.h>
 #include <vector>
@@ -8,27 +8,25 @@
 #include "CTile.h"
 #include "CSurface.h"
 
-class CMap {
-public:
-	// SDL_Texture* Tex_Tileset;	// Pointer to the map tileset texture
+struct CMap_Tileset {
+	SDL_Texture* img;
+	int w;
+	int h;
+};
 
+class CMap {
 private:
 	std::vector<CTile> TileList;
 
 public:
+	static CMap_Tileset Tileset;
+
 	CMap();
 	CTile* GetTile(int X, int Y);
 
-
 public:
-	bool OnLoad(char const* File);
-	void OnLoad();
+	bool Load(FILE* fhandle);
 
-	void OnRender(SDL_Renderer* renderer, int MapX, int MapY, bool bg);
-
-	void ViewMap(SDL_Renderer* renderer, SDL_Texture* ui, int Xo, int Yo);
-
-	void ChangeTile(int X, int Y, int tile, int fore, int type, int coll);
-
+	void OnRender(int MapX, int MapY, bool bg);
 };
 #endif

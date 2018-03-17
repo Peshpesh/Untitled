@@ -1,5 +1,5 @@
-#ifndef _CTILE_H_
-#define _CTILE_H_
+#ifndef _C_TILE_H_
+#define _C_TILE_H_
 
 #include "Define.h"
 
@@ -10,6 +10,15 @@ enum
   TILE_TYPE_ICE,          // increased inertia when colliding with these tiles
   TILE_TYPE_FIRE,         // persistent damage when colliding with these tiles
 };
+
+// enum
+// {
+//   ENABLE_NONE 	 = 0,
+// 	ENABLE_BG	     = 0x00000001,		// Place background tiles
+//   ENABLE_FG 	   = 0x00000002,		// Place foreground tiles
+//   ENABLE_TYPE 	 = 0x00000004,		// Place tile types
+// 	ENABLE_COLL 	 = 0x00000008,		// Place collision types
+// };
 
 enum
 {
@@ -28,10 +37,10 @@ enum
 class CTile
 {
 public:
-	int		TileID;			// Background tile (ID) drawn
-	int		ForeID;			// Foreground tile (ID) drawn
-	int		TypeID;			// Tile characteristics
-	int		CollID;		  // Collision characteristics
+	short		bg_ID;			// Background tile (ID) drawn
+	short		fg_ID;			// Foreground tile (ID) drawn
+	short		TypeID;			// Tile characteristics
+	short		CollID;		  // Collision characteristics
 
 public:
 	CTile();

@@ -21,6 +21,7 @@ ${SRCDIR}/CApp_OnEvent.cpp
 ${SRCDIR}/CApp_OnInit.cpp
 ${SRCDIR}/CApp_OnLoop.cpp
 ${SRCDIR}/CApp_OnRender.cpp
+${SRCDIR}/CArea.cpp
 ${SRCDIR}/CAsset.cpp
 ${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CCamera.cpp
@@ -35,9 +36,11 @@ ${SRCDIR}/CGameIO.cpp
 ${SRCDIR}/CGlobal.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
+${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMode.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
+${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTitle.cpp
 ${SRCDIR}/CTitle_ext.cpp
 ${SRCDIR}/CType.cpp
@@ -46,6 +49,7 @@ ${SRCDIR}/CType_def.cpp
 
 set(HEADER_FILES
 ${SRCDIR}/CApp.h
+${SRCDIR}/CArea.h
 ${SRCDIR}/CAsset.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CConfig.h
@@ -59,9 +63,11 @@ ${SRCDIR}/CGameIO.h
 ${SRCDIR}/CGlobal.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
+${SRCDIR}/CMap.h
 ${SRCDIR}/CMode.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
+${SRCDIR}/CTile.h
 ${SRCDIR}/CTitle.h
 ${SRCDIR}/CType.h
 ${SRCDIR}/Define.h
