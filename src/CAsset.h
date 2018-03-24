@@ -98,6 +98,8 @@ class CAsset
 
   public:
     static void paletteAlpha(const short& a);
+    static void paletteBlend(const SDL_Color& rgb);
+    static void paletteReset();
 
   public:
     static void queryTileDims(SDL_Texture* texture, int& w, int& h);
@@ -110,7 +112,8 @@ class CAsset
   public:
     // returns a SDL_Rect struct for given X, Y, W, H. Ideal for drawing.
   	static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
-    static SDL_Rect getRect(const SDL_Point* A, const SDL_Point* B);
+    static SDL_Rect getRect(const SDL_Point* A, const SDL_Point* B);  // this should be deprecated
+    static SDL_Rect getRect(const SDL_Point& A, const SDL_Point& B);
     static SDL_Rect getWinCentRect(const unsigned int& w, const unsigned int& h);
     static SDL_Rect getTileRect(const SDL_Point* A, const SDL_Point* B);
     static SDL_Point getPos(int X, int Y);
@@ -131,6 +134,20 @@ class CAsset
 
     static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color);
     static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col);
+
+
+
+    static bool drawBox(const SDL_Rect& box, const SDL_Color& color);
+    static bool drawBox(const SDL_Rect& box, const SDL_Color& color, const int& thick);
+    static bool drawBox(const SDL_Point& A, const SDL_Point& B, const SDL_Color& color, const int& thick);
+
+    static bool drawBoxFill(const SDL_Rect& box, const SDL_Color& color);
+    static bool drawBoxFill(const SDL_Point& A, const SDL_Point& B, const SDL_Color& color);
+
+    static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color);
+    static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color, const SDL_Color& str_col);
+
+
 
     static bool drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb);
     static bool drawArrowFill(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb);

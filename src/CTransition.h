@@ -43,10 +43,12 @@ public:
   int X;
   int Y;
   bool activated;
+  SDL_Color color;
 
 public:
   static CTransition control;
 
+  void setColor(const SDL_Color& color);
   void reqTrans(const int& loc, const int &X, const int &Y);
   void reqMode(const app_module& mode);
 
@@ -55,9 +57,9 @@ public:
   bool OnRender();
 
 private:
-  bool fadeout();
+  bool wipeout();
   bool blank();
-  bool fadein();
+  bool wipein();
   void changeMode();
 };
 

@@ -3,8 +3,7 @@
 SDL_Texture* CAsset::paltex = NULL;
 SDL_Texture* CAsset::arrtex = NULL;
 
-namespace symbols
-{
+namespace symbols {
   // arrow fills
   const SDL_Rect f_AL = {15, 15, ARR_SZ, ARR_SZ};
   const SDL_Rect f_AR = {0,  15, ARR_SZ, ARR_SZ};
@@ -17,18 +16,16 @@ namespace symbols
   const SDL_Rect s_AD = {30, 0,  ARR_SZ, ARR_SZ};
 }
 
-CAsset::CAsset()
-{
+CAsset::CAsset() {
   //
 }
 
-bool CAsset::OnInit()
-{
-  if ((paltex = CSurface::OnLoad("../res_edit/palette.png")) == NULL)
+bool CAsset::OnInit() {
+  if ((paltex = CSurface::OnLoad("../res/palette.png")) == NULL)
 	{
 		return false;
 	}
-  if ((arrtex = CSurface::OnLoad("../res_edit/arrow.png")) == NULL)
+  if ((arrtex = CSurface::OnLoad("../res/arrow.png")) == NULL)
 	{
 		return false;
 	}
@@ -36,23 +33,28 @@ bool CAsset::OnInit()
 	return true;
 }
 
-void CAsset::queryTileDims(SDL_Texture* texture, int& w, int& h)
-{
+void CAsset::queryTileDims(SDL_Texture* texture, int& w, int& h) {
   int PixWidth, PixHeight;
   SDL_QueryTexture(texture, NULL, NULL, &PixWidth, &PixHeight);
   w = PixWidth / TILE_SIZE;
   h = PixHeight / TILE_SIZE;
 }
 
-void CAsset::paletteAlpha(const short& a)
-{
+void CAsset::paletteAlpha(const short& a) {
   if (a >= 0 && a <= MAX_RGBA) {
     SDL_SetTextureAlphaMod(paltex, a);
   }
 }
 
-SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H)
-{
+void CAsset::paletteBlend(const SDL_Color& rgb) {
+  SDL_SetTextureColorMod(paltex, rgb.r, rgb.g, rgb.b);
+}
+
+void CAsset::paletteReset() {
+  SDL_SetTextureColorMod(paltex, rgb::white.r, rgb::white.g, rgb::white.b);
+}
+
+SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H) {
 	SDL_Rect rect;
 	rect.x = X;
 	rect.y = Y;
@@ -61,12 +63,23 @@ SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigne
 	return rect;
 }
 
-SDL_Rect CAsset::getRect(const SDL_Point* A, const SDL_Point* B)
-{
+SDL_Rect CAsset::getRect(const SDL_Point* A, const SDL_Point* B) {
   int xmin = (A->x <  B->x) ? A->x : B->x;
   int xmax = (A->x >= B->x) ? A->x : B->x;
   int ymin = (A->y <  B->y) ? A->y : B->y;
   int ymax = (A->y >= B->y) ? A->y : B->y;
+  int w = xmax - xmin + 1;
+  int h = ymax - ymin + 1;
+
+  SDL_Rect rect = {xmin, ymin, w, h};
+  return rect;
+}
+
+SDL_Rect CAsset::getRect(const SDL_Point& A, const SDL_Point& B) {
+  int xmin = (A.x <  B.x) ? A.x : B.x;
+  int xmax = (A.x >= B.x) ? A.x : B.x;
+  int ymin = (A.y <  B.y) ? A.y : B.y;
+  int ymax = (A.y >= B.y) ? A.y : B.y;
   int w = xmax - xmin + 1;
   int h = ymax - ymin + 1;
 
@@ -83,8 +96,7 @@ SDL_Rect CAsset::getWinCentRect(const unsigned int& w, const unsigned int& h) {
   return CAsset::getRect(X, Y, w, h);
 }
 
-SDL_Rect CAsset::getTileRect(const SDL_Point* A, const SDL_Point* B)
-{
+SDL_Rect CAsset::getTileRect(const SDL_Point* A, const SDL_Point* B) {
   int xmin = (A->x <  B->x) ? A->x : B->x;
   int xmax = (A->x >= B->x) ? A->x : B->x;
   int ymin = (A->y <  B->y) ? A->y : B->y;
@@ -103,16 +115,14 @@ SDL_Rect CAsset::getTileRect(const SDL_Point* A, const SDL_Point* B)
   return rect;
 }
 
-SDL_Point CAsset::getPos(int X, int Y)
-{
+SDL_Point CAsset::getPos(int X, int Y) {
   SDL_Point pos;
   pos.x = X;
   pos.y = Y;
   return pos;
 }
 
-SDL_Rect CAsset::getPixel(const SDL_Point* pix)
-{
+SDL_Rect CAsset::getPixel(const SDL_Point* pix) {
 	SDL_Rect rect;
 
 	rect.x = pix->x;
@@ -123,13 +133,11 @@ SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 	return rect;
 }
 
-bool CAsset::inWorkspace(const SDL_Point* pos)
-{
+bool CAsset::inWorkspace(const SDL_Point* pos) {
   return (pos->x >= 0 && pos->x < WWIDTH && pos->y >= 0 && pos->y < WHEIGHT);
 }
 
-bool CAsset::inWorkspace(const int& x, const int& y)
-{
+bool CAsset::inWorkspace(const int& x, const int& y) {
   return (x >= 0 && x < WWIDTH && y >= 0 && y < WHEIGHT);
 }
 
@@ -137,19 +145,16 @@ bool CAsset::compRect(const SDL_Rect& A, const SDL_Rect& B) {
   return (A.x == B.x && A.y == B.y && A.w == B.w && A.h == B.h);
 }
 
-bool CAsset::drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick)
-{
+bool CAsset::drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick) {
   return true;
 }
 
-bool CAsset::drawBox(const SDL_Rect& box, const SDL_Point* color)
-{
+bool CAsset::drawBox(const SDL_Rect& box, const SDL_Point* color) {
   const int defThick = 1;
   return drawBox(box, color, defThick);
 }
 
-bool CAsset::drawBox(const SDL_Rect& box, const SDL_Point* color, const int& thick)
-{
+bool CAsset::drawBox(const SDL_Rect& box, const SDL_Point* color, const int& thick) {
   if (color == NULL || thick < 0) return false;
   if (thick == 0) return true;
 
@@ -175,14 +180,12 @@ bool CAsset::drawBox(const SDL_Rect& box, const SDL_Point* color, const int& thi
   return true;
 }
 
-bool CAsset::drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick)
-{
+bool CAsset::drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick) {
   SDL_Rect box = getRect(A, B);
   return drawBox(box, color, thick);
 }
 
-bool CAsset::drawBoxFill(const SDL_Rect& box, const SDL_Point* color)
-{
+bool CAsset::drawBoxFill(const SDL_Rect& box, const SDL_Point* color) {
   if (color == NULL) return false;
 
   SDL_Rect srcR = getPixel(color);
@@ -191,30 +194,91 @@ bool CAsset::drawBoxFill(const SDL_Rect& box, const SDL_Point* color)
   return true;
 }
 
-bool CAsset::drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color)
-{
+bool CAsset::drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color) {
   SDL_Rect dstR = getRect(A, B);
   return drawBoxFill(dstR, color);
 }
 
-bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color)
-{
+bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color) {
   if (!drawBoxFill(box, color)) return false;
   if (!drawBox(box, &palette::black, str_w)) return false;
 
   return true;
 }
 
-bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col)
-{
+bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Point* color, const SDL_Point* str_col) {
   if (!drawBoxFill(box, color)) return false;
   if (!drawBox(box, str_col, str_w)) return false;
 
   return true;
 }
 
-bool CAsset::drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb)
-{
+bool CAsset::drawBox(const SDL_Rect& box, const SDL_Color& color) {
+  const int defThick = 1;
+  return drawBox(box, color, defThick);
+}
+
+bool CAsset::drawBox(const SDL_Rect& box, const SDL_Color& color, const int& thick) {
+  if (thick <  0) return false;
+  if (thick == 0) return true;
+
+  paletteBlend(color);
+  SDL_Rect srcR = getPixel(&palette::white);
+  SDL_Rect dstR;
+
+  // top side
+  dstR = getRect(box.x, box.y, box.w, thick);
+  CSurface::OnDraw(paltex, srcR, dstR);
+
+  // bottom side
+  dstR = getRect(box.x, box.y + box.h - thick, box.w, thick);
+  CSurface::OnDraw(paltex, srcR, dstR);
+
+  // left side
+  dstR = getRect(box.x, box.y, thick, box.h);
+  CSurface::OnDraw(paltex, srcR, dstR);
+
+  // right side
+  dstR = getRect(box.x + box.w - thick, box.y, thick, box.h);
+  CSurface::OnDraw(paltex, srcR, dstR);
+
+  paletteReset();
+  return true;
+}
+
+bool CAsset::drawBox(const SDL_Point& A, const SDL_Point& B, const SDL_Color& color, const int& thick) {
+  SDL_Rect box = getRect(A, B);
+  return drawBox(box, color, thick);
+}
+
+bool CAsset::drawBoxFill(const SDL_Rect& box, const SDL_Color& color) {
+  paletteBlend(color);
+  SDL_Rect srcR = getPixel(&palette::white);
+  if (!CSurface::OnDraw(paltex, srcR, box)) return false;
+  paletteReset();
+  return true;
+}
+
+bool CAsset::drawBoxFill(const SDL_Point& A, const SDL_Point& B, const SDL_Color& color) {
+  SDL_Rect dstR = getRect(A, B);
+  return drawBoxFill(dstR, color);
+}
+
+bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color) {
+  if (!drawBoxFill(box, color)) return false;
+  if (!drawBox(box, &palette::black, str_w)) return false;
+
+  return true;
+}
+
+bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color, const SDL_Color& str_col) {
+  if (!drawBoxFill(box, color)) return false;
+  if (!drawBox(box, str_col, str_w)) return false;
+
+  return true;
+}
+
+bool CAsset::drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb) {
   using namespace symbols;
 
   bool retval = false;

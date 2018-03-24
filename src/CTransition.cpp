@@ -13,6 +13,11 @@ CTransition::CTransition() {
   locationID = location::DEFAULT;
   X = Y = 0;
   mode = APP_MODE_TITLE;
+  color = rgb::black;
+}
+
+void CTransition::setColor(const SDL_Color& color) {
+  this->color = color;
 }
 
 void CTransition::reqTrans(const int& loc, const int &X, const int &Y) {
@@ -57,33 +62,33 @@ void CTransition::OnLoop() {
 
 bool CTransition::OnRender() {
   if (fadeout_timer) {
-    return fadeout();
+    return wipeout();
   } else if (delay_timer) {
     return blank();
   } else if (fadein_timer) {
-    return fadein();
+    return wipein();
   }
   return true;
 }
 
-bool CTransition::fadeout() {
+bool CTransition::wipeout() {
   // left-to-right fadeout
   int w = ((float)(WWIDTH * (reset_time - fadeout_timer)) / reset_time);
   SDL_Rect fill = {0, 0, w, WHEIGHT};
-  return CAsset::drawBoxFill(fill, &palette::white);
+  return CAsset::drawBoxFill(fill, color);
 }
 
 bool CTransition::blank() {
   // blank screen between fades
   SDL_Rect fill = {0, 0, WWIDTH, WHEIGHT};
-  return CAsset::drawBoxFill(fill, &palette::white);
+  return CAsset::drawBoxFill(fill, color);
 }
 
-bool CTransition::fadein() {
+bool CTransition::wipein() {
   // left-to-right fadein
   int w = ((float)(WWIDTH * fadein_timer) / reset_time);
   SDL_Rect fill = {WWIDTH - w, 0, w, WHEIGHT};
-  return CAsset::drawBoxFill(fill, &palette::white);
+  return CAsset::drawBoxFill(fill, color);
 }
 
 void CTransition::changeMode() {
