@@ -9,6 +9,7 @@
 
 #include "CTransition.h"
 #include "CArea.h"
+#include "CEntityIO.h"
 // #include "CHero.h"
 
 class CGame : public CEvent {

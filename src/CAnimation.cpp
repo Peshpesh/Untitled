@@ -19,8 +19,7 @@ void CAnimation::OnAnimate()
 
 	CurrentFrame += FrameInc;
 
-	if (Oscillate)
-	{
+	if (Oscillate) {
 		if (FrameInc > 0)
 		{
 			if (CurrentFrame >= MaxFrames) FrameInc = -FrameInc;
@@ -29,9 +28,7 @@ void CAnimation::OnAnimate()
 		{
 			if (CurrentFrame <= 0) FrameInc = -FrameInc;
 		}
-	}
-	else
-	{
+	} else {
 		if (CurrentFrame >= MaxFrames) CurrentFrame = 0;
 	}
 }

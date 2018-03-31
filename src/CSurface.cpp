@@ -134,12 +134,11 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Point* dstpos)
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Point& dstpos)
 {
-	if (Surf_Src == NULL || dstpos == NULL)
-		return false;
+	if (Surf_Src == NULL) return false;
 
-	SDL_Rect DestR = {dstpos->x, dstpos->y, srcrect.w, srcrect.h};
+	SDL_Rect DestR = {dstpos.x, dstpos.y, srcrect.w, srcrect.h};
 
 	SDL_RenderCopy(Win_Renderer, Surf_Src, &srcrect, &DestR);
 	return true;

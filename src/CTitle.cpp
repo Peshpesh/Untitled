@@ -284,11 +284,11 @@ bool CTitle::drawGameSlot(const CGameinfo& info, const SDL_Rect& slot) {
     str = Title::pick_game::difficulty::list[info.diff];
   }
   pos.x = slot.x + diff_pos.x; pos.y = slot.y + diff_pos.y;
-  CType::NewCenterWrite(str.c_str(), &pos);
+  CType::NewCenterWrite(str.c_str(), pos);
 
   str = CAsset::msToHHMMSS(info.time);
   pos.x = slot.x + time_pos.x; pos.y = slot.y + time_pos.y;
-  CType::NewCenterWrite(str.c_str(), &pos);
+  CType::NewCenterWrite(str.c_str(), pos);
   // CType::NewCenterWrite(str.c_str(), slot, (i != pos) ? f_def : f_hov);
 
   return true;

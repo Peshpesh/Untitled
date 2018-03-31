@@ -14,6 +14,7 @@ include_directories(${SDL2_INCLUDE_DIR})
 set(SRCDIR ${PROJECT_SOURCE_DIR}/src)
 
 set(SOURCE_FILES
+${SRCDIR}/CAnimation.cpp
 ${SRCDIR}/CApp.cpp
 ${SRCDIR}/CApp_ext.cpp
 ${SRCDIR}/CApp_OnCleanup.cpp
@@ -27,6 +28,10 @@ ${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CControls.cpp
+${SRCDIR}/CEntity.cpp
+${SRCDIR}/CEntityCol.cpp
+${SRCDIR}/CEntityData.cpp
+${SRCDIR}/CEntityIO.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CGame.cpp
@@ -49,12 +54,16 @@ ${SRCDIR}/CType_def.cpp
 )
 
 set(HEADER_FILES
+${SRCDIR}/CAnimation.h
 ${SRCDIR}/CApp.h
 ${SRCDIR}/CArea.h
 ${SRCDIR}/CAsset.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CConfig.h
 ${SRCDIR}/CControls.h
+${SRCDIR}/CEntity.h
+${SRCDIR}/CEntityData.h
+${SRCDIR}/CEntityIO.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFPS.h
 ${SRCDIR}/CGame.h

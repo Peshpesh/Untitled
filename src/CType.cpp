@@ -16,8 +16,7 @@ CType::CType() {
 	dynamicText = false;
 }
 
-bool CType::OnInit()
-{
+bool CType::OnInit() {
 	if ((CS_Font = CSurface::OnLoad("../res/font.png")) == NULL) 	return false;
 	if ((Mini_Font = CSurface::OnLoad("../res/minifont.png")) == NULL) 	return false;
 
@@ -54,7 +53,7 @@ void CType::setDynamic()
 	dynamicText = true;
 }
 
-void CType::renderCursor(const int& fontID, const SDL_Point* pos)
+void CType::renderCursor(const int& fontID, const SDL_Point& pos)
 {
 	if (cursTimer >= 0) {
 		SDL_Texture* font = GetFont(fontID);
@@ -147,7 +146,7 @@ int CType::Write(const int& fontID, char const* message, int Mx, int My)
 	return Mx - FirstMx - h_spacing;
 }
 
-int CType::Write(const int& fontID, char const* message, const SDL_Point* pos)
+int CType::Write(const int& fontID, char const* message, const SDL_Point& pos)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -156,10 +155,10 @@ int CType::Write(const int& fontID, char const* message, const SDL_Point* pos)
  	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL) return -2;
 
 	int i = 0;
-	const int FirstMx = pos->x;
+	const int FirstMx = pos.x;
 	bool spec_req = false;
 
-	SDL_Point symPos = {pos->x, pos->y};
+	SDL_Point symPos = {pos.x, pos.y};
 	SDL_Rect symRec;
 
 	while (message[i] != '\0')
@@ -179,13 +178,13 @@ int CType::Write(const int& fontID, char const* message, const SDL_Point* pos)
 			GetXY_spec(fontID, sym, symRec);
 			spec_req = false;
 		}
-		if (!CSurface::OnDraw(font, symRec, &symPos)) return -1;
+		if (!CSurface::OnDraw(font, symRec, symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 	}
 	return 0;
 }
 
-int CType::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
+int CType::WriteLine(const int& fontID, char const* line, const SDL_Point& pos)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -193,9 +192,9 @@ int CType::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 	if ((font = GetInfo(fontID, h_spacing, v_spacing)) == NULL) return -2;
 
 	int i = 0;
-	const int FirstMx = pos->x;
+	const int FirstMx = pos.x;
 	bool spec_req = false;
-	SDL_Point symPos = {pos->x, pos->y};
+	SDL_Point symPos = {pos.x, pos.y};
 	SDL_Rect symRec;
 
 	while (line[i] != '\0' && line[i] != '\n')
@@ -210,18 +209,18 @@ int CType::WriteLine(const int& fontID, char const* line, const SDL_Point* pos)
 			GetXY_spec(fontID, line[i], symRec);
 			spec_req = false;
 		}
-		if (!CSurface::OnDraw(font, symRec, &symPos)) return -1;
+		if (!CSurface::OnDraw(font, symRec, symPos)) return -1;
 		symPos.x += symRec.w + h_spacing;
 		i++;
 	}
 	if (control.dynamicText && line[i] == '\0')
 	{
-		control.renderCursor(fontID, &symPos);
+		control.renderCursor(fontID, symPos);
 	}
-	return (pos->x - FirstMx - h_spacing);
+	return (pos.x - FirstMx - h_spacing);
 }
 
-int CType::Write(const int& fontID, char const* message, const SDL_Point* pos, const SDL_Color* col)
+int CType::Write(const int& fontID, char const* message, const SDL_Point& pos, const SDL_Color* col)
 {
 	changeFontColor(fontID, col);
 	int retval = Write(fontID, message, pos);
@@ -451,7 +450,7 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect
 	return retval;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point* dstC, const SDL_Color* col)
+int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC, const SDL_Color* col)
 {
 	changeFontColor(fontID, col);
 	int retval = NewCenterWrite(fontID, message, dstC);
@@ -483,27 +482,27 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect
 		currentLine = getLine(fontID, message, i, dstR.w);
 		getLineDims(fontID, currentLine.c_str(), lineW);
 		pos.x = centerX - (lineW / 2);
-		WriteLine(fontID, currentLine.c_str(), &pos);
+		WriteLine(fontID, currentLine.c_str(), pos);
 		pos.y += lineH + v_spacing;
 	}
 	if (control.dynamicText && message[i] == '\0')
 	{
 		SDL_Point symPos = {centerX, centerY - (lineH / 2)};
-		control.renderCursor(fontID, &symPos);
+		control.renderCursor(fontID, symPos);
 	}
 
 	return 0;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point* dstC)
+int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC)
 {
 	int msgWidth = 0;
 	int msgHeight = GetSymH(fontID);
 	getLineDims(fontID, message, msgWidth);
 
-	SDL_Point pos = {dstC->x - (msgWidth / 2), dstC->y - (msgHeight / 2)};
+	SDL_Point pos = {dstC.x - (msgWidth / 2), dstC.y - (msgHeight / 2)};
 
-	return WriteLine(fontID, message, &pos);
+	return WriteLine(fontID, message, pos);
 }
 
 int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col)
@@ -515,7 +514,7 @@ int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_C
 	return retval;
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Point* dstC, const SDL_Color* col)
+int CType::NewCenterWrite(char const* message, const SDL_Point& dstC, const SDL_Color* col)
 {
 	changeFontColor(col);
 	int retval = NewCenterWrite(message, dstC);
@@ -529,7 +528,7 @@ int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR)
 	return NewCenterWrite(control.def_ID, message, dstR);
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Point* dstC)
+int CType::NewCenterWrite(char const* message, const SDL_Point& dstC)
 {
 	return NewCenterWrite(control.def_ID, message, dstC);
 }

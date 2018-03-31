@@ -49,9 +49,14 @@ void CGame::OnLoop() {
 	CTransition::control.OnLoop();
 	if (CTransition::control.activated) {     // complete transition
     using namespace location;
-    if (!CArea::control.Load(abbrname[DEFAULT])) {
-      // ERROR
+    if (!CArea::control.Load(abbrname[CTransition::control.locationID])) {
+      // ERROR LOADING AREA
     }
+    //  Entities
+    if (!CEntityIO::Load(abbrname[CTransition::control.locationID])) {
+      // ERROR LOADING ENTITIES
+    }
+    //  Scenery
     CTransition::control.activated = false;
 	}
 }

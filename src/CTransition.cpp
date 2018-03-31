@@ -72,7 +72,7 @@ bool CTransition::OnRender() {
 }
 
 bool CTransition::wipeout() {
-  // left-to-right fadeout
+  // left-to-right wipe (TO color)
   int w = ((float)(WWIDTH * (reset_time - fadeout_timer)) / reset_time);
   SDL_Rect fill = {0, 0, w, WHEIGHT};
   return CAsset::drawBoxFill(fill, color);
@@ -85,7 +85,7 @@ bool CTransition::blank() {
 }
 
 bool CTransition::wipein() {
-  // left-to-right fadein
+  // left-to-right wipe (FROM color)
   int w = ((float)(WWIDTH * fadein_timer) / reset_time);
   SDL_Rect fill = {WWIDTH - w, 0, w, WHEIGHT};
   return CAsset::drawBoxFill(fill, color);
