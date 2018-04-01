@@ -568,8 +568,8 @@ void CEntity::OnAnimate()
 // }
 
 void CEntity::OnRender() {
-	// SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(&dstP);
-  // CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
+	SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(X, Y);
+  CSurface::OnDraw(sprtSrc, spriteR, dstWinPos);
 }
 
 // void CEntity::ChkEnviro()
@@ -609,8 +609,7 @@ void CEntity::OnRender() {
 // 	}
 // }
 
-bool CEntity::Jump()
-{
+bool CEntity::Jump() {
 	if (Jumper == false) return false;
 	SpeedY = -MaxSpeedY;
 	return true;

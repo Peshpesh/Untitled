@@ -3,10 +3,45 @@
 CGame CGame::control;
 
 CGame::CGame() {
-  //
+  Hero.Permanent = true;
 }
 
 bool CGame::OnInit() {
+  if (!CEntityIO::Init()) {
+    // ERROR
+  }
+
+  // initialize hero
+  {
+    using namespace Entities;
+    Hero.X = CTransition::control.X;
+    Hero.Y = CTransition::control.Y;
+    Hero.MaxHealth = CGamedata::control.data_hero.max_health;
+    Hero.Health = CGamedata::control.data_hero.health;
+
+    Hero.OnLoad(CEntityIO::getSrcTexture(groups::GLOBAL),
+                CEntityData::getEntityDims(groups::GLOBAL, global::PLAYER),
+                CEntityData::getHitboxDims(groups::GLOBAL, global::PLAYER),
+                1);
+
+    CEntity::EntityList.push_back(&Hero); // GOOD LUCK //
+  }
+
+	// complete transition
+  using namespace location;
+  if (!CArea::control.Load(abbrname[CTransition::control.locationID])) {
+    // ERROR LOADING AREA
+  }
+  //  Entities
+  if (!CEntityIO::Load(abbrname[CTransition::control.locationID])) {
+    // ERROR LOADING ENTITIES
+  }
+  //  Scenery
+  //
+  //
+  //
+  // transition complete
+  CTransition::control.activated = false;
   return true;
 }
 
@@ -57,12 +92,24 @@ void CGame::OnLoop() {
       // ERROR LOADING ENTITIES
     }
     //  Scenery
+    //
+    //
+    //
     CTransition::control.activated = false;
 	}
 }
 
 void CGame::OnRender() {
+  if (CEntity::EntityList.size() == 0) return;
   CArea::control.OnRender(0, 0, true);
+
+	// Render entities
+	for (int i = CEntity::EntityList.size() - 1; i >= 0; i--) {
+		if (!CEntity::EntityList[i]) continue;
+		CEntity::EntityList[i]->OnRender();
+	}
+
+  CArea::control.OnRender(0, 0, false);
 }
 
 void CGame::OnCleanup() {

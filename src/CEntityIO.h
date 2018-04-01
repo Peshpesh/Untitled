@@ -14,6 +14,8 @@ private:
   static void resetLevel();
 
 public:
+  static bool Init();
+
   static bool Load(char const* File);
 
   static void addEntity(const int& group, const int& entity, const int& X, const int& Y);
@@ -22,13 +24,15 @@ private:
   static void addGlobal(const int& entity, const int& X, const int& Y);
   static void addCaves(const int& entity, const int& X, const int& Y);
 
-private:
+public:
   static void loadTexInfo(const int& group);
 
+private:
   static bool isTextureLoaded(const int& group);
   static bool isTextureUsed(const int& group);
-  static SDL_Texture* getSrcTexture(const int& group);
 
+public:
+  static SDL_Texture* getSrcTexture(const int& group);
   static void purgeStaleTextures();
 };
 

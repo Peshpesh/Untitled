@@ -4,6 +4,14 @@ CEntityIO::CEntityIO() {
   //
 }
 
+bool CEntityIO::Init() {
+  loadTexInfo(Entities::groups::GLOBAL);
+  if (getSrcTexture(Entities::groups::GLOBAL) == NULL) {
+    return false;
+  }
+  return true;
+}
+
 bool CEntityIO::Load(char const* File) {
 	// try to load entity file
   std::string fpath = "../data/maps/";

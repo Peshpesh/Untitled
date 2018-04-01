@@ -39,6 +39,14 @@ void CTransition::reqMode(const app_module& mode) {
   }
 }
 
+bool CTransition::isActive() {
+  return (fadeout_timer || fadein_timer || delay_timer);
+}
+
+app_module CTransition::getMode() {
+  return mode;
+}
+
 void CTransition::OnLoop() {
   if (fadeout_timer) {
     fadeout_timer -= (SDL_GetTicks() - last_time);

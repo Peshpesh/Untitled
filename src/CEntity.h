@@ -10,7 +10,7 @@
 
 // enum {
 	// Summary:
-	// Player is exclusively used as a type for players only.
+	// Player is exclusively used as a type for players only
 	// NPC types are those that the player can interact with.
 	// Item types are those that the player can gather via collision.
 	// Coin types are those that add to the player's purse via collision.

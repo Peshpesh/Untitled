@@ -10,14 +10,15 @@
 #include "CTransition.h"
 #include "CArea.h"
 #include "CEntityIO.h"
-// #include "CHero.h"
+#include "CHero.h"
 
 class CGame : public CEvent {
   CGame();
 
 public:
   static CGame control;
-
+  CHero Hero;
+  
   bool OnInit();
 
 	void OnEvent(SDL_Event* Event);

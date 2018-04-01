@@ -5,6 +5,12 @@ void CApp::OnLoop() {
 		CGame::control.OnLoop();
 	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
 		CTitle::control.OnLoop();
+		if (CMode::isFlagOn(APP_MODE_GAME)) {
+			// switching from Title to Game
+			if (!CGame::control.OnInit()) {
+				// ERROR COULD NOT INITIALIZE GAME
+			}
+		}
 	} else if (CMode::isFlagOn(APP_MODE_FATAL)) {
 		//
 	}

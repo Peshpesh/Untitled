@@ -39,6 +39,7 @@ ${SRCDIR}/CGameinfo.cpp
 ${SRCDIR}/CGamedata.cpp
 ${SRCDIR}/CGameIO.cpp
 ${SRCDIR}/CGlobal.cpp
+${SRCDIR}/CHero.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMap.cpp
@@ -47,7 +48,9 @@ ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTitle.cpp
+${SRCDIR}/CTitle_Event.cpp
 ${SRCDIR}/CTitle_ext.cpp
+${SRCDIR}/CTitle_Render.cpp
 ${SRCDIR}/CTransition.cpp
 ${SRCDIR}/CType.cpp
 ${SRCDIR}/CType_def.cpp
@@ -71,6 +74,7 @@ ${SRCDIR}/CGameinfo.h
 ${SRCDIR}/CGamedata.h
 ${SRCDIR}/CGameIO.h
 ${SRCDIR}/CGlobal.h
+${SRCDIR}/CHero.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CMap.h
