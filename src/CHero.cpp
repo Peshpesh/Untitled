@@ -9,6 +9,7 @@ CHero::CHero() {
 	// Health = 3;
 	MaxSpeedX = 7.0;
 	MaxSpeedY = 12.0;
+	Anim_Control.MaxFrames = 8;
 	// Timer_Invinc = Timer_Invis =
 	// 	Timer_Haste = Timer_Flight = 0;
 	// Weapon = ARM_TEST;
@@ -56,8 +57,8 @@ CHero::CHero() {
 // 	Damage = 0;
 // }
 
-void CHero::OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR, const int& maxFrames) {
-	CEntity::OnLoad(img, sprR, hitR, maxFrames);
+void CHero::OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR) {
+	CEntity::OnLoad(img, sprR, hitR);
 }
 
 void CHero::OnLoop()
@@ -113,6 +114,12 @@ void CHero::OnAnimate() {
 	// {
 	// 	Anim_Control.MaxFrames = 0;
 	// }
+	if (MoveLeft) {
+		CurrentFrameRow = 0;
+	}
+	else if (MoveRight) {
+		CurrentFrameRow = 1;
+	}
 	CEntity::OnAnimate();
 }
 

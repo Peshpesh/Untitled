@@ -8,22 +8,28 @@
 struct CHeroData {
   short health;
   short max_health;
+  int X;
+  int Y;
   CHeroData();
+  void reset();
 };
 
 struct CLevelAData {
   bool adventure_ready;
   CLevelAData();
+  void reset();
 };
 
 struct CLevelBData {
   bool defeat_mother;
   bool own_medikit_used;
   CLevelBData();
+  void reset();
 };
 
 struct CMiscData {
   CMiscData();
+  void reset();
 };
 
 class CGamedata {
@@ -35,7 +41,7 @@ public:
   CLevelAData data_levelA;
   CLevelBData data_levelB;
   // CMiscData data_misc;
-  void reset();
+  void resetAll();
 };
 
 #endif

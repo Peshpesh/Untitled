@@ -112,7 +112,7 @@ public:
 
 public:
 	// Load the frame info (image, etc.) for an entity.
-	virtual void OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR, const int& maxFrames);
+	virtual void OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR);
 
 	virtual void OnLoop();
 
@@ -129,7 +129,7 @@ public:
 	virtual bool OnInteract();
 
 protected:
-	// bool OnMove(float MoveX, float MoveY);
+	void OnMove(float MoveX, float MoveY);
 
 	// void ChkEnviro();
 
@@ -137,16 +137,20 @@ protected:
 
 public:
 	// Checks if the entity's hitbox intersects passed hitbox
-	// bool Collides(const int& oXl, const int& oYt, const int& oXr, const int& oYb);
+	bool Collides(const SDL_Point& tl, const SDL_Point& br);
 
 public:
 	bool Jump();
 
 protected:
-	// void Translate(double NewX, double NewY);
-	// bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);
-	// bool CollEntity(CEntity* Entity, const int& destXl, const int& destXr, const int& destYt, const int& destYb);
-	// int CollGround(const int& collID, const int& Xrel, const int& Yrel);
+	void Translate(double NewX, double NewY);
+	int getVertDeflect(const double& NewX, const double& NewY);
+	int CollGround(const int& collID, const int& X_offset, const int& Y_offset);
+	bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);
+	bool CollEntity(CEntity* Entity, const SDL_Point& tl, const SDL_Point& br);
+	bool CollTile(const SDL_Point& tilepos, const SDL_Point& tl, const SDL_Point& br);
+	bool CollTile_top(const int& collID, const SDL_Point& tilepos, const SDL_Point& tl, const SDL_Point& br);
+	bool CollTile_bot(const int& collID, const SDL_Point& tilepos, const SDL_Point& tl, const SDL_Point& br);
 	// bool PosValidEntity(CEntity* Entity, int NewX, int NewY);
 
 	//	Debug members

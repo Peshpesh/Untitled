@@ -110,7 +110,7 @@ bool CGameIO::newGamedata(const short& slot, const Difficulty& d) {
       }
     }
   }
-  CGamedata::control.reset();
+  CGamedata::control.resetAll();
   return true;
 }
 

@@ -18,8 +18,9 @@ class CGame : public CEvent {
 public:
   static CGame control;
   CHero Hero;
-  
+
   bool OnInit();
+  void initHero();
 
 	void OnEvent(SDL_Event* Event);
   bool handleInterrupts(SDL_Event* Event);

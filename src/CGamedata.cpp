@@ -3,31 +3,47 @@
 CGamedata CGamedata::control;
 
 CHeroData::CHeroData() {
-  health = 7;
-  max_health = 7;
+  reset();
 }
 
 CLevelAData::CLevelAData() {
-  adventure_ready = false;
+  reset();
 }
 
 CLevelBData::CLevelBData() {
-  defeat_mother = false;
-  own_medikit_used = false;
+  reset();
 }
 
 CMiscData::CMiscData() {
-  //
+  reset();
 }
 
 CGamedata::CGamedata() {
   //
 }
 
-void CGamedata::reset() {
-  data_hero.health = 7;
-  data_hero.max_health = 7;
-  data_levelA.adventure_ready = false;
-  data_levelB.defeat_mother = false;
-  data_levelB.own_medikit_used = false;
+void CGamedata::resetAll() {
+  data_hero.reset();
+  data_levelA.reset();
+  data_levelB.reset();
+}
+
+void CHeroData::reset() {
+  health = 7;
+  max_health = 7;
+  X = 100;
+  Y = 100;
+}
+
+void CLevelAData::reset() {
+  adventure_ready = false;
+}
+
+void CLevelBData::reset() {
+  defeat_mother = false;
+  own_medikit_used = false;
+}
+
+void CMiscData::reset() {
+  //
 }

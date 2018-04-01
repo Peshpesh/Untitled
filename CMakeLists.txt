@@ -28,6 +28,8 @@ ${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CControls.cpp
+${SRCDIR}/CEntity_Coll.cpp
+${SRCDIR}/CEntity_Move.cpp
 ${SRCDIR}/CEntity.cpp
 ${SRCDIR}/CEntityCol.cpp
 ${SRCDIR}/CEntityData.cpp
@@ -35,6 +37,9 @@ ${SRCDIR}/CEntityIO.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CGame.cpp
+${SRCDIR}/CGame_Event.cpp
+${SRCDIR}/CGame_Loop.cpp
+${SRCDIR}/CGame_Render.cpp
 ${SRCDIR}/CGameinfo.cpp
 ${SRCDIR}/CGamedata.cpp
 ${SRCDIR}/CGameIO.cpp

@@ -11,7 +11,7 @@ public:
 	CHero();
 	// void Reset();
 
-	void OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR, const int& maxFrames);
+	void OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR);
 
 	void OnLoop();
 

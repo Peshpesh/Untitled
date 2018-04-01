@@ -15,7 +15,7 @@ void CApp::OnLoop() {
 		//
 	}
 
-	// CFPS::FPSControl.OnLoop();
+	CFPS::FPSControl.OnLoop();
 
 	if (esc_init && (SDL_GetTicks() - esc_init) >= ESC_THRESH) {
 		// call to terminate game
