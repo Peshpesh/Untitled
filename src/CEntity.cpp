@@ -11,8 +11,11 @@ namespace {
 CEntity::CEntity() {
 	sprtSrc = NULL;
 	X = Y = 0.0f;
-	MoveLeft = MoveRight = false;
+	move_left = move_right = false;
   Permanent = false;
+
+  jump_timer = 0;
+  jump_timer_max = 125;
 
 	// Type = ENTITY_TYPE_GENERIC;
 
@@ -47,9 +50,19 @@ void CEntity::OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hit
 
 void CEntity::OnLoop() {
 	// ChkEnviro();
-	// if (MoveLeft == false && MoveRight == false) StopMove();
-	// else if (MoveLeft) AccelX = -MaxAccelX;
-	// else if (MoveRight) AccelX = MaxAccelX;
+  if (jump_timer_init) {
+    jump_timer = SDL_GetTicks() - jump_timer_init;
+    if (jump_timer >= jump_timer_max) {
+      SpeedY = -MaxSpeedY;
+      jump_timer_init = 0;
+    } else {
+      SpeedY = -(MaxSpeedY / 2.0) * (1.0 + ((float)(jump_timer)/(float)(jump_timer_max)));
+    }
+  }
+
+	if (move_left == false && move_right == false) stopMove();
+	else if (move_left) AccelX = -MaxAccelX;
+	else if (move_right) AccelX = MaxAccelX;
 
 	if (Flags & ENTITY_FLAG_GRAVITY) AccelY = MaxAccelY;
 
@@ -80,7 +93,21 @@ void CEntity::OnAnimate() {
 
 void CEntity::OnRender() {
 	SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(X, Y);
-  CSurface::OnDraw(sprtSrc, spriteR, dstWinPos);
+  // CSurface::OnDraw(Surf_Dest, Tex_Entity, X - CCamera::CameraControl.GetX(),
+  //   Y - CCamera::CameraControl.GetY(), Xo + (CurrentFrameCol + Anim_Control.GetCurrentFrame()) * Width,
+  //   Yo + CurrentFrameRow * Height, Width, Height);
+  SDL_Rect sprFrame = {
+    spriteR.x + Anim_Control.GetCurrentFrame() * spriteR.w,
+    spriteR.y + CurrentFrameRow * spriteR.h,
+    spriteR.w,
+    spriteR.h};
+  CSurface::OnDraw(sprtSrc, sprFrame, dstWinPos);
+}
+
+void CEntity::OnRenderHitbox() {
+  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(X + hitboxR.x, Y + hitboxR.y);
+  SDL_Rect dHitbox = {dstWinPos.x, dstWinPos.y, hitboxR.w, hitboxR.h};
+  CAsset::drawBox(dHitbox, &palette::red);
 }
 
 // void CEntity::ChkEnviro()
@@ -122,8 +149,13 @@ void CEntity::OnRender() {
 
 bool CEntity::Jump() {
 	if (Jumper == false) return false;
-	SpeedY = -MaxSpeedY;
+  jump_timer_init = SDL_GetTicks();
+	// SpeedY = -MaxSpeedY;
 	return true;
+}
+
+void CEntity::JumpRelease() {
+  jump_timer_init = false;
 }
 
 // bool CEntity::PosValidEntity(CEntity* Entity, int NewX, int NewY)
@@ -159,18 +191,16 @@ bool CEntity::Collides(const SDL_Point& tl, const SDL_Point& br) {
 	return true;
 }
 
-// void CEntity::StopMove()
-// {
-// 	if (SpeedX > 0) AccelX = -MaxAccelX * 1.5;
-// 	if (SpeedX < 0) AccelX = MaxAccelX * 1.5;
-// 	if (!Icy)
-// 	{
-// 		if (SpeedX < 2.0f && SpeedX > -2.0f)
-// 		{
-// 			AccelX = 0;
-// 			SpeedX = 0;
-// 		}
-// 	}
+void CEntity::stopMove() {
+	if (SpeedX > 0) AccelX = -MaxAccelX * 1.5;
+	if (SpeedX < 0) AccelX = MaxAccelX * 1.5;
+	// if (!Icy) {
+		if (SpeedX < 2.0f && SpeedX > -2.0f)
+		{
+			AccelX = 0;
+			SpeedX = 0;
+		}
+	// }
 // 	else
 // 	{
 // 		if (SpeedX < 0.1f && SpeedX > -0.1f)
@@ -179,7 +209,7 @@ bool CEntity::Collides(const SDL_Point& tl, const SDL_Point& br) {
 // 			SpeedX = 0;
 // 		}
 // 	}
-// }
+}
 
 bool CEntity::OnCollision(CEntity* Entity)
 {

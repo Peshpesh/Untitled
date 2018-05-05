@@ -2,6 +2,7 @@
 #define _C_ENTITY_H_
 
 #include <vector>
+#include "CAsset.h"
 #include "CArea.h"
 #include "CAnimation.h"
 #include "CCamera.h"
@@ -69,8 +70,8 @@ public:
 	float	Y;  // sprite y-position
 	SDL_Rect spriteR;	// sprite position & size on texture
 	SDL_Rect hitboxR;	// X and Y are offset values relative to sprite
-	bool	MoveLeft;
-	bool	MoveRight;
+	bool	move_left;
+	bool	move_right;
 	bool	Permanent;	// does this entity have run-time permanence
 
 public:
@@ -99,6 +100,9 @@ public:
 	float	MaxAccelY; // pixels / idealframe^2
 
 protected:
+	short jump_timer;
+	short jump_timer_init;
+	short jump_timer_max;
 	bool Jumper;
 	bool Grounded;
 
@@ -117,6 +121,7 @@ public:
 	virtual void OnLoop();
 
 	virtual void OnRender();
+	virtual void OnRenderHitbox();
 
 	virtual void OnCleanup();
 
@@ -133,7 +138,7 @@ protected:
 
 	// void ChkEnviro();
 
-	// void StopMove();
+	void stopMove();
 
 public:
 	// Checks if the entity's hitbox intersects passed hitbox
@@ -141,6 +146,7 @@ public:
 
 public:
 	bool Jump();
+	void JumpRelease();
 
 protected:
 	void Translate(double NewX, double NewY);

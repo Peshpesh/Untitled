@@ -20,6 +20,10 @@ bool CApp::OnInit()
 
 	if (!CGameIO::control.init()) 					return false;
 
+	if (!CEntityData::init()) 							return false;
+
+	if (!CSceneryIO::Init()) 								return false;
+
  	// if (!Font::FontControl.OnInit()) 				return false;
 	// if (!CHUD::HUDControl.OnInit()) 				return false;
 	// if (!CEntityInfo::LoadCommon()) 				return false;

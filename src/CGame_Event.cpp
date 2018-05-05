@@ -37,66 +37,66 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
 
 
 void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
-  // switch (CControls::handler.getAction(sym, mod)) {
-  //   case CON_ATTACK:  {
-  //     Hero.Attack();
-  //     break;
-  //   }
-  //   case CON_JUMP:    {
-  //     Hero.Jump();
-  //     break;
-  //   }
-  //   case CON_LEFT:    {
-  //     Hero.move_left = true;
-  //     break;
-  //   }
-  //   case CON_RIGHT:   {
-  //     Hero.move_right = true;
-  //     break;
-  //   }
-  //   case CON_DOWN:    {
-  //     break;
-  //   }
-  //   case CON_UP:      {
-  //     Hero.look_up = true;
-  //     break;
-  //   }
-  //   case CON_PAUSE:   {
-  //     CInterrupt::appendFlag(INTRPT_PAUSE);
-  //     break;
-  //   }
-  //   default: break;
-  // }
+  switch (CControls::handler.getAction(sym, mod)) {
+    case CON_ATTACK:  {
+      // Hero.Attack();
+      break;
+    }
+    case CON_JUMP:    {
+      Hero.Jump();
+      break;
+    }
+    case CON_LEFT:    {
+      Hero.move_left = true;
+      break;
+    }
+    case CON_RIGHT:   {
+      Hero.move_right = true;
+      break;
+    }
+    case CON_DOWN:    {
+      break;
+    }
+    case CON_UP:      {
+      // Hero.look_up = true;
+      break;
+    }
+    case CON_PAUSE:   {
+      // CInterrupt::appendFlag(INTRPT_PAUSE);
+      break;
+    }
+    default: break;
+  }
 }
 
 void CGame::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
-  // switch (CControls::handler.getAction(sym, mod)) {
-  //   case CON_ATTACK:  {
-  //     Hero.Release();
-  //     break;
-  //   }
-  //   case CON_JUMP:    {
-  //     Hero.JumpRelease();
-  //     break;
-  //   }
-  //   case CON_LEFT:    {
-  //     Hero.move_left = false;
-  //     break;
-  //   }
-  //   case CON_RIGHT:   {
-  //     Hero.move_right = false;
-  //     break;
-  //   }
-  //   case CON_DOWN:    {
-  //     break;
-  //   }
-  //   case CON_UP:      {
-  //     Hero.look_up = false;
-  //     break;
-  //   }
-  //   case CON_PAUSE:   {
-  //     break;
-  //   }
-  //   default: break;
-  // }
+  switch (CControls::handler.getAction(sym, mod)) {
+    case CON_ATTACK:  {
+      // Hero.Release();
+      break;
+    }
+    case CON_JUMP:    {
+      Hero.JumpRelease();
+      break;
+    }
+    case CON_LEFT:    {
+      Hero.move_left = false;
+      break;
+    }
+    case CON_RIGHT:   {
+      Hero.move_right = false;
+      break;
+    }
+    case CON_DOWN:    {
+      break;
+    }
+    case CON_UP:      {
+      // Hero.look_up = false;
+      break;
+    }
+    case CON_PAUSE:   {
+      break;
+    }
+    default: break;
+  }
 }

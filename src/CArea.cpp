@@ -45,10 +45,8 @@ bool CArea::Load(char const* File) {
 	fread(&AreaWidth, sizeof(int), 1, FileHandle);
 	fread(&AreaHeight, sizeof(int), 1, FileHandle);
 
-	for (int X = 0; X < AreaWidth; X++)
-	{
-		for (int Y = 0; Y < AreaHeight; Y++)
-		{
+	for (int X = 0; X < AreaWidth; X++) {
+		for (int Y = 0; Y < AreaHeight; Y++) {
 			CMap tempMap;
 			if (tempMap.Load(FileHandle) == false) {
 				fclose(FileHandle);

@@ -1,8 +1,10 @@
 #include "CGame.h"
 
 void CGame::OnRender() {
-  if (CEntity::EntityList.size() == 0) return;
-  CArea::control.OnRender(0, 0, true);
+  // Draw background scenery
+  int scn_i = CScenery::drawBackground();
+
+  CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
 
 	// Render entities
 	for (int i = CEntity::EntityList.size() - 1; i >= 0; i--) {
@@ -10,5 +12,14 @@ void CGame::OnRender() {
 		CEntity::EntityList[i]->OnRender();
 	}
 
-  CArea::control.OnRender(0, 0, false);
+  CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
+
+  // Draw foreground scenery
+  CScenery::drawForeground(scn_i);
+
+  // TESTING/DEBUGGING
+  for (int i = CEntity::EntityList.size() - 1; i >= 0; i--) {
+    if (!CEntity::EntityList[i]) continue;
+    CEntity::EntityList[i]->OnRenderHitbox();
+  }
 }

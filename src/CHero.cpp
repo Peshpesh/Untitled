@@ -7,8 +7,8 @@ CHero::CHero() {
 	// Arsenal = 0x00000001;
 	// MaxHealth = 12;
 	// Health = 3;
-	MaxSpeedX = 7.0;
-	MaxSpeedY = 12.0;
+	MaxSpeedX = 6.0;
+	MaxSpeedY = 10.0;
 	Anim_Control.MaxFrames = 8;
 	// Timer_Invinc = Timer_Invis =
 	// 	Timer_Haste = Timer_Flight = 0;
@@ -44,7 +44,7 @@ CHero::CHero() {
 // 	Purse = 0;
 // 	Ammo = 0;
 //
-// 	MoveLeft = MoveRight = false;
+// 	move_left = move_left = false;
 // 	SpeedX = SpeedY = AccelX = AccelY = 0.0f;
 // 	MaxAccelX = 0.5f;
 // 	MaxAccelY = 0.75f;
@@ -114,11 +114,13 @@ void CHero::OnAnimate() {
 	// {
 	// 	Anim_Control.MaxFrames = 0;
 	// }
-	if (MoveLeft) {
+	if (move_left) {
 		CurrentFrameRow = 0;
-	}
-	else if (MoveRight) {
+	}	else if (move_right) {
 		CurrentFrameRow = 1;
+	} else if (SpeedX < 2.0f) {
+		Anim_Control.SetCurrentFrame(0);
+		return;
 	}
 	CEntity::OnAnimate();
 }

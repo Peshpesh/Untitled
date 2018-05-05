@@ -23,9 +23,9 @@ bool CGame::OnInit() {
     // ERROR LOADING ENTITIES
   }
   //  Scenery
-  //
-  //
-  //
+  if (!CSceneryIO::Load(abbrname[CTransition::control.locationID])) {
+    // ERROR LOADING SCENERY
+  }
   // transition complete
   CTransition::control.activated = false;
   return true;
@@ -43,6 +43,10 @@ void CGame::initHero() {
   Hero.OnLoad(CEntityIO::getSrcTexture(groups::GLOBAL),
               CEntityData::getEntityDims(groups::GLOBAL, global::PLAYER),
               CEntityData::getHitboxDims(groups::GLOBAL, global::PLAYER));
+
+  // TESTING/DEBUGGING
+  CCamera::CameraControl.SetTarget(&Hero.X, &Hero.Y);
+  CCamera::CameraControl.TargetMode = TARGET_MODE_CENTER;
 
   CEntity::EntityList.push_back(&Hero); // GOOD LUCK //
 }

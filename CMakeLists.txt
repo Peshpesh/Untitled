@@ -49,6 +49,9 @@ ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMode.cpp
+${SRCDIR}/CScenery.cpp
+${SRCDIR}/CSceneryData.cpp
+${SRCDIR}/CSceneryIO.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTile.cpp
@@ -84,6 +87,9 @@ ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMode.h
+${SRCDIR}/CScenery.h
+${SRCDIR}/CSceneryData.h
+${SRCDIR}/CSceneryIO.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h

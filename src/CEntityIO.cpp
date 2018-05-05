@@ -142,10 +142,8 @@ SDL_Texture* CEntityIO::getSrcTexture(const int& group) {
 }
 
 void CEntityIO::purgeStaleTextures() {
-  for (int i = CEntity::TextureList.size() - 1; i >= 0; i--)
-  {
-    if (!isTextureUsed(CEntity::TextureList[i].group_ID))
-    {
+  for (int i = CEntity::TextureList.size() - 1; i >= 0; i--) {
+    if (!isTextureUsed(CEntity::TextureList[i].group_ID)) {
       SDL_DestroyTexture(CEntity::TextureList[i].img);
       CEntity::TextureList.erase(CEntity::TextureList.begin() + i);
     }
