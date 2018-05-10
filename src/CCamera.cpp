@@ -4,8 +4,12 @@ CCamera CCamera::CameraControl;
 
 CCamera::CCamera() {
 	X = Y = 0;
+	X_min = X_max = Y_min = Y_max = 0;
+	follow_w = 60;
+	follow_h = 50;
 	TargetX = TargetY = NULL;
 	TargetMode = TARGET_MODE_NORMAL;
+	uselimits = false;
 }
 
 void CCamera::OnMove(int MoveX, int MoveY) {
@@ -14,28 +18,50 @@ void CCamera::OnMove(int MoveX, int MoveY) {
 }
 
 int CCamera::GetX() {
-	if (TargetX != NULL)
-	{
-		if (TargetMode == TARGET_MODE_CENTER)
-		{
-			if (*TargetX < WWIDTH / 2) return *TargetX - (WWIDTH / 2) - 1;
-			return *TargetX - (WWIDTH / 2);
+	if (TargetX != NULL) {
+		if (TargetMode == TARGET_MODE_FOLLOW) {
+			int current_X = *TargetX - (WWIDTH / 2) - (*TargetX < WWIDTH / 2);
+			if (current_X < X - (follow_w / 2)) X -= (X - (follow_w / 2)) - current_X;
+			else if (current_X > X + (follow_w / 2)) X += current_X - (X + follow_w / 2);
+			return LimX(X);
+		} else if (TargetMode == TARGET_MODE_CENTER) {
+			return LimX(*TargetX - (WWIDTH / 2) - (*TargetX < WWIDTH / 2));
 		}
-		return *TargetX;
+		return LimX(*TargetX);
 	}
-	return X;
+	return LimX(X);
 }
 
 int CCamera::GetY() {
-	if (TargetY != NULL)
-	{
-		if (TargetMode == TARGET_MODE_CENTER)
-		{
-			if (*TargetY < WHEIGHT / 2) return *TargetY - (WHEIGHT / 2) - 1;
-			return *TargetY - (WHEIGHT / 2);
+	if (TargetY != NULL) {
+		if (TargetMode == TARGET_MODE_FOLLOW) {
+			int current_Y = *TargetY - (WHEIGHT / 2) - (*TargetY < WHEIGHT / 2);
+			if (current_Y < Y - (follow_h / 2)) Y -= (Y - (follow_h / 2)) - current_Y;
+			else if (current_Y > Y + (follow_h / 2)) Y += current_Y - (Y + follow_h / 2);
+			return LimY(Y);
+		} else if (TargetMode == TARGET_MODE_CENTER) {
+			return LimY(*TargetY - (WHEIGHT / 2) - (*TargetY < WHEIGHT / 2));
 		}
-		return *TargetY;
+		return LimY(*TargetY);
 	}
+	return LimY(Y);
+}
+
+int CCamera::LimX(const int& X) {
+	if (!uselimits) return X;
+
+	if (X < X_min) return X_min;
+	if (X + WWIDTH > X_max + 1) return X_max + 1 - WWIDTH;
+
+	return X;
+}
+
+int CCamera::LimY(const int& Y) {
+	if (!uselimits) return Y;
+
+	if (Y < Y_min) return Y_min;
+	if (Y + WHEIGHT > Y_max + 1) return Y_max + 1 - WHEIGHT;
+
 	return Y;
 }
 
@@ -72,8 +98,8 @@ SDL_Point CCamera::ConvertToRel(const SDL_Point& t_pos, const double& Z) {
 	double half_height = WHEIGHT / 2.0;
 
 	// window center positions
-  long double cX = CCamera::CameraControl.GetX() + half_width;
-  long double cY = CCamera::CameraControl.GetY() + half_height;
+  long double cX = GetX() + half_width;
+  long double cY = GetY() + half_height;
 
 	long double dX = t_pos.x - cX;
 	long double dY = t_pos.y - cY;
@@ -90,8 +116,8 @@ SDL_Point CCamera::ConvertToTrue(const SDL_Point& r_pos, const double& Z) {
 	if (Z <= 0.0) return t_pos;
 
 	// window center positions
-	long double cX = CCamera::CameraControl.GetX() + (WWIDTH  / 2.0);
-	long double cY = CCamera::CameraControl.GetY() + (WHEIGHT / 2.0);
+	long double cX = GetX() + (WWIDTH  / 2.0);
+	long double cY = GetY() + (WHEIGHT / 2.0);
 
 	long double dX = r_pos.x - cX;
 	long double dY = r_pos.y - cY;
@@ -109,7 +135,7 @@ double CCamera::trueXToRel(const double& true_x, const double& Z) {
 	double half_width = WWIDTH  / 2.0;
 
 	// window center position
-  long double cX = CCamera::CameraControl.GetX() + half_width;
+  long double cX = GetX() + half_width;
 
 	// separation of true_x from center of camera
 	// (no separation means that the object's relative X is at its true X)
@@ -125,7 +151,7 @@ double CCamera::trueYToRel(const double& true_y, const double& Z) {
 	double half_height = WHEIGHT / 2.0;
 
 	// window center position
-  long double cY = CCamera::CameraControl.GetY() + half_height;
+  long double cY = GetY() + half_height;
 
 	// separation of true_y from center of camera
 	// (no separation means that the object's relative Y is at its true Y)
@@ -139,7 +165,7 @@ double CCamera::relXToTrue(const double& rel_x, const double& Z) {
 	if (Z <= 0.0) return 0.0;
 
 	// window center position
-	long double cX = CCamera::CameraControl.GetX() + (WWIDTH  / 2.0);
+	long double cX = GetX() + (WWIDTH  / 2.0);
 
 	// separation of rel_x from center of camera
 	// (no separation means that the object's relative X is at its true X)
@@ -151,7 +177,7 @@ double CCamera::relXToTrue(const double& rel_x, const double& Z) {
 
 double CCamera::relYToTrue(const double& rel_y, const double& Z) {
 	// window center position
-	long double cY = CCamera::CameraControl.GetY() + (WHEIGHT / 2.0);
+	long double cY = GetY() + (WHEIGHT / 2.0);
 
 	// separation of rel_y from center of camera
 	// (no separation means that the object's relative Y is at its true Y)
@@ -169,4 +195,18 @@ void CCamera::SetPos(int X, int Y) {
 void CCamera::SetTarget(float* X, float* Y) {
 	TargetX = X;
 	TargetY = Y;
+}
+
+void CCamera::EnableLim() {
+	uselimits = true;
+}
+void CCamera::DisableLim() {
+	uselimits = false;
+}
+
+void CCamera::SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max) {
+	this->X_min = X_min;
+	this->Y_min = Y_min;
+	this->X_max = X_max;
+	this->Y_max = Y_max;
 }

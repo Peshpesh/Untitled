@@ -46,7 +46,9 @@ void CGame::initHero() {
 
   // TESTING/DEBUGGING
   CCamera::CameraControl.SetTarget(&Hero.X, &Hero.Y);
-  CCamera::CameraControl.TargetMode = TARGET_MODE_CENTER;
+  CCamera::CameraControl.TargetMode = TARGET_MODE_FOLLOW;
+  CCamera::CameraControl.SetLimits(0,0,1050,MAP_HEIGHT*TILE_SIZE);
+  CCamera::CameraControl.EnableLim();
 
   CEntity::EntityList.push_back(&Hero); // GOOD LUCK //
 }

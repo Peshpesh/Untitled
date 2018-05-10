@@ -5,9 +5,13 @@
 #include "Define.h"
 
 enum {
-	TARGET_MODE_NORMAL = 0,
-	TARGET_MODE_CENTER
+	TARGET_MODE_NORMAL = 0,		// position camera explicitly via (target's) X, Y
+	TARGET_MODE_CENTER,				// camera position centered on (target's) X, Y
+	TARGET_MODE_FOLLOW				// camera position loosely "follows" a target's X, Y (roughly centered)
 };
+
+// If TargetX/TargetY are not NULL, the camera will use those coordinates
+// when returning X and Y via Get functions.
 
 class CCamera {
 public:
@@ -18,6 +22,11 @@ private:
 	int Y;	// Camera coordinates
 	float* TargetX;	// Target coordinates
 	float* TargetY;	// Null pointers will revert camera
+	int X_min, X_max;			//	min/max allowable X coordinates for viewing area
+	int Y_min, Y_max;			//	min/max allowable Y coordinates for viewing area
+	bool uselimits;				// 	true if min/max coords are enforced
+	int follow_w;		// width of range where the target can move without updating camera X
+	int follow_h;		// height of range where the target can move without updating camera Y
 
 public:
 	int TargetMode;
@@ -37,6 +46,10 @@ public:
 	SDL_Point GetCamRelPoint(const SDL_Point& winPos);
 	void MakeWinRel(int& X, int& Y);
 
+private:
+	int LimX(const int& X);
+	int LimY(const int& Y);
+
 public:
 	// 2.5D projection functions
 	SDL_Point ConvertToRel(const SDL_Point& t_pos, const double& Z);
@@ -49,5 +62,8 @@ public:
 public:
 	void SetPos(int X, int Y);
 	void SetTarget(float* X, float* Y);
+	void EnableLim();
+	void DisableLim();
+	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
 };
 #endif
