@@ -22,6 +22,8 @@ private:
 	int Y;	// Camera coordinates
 	float* TargetX;	// Target coordinates
 	float* TargetY;	// Null pointers will revert camera
+	int* TargetW;
+	int* TargetH;
 	int X_min, X_max;			//	min/max allowable X coordinates for viewing area
 	int Y_min, Y_max;			//	min/max allowable Y coordinates for viewing area
 	bool uselimits;				// 	true if min/max coords are enforced
@@ -62,8 +64,13 @@ public:
 public:
 	void SetPos(int X, int Y);
 	void SetTarget(float* X, float* Y);
+	void SetTarget(float* X, float* Y, int* W, int* H);
 	void EnableLim();
 	void DisableLim();
 	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
+
+public:	// public debug members
+	bool usedisplace;
+	void D_toggle_displace();
 };
 #endif

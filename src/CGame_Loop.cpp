@@ -1,6 +1,8 @@
 #include "CGame.h"
 
 void CGame::OnLoop() {
+	CCamera::CameraControl.D_toggle_displace();
+
 	CTransition::control.OnLoop();
 	if (CTransition::control.activated) {     // complete transition
     using namespace location;

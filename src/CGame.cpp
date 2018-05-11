@@ -45,7 +45,7 @@ void CGame::initHero() {
               CEntityData::getHitboxDims(groups::GLOBAL, global::PLAYER));
 
   // TESTING/DEBUGGING
-  CCamera::CameraControl.SetTarget(&Hero.X, &Hero.Y);
+  CCamera::CameraControl.SetTarget(&Hero.X, &Hero.Y, &Hero.spriteR.w, &Hero.spriteR.h);
   CCamera::CameraControl.TargetMode = TARGET_MODE_FOLLOW;
   CCamera::CameraControl.SetLimits(0,0,1050,MAP_HEIGHT*TILE_SIZE);
   CCamera::CameraControl.EnableLim();

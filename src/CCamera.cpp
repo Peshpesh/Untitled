@@ -8,8 +8,11 @@ CCamera::CCamera() {
 	follow_w = 60;
 	follow_h = 50;
 	TargetX = TargetY = NULL;
+	TargetW = TargetH = NULL;
 	TargetMode = TARGET_MODE_NORMAL;
 	uselimits = false;
+
+	usedisplace = true;
 }
 
 void CCamera::OnMove(int MoveX, int MoveY) {
@@ -19,30 +22,34 @@ void CCamera::OnMove(int MoveX, int MoveY) {
 
 int CCamera::GetX() {
 	if (TargetX != NULL) {
+		// int x_disp = (usedisplace && TargetW) ? *TargetW / 2 : 0;
+		int x_disp = TargetW ? *TargetW / 2 : 0;
 		if (TargetMode == TARGET_MODE_FOLLOW) {
-			int current_X = *TargetX - (WWIDTH / 2) - (*TargetX < WWIDTH / 2);
+			int current_X = *TargetX + x_disp - (WWIDTH / 2) - (*TargetX + x_disp < WWIDTH / 2);
 			if (current_X < X - (follow_w / 2)) X -= (X - (follow_w / 2)) - current_X;
 			else if (current_X > X + (follow_w / 2)) X += current_X - (X + follow_w / 2);
 			return LimX(X);
 		} else if (TargetMode == TARGET_MODE_CENTER) {
-			return LimX(*TargetX - (WWIDTH / 2) - (*TargetX < WWIDTH / 2));
+			return LimX(*TargetX + x_disp - (WWIDTH / 2) - (*TargetX + x_disp < WWIDTH / 2));
 		}
-		return LimX(*TargetX);
+		return LimX(*TargetX + x_disp);
 	}
 	return LimX(X);
 }
 
 int CCamera::GetY() {
 	if (TargetY != NULL) {
+		// int y_disp = (usedisplace && TargetH) ? *TargetH / 2 : 0;
+		int y_disp = TargetH ? *TargetH / 2 : 0;
 		if (TargetMode == TARGET_MODE_FOLLOW) {
-			int current_Y = *TargetY - (WHEIGHT / 2) - (*TargetY < WHEIGHT / 2);
+			int current_Y = *TargetY + y_disp - (WHEIGHT / 2) - (*TargetY + y_disp < WHEIGHT / 2);
 			if (current_Y < Y - (follow_h / 2)) Y -= (Y - (follow_h / 2)) - current_Y;
 			else if (current_Y > Y + (follow_h / 2)) Y += current_Y - (Y + follow_h / 2);
 			return LimY(Y);
 		} else if (TargetMode == TARGET_MODE_CENTER) {
-			return LimY(*TargetY - (WHEIGHT / 2) - (*TargetY < WHEIGHT / 2));
+			return LimY(*TargetY + y_disp - (WHEIGHT / 2) - (*TargetY + y_disp < WHEIGHT / 2));
 		}
-		return LimY(*TargetY);
+		return LimY(*TargetY + y_disp);
 	}
 	return LimY(Y);
 }
@@ -195,6 +202,14 @@ void CCamera::SetPos(int X, int Y) {
 void CCamera::SetTarget(float* X, float* Y) {
 	TargetX = X;
 	TargetY = Y;
+	TargetW = TargetH = NULL;
+}
+
+void CCamera::SetTarget(float* X, float* Y, int* W, int* H) {
+	TargetX = X;
+	TargetY = Y;
+	TargetW = W;
+	TargetH = H;
 }
 
 void CCamera::EnableLim() {
@@ -209,4 +224,11 @@ void CCamera::SetLimits(const int& X_min, const int& Y_min, const int& X_max, co
 	this->Y_min = Y_min;
 	this->X_max = X_max;
 	this->Y_max = Y_max;
+}
+
+//////////////////////////////////////
+//////////////////////////////////////
+
+void CCamera::D_toggle_displace() {
+	usedisplace = !usedisplace;
 }
