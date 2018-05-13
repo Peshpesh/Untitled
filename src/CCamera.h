@@ -70,7 +70,7 @@ public:
 	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
 
 public:	// public debug members
-	bool usedisplace;
-	void D_toggle_displace();
+	// bool usedisplace;
+	// void D_toggle_displace();
 };
 #endif

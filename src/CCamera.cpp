@@ -12,7 +12,7 @@ CCamera::CCamera() {
 	TargetMode = TARGET_MODE_NORMAL;
 	uselimits = false;
 
-	usedisplace = true;
+	// usedisplace = true;
 }
 
 void CCamera::OnMove(int MoveX, int MoveY) {
@@ -229,6 +229,6 @@ void CCamera::SetLimits(const int& X_min, const int& Y_min, const int& X_max, co
 //////////////////////////////////////
 //////////////////////////////////////
 
-void CCamera::D_toggle_displace() {
-	usedisplace = !usedisplace;
-}
+// void CCamera::D_toggle_displace() {
+// 	usedisplace = !usedisplace;
+// }

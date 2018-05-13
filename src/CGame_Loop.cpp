@@ -1,8 +1,6 @@
 #include "CGame.h"
 
 void CGame::OnLoop() {
-	CCamera::CameraControl.D_toggle_displace();
-
 	CTransition::control.OnLoop();
 	if (CTransition::control.activated) {     // complete transition
     using namespace location;
@@ -14,9 +12,9 @@ void CGame::OnLoop() {
       // ERROR LOADING ENTITIES
     }
     //  Scenery
-    //
-    //
-    //
+		if (!CSceneryIO::Load(abbrname[CTransition::control.locationID])) {
+	    // ERROR LOADING SCENERY
+	  }
     CTransition::control.activated = false;
 	}
 

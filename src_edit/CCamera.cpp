@@ -114,7 +114,7 @@ SDL_Point CCamera::ConvertToTrue(const SDL_Point* r_pos, const double& Z) {
 double CCamera::trueXToRel(const double& true_x, const double& Z) {
 	if (Z <= 0.0) return 0.0;
 
-	double half_width = WWIDTH  / 2.0;
+	double half_width = WWIDTH / 2.0;
 
 	// window center position
   long double cX = CCamera::CameraControl.GetX() + half_width;
@@ -147,7 +147,7 @@ double CCamera::relXToTrue(const double& rel_x, const double& Z) {
 	if (Z <= 0.0) return 0.0;
 
 	// window center position
-	long double cX = CCamera::CameraControl.GetX() + (WWIDTH  / 2.0);
+	long double cX = CCamera::CameraControl.GetX() + (WWIDTH / 2.0);
 
 	// separation of rel_x from center of camera
 	// (no separation means that the object's relative X is at its true X)

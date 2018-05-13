@@ -9,6 +9,7 @@
 #include "CFont.h"
 #include "CArea.h"
 #include "CEntity.h"
+#include "CScenery.h"
 #include "CCamera.h"
 #include "CChangeTile.h"
 #include "CTileset.h"
