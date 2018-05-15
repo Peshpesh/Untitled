@@ -15,13 +15,12 @@ void CGame::OnEvent(SDL_Event* Event) {
   * the OnEvent() function should be executed.
   */
   if (handleInterrupts(Event)) return;
-
 	CEvent::OnEvent(Event);
 }
 
 bool CGame::handleInterrupts(SDL_Event* Event) {
   if (CInterrupt::isFlagOn(INTRPT_PAUSE)) {
-    // CAnchorScenery::Control.OnEvent(Event);
+    CPause::control.OnEvent(Event);
     return true;
   }
   if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
@@ -62,7 +61,7 @@ void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       break;
     }
     case CON_PAUSE:   {
-      // CInterrupt::appendFlag(INTRPT_PAUSE);
+      CInterrupt::appendFlag(INTRPT_PAUSE);
       break;
     }
     default: break;

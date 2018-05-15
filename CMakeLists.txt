@@ -50,6 +50,7 @@ ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMode.cpp
 ${SRCDIR}/CPause.cpp
+${SRCDIR}/CPause_ext.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryData.cpp
 ${SRCDIR}/CSceneryIO.cpp
