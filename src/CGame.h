@@ -7,6 +7,7 @@
 #include "CGameIO.h"
 #include "CInterrupt.h"
 
+#include "CPause.h"
 #include "CTransition.h"
 #include "CArea.h"
 #include "CEntityIO.h"

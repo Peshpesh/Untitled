@@ -142,7 +142,6 @@ class CTitle : public CEvent {
   short difficulty;
 
 public:
-
   static CTitle control;
   bool call_terminate;
 

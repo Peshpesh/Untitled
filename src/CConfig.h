@@ -6,7 +6,6 @@
 #include "Define.h"
 #include "CControls.h"
 
-
 struct ConfigKey {
   unsigned short sfx_volume;
   unsigned short bgm_volume;

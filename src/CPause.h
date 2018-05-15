@@ -1,36 +1,45 @@
-#ifndef _CPAUSE_H_
-#define _CPAUSE_H_
+#ifndef _C_PAUSE_H_
+#define _C_PAUSE_H_
 
-#include "CMenu.h"
+#include "CAsset.h"
+#include "CType.h"
+#include "CEvent.h"
+#include "CControls.h"
+#include "CConfig.h"
 
-class CPause : public CMenu
-{
-public:
-	bool Quitgame;
+namespace pausemenu {
+	enum menus {
+    MAIN = 0,
+    ADJUST_AUDIO,
+    ADJUST_VIDEO,
+    QUIT_GAME,
+  };
+	namespace audiomenu {
+		//
+	};
+	namespace videomenu {
+		//
+	};
+	namespace quitmenu {
+		//
+	};
+};
 
-private:
-	bool videomenu;
-	bool audiomenu;
-	bool quitmenu;
-
-public:
+class CPause : public CEvent {
 	CPause();
 
-	void	OnInit();
+  short menu_kind;
+  short pos;
 
-	void	MenuChange(char* opts);
+public:
+  static CPause control;
+  // bool call_terminate;
 
-	void	OnEvent(SDL_Keycode sym);
+  void OnEvent(SDL_Event* Event);
 
-	bool	OnLoop();
-	void	VidMenuLoop();
-	void	AudMenuLoop();
-	void	QuitMenuLoop();
+  bool OnRender();
 
-	int		GetResponse();
-
-	void	OnRender(SDL_Renderer* renderer);
-
-	void	OnCleanup();
+private:
+	void reinit();
 };
 #endif

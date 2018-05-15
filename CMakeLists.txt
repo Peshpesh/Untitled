@@ -49,6 +49,7 @@ ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMode.cpp
+${SRCDIR}/CPause.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryData.cpp
 ${SRCDIR}/CSceneryIO.cpp
@@ -87,6 +88,7 @@ ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMode.h
+${SRCDIR}/CPause.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryIO.h

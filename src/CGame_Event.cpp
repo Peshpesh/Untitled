@@ -10,7 +10,7 @@ void CGame::OnEvent(SDL_Event* Event) {
   * - Dialogue
   * - In-game menus (shops, save points, etc.)
   * - Minigames
-  * - Surely, there could be more...
+  * - there could be more...
   * In the circumstance where inputs should be processed for "normal gameplay,"
   * the OnEvent() function should be executed.
   */
