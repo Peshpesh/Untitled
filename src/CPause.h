@@ -24,8 +24,8 @@ namespace pausemenu {
 	};
 	extern const SDL_Color* f_def;
 	extern const SDL_Color* f_hov;
-	extern const SDL_Point* o_def;
-	extern const SDL_Point* o_hov;
+	extern const SDL_Point* c_col;
+	extern const SDL_Point* s_col;
 	extern const short num_options;
 	extern const short opt_w;
 	extern const short opt_h;
@@ -36,13 +36,33 @@ namespace pausemenu {
 	extern const short stroke_w;
 	extern const char* const opt_list[];
 	namespace audiomenu {
-		//
+		extern const short num_options;
+		extern const short w;
+		extern const short h;
+		extern const short x;
+		extern const short y;
+		extern const short bar_w;
+		extern const short bar_h;
+		extern const char* const header;
+		extern const char* const opt_list[];
 	};
 	namespace videomenu {
-		//
+		extern const short num_options;
+		extern const short w;
+		extern const short h;
+		extern const short x;
+		extern const short y;
+		extern const char* const header;
+		extern const char* const opt_list[];
 	};
 	namespace quitmenu {
-		//
+		extern const short num_options;
+		extern const short w;
+		extern const short h;
+		extern const short x;
+		extern const short y;
+		extern const char* const header;
+		extern const char* const opt_list[];
 	};
 };
 
@@ -57,9 +77,6 @@ public:
   bool call_quit;
 
   void OnEvent(SDL_Event* Event);
-
-  bool OnRender();
-
 private:
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 
@@ -68,6 +85,15 @@ private:
 	void eventVideo(const Gamecon& action);
 	void eventQuit(const Gamecon& action);
 
+public:
+  bool OnRender();
+private:
+	bool drawMain();
+	bool drawAudio();
+	bool drawVideo();
+	bool drawQuit();
+
+private:
 	void unpause();
 	void reinit();
 };

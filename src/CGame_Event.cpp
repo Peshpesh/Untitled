@@ -19,17 +19,19 @@ void CGame::OnEvent(SDL_Event* Event) {
 }
 
 bool CGame::handleInterrupts(SDL_Event* Event) {
-  if (CInterrupt::isFlagOn(INTRPT_PAUSE)) {
-    CPause::control.OnEvent(Event);
-    return true;
-  }
-  if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
-    // CAnchorScenery::Control.OnEvent(Event);
-    return true;
-  }
-  if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
-    // CAnchorScenery::Control.OnEvent(Event);
-    return true;
+  if (!CInterrupt::isNone()) {
+    if (CInterrupt::isFlagOn(INTRPT_PAUSE)) {
+      CPause::control.OnEvent(Event);
+      return true;
+    }
+    if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
+      // CAnchorScenery::Control.OnEvent(Event);
+      return true;
+    }
+    if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
+      // CAnchorScenery::Control.OnEvent(Event);
+      return true;
+    }
   }
   return false;
 }

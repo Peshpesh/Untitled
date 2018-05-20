@@ -490,7 +490,6 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect
 		SDL_Point symPos = {centerX, centerY - (lineH / 2)};
 		control.renderCursor(fontID, symPos);
 	}
-
 	return 0;
 }
 

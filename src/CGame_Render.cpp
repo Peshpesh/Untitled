@@ -17,9 +17,26 @@ void CGame::OnRender() {
   // Draw foreground scenery
   CScenery::drawForeground(scn_i);
 
+  // Draw interruptions last
+  drawIntrpt();
+
   // TESTING/DEBUGGING
   for (int i = CEntity::EntityList.size() - 1; i >= 0; i--) {
     if (!CEntity::EntityList[i]) continue;
     CEntity::EntityList[i]->OnRenderHitbox();
+  }
+}
+
+void CGame::drawIntrpt() {
+  if (!CInterrupt::isNone()) {
+    if (CInterrupt::isFlagOn(INTRPT_PAUSE)) {
+      CPause::control.OnRender(); return;
+    }
+    if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
+      // CAnchorScenery::Control.OnEvent(Event); return;
+    }
+    if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
+      // CAnchorScenery::Control.OnEvent(Event); return;
+    }
   }
 }

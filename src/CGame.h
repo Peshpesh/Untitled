@@ -22,21 +22,26 @@ public:
   CHero Hero;
 
   bool OnInit();
+private:
   void initHero();
 
+public:
 	void OnEvent(SDL_Event* Event);
+private:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void OnKeyUp(SDL_Keycode sym, Uint16 mod);
   bool handleInterrupts(SDL_Event* Event);
 
+public:
 	void OnExit();
 
 	void OnLoop();
 
 	void OnRender();
+private:
+  void drawIntrpt();
 
 	void OnCleanup();
-
-	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
-	void OnKeyUp(SDL_Keycode sym, Uint16 mod);
 };
 
 #endif
