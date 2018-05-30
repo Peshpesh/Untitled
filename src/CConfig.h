@@ -35,9 +35,11 @@ public:
 
 private:
   bool OnInit();
+public:
   void reset_all();
   void reset_audio();
   void reset_video();
+private:
   void save();
 
 public:

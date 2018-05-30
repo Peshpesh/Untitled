@@ -41,10 +41,27 @@ namespace pausemenu {
 		extern const short h;
 		extern const short x;
 		extern const short y;
-		extern const short bar_w;
-		extern const short bar_h;
+		// extern const short bar_w;
+		// extern const short bar_h;
+		extern const short name_w;
+		extern const short val_w;
+		extern const short name_x;
+		extern const short val_x;
+		extern const short val_h;
+  	extern const SDL_Point* empty_col;
+		extern const SDL_Point* fill_col;
+		extern const SDL_Point* mod_col;
+  	extern const SDL_Color* ftex_col;
 		extern const char* const header;
 		extern const char* const opt_list[];
+		enum decision {
+			RESUME = 0,
+			SFX_VOLUME,
+			BGM_VOLUME,
+			TYPE_VOLUME,
+			AUDIO_OUT,
+			SET_DEFAULT,
+		};
 	};
 	namespace videomenu {
 		extern const short num_options;
@@ -92,6 +109,8 @@ private:
 	bool drawAudio();
 	bool drawVideo();
 	bool drawQuit();
+private:
+	bool drawVolume(const SDL_Rect& val_bar, const Configflag& vol_type, std::string& val);
 
 private:
 	void unpause();
