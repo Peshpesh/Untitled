@@ -22,6 +22,11 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
   if (!CInterrupt::isNone()) {
     if (CInterrupt::isFlagOn(INTRPT_PAUSE)) {
       CPause::control.OnEvent(Event);
+      if (CPause::control.call_quit) {
+        CPause::control.unpause();
+        CTransition::control.reqReset();
+        CTransition::control.reqMode(APP_MODE_TITLE);
+      }
       return true;
     }
     if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
@@ -35,7 +40,6 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
   }
   return false;
 }
-
 
 void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   switch (CControls::handler.getAction(sym, mod)) {

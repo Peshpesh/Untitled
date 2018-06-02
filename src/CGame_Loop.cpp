@@ -3,24 +3,11 @@
 void CGame::OnLoop() {
 	CTransition::control.OnLoop();
 	if (CTransition::control.activated) {     // complete transition
-    using namespace location;
-    if (!CArea::control.Load(abbrname[CTransition::control.locationID])) {
-      // ERROR LOADING AREA
-    }
-    //  Entities
-    if (!CEntityIO::Load(abbrname[CTransition::control.locationID])) {
-      // ERROR LOADING ENTITIES
-    }
-    //  Scenery
-		if (!CSceneryIO::Load(abbrname[CTransition::control.locationID])) {
-	    // ERROR LOADING SCENERY
-	  }
-    CTransition::control.activated = false;
+		if (!handleTransit()) return;
 	}
 
 	for (int i = 0; i < CEntity::EntityList.size(); i++) {
 		if (!CEntity::EntityList[i]) continue;
-
 		// This should trigger AFTER a death animation.
 		// if (CEntity::EntityList[i]->Dead == true && i != 0) {
 		// 	delete CEntity::EntityList[i];
@@ -29,4 +16,22 @@ void CGame::OnLoop() {
 		// }
 		CEntity::EntityList[i]->OnLoop();
 	}
+}
+
+bool CGame::handleTransit() {
+	if (CTransition::control.getMode() != APP_MODE_GAME) return false;
+	using namespace location;
+	if (!CArea::control.Load(abbrname[CTransition::control.locationID])) {
+		// ERROR LOADING AREA
+	}
+	//  Entities
+	if (!CEntityIO::Load(abbrname[CTransition::control.locationID])) {
+		// ERROR LOADING ENTITIES
+	}
+	//  Scenery
+	if (!CSceneryIO::Load(abbrname[CTransition::control.locationID])) {
+		// ERROR LOADING SCENERY
+	}
+	CTransition::control.activated = false;
+	return true;
 }

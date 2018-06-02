@@ -5,6 +5,7 @@ CEntityIO::CEntityIO() {
 }
 
 bool CEntityIO::Init() {
+  resetLevel();
   loadTexInfo(Entities::groups::GLOBAL);
   if (getSrcTexture(Entities::groups::GLOBAL) == NULL) {
     return false;
@@ -43,6 +44,14 @@ bool CEntityIO::Load(char const* File) {
   purgeStaleTextures();
 	fclose(FileHandle);
 	return true;
+}
+
+void CEntityIO::Cleanup() {
+  for (int i = CEntity::EntityList.size() - 1; i >= 0; i--) {
+    if (!CEntity::EntityList[i]->Permanent) delete CEntity::EntityList[i];
+    CEntity::EntityList.erase(CEntity::EntityList.begin() + i);
+  } CEntity::EntityList.clear();
+  purgeStaleTextures();
 }
 
 void CEntityIO::resetLevel() {

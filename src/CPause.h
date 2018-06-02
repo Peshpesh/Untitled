@@ -41,8 +41,6 @@ namespace pausemenu {
 		extern const short h;
 		extern const short x;
 		extern const short y;
-		// extern const short bar_w;
-		// extern const short bar_h;
 		extern const short name_w;
 		extern const short val_w;
 		extern const short name_x;
@@ -69,10 +67,22 @@ namespace pausemenu {
 		extern const short h;
 		extern const short x;
 		extern const short y;
+		extern const short name_w;
+		extern const short val_w;
+		extern const short name_x;
+		extern const short val_x;
 		extern const char* const header;
 		extern const char* const opt_list[];
+		enum decision {
+			RESUME = 0,
+			VIDEO_OUT,
+		};
 	};
 	namespace quitmenu {
+		extern const SDL_Color* f_def;
+		extern const SDL_Color* f_hov;
+		extern const SDL_Point* c_col;
+		extern const SDL_Point* s_col;
 		extern const short num_options;
 		extern const short w;
 		extern const short h;
@@ -85,7 +95,6 @@ namespace pausemenu {
 
 class CPause : public CEvent {
 	CPause();
-
   short menu_kind;
   short pos;
 
@@ -96,7 +105,6 @@ public:
   void OnEvent(SDL_Event* Event);
 private:
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
-
 	void eventMain(const Gamecon& action);
 	void eventAudio(const Gamecon& action);
 	void eventVideo(const Gamecon& action);
@@ -111,9 +119,9 @@ private:
 	bool drawQuit();
 private:
 	bool drawVolume(const SDL_Rect& val_bar, const Configflag& vol_type, std::string& val);
-
-private:
+public:
 	void unpause();
+private:
 	void reinit();
 };
 #endif

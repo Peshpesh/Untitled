@@ -12,6 +12,10 @@ void CTitle::OnInit() {
   sel_difficulty = false;
   menu_kind = Title::MAIN;
   pos = 0;
+  if (CTransition::control.activated) {
+    CGameIO::control.loadAllGameinfo();
+    CTransition::control.activated = false;
+  }
 }
 
 void CTitle::OnLoop() {

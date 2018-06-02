@@ -50,6 +50,7 @@ public:
 
   void setColor(const SDL_Color& color);
   void reqTrans(const int& loc, const int &X, const int &Y);
+  void reqReset();
   void reqMode(const app_module& mode);
   bool isActive();
   app_module getMode();

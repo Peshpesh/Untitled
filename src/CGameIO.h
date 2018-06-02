@@ -40,10 +40,12 @@ public:
   void saveGlobal();
 
   void loadAllGameinfo();
+  void clearAllGameinfo();
 
   bool newGamedata(const short& slot, const Difficulty& d);
   bool loadGamedata(const short& slot);
   bool saveGame();
+
   short getActiveSlot();
   short getNumSavedGames();
 

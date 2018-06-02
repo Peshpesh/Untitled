@@ -18,6 +18,8 @@ public:
 
   static bool Load(char const* File);
 
+  static void Cleanup();
+
   static void addEntity(const int& group, const int& entity, const int& X, const int& Y);
 
 private:

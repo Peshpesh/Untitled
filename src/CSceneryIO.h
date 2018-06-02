@@ -8,6 +8,7 @@
 
 class CSceneryIO {
   CSceneryIO();
+
 private:
   static void resetLevel();
 
@@ -15,6 +16,8 @@ public:
   static bool Init();
 
   static bool Load(char const* File);
+
+  static void Cleanup();
 
   static void addScenery(const int& group, const int& decor, const double& X, const double& Y, const int& layer);
 

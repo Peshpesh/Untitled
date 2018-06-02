@@ -38,6 +38,7 @@ ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CGame.cpp
 ${SRCDIR}/CGame_Event.cpp
+${SRCDIR}/CGame_Init.cpp
 ${SRCDIR}/CGame_Loop.cpp
 ${SRCDIR}/CGame_Render.cpp
 ${SRCDIR}/CGameinfo.cpp

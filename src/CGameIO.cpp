@@ -68,7 +68,8 @@ void CGameIO::saveGlobal() {
 }
 
 void CGameIO::loadAllGameinfo() {
-  numSavedGames = 0;
+  clearAllGameinfo();
+
   for (int i = 0; i < num_games; i++) {
     std::string file = std::string(path) + std::string(game_file[i]);
     FILE* FileHandle = fopen(file.c_str(), "rb");
@@ -90,6 +91,13 @@ void CGameIO::loadAllGameinfo() {
     CGameinfo::infolist.push_back(data);
     fclose(FileHandle);
   }
+}
+
+void CGameIO::clearAllGameinfo() {
+  for (int i = CGameinfo::infolist.size() - 1; i >= 0; i--) {
+    if (CGameinfo::infolist[i]) delete CGameinfo::infolist[i];
+    CGameinfo::infolist.erase(CGameinfo::infolist.begin() + i);
+  } numSavedGames = 0;
 }
 
 bool CGameIO::newGamedata(const short& slot, const Difficulty& d) {
@@ -115,6 +123,14 @@ bool CGameIO::newGamedata(const short& slot, const Difficulty& d) {
 }
 
 bool CGameIO::loadGamedata(const short& slot) {
+  for (int i = 0; i < num_games; i++) {
+    if (i != slot && CGameinfo::infolist[i]) {
+      // get rid of gameinfo that we won't need
+      delete CGameinfo::infolist[i];
+      CGameinfo::infolist[i] = NULL;  // fix dangling pointer
+    }
+  }
+
   std::string file = std::string(path) + std::string(game_file[slot]);
   FILE* FileHandle = fopen(file.c_str(), "rb");
 

@@ -32,6 +32,14 @@ void CTransition::reqTrans(const int& loc, const int &X, const int &Y) {
   this->Y = Y;
 }
 
+void CTransition::reqReset() {
+  fadeout_timer = fadein_timer = reset_time;
+  delay_timer = delay_time;
+  last_time = SDL_GetTicks();
+  locationID = location::DEFAULT;
+  X = Y = 0;
+}
+
 void CTransition::reqMode(const app_module& mode) {
   if (!CMode::isFlagOn(mode)) {
     this->mode = mode;

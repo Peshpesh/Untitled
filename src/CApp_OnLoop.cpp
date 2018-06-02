@@ -3,6 +3,11 @@
 void CApp::OnLoop() {
 	if (CMode::isFlagOn(APP_MODE_GAME)) {
 		CGame::control.OnLoop();
+		if (CMode::isFlagOn(APP_MODE_TITLE)) {
+			// switch from Game to Title
+			CGame::control.OnExit();
+			CTitle::control.OnInit();
+		}
 	} else if (CMode::isFlagOn(APP_MODE_TITLE)) {
 		CTitle::control.OnLoop();
 		if (CMode::isFlagOn(APP_MODE_GAME)) {

@@ -1,5 +1,9 @@
 #include "CSceneryIO.h"
 
+CSceneryIO::CSceneryIO() {
+  //
+}
+
 bool CSceneryIO::Init() {
   loadTexInfo(Decorations::groups::GLOBAL);
   if (fetchTexture(Decorations::groups::GLOBAL) == NULL) {
@@ -61,6 +65,11 @@ bool CSceneryIO::Load(const char* File) {
   purgeStaleTextures();
   fclose(FileHandle);
   return true;
+}
+
+void CSceneryIO::Cleanup() {
+  resetLevel();
+  purgeStaleTextures();
 }
 
 void CSceneryIO::resetLevel() {

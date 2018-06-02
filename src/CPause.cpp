@@ -81,17 +81,15 @@ void CPause::eventAudio(const Gamecon& action) {
 void CPause::eventVideo(const Gamecon& action) {
 	using namespace pausemenu::videomenu;
   switch (action) {
-    // case CON_DOWN: if (++pos >= num_options) pos = 0; 		break;
-    // case CON_UP:   if (--pos < 0) pos = num_options - 1; 	break;
-    // case CON_ATTACK: {
-    //   switch (pos) {
-    //     case RESUME:     		unpause(); break;
-    //     case AUDIO_MENU:    menu_kind = ADJUST_AUDIO; pos = 0; break;
-    //     case VIDEO_MENU: 		menu_kind = ADJUST_VIDEO; pos = 0; break;
-    //     case QUIT_MENU:    	menu_kind = QUIT_GAME; pos = 0; break;
-    //     default: break;
-    //   } break;
-    // }
+    case CON_DOWN: if (++pos >= num_options) pos = 0; 		break;
+    case CON_UP:   if (--pos < 0) pos = num_options - 1; 	break;
+    case CON_ATTACK: {
+      switch (pos) {
+        case RESUME:		menu_kind = pausemenu::MAIN; pos = 0; break;
+        case VIDEO_OUT: CConfig::control.con_change = CONFIG_DISPLAY; break;
+        default: break;
+      } break;
+    }
     case CON_PAUSE: unpause(); break;
     default: break;
   }
@@ -100,17 +98,17 @@ void CPause::eventVideo(const Gamecon& action) {
 void CPause::eventQuit(const Gamecon& action) {
 	using namespace pausemenu::quitmenu;
   switch (action) {
-    // case CON_DOWN: if (++pos >= num_options) pos = 0; 		break;
-    // case CON_UP:   if (--pos < 0) pos = num_options - 1; 	break;
-    // case CON_ATTACK: {
-    //   switch (pos) {
-    //     case RESUME:     		unpause(); break;
-    //     case AUDIO_MENU:    menu_kind = ADJUST_AUDIO; pos = 0; break;
-    //     case VIDEO_MENU: 		menu_kind = ADJUST_VIDEO; pos = 0; break;
-    //     case QUIT_MENU:    	menu_kind = QUIT_GAME; pos = 0; break;
-    //     default: break;
-    //   } break;
-    // }
+    case CON_DOWN: if (++pos >= num_options) pos = 0; 		break;
+    case CON_UP:   if (--pos < 0) pos = num_options - 1; 	break;
+    case CON_ATTACK: {
+			if (pos == true) {
+				// go to title screen
+				call_quit = true;
+			} else {
+				menu_kind = pausemenu::MAIN; pos = 0; break;
+			}
+			break;
+    }
     case CON_PAUSE: unpause(); break;
     default: break;
   }
@@ -163,17 +161,14 @@ bool CPause::drawAudio() {
 			case RESUME: 			break;
 			case SFX_VOLUME: 	{
 				if (!drawVolume(val_bar, CONFIG_SFX, val)) return false;
-				CType::NewCenterWrite(val.c_str(), val_bar, ftex_col);
 				break;
 			}
 			case BGM_VOLUME: 	{
 				if (!drawVolume(val_bar, CONFIG_BGM, val)) return false;
-				CType::NewCenterWrite(val.c_str(), val_bar, ftex_col);
 				break;
 			}
 			case TYPE_VOLUME: {
 				if (!drawVolume(val_bar, CONFIG_TEX, val)) return false;
-				CType::NewCenterWrite(val.c_str(), val_bar, ftex_col);
 				break;
 			}
 			case AUDIO_OUT:		{
@@ -189,6 +184,51 @@ bool CPause::drawAudio() {
 	return true;
 }
 
+bool CPause::drawVideo() {
+	using namespace pausemenu::videomenu;
+	SDL_Rect canvas = {x, y, w, h};
+	if (!CAsset::drawStrBox(canvas, pausemenu::stroke_w, pausemenu::c_col, pausemenu::s_col)) return false;
+
+	SDL_Rect name_bar = {x, y, pausemenu::opt_w, pausemenu::opt_h};
+	CType::NewCenterWrite(header, name_bar, pausemenu::f_def);
+
+	name_bar.x = name_x;
+	name_bar.y += pausemenu::opt_h;
+	name_bar.w = name_w;
+	SDL_Rect val_bar = {val_x, name_bar.y, val_w, pausemenu::opt_h};
+	for (int i = 0; i < num_options; i++) {
+		std::string val;
+		CType::NewCenterWrite(opt_list[i], name_bar, (i != pos) ? pausemenu::f_def : pausemenu::f_hov);
+		switch (i) {
+			case RESUME: 			break;
+			case VIDEO_OUT:		{
+				val = CConfig::control.isFullscreen() ? "Fullscreen" : "Windowed";
+				CType::NewCenterWrite(val.c_str(), val_bar, pausemenu::f_def);
+				break;
+			}
+		}
+		name_bar.y += pausemenu::opt_h;
+		val_bar.y += pausemenu::opt_h;
+	}
+	return true;
+}
+
+bool CPause::drawQuit() {
+	using namespace pausemenu::quitmenu;
+	SDL_Rect canvas = {x, y, w, h};
+	if (!CAsset::drawStrBox(canvas, pausemenu::stroke_w, c_col, s_col)) return false;
+
+	SDL_Rect bar = {x, y, pausemenu::opt_w, pausemenu::opt_h};
+	CType::NewCenterWrite(header, bar, f_def);
+	bar.y += pausemenu::opt_h;
+
+	for (int i = 0; i < num_options; i++) {
+		CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
+		bar.y += pausemenu::opt_h;
+	}
+	return true;
+}
+
 bool CPause::drawVolume(const SDL_Rect& val_bar, const Configflag& vol_type, std::string& val) {
 	bool modify = (CConfig::control.con_change == vol_type);
 	short vol = CConfig::control.getVolume(vol_type);
@@ -199,37 +239,6 @@ bool CPause::drawVolume(const SDL_Rect& val_bar, const Configflag& vol_type, std
 		pausemenu::audiomenu::mod_col :
 		pausemenu::audiomenu::fill_col)) return false;
 	val = CAsset::intToStr(vol);
-	return true;
-}
-
-bool CPause::drawVideo() {
-	using namespace pausemenu::videomenu;
-	SDL_Rect canvas = {x, y, w, h};
-	if (!CAsset::drawStrBox(canvas, pausemenu::stroke_w, pausemenu::c_col, pausemenu::s_col)) return false;
-
-	SDL_Rect bar = {x, y, pausemenu::opt_w, pausemenu::opt_h};
-	CType::NewCenterWrite(header, bar, pausemenu::f_def);
-	bar.y += pausemenu::opt_h;
-
-	for (int i = 0; i < num_options; i++) {
-		CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? pausemenu::f_def : pausemenu::f_hov);
-		bar.y += pausemenu::opt_h;
-	}
-	return true;
-}
-
-bool CPause::drawQuit() {
-	using namespace pausemenu::quitmenu;
-	SDL_Rect canvas = {x, y, w, h};
-	if (!CAsset::drawStrBox(canvas, pausemenu::stroke_w, pausemenu::c_col, pausemenu::s_col)) return false;
-
-	SDL_Rect bar = {x, y, pausemenu::opt_w, pausemenu::opt_h};
-	CType::NewCenterWrite(header, bar, pausemenu::f_def);
-	bar.y += pausemenu::opt_h;
-
-	for (int i = 0; i < num_options; i++) {
-		CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? pausemenu::f_def : pausemenu::f_hov);
-		bar.y += pausemenu::opt_h;
-	}
+	CType::NewCenterWrite(val.c_str(), val_bar, pausemenu::audiomenu::ftex_col);
 	return true;
 }

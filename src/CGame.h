@@ -33,14 +33,17 @@ private:
   bool handleInterrupts(SDL_Event* Event);
 
 public:
-	void OnExit();
-
 	void OnLoop();
+private:
+  bool handleTransit();
 
+public:
 	void OnRender();
 private:
   void drawIntrpt();
 
+public:
+  void OnExit();
 	void OnCleanup();
 };
 
