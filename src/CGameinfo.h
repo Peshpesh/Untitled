@@ -32,5 +32,4 @@ public:
   unsigned long long time;
   // more ...
 };
-
 #endif

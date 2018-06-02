@@ -21,6 +21,11 @@ public:
   static CGame control;
   CHero Hero;
 
+private:
+  Difficulty diff;
+  int suspend_flag;
+
+public:
   bool OnInit();
 private:
   void initHero();

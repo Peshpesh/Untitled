@@ -6,7 +6,9 @@
 #include "CType.h"
 
 class CInventory : public CEvent {
-
+  CInventory();
+public:
+  static CInventory control;
 };
 
 #endif

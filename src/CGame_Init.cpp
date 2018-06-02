@@ -1,25 +1,20 @@
 #include "CGame.h"
 
 bool CGame::OnInit() {
+  diff = CGameinfo::infolist[CGameIO::control.getActiveSlot()]->diff;
+  suspend_flag = (diff != BRUTAL) ?
+                  INTRPT_PAUSE | INTRPT_VIEW_MAP | INTRPT_INVENTORY :
+                  INTRPT_PAUSE;
+
   if (!CEntityIO::Init()) {
     // ERROR
+    return false;
   } initHero();
 
 	// complete transition
-  using namespace location;
-  if (!CArea::control.Load(abbrname[CTransition::control.locationID])) {
-    // ERROR LOADING AREA
+  if (!handleTransit()) {
+    return false;
   }
-  //  Entities
-  if (!CEntityIO::Load(abbrname[CTransition::control.locationID])) {
-    // ERROR LOADING ENTITIES
-  }
-  //  Scenery
-  if (!CSceneryIO::Load(abbrname[CTransition::control.locationID])) {
-    // ERROR LOADING SCENERY
-  }
-  // transition complete
-  CTransition::control.activated = false;
   return true;
 }
 

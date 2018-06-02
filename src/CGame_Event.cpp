@@ -30,11 +30,9 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
       return true;
     }
     if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
-      // CAnchorScenery::Control.OnEvent(Event);
       return true;
     }
     if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
-      // CAnchorScenery::Control.OnEvent(Event);
       return true;
     }
   }
@@ -43,30 +41,51 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
 
 void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   switch (CControls::handler.getAction(sym, mod)) {
-    case CON_ATTACK:  {
+    case CON_ATTACK:    {
       // Hero.Attack();
       break;
     }
-    case CON_JUMP:    {
+    case CON_DEFEND:    {
+      // Hero.Defend();
+      break;
+    }
+    case CON_JUMP:      {
       Hero.Jump();
       break;
     }
-    case CON_LEFT:    {
+    case CON_SPEC:      {
+      break;
+    }
+    case CON_LEFT:      {
       Hero.move_left = true;
       break;
     }
-    case CON_RIGHT:   {
+    case CON_RIGHT:     {
       Hero.move_right = true;
       break;
     }
-    case CON_DOWN:    {
+    case CON_DOWN:      {
       break;
     }
-    case CON_UP:      {
+    case CON_UP:        {
       // Hero.look_up = true;
       break;
     }
-    case CON_PAUSE:   {
+    case CON_CYCLE_L:   {
+      break;
+    }
+    case CON_CYCLE_R:   {
+      break;
+    }
+    case CON_MAP:       {
+      CInterrupt::appendFlag(INTRPT_VIEW_MAP);
+      break;
+    }
+    case CON_INVENTORY: {
+      CInterrupt::appendFlag(INTRPT_INVENTORY);
+      break;
+    }
+    case CON_PAUSE:     {
       CInterrupt::appendFlag(INTRPT_PAUSE);
       break;
     }
@@ -76,30 +95,48 @@ void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
 void CGame::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
   switch (CControls::handler.getAction(sym, mod)) {
-    case CON_ATTACK:  {
+    case CON_ATTACK:    {
       // Hero.Release();
       break;
     }
-    case CON_JUMP:    {
+    case CON_DEFEND:    {
+      break;
+    }
+    case CON_JUMP:      {
       Hero.JumpRelease();
       break;
     }
-    case CON_LEFT:    {
+    case CON_SPEC:      {
+      break;
+    }
+    case CON_LEFT:      {
       Hero.move_left = false;
       break;
     }
-    case CON_RIGHT:   {
+    case CON_RIGHT:     {
       Hero.move_right = false;
       break;
     }
-    case CON_DOWN:    {
+    case CON_DOWN:      {
       break;
     }
-    case CON_UP:      {
+    case CON_UP:        {
       // Hero.look_up = false;
       break;
     }
-    case CON_PAUSE:   {
+    case CON_CYCLE_L:   {
+      break;
+    }
+    case CON_CYCLE_R:   {
+      break;
+    }
+    case CON_MAP:       {
+      break;
+    }
+    case CON_INVENTORY: {
+      break;
+    }
+    case CON_PAUSE:     {
       break;
     }
     default: break;
