@@ -2,8 +2,19 @@
 
 CGlobal CGlobal::control;
 
+/*
+* the var "lastloaded" represents the most recent game played.
+* It can be either:
+* 'N' : No valid load
+* 'A' : The "Alpha" game slot
+* 'B' : The "Beta" game slot
+* 'C' : The "Gamma" game slot
+* 'T' : Unsaved game (temporary); this occurs if a new game was created,
+*       but it was never saved.
+*/
+
 CGlobinfo::CGlobinfo() {
-  lastloaded = 'A';
+  lastloaded = 'N';
   N_load = 0;
   N_save = 0;
   N_death = 0;

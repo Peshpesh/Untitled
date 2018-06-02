@@ -115,26 +115,38 @@ namespace Title {
     const SDL_Point* o_hov = &palette::light_green;
     const SDL_Point* o_act = &palette::light_red;
     const SDL_Point* fill_col = &palette::cyan;
-    const short num_controls = 7;
+    const short num_controls = 13;
     const short num_config = 5;
     const short num_options = num_controls + num_config;
     const char* const controls_text[] = {
       "Confirm - Attack",
-      "Back - Jump",
+      "Go Back - Defend",
+      "Jump",
+      "Special",
       "Left",
       "Right",
       "Up",
       "Down - Examine",
+      "Cycle Equip Left",
+      "Cycle Equip Right",
+      "Show Map",
+      "Inventory",
       "Pause",
     };
     const Gamecon controls_list[] = {
-      CON_ATTACK,
-      CON_JUMP,
-      CON_LEFT,
-      CON_RIGHT,
-      CON_UP,
-      CON_DOWN,
-      CON_PAUSE,
+    	CON_ATTACK,
+    	CON_DEFEND,
+    	CON_JUMP,
+    	CON_SPEC,
+    	CON_LEFT,
+    	CON_RIGHT,
+    	CON_UP,
+    	CON_DOWN,
+    	CON_CYCLE_L,
+    	CON_CYCLE_R,
+    	CON_MAP,
+    	CON_INVENTORY,
+    	CON_PAUSE,
     };
     const char* const config_text[] = {
       "SFX Volume",

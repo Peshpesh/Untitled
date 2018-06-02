@@ -54,19 +54,13 @@ class CApp : public CEvent
 {
 private:
 	bool	Running;
-	// bool	Paused;
-	// bool	Suspend;			// gameplay loop suspension (frozen)
 	SDL_Window* Win_Display;    // Main Window
-	// SDL_Renderer* Win_Renderer; // Main Renderer
 
 private:
 	SDL_Texture* DEBUG_TEXTURE;
-	// CPlayer		Player;
-	// CPause		PauseMenu;
 
 private:
 	int esc_init;
-	// int esc_time;
 
 public:
 
@@ -75,10 +69,8 @@ public:
 	int	OnExecute();
 
 public:
-
 	// Initializes SDL, main window and renderer, and test/introductory graphics
 	bool OnInit();
-	// bool InitGame();
 
 	// Handles non-motion events from the user
 	void OnEvent(SDL_Event* Event);
@@ -89,7 +81,6 @@ public:
 	// Handles looping calculations, such as for idle animations
 	void OnLoop();
 	void OnPause();
-	// void ExitGame();
 
 	// Renders graphics
 	void OnRender();

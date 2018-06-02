@@ -28,7 +28,7 @@ private:
   // external objects should not be able to interact directly
   // with the global data structure.
   CGlobinfo data;
-  
+
 public:
   // exchange global data members with inquiring objects here...
   void push_data(const CGlobinfo& data);

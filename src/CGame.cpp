@@ -13,7 +13,7 @@ void CGame::OnCleanup() {
 
 // For quitting the game
 void CGame::OnExit() {
-  // CArea::control.OnInit();
+  CArea::control.OnInit();
   CEntityIO::Cleanup();
   CSceneryIO::Cleanup();
 }

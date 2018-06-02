@@ -1,17 +1,12 @@
 #include "CApp.h"
 
 /* The constructor initializes the Running Program flag */
-CApp::CApp()
-{
+CApp::CApp() {
 	Win_Display = NULL;
-	// Win_Renderer = NULL;
 
 	Running = true;
-	// Paused = false;
-	// Suspend = false;
 
 	esc_init = 0;
-	// esc_time = 0;
 
 	// debugging
 	DEBUG_TEXTURE = NULL;
@@ -21,22 +16,18 @@ CApp::CApp()
 * critical functions. Initialization, event handling, data manipulation,
 * rendering, and house keeping are done within this member.
 */
-int CApp::OnExecute()
-{
+int CApp::OnExecute() {
 	// If our initialization function fails, the program will end here.
-	if (OnInit() == false)
-	{
+	if (OnInit() == false) {
 		return -1;
 	}
 
 	SDL_Event Event;
 	// This loop will run endlessly until something makes the Running
 	// flag false. That will happen, hopefully, by the user's decision.
-	while (Running)
-	{
+	while (Running) {
 		// Check for pending events; handle them
-		while (SDL_PollEvent(&Event))
-		{
+		while (SDL_PollEvent(&Event)) {
 			OnEvent(&Event);
 		}
 		OnLoop();      // Perform necessary manipulations (gameplay)
@@ -46,8 +37,7 @@ int CApp::OnExecute()
 	return 0;
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 	CApp game;
 	return game.OnExecute();
 }
