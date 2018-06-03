@@ -4,7 +4,7 @@ CSceneryIO::CSceneryIO() {
   //
 }
 
-bool CSceneryIO::Init() {
+bool CSceneryIO::init() {
   loadTexInfo(Decorations::groups::GLOBAL);
   if (fetchTexture(Decorations::groups::GLOBAL) == NULL) {
     return false;

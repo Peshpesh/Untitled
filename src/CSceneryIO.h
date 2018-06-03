@@ -13,7 +13,7 @@ private:
   static void resetLevel();
 
 public:
-  static bool Init();
+  static bool init();
 
   static bool Load(char const* File);
 

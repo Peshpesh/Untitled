@@ -8,7 +8,7 @@ CItem CInventory::fetchItem(const short& ID) {
       val.equip = false;
       val.num = 1;
       val.maxnum = 1;
-      val.spr = CAsset::getRect(0,0,1,1);
+      val.spr = CAsset::getRect(0, 0, ITEM_SIZE, ITEM_SIZE);
       break;
     }
     case PEWPEW: {

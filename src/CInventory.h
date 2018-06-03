@@ -2,6 +2,7 @@
 #define _C_INVENTORY_H_
 
 #include "CEvent.h"
+#include "CControls.h"
 #include "CAsset.h"
 #include "CType.h"
 #include "Define.h"
@@ -19,6 +20,13 @@ namespace items {
     ROOMKEY_RUINS,
     TRANQUIL_STONE,
   };
+  namespace adderrors {
+    enum {
+      ONLYONE = 1,
+      TOOMANY = 2,
+      NOSPACE = 3,
+    };
+  }
 }
 
 namespace invinterface {
@@ -49,10 +57,15 @@ class CInventory : public CEvent {
   CInventory();
 public:
   static CInventory control;
+  SDL_Texture* itemsrc;
   std::vector<CItem> equipment;
   std::vector<CItem> items;
   short muns;
   short pos;
+
+public:
+  bool init();
+  void reinit();
 
 public:
   void OnEvent(SDL_Event* Event);
@@ -66,12 +79,18 @@ private:
   bool drawEquipment();
   bool drawItems();
   bool drawCursor();
-  bool drawInfo();
+  void drawInfo();
 
 public:
-  CItem fetchItem(const short& ID);
+  short canAddItem(const short& ID);
+  void addItem(const short& ID);
+
 private:
+  CItem fetchItem(const short& ID);
   void fetchInfo(const short& ID, std::string& name, std::string& about);
+
+public:
+  void Cleanup();
 };
 
 #endif

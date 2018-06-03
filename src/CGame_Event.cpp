@@ -33,6 +33,7 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
       return true;
     }
     if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
+      CInventory::control.OnEvent(Event);
       return true;
     }
   }

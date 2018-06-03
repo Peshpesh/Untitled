@@ -6,6 +6,8 @@ bool CGame::OnInit() {
                   INTRPT_PAUSE | INTRPT_VIEW_MAP | INTRPT_INVENTORY :
                   INTRPT_PAUSE;
 
+  CInventory::control.reinit();
+
   if (!CEntityIO::Init()) {
     // ERROR
     return false;

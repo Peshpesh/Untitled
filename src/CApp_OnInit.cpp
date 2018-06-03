@@ -22,7 +22,9 @@ bool CApp::OnInit()
 
 	if (!CEntityData::init()) 							return false;
 
-	if (!CSceneryIO::Init()) 								return false;
+	if (!CSceneryIO::init()) 								return false;
+
+	if (!CInventory::control.init())				return false;
 
  	// if (!Font::FontControl.OnInit()) 				return false;
 	// if (!CHUD::HUDControl.OnInit()) 				return false;
