@@ -36,7 +36,7 @@ void CGame::drawIntrpt() {
       // CAnchorScenery::Control.OnEvent(Event); return;
     }
     if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
-      // CAnchorScenery::Control.OnEvent(Event); return;
+      CInventory::control.OnRender(); return;
     }
   }
 }

@@ -10,6 +10,7 @@
 #include "CPause.h"
 #include "CTransition.h"
 #include "CArea.h"
+#include "CInventory.h"
 #include "CEntityIO.h"
 #include "CSceneryIO.h"
 #include "CHero.h"

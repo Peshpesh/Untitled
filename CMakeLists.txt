@@ -48,6 +48,9 @@ ${SRCDIR}/CGlobal.cpp
 ${SRCDIR}/CHero.cpp
 ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
+${SRCDIR}/CInventory.cpp
+${SRCDIR}/CInventory_ext.cpp
+${SRCDIR}/CInventory_list.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMode.cpp
 ${SRCDIR}/CPause.cpp
@@ -88,6 +91,7 @@ ${SRCDIR}/CGlobal.h
 ${SRCDIR}/CHero.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
+${SRCDIR}/CInventory.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMode.h
 ${SRCDIR}/CPause.h

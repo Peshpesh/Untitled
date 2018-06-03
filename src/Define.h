@@ -5,6 +5,7 @@
 #define MAP_HEIGHT 20	// tiles
 
 #define TILE_SIZE 32	// pixels
+#define ITEM_SIZE 32  // pixels
 
 #define WWIDTH 640		// pixels
 #define WHEIGHT 480		// pixels
