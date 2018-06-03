@@ -51,7 +51,7 @@ namespace rgb
   // extern const SDL_Color silver;
   // extern const SDL_Color light_gray;
   extern const SDL_Color gray;
-  // extern const SDL_Color dark_gray;
+  extern const SDL_Color dark_gray;
   extern const SDL_Color black;
 
   extern const SDL_Color red;

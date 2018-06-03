@@ -3,6 +3,7 @@
 
 #include "CEvent.h"
 #include "CControls.h"
+#include "CInterrupt.h"
 #include "CAsset.h"
 #include "CType.h"
 #include "Define.h"
@@ -34,6 +35,7 @@ namespace invinterface {
   extern const short buff_sp;
   extern const short canv_w;
   extern const short canv_h;
+  extern const short menu_w;
   extern const short str_w;
   extern const SDL_Rect canvas_r;
   extern const SDL_Rect equip_r;
@@ -43,6 +45,26 @@ namespace invinterface {
   extern const SDL_Color* f_col;
   extern const SDL_Point* c_col;
   extern const SDL_Point* s_col;
+  extern const SDL_Color* cursor_col;
+  extern const short cursor_w;
+  namespace optmenu {
+    extern const SDL_Rect menu_r;
+    extern const SDL_Rect opts_r;
+    extern const SDL_Point* c_col;
+    extern const SDL_Color* f_inactive;
+    extern const SDL_Color* f_col;
+    extern const SDL_Color* f_hov;
+    extern const short str_w;
+    extern const SDL_Point* s_col;
+    extern const short num_options;
+    extern const short opts_h;
+    extern const char* const opt_list[];
+    enum decision {
+      USE_ITEM,
+      DROP_ITEM,
+      CANCEL,
+    };
+  }
 }
 
 struct CItem {
@@ -62,6 +84,8 @@ public:
   std::vector<CItem> items;
   short muns;
   short pos;
+  bool menuactive;
+  short menupos;
 
 public:
   bool init();
@@ -71,6 +95,8 @@ public:
   void OnEvent(SDL_Event* Event);
 private:
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void handleNav(const Gamecon& action);
+  void handleMenu(const Gamecon& action);
 
 public:
   bool OnRender();
@@ -78,8 +104,9 @@ private:
   bool drawFrame();
   bool drawEquipment();
   bool drawItems();
-  bool drawCursor();
+  bool drawCursor(const SDL_Rect& dest);
   void drawInfo();
+  bool drawMenu();
 
 public:
   short canAddItem(const short& ID);

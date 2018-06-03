@@ -30,6 +30,7 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
       return true;
     }
     if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
+      CMapModel::control.OnEvent(Event);
       return true;
     }
     if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
@@ -79,6 +80,7 @@ void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       break;
     }
     case CON_MAP:       {
+      CMapModel::control.OnInit();
       CInterrupt::appendFlag(INTRPT_VIEW_MAP);
       break;
     }

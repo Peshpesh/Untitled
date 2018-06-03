@@ -52,6 +52,7 @@ ${SRCDIR}/CInventory.cpp
 ${SRCDIR}/CInventory_ext.cpp
 ${SRCDIR}/CInventory_list.cpp
 ${SRCDIR}/CMap.cpp
+${SRCDIR}/CMapModel.cpp
 ${SRCDIR}/CMode.cpp
 ${SRCDIR}/CPause.cpp
 ${SRCDIR}/CPause_ext.cpp
@@ -93,6 +94,7 @@ ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CInventory.h
 ${SRCDIR}/CMap.h
+${SRCDIR}/CMapModel.h
 ${SRCDIR}/CMode.h
 ${SRCDIR}/CPause.h
 ${SRCDIR}/CScenery.h

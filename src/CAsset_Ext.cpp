@@ -43,6 +43,8 @@ namespace palette
 
 namespace rgb
 {
+  const SDL_Color dark_gray = {53, 53, 53};
+
   const SDL_Color red      = {255, 10, 20};
   const SDL_Color orange   = {255, 148, 21};
   const SDL_Color yellow   = {255, 241, 0};

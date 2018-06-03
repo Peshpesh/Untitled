@@ -41,8 +41,7 @@ namespace {
   };
 }
 
-CTileset::CTileset()
-{
+CTileset::CTileset() {
   succ = false;
 
   tileset = NULL;
@@ -52,36 +51,29 @@ CTileset::CTileset()
   newF = "";
 }
 
-bool CTileset::OnInit()
-{
+bool CTileset::OnInit() {
   using namespace Tileset_ID;
   return changeTileset(name[TS_DEFAULT]);
 }
 
-void CTileset::OnEvent(SDL_Event* Event)
-{
+void CTileset::OnEvent(SDL_Event* Event) {
   CEvent::OnEvent(Event);
 }
 
-void CTileset::resetPath()
-{
+void CTileset::resetPath() {
   newF.clear();
 }
 
-void CTileset::backPath()
-{
+void CTileset::backPath() {
   if (newF.size() > 0) newF.erase(newF.end()-1);
 }
 
-void CTileset::addToPath(char addChar)
-{
+void CTileset::addToPath(char addChar) {
   if (newF.size() < newF.max_size()) newF.push_back(addChar);
 }
 
-void CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod)
-{
-  switch (sym)
-  {
+void CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
+  switch (sym) {
     case SDLK_0:	addToPath('0');	break;
     case SDLK_1:	addToPath('1');	break;
     case SDLK_2:	addToPath('2');	break;
@@ -128,16 +120,12 @@ void CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod)
   }
 }
 
-void CTileset::OnLButtonDown(int mX, int mY)
-{
+void CTileset::OnLButtonDown(int mX, int mY) {
   SDL_Point mouse = {mX, mY};
-  if (SDL_PointInRect(&mouse, &okButton))
-  {
+  if (SDL_PointInRect(&mouse, &okButton)) {
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
     changeTileset();
-  }
-  else if (SDL_PointInRect(&mouse, &cancelButton))
-  {
+  } else if (SDL_PointInRect(&mouse, &cancelButton)) {
     succ = false;
     pushInform(I_CANCEL);
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
@@ -145,8 +133,7 @@ void CTileset::OnLButtonDown(int mX, int mY)
   }
 }
 
-bool CTileset::OnRender(const SDL_Point* m)
-{
+bool CTileset::OnRender(const SDL_Point* m) {
   CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
   CAsset::drawBoxFill(&fnameBox, fnameBoxCol);
   CAsset::drawStrBox(&okButton, bstrsiz, SDL_PointInRect(m, &okButton) ? optHovCol : optCol, bCol);
@@ -162,8 +149,7 @@ bool CTileset::OnRender(const SDL_Point* m)
   return true;
 }
 
-SDL_Rect CTileset::getTileSrcR(const int& ID)
-{
+SDL_Rect CTileset::getTileSrcR(const int& ID) {
   SDL_Rect srcR = {0, 0, 0, 0};
   if (ID < 0) return srcR;
 
@@ -174,13 +160,11 @@ SDL_Rect CTileset::getTileSrcR(const int& ID)
   return srcR;
 }
 
-std::string CTileset::getFileName()
-{
+std::string CTileset::getFileName() {
   return file;
 }
 
-std::string CTileset::getFilePath()
-{
+std::string CTileset::getFilePath() {
   std::string filepath = ts_path + file + extension;
   return filepath;
 }
@@ -200,8 +184,7 @@ short CTileset::getFileID() {
   return getFileID(file);
 }
 
-bool CTileset::wasSuccess()
-{
+bool CTileset::wasSuccess() {
   return succ;
 }
 
@@ -229,34 +212,11 @@ bool CTileset::changeTileset(const short& fID) {
   return succ;
 }
 
-bool CTileset::changeTileset(const std::string& fname)
-{
+bool CTileset::changeTileset(const std::string& fname) {
   return changeTileset(getFileID(fname));
-  // if (getFileID(fname) < 0) {
-  //   succ = false;
-  //   return succ;
-  // }
-  //
-  // SDL_Texture* try_surf = NULL;
-  //
-  // std::string filepath = ts_path + fname + extension;
-  //
-  // if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
-  //   succ = true;
-  //   SDL_DestroyTexture(tileset);
-  //   tileset = try_surf;
-  //   CAsset::queryTileDims(tileset, ts_w, ts_h);
-  //   file = fname;
-  // }
-  // else {
-  //   succ = false;
-  // }
-  //
-  // return succ;
 }
 
-void CTileset::changeTileset()
-{
+void CTileset::changeTileset() {
   if (getFileID(newF) < 0) {
     succ = false;
     pushInform(I_NOTFOUND);
@@ -289,14 +249,11 @@ void CTileset::changeTileset()
   resetPath();
 }
 
-void CTileset::pushInform(const int& ID)
-{
+void CTileset::pushInform(const int& ID) {
   if (ID < I_CANCEL || ID > I_FAIL) return;
-
   CInform::InfoControl.pushInform(inform[ID]);
 }
 
-void CTileset::OnTerminate()
-{
+void CTileset::OnTerminate() {
   SDL_DestroyTexture(tileset);
 }

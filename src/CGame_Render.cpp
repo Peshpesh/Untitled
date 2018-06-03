@@ -33,7 +33,7 @@ void CGame::drawIntrpt() {
       CPause::control.OnRender(); return;
     }
     if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
-      // CAnchorScenery::Control.OnEvent(Event); return;
+      CMapModel::control.OnRender(); return;
     }
     if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
       CInventory::control.OnRender(); return;

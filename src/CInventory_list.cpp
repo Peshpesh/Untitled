@@ -6,50 +6,50 @@ CItem CInventory::fetchItem(const short& ID) {
   switch (ID) {
     case JOURNAL: {
       val.equip = false;
-      val.num = 1;
-      val.maxnum = 1;
+      val.num = 0;
+      val.maxnum = 0;
       val.spr = CAsset::getRect(0, 0, ITEM_SIZE, ITEM_SIZE);
       break;
     }
     case PEWPEW: {
       val.equip = true;
-      val.num = 1;
-      val.maxnum = 1;
+      val.num = 0;
+      val.maxnum = 0;
       val.spr = CAsset::getRect(0,0,1,1);
       break;
     }
     case MEDIKIT: {
       val.equip = false;
-      val.num = 1;
-      val.maxnum = 1;
+      val.num = 0;
+      val.maxnum = 0;
       val.spr = CAsset::getRect(0,0,1,1);
       break;
     }
     case WARMGLOVES: {
       val.equip = false;
-      val.num = 1;
-      val.maxnum = 1;
+      val.num = 0;
+      val.maxnum = 0;
       val.spr = CAsset::getRect(0,0,1,1);
       break;
     }
     case ROOMKEY_RUINS: {
       val.equip = false;
-      val.num = 1;
-      val.maxnum = 1;
+      val.num = 0;
+      val.maxnum = 0;
       val.spr = CAsset::getRect(0,0,1,1);
       break;
     }
     case TRANQUIL_STONE: {
       val.equip = false;
-      val.num = 1;
-      val.maxnum = 1;
+      val.num = 0;
+      val.maxnum = 0;
       val.spr = CAsset::getRect(0,0,1,1);
       break;
     }
     default: {
       val.equip = false;
-      val.num = 1;
-      val.maxnum = 1;
+      val.num = 0;
+      val.maxnum = 0;
       val.spr = CAsset::getRect(0,0,1,1);
       break;
     }

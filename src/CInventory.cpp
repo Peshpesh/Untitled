@@ -5,24 +5,38 @@ CInventory CInventory::control;
 CInventory::CInventory() {
   muns = 0;
   pos = 0;
+  menuactive = false;
+  menupos = 0;
   itemsrc = NULL;
 }
 
 bool CInventory::init() {
-  if ((itemsrc = CSurface::OnLoad("../res/item.png")) == NULL) {
-    return false;
-  } return true;
-}
-
-void CInventory::reinit() {
   muns = 0;
   pos = 0;
+  menuactive = false;
+  menupos = 0;
   equipment.clear();
   items.clear();
 
+  if (itemsrc == NULL) {
+    if ((itemsrc = CSurface::OnLoad("../res/item.png")) == NULL) {
+      return false;
+    }
+  }
   // DEBUGGING
+  addItem(items::PEWPEW);
   addItem(items::JOURNAL);
   addItem(items::WARMGLOVES);
+  addItem(items::TRANQUIL_STONE);
+  addItem(items::MEDIKIT);
+  addItem(items::ROOMKEY_RUINS);
+  return true;
+}
+
+void CInventory::reinit() {
+  pos = 0;
+  menuactive = false;
+  menupos = 0;
 }
 
 void CInventory::OnEvent(SDL_Event* Event) {
@@ -31,8 +45,12 @@ void CInventory::OnEvent(SDL_Event* Event) {
 
 void CInventory::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   Gamecon action = CControls::handler.getAction(sym, mod);
+  if (!menuactive) handleNav(action);
+  else handleMenu(action);
+}
 
-  // lol
+void CInventory::handleNav(const Gamecon& action) {
+  // lol...
   short eq_rows = 1 + ((equipment.size() - 1) / invinterface::row_items);
   short it_rows = 1 + ((items.size() - 1) / invinterface::row_items);
   short eq_resid = equipment.size() % invinterface::row_items;
@@ -131,9 +149,9 @@ void CInventory::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
             }
           } else {
             if (pos + (invinterface::row_items * (it_rows - 1)) >= items.size()) {
-              pos = pos + (invinterface::row_items * (it_rows - 1)) - invinterface::row_items;
+              pos = pos + equipment.size() + (invinterface::row_items * (it_rows - 1)) - invinterface::row_items;
             } else {
-              pos = pos + (invinterface::row_items * (it_rows - 1));
+              pos = pos + equipment.size() + (invinterface::row_items * (it_rows - 1));
             }
           }
         }
@@ -144,9 +162,9 @@ void CInventory::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
         } else {
           if (adj_pos >= equipment.size()) {
             if (adj_pos + (invinterface::row_items * (it_rows - 1)) >= items.size()) {
-              pos = adj_pos + (invinterface::row_items * (it_rows - 1)) - invinterface::row_items;
+              pos = adj_pos + equipment.size() + (invinterface::row_items * (it_rows - 1)) - invinterface::row_items;
             } else {
-              pos = adj_pos + (invinterface::row_items * (it_rows - 1));
+              pos = adj_pos + equipment.size() + (invinterface::row_items * (it_rows - 1));
             }
           } else {
             if (adj_pos + (invinterface::row_items * (eq_rows - 1)) >= equipment.size()) {
@@ -159,16 +177,31 @@ void CInventory::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       }
       break;
     }
-    // case CON_ATTACK: {
-    //   switch (pos) {
-    //     case RESUME:     		unpause(); break;
-    //     case AUDIO_MENU:    menu_kind = ADJUST_AUDIO; pos = 0; break;
-    //     case VIDEO_MENU: 		menu_kind = ADJUST_VIDEO; pos = 0; break;
-    //     case QUIT_MENU:    	menu_kind = QUIT_GAME; pos = 0; break;
-    //     default: break;
-    //   } break;
-    // }
-    // case CON_PAUSE: unpause(); break;
+    case CON_ATTACK: menuactive = true; break;
+    case CON_DEFEND:    reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    case CON_INVENTORY: reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    case CON_PAUSE:     reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    default: break;
+  }
+}
+
+void CInventory::handleMenu(const Gamecon& action) {
+  using namespace invinterface::optmenu;
+  switch (action) {
+    case CON_DOWN: {
+      if (menupos == num_options - 1) menupos = 0;
+      else menupos++;
+      break;
+    }
+    case CON_UP: {
+      if (menupos == 0) menupos = num_options - 1;
+      else menupos--;
+      break;
+    }
+    case CON_ATTACK:    break;
+    case CON_DEFEND:    menuactive = false; menupos = 0; break;
+    case CON_INVENTORY: reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    case CON_PAUSE:     reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
     default: break;
   }
 }
@@ -177,7 +210,7 @@ bool CInventory::OnRender() {
   if (!drawFrame())     return false;
   if (!drawEquipment()) return false;
   if (!drawItems())     return false;
-  if (!drawCursor())    return false;
+  if (!drawMenu())      return false;
   drawInfo();
   return true;
 }
@@ -198,6 +231,7 @@ bool CInventory::drawEquipment() {
   for (int i = 0; i < equipment.size(); i++) {
     // render equipment icon
     if (!CSurface::OnDraw(itemsrc, equipment[i].spr, dest)) return false;
+    if (i == pos && !drawCursor(dest)) return false;
     if (((i + 1) % row_items == 0)) {
       dest.x = init_x;
       dest.y += buff_sp + ITEM_SIZE;
@@ -216,6 +250,7 @@ bool CInventory::drawItems() {
   for (int i = 0; i < items.size(); i++) {
     // render item icon
     if (!CSurface::OnDraw(itemsrc, items[i].spr, dest)) return false;
+    if (i == pos - equipment.size() && !drawCursor(dest)) return false;
     if (((i + 1) % row_items == 0)) {
       dest.x = init_x;
       dest.y += buff_sp + ITEM_SIZE;
@@ -226,9 +261,9 @@ bool CInventory::drawItems() {
   return true;
 }
 
-bool CInventory::drawCursor() {
+bool CInventory::drawCursor(const SDL_Rect& dest) {
   using namespace invinterface;
-  return true;
+  return CAsset::drawBox(dest, *cursor_col, cursor_w);
 }
 
 void CInventory::drawInfo() {
@@ -241,6 +276,18 @@ void CInventory::drawInfo() {
   }
   CType::NewCenterWrite(name.c_str(), title_r, f_col);
   CType::NewCenterWrite(about.c_str(), about_r, f_col);
+}
+
+bool CInventory::drawMenu() {
+  using namespace invinterface::optmenu;
+  if (!CAsset::drawStrBox(menu_r, str_w, c_col, s_col)) return false;
+
+  SDL_Rect opt_r = {menu_r.x, menu_r.y, menu_r.w, opts_h};
+  for (int i = 0; i < num_options; i++) {
+    CType::NewCenterWrite(opt_list[i], opt_r, menuactive ? ((i == menupos) ? f_hov : f_col) : f_inactive);
+    opt_r.y += opts_h;
+  }
+  return true;
 }
 
 short CInventory::canAddItem(const short& ID) {
