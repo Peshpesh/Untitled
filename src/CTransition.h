@@ -3,29 +3,8 @@
 
 #include "CMode.h"
 #include "CAsset.h"
+#include "CLocation.h"
 #include "Define.h"
-
-namespace location {
-  enum {
-    DEFAULT = 0,
-    YRAI_HOME = 1,
-    YRAI = 2,
-    YRAI_OUTSKIRTS = 3,
-  };
-  const short num = 4;
-  const char* const abbrname[] = {
-    "default",
-    "yraihome",
-    "yrai",
-    "yraiout",
-  };
-  const char* const fullname[] = {
-    "Debug Area",
-    "Home",
-    "Yrai",
-    "Yrai -- Outskirts",
-  };
-};
 
 class CTransition {
   CTransition();

@@ -88,7 +88,7 @@ void CInventory::fetchInfo(const short& ID, std::string& name, std::string& abou
     }
     case TRANQUIL_STONE: {
       name = "Tranquil Stone";
-      about = "A cloudy, blue-green crystal attached to a broken string.";
+      about = "A cloudy, blue-green crystal attached to a broken string. Its color reminds me of the Enko Sea.";
       break;
     }
     default: {

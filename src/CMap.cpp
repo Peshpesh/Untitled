@@ -11,10 +11,8 @@ CTile* CMap::GetTile(int X, int Y) {
 	ID = X / TILE_SIZE;
 	ID += (MAP_WIDTH * (Y / TILE_SIZE));
 
-	if (ID < 0 || ID >= TileList.size())
-	{
-		return NULL;
-	}
+	if (ID < 0 || ID >= TileList.size()) return NULL;
+
 	return &TileList[ID];
 }
 

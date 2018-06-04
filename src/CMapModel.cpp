@@ -7,6 +7,9 @@ namespace mapmodel {
   const short b_sz = 2;
   const SDL_Point* b_col = &palette::black;
   const SDL_Point* canv_col = &palette::dark_cyan;
+  const SDL_Point* hero_col = &palette::silver;
+  const SDL_Color* f_col = &rgb::white;
+  const short title_h = 64;
 }
 
 CMapModel::CMapModel() {
@@ -15,6 +18,7 @@ CMapModel::CMapModel() {
   mW = mH = 0;
   visCanvas   = CAsset::getRect(0,0,0,0);
   visFrame    = CAsset::getRect(0,0,0,0);
+  visTitle    = CAsset::getRect(0,0,0,0);
 }
 
 void CMapModel::OnInit() {
@@ -36,6 +40,10 @@ void CMapModel::OnInit() {
   visFrame.y    = (WHEIGHT - visFrame.h) / 2;
   visCanvas.x   = visFrame.x  + b_sz;
   visCanvas.y   = visFrame.y  + b_sz;
+  visTitle.x    = visFrame.x;
+  visTitle.y    = visFrame.y - title_h;
+  visTitle.w    = visFrame.w;
+  visTitle.h    = title_h;
 }
 
 void CMapModel::OnEvent(SDL_Event* Event) {
@@ -47,6 +55,7 @@ void CMapModel::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   switch (action) {
     case CON_ATTACK: CInterrupt::removeFlag(INTRPT_VIEW_MAP); break;
     case CON_DEFEND: CInterrupt::removeFlag(INTRPT_VIEW_MAP); break;
+    case CON_MAP:    CInterrupt::removeFlag(INTRPT_VIEW_MAP); break;
     case CON_INVENTORY: {
       CInterrupt::removeFlag(INTRPT_VIEW_MAP);
       CInterrupt::appendFlag(INTRPT_INVENTORY);
@@ -63,7 +72,14 @@ void CMapModel::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
 bool CMapModel::OnRender() {
   if (!renderVisWindow()) return false;
+  if (!renderTitle()) return false;
   if (!renderArea()) return false;
+  return true;
+}
+
+bool CMapModel::OnRender(const float& hero_x, const float& hero_y) {
+  if (!OnRender()) return false;
+  if (!renderPosition(hero_x, hero_y)) return false;
   return true;
 }
 
@@ -72,6 +88,16 @@ bool CMapModel::renderVisWindow() {
 
   if (!CAsset::drawBoxFill(visFrame, b_col)) return false;
   if (!CAsset::drawBoxFill(visCanvas, canv_col)) return false;
+
+  return true;
+}
+
+bool CMapModel::renderTitle() {
+  using namespace mapmodel;
+
+  std::string name = CLocation::getFullname(CArea::control.location_ID);
+  if (name.empty()) return false;
+  CType::NewCenterWrite(name.c_str(), visTitle, f_col);
 
   return true;
 }
@@ -120,7 +146,7 @@ bool CMapModel::drawVisTile(const int& x_rel, const int& y_rel, const int& bg_ID
   using namespace mapmodel;
 
   SDL_Rect dstR = {visCanvas.x + x_rel, visCanvas.y + y_rel, mod_t_sz, mod_t_sz};
-  SDL_Rect srcR = {0,0,TILE_SIZE,TILE_SIZE};
+  SDL_Rect srcR = {0, 0, TILE_SIZE, TILE_SIZE};
 
   if (bg_ID >= 0) {
     srcR.x = (bg_ID % CMap::Tileset.w) * TILE_SIZE;
@@ -133,4 +159,14 @@ bool CMapModel::drawVisTile(const int& x_rel, const int& y_rel, const int& bg_ID
     if (!CSurface::OnDraw(CMap::Tileset.img, srcR, dstR)) return false;
   }
   return true;
+}
+
+bool CMapModel::renderPosition(const float& x, const float& y) {
+  using namespace mapmodel;
+  SDL_Rect dstR = {
+    visCanvas.x + (int)(x / TILE_SIZE) * mod_t_sz,
+    visCanvas.y + (int)(y / TILE_SIZE) * mod_t_sz,
+    mod_t_sz,
+    mod_t_sz};
+  return CAsset::drawBoxFill(dstR, hero_col);
 }

@@ -4,7 +4,7 @@
 #include <string>
 #include "CAsset.h"
 #include "CMap.h"
-// #include "CTransition.h"
+#include "CLocation.h"
 
 namespace Tileset {
   const short num = 1;
@@ -24,16 +24,16 @@ public:
 
 public:
 	std::vector<CMap>	MapList;
+  short location_ID;
 
 private:
 	int	AreaWidth;		// Maps
 	int	AreaHeight;		// Maps
-	// SDL_Texture*	Tex_Tileset;
 	short tileset_ID;
 
 public:
 	void OnInit();
-	bool Load(char const* File);
+	bool Load(const int& location_ID);
 	bool ChangeTileset(const short& fID);
 
 	void GetDims(int& mW, int& mH);

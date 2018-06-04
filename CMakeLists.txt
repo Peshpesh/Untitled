@@ -38,6 +38,7 @@ ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CGame.cpp
 ${SRCDIR}/CGame_Event.cpp
+${SRCDIR}/CGame_Hud.cpp
 ${SRCDIR}/CGame_Init.cpp
 ${SRCDIR}/CGame_Loop.cpp
 ${SRCDIR}/CGame_Render.cpp
@@ -51,6 +52,7 @@ ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CInventory.cpp
 ${SRCDIR}/CInventory_ext.cpp
 ${SRCDIR}/CInventory_list.cpp
+${SRCDIR}/CLocation.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMapModel.cpp
 ${SRCDIR}/CMode.cpp
@@ -93,6 +95,7 @@ ${SRCDIR}/CHero.h
 ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CInventory.h
+${SRCDIR}/CLocation.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMapModel.h
 ${SRCDIR}/CMode.h

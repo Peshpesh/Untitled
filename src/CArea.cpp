@@ -10,6 +10,7 @@ void CArea::OnInit() {
 	MapList.clear();
 	AreaHeight = AreaWidth = 1;
 	tileset_ID = -1;	 // will want to change this to some tileset used on title screen
+	location_ID = -1;
 
 	CMap tempMap;
 	// tempMap.OnLoad();
@@ -17,19 +18,23 @@ void CArea::OnInit() {
 	MapList.push_back(tempMap);
 }
 
-bool CArea::Load(char const* File) {
-	MapList.clear();
+bool CArea::Load(const int& location_ID) {
+	std::string abbrname = CLocation::getAbbrname(location_ID);
+	if (abbrname.empty()) return false;
 
 	// try to load area/maps
   std::string fpath = "../data/maps/";
   std::string ext = ".area";
-  std::string fname = fpath + std::string(File) + ext;
+  std::string fname = fpath + std::string(abbrname) + ext;
 
 	FILE* FileHandle = fopen(fname.c_str(), "rb");
 	if (FileHandle == NULL) {
 		// ERROR: failed to open .area file
 		return false;
 	}
+
+	MapList.clear();
+	this->location_ID = location_ID;
 
 	// Grab the ID of the tileset for the area
 	short setID;

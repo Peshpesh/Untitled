@@ -9,8 +9,9 @@ CGame::CGame() {
 
 bool CGame::handleTransit() {
 	if (CTransition::control.getMode() != APP_MODE_GAME) return false;
+
 	using namespace location;
-	if (!CArea::control.Load(abbrname[CTransition::control.locationID])) {
+	if (!CArea::control.Load(CTransition::control.locationID)) {
 		// ERROR LOADING AREA
 	}
 	//  Entities

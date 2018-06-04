@@ -17,6 +17,10 @@ void CGame::OnRender() {
   // Draw foreground scenery
   CScenery::drawForeground(scn_i);
 
+  if (!CHud::OnRender()) {
+    // 
+  }
+
   // Draw interruptions last
   drawIntrpt();
 
@@ -33,7 +37,8 @@ void CGame::drawIntrpt() {
       CPause::control.OnRender(); return;
     }
     if (CInterrupt::isFlagOn(INTRPT_VIEW_MAP)) {
-      CMapModel::control.OnRender(); return;
+      CMapModel::control.OnRender(Hero.X, Hero.Y);
+      return;
     }
     if (CInterrupt::isFlagOn(INTRPT_INVENTORY)) {
       CInventory::control.OnRender(); return;

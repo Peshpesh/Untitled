@@ -54,4 +54,9 @@ public:
 	void OnCleanup();
 };
 
+class CHud {
+  CHud();
+public:
+  static bool OnRender();
+};
 #endif
