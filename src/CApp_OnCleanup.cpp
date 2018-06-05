@@ -7,8 +7,9 @@ void CApp::OnCleanup() {
 	CType::control.OnCleanup();
 	CAsset::OnCleanup();
 	CSurface::OnCleanup();
-
-	// SDL_Quit();
+	CGame::control.OnCleanup();
+	
+	SDL_Quit();
 }
 
 // void CApp::OnCleanup()

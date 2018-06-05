@@ -26,14 +26,14 @@ bool CGame::handleTransit() {
 	return true;
 }
 
-// For terminating the application
-void CGame::OnCleanup() {
-  OnExit();
-}
-
 // For quitting the game
-void CGame::OnExit() {
-  CArea::control.OnInit();
+void CGame::OnCleanup() {
+  CArea::control.OnCleanup();
   CEntityIO::Cleanup();
   CSceneryIO::Cleanup();
+}
+
+// For terminating the application
+void CGame::OnExit() {
+  OnCleanup();
 }
