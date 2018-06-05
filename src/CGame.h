@@ -58,5 +58,10 @@ class CHud {
   CHud();
 public:
   static bool OnRender();
+private:
+  static bool drawHp();
+  static bool drawEnergy();
+  static bool drawEquipment();
+  static bool drawAllyInfo();
 };
 #endif

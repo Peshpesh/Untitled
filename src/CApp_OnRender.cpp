@@ -17,6 +17,12 @@ void CApp::OnRender() {
 		// ERROR
 	}
 
+	if (DEBUG) {
+		std::string fps_str = CAsset::intToStr(CFPS::FPSControl.GetFPS()) + " fps";
+		const SDL_Point fps_pos = {1,1};
+		CType::Write(FONT_MINI, fps_str.c_str(), fps_pos, &rgb::white);
+	}
+
 	if (esc_init) drawQuitMsg();
 
 	CSurface::Present();

@@ -72,7 +72,6 @@ private:
 	static void changeFontAlpha(const short& A);
 	static void resetFontAlpha();
 
-
 public:
 	static void GetXY(const int& fontID, char symbol, int& X, int& Y, int& W, int& H);
 	static void GetXY(const int& fontID, char symbol, SDL_Rect& symRec);
