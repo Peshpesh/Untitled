@@ -85,6 +85,11 @@ namespace rgb
   extern const SDL_Color dark_magenta;
 }
 
+namespace carot {
+  extern const SDL_Rect sm_half_l;
+  extern const SDL_Rect sm_half_r;
+}
+
 class CAsset
 {
 	public:
@@ -95,11 +100,14 @@ class CAsset
 	private:
 		static SDL_Texture* paltex;     // color palette
 		static SDL_Texture* arrtex;     // arrows texture
+    static SDL_Texture* crttex;     // carot texture
 
   public:
     static void paletteAlpha(const short& a);
     static void paletteBlend(const SDL_Color& rgb);
     static void paletteReset();
+    static void carotBlend(const SDL_Color& rgb);
+    static void carotReset();
 
   public:
     static void queryTileDims(SDL_Texture* texture, int& w, int& h);
@@ -147,7 +155,8 @@ class CAsset
     static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color);
     static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color, const SDL_Color& str_col);
 
-
+    static bool drawCircle(const int& Xo, const int& Yo, const int& r);
+    static bool drawSmCircleMeter(const int& X, const int& Y);
 
     static bool drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb);
     static bool drawArrowFill(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb);
@@ -166,6 +175,9 @@ public:
     static std::string msToHHMMSS(const unsigned long& t);  // convert milliseconds to hh:mm:ss timestamp
     static std::string intToStr(const int& val);
     static std::string doubleToStr(double val, const unsigned int& precision);
+
+public:
+    static void debug_a();
 };
 
 #endif

@@ -177,7 +177,7 @@ void CInventory::handleNav(const Gamecon& action) {
       }
       break;
     }
-    case CON_ATTACK: menuactive = true; break;
+    case CON_ATTACK:    menuactive = true; break;
     case CON_DEFEND:    reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
     case CON_INVENTORY: reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
     case CON_PAUSE:     reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;

@@ -7,8 +7,7 @@ CSurface::CSurface()
 	//
 }
 
-bool CSurface::OnInit(SDL_Window* window)
-{
+bool CSurface::OnInit(SDL_Window* window) {
 	if ((Win_Renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)) == NULL)
 	{
 		return false;
@@ -16,18 +15,15 @@ bool CSurface::OnInit(SDL_Window* window)
 	return true;
 }
 
-void CSurface::Clear()
-{
+void CSurface::Clear() {
 	if (SDL_RenderClear(Win_Renderer) != 0) SDL_Delay(5000);
 }
 
-void CSurface::Present()
-{
+void CSurface::Present() {
 	SDL_RenderPresent(Win_Renderer);
 }
 
-void CSurface::OnCleanup()
-{
+void CSurface::OnCleanup() {
 	SDL_DestroyRenderer(Win_Renderer);
 }
 
@@ -39,8 +35,7 @@ void CSurface::OnCleanup()
 * param File     : character string of the file name
 * param renderer : renderer in use
 */
-SDL_Texture* CSurface::OnLoad(char const* File)
-{
+SDL_Texture* CSurface::OnLoad(char const* File) {
 	// Initialize texture and surface pointers to null
 	SDL_Texture* Surf_Text = NULL;
 	SDL_Surface* Surf_Return = NULL;
@@ -65,8 +60,7 @@ SDL_Texture* CSurface::OnLoad(char const* File)
 * param X : horizontal position (Q-II) to draw texture
 * param Y : vertical position (Q-II) to draw texture
 */
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y)
-{
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y) {
 	if (Surf_Src == NULL) return false;
 
 	SDL_Rect DestR;
@@ -79,8 +73,7 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y)
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W, int H)
-{
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W, int H) {
 	if (Surf_Src == NULL) return false;
 
 	SDL_Rect DestR;
@@ -102,8 +95,7 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int Wo, int Ho, int W, int H)
-{
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int Wo, int Ho, int W, int H) {
 	if (Surf_Src == NULL)
 		return false;
 
@@ -125,21 +117,50 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Rect& dstrect)
-{
-	if (Surf_Src == NULL)
-		return false;
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Rect& dstrect) {
+	if (Surf_Src == NULL) return false;
 
 	SDL_RenderCopy(Win_Renderer, Surf_Src, &srcrect, &dstrect);
 	return true;
 }
 
-bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Point& dstpos)
-{
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Point& dstpos) {
 	if (Surf_Src == NULL) return false;
 
 	SDL_Rect DestR = {dstpos.x, dstpos.y, srcrect.w, srcrect.h};
 
 	SDL_RenderCopy(Win_Renderer, Surf_Src, &srcrect, &DestR);
+	return true;
+}
+
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Rect& dstrect, const double& r) {
+	if (Surf_Src == NULL) return false;
+
+	SDL_RenderCopyEx(Win_Renderer, Surf_Src, &srcrect, &dstrect, r, NULL, SDL_FLIP_NONE);
+	return true;
+}
+
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Point& dstpos, const double& r) {
+	if (Surf_Src == NULL) return false;
+
+	SDL_Rect DestR = {dstpos.x, dstpos.y, srcrect.w, srcrect.h};
+
+	SDL_RenderCopyEx(Win_Renderer, Surf_Src, &srcrect, &DestR, r, NULL, SDL_FLIP_NONE);
+	return true;
+}
+
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Rect& dstrect, const SDL_Point* a, const double& r) {
+	if (Surf_Src == NULL) return false;
+
+	SDL_RenderCopyEx(Win_Renderer, Surf_Src, &srcrect, &dstrect, r, a, SDL_FLIP_NONE);
+	return true;
+}
+
+bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect& srcrect, const SDL_Point& dstpos, const SDL_Point* a, const double& r) {
+	if (Surf_Src == NULL) return false;
+
+	SDL_Rect DestR = {dstpos.x, dstpos.y, srcrect.w, srcrect.h};
+
+	SDL_RenderCopyEx(Win_Renderer, Surf_Src, &srcrect, &DestR, r, a, SDL_FLIP_NONE);
 	return true;
 }

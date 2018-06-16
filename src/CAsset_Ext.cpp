@@ -78,3 +78,8 @@ namespace rgb
   const SDL_Color dark_magenta  = {165, 0, 53};
   const SDL_Color black         = {0, 0, 0};
 }
+
+namespace carot {
+  const SDL_Rect sm_half_l = {0, 0, 16, 31};
+  const SDL_Rect sm_half_r = {16, 0, 16, 31};
+}

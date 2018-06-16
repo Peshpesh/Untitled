@@ -2,6 +2,7 @@
 
 SDL_Texture* CAsset::paltex = NULL;
 SDL_Texture* CAsset::arrtex = NULL;
+SDL_Texture* CAsset::crttex = NULL;
 
 namespace symbols {
   // arrow fills
@@ -21,14 +22,15 @@ CAsset::CAsset() {
 }
 
 bool CAsset::OnInit() {
-  if ((paltex = CSurface::OnLoad("../res/palette.png")) == NULL)
-	{
+  if ((paltex = CSurface::OnLoad("../res/palette.png")) == NULL) {
 		return false;
 	}
-  if ((arrtex = CSurface::OnLoad("../res/arrow.png")) == NULL)
-	{
+  if ((arrtex = CSurface::OnLoad("../res/arrow.png")) == NULL) {
 		return false;
 	}
+  if ((crttex = CSurface::OnLoad("../res/carot.png")) == NULL) {
+    return false;
+  }
   SDL_SetTextureBlendMode(paltex, SDL_BLENDMODE_BLEND);
 	return true;
 }
@@ -52,6 +54,14 @@ void CAsset::paletteBlend(const SDL_Color& rgb) {
 
 void CAsset::paletteReset() {
   SDL_SetTextureColorMod(paltex, rgb::white.r, rgb::white.g, rgb::white.b);
+}
+
+void CAsset::carotBlend(const SDL_Color& rgb) {
+  SDL_SetTextureColorMod(crttex, rgb.r, rgb.g, rgb.b);
+}
+
+void CAsset::carotReset() {
+  SDL_SetTextureColorMod(crttex, rgb::white.r, rgb::white.g, rgb::white.b);
 }
 
 SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H) {
@@ -278,6 +288,71 @@ bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& 
   return true;
 }
 
+bool CAsset::drawSmCircleMeter(const int& X, const int& Y) {
+  float test = 0.85f;
+
+  if (test >= 0.5f) {
+    // mod = test - 0.5;
+    // fract = mod / 0.5;
+    // add_angle = 180 - (fract * 180);
+    // angle = 180 + add_angle;
+    SDL_Rect srcR = carot::sm_half_l;
+    SDL_Rect dstR = {X, Y, carot::sm_half_l.w, carot::sm_half_l.h};
+    SDL_Point anch = {carot::sm_half_l.w - 1, carot::sm_half_l.h / 2};
+
+    carotBlend(rgb::dark_blue);
+    CSurface::OnDraw(crttex, srcR, dstR, &anch, 180.0);
+
+    double rot = 360.0 - (((test - 0.5f) / 0.5f) * 180.0);
+    carotBlend(rgb::light_green);
+    CSurface::OnDraw(crttex, srcR, dstR);
+    CSurface::OnDraw(crttex, srcR, dstR, &anch, rot);
+  } else {
+    // 
+  }
+
+  return true;
+}
+
+bool CAsset::drawCircle(const int& Xo, const int& Yo, const int& r) {
+  int x = r-1;
+  int y = 0;
+  int dx = 1;
+  int dy = 1;
+  int err = dx - (r << 1);
+
+  while (x >= y) {
+      // drawBoxFill({Xo - x, Yo + y, 2*x, 1}, rgb::cyan);
+      //
+      // drawBoxFill({Xo - x, Yo - y, 2*x, 1}, rgb::cyan);
+      //
+      // drawBoxFill({Xo - y, Yo + x, 2*y, 1}, rgb::cyan);
+      //
+      // drawBoxFill({Xo - y, Yo - x, 2*y, 1}, rgb::cyan);
+
+      // drawBoxFill({Xo + x, Yo + y, 1, 1}, rgb::red);
+      // drawBoxFill({Xo + y, Yo + x, 1, 1}, rgb::red);
+      // drawBoxFill({Xo - y, Yo + x, 1, 1}, rgb::red);
+      // drawBoxFill({Xo - x, Yo + y, 1, 1}, rgb::red);
+      // drawBoxFill({Xo - x, Yo - y, 1, 1}, rgb::red);
+      // drawBoxFill({Xo - y, Yo - x, 1, 1}, rgb::red);
+      // drawBoxFill({Xo + y, Yo - x, 1, 1}, rgb::red);
+      // drawBoxFill({Xo + x, Yo - y, 1, 1}, rgb::red);
+
+      if (err <= 0) {
+          y++;
+          err += dy;
+          dy += 2;
+      }
+      if (err > 0) {
+          x--;
+          dx += 2;
+          err += dx - (r << 1);
+      }
+  }
+  return true;
+}
+
 bool CAsset::drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb) {
   using namespace symbols;
 
@@ -297,8 +372,7 @@ bool CAsset::drawArrow(const SDL_Rect& dstR, const char& dir, const SDL_Color* r
   return retval;
 }
 
-bool CAsset::drawArrowFill(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb)
-{
+bool CAsset::drawArrowFill(const SDL_Rect& dstR, const char& dir, const SDL_Color* rgb) {
   using namespace symbols;
 
   bool retval = false;
@@ -522,4 +596,40 @@ std::string CAsset::doubleToStr(double val, const unsigned int& precision) {
 		retstr = intToStr((int)(val));
 	}
 	return retstr;
+}
+
+
+void CAsset::debug_a() {
+  static double v = 0.0;
+  static double vi = 3.1415926*9;
+  static short i = 0;
+  static const SDL_Color* lol[] = {
+    &rgb::light_cyan,
+    &rgb::light_green,
+    &rgb::light_red,
+    &rgb::yellow,
+    &rgb::light_violet,
+    &rgb::orange,
+    &rgb::white,
+  };
+  static int x = 0;
+  static int xi = vi;
+  static int y = 0;
+  static int yi = vi;
+  paletteBlend(*lol[i]);
+  SDL_Rect srcR = getPixel(&palette::white);
+  SDL_Rect dstR = {x,y,100,100};
+  CSurface::OnDraw(paltex, srcR, dstR, v);
+  paletteReset();
+  v += vi;
+  i++;
+  // if (v > 360.0 || v < 0.0) vi = -vi;
+  if (v > 360.0) v-= 360.0;
+  if (i > 6) i = 0;
+  x += xi;
+  y += yi;
+  if (yi > 0 && y + 100 > WHEIGHT) yi = -yi;
+  if (yi < 0 && y < 0) yi = -yi;
+  if (xi > 0 && x + 100 > WWIDTH) xi = -xi;
+  if (xi < 0 && x < 0) xi = -xi;
 }

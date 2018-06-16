@@ -19,8 +19,13 @@ void CApp::OnRender() {
 
 	if (DEBUG) {
 		std::string fps_str = CAsset::intToStr(CFPS::FPSControl.GetFPS()) + " fps";
+		std::string speedfactor_str = CAsset::doubleToStr(CFPS::FPSControl.GetSpeedFactor(),10) + " SF";
 		const SDL_Point fps_pos = {1,1};
+		const SDL_Point sf_pos = {100,1};
 		CType::Write(FONT_MINI, fps_str.c_str(), fps_pos, &rgb::white);
+		CType::Write(FONT_MINI, speedfactor_str.c_str(), sf_pos, &rgb::white);
+		CAsset::drawSmCircleMeter(100, 100);
+		// CAsset::debug_a();
 	}
 
 	if (esc_init) drawQuitMsg();
