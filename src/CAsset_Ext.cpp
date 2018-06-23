@@ -82,4 +82,5 @@ namespace rgb
 namespace carot {
   const SDL_Rect sm_half_l = {0, 0, 16, 31};
   const SDL_Rect sm_half_r = {16, 0, 16, 31};
+  const SDL_Rect sm_case = {32, 0, 31, 31};
 }

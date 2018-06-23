@@ -17,9 +17,7 @@ void CGame::OnRender() {
   // Draw foreground scenery
   CScenery::drawForeground(scn_i);
 
-  if (!CHud::OnRender()) {
-    // 
-  }
+  CHud::control.OnRender();
 
   // Draw interruptions last
   drawIntrpt();

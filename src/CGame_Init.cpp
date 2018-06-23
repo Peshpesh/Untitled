@@ -13,6 +13,10 @@ bool CGame::OnInit() {
     return false;
   } initHero();
 
+  CHud::control.assignHp(&Hero.Health, &Hero.MaxHealth);
+  // CHud::control.assignEn(&Hero., &Hero.);
+  // CHud::control.assignSp(&., &.);
+
 	// complete transition
   if (!handleTransit()) {
     return false;
@@ -23,6 +27,7 @@ bool CGame::OnInit() {
 void CGame::initHero() {
   // initialize hero
   using namespace Entities;
+
   Hero.Permanent  = true;
   Hero.X          = CGamedata::control.data_hero.X;
   Hero.Y          = CGamedata::control.data_hero.Y;
@@ -33,11 +38,12 @@ void CGame::initHero() {
               CEntityData::getEntityDims(groups::GLOBAL, global::PLAYER),
               CEntityData::getHitboxDims(groups::GLOBAL, global::PLAYER));
 
-  // TESTING/DEBUGGING
   CCamera::CameraControl.SetTarget(&Hero.X, &Hero.Y, &Hero.spriteR.w, &Hero.spriteR.h);
   CCamera::CameraControl.TargetMode = TARGET_MODE_FOLLOW;
-  CCamera::CameraControl.SetLimits(0,0,1050,MAP_HEIGHT*TILE_SIZE);
-  CCamera::CameraControl.EnableLim();
+
+  // TESTING/DEBUGGING
+  // CCamera::CameraControl.SetLimits(0,0,1050,MAP_HEIGHT*TILE_SIZE);
+  // CCamera::CameraControl.EnableLim();
 
   CEntity::EntityList.push_back(&Hero); // GOOD LUCK //
 }

@@ -24,8 +24,6 @@ void CApp::OnRender() {
 		const SDL_Point sf_pos = {100,1};
 		CType::Write(FONT_MINI, fps_str.c_str(), fps_pos, &rgb::white);
 		CType::Write(FONT_MINI, speedfactor_str.c_str(), sf_pos, &rgb::white);
-		CAsset::drawSmCircleMeter(100, 100);
-		// CAsset::debug_a();
 	}
 
 	if (esc_init) drawQuitMsg();

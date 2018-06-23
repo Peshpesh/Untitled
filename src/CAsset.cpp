@@ -288,29 +288,48 @@ bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& 
   return true;
 }
 
-bool CAsset::drawSmCircleMeter(const int& X, const int& Y) {
-  float test = 0.85f;
+bool CAsset::drawSmCircleMeter(const int& X, const int& Y, const int& val, const int& maxval) {
+  using namespace carot;
 
-  if (test >= 0.5f) {
-    // mod = test - 0.5;
-    // fract = mod / 0.5;
-    // add_angle = 180 - (fract * 180);
-    // angle = 180 + add_angle;
-    SDL_Rect srcR = carot::sm_half_l;
-    SDL_Rect dstR = {X, Y, carot::sm_half_l.w, carot::sm_half_l.h};
-    SDL_Point anch = {carot::sm_half_l.w - 1, carot::sm_half_l.h / 2};
+  SDL_Rect dstR = {X, Y, sm_half_l.w, sm_half_l.h};
+  SDL_Point anch = {sm_half_l.w - 1, sm_half_l.h / 2};
+  float frac = float(val) / maxval;
+
+  if (val <= 0 || val >= maxval) {
+    if (val <= 0) carotBlend(rgb::dark_blue);
+    else carotBlend(rgb::light_green);
+
+    CSurface::OnDraw(crttex, sm_half_l, dstR);
+    CSurface::OnDraw(crttex, sm_half_l, dstR, &anch, 180.0);
+
+    carotBlend(rgb::black);
+    dstR.w = sm_case.w;
+    CSurface::OnDraw(crttex, sm_case, dstR);
+  } else if (frac >= 0.5f) {
+    carotBlend(rgb::dark_blue);
+    CSurface::OnDraw(crttex, sm_half_l, dstR, &anch, 180.0);
+
+    carotBlend(rgb::light_green);
+    double rot = 360.0 - (((frac - 0.5f) / 0.5f) * 180.0);
+    CSurface::OnDraw(crttex, sm_half_l, dstR);
+    CSurface::OnDraw(crttex, sm_half_l, dstR, &anch, rot);
+
+    carotBlend(rgb::black);
+    dstR.w = sm_case.w;
+    CSurface::OnDraw(crttex, sm_case, dstR);
+  } else if (frac < 0.5f) {
+    carotBlend(rgb::light_green);
+    CSurface::OnDraw(crttex, sm_half_l, dstR);
 
     carotBlend(rgb::dark_blue);
-    CSurface::OnDraw(crttex, srcR, dstR, &anch, 180.0);
+    CSurface::OnDraw(crttex, sm_half_l, dstR, &anch, 180.0);
+    double rot = 360.0 * (1.0 - frac);
+    CSurface::OnDraw(crttex, sm_half_l, dstR, &anch, rot);
 
-    double rot = 360.0 - (((test - 0.5f) / 0.5f) * 180.0);
-    carotBlend(rgb::light_green);
-    CSurface::OnDraw(crttex, srcR, dstR);
-    CSurface::OnDraw(crttex, srcR, dstR, &anch, rot);
-  } else {
-    // 
+    carotBlend(rgb::black);
+    dstR.w = sm_case.w;
+    CSurface::OnDraw(crttex, sm_case, dstR);
   }
-
   return true;
 }
 

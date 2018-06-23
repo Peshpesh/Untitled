@@ -15,6 +15,7 @@
 #include "CEntityIO.h"
 #include "CSceneryIO.h"
 #include "CHero.h"
+#include "CHUD.h"
 
 class CGame : public CEvent {
   CGame();
@@ -52,16 +53,5 @@ private:
 public:
   void OnExit();
 	void OnCleanup();
-};
-
-class CHud {
-  CHud();
-public:
-  static bool OnRender();
-private:
-  static bool drawHp();
-  static bool drawEnergy();
-  static bool drawEquipment();
-  static bool drawAllyInfo();
 };
 #endif
