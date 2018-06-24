@@ -8,7 +8,7 @@
 #include "CGlobal.h"
 
 // This class should handle files describing each game's status/progress.
-// Namely, this should be able to output/load game data.
+// Specifically, this should be able to output/load game data.
 // It should include things like:
 //    - player status (HP, equip, special charge)
 //    - area and save location

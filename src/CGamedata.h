@@ -43,5 +43,4 @@ public:
   // CMiscData data_misc;
   void resetAll();
 };
-
 #endif
