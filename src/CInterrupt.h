@@ -6,7 +6,7 @@ enum interrupts {
   INTRPT_PAUSE      = 0x00000001,     // interrupted by pause menu
   INTRPT_VIEW_MAP   = 0x00000002,     // interrupted by map viewer
   INTRPT_INVENTORY  = 0x00000004,     // interrupted by inventory interface
-  
+
   // INTRPT_CHANGE_TS  = 0x00000008,   // change tileset
   // INTRPT_CHANGE_EN  = 0x00000010,   // change/explore entity groups
   // INTRPT_CHANGE_SC  = 0x00000020,   // change/explore scenery groups
@@ -24,6 +24,7 @@ class CInterrupt {
 
 private:
   static int handle;
+  static int suspend_flag;
 
 public:
   CInterrupt();
@@ -33,6 +34,9 @@ public:
 
   // turns on a bitwise flag in handle
   static void appendFlag(int flag);
+
+  // assigns the suspend_flag member
+  static void setSuspend(int flag);
 
   // turns all flags off
   static void resetFlags();
@@ -45,6 +49,9 @@ public:
 
   // returns true if there are no interruptions
   static bool isNone();
+
+  // returns true if a suspend_flag is on in handle
+  static bool isSuspended();
 };
 
 #endif

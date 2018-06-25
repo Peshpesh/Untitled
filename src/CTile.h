@@ -11,15 +11,6 @@ enum
   TILE_TYPE_FIRE,         // persistent damage when colliding with these tiles
 };
 
-// enum
-// {
-//   ENABLE_NONE 	 = 0,
-// 	ENABLE_BG	     = 0x00000001,		// Place background tiles
-//   ENABLE_FG 	   = 0x00000002,		// Place foreground tiles
-//   ENABLE_TYPE 	 = 0x00000004,		// Place tile types
-// 	ENABLE_COLL 	 = 0x00000008,		// Place collision types
-// };
-
 enum
 {
   SOLID_NONE = 0,       // tile is solid nowhere

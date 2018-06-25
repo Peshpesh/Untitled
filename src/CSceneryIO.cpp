@@ -12,12 +12,14 @@ bool CSceneryIO::init() {
   return true;
 }
 
-bool CSceneryIO::Load(const char* File) {
+bool CSceneryIO::Load(const int& location_ID) {
+  std::string abbrname = CLocation::getAbbrname(location_ID);
+	if (abbrname.empty()) return false;
+
   // try to load scenery file
   std::string fpath = "../data/maps/";
   std::string ext = ".scn";
-  std::string fname = fpath + std::string(File) + ext;
-  // std::string filePath = io_path + fname + io_ext;
+  std::string fname = fpath + std::string(abbrname) + ext;
 
   FILE* FileHandle = fopen(fname.c_str(), "rb");
 

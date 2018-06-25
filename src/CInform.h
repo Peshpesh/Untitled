@@ -10,7 +10,6 @@ public:
   static CInform InfoControl;
 
 private:
-
   CInform();
 
   std::string info;

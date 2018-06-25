@@ -52,18 +52,18 @@ void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       break;
     }
     case CON_JUMP:      {
-      Hero.Jump();
+      CHero::Hero.Jump();
       break;
     }
     case CON_SPEC:      {
       break;
     }
     case CON_LEFT:      {
-      Hero.move_left = true;
+      CHero::Hero.move_left = true;
       break;
     }
     case CON_RIGHT:     {
-      Hero.move_right = true;
+      CHero::Hero.move_right = true;
       break;
     }
     case CON_DOWN:      {
@@ -106,18 +106,18 @@ void CGame::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
       break;
     }
     case CON_JUMP:      {
-      Hero.JumpRelease();
+      CHero::Hero.JumpRelease();
       break;
     }
     case CON_SPEC:      {
       break;
     }
     case CON_LEFT:      {
-      Hero.move_left = false;
+      CHero::Hero.move_left = false;
       break;
     }
     case CON_RIGHT:     {
-      Hero.move_right = false;
+      CHero::Hero.move_right = false;
       break;
     }
     case CON_DOWN:      {

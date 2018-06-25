@@ -7,6 +7,9 @@
 #include "CGameIO.h"
 #include "CInterrupt.h"
 
+#include "CDifficulty.h"
+#include "CStages.h"
+
 #include "CPause.h"
 #include "CTransition.h"
 #include "CArea.h"
@@ -22,11 +25,6 @@ class CGame : public CEvent {
 
 public:
   static CGame control;
-  CHero Hero;
-
-private:
-  Difficulty diff;
-  int suspend_flag;
 
 public:
   bool OnInit();

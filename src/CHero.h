@@ -8,7 +8,10 @@
 
 class CHero : public CEntity {
 public:
+
 	CHero();
+  static CHero Hero;
+
 	// void Reset();
 
 	void OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR);

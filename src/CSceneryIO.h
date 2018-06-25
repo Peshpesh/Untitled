@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include "CLocation.h"
 #include "CScenery.h"
 #include "CSceneryData.h"
 
@@ -15,7 +16,7 @@ private:
 public:
   static bool init();
 
-  static bool Load(char const* File);
+  static bool Load(const int& location_ID);
 
   static void Cleanup();
 

@@ -13,11 +13,14 @@ bool CEntityIO::Init() {
   return true;
 }
 
-bool CEntityIO::Load(char const* File) {
+bool CEntityIO::Load(const int& location_ID) {
+  std::string abbrname = CLocation::getAbbrname(location_ID);
+	if (abbrname.empty()) return false;
+
 	// try to load entity file
   std::string fpath = "../data/maps/";
   std::string ext = ".ent";
-  std::string fname = fpath + std::string(File) + ext;
+  std::string fname = fpath + std::string(abbrname) + ext;
 
 	FILE* FileHandle = fopen(fname.c_str(), "rb");
 	if (FileHandle == NULL) {

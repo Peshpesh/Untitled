@@ -2,8 +2,7 @@
 
 CFPS CFPS::FPSControl;
 
-CFPS::CFPS()
-{
+CFPS::CFPS() {
 	OldTime = 0;
 	LastTime = 0;
 	SpeedFactor = 0;

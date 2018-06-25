@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include "CLocation.h"
 #include "CEntity.h"
 #include "CEntityData.h"
 
@@ -16,7 +17,7 @@ private:
 public:
   static bool Init();
 
-  static bool Load(char const* File);
+  static bool Load(const int& location_ID);
 
   static void Cleanup();
 

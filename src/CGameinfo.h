@@ -8,13 +8,7 @@
 // the story), which goes in the CGamedata class.
 
 #include <vector>
-
-enum Difficulty {
-  EASY    = 0,
-  NORMAL  = 1,
-  HARD    = 2,
-  BRUTAL  = 3,
-};
+#include "CDifficulty.h"
 
 class CGameinfo {
 public:

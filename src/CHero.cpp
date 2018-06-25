@@ -1,5 +1,7 @@
 #include "CHero.h"
 
+CHero CHero::Hero;
+
 CHero::CHero() {
 	// Type = ENTITY_TYPE_PLAYER;
 	Flags = ENTITY_FLAG_GRAVITY | ENTITY_FLAG_HOLLOW;
@@ -23,39 +25,6 @@ CHero::CHero() {
 	// Col_Width = 16;
 	// Col_Height = 31;
 }
-
-// void CPlayer::Reset()
-// {
-// 	Type = ENTITY_TYPE_PLAYER;
-// 	Flags = ENTITY_FLAG_GRAVITY | ENTITY_FLAG_HOLLOW;
-// 	Modifiers = MODE_NONE;
-// 	Arsenal = 0x00000001;
-// 	MaxHealth = 12;
-// 	Health = 3;
-// 	MaxSpeedX = 7.0;
-// 	MaxSpeedY = 12.0;
-// 	Timer_Invinc = Timer_Invis =
-// 		Timer_Haste = Timer_Flight = 0;
-// 	Weapon = ARM_TEST;
-// 	Underwater = false;
-// 	Air = 100.0;
-// 	Shooting = TryInteract = false;
-// 	Livebullets = 0;
-// 	Purse = 0;
-// 	Ammo = 0;
-//
-// 	move_left = move_left = false;
-// 	SpeedX = SpeedY = AccelX = AccelY = 0.0f;
-// 	MaxAccelX = 0.5f;
-// 	MaxAccelY = 0.75f;
-// 	Jumper = false;
-// 	Dead = false;
-// 	Engaged = false;
-// 	Wet = false;
-// 	Icy = false;
-//
-// 	Damage = 0;
-// }
 
 void CHero::OnLoad(SDL_Texture* img, const SDL_Rect& sprR, const SDL_Rect& hitR) {
 	CEntity::OnLoad(img, sprR, hitR);

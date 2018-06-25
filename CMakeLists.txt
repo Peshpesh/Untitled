@@ -28,6 +28,7 @@ ${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CControls.cpp
+${SRCDIR}/CDifficulty.cpp
 ${SRCDIR}/CEntity_Coll.cpp
 ${SRCDIR}/CEntity_Move.cpp
 ${SRCDIR}/CEntity.cpp
@@ -71,6 +72,9 @@ ${SRCDIR}/CTitle_Render.cpp
 ${SRCDIR}/CTransition.cpp
 ${SRCDIR}/CType.cpp
 ${SRCDIR}/CType_def.cpp
+${SRCDIR}/stage/CStage.cpp
+${SRCDIR}/stage/CDebug.cpp
+${SRCDIR}/stage/CYrai.cpp
 )
 
 set(HEADER_FILES
@@ -81,6 +85,7 @@ ${SRCDIR}/CAsset.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CConfig.h
 ${SRCDIR}/CControls.h
+${SRCDIR}/CDifficulty.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityData.h
 ${SRCDIR}/CEntityIO.h
@@ -105,12 +110,16 @@ ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryIO.h
 ${SRCDIR}/CSound.h
+${SRCDIR}/CStages.h
 ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CTitle.h
 ${SRCDIR}/CTransition.h
 ${SRCDIR}/CType.h
 ${SRCDIR}/Define.h
+${SRCDIR}/stage/CStage.h
+${SRCDIR}/stage/CDebug.h
+${SRCDIR}/stage/CYrai.h
 )
 
 set(GCC_COVERAGE_LINK_FLAGS	"-mwindows")
