@@ -2,6 +2,7 @@
 #define _C_STAGE_DEBUG_
 
 #include "CStage.h"
+#include "../CHUD.h"
 #include "../CArea.h"
 #include "../CEntityIO.h"
 #include "../CSceneryIO.h"
@@ -14,7 +15,6 @@ class CDebug_Stage : public CStage {
   CDebug_Stage();
 public:
   static CDebug_Stage anch;
-
 public:
   void OnInit();
   void OnLoad();

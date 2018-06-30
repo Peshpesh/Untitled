@@ -2,6 +2,8 @@
 #define _C_STAGE_YRAI_
 
 #include "CStage.h"
+#include "../CGamedata.h"
+#include "../CHUD.h"
 #include "../CArea.h"
 #include "../CEntity.h"
 #include "../CScenery.h"
@@ -12,10 +14,12 @@
 #include "../CHero.h"
 
 class CYrai : public CStage {
-  CYrai();
+  CYrai():data(&CGamedata::control.data_yrai),rhighid(&CGamedata::control.data_rhighid){};
 public:
   static CYrai anch;
-  
+private:
+  CYraiData* const data;
+  const CRhighidData* const rhighid;
 public:
   void OnInit();
   void OnLoad();

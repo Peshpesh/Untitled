@@ -2,10 +2,6 @@
 
 CYrai CYrai::anch;
 
-CYrai::CYrai() {
-
-}
-
 void CYrai::OnInit() {
 
 }
@@ -31,6 +27,8 @@ void CYrai::OnRender() {
   CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
 
   CScenery::drawForeground(scn_i);
+
+  CHud::control.OnRender();
 }
 
 void CYrai::OnCleanup() {

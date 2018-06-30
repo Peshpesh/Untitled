@@ -14,16 +14,16 @@ struct CHeroData {
   void reset();
 };
 
-struct CLevelAData {
+struct CYraiData {
   bool adventure_ready;
-  CLevelAData();
+  CYraiData();
   void reset();
 };
 
-struct CLevelBData {
+struct CRhighidData {
   bool defeat_mother;
   bool own_medikit_used;
-  CLevelBData();
+  CRhighidData();
   void reset();
 };
 
@@ -38,8 +38,8 @@ class CGamedata {
 public:
   static CGamedata control;
   CHeroData data_hero;
-  CLevelAData data_levelA;
-  CLevelBData data_levelB;
+  CYraiData data_yrai;
+  CRhighidData data_rhighid;
   // CMiscData data_misc;
   void resetAll();
 };

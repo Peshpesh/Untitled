@@ -6,11 +6,11 @@ CHeroData::CHeroData() {
   reset();
 }
 
-CLevelAData::CLevelAData() {
+CYraiData::CYraiData() {
   reset();
 }
 
-CLevelBData::CLevelBData() {
+CRhighidData::CRhighidData() {
   reset();
 }
 
@@ -24,8 +24,8 @@ CGamedata::CGamedata() {
 
 void CGamedata::resetAll() {
   data_hero.reset();
-  data_levelA.reset();
-  data_levelB.reset();
+  data_yrai.reset();
+  data_rhighid.reset();
 }
 
 void CHeroData::reset() {
@@ -35,11 +35,11 @@ void CHeroData::reset() {
   Y = 100;
 }
 
-void CLevelAData::reset() {
+void CYraiData::reset() {
   adventure_ready = false;
 }
 
-void CLevelBData::reset() {
+void CRhighidData::reset() {
   defeat_mother = false;
   own_medikit_used = false;
 }

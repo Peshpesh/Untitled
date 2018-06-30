@@ -29,6 +29,7 @@ void CDebug_Stage::OnLoop() {
       if (!CEntity::EntityList[i]) continue;
       CEntity::EntityList[i]->OnLoop();
     }
+
   }
 }
 
@@ -45,6 +46,8 @@ void CDebug_Stage::OnRender() {
   CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
 
   CScenery::drawForeground(scn_i);
+
+  CHud::control.OnRender();
 }
 
 void CDebug_Stage::OnCleanup() {

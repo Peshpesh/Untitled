@@ -4,9 +4,6 @@ void CGame::OnRender() {
   // draw stage area, entities, scenery, etc.
   CStage::stage->OnRender();
 
-  // draw heads-up display
-  CHud::control.OnRender();
-
   // draw interruptions last
   drawIntrpt();
 
