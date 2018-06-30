@@ -12,18 +12,40 @@
 #include "CInterrupt.h"
 #include "CControls.h"
 
+namespace dia {
+  extern const float def_rate;  // default type rate
+  extern const short rec_idle;  // recommended idle time
+};
+
+/* CPhrase structs are "dialogue boxes" that have a few properties:
+  - name: Source of dialogue. This string can be empty.
+  - text: Contents of the text box. Could be empty, but why?
+  - type_rate:  How fast the text is "typed out" (in char/s). Has a default value.
+  - idle_time:  After the text is "fully typed," wait this long (ms) before auto-advancing.
+                Has a default value of -1, which means to wait forever (user must force).
+*/
+
 struct CPhrase {
   std::string name;
   std::string text;
-  unsigned int text_rate; // char per ms typed to screen
+  float type_rate; // char per s typed to screen
   int idle_time;
+  CPhrase(const std::string& n, const std::string& t, const float& t_r, const int& i_t):
+    name(n),text(t),type_rate(t_r),idle_time(i_t){};
+  CPhrase(const std::string& t, const float& t_r, const int& i_t):
+    name(""),text(t),type_rate(t_r),idle_time(i_t){};
+  CPhrase(const std::string& t):
+    name(""),text(t),type_rate(dia::def_rate),idle_time(-1){};
 };
 
 class CDialogue : public CEvent {
   CDialogue();
 
 private:
-  unsigned long long init_time; // SDL_ticks at phrase init
+  unsigned long long prev_time;
+  unsigned int cur_time;
+  unsigned int end_time;
+  unsigned int cur_idle;
 
 private:
   void resetTimer();
@@ -46,6 +68,9 @@ public:
   void OnLoop();
 
   void OnRender();
+
+private:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 };
 
 #endif
