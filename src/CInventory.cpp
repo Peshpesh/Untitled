@@ -274,8 +274,8 @@ void CInventory::drawInfo() {
   } else {
     fetchInfo(items[pos - equipment.size()].ID, name, about);
   }
-  CType::NewCenterWrite(name.c_str(), title_r, f_col);
-  CType::NewCenterWrite(about.c_str(), about_r, f_col);
+  CType::CenterWrite(name.c_str(), title_r, f_col);
+  CType::CenterWrite(about.c_str(), about_r, f_col);
 }
 
 bool CInventory::drawMenu() {
@@ -284,7 +284,7 @@ bool CInventory::drawMenu() {
 
   SDL_Rect opt_r = {menu_r.x, menu_r.y, menu_r.w, opts_h};
   for (int i = 0; i < num_options; i++) {
-    CType::NewCenterWrite(opt_list[i], opt_r, menuactive ? ((i == menupos) ? f_hov : f_col) : f_inactive);
+    CType::CenterWrite(opt_list[i], opt_r, menuactive ? ((i == menupos) ? f_hov : f_col) : f_inactive);
     opt_r.y += opts_h;
   }
   return true;

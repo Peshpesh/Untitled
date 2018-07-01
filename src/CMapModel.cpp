@@ -97,7 +97,7 @@ bool CMapModel::renderTitle() {
 
   std::string name = CLocation::getFullname(CArea::control.location_ID);
   if (name.empty()) return false;
-  CType::NewCenterWrite(name.c_str(), visTitle, f_col);
+  CType::CenterWrite(name.c_str(), visTitle, f_col);
 
   return true;
 }

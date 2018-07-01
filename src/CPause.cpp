@@ -118,6 +118,10 @@ bool CPause::OnRender() {
 	bool retval = false;
 	CType::control.SetFont(FONT_MINI);
 
+	CAsset::paletteAlpha(pausemenu::fill_A);
+	CAsset::fillScreen();
+	CAsset::paletteAlpha(MAX_RGBA);
+
 	switch (menu_kind) {
 		case pausemenu::MAIN:       		retval = drawMain(); 	break;
 		case pausemenu::ADJUST_AUDIO:   retval = drawAudio(); break;
@@ -136,7 +140,7 @@ bool CPause::drawMain() {
 
 	SDL_Rect bar = {x, y, opt_w, opt_h};
 	for (int i = 0; i < num_options; i++) {
-		CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
+		CType::CenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
 		bar.y += opt_h;
 	}
 	return true;
@@ -148,7 +152,7 @@ bool CPause::drawAudio() {
 	if (!CAsset::drawStrBox(canvas, pausemenu::stroke_w, pausemenu::c_col, pausemenu::s_col)) return false;
 
 	SDL_Rect name_bar = {x, y, pausemenu::opt_w, pausemenu::opt_h};
-	CType::NewCenterWrite(header, name_bar, pausemenu::f_def);
+	CType::CenterWrite(header, name_bar, pausemenu::f_def);
 
 	name_bar.x = name_x;
 	name_bar.y += pausemenu::opt_h;
@@ -156,7 +160,7 @@ bool CPause::drawAudio() {
 	SDL_Rect val_bar = {val_x, name_bar.y + (name_bar.h - val_h) / 2, val_w, val_h};
 	for (int i = 0; i < num_options; i++) {
 		std::string val;
-		CType::NewCenterWrite(opt_list[i], name_bar, (i != pos) ? pausemenu::f_def : pausemenu::f_hov);
+		CType::CenterWrite(opt_list[i], name_bar, (i != pos) ? pausemenu::f_def : pausemenu::f_hov);
 		switch (i) {
 			case RESUME: 			break;
 			case SFX_VOLUME: 	{
@@ -173,7 +177,7 @@ bool CPause::drawAudio() {
 			}
 			case AUDIO_OUT:		{
 				val = CConfig::control.isStereo() ? "Stereo" : "Mono";
-				CType::NewCenterWrite(val.c_str(), val_bar, pausemenu::f_def);
+				CType::CenterWrite(val.c_str(), val_bar, pausemenu::f_def);
 				break;
 			}
 			case SET_DEFAULT: break;
@@ -190,7 +194,7 @@ bool CPause::drawVideo() {
 	if (!CAsset::drawStrBox(canvas, pausemenu::stroke_w, pausemenu::c_col, pausemenu::s_col)) return false;
 
 	SDL_Rect name_bar = {x, y, pausemenu::opt_w, pausemenu::opt_h};
-	CType::NewCenterWrite(header, name_bar, pausemenu::f_def);
+	CType::CenterWrite(header, name_bar, pausemenu::f_def);
 
 	name_bar.x = name_x;
 	name_bar.y += pausemenu::opt_h;
@@ -198,12 +202,12 @@ bool CPause::drawVideo() {
 	SDL_Rect val_bar = {val_x, name_bar.y, val_w, pausemenu::opt_h};
 	for (int i = 0; i < num_options; i++) {
 		std::string val;
-		CType::NewCenterWrite(opt_list[i], name_bar, (i != pos) ? pausemenu::f_def : pausemenu::f_hov);
+		CType::CenterWrite(opt_list[i], name_bar, (i != pos) ? pausemenu::f_def : pausemenu::f_hov);
 		switch (i) {
 			case RESUME: 			break;
 			case VIDEO_OUT:		{
 				val = CConfig::control.isFullscreen() ? "Fullscreen" : "Windowed";
-				CType::NewCenterWrite(val.c_str(), val_bar, pausemenu::f_def);
+				CType::CenterWrite(val.c_str(), val_bar, pausemenu::f_def);
 				break;
 			}
 		}
@@ -219,11 +223,11 @@ bool CPause::drawQuit() {
 	if (!CAsset::drawStrBox(canvas, pausemenu::stroke_w, c_col, s_col)) return false;
 
 	SDL_Rect bar = {x, y, pausemenu::opt_w, pausemenu::opt_h};
-	CType::NewCenterWrite(header, bar, f_def);
+	CType::CenterWrite(header, bar, f_def);
 	bar.y += pausemenu::opt_h;
 
 	for (int i = 0; i < num_options; i++) {
-		CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
+		CType::CenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
 		bar.y += pausemenu::opt_h;
 	}
 	return true;
@@ -239,6 +243,6 @@ bool CPause::drawVolume(const SDL_Rect& val_bar, const Configflag& vol_type, std
 		pausemenu::audiomenu::mod_col :
 		pausemenu::audiomenu::fill_col)) return false;
 	val = CAsset::intToStr(vol);
-	CType::NewCenterWrite(val.c_str(), val_bar, pausemenu::audiomenu::ftex_col);
+	CType::CenterWrite(val.c_str(), val_bar, pausemenu::audiomenu::ftex_col);
 	return true;
 }

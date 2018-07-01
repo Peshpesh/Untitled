@@ -6,6 +6,7 @@ enum interrupts {
   INTRPT_PAUSE      = 0x00000001,     // interrupted by pause menu
   INTRPT_VIEW_MAP   = 0x00000002,     // interrupted by map viewer
   INTRPT_INVENTORY  = 0x00000004,     // interrupted by inventory interface
+  INTRPT_DIALOGUE   = 0x00000008,     // interrupted by text on screen
 
   // INTRPT_CHANGE_TS  = 0x00000008,   // change tileset
   // INTRPT_CHANGE_EN  = 0x00000010,   // change/explore entity groups

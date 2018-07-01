@@ -32,11 +32,11 @@ struct CPhrase {
   float type_rate; // char per s typed to screen
   int idle_time;
   CPhrase(const std::string& n, const std::string& t, const float& t_r, const int& i_t):
-    name(n),text(t),type_rate(t_r),idle_time(i_t),length(CType::getLength(t.c_str())){};
+    name(n),text(t),type_rate(t_r),idle_time(i_t),length(CType::getSpeakLength(t.c_str())){};
   CPhrase(const std::string& t, const float& t_r, const int& i_t):
-    name(""),text(t),type_rate(t_r),idle_time(i_t),length(CType::getLength(t.c_str())){};
+    name(""),text(t),type_rate(t_r),idle_time(i_t),length(CType::getSpeakLength(t.c_str())){};
   CPhrase(const std::string& t):
-    name(""),text(t),type_rate(dia::def_rate),idle_time(-1),length(CType::getLength(t.c_str())){};
+    name(""),text(t),type_rate(dia::def_rate),idle_time(-1),length(CType::getSpeakLength(t.c_str())){};
 };
 
 class CDialogue : public CEvent {

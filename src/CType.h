@@ -15,10 +15,22 @@ enum FONT_NAMES {
 	FONT_MINI,
 };
 
+enum TEXT_JUST {
+	H_JUST_L = 0x00000001,
+	H_JUST_C = 0x00000002,
+	H_JUST_R = 0x00000004,
+	V_JUST_T = 0x00000008,
+	V_JUST_C = 0x00000010,
+	V_JUST_B = 0x00000020,
+};
+
+namespace speech_def {
+	extern const short pause_l;
+};
+
 // Takes in a queried symbol, passes X and Y coords
 // where to find the queried symbol in font image
-class CType
-{
+class CType {
 public:
 	static CType control;
 	SDL_Texture* CS_Font;
@@ -134,23 +146,27 @@ public:
 	* param message  : Pointer to char array/string (i.e., the message written)
 	* param Mx : x-position of message center
 	* param My : y-position of message center */
-	static int CenterWrite(const int& fontID, char const* message, int Mx, int My);
+	static int OldCenterWrite(const int& fontID, char const* message, int Mx, int My);
 
+	static int OldCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR);
+
+	static int CenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR, const SDL_Color* col);
+	static int CenterWrite(const int& fontID, char const* message, const SDL_Point& dstC, const SDL_Color* col);
 	static int CenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR);
+	static int CenterWrite(const int& fontID, char const* message, const SDL_Point& dstC);
+	static int CenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col);
+	static int CenterWrite(char const* message, const SDL_Point& dstC, const SDL_Color* col);
+	static int CenterWrite(char const* message, const SDL_Rect& dstR);
+	static int CenterWrite(char const* message, const SDL_Point& dstC);
 
-	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR, const SDL_Color* col);
-	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC, const SDL_Color* col);
-	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR);
-	static int NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC);
-	static int NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col);
-	static int NewCenterWrite(char const* message, const SDL_Point& dstC, const SDL_Color* col);
-	static int NewCenterWrite(char const* message, const SDL_Rect& dstR);
-	static int NewCenterWrite(char const* message, const SDL_Point& dstC);
+	static int WriteBox(const int& fontID, char const* message, const short& lin, const SDL_Rect& dstR);
 
 	static void getLineDims(const int& fontID, char const* message, int& msgWidth);
 	static int getTextHeight(const int& fontID, char const* message, int maxWidth);
 	static int getNumLines(const int& fontID, char const* message, int maxWidth);
 	static std::string getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth);
-	static int getLength(char const* message);
+	static std::string getLine(const int& fontID, char const* message, int& iterator, const int& max_l, const int& maxWidth);
+	static int getSpeakLength(char const* message);
+	static std::string getSpeakSegment(char const* message, const short& l);
 };
 #endif

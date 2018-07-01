@@ -49,7 +49,7 @@ void CInform::OnLoop() {
 bool CInform::OnRender() {
   if (timeLeft > 0) {
     if (!CAsset::drawStrBox(frame, bsiz, &palette::dark_blue, &palette::light_cyan)) return false;
-    CType::NewCenterWrite(FONT_MINI, info.c_str(), texBox, &rgb::light_green);
+    CType::CenterWrite(FONT_MINI, info.c_str(), texBox, &rgb::light_green);
   }
 
   return true;

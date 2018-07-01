@@ -37,6 +37,10 @@ bool CGame::handleInterrupts(SDL_Event* Event) {
       CInventory::control.OnEvent(Event);
       return true;
     }
+    if (CInterrupt::isFlagOn(INTRPT_DIALOGUE)) {
+      CDialogue::control.OnEvent(Event);
+      return true;
+    }
   }
   return false;
 }

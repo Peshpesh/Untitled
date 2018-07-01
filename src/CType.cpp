@@ -184,8 +184,7 @@ int CType::Write(const int& fontID, char const* message, const SDL_Point& pos)
 	return 0;
 }
 
-int CType::WriteLine(const int& fontID, char const* line, const SDL_Point& pos)
-{
+int CType::WriteLine(const int& fontID, char const* line, const SDL_Point& pos) {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
 	int v_spacing = 0;
@@ -197,8 +196,7 @@ int CType::WriteLine(const int& fontID, char const* line, const SDL_Point& pos)
 	SDL_Point symPos = {pos.x, pos.y};
 	SDL_Rect symRec;
 
-	while (line[i] != '\0' && line[i] != '\n')
-	{
+	while (line[i] != '\0' && line[i] != '\n') {
 		if (line[i] == '$') {
 			spec_req = true;
 			i++;
@@ -397,7 +395,7 @@ bool CType::TextBox(const int& fontID, char const* message,
 	return true;
 }
 
-int CType::CenterWrite(const int& fontID, char const* message, int Mx, int My)
+int CType::OldCenterWrite(const int& fontID, char const* message, int Mx, int My)
 {
 	SDL_Texture* font = NULL;
 	int h_spacing = 0;
@@ -434,32 +432,32 @@ int CType::CenterWrite(const int& fontID, char const* message, int Mx, int My)
 	return Length;
 }
 
-int CType::CenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR)
+int CType::OldCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR)
 {
 	int centerX = dstR.x + (dstR.w / 2);
 	int centerY = dstR.y + (dstR.h / 2);
-	return CenterWrite(fontID, message, centerX, centerY);
+	return OldCenterWrite(fontID, message, centerX, centerY);
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR, const SDL_Color* col)
+int CType::CenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR, const SDL_Color* col)
 {
 	changeFontColor(fontID, col);
-	int retval = NewCenterWrite(fontID, message, dstR);
+	int retval = CenterWrite(fontID, message, dstR);
 	resetFontColor(fontID);
 
 	return retval;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC, const SDL_Color* col)
+int CType::CenterWrite(const int& fontID, char const* message, const SDL_Point& dstC, const SDL_Color* col)
 {
 	changeFontColor(fontID, col);
-	int retval = NewCenterWrite(fontID, message, dstC);
+	int retval = CenterWrite(fontID, message, dstC);
 	resetFontColor(fontID);
 
 	return retval;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR) {
+int CType::CenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR) {
 	int centerX = dstR.x + (dstR.w / 2);
 	int centerY = dstR.y + (dstR.h / 2);
 
@@ -490,7 +488,7 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect
 	return 0;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC) {
+int CType::CenterWrite(const int& fontID, char const* message, const SDL_Point& dstC) {
 	int msgWidth = 0;
 	int msgHeight = GetSymH(fontID);
 	getLineDims(fontID, message, msgWidth);
@@ -500,28 +498,57 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Poin
 	return WriteLine(fontID, message, pos);
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col) {
+int CType::CenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col) {
 	changeFontColor(col);
-	int retval = NewCenterWrite(message, dstR);
+	int retval = CenterWrite(message, dstR);
 	resetFontColor();
 
 	return retval;
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Point& dstC, const SDL_Color* col) {
+int CType::CenterWrite(char const* message, const SDL_Point& dstC, const SDL_Color* col) {
 	changeFontColor(col);
-	int retval = NewCenterWrite(message, dstC);
+	int retval = CenterWrite(message, dstC);
 	resetFontColor();
 
 	return retval;
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR) {
-	return NewCenterWrite(control.def_ID, message, dstR);
+int CType::CenterWrite(char const* message, const SDL_Rect& dstR) {
+	return CenterWrite(control.def_ID, message, dstR);
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Point& dstC) {
-	return NewCenterWrite(control.def_ID, message, dstC);
+int CType::CenterWrite(char const* message, const SDL_Point& dstC) {
+	return CenterWrite(control.def_ID, message, dstC);
+}
+
+int CType::WriteBox(const int& fontID, char const* message, const short& lin, const SDL_Rect& dstR) {
+	// if ((j & H_JUST_L)
+	// else if (j & H_JUST_C)
+	// else if (j & H_JUST_R)
+	// if ((j & V_JUST_T)
+	// else if (j & V_JUST_C)
+	// else if (j & V_JUST_B)
+	// int msgWidth = 0;
+	// int msgHeight = getTextHeight(fontID, message, dstR.w);
+
+	if (lin <= 0) return -1;
+
+	int symH = GetSymH(fontID);
+	int lineH = dstR.h / lin;
+	int lineW = 0;
+
+	SDL_Point pos = {dstR.x, dstR.y + ((lineH - symH) / 2)};
+
+	int i = 0;
+	std::string currentLine;
+	while (message[i] != '\0') {
+		if (message[i] == '\n') i++;
+		currentLine = getLine(fontID, message, i, dstR.w);
+		getLineDims(fontID, currentLine.c_str(), lineW);
+		WriteLine(fontID, currentLine.c_str(), pos);
+		pos.y += lineH;
+	}
 }
 
 int CType::getTextHeight(const int& fontID, char const* message, int maxWidth) {
@@ -592,16 +619,14 @@ std::string CType::getLine(const int& fontID, char const* message, int& iterator
 		i++;
 	}
 
-	if (linWidth == 0)
-	{
+	if (linWidth == 0) {
 		lin = wrd;
 		iterator = i + 1;
 	}
 	return lin;
 }
 
-void CType::getLineDims(const int& fontID, char const* message, int& msgWidth)
-{
+void CType::getLineDims(const int& fontID, char const* message, int& msgWidth) {
 	int h_spacing = GetHSpacing(fontID);
 
 	int i = 0;
@@ -625,8 +650,7 @@ void CType::getLineDims(const int& fontID, char const* message, int& msgWidth)
 	}
 }
 
-int CType::getNumLines(const int& fontID, char const* message, int maxWidth)
-{
+int CType::getNumLines(const int& fontID, char const* message, int maxWidth) {
 	int N = 0;
 	int i = 0;
 
@@ -638,17 +662,39 @@ int CType::getNumLines(const int& fontID, char const* message, int maxWidth)
 		getLine(fontID, message, i, maxWidth);
 		N++;
 	}
-
 	return N;
 }
 
-int CType::getLength(char const* message) {
+int CType::getSpeakLength(char const* message) {
+	using namespace speech_def;
 	int N = 0;
 	int i = 0;
 	while (message[i] != '\0') {
-		if (message[i] != '\n' && message[i] != '$') N++;
+		if (message[i] != '\n' && message[i] != '$') {
+			if ((message[i] == '.' || message[i] == '?' || message[i] == '!') &&
+					!(message[i+1] == '.' || message[i+1] == '?' || message[i+1] == '!' || message[i+1] == '\0'))
+					N += pause_l;
+			else N++;
+		}
 		i++;
 	}	return N;
+}
+
+std::string CType::getSpeakSegment(char const* message, const short& l) {
+	using namespace speech_def;
+	int N = 0;
+	int i = 0;
+	std::string val;
+	while (N <= l && message[i] != '\0') {
+		if (message[i] != '\n' && message[i] != '$') {
+			if ((message[i] == '.' || message[i] == '?' || message[i] == '!') &&
+					!(message[i+1] == '.' || message[i+1] == '?' || message[i+1] == '!' || message[i+1] == '\0'))
+					N += pause_l;
+			else N++;
+		}
+		val.push_back(message[i]);
+		i++;
+	}	return val;
 }
 
 void CType::OnCleanup() {

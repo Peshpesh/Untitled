@@ -11,16 +11,23 @@ namespace dia {
 namespace frame {
   const short str_w = 2;
   const SDL_Color* fill_col = &rgb::black;
+  const SDL_Color* text_col = &rgb::white;
   const SDL_Color* b_col = &rgb::light_cyan;
-  const short t_w = 448;
-  const short t_h = 128;
+  const short f_A = 166;  // A for alpha
+  const short f_w = 448;
+  const short f_h = 128;
+  const short f_x = (WWIDTH - f_w) / 2;
+  const short f_y = 300;
+  const SDL_Rect f = {f_x, f_y, f_w, f_h};
+  const short t_w = f_w - 64;
+  const short t_h = f_h - 48;
   const short t_x = (WWIDTH - t_w) / 2;
-  const short t_y = 300;
+  const short t_y = f_y + ((f_h - t_h) / 2);
   const SDL_Rect t = {t_x, t_y, t_w, t_h};
-  const short i_w = 48;
-  const short i_h = 48;
-  const short i_x = t_x - (i_w / 2);
-  const short i_y = t_y - (i_h / 2);
+  const short i_w = 47;
+  const short i_h = 47;
+  const short i_x = f_x - (i_w / 2) + 1;
+  const short i_y = f_y - (i_h / 2) + 1;
   const double i_r = 45.0;
   const SDL_Rect i = {i_x, i_y, i_w, i_h};
 };
@@ -52,6 +59,7 @@ void CDialogue::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       else {
         convo.erase(convo.begin());
         resetTimer();
+        if (convo.empty()) CInterrupt::removeFlag(INTRPT_DIALOGUE);
       }
       break;
     }
@@ -82,12 +90,13 @@ void CDialogue::OnLoop() {
 
   if (!CInterrupt::isFlagOn(INTRPT_PAUSE)) {
     if (cur_time < end_time) {
-      cur_time += (SDL_GetTicks() - prev_time) * (1 + (speed_up * 2));
+      cur_time += (SDL_GetTicks() - prev_time) * (1 + (speed_up * 4));
     } else if (convo[0].idle_time >= 0) {
       cur_idle += SDL_GetTicks() - prev_time + (speed_up * convo[0].idle_time);
       if (cur_idle >= convo[0].idle_time) {
         convo.erase(convo.begin());
         resetTimer();
+        if (convo.empty()) CInterrupt::removeFlag(INTRPT_DIALOGUE);
         return;
       }
     }
@@ -98,14 +107,16 @@ void CDialogue::OnLoop() {
 void CDialogue::OnRender() {
   if (convo.empty()) return;
 
+  CAsset::paletteAlpha(frame::f_A);
   drawFrame();
   if (!convo[0].name.empty()) drawName();
   drawIcon();
   drawMessage();
+  CAsset::paletteAlpha(MAX_RGBA);
 }
 
 void CDialogue::drawFrame() {
-  CAsset::drawStrBox(frame::t, frame::str_w, *frame::fill_col, *frame::b_col);
+  CAsset::drawStrBox(frame::f, frame::str_w, *frame::fill_col, *frame::b_col);
 }
 
 void CDialogue::drawName() {
@@ -117,5 +128,12 @@ void CDialogue::drawIcon() {
 }
 
 void CDialogue::drawMessage() {
-  
+  CType::control.SetColor(frame::text_col);
+  if (cur_time < end_time) {
+    int vis_l = convo[0].length * (1.0 - ((double)(end_time - cur_time) / (double)(end_time)));
+    std::string vis = CType::getSpeakSegment(convo[0].text.c_str(), vis_l);
+    CType::WriteBox(FONT_MINI, vis.c_str(), 3, frame::t);
+  } else {
+    CType::WriteBox(FONT_MINI, convo[0].text.c_str(), 3, frame::t);
+  }
 }

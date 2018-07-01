@@ -23,10 +23,10 @@ bool CTitle::drawMainMenu() {
   for (int i = 0; i < num_options; i++) {
     if (i == decision::DEC_LOAD && !CGameIO::control.getNumSavedGames()) {
       if (!CAsset::drawStrBox(bar, stroke_w, o_lock)) return false;
-      CType::NewCenterWrite(opt_list[i], bar, f_lock);
+      CType::CenterWrite(opt_list[i], bar, f_lock);
     } else {
       if (!CAsset::drawStrBox(bar, stroke_w, (i != pos) ? o_def : o_hov)) return false;
-      CType::NewCenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
+      CType::CenterWrite(opt_list[i], bar, (i != pos) ? f_def : f_hov);
     }
     bar.x += dx;
     bar.y += dy + opt_h;
@@ -65,12 +65,12 @@ bool CTitle::drawGameSlot(const CGameinfo& info, const SDL_Rect& slot) {
     str = Title::pick_game::difficulty::list[info.diff];
   }
   pos.x = slot.x + diff_pos.x; pos.y = slot.y + diff_pos.y;
-  CType::NewCenterWrite(str.c_str(), pos);
+  CType::CenterWrite(str.c_str(), pos);
 
   str = CAsset::msToHHMMSS(info.time);
   pos.x = slot.x + time_pos.x; pos.y = slot.y + time_pos.y;
-  CType::NewCenterWrite(str.c_str(), pos);
-  // CType::NewCenterWrite(str.c_str(), slot, (i != pos) ? f_def : f_hov);
+  CType::CenterWrite(str.c_str(), pos);
+  // CType::CenterWrite(str.c_str(), slot, (i != pos) ? f_def : f_hov);
 
   return true;
 }
@@ -84,7 +84,7 @@ bool CTitle::drawGameInfo() {
     if (CGameinfo::infolist[i]) {
       if (!drawGameSlot(*CGameinfo::infolist[i], slot)) return false;
     } else {
-      CType::NewCenterWrite(empty_text, slot, (i != pos) ? f_def : f_hov);
+      CType::CenterWrite(empty_text, slot, (i != pos) ? f_def : f_hov);
     }
     slot.x += dx;
     slot.y += dy;
@@ -93,7 +93,7 @@ bool CTitle::drawGameInfo() {
   SDL_Rect bar = {x, slot.y, opt_w, opt_h};
   for (int i = 0; i < num_other; i++) {
     if (!CAsset::drawStrBox(bar, stroke_w, (i != pos - slot::num) ? o_def : o_hov)) return false;
-    CType::NewCenterWrite(other_list[i], bar, (i != pos - slot::num) ? f_def : f_hov);
+    CType::CenterWrite(other_list[i], bar, (i != pos - slot::num) ? f_def : f_hov);
     bar.x += dx;
     bar.y += dy;
   }
@@ -107,13 +107,13 @@ bool CTitle::drawDifficulty() {
   for (int i = 0; i < num; i++) {
     if (i != difficulty) {
       if (!CAsset::drawStrBox(bar, stroke_w, o_diff[i])) return false;
-      CType::NewCenterWrite(list[i], bar, f_def);
+      CType::CenterWrite(list[i], bar, f_def);
     } else {
       SDL_Rect info_bar = {bar.x + opt_w, bar.y, info_w, info_h};
       if (!CAsset::drawStrBox(bar, stroke_w, h_diff[i])) return false;
       if (!CAsset::drawStrBox(info_bar, stroke_w, h_diff[i])) return false;
-      CType::NewCenterWrite(list[i], bar, f_hov);
-      CType::NewCenterWrite(info[i], info_bar, f_hov);
+      CType::CenterWrite(list[i], bar, f_hov);
+      CType::CenterWrite(info[i], info_bar, f_hov);
     }
     bar.x += dx;
     bar.y += dy;
@@ -127,7 +127,7 @@ bool CTitle::drawOverwriteWarn(const short& slot) {
   if (CGameinfo::infolist[slot]) {
     SDL_Rect bar = {x, y, w, h};
     if (!CAsset::drawStrBox(bar, stroke_w, o_col)) return false;
-    CType::NewCenterWrite(info, bar, f_col);
+    CType::CenterWrite(info, bar, f_col);
   }
 
   return true;
@@ -145,8 +145,8 @@ bool CTitle::drawControls() {
     const SDL_Point* o_col = (i != pos) ? o_def : (modify ? o_act : o_hov);
     CAsset::drawStrBox(l_bar, stroke_w, o_col);
     CAsset::drawStrBox(r_bar, stroke_w, o_col);
-    CType::NewCenterWrite(controls_text[i], l_bar, f_col);
-    CType::NewCenterWrite(
+    CType::CenterWrite(controls_text[i], l_bar, f_col);
+    CType::CenterWrite(
       (char*)(SDL_GetKeyName(CControls::handler.getAssignKey(controls_list[i]))), r_bar, f_col);
     l_bar.x += dx; r_bar.x += dx;
     l_bar.y += dy; r_bar.y += dy;
@@ -166,7 +166,7 @@ bool CTitle::drawConfig() {
     const SDL_Point* o_col = (i != pos - num_controls) ? o_def : (modify ? o_act : o_hov);
     if (!CAsset::drawStrBox(l_bar, stroke_w, o_col)) return false;
     if (!CAsset::drawStrBox(r_bar, stroke_w, o_col)) return false;
-    CType::NewCenterWrite(config_text[i], l_bar, f_col);
+    CType::CenterWrite(config_text[i], l_bar, f_col);
 
     std::string val;
     if (config_list[i] == CONFIG_SFX || config_list[i] == CONFIG_BGM || config_list[i] == CONFIG_TEX) {
@@ -180,7 +180,7 @@ bool CTitle::drawConfig() {
     } else if (config_list[i] == CONFIG_DISPLAY) {
       if (CConfig::control.isFullscreen()) val = "Fullscreen";
       else val = "Windowed";
-    } CType::NewCenterWrite(val.c_str(), r_bar, f_col);
+    } CType::CenterWrite(val.c_str(), r_bar, f_col);
     l_bar.x += dx; r_bar.x += dx;
     l_bar.y += dy; r_bar.y += dy;
   }

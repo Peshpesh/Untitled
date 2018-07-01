@@ -35,6 +35,7 @@ namespace pausemenu {
 	extern const short y;
 	extern const short stroke_w;
 	extern const char* const opt_list[];
+	extern const short fill_A;
 	namespace audiomenu {
 		extern const short num_options;
 		extern const short w;

@@ -301,6 +301,15 @@ bool CAsset::drawRotStrBox(const SDL_Rect& box, const int& str_w, const SDL_Colo
   return true;
 }
 
+bool CAsset::fillScreen() {
+  return fillScreen(rgb::black);
+}
+
+bool CAsset::fillScreen(const SDL_Color& color) {
+  SDL_Rect f = {0, 0, WWIDTH, WHEIGHT};
+  return drawBoxFill(f, color);
+}
+
 bool CAsset::drawSmCircleMeter(const int& X, const int& Y, const int& val, const int& maxval) {
   using namespace carot;
 

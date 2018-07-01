@@ -10,16 +10,17 @@ namespace pausemenu {
   const short opt_w = w;
   const short opt_h = 40;
 	const short h = opt_h * num_options;
-	const short x = (WWIDTH - w) / 3;
-	const short y = ((WHEIGHT - h) / 5) * 3;
+	const short x = (WWIDTH - w) / 2;
+	const short y = (WHEIGHT - h) / 2;
 	const short stroke_w = 2;
 	const char* const opt_list[] = {"Resume","Audio","Video","Quit"};
+  const short fill_A = 166;
 	namespace audiomenu {
     const short num_options = 6;
     const short w = 350;
     const short h = opt_h * (num_options + 1);
-    const short x = (WWIDTH - w) / 3;
-    const short y = ((WHEIGHT - h) / 5) * 3;
+    const short x = (WWIDTH - w) / 2;
+    const short y = (WHEIGHT - h) / 2;
     const short name_w = w / 3;
     const short val_w = w / 2;
     const short name_x = x;
@@ -43,8 +44,8 @@ namespace pausemenu {
     const short num_options = 2;
     const short w = 300;
     const short h = opt_h * (num_options + 1);
-    const short x = (WWIDTH - w) / 3;
-    const short y = ((WHEIGHT - h) / 5) * 3;
+    const short x = (WWIDTH - w) / 2;
+    const short y = (WHEIGHT - h) / 2;
     const short name_w = w / 2;
     const short val_w = w / 2;
     const short name_x = x;
@@ -63,8 +64,8 @@ namespace pausemenu {
     const short num_options = 2;
     const short w = opt_w;
     const short h = opt_h * (num_options + 1);
-    const short x = (WWIDTH - w) / 3;
-    const short y = ((WHEIGHT - h) / 5) * 3;
+    const short x = (WWIDTH - w) / 2;
+    const short y = (WHEIGHT - h) / 2;
 		const char* const header = "Return to Title?";
     const char* const opt_list[] = {"No","Yes"};
 	};

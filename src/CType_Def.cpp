@@ -1,7 +1,10 @@
 #include "CType.h"
 
-namespace fontrgb
-{
+namespace speech_def {
+	const short pause_l = 5;
+};
+
+namespace fontrgb {
 	const SDL_Color red      	= {237,	28,		36};
   const SDL_Color orange   	= {242,	101,	34};
   const SDL_Color yellow   	= {255, 242, 	0};
