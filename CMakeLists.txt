@@ -28,6 +28,7 @@ ${SRCDIR}/CAsset_Ext.cpp
 ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CConfig.cpp
 ${SRCDIR}/CControls.cpp
+${SRCDIR}/CDialogue.cpp
 ${SRCDIR}/CDifficulty.cpp
 ${SRCDIR}/CEntity_Coll.cpp
 ${SRCDIR}/CEntity_Move.cpp
@@ -85,6 +86,7 @@ ${SRCDIR}/CAsset.h
 ${SRCDIR}/CCamera.h
 ${SRCDIR}/CConfig.h
 ${SRCDIR}/CControls.h
+${SRCDIR}/CDialogue.h
 ${SRCDIR}/CDifficulty.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityData.h

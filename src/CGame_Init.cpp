@@ -23,6 +23,10 @@ bool CGame::OnInit() {
   if (!handleTransit()) {
     return false;
   }
+  // testing
+  CPhrase test("",1.0,10000);
+  CDialogue::control.convo.push_back(test);
+  CDialogue::control.resetTimer();
   return true;
 }
 

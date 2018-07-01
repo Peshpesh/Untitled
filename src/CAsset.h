@@ -152,9 +152,11 @@ class CAsset
 
     static bool drawBoxFill(const SDL_Rect& box, const SDL_Color& color);
     static bool drawBoxFill(const SDL_Point& A, const SDL_Point& B, const SDL_Color& color);
+    static bool drawRotBoxFill(const SDL_Rect& box, const SDL_Color& color, const double& r);
 
     static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color);
     static bool drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color, const SDL_Color& str_col);
+    static bool drawRotStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color, const SDL_Color& str_col, const double& r);
 
     static bool drawCircle(const int& Xo, const int& Yo, const int& r);
     static bool drawSmCircleMeter(const int& X, const int& Y, const int& val, const int& maxval);

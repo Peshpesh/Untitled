@@ -4,6 +4,9 @@ void CGame::OnRender() {
   // draw stage area, entities, scenery, etc.
   CStage::stage->OnRender();
 
+  // draw dialogue
+  CDialogue::control.OnRender();
+
   // draw interruptions last
   drawIntrpt();
 

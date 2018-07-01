@@ -459,8 +459,7 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Poin
 	return retval;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR)
-{
+int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect& dstR) {
 	int centerX = dstR.x + (dstR.w / 2);
 	int centerY = dstR.y + (dstR.h / 2);
 
@@ -476,8 +475,7 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect
 
 	int i = 0;
 	std::string currentLine;
-	while (message[i] != '\0')
-	{
+	while (message[i] != '\0') {
 		if (message[i] == '\n') i++;
 		currentLine = getLine(fontID, message, i, dstR.w);
 		getLineDims(fontID, currentLine.c_str(), lineW);
@@ -485,16 +483,14 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Rect
 		WriteLine(fontID, currentLine.c_str(), pos);
 		pos.y += lineH + v_spacing;
 	}
-	if (control.dynamicText && message[i] == '\0')
-	{
+	if (control.dynamicText && message[i] == '\0') {
 		SDL_Point symPos = {centerX, centerY - (lineH / 2)};
 		control.renderCursor(fontID, symPos);
 	}
 	return 0;
 }
 
-int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC)
-{
+int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Point& dstC) {
 	int msgWidth = 0;
 	int msgHeight = GetSymH(fontID);
 	getLineDims(fontID, message, msgWidth);
@@ -504,8 +500,7 @@ int CType::NewCenterWrite(const int& fontID, char const* message, const SDL_Poin
 	return WriteLine(fontID, message, pos);
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col)
-{
+int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_Color* col) {
 	changeFontColor(col);
 	int retval = NewCenterWrite(message, dstR);
 	resetFontColor();
@@ -513,8 +508,7 @@ int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR, const SDL_C
 	return retval;
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Point& dstC, const SDL_Color* col)
-{
+int CType::NewCenterWrite(char const* message, const SDL_Point& dstC, const SDL_Color* col) {
 	changeFontColor(col);
 	int retval = NewCenterWrite(message, dstC);
 	resetFontColor();
@@ -522,25 +516,21 @@ int CType::NewCenterWrite(char const* message, const SDL_Point& dstC, const SDL_
 	return retval;
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR)
-{
+int CType::NewCenterWrite(char const* message, const SDL_Rect& dstR) {
 	return NewCenterWrite(control.def_ID, message, dstR);
 }
 
-int CType::NewCenterWrite(char const* message, const SDL_Point& dstC)
-{
+int CType::NewCenterWrite(char const* message, const SDL_Point& dstC) {
 	return NewCenterWrite(control.def_ID, message, dstC);
 }
 
-int CType::getTextHeight(const int& fontID, char const* message, int maxWidth)
-{
+int CType::getTextHeight(const int& fontID, char const* message, int maxWidth) {
 	int v_spacing = GetVSpacing(fontID);
 	int lineH = GetSymH(fontID);
 
 	int tH = 0;
 	int i = 0;
-	while (message[i] != '\0')
-	{
+	while (message[i] != '\0') {
 		if (message[i] == '\n') i++;
 		tH += lineH + ((bool)(i) * v_spacing);
 		getLine(fontID, message, i, maxWidth);
@@ -548,8 +538,7 @@ int CType::getTextHeight(const int& fontID, char const* message, int maxWidth)
 	return tH;
 }
 
-std::string CType::getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth)
-{
+std::string CType::getLine(const int& fontID, char const* message, int& iterator, const int& maxWidth) {
 	int h_spacing = GetHSpacing(fontID);
 	int v_spacing = GetVSpacing(fontID);
 
@@ -560,13 +549,10 @@ std::string CType::getLine(const int& fontID, char const* message, int& iterator
 	int linWidth = 0;
 	int wrdWidth = 0;
 	bool spec_req = false;
-	while (true)
-	{
+	while (true) {
 		char sym = message[i];
-		if (sym == '\0' || sym == '\n')
-		{
-			if (wrd != " ")
-			{
+		if (sym == '\0' || sym == '\n') {
+			if (wrd != " ") {
 				lin += wrd;
 				linWidth += wrdWidth;
 			}
@@ -582,8 +568,7 @@ std::string CType::getLine(const int& fontID, char const* message, int& iterator
 				if (linWidth + wrdWidth + symRec.w > maxWidth) break;
 
 				if (sym == ' ') {
-					if (wrd != " ")
-					{
+					if (wrd != " ") {
 						lin += wrd;
 						linWidth += wrdWidth;
 						iterator = i + 1;
@@ -594,8 +579,7 @@ std::string CType::getLine(const int& fontID, char const* message, int& iterator
 				wrd.push_back(sym);
 				wrdWidth += symRec.w;
 			}
-		}
-		else {
+		}	else {
 			GetXY_spec(fontID, sym, symRec);
 			if (linWidth + wrdWidth != 0) symRec.w += h_spacing;
 			if (linWidth + wrdWidth + symRec.w > maxWidth) break;
@@ -658,77 +642,14 @@ int CType::getNumLines(const int& fontID, char const* message, int maxWidth)
 	return N;
 }
 
-// std::string CType::intToStr(const int& val)
-// {
-// 	std::string retstr;
-// 	int magnitude = 1;
-//
-// 	if (val < 0) {
-// 		retstr = "-";
-// 		magnitude = -magnitude;
-// 	}
-//
-// 	// How big is this number? (how many digits is key)
-// 	while (val / (magnitude * 10) != 0)
-// 	{
-// 		// if the loop condition is nonzero, then that means the denominator
-// 		// isn't large enough to reduce the fraction to zero...
-// 		// The fraction reduces to zero IF the denominator exceeds
-// 		// the numerator, which is what we're looking for.
-// 		// EX: First loop does N / 10. If zero, then abs(N) is less than 10 (Magnitude of 10^0, or 1).
-// 		//     Otherwise, next loop does N / 100. If zero, then abs(N) is less than 100. (Mag 10^1, or 10)
-// 		//     Next loop would be N / 1000... And on until the loop ends.
-// 		magnitude *= 10;
-// 	}
-//
-// 	while (magnitude != 0)
-// 	{
-// 		// First, mod the number by current mag*10 to get rid of following digits.
-// 		// Second, divide the resulting number by mag to get rid of leading digits.
-// 		switch ((val % (magnitude * 10)) / magnitude)
-// 		{
-// 			case 0: retstr.push_back('0'); break;
-// 			case 1: retstr.push_back('1'); break;
-// 			case 2: retstr.push_back('2'); break;
-// 			case 3: retstr.push_back('3'); break;
-// 			case 4: retstr.push_back('4'); break;
-// 			case 5: retstr.push_back('5'); break;
-// 			case 6: retstr.push_back('6'); break;
-// 			case 7: retstr.push_back('7'); break;
-// 			case 8: retstr.push_back('8'); break;
-// 			case 9: retstr.push_back('9'); break;
-// 			default: break;
-// 		}
-// 		magnitude /= 10;
-// 	}
-// 	return retstr;
-// }
-//
-// std::string CType::doubleToStr(double val, const unsigned int& precision) {
-// 	std::string retstr;
-//
-// 	if (val < 0.0) {
-// 		retstr = "-";
-// 		val = -val;
-// 	}
-//
-// 	if (precision != 0) {
-// 		std::string intPart = intToStr((int)(val));
-//
-// 		int O = 1;		// big O
-// 		for (int i = 1; i <= precision; i++) O *= 10;
-//
-// 		double truncVal = val - (int)(val);
-// 		std::string truncPart = intToStr((int)(truncVal * O));
-// 		while (truncPart.size() < precision) truncPart = "0" + truncPart;
-//
-// 		retstr = intPart + "." + truncPart;
-// 	}
-// 	else {
-// 		retstr = intToStr((int)(val));
-// 	}
-// 	return retstr;
-// }
+int CType::getLength(char const* message) {
+	int N = 0;
+	int i = 0;
+	while (message[i] != '\0') {
+		if (message[i] != '\n' && message[i] != '$') N++;
+		i++;
+	}	return N;
+}
 
 void CType::OnCleanup() {
 	SDL_DestroyTexture(CS_Font);

@@ -13,6 +13,7 @@
 #include "CPause.h"
 #include "CTransition.h"
 #include "CArea.h"
+#include "CDialogue.h"
 #include "CMapModel.h"
 #include "CInventory.h"
 #include "CEntityIO.h"

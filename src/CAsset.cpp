@@ -274,17 +274,30 @@ bool CAsset::drawBoxFill(const SDL_Point& A, const SDL_Point& B, const SDL_Color
   return drawBoxFill(dstR, color);
 }
 
+bool CAsset::drawRotBoxFill(const SDL_Rect& box, const SDL_Color& color, const double& r) {
+  paletteBlend(color);
+  SDL_Rect srcR = getPixel(&palette::white);
+  if (!CSurface::OnDraw(paltex, srcR, box, r)) return false;
+  paletteReset();
+  return true;
+}
+
 bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color) {
   if (!drawBoxFill(box, color)) return false;
   if (!drawBox(box, &palette::black, str_w)) return false;
-
   return true;
 }
 
 bool CAsset::drawStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color, const SDL_Color& str_col) {
   if (!drawBoxFill(box, color)) return false;
   if (!drawBox(box, str_col, str_w)) return false;
+  return true;
+}
 
+bool CAsset::drawRotStrBox(const SDL_Rect& box, const int& str_w, const SDL_Color& color, const SDL_Color& str_col, const double& r) {
+  if (!drawRotBoxFill(box, str_col, r)) return false;
+  const SDL_Rect infill = {box.x + str_w, box.y + str_w, box.w - (str_w * 2), box.h - (str_w * 2)};
+  if (!drawRotBoxFill(infill, color, r)) return false;
   return true;
 }
 

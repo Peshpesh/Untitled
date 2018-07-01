@@ -5,6 +5,7 @@ void CGame::OnLoop() {
 	if (CTransition::control.activated) {     // complete transition
 		if (!handleTransit()) return;
 	}
+	CDialogue::control.OnLoop();
 	CStage::stage->OnLoop();
 	// if (!CInterrupt::isSuspended()) {
 	// 	for (int i = 0; i < CEntity::EntityList.size(); i++) {

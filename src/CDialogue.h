@@ -28,14 +28,15 @@ namespace dia {
 struct CPhrase {
   std::string name;
   std::string text;
+  int length;      // renderable character length
   float type_rate; // char per s typed to screen
   int idle_time;
   CPhrase(const std::string& n, const std::string& t, const float& t_r, const int& i_t):
-    name(n),text(t),type_rate(t_r),idle_time(i_t){};
+    name(n),text(t),type_rate(t_r),idle_time(i_t),length(CType::getLength(t.c_str())){};
   CPhrase(const std::string& t, const float& t_r, const int& i_t):
-    name(""),text(t),type_rate(t_r),idle_time(i_t){};
+    name(""),text(t),type_rate(t_r),idle_time(i_t),length(CType::getLength(t.c_str())){};
   CPhrase(const std::string& t):
-    name(""),text(t),type_rate(dia::def_rate),idle_time(-1){};
+    name(""),text(t),type_rate(dia::def_rate),idle_time(-1),length(CType::getLength(t.c_str())){};
 };
 
 class CDialogue : public CEvent {
@@ -46,18 +47,10 @@ private:
   unsigned int cur_time;
   unsigned int end_time;
   unsigned int cur_idle;
+  bool speed_up;
 
-private:
+public:
   void resetTimer();
-
-  // int		Timer;			// How much time has passed since the start of typing current page
-  // int		Length;			// How many characters allowed to type on current page
-  // int		Pagenum;		// Page number
-  // int		RecordFPS;	// FPS on record
-  // bool	FastType;		// True if user is advancing thru dialogue
-  // bool	Pageend;		// True if waiting at end of page
-  // bool	Typing;			// True if typing a page
-  // bool	Done;				// True if passed message is finished
 
 public:
   static CDialogue control;
@@ -71,6 +64,12 @@ public:
 
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void OnKeyUp(SDL_Keycode sym, Uint16 mod);
+private:
+  void drawFrame();
+  void drawName();
+  void drawIcon();
+  void drawMessage();
 };
 
 #endif
