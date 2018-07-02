@@ -24,7 +24,8 @@ bool CGame::OnInit() {
     return false;
   }
   // testing
-  CPhrase test("This is just a test. This is just a test. This is just a test. This is just a test.",16.0,5000);
+  CPhrase test("This is just a test. This is just a test. This is just a test. This is just a test.",32.0,5000);
+  CDialogue::control.convo.push_back(test);
   CDialogue::control.convo.push_back(test);
   CDialogue::control.resetTimer();
   CInterrupt::appendFlag(INTRPT_DIALOGUE);

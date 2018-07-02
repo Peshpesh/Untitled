@@ -21,22 +21,30 @@ namespace dia {
   - name: Source of dialogue. This string can be empty.
   - text: Contents of the text box. Could be empty, but why?
   - type_rate:  How fast the text is "typed out" (in char/s). Has a default value.
-  - idle_time:  After the text is "fully typed," wait this long (ms) before auto-advancing.
-                Has a default value of -1, which means to wait forever (user must force).
+  - idle_time:  After the text is "fully typed," wait this long (ms) before either:
+                  a) displaying responses, if there are any
+                  b) auto-advancing, if there are no responses
 */
 
 struct CPhrase {
   std::string name;
   std::string text;
-  int length;      // renderable character length
+  std::vector<std::string> response;
   float type_rate; // char per s typed to screen
+  float resp_rate;
+  int length;      // renderable character length
+  int resp_length;
   int idle_time;
   CPhrase(const std::string& n, const std::string& t, const float& t_r, const int& i_t):
-    name(n),text(t),type_rate(t_r),idle_time(i_t),length(CType::getSpeakLength(t.c_str())){};
+    name(n),text(t),type_rate(t_r),resp_rate(t_r),
+    length(CType::getSpeakLength(t.c_str())),resp_length(0),idle_time(i_t){};
   CPhrase(const std::string& t, const float& t_r, const int& i_t):
-    name(""),text(t),type_rate(t_r),idle_time(i_t),length(CType::getSpeakLength(t.c_str())){};
+    name(""),text(t),type_rate(t_r),resp_rate(t_r),
+    length(CType::getSpeakLength(t.c_str())),resp_length(0),idle_time(i_t){};
   CPhrase(const std::string& t):
-    name(""),text(t),type_rate(dia::def_rate),idle_time(-1),length(CType::getSpeakLength(t.c_str())){};
+    name(""),text(t),type_rate(dia::def_rate),resp_rate(dia::def_rate),
+    length(CType::getSpeakLength(t.c_str())),resp_length(0),idle_time(-1){};
+  void setRespLength();
 };
 
 class CDialogue : public CEvent {
@@ -47,7 +55,12 @@ private:
   unsigned int cur_time;
   unsigned int end_time;
   unsigned int cur_idle;
+  unsigned int cur_resp_time;
+  unsigned int end_resp_time;
   bool speed_up;
+
+// private:
+  // unsigned int getEndRespTime(const std::vector<std::string>& resp);
 
 public:
   void resetTimer();
@@ -65,6 +78,8 @@ public:
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void OnKeyUp(SDL_Keycode sym, Uint16 mod);
+  void handleSimpleTalk(const Gamecon& action);
+  void handleResponse(const Gamecon& action);
 private:
   void drawFrame();
   void drawName();
