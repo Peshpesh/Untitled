@@ -58,6 +58,7 @@ private:
   unsigned int cur_resp_time;
   unsigned int end_resp_time;
   bool speed_up;
+  unsigned short sel;
 
 // private:
   // unsigned int getEndRespTime(const std::vector<std::string>& resp);
@@ -85,6 +86,7 @@ private:
   void drawName();
   void drawIcon();
   void drawMessage();
+  void drawResponse();
 };
 
 #endif

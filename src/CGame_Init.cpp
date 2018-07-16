@@ -24,8 +24,10 @@ bool CGame::OnInit() {
     return false;
   }
   // testing
-  CPhrase test("This is just a test. This is just a test. This is just a test. This is just a test.",32.0,5000);
-  CDialogue::control.convo.push_back(test);
+  CPhrase test("This is just a test.",3.0,100);
+  test.response.push_back("Yessir");
+  test.response.push_back("Nopers");
+  test.setRespLength();
   CDialogue::control.convo.push_back(test);
   CDialogue::control.resetTimer();
   CInterrupt::appendFlag(INTRPT_DIALOGUE);

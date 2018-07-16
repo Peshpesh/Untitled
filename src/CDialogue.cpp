@@ -25,6 +25,10 @@ namespace frame {
   const short t_x = (WWIDTH - t_w) / 2;
   const short t_y = f_y + ((f_h - t_h) / 2);
   const SDL_Rect t = {t_x, t_y, t_w, t_h};
+  const short r_w = t_w;
+  const short r_h = t_h / num_rows;
+  const short r_x = (WWIDTH - r_w) / 2;
+  const short r_y = t_y + (t_h - r_h);
   const short i_w = 47;
   const short i_h = 47;
   const short i_x = f_x - (i_w / 2) + 1;
@@ -48,6 +52,7 @@ CDialogue::CDialogue() {
   cur_resp_time = 0;
   end_resp_time = 0;
   speed_up = false;
+  sel = 0;
 }
 
 void CDialogue::resetTimer() {
@@ -129,6 +134,16 @@ void CDialogue::handleResponse(const Gamecon& action) {
       speed_up = true;
       break;
     }
+    case CON_LEFT: {
+      if (sel == 0) sel = convo[0].response.size() - 1;
+      else sel--;
+      break;
+    }
+    case CON_RIGHT: {
+      if (sel == convo[0].response.size() - 1) sel = 0;
+      else sel++;
+      break;
+    }
     case CON_PAUSE:   {
       CInterrupt::appendFlag(INTRPT_PAUSE);
       break;
@@ -166,6 +181,7 @@ void CDialogue::OnRender() {
   if (!convo[0].name.empty()) drawName();
   drawIcon();
   drawMessage();
+  drawResponse();
   CAsset::paletteAlpha(MAX_RGBA);
 }
 
@@ -190,5 +206,34 @@ void CDialogue::drawMessage() {
     CType::WriteBox(FONT_MINI, vis.c_str(), num_rows, t);
   } else {
     CType::WriteBox(FONT_MINI, convo[0].text.c_str(), num_rows, t);
+  }
+}
+
+void CDialogue::drawResponse() {
+  if (convo[0].response.empty() || cur_resp_time == 0) return;
+  using namespace frame;
+
+  SDL_Rect r = {r_x, r_y, r_w / convo[0].response.size(), r_h};
+  if (cur_resp_time < end_resp_time) {
+    int vis_l = convo[0].resp_length * (1.0 - ((double)(end_resp_time - cur_resp_time) / (double)(end_resp_time)));
+    int total_l = 0;
+    for (int i = 0; i < convo[0].response.size(); i++) {
+      int len = CType::getSpeakLength(convo[0].response[i].c_str());
+      if (total_l + len <= vis_l) {
+        CType::WriteBox(FONT_MINI, convo[0].response[i].c_str(), 1, r);
+        total_l += len;
+        r.x += r.w;
+      } else {
+        std::string vis = CType::getSpeakSegment(convo[0].response[i].c_str(), vis_l - total_l);
+        CType::WriteBox(FONT_MINI, vis.c_str(), 1, r);
+        break;
+      }
+    }
+  } else {
+    for (int i = 0; i < convo[0].response.size(); i++) {
+      std::string val = (i == sel) ? "$R" + convo[0].response[i] : convo[0].response[i];
+      CType::WriteBox(FONT_MINI, val.c_str(), 1, r);
+      r.x += r.w;
+    }
   }
 }
