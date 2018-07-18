@@ -26,6 +26,7 @@ class CGame : public CEvent {
 
 public:
   static CGame control;
+  short test_resp;
 
 public:
   bool OnInit();

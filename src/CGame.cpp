@@ -3,7 +3,7 @@
 CGame CGame::control;
 
 CGame::CGame() {
-  //
+  test_resp = 0;
 }
 
 bool CGame::handleTransit() {

@@ -15,6 +15,7 @@
 namespace dia {
   extern const float def_rate;  // default type rate
   extern const short rec_idle;  // recommended idle time
+  extern const SDL_Color* def_sel_col; // default selection color
 };
 
 /* CPhrase structs are "dialogue boxes" that have a few properties:
@@ -59,12 +60,17 @@ private:
   unsigned int end_resp_time;
   bool speed_up;
   unsigned short sel;
+  short* receiver;
+  const SDL_Color* sel_col;
 
 // private:
   // unsigned int getEndRespTime(const std::vector<std::string>& resp);
 
 public:
   void resetTimer();
+  void setReceiver(short* R);
+  void receiveResp();
+  void resetResp();
 
 public:
   static CDialogue control;

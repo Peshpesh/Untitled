@@ -6,6 +6,7 @@ std::vector<CPhrase> CDialogue::convo;
 namespace dia {
   const float def_rate = 32.0f; // default type rate
   const short rec_idle = 3000;  // recommended idle time
+  const SDL_Color* def_sel_col = &rgb::yellow;
 };
 
 namespace frame {
@@ -53,6 +54,8 @@ CDialogue::CDialogue() {
   end_resp_time = 0;
   speed_up = false;
   sel = 0;
+  receiver = NULL;
+  sel_col = dia::def_sel_col;
 }
 
 void CDialogue::resetTimer() {
@@ -69,13 +72,19 @@ void CDialogue::resetTimer() {
   }
 }
 
-// unsigned int CDialogue::getEndRespTime(const std::vector<std::string>& resp) {
-//   unsigned int val = 0;
-//   for (int i = 0; i < resp.size(); i++) {
-//     val += 1000.0f * (resp[i].size() / convo[0].resp_rate);
-//   }
-//   return val;
-// }
+void CDialogue::setReceiver(short* R) {
+  receiver = R;
+}
+
+void CDialogue::receiveResp() {
+  if (receiver == NULL) return;
+  *receiver = sel + 1;
+}
+
+void CDialogue::resetResp() {
+  sel = 0;
+  receiver = NULL;
+}
 
 void CDialogue::OnEvent(SDL_Event* Event) {
   CEvent::OnEvent(Event);
@@ -128,6 +137,12 @@ void CDialogue::handleSimpleTalk(const Gamecon& action) {
 void CDialogue::handleResponse(const Gamecon& action) {
   switch (action) {
     case CON_ATTACK:  {
+      receiveResp();
+      convo.erase(convo.begin());
+      resetTimer();
+      resetResp();
+      speed_up = false;
+      if (convo.empty()) CInterrupt::removeFlag(INTRPT_DIALOGUE);
       break;
     }
     case CON_DEFEND:  {
@@ -220,19 +235,19 @@ void CDialogue::drawResponse() {
     for (int i = 0; i < convo[0].response.size(); i++) {
       int len = CType::getSpeakLength(convo[0].response[i].c_str());
       if (total_l + len <= vis_l) {
-        CType::WriteBox(FONT_MINI, convo[0].response[i].c_str(), 1, r);
+        CType::CenterWrite(FONT_MINI, convo[0].response[i].c_str(), r);
         total_l += len;
         r.x += r.w;
       } else {
         std::string vis = CType::getSpeakSegment(convo[0].response[i].c_str(), vis_l - total_l);
-        CType::WriteBox(FONT_MINI, vis.c_str(), 1, r);
+        CType::CenterWrite(FONT_MINI, vis.c_str(), r);
         break;
       }
     }
   } else {
     for (int i = 0; i < convo[0].response.size(); i++) {
       std::string val = (i == sel) ? "$R" + convo[0].response[i] : convo[0].response[i];
-      CType::WriteBox(FONT_MINI, val.c_str(), 1, r);
+      CType::CenterWrite(FONT_MINI, val.c_str(), r, (i == sel) ? sel_col : text_col);
       r.x += r.w;
     }
   }

@@ -31,6 +31,7 @@ bool CGame::OnInit() {
   CDialogue::control.convo.push_back(test);
   CDialogue::control.resetTimer();
   CInterrupt::appendFlag(INTRPT_DIALOGUE);
+  CDialogue::control.setReceiver(&test_resp);
   return true;
 }
 
