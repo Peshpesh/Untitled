@@ -193,19 +193,14 @@ void CDialogue::OnRender() {
 
   CAsset::paletteAlpha(frame::f_A);
   drawFrame();
-  if (!convo[0].name.empty()) drawName();
   drawIcon();
   drawMessage();
-  drawResponse();
+  if (!convo[0].response.empty() && cur_resp_time) drawResponse();
   CAsset::paletteAlpha(MAX_RGBA);
 }
 
 void CDialogue::drawFrame() {
   CAsset::drawStrBox(frame::f, frame::str_w, *frame::fill_col, *frame::b_col);
-}
-
-void CDialogue::drawName() {
-
 }
 
 void CDialogue::drawIcon() {
@@ -225,7 +220,6 @@ void CDialogue::drawMessage() {
 }
 
 void CDialogue::drawResponse() {
-  if (convo[0].response.empty() || cur_resp_time == 0) return;
   using namespace frame;
 
   SDL_Rect r = {r_x, r_y, r_w / convo[0].response.size(), r_h};

@@ -28,7 +28,6 @@ namespace dia {
 */
 
 struct CPhrase {
-  std::string name;
   std::string text;
   std::vector<std::string> response;
   float type_rate; // char per s typed to screen
@@ -36,14 +35,11 @@ struct CPhrase {
   int length;      // renderable character length
   int resp_length;
   int idle_time;
-  CPhrase(const std::string& n, const std::string& t, const float& t_r, const int& i_t):
-    name(n),text(t),type_rate(t_r),resp_rate(t_r),
-    length(CType::getSpeakLength(t.c_str())),resp_length(0),idle_time(i_t){};
   CPhrase(const std::string& t, const float& t_r, const int& i_t):
-    name(""),text(t),type_rate(t_r),resp_rate(t_r),
+    text(t),type_rate(t_r),resp_rate(t_r),
     length(CType::getSpeakLength(t.c_str())),resp_length(0),idle_time(i_t){};
   CPhrase(const std::string& t):
-    name(""),text(t),type_rate(dia::def_rate),resp_rate(dia::def_rate),
+    text(t),type_rate(dia::def_rate),resp_rate(dia::def_rate),
     length(CType::getSpeakLength(t.c_str())),resp_length(0),idle_time(-1){};
   void setRespLength();
 };

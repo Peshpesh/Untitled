@@ -6,7 +6,7 @@ CType::CType() {
 	CS_Font = NULL;
 	Mini_Font = NULL;
 
-	def_rgb = &rgb::black;
+	def_rgb = &rgb::red;
 	def_a = MAX_RGBA;
 	def_ID = 0;
 

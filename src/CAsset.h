@@ -107,6 +107,7 @@ class CAsset
     static void paletteAlpha(const short& a);
     static void paletteBlend(const SDL_Color& rgb);
     static void paletteReset();
+    static void paletteBlendmode(const SDL_BlendMode& mode);
     static void carotBlend(const SDL_Color& rgb);
     static void carotReset();
 
@@ -185,5 +186,4 @@ public:
 public:
     static void debug_a();
 };
-
 #endif

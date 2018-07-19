@@ -52,8 +52,13 @@ void CAsset::paletteBlend(const SDL_Color& rgb) {
   SDL_SetTextureColorMod(paltex, rgb.r, rgb.g, rgb.b);
 }
 
+void CAsset::paletteBlendmode(const SDL_BlendMode& mode) {
+  SDL_SetTextureBlendMode(paltex, mode);
+}
+
 void CAsset::paletteReset() {
   SDL_SetTextureColorMod(paltex, rgb::white.r, rgb::white.g, rgb::white.b);
+  SDL_SetTextureBlendMode(paltex, SDL_BLENDMODE_BLEND);
 }
 
 void CAsset::carotBlend(const SDL_Color& rgb) {
