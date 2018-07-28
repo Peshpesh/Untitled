@@ -5,13 +5,15 @@ CHero CHero::Hero;
 CHero::CHero() {
 	// Type = ENTITY_TYPE_PLAYER;
 	Flags = ENTITY_FLAG_GRAVITY | ENTITY_FLAG_HOLLOW;
+	look_up = look_down = false;
 	// Modifiers = MODE_NONE;
 	// Arsenal = 0x00000001;
 	// MaxHealth = 12;
 	// Health = 3;
 	MaxSpeedX = 6.0;
 	MaxSpeedY = 10.0;
-	Anim_Control.MaxFrames = 8;
+	Anim_Control.MaxFrames = 3;
+	Anim_Control.Oscillate = true;
 	// Timer_Invinc = Timer_Invis =
 	// 	Timer_Haste = Timer_Flight = 0;
 	// Weapon = ARM_TEST;
@@ -70,32 +72,31 @@ void CHero::OnCleanup() {
 }
 
 void CHero::OnAnimate() {
-	// if (CurrentFrameCol == 0 && Weapon != UNARMED)
-	// {
-	// 	CurrentFrameCol = 4;			// Column 4 starts the armed frames
-	// }
-	// if (SpeedX != 0)
-	// {
-	// 	Anim_Control.MaxFrames = 4;		// For mainchar
-	// 	if (Anim_Control.GetCurrentFrame() == 0) Anim_Control.SetCurrentFrame(1);
-	// }
-	// else
-	// {
-	// 	Anim_Control.MaxFrames = 0;
-	// }
-	if (move_left) {
-		CurrentFrameRow = 0;
-	}	else if (move_right) {
-		CurrentFrameRow = 1;
+	if (!Jumper) Anim_Control.MaxFrames = 1;
+	else Anim_Control.MaxFrames = 3;
+
+	// if (look_up) CurrentFrameCol = 4 + (!Jumper * 3);
+	// else if (look_down) CurrentFrameCol = 8;
+	// else CurrentFrameCol = 0 + (!Jumper * 3);
+	// if (!Jumper) Anim_Control.SetCurrentFrame(0);
+
+	if (move_left || move_right) {
+		CurrentFrameRow = move_right;
+		CurrentFrameCol = look_up ? 5 : 1;
+		if (!Jumper) {
+			Anim_Control.SetCurrentFrame(0);
+			if (!look_down) CurrentFrameCol += 2;
+			else CurrentFrameCol = 8;
+		}
 	} else if (SpeedX < 2.0f) {
+		CurrentFrameCol = (look_down && !Jumper) ? 8 : (!Jumper * 3) + (look_up * 4);
 		Anim_Control.SetCurrentFrame(0);
 		return;
 	}
-	CEntity::OnAnimate();
+	if (Jumper) CEntity::OnAnimate();
 }
 
-bool CHero::OnCollision(CEntity* Entity)
-{
+bool CHero::OnCollision(CEntity* Entity) {
 	// // If the player is not invincible and the collision causes damage...
 	// if (!(Modifiers & MODE_INVINCIBLE) && Entity->Flags & ENTITY_FLAG_DAMAGE && Entity->Type == ENTITY_TYPE_GENERIC)
 	// {

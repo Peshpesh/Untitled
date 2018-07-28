@@ -13,7 +13,7 @@ void CGame::OnRender() {
   // TESTING/DEBUGGING
   for (int i = CEntity::EntityList.size() - 1; i >= 0; i--) {
     if (!CEntity::EntityList[i]) continue;
-    CEntity::EntityList[i]->OnRenderHitbox();
+    // CEntity::EntityList[i]->OnRenderHitbox();
   }
 }
 

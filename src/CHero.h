@@ -8,6 +8,7 @@
 
 class CHero : public CEntity {
 public:
+	bool look_up, look_down;
 
 	CHero();
   static CHero Hero;
@@ -25,6 +26,9 @@ public:
 	void OnAnimate();
 
 	bool OnCollision(CEntity* Entity);
+
+	void lookUp();
+	void lookDown();
 
 	// Converts hex weapon code to enum
 	// static Uint8 ConvertBinary(const int &Weapon);

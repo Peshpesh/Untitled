@@ -16,6 +16,7 @@ void CTitle::OnInit() {
     CGameIO::control.loadAllGameinfo();
     CTransition::control.activated = false;
   }
+  CType::control.SetColor(&rgb::black);
 }
 
 void CTitle::OnLoop() {

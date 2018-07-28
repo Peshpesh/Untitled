@@ -38,6 +38,21 @@ namespace frame {
   const SDL_Rect i = {i_x, i_y, i_w, i_h};
 };
 
+void CPhrase::setResponses(const std::string& A, const std::string& B, const std::string& C) {
+  response.clear();
+  response.push_back(A);
+  response.push_back(B);
+  response.push_back(C);
+  setRespLength();
+}
+
+void CPhrase::setResponses(const std::string& A, const std::string& B) {
+  response.clear();
+  response.push_back(A);
+  response.push_back(B);
+  setRespLength();
+}
+
 void CPhrase::setRespLength() {
   resp_length = 0;
   for (int i = 0; i < response.size(); i++) {

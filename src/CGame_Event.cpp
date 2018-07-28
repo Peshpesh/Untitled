@@ -71,10 +71,11 @@ void CGame::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       break;
     }
     case CON_DOWN:      {
+      CHero::Hero.look_down = true;
       break;
     }
     case CON_UP:        {
-      // Hero.look_up = true;
+      CHero::Hero.look_up = true;
       break;
     }
     case CON_CYCLE_L:   {
@@ -125,10 +126,11 @@ void CGame::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
       break;
     }
     case CON_DOWN:      {
+      CHero::Hero.look_down = false;
       break;
     }
     case CON_UP:        {
-      // Hero.look_up = false;
+      CHero::Hero.look_up = false;
       break;
     }
     case CON_CYCLE_L:   {

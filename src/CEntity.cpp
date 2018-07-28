@@ -97,7 +97,7 @@ void CEntity::OnRender() {
   //   Y - CCamera::CameraControl.GetY(), Xo + (CurrentFrameCol + Anim_Control.GetCurrentFrame()) * Width,
   //   Yo + CurrentFrameRow * Height, Width, Height);
   SDL_Rect sprFrame = {
-    spriteR.x + Anim_Control.GetCurrentFrame() * spriteR.w,
+    spriteR.x + (CurrentFrameCol + Anim_Control.GetCurrentFrame()) * spriteR.w,
     spriteR.y + CurrentFrameRow * spriteR.h,
     spriteR.w,
     spriteR.h};

@@ -24,14 +24,30 @@ bool CGame::OnInit() {
     return false;
   }
   // testing
-  CPhrase test("This is just a test.",3.0,100);
-  test.response.push_back("Yessir");
-  test.response.push_back("Nopers");
-  test.setRespLength();
-  CDialogue::control.convo.push_back(test);
-  CDialogue::control.resetTimer();
-  CInterrupt::appendFlag(INTRPT_DIALOGUE);
-  CDialogue::control.setReceiver(&test_resp);
+  // CPhrase test("This is just a test.",3.0,100);
+  // test.setResponses("Yea","noop");
+  // CDialogue::control.convo.push_back(test);
+  // CDialogue::control.resetTimer();
+  // CDialogue::control.convo.push_back(CPhrase("Peri.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("Our blue star.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("The beginning and end of all cycles.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("My only constant.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("Every cycle, this rock is born of your fire.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("From the earth springs life, and water nurtures this life to its end.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("Dusts of the dead scatter to the wind, until there is no more life to give.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("With a Cataclysm, this rock is returned to you and born again - all the same.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("I know life is never exactly the same from cycle to cycle but...",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("... This one is different.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("Life possesses power that I have never known it to possess.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("Its power has made days unpredictable.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("I can no longer see the end...",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("... nor a new beginning.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("Just nothing.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("I do not know what to do.",16.0,3000));
+  // CDialogue::control.convo.push_back(CPhrase("I am scared, Peri...",16.0,3000));
+  // CDialogue::control.resetTimer();
+  // CInterrupt::appendFlag(INTRPT_DIALOGUE);
+  // CDialogue::control.setReceiver(&test_resp);
   return true;
 }
 

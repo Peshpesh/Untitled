@@ -41,6 +41,8 @@ struct CPhrase {
   CPhrase(const std::string& t):
     text(t),type_rate(dia::def_rate),resp_rate(dia::def_rate),
     length(CType::getSpeakLength(t.c_str())),resp_length(0),idle_time(-1){};
+  void setResponses(const std::string& A, const std::string& B, const std::string& C);
+  void setResponses(const std::string& A, const std::string& B);
   void setRespLength();
 };
 
