@@ -49,10 +49,10 @@ void CEntity::OnMove(float MoveX, float MoveY) {
 
 		MoveX -= NewX;
 		MoveY -= NewY;
-		if (NewX > 0 && MoveX <= 0) NewX = 0;
-		if (NewX < 0 && MoveX >= 0) NewX = 0;
-		if (NewY > 0 && MoveY <= 0) NewY = 0;
-		if (NewY < 0 && MoveY >= 0) NewY = 0;
+		if (NewX > 0 && MoveX < 0) NewX = 0;
+		if (NewX < 0 && MoveX > 0) NewX = 0;
+		if (NewY > 0 && MoveY < 0) NewY = 0;
+		if (NewY < 0 && MoveY > 0) NewY = 0;
 		if (MoveX == 0) NewX = 0;
 		if (MoveY == 0) NewY = 0;
 		if (MoveX == 0 && MoveY == 0) break;
@@ -87,12 +87,10 @@ void CEntity::Translate(double NewX, double NewY) {
 				Jumper = true;
 				Grounded = true;
 				if (NewY > 0)	SpeedY = 0;
-			}
-			else {
+			}	else {
 				if (NewY < 0)	SpeedY = 0;
 			}
-		}
-		else {
+		}	else {
 			// The entity CANNOT move in X. The queried movement in X
 			// required a change in Y, so we must check if the entity can move in only Y
 			// now that it is apparent it cannot move in X.
@@ -106,8 +104,7 @@ void CEntity::Translate(double NewX, double NewY) {
 				}
 			}
 		}
-	}
-	else {
+	}	else {
 		// If there is no push in Y, then we can just check for
 		// if movement is possible in X, and then in Y.
 		if (CheckPathXY(destXl, destXr, srcYt, srcYb)) X += NewX;
@@ -115,8 +112,7 @@ void CEntity::Translate(double NewX, double NewY) {
 
 		if (CheckPathXY(srcXl, srcXr, destYt, destYb)) {
       Y += NewY;
-    }
-		else {
+    }	else {
 			SpeedY = 0;
 			if (NewY > 0) {
 				Jumper = true;
@@ -131,7 +127,9 @@ bool CEntity::CheckPathXY(const int& destXl, const int& destXr, const int& destY
   SDL_Point topleft = {destXl, destYt};
   SDL_Point botright = {destXr, destYb};
 	for (int i = 0; i < EntityList.size(); i++) {
-		if (CollEntity(EntityList[i], topleft, botright) && pathclear) pathclear = false;
+		if (CollEntity(EntityList[i], topleft, botright) && pathclear) {
+			pathclear = false;
+		}
 	}
   if (!pathclear) return false;
 	for (int tY = destYt / TILE_SIZE; tY <= destYb / TILE_SIZE; tY++) {

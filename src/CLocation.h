@@ -12,7 +12,8 @@ namespace location {
   };
   const short num = 4;
   const char* const abbrname[] = {
-    "default",
+    // "default",
+    "level0",
     "yraihome",
     "yrai",
     "yraiout",

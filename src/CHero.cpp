@@ -109,7 +109,7 @@ bool CHero::OnCollision(CEntity* Entity) {
 	// 	else                            // Otherwise, you get a grace period of invincibility
 	// 	{
 	// 		Modifiers = Modifiers | MODE_INVINCIBLE;		// Player is now invincible
-	// 		Timer_Invinc = CFPS::FPSControl.GetFPS() * 2;   // FPS * # of seconds invincible
+	// 		Timer_Invinc = CFPS::FPSControl.GetFPS() * 2;   // FPS * # of seconds invincible (THIS IS BAD)
 	// 		// This gives us the # of invincibility frames
 	// 		// for the current FPS
 	// 	}

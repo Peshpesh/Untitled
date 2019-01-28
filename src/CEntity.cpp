@@ -231,8 +231,7 @@ void CEntity::OnCleanup()
 //*************************************************************
 //*************************************************************
 
-void CEntity::GetPos(float& X, float& Y)
-{
+void CEntity::GetPos(float& X, float& Y) {
 	X = this->X;
 	Y = this->Y;
 }

@@ -24,6 +24,8 @@ enum
 {
   SOLID_NONE = 0,       // tile is solid nowhere
   SOLID_ALL,            // tile is solid everywhere
+
+  /*    GENTLE SLOPES   */
   SOLID_U_BL_MR,        // tile is solid Under Bottom-Left to Middle-Right line
   SOLID_U_ML_TR,        // tile is solid Under Middle-Left to Top-Right line
   SOLID_U_TL_MR,        // tile is solid Under Top-Left to Middle-Right line
@@ -32,6 +34,16 @@ enum
   SOLID_A_ML_TR,        // tile is solid Above Middle-Left to Top-Right line
   SOLID_A_TL_MR,        // tile is solid Above Top-Left to Middle-Right line
   SOLID_A_ML_BR,        // tile is solid Above Middle-Left to Bottom-Right line
+
+  /*    STEEP SLOPES    */
+  SOLID_U_LT_MB,        // tile is solid Under Left-top to Middle-bottom line
+  SOLID_U_MT_RB,        // tile is solid Under Middle-top to Right-bottom line
+  SOLID_U_RT_MB,        // tile is solid Under Right-top to Middle-bottom line
+  SOLID_U_MT_LB,        // tile is solid Under Middle-top to Left-bottom line
+
+  /*    FLAT TILES      */
+  SOLID_HALF_TH,        // top-half of tile is solid
+  SOLID_HALF_BH,        // bottom-half of tile is solid
 };
 
 class CTile

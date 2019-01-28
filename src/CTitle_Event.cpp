@@ -92,6 +92,7 @@ void CTitle::eventNewGame(const Gamecon& action) {
       else returnToMain();
       break;
     }
+    case CON_DEFEND:  returnToMain(); break;
     case CON_JUMP:    returnToMain(); break;
     default:          break;
   }
@@ -137,6 +138,7 @@ void CTitle::eventOptions(const Gamecon& action) {
       else CConfig::control.con_change = config_list[pos - num_controls];
       break;
     }
+    case CON_DEFEND: returnToMain(); break;
     case CON_JUMP: returnToMain(); break;
     default: break;
   }
