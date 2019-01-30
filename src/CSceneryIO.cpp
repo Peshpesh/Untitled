@@ -92,6 +92,7 @@ void CSceneryIO::addScenery(const int& group, const int& decor, const double& X,
   CScenery* newScn = NULL;
   switch (group) {
     case GLOBAL: addGlobal(decor, newScn); break;
+    case GOLDENROD: addGoldenrod(decor, newScn); break;
     default: break;
   }
 
@@ -108,6 +109,34 @@ void CSceneryIO::addGlobal(const int& decor, CScenery*& newScn) {
   using namespace Decorations::global;
   switch (decor) {
     case NOTHING: newScn = new CScenery; break;
+    default: break;
+  }
+}
+
+void CSceneryIO::addGoldenrod(const int& decor, CScenery*& newScn) {
+  using namespace Decorations::goldenrod;
+  switch (decor) {
+    case L_TREE_A: newScn = new CScenery; break;
+    case L_TREE_B: newScn = new CScenery; break;
+    case L_TREE_C: newScn = new CScenery; break;
+    case L_TREE_D: newScn = new CScenery; break;
+    case L_SHRUB_A: newScn = new CScenery; break;
+    case L_SHRUB_B: newScn = new CScenery; break;
+    case L_SHRUB_C: newScn = new CScenery; break;
+    case M_TREE_A: newScn = new CScenery; break;
+    case M_TREE_B: newScn = new CScenery; break;
+    case M_TREE_C: newScn = new CScenery; break;
+    case M_TREE_D: newScn = new CScenery; break;
+    case M_SHRUB_A: newScn = new CScenery; break;
+    case M_SHRUB_B: newScn = new CScenery; break;
+    case M_SHRUB_C: newScn = new CScenery; break;
+    case S_TREE_A: newScn = new CScenery; break;
+    case S_TREE_B: newScn = new CScenery; break;
+    case S_TREE_C: newScn = new CScenery; break;
+    case S_TREE_D: newScn = new CScenery; break;
+    case S_SHRUB_A: newScn = new CScenery; break;
+    case S_SHRUB_B: newScn = new CScenery; break;
+    case S_SHRUB_C: newScn = new CScenery; break;
     default: break;
   }
 }

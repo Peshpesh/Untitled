@@ -24,6 +24,7 @@ public:
 
 private:
   static void addGlobal(const int& decor, CScenery*& newScn);
+  static void addGoldenrod(const int& decor, CScenery*& newScn);
 
 public:
   static void loadTexInfo(const int& group);

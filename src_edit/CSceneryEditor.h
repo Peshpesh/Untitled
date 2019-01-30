@@ -15,8 +15,7 @@
 #include "CAnchorScenery.h"
 #include "CLayerEditor.h"
 
-namespace sceneryEngine
-{
+namespace sceneryEngine {
   namespace buttons {
     namespace chScenery
     { // Change scenery button

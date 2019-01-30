@@ -109,7 +109,7 @@ bool CScenery::OnRender() {
 int CScenery::drawBackground() {
   int N = sceneryList.size();
   while (N > 0) {
-    if (layerList[sceneryList[N-1]->layer] <= 1.0) break;
+    if (layerList[sceneryList[N-1]->layer] < 1.0) break;
     N--;
     if (!sceneryList[N]->OnRender()) return false;
   }
