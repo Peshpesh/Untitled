@@ -29,7 +29,6 @@ void CDebug_Stage::OnLoop() {
       if (!CEntity::EntityList[i]) continue;
       CEntity::EntityList[i]->OnLoop();
     }
-
   }
 }
 

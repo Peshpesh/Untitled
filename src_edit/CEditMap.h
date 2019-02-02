@@ -93,6 +93,9 @@ namespace mapEngine
     extern const SDL_Point bg_pos;
     extern const SDL_Point fg_pos;
     extern const SDL_Point ty_pos;
+    extern const short co_t_size;
+    extern const short co_w;
+    extern const short co_spac;
     extern const SDL_Point co_pos;
     extern const short arrSpac;
     extern const short rmOffset_x;
@@ -269,6 +272,7 @@ private:
   bool drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawActive_co(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawCollTiles(const SDL_Point* mouse);
   bool drawTileButtons(const SDL_Point* tPos, const SDL_Point* mouse);
   bool drawOpac_ty();
   bool drawOpac_co();

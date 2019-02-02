@@ -86,7 +86,11 @@ namespace mapEngine
     const SDL_Point bg_pos = {674, 210};
     const SDL_Point fg_pos = {674, 280};
     const SDL_Point ty_pos = {674, 350};
-    const SDL_Point co_pos = {674, 420};
+    // const SDL_Point co_pos = {674, 420};
+    const short co_t_size = 16;
+    const short co_w = 4;
+    const short co_spac = 2;
+    const SDL_Point co_pos = {WWIDTH + ((EWIDTH - WWIDTH - (co_t_size * co_w) - (co_spac * (co_w - 1))) / 2), 400};
     const short arrSpac = 8;
     const short rmOffset_x = -28;
     const short rmOffset_y = -15;
