@@ -14,6 +14,7 @@ CSceneryEditor::CSceneryEditor() {
 
   group_ID = Decorations::groups::GLOBAL;
   decor_ID = Decorations::global::NOTHING;
+  list_page = 0;
   placePos = sceneryEngine::misc::placeRelPos::TOP_LEFT;
   use_anchor = false;
   show_anchor = false;
@@ -31,10 +32,11 @@ void CSceneryEditor::updateSceneryButtons() {
   using namespace sceneryEngine::misc::sceneryButtons;
 
   sceneryButtons.clear();
-  for (int i = 0; i < CSceneryData::getNumDecor(group_ID); i++)
-  {
+  list_page = 0;
+
+  for (int i = 0; i < CSceneryData::getNumDecor(group_ID); i++) {
     // add buttons
-    CButton button(list_x, list_y + (i * button_h), button_w, button_h);
+    CButton button(list_x, list_y + ((i % max_buttons) * button_h), button_w, button_h);
     button.defCol = offCol;
     button.onCol  = onCol;
     button.hovCol = hovCol;

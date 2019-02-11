@@ -216,12 +216,23 @@ bool CSceneryEditor::handleSwitchPlace(const SDL_Point* m) {
 }
 
 bool CSceneryEditor::handleSceneryList(const SDL_Point* m) {
-  for (int i = 0; i < sceneryButtons.size(); i++) {
+  using namespace sceneryEngine::misc::sceneryButtons;
+
+  int i = list_page * max_buttons;
+  while (i < sceneryButtons.size() && i < (list_page + 1) * max_buttons) {
     if (SDL_PointInRect(m, &sceneryButtons[i].dstR)) {
       decor_ID = i;
       return true;
     }
+    i++;
   }
+
+  // for (int i = 0; i < sceneryButtons.size(); i++) {
+  //   if (SDL_PointInRect(m, &sceneryButtons[i].dstR)) {
+  //     decor_ID = i;
+  //     return true;
+  //   }
+  // }
   return false;
 }
 

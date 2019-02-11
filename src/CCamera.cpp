@@ -226,6 +226,13 @@ void CCamera::SetLimits(const int& X_min, const int& Y_min, const int& X_max, co
 	this->Y_max = Y_max;
 }
 
+void CCamera::GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max) {
+	X_min = this->X_min;
+	Y_min = this->Y_min;
+	X_max = this->X_max;
+	Y_max = this->Y_max;
+}
+
 //////////////////////////////////////
 //////////////////////////////////////
 

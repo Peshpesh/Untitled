@@ -15,6 +15,12 @@ void CGame::OnRender() {
     if (!CEntity::EntityList[i]) continue;
     // CEntity::EntityList[i]->OnRenderHitbox();
   }
+  int cam_x_min, cam_y_min, cam_x_max, cam_y_max;
+  CCamera::CameraControl.GetLimits(cam_x_min, cam_y_min, cam_x_max, cam_y_max);
+  std::string lims_str    = CAsset::intToStr(cam_x_min) + ". " + CAsset::intToStr(cam_y_min) + ". "
+                          + CAsset::intToStr(cam_x_max) + ". " + CAsset::intToStr(cam_y_max);
+  const SDL_Point lims_pos = {200,1};
+  CType::Write(FONT_MINI, lims_str.c_str(), lims_pos, &rgb::white);
 }
 
 void CGame::drawIntrpt() {

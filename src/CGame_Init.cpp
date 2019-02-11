@@ -69,7 +69,7 @@ void CGame::initHero() {
   CCamera::CameraControl.TargetMode = TARGET_MODE_FOLLOW;
 
   // TESTING/DEBUGGING
-  // CCamera::CameraControl.SetLimits(0,0,1050,MAP_HEIGHT*TILE_SIZE);
+  // CCamera::CameraControl.SetLimits(0,0,MAP_WIDTH*TILE_SIZE,MAP_HEIGHT*TILE_SIZE);
   // CCamera::CameraControl.EnableLim();
 
   CEntity::EntityList.push_back(&CHero::Hero); // GOOD LUCK //

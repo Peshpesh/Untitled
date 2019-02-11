@@ -25,6 +25,8 @@ enum
   MODIFY_MAP = 0,
   MODIFY_NPC,
   MODIFY_SCENE,
+  MODIFY_SANDBOX,
+  MODIFY_OPTIONS,
 };
 
 namespace io_ui
@@ -65,42 +67,6 @@ namespace engineSwitch
   extern const short bsiz;
 }
 
-// namespace npc_editor
-// {
-//   const short tbl_nm_x = 250;
-//   const short tbl_nm_y = 490;
-//   const short ent_nm_x = 250;
-//   const short ent_nm_y = 510;
-//   namespace but_nset
-//   {
-//     const short x = 5;
-//     const short y = 540;
-//     const short w = 75;
-//     const short h = 50;
-//   }
-//   // Entity Editor definitions (application static)
-// }
-
-// namespace scn_editor
-// {
-//   namespace popt_flip
-//   {
-//     const short x = 20;
-//     const short y = 510;
-//   }
-//   namespace dp_adj
-//   {
-//     const short l_x = 150;
-//     const short c_x = 250;
-//     const short u_x = 350;
-//     const short y = 530;
-//   }
-//   const short scn_nm_x = 250;
-//   const short scn_nm_y = 490;
-//   const unsigned short scn_nm_w = 160;
-//   // Scenery Editor definitions (application static)
-// }
-
 class CApp : public CEvent {
 private:
 	SDL_Window* Map_Display;    // Edit Window
@@ -113,8 +79,6 @@ private:
 
 public:
 	int active_mod;
-	// int intrpt;
-	// int tabl_name_W;
 
 public:
 	CApp();
@@ -142,11 +106,6 @@ public:
   bool renderEngSwitch();
   bool renderModelButton();
   bool renderIOButtons();
-
-	// bool RenderNPCedit();
-	bool RenderSCNedit();
-	bool RenderSCNswitch();
-	bool RenderSCNdepth();
 
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnTerminate();

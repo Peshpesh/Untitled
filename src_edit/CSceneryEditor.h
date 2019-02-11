@@ -116,6 +116,8 @@ namespace sceneryEngine {
       extern const short button_w;
       extern const short button_h;
       extern const short max_buttons;
+      extern const short pg_button_w;
+      extern const short pg_button_h;
     }
     namespace layerBrief {
       extern const SDL_Point* fieldCol;
@@ -162,6 +164,7 @@ class CSceneryEditor : public CEvent {
   bool render_active, has_rendered_active;
   short group_ID;
   short decor_ID;
+  short list_page;
   short placePos;
   bool use_anchor;
   bool show_anchor;

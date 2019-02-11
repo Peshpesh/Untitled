@@ -31,8 +31,8 @@ void CGamedata::resetAll() {
 void CHeroData::reset() {
   health = 7;
   max_health = 7;
-  X = 100;
-  Y = 100;
+  X = 200;
+  Y = 500;
 }
 
 void CYraiData::reset() {

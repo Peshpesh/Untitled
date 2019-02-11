@@ -243,7 +243,7 @@ void CEntityData::getDims_global(const int& entity, SDL_Rect& srcRect) {
   using namespace Entities::global;
 
   switch (entity) {
-    case PLAYER:      srcRect = CAsset::getRect(0, 128, 32, 32); break;
+    case PLAYER:      srcRect = CAsset::getRect(0, 0, 32, 32); break;
     case HEART:       srcRect = CAsset::getRect(0, 0, 32, 32); break;
     case AMYTHYST:    srcRect = CAsset::getRect(0, 0, 32, 32); break;
     case EVILPLAYER:  srcRect = CAsset::getRect(256, 128, 32, 32); break;

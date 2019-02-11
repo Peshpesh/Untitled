@@ -1,7 +1,6 @@
 #include "CApp.h"
 
-void CApp::OnRender()
-{
+void CApp::OnRender() {
 	static const bool debug = true;
 
 	CSurface::Clear();
@@ -27,6 +26,8 @@ void CApp::OnRender()
 		case MODIFY_MAP:		CEditMap::MapEditor.OnRender(&mouse); 		break;
 		case MODIFY_NPC:		CEntityEditor::Control.OnRender(&mouse); 	break;
 		case MODIFY_SCENE:	CSceneryEditor::control.OnRender(&mouse); break;
+		case MODIFY_SANDBOX:	break;		
+		case MODIFY_OPTIONS:	break;
 		default:						break;
 	}
 
@@ -57,16 +58,14 @@ void CApp::OnRender()
 	CSurface::Present();
 }
 
-bool CApp::renderEngSwitch()
-{
+bool CApp::renderEngSwitch() {
 	using namespace engineSwitch;
 
 	bool canHilight = CInterrupt::isNone();
 	bool noHov;
 
 	const SDL_Point* color = NULL;
-	for (int i = MODIFY_MAP; i <= MODIFY_SCENE; i++)
-	{
+	for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
 		noHov = (!canHilight || !SDL_PointInRect(&mouse, &engineButton[i]));
 		color = (active_mod == i) ? engineOnCol : (noHov ? engineOffCol : engineHvCol);
 		CAsset::drawStrBox(&engineButton[i], bsiz, color);
@@ -76,8 +75,7 @@ bool CApp::renderEngSwitch()
 	return true;
 }
 
-bool CApp::renderModelButton()
-{
+bool CApp::renderModelButton() {
 	using namespace modelSwitch;
 
 	bool active = CInterrupt::isFlagOn(INTRPT_MAP_MODEL);
@@ -90,8 +88,7 @@ bool CApp::renderModelButton()
 	return true;
 }
 
-bool CApp::renderIOButtons()
-{
+bool CApp::renderIOButtons() {
 	using namespace io_ui;
 
 	bool hov = CInterrupt::isNone();

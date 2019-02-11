@@ -123,7 +123,9 @@ namespace sceneryEngine
       const short list_y = 50;
       const short button_w = 90;
       const short button_h = 20;
-      const short max_buttons = 20;
+      const short max_buttons = 16;
+      const short pg_button_w = button_w / 3;
+      const short pg_button_h = 1 + (button_h / 2);
     }
     namespace layerBrief {
       const SDL_Point* fieldCol = &palette::silver;

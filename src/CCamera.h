@@ -68,6 +68,7 @@ public:
 	void EnableLim();
 	void DisableLim();
 	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
+	void GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max);
 
 public:	// public debug members
 	// bool usedisplace;

@@ -13,6 +13,11 @@ void CDebug_Stage::OnInit() {
 void CDebug_Stage::OnLoad() {
 	if (!CArea::control.Load(location::DEFAULT)) {
 		// ERROR LOADING AREA
+	} else {
+		int mW, mH;
+		CArea::control.GetDims(mW, mH);
+		CCamera::CameraControl.SetLimits(0, 0, mW * MAP_WIDTH * TILE_SIZE, mH * MAP_HEIGHT * TILE_SIZE);
+		CCamera::CameraControl.EnableLim();
 	}
 	if (!CEntityIO::Load(location::DEFAULT)) {
 		// ERROR LOADING ENTITIES
