@@ -26,7 +26,7 @@ void CApp::OnRender() {
 		case MODIFY_MAP:		CEditMap::MapEditor.OnRender(&mouse); 		break;
 		case MODIFY_NPC:		CEntityEditor::Control.OnRender(&mouse); 	break;
 		case MODIFY_SCENE:	CSceneryEditor::control.OnRender(&mouse); break;
-		case MODIFY_SANDBOX:	break;		
+		case MODIFY_SIM:		CSimulate::control.OnRender(&mouse); 			break;
 		case MODIFY_OPTIONS:	break;
 		default:						break;
 	}

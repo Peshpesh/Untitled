@@ -34,7 +34,7 @@ namespace engineSwitch
     "Map Editor",
     "Npc Editor",
     "Scn Editor",
-    "Sandbox",
+    "Simulate",
     "Options"
   };
   const SDL_Rect engineButton[] = {

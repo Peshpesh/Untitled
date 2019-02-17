@@ -119,13 +119,18 @@ namespace sceneryEngine
       const SDL_Point* offCol = &palette::silver;
       const SDL_Point* onCol  = &palette::green;
       const SDL_Point* hovCol = &palette::light_yellow;
-      const short list_x = 645;
-      const short list_y = 50;
+      const short pg_button_x = 645;
+      const short pg_button_y = 50;
       const short button_w = 90;
       const short button_h = 20;
-      const short max_buttons = 16;
       const short pg_button_w = button_w / 3;
       const short pg_button_h = 1 + (button_h / 2);
+      const SDL_Rect prev_pg = CAsset::getRect(pg_button_x, pg_button_y, pg_button_w, pg_button_h);
+      const SDL_Rect curr_pg = CAsset::getRect(prev_pg.x + pg_button_w, pg_button_y, pg_button_w, pg_button_h);
+      const SDL_Rect next_pg = CAsset::getRect(curr_pg.x + pg_button_w, pg_button_y, pg_button_w, pg_button_h);
+      const short list_x = pg_button_x;
+      const short list_y = pg_button_y + pg_button_h;
+      const short max_buttons = 16;
     }
     namespace layerBrief {
       const SDL_Point* fieldCol = &palette::silver;

@@ -111,13 +111,18 @@ namespace sceneryEngine {
       extern const SDL_Point* offCol;
       extern const SDL_Point* onCol;
       extern const SDL_Point* hovCol;
+      extern const short pg_button_x;
+      extern const short pg_button_y;
+      extern const short pg_button_w;
+      extern const short pg_button_h;
+      extern const SDL_Rect prev_pg;
+      extern const SDL_Rect curr_pg;
+      extern const SDL_Rect next_pg;
       extern const short list_x;
       extern const short list_y;
       extern const short button_w;
       extern const short button_h;
       extern const short max_buttons;
-      extern const short pg_button_w;
-      extern const short pg_button_h;
     }
     namespace layerBrief {
       extern const SDL_Point* fieldCol;

@@ -19,13 +19,13 @@
 #include "CEditMap.h"
 #include "CEntityEditor.h"
 #include "CSceneryEditor.h"
+#include "CSimulate.h"
 
-enum
-{
+enum {
   MODIFY_MAP = 0,
   MODIFY_NPC,
   MODIFY_SCENE,
-  MODIFY_SANDBOX,
+  MODIFY_SIM,
   MODIFY_OPTIONS,
 };
 

@@ -60,6 +60,10 @@ ${SRCDIR}/CSceneryEditor.cpp
 ${SRCDIR}/CSceneryEditor_Event.cpp
 ${SRCDIR}/CSceneryEditor_Ext.cpp
 ${SRCDIR}/CSceneryEditor_Render.cpp
+${SRCDIR}/CSimulate.cpp
+${SRCDIR}/CSimulate_Ext.cpp
+${SRCDIR}/CSimulate_Event.cpp
+${SRCDIR}/CSimulate_Render.cpp
 ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTerminate.cpp
@@ -96,6 +100,7 @@ ${SRCDIR}/CModel.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryEditor.h
+${SRCDIR}/CSimulate.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTerminate.h

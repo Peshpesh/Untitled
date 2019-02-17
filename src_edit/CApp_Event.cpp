@@ -11,7 +11,7 @@ void CApp::OnEvent(SDL_Event* Event)
 	if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
 	if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
 	if (active_mod == MODIFY_SCENE) CSceneryEditor::control.OnEvent(Event);
-	if (active_mod == MODIFY_SANDBOX) ;
+	if (active_mod == MODIFY_SIM) ;
 	if (active_mod == MODIFY_OPTIONS) ;
 }
 
