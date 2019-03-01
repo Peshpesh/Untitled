@@ -14,6 +14,30 @@ void CSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
 void CSimulate::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
+
+  if (handleStartSim(&m)) return;
+  if (handleStopSim(&m)) return;
+}
+
+bool CSimulate::handleStartSim(const SDL_Point* m) {
+  if (status != PLACE) {
+    if (SDL_PointInRect(m, &simulator::r_start)) {
+      status = PLACE;
+      return true;
+    }
+  } else if (CAsset::inWorkspace(m)) {
+    status = ACTIVE;
+    return true;
+  }
+  return false;
+}
+
+bool CSimulate::handleStopSim(const SDL_Point* m) {
+  if (status != INACTIVE && SDL_PointInRect(m, &simulator::r_stop)) {
+    stopSim();
+    return true;
+  }
+  return false;
 }
 
 void CSimulate::OnRButtonDown(int mX, int mY) {
