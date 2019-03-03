@@ -4,7 +4,8 @@ CSimEntity::CSimEntity() {
   sprtSrc = NULL;
 	X = Y = 0.0f;
 
-  Flags = Entityflags::GRAVITY | Entityflags::HOLLOW;
+  // Flags = Entityflags::GRAVITY | Entityflags::HOLLOW;
+  Flags = Entityflags::HOLLOW;
 	Dead = false;
 
 	SpeedX = SpeedY = AccelX = AccelY = 0.0f;
@@ -14,11 +15,10 @@ CSimEntity::CSimEntity() {
 	MaxAccelY = 0.75f;
 }
 
-bool CSimEntity::OnLoad() {
+void CSimEntity::OnLoad() {
   sprtSrc = CEntity::getSrcTexture(Entities::groups::GLOBAL);
   spriteR = CEntityData::getEntityDims(Entities::groups::GLOBAL, Entities::global::PLAYER);
   hitboxR = CEntityData::getHitboxDims(Entities::groups::GLOBAL, Entities::global::PLAYER);
-  return true;
 }
 
 void CSimEntity::OnLoop() {
@@ -44,8 +44,7 @@ bool CSimEntity::OnRender() {
     spriteR.y,
     spriteR.w,
     spriteR.h};
-  CSurface::OnDraw(sprtSrc, sprFrame, dstWinPos);
-  return true;
+  return CSurface::OnDraw(sprtSrc, &sprFrame, &dstWinPos);
 }
 
 void CSimEntity::OnCleanup() {

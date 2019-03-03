@@ -6,7 +6,7 @@ void CApp::OnRender() {
 	CSurface::Clear();
 
 	// Draw working background
-	CArea::AreaControl.OnRenderFill(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	CArea::control.OnRenderFill(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
 	int scn_N = CScenery::sceneryList.size();
 
@@ -18,6 +18,9 @@ void CApp::OnRender() {
 
 	// Draw the entities in the area
 	CEntityEditor::Control.drawEntities();
+
+	// Draw simulation Entity
+	CSimulate::control.drawHero();
 
 	// Draw foreground scenery
 	CSceneryEditor::control.drawForeground(scn_N);

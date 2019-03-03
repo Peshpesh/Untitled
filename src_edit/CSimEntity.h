@@ -1,6 +1,7 @@
 #ifndef _C_SIMENTITY_H_
 #define _C_SIMENTITY_H_
 
+#include "CArea.h"
 #include "CEntity.h"
 
 namespace Entityflags {
@@ -45,7 +46,7 @@ public:
 
 	void OnLoop();
 
-	void OnRender();
+	bool OnRender();
 	void OnRenderHitbox();
 
 	void OnCleanup();

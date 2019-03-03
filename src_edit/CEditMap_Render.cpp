@@ -2,10 +2,10 @@
 
 bool CEditMap::RenderMap() {
   // Draw the working area
-	if (show_bg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
-	if (show_fg) CArea::AreaControl.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	if (show_ty) CArea::AreaControl.OnRenderType(Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	if (show_co) CArea::AreaControl.OnRenderColl(Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (show_bg) CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
+	if (show_fg) CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
+	if (show_ty) CArea::control.OnRenderType(Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (show_co) CArea::control.OnRenderColl(Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
   return true;
 }
@@ -20,7 +20,7 @@ bool CEditMap::OnRender(const SDL_Point* mouse) {
 }
 
 bool CEditMap::RenderWkspc(const SDL_Point* mouse) {
-	SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(mouse);
+	SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(*mouse);
 
   if (!drawTileShadow(mouse, &mapPos)) return false;
 	if (!drawPlaceDomain(mouse, &mapPos)) return false;

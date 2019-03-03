@@ -1,6 +1,7 @@
 #ifndef _C_SIMULATE_H_
 #define _C_SIMULATE_H_
 
+#include "CSimEntity.h"
 #include "CEvent.h"
 #include "CInform.h"
 #include "CInterrupt.h"
@@ -39,12 +40,14 @@ class CSimulate : public CEvent {
 
 public:
   static CSimulate control;
+  CSimEntity hero;
 
 private:
   simstate status;
 
 public:
   bool OnInit();
+  void OnLoop(const SDL_Point* m);
   void OnTerminate();
 
 public:
@@ -61,6 +64,7 @@ private:
 
 public:
   bool OnRender(const SDL_Point* m);
+  bool drawHero();
 
 private:
   bool drawMain(const SDL_Point* m);

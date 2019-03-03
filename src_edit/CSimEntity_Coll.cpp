@@ -20,13 +20,13 @@ int CSimEntity::getVertDeflect(const double& NewX, const double& NewY) {
                     // OR, "where on the tile (in Y, from 0 to 31) is this point?"
 
   if (NewX > 0.0)	{ // Moving right
-    Tile = CArea::control.GetTile(destXr, srcYb);
+    if ((Tile = CArea::control.GetTile(destXr, srcYb)) == NULL) return 0;
     Y_offset = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
     if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Y_offset < TILE_SIZE / 2)) {
       push_Y = CollGround(Tile->CollID, destXr % TILE_SIZE, Y_offset);
     }
     if (push_Y == 0) {
-      Tile = CArea::control.GetTile(destXr, srcYt);
+      if ((Tile = CArea::control.GetTile(destXr, srcYt)) == NULL) return 0;
       Y_offset = srcYt - ((srcYt / TILE_SIZE) * TILE_SIZE);
       if (Tile->CollID == SOLID_A_TL_MR || (Tile->CollID == SOLID_A_ML_BR && Y_offset >= TILE_SIZE / 2)) {
         push_Y = CollGround(Tile->CollID, destXr % TILE_SIZE, Y_offset);
@@ -34,12 +34,12 @@ int CSimEntity::getVertDeflect(const double& NewX, const double& NewY) {
     }
   } else if (NewX < 0.0) {	// Moving left
     Y_offset = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
-    Tile = CArea::control.GetTile(destXl, srcYb);
+    if ((Tile = CArea::control.GetTile(destXl, srcYb)) == NULL) return 0;
     if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Y_offset < TILE_SIZE / 2)) {
       push_Y = CollGround(Tile->CollID, destXl % TILE_SIZE, Y_offset);
     }
     if (push_Y == 0) {
-      Tile = CArea::control.GetTile(destXl, srcYt);
+      if ((Tile = CArea::control.GetTile(destXl, srcYt)) == NULL) return 0;
       Y_offset = srcYt - ((srcYt / TILE_SIZE) * TILE_SIZE);
       if (Tile->CollID == SOLID_A_ML_TR || (Tile->CollID == SOLID_A_BL_MR && Y_offset >= TILE_SIZE / 2)) {
         push_Y = CollGround(Tile->CollID, destXl % TILE_SIZE, Y_offset);
@@ -82,7 +82,7 @@ bool CSimEntity::CollTile(const SDL_Point& tilepos, const SDL_Point& tl, const S
   CTile* Tile = CArea::control.GetTile(tilepos.x * TILE_SIZE, tilepos.y * TILE_SIZE);
   // Check if the collided tile is entirely solid.
   // If it is, entity can't move to destination.
-  if (Tile->CollID == SOLID_ALL) return false;
+  if (Tile == NULL || Tile->CollID == SOLID_ALL) return false;
 
   // Check if the collided tile is partially solid.
   // If it is, the entity MIGHT be able to move.

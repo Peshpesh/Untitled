@@ -36,7 +36,7 @@ void CModel::OnInit() {
 
   aW = aH = 0;
   mW = mH = 0;
-  CArea::AreaControl.GetDims(aW, aH);
+  CArea::control.GetDims(aW, aH);
 
   mW = aW * MAP_WIDTH * mod_t_sz;
   mH = aH * MAP_HEIGHT * mod_t_sz;
@@ -118,7 +118,7 @@ bool CModel::renderArea() {
       ID = i + (j * aW);
       x_rel = i * mod_t_sz * MAP_WIDTH;
       y_rel = j * mod_t_sz * MAP_HEIGHT;
-      if (!renderMap(&CArea::AreaControl.MapList[ID], x_rel, y_rel)) return false;
+      if (!renderMap(&CArea::control.MapList[ID], x_rel, y_rel)) return false;
     }
   }
   return true;

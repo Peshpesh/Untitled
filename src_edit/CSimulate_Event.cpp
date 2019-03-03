@@ -22,10 +22,14 @@ void CSimulate::OnLButtonDown(int mX, int mY) {
 bool CSimulate::handleStartSim(const SDL_Point* m) {
   if (status != PLACE) {
     if (SDL_PointInRect(m, &simulator::r_start)) {
+      hero.OnLoad();
       status = PLACE;
       return true;
     }
   } else if (CAsset::inWorkspace(m)) {
+    hero.Flags |= Entityflags::GRAVITY;
+    CCamera::CameraControl.TargetMode = TARGET_MODE_FOLLOW;
+    CCamera::CameraControl.SetTarget(&hero.X, &hero.Y, &hero.spriteR.w, &hero.spriteR.h);
     status = ACTIVE;
     return true;
   }

@@ -158,11 +158,11 @@ bool CEditMap::handleAreaRemove(const SDL_Point* mouse)
 }
 
 void CEditMap::extendMap_R() {
-  CArea::AreaControl.OnExpandRight();
+  CArea::control.OnExpandRight();
 }
 
 void CEditMap::extendMap_L() {
-  CArea::AreaControl.OnExpandLeft();
+  CArea::control.OnExpandLeft();
 
   // This loop updates the position of our entities & scenery
   // to prevent unintended "movement" over the changed area
@@ -185,11 +185,11 @@ void CEditMap::extendMap_L() {
 }
 
 void CEditMap::extendMap_D() {
-  CArea::AreaControl.OnExpandDown();
+  CArea::control.OnExpandDown();
 }
 
 void CEditMap::extendMap_U() {
-  CArea::AreaControl.OnExpandUp();
+  CArea::control.OnExpandUp();
 
   // Update entity positions relative to new area size
   for (int i = 0; i < CEntity::entityList.size(); i++) {
@@ -211,13 +211,13 @@ void CEditMap::extendMap_U() {
 }
 
 void CEditMap::removeMap_R() {
-  CArea::AreaControl.OnReduceRight();
+  CArea::control.OnReduceRight();
 }
 
 void CEditMap::removeMap_L() {
   // adjustments to pre-existing objects on the map (e.g., entities)
   // are only necessary if a reduction in map area is possible
-  if (CArea::AreaControl.OnReduceLeft()) {
+  if (CArea::control.OnReduceLeft()) {
     for (int i = 0; i < CEntity::entityList.size(); i++) {
       CEntity::entityList[i].dstP.x -= MAP_WIDTH * TILE_SIZE;
     }
@@ -237,13 +237,13 @@ void CEditMap::removeMap_L() {
 }
 
 void CEditMap::removeMap_D() {
-  CArea::AreaControl.OnReduceDown();
+  CArea::control.OnReduceDown();
 }
 
 void CEditMap::removeMap_U() {
   // adjustments to pre-existing objects on the map (e.g., entities)
   // are only necessary if a reduction in map area is possible
-  if (CArea::AreaControl.OnReduceUp())
+  if (CArea::control.OnReduceUp())
   {
     for (int i = 0; i < CEntity::entityList.size(); i++) {
       CEntity::entityList[i].dstP.y -= MAP_HEIGHT * TILE_SIZE;
@@ -295,7 +295,7 @@ bool CEditMap::handlePlaceDomain(const SDL_Point* mouse) {
     {
       retval = true;
       SDL_Rect dom = getTileDomain(rClickA, rClickB);
-      SDL_Point clickPos = CCamera::CameraControl.GetCamRelPoint(mouse);
+      SDL_Point clickPos = CCamera::CameraControl.GetCamRelPoint(*mouse);
 
       if (SDL_PointInRect(&clickPos, &dom))
       {
@@ -342,10 +342,10 @@ bool CEditMap::handleNewTile(const SDL_Point* mouse) {
 }
 
 void CEditMap::placeBlock(const int& x, const int& y) {
-  if (active_TL) CArea::AreaControl.ChangeTile(x, y, &TileTL, onTiles);
-  if (active_TR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y, &TileTR, onTiles);
-  if (active_BL) CArea::AreaControl.ChangeTile(x, y + TILE_SIZE, &TileBL, onTiles);
-  if (active_BR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y + TILE_SIZE, &TileBR, onTiles);
+  if (active_TL) CArea::control.ChangeTile(x, y, &TileTL, onTiles);
+  if (active_TR) CArea::control.ChangeTile(x + TILE_SIZE, y, &TileTR, onTiles);
+  if (active_BL) CArea::control.ChangeTile(x, y + TILE_SIZE, &TileBL, onTiles);
+  if (active_BR) CArea::control.ChangeTile(x + TILE_SIZE, y + TILE_SIZE, &TileBR, onTiles);
 }
 
 bool CEditMap::handleGetSet(const SDL_Point* mouse) {

@@ -280,7 +280,7 @@ void CFileIO::addToPath(const char& addSym)
 
 void CFileIO::newData()
 {
-  CArea::AreaControl.OnInit();
+  CArea::control.OnInit();
   CEntity::OnInit();
   CScenery::OnInit();
 
@@ -294,7 +294,7 @@ void CFileIO::newData()
 
 void CFileIO::loadData()
 {
-  if (!CArea::AreaControl.NewLoad(newName.c_str())) {
+  if (!CArea::control.NewLoad(newName.c_str())) {
     // problem loading the area
     newName.clear();
     return;
@@ -323,7 +323,7 @@ void CFileIO::loadData()
 
 void CFileIO::saveData()
 {
-  if (!CArea::AreaControl.NewSave(newName.c_str())) {
+  if (!CArea::control.NewSave(newName.c_str())) {
     pushInform(I_FAIL_SAVE);
     return;
   }

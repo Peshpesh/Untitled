@@ -2,6 +2,7 @@
 
 bool CSimulate::OnRender(const SDL_Point* m) {
   bool intrpt = !(CInterrupt::isNone());
+
   if (!CAsset::drawAppFrame()) return false;
 
   if (!drawMain(intrpt ? NULL : m)) return false;
@@ -31,6 +32,12 @@ bool CSimulate::drawMain(const SDL_Point* m) {
   Font::NewCenterWrite(stop_lab, &r_stop);
 
   return true;
+}
+
+bool CSimulate::drawHero() {
+  if (status != INACTIVE) {
+    hero.OnRender();
+  } return true;
 }
 
 bool CSimulate::drawIntrpt(const SDL_Point* m) {

@@ -8,7 +8,7 @@
 class CArea
 {
 public:
-	static CArea	AreaControl;
+	static CArea	control;
 
 public:
 	std::vector<CMap>	MapList;

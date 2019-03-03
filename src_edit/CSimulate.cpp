@@ -15,6 +15,9 @@ simstate CSimulate::getStatus() {
 }
 
 void CSimulate::stopSim() {
+  hero.Flags &= ~Entityflags::GRAVITY;
+  CCamera::CameraControl.TargetMode = TARGET_MODE_NORMAL;
+  CCamera::CameraControl.FreeTarget();
   status = INACTIVE;
 }
 

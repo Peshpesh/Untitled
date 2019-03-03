@@ -55,21 +55,17 @@ int CCamera::GetY() {
 }
 
 int CCamera::LimX(const int& X) {
-	if (!uselimits) return X;
-
-	if (X < X_min) return X_min;
-	if (X + WWIDTH > X_max + 1) return X_max + 1 - WWIDTH;
-
-	return X;
+	if (uselimits) {
+		if (X < X_min) return X_min;
+		if (X + WWIDTH > X_max + 1) return X_max + 1 - WWIDTH;
+	}	return X;
 }
 
 int CCamera::LimY(const int& Y) {
-	if (!uselimits) return Y;
-
-	if (Y < Y_min) return Y_min;
-	if (Y + WHEIGHT > Y_max + 1) return Y_max + 1 - WHEIGHT;
-
-	return Y;
+	if (uselimits) {
+		if (Y < Y_min) return Y_min;
+		if (Y + WHEIGHT > Y_max + 1) return Y_max + 1 - WHEIGHT;
+	} return Y;
 }
 
 SDL_Point CCamera::GetPoint() {

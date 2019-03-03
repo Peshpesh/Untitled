@@ -1,8 +1,6 @@
 #ifndef _C_TILE_H_
 #define _C_TILE_H_
 
-#include "Define.h"
-
 enum
 {
   TILE_TYPE_NORMAL = 0,   // Nothing unusual about these tiles

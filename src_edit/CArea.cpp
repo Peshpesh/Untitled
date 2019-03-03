@@ -1,6 +1,6 @@
 #include "CArea.h"
 
-CArea CArea::AreaControl;
+CArea CArea::control;
 
 CArea::CArea() {
 	OnInit();
