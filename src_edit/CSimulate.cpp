@@ -4,10 +4,7 @@ CSimulate CSimulate::control;
 
 CSimulate::CSimulate() {
   status = INACTIVE;
-}
-
-bool CSimulate::OnInit() {
-  //
+  cam_option = TARGET_MODE_NORMAL;
 }
 
 simstate CSimulate::getStatus() {

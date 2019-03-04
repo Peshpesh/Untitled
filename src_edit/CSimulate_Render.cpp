@@ -6,6 +6,7 @@ bool CSimulate::OnRender(const SDL_Point* m) {
   if (!CAsset::drawAppFrame()) return false;
 
   if (!drawMain(intrpt ? NULL : m)) return false;
+  if (!drawCamera(intrpt ? NULL : m)) return false;
 
   if (intrpt && !drawIntrpt(m)) return false;
   return true;
@@ -34,9 +35,29 @@ bool CSimulate::drawMain(const SDL_Point* m) {
   return true;
 }
 
+bool CSimulate::drawCamera(const SDL_Point* m) {
+  using namespace simulator::camera;
+  bool retval = true;
+
+  if (status == ACTIVE || status == SUSPENDED) {
+    for (int i = 0; i <= TARGET_MODE_FOLLOW; i++) {
+      retval *= CAsset::drawStrBox(&r_modes[i], bsiz, (i == cam_option) ? on_col :
+        ((m && SDL_PointInRect(m, &r_modes[i])) ? off_hcol : off_col)
+      );
+      Font::NewCenterWrite(modes[i], &r_modes[i]);
+    }
+  } else {
+    for (int i = 0; i <= TARGET_MODE_FOLLOW; i++) {
+      retval *= CAsset::drawStrBox(&r_modes[i], bsiz, in_col);
+      Font::NewCenterWrite(modes[i], &r_modes[i]);
+    }
+  }
+  return retval;
+}
+
 bool CSimulate::drawHero() {
   if (status != INACTIVE) {
-    hero.OnRender();
+    return hero.OnRender();
   } return true;
 }
 

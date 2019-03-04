@@ -33,6 +33,19 @@ namespace simulator {
   extern const SDL_Point* suspend_hcol;
   extern const SDL_Point* stop_col;
   extern const SDL_Point* stop_hcol;
+  namespace camera {
+    extern const short w_mode;
+    extern const short h_mode;
+    extern const short x_mode;
+    extern const short y_mode;
+    extern const char* const modes[];
+    extern const SDL_Rect r_modes[];
+    extern const short bsiz;
+    extern const SDL_Point* in_col;
+    extern const SDL_Point* off_col;
+    extern const SDL_Point* off_hcol;
+    extern const SDL_Point* on_col;
+  }
 }
 
 class CSimulate : public CEvent {
@@ -44,9 +57,9 @@ public:
 
 private:
   simstate status;
+  short cam_option;
 
 public:
-  bool OnInit();
   void OnLoop(const SDL_Point* m);
   void OnTerminate();
 
@@ -60,7 +73,10 @@ private:
   void OnLButtonDown(int mX, int mY);
   void OnRButtonDown(int mX, int mY);
   bool handleStartSim(const SDL_Point* m);
+  bool handleSuspendSim(const SDL_Point* m);
   bool handleStopSim(const SDL_Point* m);
+
+  bool handleCameraOption(const SDL_Point* m);
 
 public:
   bool OnRender(const SDL_Point* m);
@@ -68,6 +84,7 @@ public:
 
 private:
   bool drawMain(const SDL_Point* m);
+  bool drawCamera(const SDL_Point* m);
   bool drawIntrpt(const SDL_Point* m);
 
 public:
