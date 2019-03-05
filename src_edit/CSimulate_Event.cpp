@@ -30,9 +30,7 @@ bool CSimulate::handleStartSim(const SDL_Point* m) {
       return true;
     }
   } else if (CAsset::inWorkspace(m)) {
-    hero.Flags |= Entityflags::GRAVITY;
-    CCamera::CameraControl.TargetMode = TARGET_MODE_FOLLOW;
-    CCamera::CameraControl.SetTarget(&hero.X, &hero.Y, &hero.spriteR.w, &hero.spriteR.h);
+    updateCamera();
     status = ACTIVE;
     return true;
   }
@@ -62,6 +60,7 @@ bool CSimulate::handleCameraOption(const SDL_Point* m) {
     for (int i = 0; i <= TARGET_MODE_FOLLOW; i++) {
       if (i != cam_option && SDL_PointInRect(m, &r_modes[i])) {
         cam_option = i;
+        updateCamera();
         return true;
       }
     }

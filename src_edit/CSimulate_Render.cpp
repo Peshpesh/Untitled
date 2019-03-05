@@ -7,6 +7,8 @@ bool CSimulate::OnRender(const SDL_Point* m) {
 
   if (!drawMain(intrpt ? NULL : m)) return false;
   if (!drawCamera(intrpt ? NULL : m)) return false;
+  if (!drawManualCam(intrpt ? NULL : m)) return false;
+  if (!drawFollowCam(intrpt ? NULL : m)) return false;
 
   if (intrpt && !drawIntrpt(m)) return false;
   return true;
@@ -39,6 +41,8 @@ bool CSimulate::drawCamera(const SDL_Point* m) {
   using namespace simulator::camera;
   bool retval = true;
 
+  Font::NewCenterWrite(modes_title, &p_modes_title);
+
   if (status == ACTIVE || status == SUSPENDED) {
     for (int i = 0; i <= TARGET_MODE_FOLLOW; i++) {
       retval *= CAsset::drawStrBox(&r_modes[i], bsiz, (i == cam_option) ? on_col :
@@ -52,6 +56,49 @@ bool CSimulate::drawCamera(const SDL_Point* m) {
       Font::NewCenterWrite(modes[i], &r_modes[i]);
     }
   }
+  return retval;
+}
+
+bool CSimulate::drawManualCam(const SDL_Point* m) {
+  using namespace simulator::camera;
+  bool retval = true;
+
+  Font::NewCenterWrite(manual_title, &p_manual_title);
+
+  if (status == ACTIVE || status == SUSPENDED) {
+    retval *= CAsset::drawStrBox(&r_cam_x, bsiz, (m && SDL_PointInRect(m, &r_cam_x)) ? off_hcol : off_col);
+    retval *= CAsset::drawStrBox(&r_cam_y, bsiz, (m && SDL_PointInRect(m, &r_cam_y)) ? off_hcol : off_col);
+  } else {
+    retval *= CAsset::drawStrBox(&r_cam_x, bsiz, in_col);
+    retval *= CAsset::drawStrBox(&r_cam_y, bsiz, in_col);
+  }
+
+  std::string x_s = "X " + Font::intToStr(cam_x);
+  std::string y_s = "Y " + Font::intToStr(cam_y);
+  Font::NewCenterWrite(x_s.c_str(), &r_cam_x);
+  Font::NewCenterWrite(y_s.c_str(), &r_cam_y);
+  return retval;
+}
+
+bool CSimulate::drawFollowCam(const SDL_Point* m) {
+  using namespace simulator::camera;
+  bool retval = true;
+
+  Font::NewCenterWrite(follow_title, &p_follow_title);
+
+  if (status == ACTIVE || status == SUSPENDED) {
+    retval *= CAsset::drawStrBox(&r_follow_w, bsiz, (m && SDL_PointInRect(m, &r_follow_w)) ? off_hcol : off_col);
+    retval *= CAsset::drawStrBox(&r_follow_h, bsiz, (m && SDL_PointInRect(m, &r_follow_h)) ? off_hcol : off_col);
+  } else {
+    retval *= CAsset::drawStrBox(&r_follow_w, bsiz, in_col);
+    retval *= CAsset::drawStrBox(&r_follow_h, bsiz, in_col);
+  }
+
+  std::string w_s = "W " + Font::intToStr(follow_w);
+  std::string h_s = "H " + Font::intToStr(follow_h);
+  Font::NewCenterWrite(w_s.c_str(), &r_follow_w);
+  Font::NewCenterWrite(h_s.c_str(), &r_follow_h);
+
   return retval;
 }
 

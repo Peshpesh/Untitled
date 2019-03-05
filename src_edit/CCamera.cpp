@@ -20,6 +20,29 @@ void CCamera::OnMove(int MoveX, int MoveY) {
 	Y += MoveY;
 }
 
+void CCamera::SetPos(int X, int Y) {
+	this->X = X;
+	this->Y = Y;
+}
+
+void CCamera::SetTarget(float* X, float* Y) {
+	TargetX = X;
+	TargetY = Y;
+	TargetW = TargetH = NULL;
+}
+
+void CCamera::SetTarget(float* X, float* Y, int* W, int* H) {
+	TargetX = X;
+	TargetY = Y;
+	TargetW = W;
+	TargetH = H;
+}
+
+void CCamera::FreeTarget() {
+	TargetX = TargetY = NULL;
+	TargetW = TargetH = NULL;
+}
+
 int CCamera::GetX() {
 	if (TargetX != NULL) {
 		// int x_disp = (usedisplace && TargetW) ? *TargetW / 2 : 0;
@@ -192,29 +215,6 @@ double CCamera::relYToTrue(const double& rel_y, const double& Z) {
 	return cY + (dY * Z);
 }
 
-void CCamera::SetPos(int X, int Y) {
-	this->X = X;
-	this->Y = Y;
-}
-
-void CCamera::SetTarget(float* X, float* Y) {
-	TargetX = X;
-	TargetY = Y;
-	TargetW = TargetH = NULL;
-}
-
-void CCamera::SetTarget(float* X, float* Y, int* W, int* H) {
-	TargetX = X;
-	TargetY = Y;
-	TargetW = W;
-	TargetH = H;
-}
-
-void CCamera::FreeTarget() {
-	TargetX = TargetY = NULL;
-	TargetW = TargetH = NULL;
-}
-
 void CCamera::EnableLim() {
 	uselimits = true;
 }
@@ -234,6 +234,11 @@ void CCamera::GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max) {
 	Y_min = this->Y_min;
 	X_max = this->X_max;
 	Y_max = this->Y_max;
+}
+
+void CCamera::SetFollow(const unsigned int& w, const unsigned int& h) {
+	follow_w = w;
+	follow_h = h;
 }
 
 //////////////////////////////////////

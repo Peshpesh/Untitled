@@ -4,8 +4,8 @@ CSimEntity::CSimEntity() {
   sprtSrc = NULL;
 	X = Y = 0.0f;
 
-  // Flags = Entityflags::GRAVITY | Entityflags::HOLLOW;
-  Flags = Entityflags::HOLLOW;
+  Flags = Entityflags::GRAVITY | Entityflags::HOLLOW;
+  // Flags = Entityflags::HOLLOW;
 	Dead = false;
 
 	SpeedX = SpeedY = AccelX = AccelY = 0.0f;

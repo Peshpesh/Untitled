@@ -38,8 +38,29 @@ namespace simulator {
     extern const short h_mode;
     extern const short x_mode;
     extern const short y_mode;
+    extern const char* const modes_title;
     extern const char* const modes[];
+    extern const SDL_Point p_modes_title;
     extern const SDL_Rect r_modes[];
+
+    extern const short w_manual;
+    extern const short h_manual;
+    extern const short x_manual;
+    extern const short y_manual;
+    extern const char* const manual_title;
+    extern const SDL_Point p_manual_title;
+    extern const SDL_Rect r_cam_x;
+    extern const SDL_Rect r_cam_y;
+
+    extern const short w_follow;
+    extern const short h_follow;
+    extern const short x_follow;
+    extern const short y_follow;
+    extern const char* const follow_title;
+    extern const SDL_Point p_follow_title;
+    extern const SDL_Rect r_follow_w;
+    extern const SDL_Rect r_follow_h;
+
     extern const short bsiz;
     extern const SDL_Point* in_col;
     extern const SDL_Point* off_col;
@@ -58,6 +79,9 @@ public:
 private:
   simstate status;
   short cam_option;
+  unsigned int follow_w;
+  unsigned int follow_h;
+  int cam_x, cam_y;
 
 public:
   void OnLoop(const SDL_Point* m);
@@ -85,11 +109,16 @@ public:
 private:
   bool drawMain(const SDL_Point* m);
   bool drawCamera(const SDL_Point* m);
+  bool drawManualCam(const SDL_Point* m);
+  bool drawFollowCam(const SDL_Point* m);
   bool drawIntrpt(const SDL_Point* m);
 
 public:
   simstate getStatus();
   void stopSim();
+
+private:
+  void updateCamera();
 };
 
 #endif

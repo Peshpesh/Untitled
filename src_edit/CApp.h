@@ -77,6 +77,8 @@ private:
 	int mouseX;
 	int mouseY;
 
+  bool pan_l, pan_r, pan_u, pan_d;
+
 public:
 	int active_mod;
 
@@ -111,6 +113,8 @@ public:
 	void OnTerminate();
 
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+
+	void OnKeyUp(SDL_Keycode sym, Uint16 mod);
 
 	void OnLButtonDown(int mX, int mY);
 

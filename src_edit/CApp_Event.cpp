@@ -37,7 +37,21 @@ void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 	if (!CInterrupt::isNone()) return;
 
   switch (sym) {
+		case SDLK_LEFT: 	pan_l = true; break;
+		case SDLK_RIGHT: 	pan_r = true; break;
+		case SDLK_UP: 		pan_u = true; break;
+		case SDLK_DOWN: 	pan_d = true; break;
     case SDLK_ESCAPE: CInterrupt::appendFlag(INTRPT_EXIT); break;
+    default: break;
+  }
+}
+
+void CApp::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
+  switch (sym) {
+		case SDLK_LEFT: 	pan_l = false; break;
+		case SDLK_RIGHT: 	pan_r = false; break;
+		case SDLK_UP: 		pan_u = false; break;
+		case SDLK_DOWN: 	pan_d = false; break;
     default: break;
   }
 }

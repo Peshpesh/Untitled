@@ -27,8 +27,8 @@ private:
 	int X_min, X_max;			//	min/max allowable X coordinates for viewing area
 	int Y_min, Y_max;			//	min/max allowable Y coordinates for viewing area
 	bool uselimits;				// 	true if min/max coords are enforced
-	int follow_w;		// width of range where the target can move without updating camera X
-	int follow_h;		// height of range where the target can move without updating camera Y
+	unsigned int follow_w;		// width of range where the target can move without updating camera X
+	unsigned int follow_h;		// height of range where the target can move without updating camera Y
 
 public:
 	int TargetMode;
@@ -70,6 +70,7 @@ public:
 	void DisableLim();
 	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
 	void GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max);
+	void SetFollow(const unsigned int& w, const unsigned int& h);
 
 public:	// public debug members
 	// bool usedisplace;
