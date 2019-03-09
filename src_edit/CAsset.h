@@ -155,6 +155,7 @@ class CAsset
 public:
     static bool isInt(const char& c);
     static int charToInt(const char& c);
+    static int strToInt(const std::string& str);
     static double strToDouble(const std::string& str);
 };
 

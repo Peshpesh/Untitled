@@ -34,6 +34,8 @@ namespace simulator {
   extern const SDL_Point* stop_col;
   extern const SDL_Point* stop_hcol;
   namespace camera {
+    enum edit_cam {EDIT_NONE = 0, EDIT_CAM_X, EDIT_CAM_Y, EDIT_FOLLOW_W, EDIT_FOLLOW_H};
+    extern const short max_edit_dig;
     extern const short w_mode;
     extern const short h_mode;
     extern const short x_mode;
@@ -82,6 +84,8 @@ private:
   unsigned int follow_w;
   unsigned int follow_h;
   int cam_x, cam_y;
+  short edit_xywh;
+  std::string edit_sval;
 
 public:
   void OnLoop(const SDL_Point* m);
@@ -93,14 +97,21 @@ public:
 private:
   bool handleInterr(SDL_Event* Event);
 
-  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void OnLButtonDown(int mX, int mY);
-  void OnRButtonDown(int mX, int mY);
   bool handleStartSim(const SDL_Point* m);
   bool handleSuspendSim(const SDL_Point* m);
   bool handleStopSim(const SDL_Point* m);
 
   bool handleCameraOption(const SDL_Point* m);
+  bool handleManualCam(const SDL_Point* m);
+  bool handleFollowCam(const SDL_Point* m);
+
+private:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void addToEdit(const char& c);
+  void delFromEdit();
+  void stopEdit();
+  void applyEdit();
 
 public:
   bool OnRender(const SDL_Point* m);

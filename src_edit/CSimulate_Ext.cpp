@@ -23,6 +23,7 @@ namespace simulator {
   const SDL_Point* stop_col     = &palette::red;
   const SDL_Point* stop_hcol    = &palette::light_red;
   namespace camera {
+    const short max_edit_dig = 4;
     const short w_mode  = w_main;
     const short h_mode  = h_main;
     const short x_mode  = x_main + w_main + 20;

@@ -380,9 +380,25 @@ int CAsset::charToInt(const char& c) {
   return retval;
 }
 
+int CAsset::strToInt(const std::string& str) {
+  if (str.empty()) return 0;
+  int val = 0;
+
+  bool neg = (str[0] == '-');
+  int i = str.size() - 1;
+  int O = 1;
+  while (i >= neg) {
+    if (str[i] == '.') return neg ? -val : val; // assuming the period is a floating point
+    if (!isInt(str[i])) return 0;  // invalid character
+    val += O * charToInt(str[i]);
+    O *= 10;
+    i--;
+  }
+  return val;
+}
+
 double CAsset::strToDouble(const std::string& str) {
   if (str.empty()) return 0.0;
-
   double val = 0.0;
 
   bool neg = (str[0] == '-');
