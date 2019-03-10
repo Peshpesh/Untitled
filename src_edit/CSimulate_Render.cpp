@@ -9,6 +9,7 @@ bool CSimulate::OnRender(const SDL_Point* m) {
   if (!drawCamera(intrpt ? NULL : m)) return false;
   if (!drawManualCam(intrpt ? NULL : m)) return false;
   if (!drawFollowCam(intrpt ? NULL : m)) return false;
+  if (!drawApplyCam(intrpt ? NULL : m)) return false;
 
   if (intrpt && !drawIntrpt(m)) return false;
   return true;
@@ -105,6 +106,22 @@ bool CSimulate::drawFollowCam(const SDL_Point* m) {
   std::string h_s = "H " + Font::intToStr(follow_h);
   Font::NewCenterWrite(edit_w ? edit_sval.c_str() : w_s.c_str(), &r_follow_w);
   Font::NewCenterWrite(edit_h ? edit_sval.c_str() : h_s.c_str(), &r_follow_h);
+
+  return retval;
+}
+
+bool CSimulate::drawApplyCam(const SDL_Point* m) {
+  using namespace simulator::camera;
+  bool retval = true;
+
+  if ((status == ACTIVE || status == SUSPENDED) && did_edit_xywh) {
+    retval *= CAsset::drawStrBox(&r_app_mf, bsiz,
+      (m && SDL_PointInRect(m, &r_app_mf)) ? off_hcol : off_col);
+  } else {
+    retval *= CAsset::drawStrBox(&r_app_mf, bsiz, in_col);
+  }
+
+  Font::NewCenterWrite(app_mf_title, &r_app_mf);
 
   return retval;
 }

@@ -98,6 +98,11 @@ SDL_Point CCamera::GetPoint() {
 	return retval;
 }
 
+void CCamera::GetNormalXY(int& X, int& Y) {
+	X = this->X;
+	Y = this->Y;
+}
+
 SDL_Point CCamera::GetWinRelPoint(const SDL_Point& absPos) {
 	SDL_Point retval = {absPos.x - GetX(), absPos.y - GetY()};
 	return retval;
@@ -239,6 +244,11 @@ void CCamera::GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max) {
 void CCamera::SetFollow(const unsigned int& w, const unsigned int& h) {
 	follow_w = w;
 	follow_h = h;
+}
+
+void CCamera::GetFollow(unsigned int& w, unsigned int& h) {
+	w = follow_w;
+	h = follow_h;
 }
 
 //////////////////////////////////////

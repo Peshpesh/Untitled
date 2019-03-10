@@ -77,8 +77,11 @@ bool CApp::handleEngSwitch(const SDL_Point* m) {
 	for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
 		if (SDL_PointInRect(m, &engineButton[i])) {
 			active_mod = i;
-			if (active_mod != MODIFY_SIM && CSimulate::control.getStatus() == PLACE) {
-				CSimulate::control.stopSim();
+			if (active_mod != MODIFY_SIM) {
+				CSimulate::control.resetxywh();
+				if (CSimulate::control.getStatus() == PLACE) {
+					CSimulate::control.stopSim();
+				}
 			}
 			return true;
 		}

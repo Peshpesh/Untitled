@@ -59,6 +59,13 @@ namespace simulator {
     const SDL_Rect r_follow_w = CAsset::getRect(x_follow, y_follow, w_follow / 2, h_follow);
     const SDL_Rect r_follow_h = CAsset::getRect(x_follow + (w_follow / 2), y_follow, w_follow / 2, h_follow);
 
+    const short w_app_mf = w_manual / 2;
+    const short h_app_mf = h_manual * 2;
+    const short x_app_mf = x_manual + w_manual + 20;
+    const short y_app_mf = WHEIGHT + (EHEIGHT - WHEIGHT - h_app_mf) / 2;
+    const char* const app_mf_title = "Apply XYWH";
+    const SDL_Rect r_app_mf = CAsset::getRect(x_app_mf, y_app_mf, w_app_mf, h_app_mf);
+
     const short bsiz          = 2;
     const SDL_Point* in_col   = &palette::dark_gray;
     const SDL_Point* off_col  = &palette::light_gray;

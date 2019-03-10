@@ -43,6 +43,7 @@ public:
 	int GetX();
 	int GetY();
 	SDL_Point GetPoint();
+	void GetNormalXY(int& X, int& Y);
 	SDL_Point GetWinRelPoint(const SDL_Point& absPos);
 	SDL_Point GetWinRelPoint(const double& rel_x, const double& rel_y);
 	SDL_Point GetCamRelPoint(const SDL_Point& winPos);
@@ -71,6 +72,7 @@ public:
 	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
 	void GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max);
 	void SetFollow(const unsigned int& w, const unsigned int& h);
+	void GetFollow(unsigned int& w, unsigned int& h);
 
 public:	// public debug members
 	// bool usedisplace;

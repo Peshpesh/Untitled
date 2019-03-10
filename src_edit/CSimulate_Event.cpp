@@ -13,15 +13,15 @@ bool CSimulate::handleInterr(SDL_Event* Event) {
 void CSimulate::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
 
-  if (edit_xywh != simulator::camera::EDIT_NONE) edit_xywh = simulator::camera::EDIT_NONE;
-
   if (handleStartSim(&m))   return;
   if (handleSuspendSim(&m)) return;
   if (handleStopSim(&m))    return;
   if (status == ACTIVE || status == SUSPENDED) {
+    if (edit_xywh) clearxywh();
     if (handleCameraOption(&m)) return;
     if (handleManualCam(&m))    return;
     if (handleFollowCam(&m))    return;
+    if (handleApplyCam(&m))     return;
   }
 }
 
@@ -96,9 +96,17 @@ bool CSimulate::handleFollowCam(const SDL_Point* m) {
   return retval;
 }
 
+bool CSimulate::handleApplyCam(const SDL_Point* m) {
+  using namespace simulator::camera;
+  if (did_edit_xywh && SDL_PointInRect(m, &r_app_mf)) {
+    updateCamera();
+    did_edit_xywh = false;
+    return true;
+  } return false;
+}
 
 void CSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
-  if (edit_xywh != simulator::camera::EDIT_NONE) {
+  if (edit_xywh) {
     switch (sym) {
       case SDLK_0:	        addToEdit('0');	      break;
       case SDLK_1:	        addToEdit('1');	      break;
@@ -111,7 +119,7 @@ void CSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       case SDLK_8:	        addToEdit('8');	      break;
       case SDLK_9:	        addToEdit('9');	      break;
       case SDLK_BACKSPACE:  delFromEdit();        break;
-      case SDLK_ESCAPE:     stopEdit();           break;
+      case SDLK_ESCAPE:     clearxywh();          break;
       case SDLK_RETURN:     applyEdit();          break;
       default:              break;
     }
@@ -131,21 +139,36 @@ void CSimulate::delFromEdit() {
   if (edit_sval.size() > 0) edit_sval.erase(edit_sval.end() - 1);
 }
 
-void CSimulate::stopEdit() {
-  edit_sval.clear();
-  edit_xywh = simulator::camera::EDIT_NONE;
-}
-
 void CSimulate::applyEdit() {
   if (!edit_sval.empty()) {
     int appl_val = CAsset::strToInt(edit_sval);
     switch (edit_xywh) {
-      case simulator::camera::EDIT_CAM_X:     cam_x = appl_val;     break;
-      case simulator::camera::EDIT_CAM_Y:     cam_y = appl_val;     break;
-      case simulator::camera::EDIT_FOLLOW_W:  follow_w = appl_val;  break;
-      case simulator::camera::EDIT_FOLLOW_H:  follow_h = appl_val;  break;
+      case simulator::camera::EDIT_CAM_X: {
+        if (cam_x != appl_val) {
+          cam_x = appl_val;
+          did_edit_xywh = true;
+        } break;
+      }
+      case simulator::camera::EDIT_CAM_Y: {
+        if (cam_y != appl_val) {
+          cam_y = appl_val;
+          did_edit_xywh = true;
+        } break;
+      }
+      case simulator::camera::EDIT_FOLLOW_W: {
+        if (follow_w != appl_val) {
+          follow_w = appl_val;
+          did_edit_xywh = true;
+        } break;
+      }
+      case simulator::camera::EDIT_FOLLOW_H: {
+        if (follow_h != appl_val) {
+          follow_h = appl_val;
+          did_edit_xywh = true;
+        } break;
+      }
       default: break;
     }
   }
-  stopEdit();
+  clearxywh();
 }

@@ -63,6 +63,13 @@ namespace simulator {
     extern const SDL_Rect r_follow_w;
     extern const SDL_Rect r_follow_h;
 
+    extern const short x_app_mf;
+    extern const short y_app_mf;
+    extern const short h_app_mf;
+    extern const short w_app_mf;
+    extern const char* const app_mf_title;
+    extern const SDL_Rect r_app_mf;
+
     extern const short bsiz;
     extern const SDL_Point* in_col;
     extern const SDL_Point* off_col;
@@ -86,6 +93,7 @@ private:
   int cam_x, cam_y;
   short edit_xywh;
   std::string edit_sval;
+  bool did_edit_xywh;
 
 public:
   void OnLoop(const SDL_Point* m);
@@ -105,12 +113,12 @@ private:
   bool handleCameraOption(const SDL_Point* m);
   bool handleManualCam(const SDL_Point* m);
   bool handleFollowCam(const SDL_Point* m);
+  bool handleApplyCam(const SDL_Point* m);
 
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void addToEdit(const char& c);
   void delFromEdit();
-  void stopEdit();
   void applyEdit();
 
 public:
@@ -122,11 +130,14 @@ private:
   bool drawCamera(const SDL_Point* m);
   bool drawManualCam(const SDL_Point* m);
   bool drawFollowCam(const SDL_Point* m);
+  bool drawApplyCam(const SDL_Point* m);
   bool drawIntrpt(const SDL_Point* m);
 
 public:
   simstate getStatus();
   void stopSim();
+  void clearxywh();
+  void resetxywh();
 
 private:
   void updateCamera();
