@@ -23,8 +23,7 @@ void CArea::GetDims(int& mW, int& mH)
 	mH = AreaHeight;
 }
 
-CMap* CArea::GetMap(int X, int Y)
-{
+CMap* CArea::GetMap(int X, int Y) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE;
 	int MapHeight = MAP_HEIGHT * TILE_SIZE;
 
@@ -36,14 +35,15 @@ CMap* CArea::GetMap(int X, int Y)
 	return &MapList[ID];
 }
 
-CTile* CArea::GetTile(int X, int Y)
-{
-	int MapWidth = MAP_WIDTH * TILE_SIZE;
-	int MapHeight = MAP_HEIGHT * TILE_SIZE;
+CTile* CArea::GetTile(int X, int Y) {
+	if (X < 0 || Y < 0) return NULL;
 
 	CMap* Map = GetMap(X, Y);
 
 	if (Map == NULL) return NULL;
+
+	int MapWidth = MAP_WIDTH * TILE_SIZE;
+	int MapHeight = MAP_HEIGHT * TILE_SIZE;
 
 	X = X % MapWidth;
 	Y = Y % MapHeight;

@@ -1,7 +1,9 @@
 #include "CSimEntity.h"
 
 void CSimEntity::OnMove(float MoveX, float MoveY) {
+	Jumper = false;
 	if (MoveX == 0 && MoveY == 0) return;
+	// bool CanMove = true;
 
 	// resolutions of pathfinders (in pixels)
 	double NewX = 0;
@@ -33,7 +35,16 @@ void CSimEntity::OnMove(float MoveX, float MoveY) {
 		}
 	}
 
-	while (true) {
+	while (true)
+	{
+		// if (Flags & ENTITY_FLAG_GHOST)
+		// {
+		// 	// We don't care about collisions, but we need to send events to other entities
+		// 	PosValid((int)(X + NewX), (int)(Y + NewY), true);
+		// 	X += NewX;
+		// 	Y += NewY;
+		// }
+
 		Translate(NewX, NewY);
 
 		MoveX -= NewX;
@@ -59,6 +70,8 @@ void CSimEntity::Translate(double NewX, double NewY) {
 	int srcYt = Y + hitboxR.y;
 	int srcXr = srcXl + hitboxR.w - 1;
 	int srcYb = srcYt + hitboxR.h - 1;
+	// int pushY = 0;
+	Grounded = false;
   int push_Y = getVertDeflect(NewX, NewY);
 
 	// Now, let's see if the destination hitbox will collide with
@@ -71,6 +84,8 @@ void CSimEntity::Translate(double NewX, double NewY) {
 			X += NewX;
 			Y += push_Y;
 			if (push_Y < 0) {
+				Jumper = true;
+				Grounded = true;
 				if (NewY > 0)	SpeedY = 0;
 			}	else {
 				if (NewY < 0)	SpeedY = 0;
@@ -83,6 +98,10 @@ void CSimEntity::Translate(double NewX, double NewY) {
 			if (CheckPathXY(srcXl, srcXr, destYt, destYb)) Y += NewY;
 			else {
 				SpeedY = 0;
+				if (NewY > 0) {
+					Jumper = true;
+					Grounded = true;
+				}
 			}
 		}
 	}	else {
@@ -95,6 +114,10 @@ void CSimEntity::Translate(double NewX, double NewY) {
       Y += NewY;
     }	else {
 			SpeedY = 0;
+			if (NewY > 0) {
+				Jumper = true;
+				Grounded = true;
+			}
 		}
 	}
 }

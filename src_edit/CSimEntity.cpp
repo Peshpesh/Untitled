@@ -8,6 +8,16 @@ CSimEntity::CSimEntity() {
   // Flags = Entityflags::HOLLOW;
 	Dead = false;
 
+  jump_timer = 0;
+  jump_timer_max = 125;
+  jump_timer_init = 0;
+
+  Jumper = false;
+	Grounded = false;
+
+  move_left = false;
+	move_right = false;
+
 	SpeedX = SpeedY = AccelX = AccelY = 0.0f;
 	MaxSpeedX = 10.0f;
 	MaxSpeedY = 10.0f;
@@ -22,6 +32,20 @@ void CSimEntity::OnLoad() {
 }
 
 void CSimEntity::OnLoop() {
+  if (jump_timer_init) {
+    jump_timer = SDL_GetTicks() - jump_timer_init;
+    if (jump_timer >= jump_timer_max) {
+      SpeedY = -MaxSpeedY;
+      jump_timer_init = 0;
+    } else {
+      SpeedY = -(MaxSpeedY / 2.0) * (1.0 + ((float)(jump_timer)/(float)(jump_timer_max)));
+    }
+  }
+
+	if (move_left == false && move_right == false) stopMove();
+	else if (move_left) AccelX = -MaxAccelX;
+	else if (move_right) AccelX = MaxAccelX;
+
 	if (Flags & Entityflags::GRAVITY) AccelY = MaxAccelY;
 
 	SpeedX += AccelX * CFPS::FPSControl.GetSpeedFactor();
@@ -35,6 +59,25 @@ void CSimEntity::OnLoop() {
 	if (SpeedY < -MaxSpeedY) SpeedY = -MaxSpeedY;
 
 	OnMove(SpeedX, SpeedY);
+}
+
+bool CSimEntity::Jump() {
+	if (Jumper == false) return false;
+  jump_timer_init = SDL_GetTicks();
+	return true;
+}
+
+void CSimEntity::JumpRelease() {
+  jump_timer_init = false;
+}
+
+void CSimEntity::stopMove() {
+	if (SpeedX > 0) AccelX = -MaxAccelX * 1.5;
+	if (SpeedX < 0) AccelX = MaxAccelX * 1.5;
+	if (SpeedX < 2.0f && SpeedX > -2.0f) {
+		AccelX = 0;
+		SpeedX = 0;
+	}
 }
 
 bool CSimEntity::OnRender() {

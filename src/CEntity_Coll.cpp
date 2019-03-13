@@ -20,13 +20,13 @@ int CEntity::getVertDeflect(const double& NewX, const double& NewY) {
                     // OR, "where on the tile (in Y, from 0 to 31) is this point?"
 
   if (NewX > 0.0)	{ // Moving right
-    Tile = CArea::control.GetTile(destXr, srcYb);
+    if ((Tile = CArea::control.GetTile(destXr, srcYb)) == NULL) return 0;
     Y_offset = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
     if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Y_offset < TILE_SIZE / 2)) {
       push_Y = CollGround(Tile->CollID, destXr % TILE_SIZE, Y_offset);
     }
     if (push_Y == 0) {
-      Tile = CArea::control.GetTile(destXr, srcYt);
+      if ((Tile = CArea::control.GetTile(destXr, srcYt)) == NULL) return 0;
       Y_offset = srcYt - ((srcYt / TILE_SIZE) * TILE_SIZE);
       if (Tile->CollID == SOLID_A_TL_MR || (Tile->CollID == SOLID_A_ML_BR && Y_offset >= TILE_SIZE / 2)) {
         push_Y = CollGround(Tile->CollID, destXr % TILE_SIZE, Y_offset);
@@ -34,12 +34,12 @@ int CEntity::getVertDeflect(const double& NewX, const double& NewY) {
     }
   } else if (NewX < 0.0) {	// Moving left
     Y_offset = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
-    Tile = CArea::control.GetTile(destXl, srcYb);
+    if ((Tile = CArea::control.GetTile(destXl, srcYb)) == NULL) return 0;
     if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Y_offset < TILE_SIZE / 2)) {
       push_Y = CollGround(Tile->CollID, destXl % TILE_SIZE, Y_offset);
     }
     if (push_Y == 0) {
-      Tile = CArea::control.GetTile(destXl, srcYt);
+      if ((Tile = CArea::control.GetTile(destXl, srcYt)) == NULL) return 0;
       Y_offset = srcYt - ((srcYt / TILE_SIZE) * TILE_SIZE);
       if (Tile->CollID == SOLID_A_ML_TR || (Tile->CollID == SOLID_A_BL_MR && Y_offset >= TILE_SIZE / 2)) {
         push_Y = CollGround(Tile->CollID, destXl % TILE_SIZE, Y_offset);

@@ -5,6 +5,7 @@ bool CSimulate::OnRender(const SDL_Point* m) {
 
   if (!CAsset::drawAppFrame()) return false;
 
+  if (!drawDebug()) return false;
   if (!drawMain(intrpt ? NULL : m)) return false;
   if (!drawCamera(intrpt ? NULL : m)) return false;
   if (!drawManualCam(intrpt ? NULL : m)) return false;
@@ -12,6 +13,10 @@ bool CSimulate::OnRender(const SDL_Point* m) {
   if (!drawApplyCam(intrpt ? NULL : m)) return false;
 
   if (intrpt && !drawIntrpt(m)) return false;
+  return true;
+}
+
+bool CSimulate::drawDebug() {
   return true;
 }
 

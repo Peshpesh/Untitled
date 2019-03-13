@@ -21,6 +21,8 @@ public:
 	float	Y;  // sprite y-position
 	SDL_Rect spriteR;	// sprite position & size on texture
 	SDL_Rect hitboxR;	// X and Y are offset values relative to sprite
+	bool	move_left;
+	bool	move_right;
 
 public:
 	int 	Flags;
@@ -31,6 +33,11 @@ protected:
 	float	SpeedY; // pixels / idealframe
 	float	AccelX; // pixels / idealframe^2
 	float	AccelY; // pixels / idealframe^2
+	short jump_timer;
+	short jump_timer_init;
+	short jump_timer_max;
+	bool Jumper;
+	bool Grounded;
 
 public:
 	float	MaxSpeedX; // pixels / idealframe
@@ -53,6 +60,11 @@ public:
 
 protected:
 	void OnMove(float MoveX, float MoveY);
+	void stopMove();
+
+public:
+	bool Jump();
+	void JumpRelease();
 
 protected:
 	void Translate(double NewX, double NewY);

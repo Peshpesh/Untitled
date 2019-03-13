@@ -16,6 +16,7 @@ CEntity::CEntity() {
 
   jump_timer = 0;
   jump_timer_max = 125;
+  jump_timer_init = 0;
 
 	// Type = ENTITY_TYPE_GENERIC;
 

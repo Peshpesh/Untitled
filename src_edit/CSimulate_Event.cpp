@@ -6,6 +6,30 @@ void CSimulate::OnEvent(SDL_Event* Event) {
   CEvent::OnEvent(Event);
 }
 
+void CSimulate::moveLeft() {
+  hero.move_left = true;
+}
+
+void CSimulate::moveRight() {
+  hero.move_right = true;
+}
+
+void CSimulate::stopMoveLeft() {
+  hero.move_left = false;
+}
+
+void CSimulate::stopMoveRight() {
+  hero.move_right = false;
+}
+
+void CSimulate::jump() {
+  hero.Jump();
+}
+
+void CSimulate::jumpRelease() {
+  hero.JumpRelease();
+}
+
 bool CSimulate::handleInterr(SDL_Event* Event) {
   return false;
 }
@@ -123,6 +147,9 @@ void CSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
       case SDLK_RETURN:     applyEdit();          break;
       default:              break;
     }
+  } else if (sym == SDLK_p) {
+    if (status == ACTIVE)         status = SUSPENDED;
+    else if (status == SUSPENDED) status = ACTIVE;
   }
 }
 

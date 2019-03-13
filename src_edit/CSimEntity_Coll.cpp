@@ -82,6 +82,7 @@ bool CSimEntity::CollTile(const SDL_Point& tilepos, const SDL_Point& tl, const S
   CTile* Tile = CArea::control.GetTile(tilepos.x * TILE_SIZE, tilepos.y * TILE_SIZE);
   // Check if the collided tile is entirely solid.
   // If it is, entity can't move to destination.
+  // if (Tile == NULL) SDL_Delay(1000);
   if (Tile == NULL || Tile->CollID == SOLID_ALL) return false;
 
   // Check if the collided tile is partially solid.

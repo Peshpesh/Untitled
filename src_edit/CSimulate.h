@@ -101,6 +101,12 @@ public:
 
 public:
   void OnEvent(SDL_Event* Event);
+  void moveLeft();
+  void moveRight();
+  void stopMoveLeft();
+  void stopMoveRight();
+  void jump();
+  void jumpRelease();
 
 private:
   bool handleInterr(SDL_Event* Event);
@@ -126,6 +132,7 @@ public:
   bool drawHero();
 
 private:
+  bool drawDebug();
   bool drawMain(const SDL_Point* m);
   bool drawCamera(const SDL_Point* m);
   bool drawManualCam(const SDL_Point* m);

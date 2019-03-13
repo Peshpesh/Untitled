@@ -36,11 +36,23 @@ bool CApp::handleInterr(SDL_Event* Event) {
 void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 	if (!CInterrupt::isNone()) return;
 
-  switch (sym) {
-		case SDLK_LEFT: 	pan_l = true; break;
-		case SDLK_RIGHT: 	pan_r = true; break;
+	switch (sym) {
+		case SDLK_LEFT: 	{
+			pan_l = true;
+			CSimulate::control.moveLeft();
+			break;
+		}
+		case SDLK_RIGHT: 	{
+			pan_r = true;
+			CSimulate::control.moveRight();
+			break;
+		}
 		case SDLK_UP: 		pan_u = true; break;
 		case SDLK_DOWN: 	pan_d = true; break;
+		case SDLK_SPACE:	{
+			CSimulate::control.jump();
+			break;
+		}
     case SDLK_ESCAPE: CInterrupt::appendFlag(INTRPT_EXIT); break;
     default: break;
   }
@@ -48,10 +60,22 @@ void CApp::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
 void CApp::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
   switch (sym) {
-		case SDLK_LEFT: 	pan_l = false; break;
-		case SDLK_RIGHT: 	pan_r = false; break;
+		case SDLK_LEFT: 	{
+			pan_l = false;
+			CSimulate::control.stopMoveLeft();
+			break;
+		}
+		case SDLK_RIGHT: 	{
+			pan_r = false;
+			CSimulate::control.stopMoveRight();
+			break;
+		}
 		case SDLK_UP: 		pan_u = false; break;
 		case SDLK_DOWN: 	pan_d = false; break;
+		case SDLK_SPACE:	{
+			CSimulate::control.jumpRelease();
+			break;
+		}
     default: break;
   }
 }
