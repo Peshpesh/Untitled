@@ -17,6 +17,12 @@ bool CSimulate::OnRender(const SDL_Point* m) {
 }
 
 bool CSimulate::drawDebug() {
+  SDL_Rect follow_dom = CCamera::CameraControl.GetFollow();
+  SDL_Point follow_p = CCamera::CameraControl.GetWinRelPoint(follow_dom.x, follow_dom.y);
+  follow_dom.x = follow_p.x;
+  follow_dom.y = follow_p.y;
+
+  CAsset::drawBox(&follow_dom, &palette::red);
   return true;
 }
 

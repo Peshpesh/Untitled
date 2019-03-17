@@ -27,8 +27,9 @@ private:
 	int X_min, X_max;			//	min/max allowable X coordinates for viewing area
 	int Y_min, Y_max;			//	min/max allowable Y coordinates for viewing area
 	bool uselimits;				// 	true if min/max coords are enforced
-	unsigned int follow_w;		// width of range where the target can move without updating camera X
-	unsigned int follow_h;		// height of range where the target can move without updating camera Y
+	// unsigned int follow_w;		// width of range where the target can move without updating camera X
+	// unsigned int follow_h;		// height of range where the target can move without updating camera Y
+	SDL_Rect follow_dom;			// rectangle (domain) containing followed object
 
 public:
 	int TargetMode;
@@ -38,6 +39,7 @@ public:
 
 public:
 	void OnMove(int MoveX, int MoveY);
+	void OnLoop();
 
 public:
 	int GetX();
@@ -66,13 +68,15 @@ public:
 	void SetPos(int X, int Y);
 	void SetTarget(float* X, float* Y);
 	void SetTarget(float* X, float* Y, int* W, int* H);
+	// bool ApplyTargetToStatic();
 	void FreeTarget();
 	void EnableLim();
 	void DisableLim();
 	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
 	void GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max);
-	void SetFollow(const unsigned int& w, const unsigned int& h);
-	void GetFollow(unsigned int& w, unsigned int& h);
+	void SetFollowDims(const unsigned int& w, const unsigned int& h);
+	void GetFollowDims(unsigned int& w, unsigned int& h);
+	SDL_Rect GetFollow();
 
 public:	// public debug members
 	// bool usedisplace;

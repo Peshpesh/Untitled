@@ -5,8 +5,9 @@ CCamera CCamera::CameraControl;
 CCamera::CCamera() {
 	X = Y = 0;
 	X_min = X_max = Y_min = Y_max = 0;
-	follow_w = 60;
-	follow_h = 50;
+	follow_dom.x = follow_dom.y = 0;
+	follow_dom.w = 60;
+	follow_dom.h = 50;
 	TargetX = TargetY = NULL;
 	TargetW = TargetH = NULL;
 	TargetMode = TARGET_MODE_NORMAL;
@@ -20,6 +21,31 @@ void CCamera::OnMove(int MoveX, int MoveY) {
 	Y += MoveY;
 }
 
+void CCamera::OnLoop() {
+	if (TargetX && TargetY) {
+		if (*TargetX < (float)(follow_dom.x)) follow_dom.x = *TargetX - (*TargetX < 0.0f);
+		if (*TargetY < follow_dom.y) follow_dom.y = *TargetY - (*TargetY < 0.0f);
+		if (TargetW) {
+			if (*TargetX + *TargetW > follow_dom.x + follow_dom.w) {
+				follow_dom.x = *TargetX + *TargetW - follow_dom.w - (*TargetX + *TargetW - follow_dom.w < 0.0f);
+			}
+		} else {
+			if (*TargetX > follow_dom.x + follow_dom.w) {
+				follow_dom.x = *TargetX - follow_dom.w - (*TargetX - follow_dom.w < 0.0f);
+			}
+		}
+		if (TargetH) {
+			if (*TargetY + *TargetH > follow_dom.y + follow_dom.h) {
+				follow_dom.y = *TargetY + *TargetH - follow_dom.h - (*TargetY + *TargetH - follow_dom.y < 0.0f);
+			}
+		} else {
+			if (*TargetY > follow_dom.y + follow_dom.h) {
+				follow_dom.y = *TargetY - follow_dom.h - (*TargetY - follow_dom.h < 0.0f);
+			}
+		}
+	}
+}
+
 void CCamera::SetPos(int X, int Y) {
 	this->X = X;
 	this->Y = Y;
@@ -29,6 +55,10 @@ void CCamera::SetTarget(float* X, float* Y) {
 	TargetX = X;
 	TargetY = Y;
 	TargetW = TargetH = NULL;
+	if (X && Y) {
+		follow_dom.x = *X - (follow_dom.w / 2.0f) - (*X - (float)(follow_dom.w / 2.0f) < 0.0f);
+		follow_dom.y = *Y - (follow_dom.h / 2.0f) - (*Y - (float)(follow_dom.h / 2.0f) < 0.0f);
+	}
 }
 
 void CCamera::SetTarget(float* X, float* Y, int* W, int* H) {
@@ -36,6 +66,12 @@ void CCamera::SetTarget(float* X, float* Y, int* W, int* H) {
 	TargetY = Y;
 	TargetW = W;
 	TargetH = H;
+	if (X && Y && W && H) {
+		follow_dom.x = *X + (*W / 2.0f) - (follow_dom.w / 2.0f) -
+								  (*X + (*W / 2.0f) - (float)(follow_dom.w / 2.0f) < 0.0f);
+		follow_dom.y = *Y + (*W / 2.0f) - (follow_dom.h / 2.0f) -
+								  (*Y + (*W / 2.0f) - (float)(follow_dom.h / 2.0f) < 0.0f);
+	}
 }
 
 void CCamera::FreeTarget() {
@@ -43,38 +79,67 @@ void CCamera::FreeTarget() {
 	TargetW = TargetH = NULL;
 }
 
+// int CCamera::GetX() {
+// 	if (TargetX != NULL) {
+// 		int x_disp = TargetW ? *TargetW / 2 : 0;
+// 		if (TargetMode == TARGET_MODE_FOLLOW) {
+// 			int current_X = *TargetX + x_disp - (WWIDTH / 2) - (*TargetX + x_disp < WWIDTH / 2);
+// 			if (current_X < X - (follow_w / 2)) X -= (X - (follow_w / 2)) - current_X;
+// 			else if (current_X > X + (follow_w / 2)) X += current_X - (X + follow_w / 2);
+// 			return LimX(X);
+// 		} else if (TargetMode == TARGET_MODE_CENTER) {
+// 			return LimX(*TargetX + x_disp - (WWIDTH / 2) - (*TargetX + x_disp < WWIDTH / 2));
+// 		}
+// 		return LimX(*TargetX + x_disp);
+// 	}
+// 	return LimX(X);
+// }
+
+// int CCamera::GetY() {
+// 	if (TargetY != NULL) {
+// 		// int y_disp = (usedisplace && TargetH) ? *TargetH / 2 : 0;
+// 		int y_disp = TargetH ? *TargetH / 2 : 0;
+// 		if (TargetMode == TARGET_MODE_FOLLOW) {
+// 			int current_Y = *TargetY + y_disp - (WHEIGHT / 2) - (*TargetY + y_disp < WHEIGHT / 2);
+// 			if (current_Y < Y - (follow_h / 2)) Y -= (Y - (follow_h / 2)) - current_Y;
+// 			else if (current_Y > Y + (follow_h / 2)) Y += current_Y - (Y + follow_h / 2);
+// 			return LimY(Y);
+// 		} else if (TargetMode == TARGET_MODE_CENTER) {
+// 			return LimY(*TargetY + y_disp - (WHEIGHT / 2) - (*TargetY + y_disp < WHEIGHT / 2));
+// 		}
+// 		return LimY(*TargetY + y_disp);
+// 	}
+// 	return LimY(Y);
+// }
+
 int CCamera::GetX() {
+	int retval = 0;
 	if (TargetX != NULL) {
-		// int x_disp = (usedisplace && TargetW) ? *TargetW / 2 : 0;
-		int x_disp = TargetW ? *TargetW / 2 : 0;
-		if (TargetMode == TARGET_MODE_FOLLOW) {
-			int current_X = *TargetX + x_disp - (WWIDTH / 2) - (*TargetX + x_disp < WWIDTH / 2);
-			if (current_X < X - (follow_w / 2)) X -= (X - (follow_w / 2)) - current_X;
-			else if (current_X > X + (follow_w / 2)) X += current_X - (X + follow_w / 2);
-			return LimX(X);
-		} else if (TargetMode == TARGET_MODE_CENTER) {
-			return LimX(*TargetX + x_disp - (WWIDTH / 2) - (*TargetX + x_disp < WWIDTH / 2));
+		switch (TargetMode) {
+			case TARGET_MODE_NORMAL: retval = *TargetX + (TargetW ? *TargetW / 2.0f : 0.0f); break;
+			case TARGET_MODE_CENTER: retval = *TargetX + (TargetW ? *TargetW / 2.0f : 0.0f) - (WWIDTH / 2); break;
+			case TARGET_MODE_FOLLOW: retval = follow_dom.x - (WWIDTH - follow_dom.w) / 2; break;
+			default: break;
 		}
-		return LimX(*TargetX + x_disp);
+	} else {
+		retval = X;
 	}
-	return LimX(X);
+	return LimX(retval);
 }
 
 int CCamera::GetY() {
+	int retval = 0;
 	if (TargetY != NULL) {
-		// int y_disp = (usedisplace && TargetH) ? *TargetH / 2 : 0;
-		int y_disp = TargetH ? *TargetH / 2 : 0;
-		if (TargetMode == TARGET_MODE_FOLLOW) {
-			int current_Y = *TargetY + y_disp - (WHEIGHT / 2) - (*TargetY + y_disp < WHEIGHT / 2);
-			if (current_Y < Y - (follow_h / 2)) Y -= (Y - (follow_h / 2)) - current_Y;
-			else if (current_Y > Y + (follow_h / 2)) Y += current_Y - (Y + follow_h / 2);
-			return LimY(Y);
-		} else if (TargetMode == TARGET_MODE_CENTER) {
-			return LimY(*TargetY + y_disp - (WHEIGHT / 2) - (*TargetY + y_disp < WHEIGHT / 2));
+		switch (TargetMode) {
+			case TARGET_MODE_NORMAL: retval = *TargetY + (TargetH ? *TargetH / 2.0f : 0.0f); break;
+			case TARGET_MODE_CENTER: retval = *TargetY + (TargetH ? *TargetH / 2.0f : 0.0f) - (WHEIGHT / 2); break;
+			case TARGET_MODE_FOLLOW: retval = follow_dom.y - (WHEIGHT - follow_dom.h) / 2; break;
+			default: break;
 		}
-		return LimY(*TargetY + y_disp);
+	} else {
+		retval = Y;
 	}
-	return LimY(Y);
+	return LimY(retval);
 }
 
 int CCamera::LimX(const int& X) {
@@ -241,14 +306,18 @@ void CCamera::GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max) {
 	Y_max = this->Y_max;
 }
 
-void CCamera::SetFollow(const unsigned int& w, const unsigned int& h) {
-	follow_w = w;
-	follow_h = h;
+void CCamera::SetFollowDims(const unsigned int& w, const unsigned int& h) {
+	follow_dom.w = w;
+	follow_dom.h = h;
 }
 
-void CCamera::GetFollow(unsigned int& w, unsigned int& h) {
-	w = follow_w;
-	h = follow_h;
+void CCamera::GetFollowDims(unsigned int& w, unsigned int& h) {
+	w = follow_dom.w;
+	h = follow_dom.h;
+}
+
+SDL_Rect CCamera::GetFollow() {
+	return follow_dom;
 }
 
 //////////////////////////////////////

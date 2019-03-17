@@ -20,6 +20,7 @@ simstate CSimulate::getStatus() {
 
 void CSimulate::stopSim() {
   // hero.Flags &= ~Entityflags::GRAVITY;
+  // CCamera::CameraControl.ApplyTargetToStatic();
   CCamera::CameraControl.TargetMode = TARGET_MODE_NORMAL;
   CCamera::CameraControl.FreeTarget();
   status = INACTIVE;
@@ -34,14 +35,14 @@ void CSimulate::clearxywh() {
 void CSimulate::resetxywh() {
   clearxywh();
   CCamera::CameraControl.GetNormalXY(cam_x, cam_y);
-  CCamera::CameraControl.GetFollow(follow_w, follow_h);
+  CCamera::CameraControl.GetFollowDims(follow_w, follow_h);
   did_edit_xywh = false;
 }
 
 void CSimulate::updateCamera() {
   CCamera::CameraControl.TargetMode = cam_option;
   CCamera::CameraControl.SetPos(cam_x, cam_y);
-  CCamera::CameraControl.SetFollow(follow_w, follow_h);
+  CCamera::CameraControl.SetFollowDims(follow_w, follow_h);
   if (cam_option == TARGET_MODE_NORMAL) {
     CCamera::CameraControl.FreeTarget();
   } else {
