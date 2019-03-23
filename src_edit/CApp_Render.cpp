@@ -26,12 +26,12 @@ void CApp::OnRender() {
 	CSceneryEditor::control.drawForeground(scn_N);
 
 	switch (active_mod) {
-		case MODIFY_MAP:		CEditMap::MapEditor.OnRender(&mouse); 		break;
-		case MODIFY_NPC:		CEntityEditor::Control.OnRender(&mouse); 	break;
-		case MODIFY_SCENE:	CSceneryEditor::control.OnRender(&mouse); break;
-		case MODIFY_SIM:		CSimulate::control.OnRender(&mouse); 			break;
-		case MODIFY_OPTIONS:	break;
-		default:						break;
+		case MODIFY_MAP:			CEditMap::MapEditor.OnRender(&mouse); 		break;
+		case MODIFY_NPC:			CEntityEditor::Control.OnRender(&mouse); 	break;
+		case MODIFY_SCENE:		CSceneryEditor::control.OnRender(&mouse); break;
+		case MODIFY_SIM:			CSimulate::control.OnRender(&mouse); 			break;
+		case MODIFY_OPTIONS:	COptions::control.OnRender(&mouse);				break;
+		default:							break;
 	}
 
 	renderEngSwitch();

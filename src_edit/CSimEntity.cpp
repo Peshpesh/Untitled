@@ -19,7 +19,7 @@ CSimEntity::CSimEntity() {
 	move_right = false;
 
 	SpeedX = SpeedY = AccelX = AccelY = 0.0f;
-	MaxSpeedX = 0.5f;
+	MaxSpeedX = 6.5f;
 	MaxSpeedY = 8.5f;
 	MaxAccelX = 0.5f;
 	MaxAccelY = 0.75f;

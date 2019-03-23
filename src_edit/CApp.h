@@ -20,6 +20,7 @@
 #include "CEntityEditor.h"
 #include "CSceneryEditor.h"
 #include "CSimulate.h"
+#include "COptions.h"
 
 enum {
   MODIFY_MAP = 0,

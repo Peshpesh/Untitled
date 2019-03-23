@@ -10,7 +10,7 @@ void CApp::OnEvent(SDL_Event* Event) {
 	if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
 	if (active_mod == MODIFY_SCENE) CSceneryEditor::control.OnEvent(Event);
 	if (active_mod == MODIFY_SIM) CSimulate::control.OnEvent(Event);
-	if (active_mod == MODIFY_OPTIONS) ;
+	if (active_mod == MODIFY_OPTIONS) COptions::control.OnEvent(Event);
 }
 
 bool CApp::handleInterr(SDL_Event* Event) {
