@@ -26,6 +26,21 @@ namespace g_options {
   extern const SDL_Rect r_cam_xmax;
   extern const SDL_Rect r_cam_ymax;
 
+  extern const short w_app_camlim;
+  extern const short h_app_camlim;
+  extern const short x_app_camlim;
+  extern const short y_app_camlim;
+  extern const short w_limswitch;
+  extern const short h_limswitch;
+  extern const short x_limswitch;
+  extern const short y_limswitch;
+  extern const char* const app_camlim_title;
+  extern const char* const showlim_title;
+  extern const char* const uselim_title;
+  extern const SDL_Rect r_app_camlim;
+  extern const SDL_Rect r_showlim;
+  extern const SDL_Rect r_uselim;
+
   extern const short bsiz;
   extern const SDL_Point* in_col;
   extern const SDL_Point* off_col;
@@ -48,10 +63,12 @@ private:
   int cam_ymax;
   std::string edit_sval;
   bool did_edit_cam_minmax;
+  bool show_lims;
   bool auto_save;
   int auto_save_period;   // in minutes
 
 public:
+  void OnInit();
   void OnEvent(SDL_Event* Event);
 
 private:
@@ -66,6 +83,7 @@ private:
   void delFromEdit();
   void applyEdit();
   void cleartarget();
+  void checkCameraLims();
 
 public:
   bool OnRender(const SDL_Point* m);
@@ -73,6 +91,9 @@ public:
 private:
   bool drawIntrpt(const SDL_Point* m);
   bool drawCameraOpts(const SDL_Point* m);
+
+public:
+  bool drawCameraLims();
 };
 
 

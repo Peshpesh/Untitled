@@ -4,7 +4,10 @@ CCamera CCamera::CameraControl;
 
 CCamera::CCamera() {
 	X = Y = 0;
-	X_min = X_max = Y_min = Y_max = 0;
+	X_min = 0;
+	Y_min = 0;
+	X_max = (TILE_SIZE * MAP_WIDTH) - 1;
+	Y_max = (TILE_SIZE * MAP_HEIGHT) - 1;
 	follow_dom.x = follow_dom.y = 0;
 	follow_dom.w = 60;
 	follow_dom.h = 50;
@@ -19,6 +22,16 @@ CCamera::CCamera() {
 void CCamera::OnMove(int MoveX, int MoveY) {
 	X += MoveX;
 	Y += MoveY;
+	enforceLims();
+}
+
+void CCamera::enforceLims() {
+	if (uselimits) {
+		if (X < X_min) 										X = X_min;
+		else if (X + WWIDTH - 1 > X_max) 	X = X_max - WWIDTH + 1;
+		if (Y < Y_min) 										Y = Y_min;
+		else if (Y + WHEIGHT - 1 > Y_max) Y = Y_max - WHEIGHT + 1;
+	}
 }
 
 void CCamera::OnLoop() {
@@ -145,7 +158,7 @@ int CCamera::GetY() {
 int CCamera::LimX(const int& X) {
 	if (uselimits) {
 		if (X < X_min) return X_min;
-		if (X + WWIDTH > X_max + 1) return X_max + 1 - WWIDTH;
+		if (X + WWIDTH - 1 > X_max) return X_max + 1 - WWIDTH;
 	}
 	return X;
 }
@@ -153,7 +166,7 @@ int CCamera::LimX(const int& X) {
 int CCamera::LimY(const int& Y) {
 	if (uselimits) {
 		if (Y < Y_min) return Y_min;
-		if (Y + WHEIGHT > Y_max + 1) return Y_max + 1 - WHEIGHT;
+		if (Y + WHEIGHT - 1 > Y_max) return Y_max + 1 - WHEIGHT;
 	}
 	return Y;
 }
@@ -288,8 +301,17 @@ double CCamera::relYToTrue(const double& rel_y, const double& Z) {
 void CCamera::EnableLim() {
 	uselimits = true;
 }
+
 void CCamera::DisableLim() {
 	uselimits = false;
+}
+
+void CCamera::ToggleLim() {
+	uselimits = !uselimits;
+}
+
+bool CCamera::isLim() {
+	return uselimits;
 }
 
 void CCamera::SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max) {

@@ -25,6 +25,9 @@ void CApp::OnRender() {
 	// Draw foreground scenery
 	CSceneryEditor::control.drawForeground(scn_N);
 
+	// Draw camera limits
+	COptions::control.drawCameraLims();
+
 	switch (active_mod) {
 		case MODIFY_MAP:			CEditMap::MapEditor.OnRender(&mouse); 		break;
 		case MODIFY_NPC:			CEntityEditor::Control.OnRender(&mouse); 	break;

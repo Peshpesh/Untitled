@@ -52,6 +52,7 @@ public:
 	void MakeWinRel(int& X, int& Y);
 
 private:
+	void enforceLims();
 	int LimX(const int& X);
 	int LimY(const int& Y);
 
@@ -72,6 +73,8 @@ public:
 	void FreeTarget();
 	void EnableLim();
 	void DisableLim();
+	void ToggleLim();
+	bool isLim();
 	void SetLimits(const int& X_min, const int& Y_min, const int& X_max, const int& Y_max);
 	void GetLimits(int& X_min, int& Y_min, int& X_max, int& Y_max);
 	void SetFollowDims(const unsigned int& w, const unsigned int& h);

@@ -4,18 +4,24 @@ COptions COptions::control;
 
 COptions::COptions() {
   edit_target = NULL;
-  cam_xmin = 0;
-  cam_ymin = 0;
-  cam_xmax = TILE_SIZE * MAP_WIDTH;
-  cam_ymax = TILE_SIZE * MAP_HEIGHT;
   did_edit_cam_minmax = false;
+  show_lims = true;
   auto_save = false;
   auto_save_period = 5;
+}
+
+void COptions::OnInit() {
+  CCamera::CameraControl.GetLimits(cam_xmin, cam_ymin, cam_xmax, cam_ymax);
 }
 
 void COptions::cleartarget() {
   edit_target = NULL;
   edit_sval.clear();
+}
+
+void COptions::checkCameraLims() {
+  if (cam_xmax < cam_xmin) cam_xmax = cam_xmin + 1;
+  if (cam_ymax < cam_ymin) cam_ymax = cam_ymin + 1;
 }
 
 void COptions::OnEvent(SDL_Event* Event){
@@ -36,20 +42,21 @@ void COptions::OnLButtonDown(int mX, int mY){
 
 bool COptions::handleCameraOpts(const SDL_Point* m) {
   using namespace g_options;
-  bool retval = false;
-  if (SDL_PointInRect(m, &r_cam_xmax)) {
-    edit_target = &cam_xmax;
-    retval = true;
-  } else if (SDL_PointInRect(m, &r_cam_ymax)) {
-    edit_target = &cam_ymax;
-    retval = true;
-  } else if (SDL_PointInRect(m, &r_cam_ymin)) {
-    edit_target = &cam_ymin;
-    retval = true;
-  } else if (SDL_PointInRect(m, &r_cam_xmin)) {
-    edit_target = &cam_xmin;
-    retval = true;
-  } return retval;
+  bool retval = true;
+
+  if (SDL_PointInRect(m, &r_cam_xmax)) edit_target = &cam_xmax;
+  else if (SDL_PointInRect(m, &r_cam_ymax)) edit_target = &cam_ymax;
+  else if (SDL_PointInRect(m, &r_cam_ymin)) edit_target = &cam_ymin;
+  else if (SDL_PointInRect(m, &r_cam_xmin)) edit_target = &cam_xmin;
+  else if (did_edit_cam_minmax && SDL_PointInRect(m, &r_app_camlim)) {
+    CCamera::CameraControl.SetLimits(cam_xmin, cam_ymin, cam_xmax, cam_ymax);
+    did_edit_cam_minmax = false;
+  }
+  else if (SDL_PointInRect(m, &r_showlim)) show_lims = !show_lims;
+  else if (SDL_PointInRect(m, &r_uselim)) CCamera::CameraControl.ToggleLim();
+  else retval = false;
+
+  return retval;
 }
 
 void COptions::OnKeyDown(SDL_Keycode sym, Uint16 mod){
@@ -91,6 +98,8 @@ void COptions::applyEdit(){
     int appl_val = CAsset::strToInt(edit_sval);
     if (appl_val != *edit_target) {
       *edit_target = appl_val;
+      checkCameraLims();
+      did_edit_cam_minmax = true;
     }
   } cleartarget();
 }
@@ -151,5 +160,38 @@ bool COptions::drawCameraOpts(const SDL_Point* m){
     Font::NewCenterWrite(xmax_s.c_str(), &r_cam_xmax);
     Font::NewCenterWrite(ymax_s.c_str(), &r_cam_ymax);
   }
+
+  retval *= CAsset::drawStrBox(&r_app_camlim, bsiz, did_edit_cam_minmax ?
+    ((m && SDL_PointInRect(m, &r_app_camlim)) ? off_hcol : off_col) : in_col);
+  retval *= CAsset::drawStrBox(&r_showlim, bsiz, show_lims ?
+    on_col : ((m && SDL_PointInRect(m, &r_showlim)) ? off_hcol : off_col));
+  retval *= CAsset::drawStrBox(&r_uselim, bsiz, CCamera::CameraControl.isLim() ?
+    on_col : ((m && SDL_PointInRect(m, &r_uselim)) ? off_hcol : off_col));
+  Font::NewCenterWrite(app_camlim_title, &r_app_camlim);
+  Font::NewCenterWrite(showlim_title, &r_showlim);
+  Font::NewCenterWrite(uselim_title, &r_uselim);
+
+  return retval;
+}
+
+bool COptions::drawCameraLims() {
+  if (!show_lims) return true;
+  bool retval = true;
+
+  SDL_Point lim_p = CCamera::CameraControl.GetWinRelPoint(cam_xmin, cam_ymin);
+  SDL_Rect limdom = {lim_p.x, lim_p.y, cam_xmax - cam_xmin + 1, cam_ymax - cam_ymin + 1};
+
+
+  if (did_edit_cam_minmax) {
+    int xs, ys, xe, ye;
+    CCamera::CameraControl.GetLimits(xs, ys, xe, ye);
+    SDL_Point active_lim_p = CCamera::CameraControl.GetWinRelPoint(xs, ys);
+    SDL_Rect active_limdom = {active_lim_p.x, active_lim_p.y, xe - xs + 1, ye - ys + 1};
+    retval *= CAsset::drawBox(&limdom, &palette::yellow);
+    retval *= CAsset::drawBox(&active_limdom, &palette::red);
+  } else {
+    retval *= CAsset::drawBox(&limdom, &palette::red);
+  }
+
   return retval;
 }
