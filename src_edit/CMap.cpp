@@ -5,8 +5,7 @@ CMap::CMap()
 	//
 }
 
-CTile* CMap::GetTile(int X, int Y)
-{
+CTile* CMap::GetTile(int X, int Y) {
 	int ID = 0;
 	ID = X / TILE_SIZE;
 	ID += (MAP_WIDTH * (Y / TILE_SIZE));

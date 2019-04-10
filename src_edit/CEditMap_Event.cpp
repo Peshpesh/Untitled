@@ -74,7 +74,8 @@ void CEditMap::OnLButtonDown(int mX, int mY)
   if (handleScroll_bg(&mouse, EditTile)) return;
   if (handleScroll_fg(&mouse, EditTile)) return;
   if (handleScroll_ty(&mouse, EditTile)) return;
-  if (handleScroll_co(&mouse, EditTile)) return;
+  // if (handleScroll_co(&mouse, EditTile)) return;
+  if (handleColl(&mouse, EditTile)) return;
   if (handleTileReset(&mouse, EditTile)) return;
   if (handleOpac_ty(&mouse)) return;
   if (handleOpac_co(&mouse)) return;
@@ -445,25 +446,45 @@ bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile) {
   return false;
 }
 
-bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile) {
+// bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile) {
+//   using namespace mapEngine::disp_t;
+//
+//   // Click on arrow LEFT or RIGHT of active collision.
+//   // Changes the active collision to previous or next collision index.
+//
+//   const char arrDir = getScrollDir(&co_pos, mouse);
+//
+//   if (arrDir == 'N') return false;
+//
+//   else if (arrDir == 'R') {
+//     if (EditTile->CollID != SOLID_A_ML_BR) EditTile->CollID += 1;
+//     else EditTile->CollID = 0;
+//     return true;
+//   }
+//   else if (arrDir == 'L') {
+//     if (EditTile->CollID != 0) EditTile->CollID -= 1;
+//     else EditTile->CollID = SOLID_A_ML_BR;
+//     return true;
+//   }
+//   return false;
+// }
+
+bool CEditMap::handleColl(const SDL_Point* mouse, CTile* EditTile) {
+  if (!mouse || !EditTile) return false;
   using namespace mapEngine::disp_t;
 
-  // Click on arrow LEFT or RIGHT of active collision.
-  // Changes the active collision to previous or next collision index.
-
-  const char arrDir = getScrollDir(&co_pos, mouse);
-
-  if (arrDir == 'N') return false;
-
-  else if (arrDir == 'R') {
-    if (EditTile->CollID != SOLID_A_ML_BR) EditTile->CollID += 1;
-    else EditTile->CollID = 0;
-    return true;
-  }
-  else if (arrDir == 'L') {
-    if (EditTile->CollID != 0) EditTile->CollID -= 1;
-    else EditTile->CollID = SOLID_A_ML_BR;
-    return true;
+  SDL_Rect targetR = {0, 0, co_t_size, co_t_size};
+  int k = 0;
+  for (int j = 0; j < coll_h; j++) {
+    for (int i = 0; i < coll_w; i++) {
+      targetR.x = co_pos.x + ((k % co_w) * (co_t_size + co_spac));
+      targetR.y = co_pos.y + ((k / co_w) * (co_t_size + co_spac));
+      if (SDL_PointInRect(mouse, &targetR)) {
+        EditTile->CollID = k;
+        return true;
+      }
+      k++;
+    }
   }
   return false;
 }

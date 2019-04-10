@@ -228,7 +228,8 @@ private:
   bool handleScroll_bg(const SDL_Point* mouse, CTile* EditTile);
   bool handleScroll_fg(const SDL_Point* mouse, CTile* EditTile);
   bool handleScroll_ty(const SDL_Point* mouse, CTile* EditTile);
-  bool handleScroll_co(const SDL_Point* mouse, CTile* EditTile);
+  // bool handleScroll_co(const SDL_Point* mouse, CTile* EditTile);
+  bool handleColl(const SDL_Point* mouse, CTile* EditTile);
   char getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse);
 
   bool handleTileReset(const SDL_Point* mouse, CTile* EditTile);
@@ -272,7 +273,7 @@ private:
   bool drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawActive_co(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawCollTiles(const SDL_Point* mouse);
+  bool drawCollTiles(const CTile* ShowTile, const SDL_Point* mouse);
   bool drawTileButtons(const SDL_Point* tPos, const SDL_Point* mouse);
   bool drawOpac_ty();
   bool drawOpac_co();

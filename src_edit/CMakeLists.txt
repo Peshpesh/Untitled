@@ -54,6 +54,8 @@ ${SRCDIR}/CLayerEditor.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMeter.cpp
 ${SRCDIR}/CModel.cpp
+${SRCDIR}/COptions.cpp
+${SRCDIR}/COptions_Ext.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryData.cpp
 ${SRCDIR}/CSceneryEditor.cpp
@@ -101,6 +103,7 @@ ${SRCDIR}/CLayerEditor.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMeter.h
 ${SRCDIR}/CModel.h
+${SRCDIR}/COptions.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryEditor.h

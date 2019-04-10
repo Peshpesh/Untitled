@@ -106,7 +106,7 @@ bool CEditMap::RenderSidebar(const SDL_Point* mouse) {
   if (!drawActive_bg(ShowTile, mouse)) return false;
   if (!drawActive_fg(ShowTile, mouse)) return false;
   if (!drawActive_ty(ShowTile, mouse)) return false;
-	if (!drawCollTiles(mouse)) return false;
+	if (!drawCollTiles(ShowTile, mouse)) return false;
   // if (!drawActive_co(ShowTile, mouse)) return false;
   if (!drawOpac_ty()) return false;
   if (!drawOpac_co()) return false;
@@ -285,8 +285,10 @@ bool CEditMap::drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse) {
 	return true;
 }
 
-bool CEditMap::drawCollTiles(const SDL_Point* mouse) {
+bool CEditMap::drawCollTiles(const CTile* ShowTile, const SDL_Point* mouse) {
 	using namespace mapEngine::disp_t;
+
+	SDL_SetTextureAlphaMod(Coll_Tileset, MAX_RGBA);
 
 	SDL_Rect dstR = {0, 0, co_t_size, co_t_size};
 	int k = 0;
@@ -298,9 +300,13 @@ bool CEditMap::drawCollTiles(const SDL_Point* mouse) {
 			dstR.x = co_pos.x + ((k % co_w) * (co_t_size + co_spac));
 			dstR.y = co_pos.y + ((k / co_w) * (co_t_size + co_spac));
 			CSurface::OnDraw(Coll_Tileset, &srcR, &dstR);
+			if (k == ShowTile->CollID) {
+				CAsset::drawBox(&dstR, &palette::red);
+			}
 			k++;
 		}
 	}
+	SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
 	return true;
 }
 
