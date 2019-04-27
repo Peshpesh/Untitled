@@ -73,8 +73,9 @@ void CEditMap::OnLButtonDown(int mX, int mY)
   if (handleGetTile(&mouse)) return;
   if (handleScroll_bg(&mouse, EditTile)) return;
   if (handleScroll_fg(&mouse, EditTile)) return;
-  if (handleScroll_ty(&mouse, EditTile)) return;
+  // if (handleScroll_ty(&mouse, EditTile)) return;
   // if (handleScroll_co(&mouse, EditTile)) return;
+  if (handleType(&mouse, EditTile)) return;
   if (handleColl(&mouse, EditTile)) return;
   if (handleTileReset(&mouse, EditTile)) return;
   if (handleOpac_ty(&mouse)) return;
@@ -423,28 +424,28 @@ bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile) {
   return false;
 }
 
-bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile) {
-  using namespace mapEngine::disp_t;
-
-  // Click on arrow LEFT or RIGHT of active tile type.
-  // Changes the active tile type to previous or next type index.
-
-  const char arrDir = getScrollDir(&ty_pos, mouse);
-
-  if (arrDir == 'N') return false;
-
-  else if (arrDir == 'R') {
-    if (EditTile->TypeID != TILE_TYPE_FIRE) EditTile->TypeID += 1;
-    else EditTile->TypeID = 0;
-    return true;
-  }
-  else if (arrDir == 'L') {
-    if (EditTile->TypeID != 0) EditTile->TypeID -= 1;
-    else EditTile->TypeID = TILE_TYPE_FIRE;
-    return true;
-  }
-  return false;
-}
+// bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile) {
+//   using namespace mapEngine::disp_t;
+//
+//   // Click on arrow LEFT or RIGHT of active tile type.
+//   // Changes the active tile type to previous or next type index.
+//
+//   const char arrDir = getScrollDir(&ty_pos, mouse);
+//
+//   if (arrDir == 'N') return false;
+//
+//   else if (arrDir == 'R') {
+//     if (EditTile->TypeID != TILE_TYPE_FIRE) EditTile->TypeID += 1;
+//     else EditTile->TypeID = 0;
+//     return true;
+//   }
+//   else if (arrDir == 'L') {
+//     if (EditTile->TypeID != 0) EditTile->TypeID -= 1;
+//     else EditTile->TypeID = TILE_TYPE_FIRE;
+//     return true;
+//   }
+//   return false;
+// }
 
 // bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile) {
 //   using namespace mapEngine::disp_t;
@@ -468,6 +469,26 @@ bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile) {
 //   }
 //   return false;
 // }
+
+bool CEditMap::handleType(const SDL_Point* mouse, CTile* EditTile) {
+  if (!mouse || !EditTile) return false;
+  using namespace mapEngine::disp_t;
+
+  SDL_Rect targetR = {0, 0, ty_t_size, ty_t_size};
+  int k = 0;
+  for (int j = 0; j < type_h; j++) {
+    for (int i = 0; i < type_w; i++) {
+      targetR.x = ty_pos.x + ((k % ty_w) * (ty_t_size + co_spac));
+      targetR.y = ty_pos.y + ((k / ty_w) * (ty_t_size + co_spac));
+      if (SDL_PointInRect(mouse, &targetR)) {
+        EditTile->TypeID = k;
+        return true;
+      }
+      k++;
+    }
+  }
+  return false;
+}
 
 bool CEditMap::handleColl(const SDL_Point* mouse, CTile* EditTile) {
   if (!mouse || !EditTile) return false;

@@ -105,7 +105,8 @@ bool CEditMap::RenderSidebar(const SDL_Point* mouse) {
   if (!drawActiveTiles()) return false;
   if (!drawActive_bg(ShowTile, mouse)) return false;
   if (!drawActive_fg(ShowTile, mouse)) return false;
-  if (!drawActive_ty(ShowTile, mouse)) return false;
+  // if (!drawActive_ty(ShowTile, mouse)) return false;
+	if (!drawTypeTiles(ShowTile, mouse)) return false;
 	if (!drawCollTiles(ShowTile, mouse)) return false;
   // if (!drawActive_co(ShowTile, mouse)) return false;
   if (!drawOpac_ty()) return false;
@@ -282,6 +283,31 @@ bool CEditMap::drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse) {
 	SDL_Point tpos = CAsset::getPos(namePos_x, ty_pos.y + nameOffset_y);
 	Font::NewCenterWrite(FONT_MINI, tName.c_str(), &tpos);
 
+	return true;
+}
+
+bool CEditMap::drawTypeTiles(const CTile* ShowTile, const SDL_Point* mouse) {
+	using namespace mapEngine::disp_t;
+
+	SDL_SetTextureAlphaMod(Type_Tileset, MAX_RGBA);
+
+	SDL_Rect dstR = {0, 0, ty_t_size, ty_t_size};
+	int k = 0;
+	for (int j = 0; j < type_h; j++) {
+		for (int i = 0; i < type_w; i++) {
+			int tX = i * TILE_SIZE;
+			int tY = j * TILE_SIZE;
+			SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+			dstR.x = ty_pos.x + ((k % ty_w) * (ty_t_size + ty_spac));
+			dstR.y = ty_pos.y + ((k / ty_w) * (ty_t_size + ty_spac));
+			CSurface::OnDraw(Type_Tileset, &srcR, &dstR);
+			if (k == ShowTile->TypeID) {
+				CAsset::drawBox(&dstR, &palette::red);
+			}
+			k++;
+		}
+	}
+	SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
 	return true;
 }
 

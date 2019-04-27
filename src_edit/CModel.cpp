@@ -253,6 +253,48 @@ bool CModel::drawCollTile(const int& x_rel, const int& y_rel, const int& collID)
       dstR.h = mod_t_sz;
       break;
     }
+    case SOLID_U_LT_MB: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz / 2;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_U_MT_RB: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_U_RT_MB: {
+      dstR.x = collCanvas.x + x_rel + (mod_t_sz / 2);
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz / 2;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_U_MT_LB: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_HALF_TH: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz / 2;
+      break;
+    }
+    case SOLID_HALF_BH: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel + (mod_t_sz / 2);
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz / 2;
+      break;
+    }
     default: CInform::InfoControl.pushInform("---CMODEL draw---\nunknown collision"); break;
   }
 
