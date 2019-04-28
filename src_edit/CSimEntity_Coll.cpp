@@ -49,6 +49,44 @@ int CSimEntity::getVertDeflect(const double& NewX, const double& NewY) {
   return push_Y;
 }
 
+int CSimEntity::getHorzDeflect(const double& NewX, const double& NewY) {
+  // If the entity is to move vertically (i.e., as given from NewY),
+  // will it have to be deflected horizontally due to steep slopes?
+
+  // If necessary, a deflection (push) amount is assigned to push_X.
+  // In other words, push_X represents the horizontal deflection required
+  // if the entity is to move vertically as requested by NewY. Without the
+  // deflection, the entity's hitbox would translate through a steep slope.
+
+  // For now, let us only consider the deflection necessary for
+  // entities of downward movement (i.e., ignoring steep-sloped ceilings)
+  int push_X = 0;
+  if (NewY > 0.0) { // moving down
+    int srcXl = X + hitboxR.x;
+    int srcXr = srcXl + hitboxR.w - 1;
+    int destYt = Y + NewY + hitboxR.y;
+    int destYb = destYt + hitboxR.h - 1;
+
+    CTile* Tile = NULL;
+    int X_tilerel = 0; // X relative to containing tile's X (left side)
+
+    // check bottom-left corner of hitbox
+    if ((Tile = CArea::control.GetTile(srcXl, destYb)) == NULL) return 0;
+    X_tilerel = srcXl % TILE_SIZE;
+    if ((Tile->CollID == SOLID_U_LT_MB && X_tilerel < TILE_SIZE / 2) || Tile->CollID == SOLID_U_MT_RB) {
+      push_X = CollWall(Tile->CollID, X_tilerel, destYb % TILE_SIZE);
+    }
+    if (!push_X) { // check bottom-right corner of hitbox
+      if ((Tile = CArea::control.GetTile(srcXr, destYb)) == NULL) return 0;
+      X_tilerel = srcXr % TILE_SIZE;
+      if ((Tile->CollID == SOLID_U_RT_MB && X_tilerel >= TILE_SIZE / 2) || Tile->CollID == SOLID_U_MT_LB) {
+        push_X = CollWall(Tile->CollID, X_tilerel, destYb % TILE_SIZE);
+      }
+    }
+  }
+  return push_X;
+}
+
 // Returns true (non-zero) if the queried tile-relative X, Y intersect solid ground.
 int CSimEntity::CollGround(const int& collID, const int& X_offset, const int& Y_offset) {
 	bool solidabove = false;
@@ -78,6 +116,31 @@ int CSimEntity::CollGround(const int& collID, const int& X_offset, const int& Y_
 	return Ypush;
 }
 
+int CSimEntity::CollWall(const int& collID, const int& X_offset, const int& Y_offset) {
+	int slope = 2;
+  int Xo = 0;
+	switch (collID) {
+		case SOLID_U_LT_MB:	slope = -slope;                     break;
+		case SOLID_U_MT_RB: Xo = TILE_SIZE / 2; slope = -slope; break;
+		case SOLID_U_RT_MB: Xo = TILE_SIZE - 1;                 break;
+		case SOLID_U_MT_LB: Xo = (TILE_SIZE / 2) - 1;           break;
+		default: break;
+	}
+
+  int X = Xo - (Y_offset / slope);
+  int push_X = 0;
+  if (slope < 0) {
+    if (X_offset <= X) {
+      push_X = X - X_offset + 1;
+    }
+  } else {
+    if (X_offset >= X) {
+      push_X = X - X_offset - 1;
+    }
+  }
+	return push_X;
+}
+
 bool CSimEntity::CollTile(const SDL_Point& tilepos, const SDL_Point& tl, const SDL_Point& br) {
   CTile* Tile = CArea::control.GetTile(tilepos.x * TILE_SIZE, tilepos.y * TILE_SIZE);
   // Check if the collided tile is entirely solid.
@@ -87,128 +150,119 @@ bool CSimEntity::CollTile(const SDL_Point& tilepos, const SDL_Point& tl, const S
 
   // Check if the collided tile is partially solid.
   // If it is, the entity MIGHT be able to move.
+  bool retval = true;
   if (Tile->CollID != SOLID_NONE) {
     // Cases where colliding with a partially-filled tile
     // should prevent movement:
-    // 1. The top of the hitbox intersects with the
+    // 1. The hitbox intersects with a half-filled tile (rectangle)
+    // 2. The top of the hitbox intersects with the
     // 		"lowest height" of a sloping roof, or the bottom of a sloping floor
-    //    ->> This is handled by CollTile_top
-    // 2. The bottom of the hitbox intersects with the
+    // 3. The bottom of the hitbox intersects with the
     //		"highest height" of a sloping floor, or the top of a sloping roof
-    //    ->> This is handled by CollTile_bot
-    // 3.	The left/right sides of the hitbox intersect with a
+    // 4.	The left/right sides of the hitbox intersect with a
     //		sloped floor or roof
-    // 4. The internal hitbox (non-side) somehow negotiates
+    // 5. The internal hitbox (non-side) somehow negotiates
     //		an intersection
 
-    // Handling cases #3 and #4
-    // There are no exceptions that allow the entity to move if
-    // the colliding sector is not from the top or bottom of the hitbox.
-    if ((tilepos.y != tl.y / TILE_SIZE) && (tilepos.y != br.y / TILE_SIZE)) return false;
+    bool l_side = (tilepos.x == tl.x / TILE_SIZE);
+    bool r_side = (tilepos.x == br.x / TILE_SIZE);
+    bool t_side = (tilepos.y == tl.y / TILE_SIZE);
+    bool b_side = (tilepos.y == br.y / TILE_SIZE);
 
-    // Handling case #1:
-    if (tilepos.y == tl.y / TILE_SIZE && !CollTile_top(Tile->CollID, tilepos, tl, br)) return false;
-
-    // Handling case #2:
-    if (tilepos.y == br.y / TILE_SIZE && !CollTile_bot(Tile->CollID, tilepos, tl, br)) return false;
-  }
-  return true;
-}
-
-bool CSimEntity::CollTile_top(const int& collID, const SDL_Point& tilepos, const SDL_Point& tl, const SDL_Point& br) {
-  // If the current tile is associated with the top of the hitbox...
-  if (collID == SOLID_A_ML_BR) {
-    if (tilepos.x != br.x / TILE_SIZE) return false;
-    else if (CollGround(collID, br.x % TILE_SIZE, tl.y % TILE_SIZE)) return false;
-  }
-  else if (collID == SOLID_A_BL_MR) {
-    // These sloped roof tiles occupy space from Y = [16, 31] relative to
-    // the tile.
-    // This entity can't move to the destination. The lowest height of
-    // the colliding tile is the bottom of the tile itself.
-    if (tilepos.x != tl.x / TILE_SIZE) return false;
-    else if (CollGround(collID, tl.x % TILE_SIZE, tl.y % TILE_SIZE)) return false;
-  }
-  else if (collID == SOLID_A_TL_MR) {
-    // These sloped roof tiles occupy space from Y = [0, 15] relative to
-    // the tile.
-    // IF the top of the hitbox destination collides with the space
-    // occupied by the sloping roof, then the entity cannot move to
-    // the destination.
-    if (tilepos.x != br.x / TILE_SIZE) {
-      if (tl.y % TILE_SIZE < TILE_SIZE / 2) return false;
-    }
-    else if (CollGround(collID, br.x % TILE_SIZE, tl.y % TILE_SIZE)) return false;
-  }
-  else if (collID == SOLID_A_ML_TR) {
-    // These sloped roof tiles occupy space from Y = [0, 15] relative to
-    // the tile.
-    // IF the top of the hitbox destination collides with the space
-    // occupied by the sloping roof, then the entity cannot move to
-    // the destination.
-    if (tilepos.x != tl.x / TILE_SIZE) {
-      if (tl.y % TILE_SIZE < TILE_SIZE / 2) return false;
-    }
-    else if (CollGround(collID, tl.x % TILE_SIZE, tl.y % TILE_SIZE)) return false;
-  }
-  else {
-    // Hitbox top collides with a sloped floor. Maybe the tile's underside.
-    if (tilepos.x != tl.x / TILE_SIZE && tilepos.x != br.x / TILE_SIZE) {
-      if (collID == SOLID_U_ML_TR || collID == SOLID_U_TL_MR) return false;
-      else {
-        int Yrel = br.y - ((tl.y / TILE_SIZE) * TILE_SIZE);
-        if (br.y - ((tl.y / TILE_SIZE) * TILE_SIZE) >= TILE_SIZE / 2) return false;
-      }
-    }
+    if (!(l_side || r_side || t_side || b_side)) retval = false;
     else {
-      int Yrel = br.y - ((tl.y / TILE_SIZE) * TILE_SIZE);
-      if (tilepos.x == tl.x / TILE_SIZE) {
-        if (CollGround(collID, tl.x % TILE_SIZE, Yrel)) return false;
+      switch (Tile->CollID) {
+        case SOLID_U_BL_MR: { // floor, +slope
+          if (!b_side) retval = false;
+          else if (br.y % TILE_SIZE >= TILE_SIZE / 2) {
+            if (!r_side) retval = false;
+            else if (CollGround(SOLID_U_BL_MR, br.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          }
+          break;
+        }
+        case SOLID_U_ML_TR: { // floor, +slope
+          if (!b_side || !r_side) retval = false;
+          else if (CollGround(SOLID_U_ML_TR, br.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          break;
+        }
+        case SOLID_U_TL_MR: { // floor, -slope
+          if (!b_side || !l_side) retval = false;
+          else if (CollGround(SOLID_U_TL_MR, tl.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          break;
+        }
+        case SOLID_U_ML_BR: { // floor, -slope
+          if (!b_side) retval = false;
+          else if (br.y % TILE_SIZE >= TILE_SIZE / 2) {
+            if (!l_side) retval = false;
+            else if (CollGround(SOLID_U_ML_BR, tl.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          }
+          break;
+        }
+        case SOLID_A_BL_MR: { // ceiling, +slope
+          if (!t_side || !l_side) retval = false;
+          else if (CollGround(SOLID_A_BL_MR, tl.x % TILE_SIZE, tl.y % TILE_SIZE)) retval = false;
+          break;
+        }
+        case SOLID_A_ML_TR: { // ceiling, +slope
+          if (!t_side) retval = false;
+          else if (tl.y % TILE_SIZE < TILE_SIZE / 2) {
+            if (!l_side) retval = false;
+            else if (CollGround(SOLID_A_ML_TR, tl.x % TILE_SIZE, tl.y % TILE_SIZE)) retval = false;
+          }
+          break;
+        }
+        case SOLID_A_TL_MR: { // ceiling, -slope
+          if (!t_side) retval = false;
+          else if (tl.y % TILE_SIZE < TILE_SIZE / 2) {
+            if (!r_side) retval = false;
+            else if (CollGround(SOLID_A_TL_MR, br.x % TILE_SIZE, tl.y % TILE_SIZE)) retval = false;
+          }
+          break;
+        }
+        case SOLID_A_ML_BR: { // ceiling, -slope
+          if (!t_side || !r_side) retval = false;
+          else if (CollGround(SOLID_A_ML_BR, br.x % TILE_SIZE, tl.y % TILE_SIZE)) retval = false;
+          break;
+        }
+        case SOLID_U_LT_MB: { // floor/wall, --slope
+          if (!l_side) retval = false;
+          else if (tl.x % TILE_SIZE < TILE_SIZE / 2) {
+            if (!b_side) retval = false;
+            else if (CollWall(SOLID_U_LT_MB, tl.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          }
+          break;
+        }
+        case SOLID_U_MT_RB: { // floor/wall, --slope
+          if (!l_side || !b_side) retval = false;
+          else if (CollWall(SOLID_U_MT_RB, tl.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          break;
+        }
+        case SOLID_U_RT_MB: { // floor/wall, ++slope
+          if (!r_side) retval = false;
+          else if (br.x % TILE_SIZE >= TILE_SIZE / 2) {
+            if (!b_side) retval = false;
+            else if (CollWall(SOLID_U_RT_MB, br.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          }
+          break;
+        }
+        case SOLID_U_MT_LB: { // floor/wall, ++slope
+          if (!r_side || !b_side) retval = false;
+          else if (CollWall(SOLID_U_MT_LB, br.x % TILE_SIZE, br.y % TILE_SIZE)) retval = false;
+          break;
+        }
+        case SOLID_HALF_TH: {
+          if (!t_side) retval = false;
+          else if (tl.y % TILE_SIZE < TILE_SIZE / 2) retval = false;
+          break;
+        }
+        case SOLID_HALF_BH: {
+          if (!b_side) retval = false;
+          else if (br.y % TILE_SIZE >= TILE_SIZE / 2) retval = false;
+          break;
+        }
+        default: retval = false; break;
       }
-      if (tilepos.x == br.x / TILE_SIZE) {
-        if (CollGround(collID, br.x % TILE_SIZE, Yrel)) return false;
-      }
     }
   }
-  return true;
-}
-
-bool CSimEntity::CollTile_bot(const int& collID, const SDL_Point& tilepos, const SDL_Point& tl, const SDL_Point& br) {
-  // If the current tile is associated with the bottom of hitbox...
-  if (collID == SOLID_U_ML_BR) {
-    if (tilepos.x != tl.x / TILE_SIZE) {
-      if (br.y % TILE_SIZE >= TILE_SIZE / 2) return false;
-    }
-    else if (CollGround(collID, tl.x % TILE_SIZE, br.y % TILE_SIZE)) return false;
-  }
-  else if (collID == SOLID_U_BL_MR) {
-    if (tilepos.x != br.x / TILE_SIZE) {
-      if (br.y % TILE_SIZE >= TILE_SIZE / 2) return false;
-    }
-    else if (CollGround(collID, br.x % TILE_SIZE, br.y % TILE_SIZE)) return false;
-  }
-  else if (collID == SOLID_U_TL_MR) {
-    if (tilepos.x != tl.x / TILE_SIZE) return false;
-    else if (CollGround(collID, tl.x % TILE_SIZE, br.y % TILE_SIZE)) return false;
-  }
-  else if (collID == SOLID_U_ML_TR) {
-    if (tilepos.x != br.x / TILE_SIZE) return false;
-    else if (CollGround(collID, br.x % TILE_SIZE, br.y % TILE_SIZE)) return false;
-  }
-  else {
-    // Hitbox bottom collides with a sloped roof. Maybe the tile's top.
-    if (tilepos.x != tl.x / TILE_SIZE && tilepos.x != br.x / TILE_SIZE) {
-      if (collID == SOLID_A_ML_BR || collID == SOLID_A_BL_MR) return false;
-      else if (br.y % TILE_SIZE < TILE_SIZE / 2) return false;
-    }
-    else {
-      if (tilepos.x == tl.x / TILE_SIZE) {
-        if (CollGround(collID, tl.x % TILE_SIZE, br.y % TILE_SIZE)) return false;
-      }
-      if (tilepos.x == br.x / TILE_SIZE) {
-        if (CollGround(collID, br.x % TILE_SIZE, br.y % TILE_SIZE)) return false;
-      }
-    }
-  }
-  return true;
+  return retval;
 }

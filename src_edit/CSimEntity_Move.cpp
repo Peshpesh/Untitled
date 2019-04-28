@@ -70,13 +70,13 @@ void CSimEntity::Translate(double NewX, double NewY) {
 	int srcYt = Y + hitboxR.y;
 	int srcXr = srcXl + hitboxR.w - 1;
 	int srcYb = srcYt + hitboxR.h - 1;
-	// int pushY = 0;
 	Grounded = false;
+	int push_X = getHorzDeflect(NewX, NewY);
   int push_Y = getVertDeflect(NewX, NewY);
 
 	// Now, let's see if the destination hitbox will collide with
 	// something that will stop this entity.
-	if (push_Y != 0) {
+	if (push_Y) {
 		if (CheckPathXY(destXl, destXr, srcYt + push_Y, srcYb + push_Y)) {
 			// The entity can move in X and Y. The entity is being "pushed"
 			// in Y by a sloping surface, which means that we also have checked
@@ -103,6 +103,24 @@ void CSimEntity::Translate(double NewX, double NewY) {
 					Grounded = true;
 				}
 			}
+		}
+	} else if (push_X) {
+		Jumper = true;
+		Grounded = true;
+		if (CheckPathXY(srcXl + push_X, srcXr + push_X, destYt, destYb)) {
+			// The entity can move in X and Y. The entity is being "pushed"
+			// in X by a sloped wall.
+			X += push_X;
+			Y += NewY;
+			if (push_X > 0 && NewX < 0)	SpeedX = 0;
+			if (push_X < 0 && NewX > 0)	SpeedX = 0;
+		} else {
+			// Requiring a deflection in X, the entity CANNOT move in Y.
+			// We must check if the entity can move in only X
+			// now that it is apparent it cannot move in Y (which requires push_X).
+			SpeedY = 0;
+			if (CheckPathXY(destXl, destXr, srcYt, srcYb)) X += NewX;
+			else SpeedX = 0;
 		}
 	}	else {
 		// If there is no push in Y, then we can just check for
