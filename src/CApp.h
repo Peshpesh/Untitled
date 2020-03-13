@@ -1,46 +1,66 @@
 #ifndef _C_APP_H_
 #define _C_APP_H_
 
+// Critical dependencies
 #include <SDL.h>
-
 #include "Define.h"
-#include "CArea.h"
-#include "CCamera.h"
-#include "CEntity.h"
-#include "CSurface.h"
+
+// Systematic dependencies
 #include "CEvent.h"
-#include "CAnimation.h"
-#include "CPlayer.h"
-#include "CHUD.h"
-#include "CEntityMod.h"
-#include "CCinema.h"
-#include "CTransport.h"
-#include "CGamedata.h"
-#include "CMenu.h"
-#include "CTitle.h"
-#include "Config.h"
-#include "CInventory.h"
-#include "CPause.h"
-#include "CEntityRes.h"
-#include "CSceneryMod.h"
+#include "CSurface.h"
 #include "CSound.h"
 
-// #include "CMapEdit.h"
+// Utility dependencies
+#include "CAsset.h"
+#include "CType.h"
+
+// Mechanical dependencies
+#include "CControls.h"
+#include "CConfig.h"
+#include "CCamera.h"
+
+// Structural dependencies
+#include "CGameIO.h"
+#include "CMode.h"
+#include "CTitle.h"
+#include "CGame.h"
+#include "CTransition.h"
+
+// #include "CArea.h"
+// #include "CEntity.h"
+
+// #include "CAnimation.h"
+// #include "CPlayer.h"
+// #include "CHUD.h"
+// #include "CEntityMod.h"
+// #include "CCinema.h"
+// #include "CTransport.h"
+// #include "CGamedata.h"
+// #include "CMenu.h"
+// #include "Config.h"
+// #include "CInventory.h"
+// #include "CPause.h"
+// #include "CEntityRes.h"
+// #include "CSceneryMod.h"
+
+namespace gen {
+	extern const char* const quit_msg;
+	extern const short quit_msg_f;
+	extern const SDL_Point quit_msg_p;
+	extern const SDL_Color* quit_msg_c;
+}
 
 class CApp : public CEvent
 {
 private:
 	bool	Running;
-	bool	Paused;
-	bool	Suspend;			// gameplay loop suspension (frozen)
-//	bool	Killgame;			// call to end the game
 	SDL_Window* Win_Display;    // Main Window
-	SDL_Renderer* Win_Renderer; // Main Renderer
 
 private:
 	SDL_Texture* DEBUG_TEXTURE;
-	CPlayer		Player;
-	CPause		PauseMenu;
+
+private:
+	int esc_init;
 
 public:
 
@@ -49,12 +69,8 @@ public:
 	int	OnExecute();
 
 public:
-
-//	CAnimation Yoshi;
-
 	// Initializes SDL, main window and renderer, and test/introductory graphics
 	bool OnInit();
-	bool InitGame();
 
 	// Handles non-motion events from the user
 	void OnEvent(SDL_Event* Event);
@@ -65,10 +81,6 @@ public:
 	// Handles looping calculations, such as for idle animations
 	void OnLoop();
 	void OnPause();
-	void ExitGame();
-
-	// Uses keyboard state to detect directional input from user for moving focus
-	void OnMotion();
 
 	// Renders graphics
 	void OnRender();
@@ -76,9 +88,9 @@ public:
 	// Destroys all windows, textures, surfaces, renderers...
 	void OnCleanup();
 
-	// const Uint8 *state = SDL_GetKeyboardState(NULL);
-
 	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 	void OnKeyUp(SDL_Keycode sym, Uint16 mod);
+
+	void drawQuitMsg();
 };
 #endif

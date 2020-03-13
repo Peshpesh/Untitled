@@ -1,242 +1,324 @@
 #include "CInventory.h"
 
-CInventory CInventory::InvControl;
-//std::vector<CItem*> CInventory::Inventory;
+CInventory CInventory::control;
 
-enum
-{
-	USE = 0,
-	DROP,
-	CANCEL,
-};
-
-CInventory::CInventory()
-{
-  active = false;
-	TEX_WIDTH = TEX_HEIGHT = 0;
-	row = col = 0;
-  Tex_Item = NULL;
-  query = NULL;
-	maxrow = 4;
-	maxcol = 5;
-	// MENU_WIDTH = 540;
-	// MENU_HEIGHT = 380;
-	MENU_W = 440;
-	INV_MENU_H = 260;
-	DETAIL_MENU_H = 120;
-	DETAIL_TEXT_W = 400;
-	DETAIL_TEXT_H = 100;
+CInventory::CInventory() {
+  muns = 0;
+  pos = 0;
+  menuactive = false;
+  menupos = 0;
+  itemsrc = NULL;
 }
 
-bool CInventory::OnInit(SDL_Renderer* renderer)
-{
-	if ((Tex_Item = CSurface::OnLoad("../res/item.png", renderer)) == NULL) return false;
+bool CInventory::init() {
+  muns = 0;
+  pos = 0;
+  menuactive = false;
+  menupos = 0;
+  equipment.clear();
+  items.clear();
 
-	int tW;
-	int tH;
-
- 	SDL_QueryTexture(Tex_Item, NULL, NULL, &tW, &tH);
-
-	TEX_WIDTH = tW / ICON_SIZE;
-	TEX_HEIGHT = tH / ICON_SIZE;
-
-	// TESTING
-	for (int i = 0; i < 8; i++)
-	{
-		CItem::Inventory.push_back(new IHPUP());
-		CItem::Inventory.push_back(new IHPDW());
-		CItem::Inventory.push_back(new IBOMB());
-	}
-	for (int i = 0; i < CItem::Inventory.size(); i++)
-	{
-		if (CItem::Inventory[i]->ename == ITEM_HPUP)
-		{
-			CItem::Inventory[i]->quant++;
-			CItem::Inventory[i]->quant++;
-		}
-	}
-	for (int i = 0; i < CItem::Inventory.size(); i++)
-	{
-		if (CItem::Inventory[i]->quant > CItem::Inventory[i]->m_quant)
-		{
-			CItem::Inventory[i]->quant = CItem::Inventory[i]->m_quant;
-		}
-	}
-	return true;
-}
-
-bool CInventory::OnEvent(SDL_Keycode sym)
-{
-	if (CItem::Inventory.size() > 0)
-	{
-		int Ncol = (int)(CItem::Inventory.size());
-		if (Ncol > maxcol) Ncol = maxcol;
-		int Nrow = 1 + ((int)(CItem::Inventory.size() - 1) / maxcol);
-	  if (sym == Config::ConfControl.confirm)
-	  {
-	    query = new CMenu;
-	    query->Active = query->Breakable = true;
-	    query->OnInit("\
-	             %USE\
-	            \n%DROP\
-	            \n%CANCEL");
-
-	    CMenu::MenuList.push_back(query);
-	  }
-	  if (sym == Config::ConfControl.left && Ncol > 1)
-	  {
-	    if (col != 0)
-	      col--;
-	    else
-			{
-				if ((row * maxcol) + Ncol > CItem::Inventory.size())
-					col = (CItem::Inventory.size() % maxcol) - 1;
-				else
-					col = Ncol - 1;
-			}
-	  }
-	  if (sym == Config::ConfControl.right && Ncol > 1)
-	  {
-			if (row != Nrow - 1 || Nrow == 1)
-			{
-		    if (col != Ncol - 1)
-		      col++;
-		    else
-		      col = 0;
-			}
-			else
-			{
-				if (col != (CItem::Inventory.size() % maxcol) - 1)
-					col++;
-				else
-					col = 0;
-			}
-	  }
-	  if (sym == Config::ConfControl.down && Nrow > 1)
-	  {
-			if (row == Nrow - 1 || CItem::Inventory.size() <= (col + (row + 1) * maxcol))
-				row = 0;
-			else
-				row++;
-	  }
-	  if (sym == Config::ConfControl.up && Nrow > 1)
-	  {
-	    if (row != 0)
-	      row--;
-	    else
-			{
-				if (CItem::Inventory.size() <= (col + (Nrow - 1) * maxcol))
-					row = Nrow - 2;
-				else
-					row = Nrow - 1;
-			}
-	  }
-	}
-  if (sym == SDLK_ESCAPE)
-  {
-	 	active = false;
-		row = col = 0;
-  }
-	return active;
-}
-
-bool CInventory::OnLoop()
-{
-  if (query)
-  {
-    if (query->Break)
-    {
-      query->OnCleanup();
-      delete CMenu::MenuList[CMenu::MenuList.size() - 1];
-      CMenu::MenuList.erase(CMenu::MenuList.begin() + CMenu::MenuList.size() - 1);
-      query = NULL;
+  if (itemsrc == NULL) {
+    if ((itemsrc = CSurface::OnLoad("../res/item.png")) == NULL) {
+      return false;
     }
-    else if (query->Submit)
-    {
-			int highlight = col + (row * maxcol);
-      switch (query->GetResponse())
-      {
-        case USE:
-        {
-          // use highlighted item
-          // step1 : use row, col to get the highlighted item index
-          // step2 : use item index to find out what kind of item is highlighted
-          // step3 : perform necessary tasks (defined in CItemProcess class)
-          // step4 : update the Inventory (e.g., subtract item from vector)
-					CItemProcess::OnLoop(CItem::Inventory[highlight]->ename);
-					CItem::Inventory[highlight]->quant--;
-					if (CItem::Inventory[highlight]->quant <= 0)
-					{
-						delete CItem::Inventory[highlight];
-						CItem::Inventory.erase(CItem::Inventory.begin() + highlight);
-					}
-					active = false;
-					row = col = 0;
-          break;
+  }
+  // DEBUGGING
+  addItem(items::PEWPEW);
+  addItem(items::JOURNAL);
+  addItem(items::WARMGLOVES);
+  addItem(items::TRANQUIL_STONE);
+  addItem(items::MEDIKIT);
+  addItem(items::ROOMKEY_RUINS);
+  return true;
+}
+
+void CInventory::reinit() {
+  pos = 0;
+  menuactive = false;
+  menupos = 0;
+}
+
+void CInventory::OnEvent(SDL_Event* Event) {
+  CEvent::OnEvent(Event);
+}
+
+void CInventory::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
+  Gamecon action = CControls::handler.getAction(sym, mod);
+  if (!menuactive) handleNav(action);
+  else handleMenu(action);
+}
+
+void CInventory::handleNav(const Gamecon& action) {
+  // lol...
+  short eq_rows = 1 + ((equipment.size() - 1) / invinterface::row_items);
+  short it_rows = 1 + ((items.size() - 1) / invinterface::row_items);
+  short eq_resid = equipment.size() % invinterface::row_items;
+  short it_resid = items.size() % invinterface::row_items;
+  short row = (pos < equipment.size()) ?
+              1 + (pos / invinterface::row_items) :
+              eq_rows + 1 + ((pos - equipment.size()) / invinterface::row_items);
+
+  // LOL
+  switch (action) {
+    case CON_LEFT: {
+      if (pos < equipment.size()) {
+        if (pos % invinterface::row_items == 0) {
+          pos += (row == eq_rows) ? eq_resid - 1 : invinterface::row_items - 1;
+        } else {
+          pos--;
         }
-        case DROP:
-        {
-          // drop highlighted item
-          break;
+      } else {
+        if ((pos - equipment.size()) % invinterface::row_items == 0) {
+          pos += (row == eq_rows + it_rows) ? it_resid - 1 : invinterface::row_items - 1;
+        } else {
+          pos--;
         }
-        case CANCEL:
-        {
-          // quit query menu; do nothing else
-          break;
-        }
-        default: 	break;
       }
-      query->OnCleanup();
-      delete CMenu::MenuList[CMenu::MenuList.size() - 1];
-      CMenu::MenuList.erase(CMenu::MenuList.begin() + CMenu::MenuList.size() - 1);
-      query = NULL;
+      break;
+    }
+    case CON_RIGHT: {
+      if (pos < equipment.size()) {
+        if ((pos + 1) % invinterface::row_items == 0) {
+          pos -= (invinterface::row_items - 1);
+        } else if (pos == equipment.size() - 1) {
+          pos -= (eq_resid - 1);
+        } else {
+          pos++;
+        }
+      } else {
+        short adj_pos = pos - equipment.size();
+        if ((adj_pos + 1) % invinterface::row_items == 0) {
+          pos -= (invinterface::row_items - 1);
+        } else if (adj_pos == items.size() - 1) {
+          pos -= (it_resid - 1);
+        } else {
+          pos++;
+        }
+      }
+      break;
+    } // LMFAOOOOOOOOOO WLAWLAOW ALKWLAW AOLWAW
+    case CON_DOWN: {
+      if (pos < equipment.size()) {
+        if (row == eq_rows) {
+          pos += eq_resid ? eq_resid : invinterface::row_items;
+          if (pos > equipment.size() + items.size()) pos = pos % invinterface::row_items;
+        } else {
+          if (pos + invinterface::row_items < equipment.size()) {
+            pos += invinterface::row_items;
+          } else {
+            if (equipment.size() + (pos % invinterface::row_items) > equipment.size() + items.size()) {
+              pos = pos % invinterface::row_items;
+            } else {
+              pos = equipment.size() + (pos % invinterface::row_items);
+            }
+          }
+        }
+      } else {
+        short adj_pos = pos - equipment.size();
+        if (row == eq_rows + it_rows) {
+          if (adj_pos % invinterface::row_items >= equipment.size()) {
+            pos = equipment.size() + (adj_pos % invinterface::row_items);
+          } else {
+            pos = adj_pos % invinterface::row_items;
+          }
+        } else {
+          if (adj_pos + invinterface::row_items < items.size()) {
+            pos += invinterface::row_items;
+          } else {
+            if (adj_pos % invinterface::row_items >= equipment.size()) {
+              pos = equipment.size() + (adj_pos % invinterface::row_items);
+            } else {
+              pos = adj_pos % invinterface::row_items;
+            }
+          }
+        }
+      }
+      break;
+    }
+    case CON_UP: {
+      if (pos < equipment.size()) {
+        if (pos >= invinterface::row_items) {
+          pos -= invinterface::row_items;
+        } else {
+          if (pos >= items.size()) {
+            if (pos + (invinterface::row_items * (eq_rows - 1)) >= equipment.size()) {
+              pos = pos + (invinterface::row_items * (eq_rows - 1)) - invinterface::row_items;
+            } else {
+              pos = pos + (invinterface::row_items * (eq_rows - 1));
+            }
+          } else {
+            if (pos + (invinterface::row_items * (it_rows - 1)) >= items.size()) {
+              pos = pos + equipment.size() + (invinterface::row_items * (it_rows - 1)) - invinterface::row_items;
+            } else {
+              pos = pos + equipment.size() + (invinterface::row_items * (it_rows - 1));
+            }
+          }
+        }
+      } else {
+        short adj_pos = pos - equipment.size();
+        if (adj_pos >= invinterface::row_items) {
+          pos -= invinterface::row_items;
+        } else {
+          if (adj_pos >= equipment.size()) {
+            if (adj_pos + (invinterface::row_items * (it_rows - 1)) >= items.size()) {
+              pos = adj_pos + equipment.size() + (invinterface::row_items * (it_rows - 1)) - invinterface::row_items;
+            } else {
+              pos = adj_pos + equipment.size() + (invinterface::row_items * (it_rows - 1));
+            }
+          } else {
+            if (adj_pos + (invinterface::row_items * (eq_rows - 1)) >= equipment.size()) {
+              pos = adj_pos + (invinterface::row_items * (eq_rows - 1)) - invinterface::row_items;
+            } else {
+              pos = adj_pos + (invinterface::row_items * (eq_rows - 1));
+            }
+          }
+        }
+      }
+      break;
+    }
+    case CON_ATTACK:    menuactive = true; break;
+    case CON_DEFEND:    reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    case CON_INVENTORY: reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    case CON_PAUSE:     reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    default: break;
+  }
+}
+
+void CInventory::handleMenu(const Gamecon& action) {
+  using namespace invinterface::optmenu;
+  switch (action) {
+    case CON_DOWN: {
+      if (menupos == num_options - 1) menupos = 0;
+      else menupos++;
+      break;
+    }
+    case CON_UP: {
+      if (menupos == 0) menupos = num_options - 1;
+      else menupos--;
+      break;
+    }
+    case CON_ATTACK:    break;
+    case CON_DEFEND:    menuactive = false; menupos = 0; break;
+    case CON_INVENTORY: reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    case CON_PAUSE:     reinit(); CInterrupt::removeFlag(INTRPT_INVENTORY); break;
+    default: break;
+  }
+}
+
+bool CInventory::OnRender() {
+  if (!drawFrame())     return false;
+  if (!drawEquipment()) return false;
+  if (!drawItems())     return false;
+  if (!drawMenu())      return false;
+  drawInfo();
+  return true;
+}
+
+bool CInventory::drawFrame() {
+  using namespace invinterface;
+  if (!CAsset::drawStrBox(canvas_r, str_w, c_col, s_col)) return false;
+  if (!CAsset::drawStrBox(about_r, str_w, c_col, s_col)) return false;
+  return true;
+}
+
+bool CInventory::drawEquipment() {
+  using namespace invinterface;
+  int init_x = equip_r.x + (equip_r.w - (ITEM_SIZE * row_items) - (buff_sp * (row_items - 1))) / 2;
+  int init_y = equip_r.y + (equip_r.h - (ITEM_SIZE * 2) - buff_sp) / 2;
+  SDL_Rect dest = {init_x, init_y, ITEM_SIZE, ITEM_SIZE};
+
+  for (int i = 0; i < equipment.size(); i++) {
+    // render equipment icon
+    if (!CSurface::OnDraw(itemsrc, equipment[i].spr, dest)) return false;
+    if (i == pos && !drawCursor(dest)) return false;
+    if (((i + 1) % row_items == 0)) {
+      dest.x = init_x;
+      dest.y += buff_sp + ITEM_SIZE;
+    } else {
+      dest.x += buff_sp + ITEM_SIZE;
     }
   }
-	return active;
+  return true;
 }
 
-void CInventory::OnRender(SDL_Renderer* renderer)
-{
-  if (Tex_Item == NULL || renderer == NULL)
-	{
-		return;
-	}
-	int spacing = 20;	// padding between text and border of box
-	unsigned int xB = (WWIDTH - MENU_W) / 2;
-	unsigned int iyB = (WHEIGHT - (INV_MENU_H + DETAIL_MENU_H)) / 2;
-	unsigned int dyB = iyB + INV_MENU_H;
-	Font::FontControl.DrawContainer(renderer, xB, iyB, MENU_W, INV_MENU_H, 'b');
-	Font::FontControl.DrawContainer(renderer, xB, dyB, MENU_W, DETAIL_MENU_H, 'b');
-
-	// what is the spacing between icons?
-	unsigned int xS = (MENU_W - (maxcol * ICON_SIZE)) / (maxcol + 1);
-	unsigned int yS = (INV_MENU_H - (maxrow * ICON_SIZE)) / (maxrow + 1);
-
-	// what is the currently highlighted item?
-	int highlight = col + (row * maxcol);
-
-	// render all inventory item icons & highlight box
-	for (int i = 0; i < CItem::Inventory.size(); i++)
-	{
-		int xT = i % maxcol;
-		int yT = i / maxcol;
-		int xO = ((xT + 1) * xS) + (xT * ICON_SIZE) + xB;
-		int yO = ((yT + 1) * yS) + (yT * ICON_SIZE) + iyB;
-		CItem::Inventory[i]->OnRender(renderer, Tex_Item, xO, yO, TEX_WIDTH, TEX_HEIGHT);
-		if (i == highlight)
-		{
-			CSurface::OnDraw(renderer, Tex_Item, xO, yO, 0, 0, ICON_SIZE, ICON_SIZE);
-			// render highlighted item's information
-			int tX = xB + ((MENU_W - DETAIL_TEXT_W) / 2);
-			int tY = dyB + ((DETAIL_MENU_H - DETAIL_TEXT_H) / 2);
-			Font::FontControl.TextBox(renderer, FONT_DEFAULT, CItem::Inventory[highlight]->name, tX, tY, DETAIL_TEXT_W, DETAIL_TEXT_H);
-			Font::FontControl.TextBox(renderer, FONT_DEFAULT, CItem::Inventory[highlight]->about, tX, tY + spacing, DETAIL_TEXT_W, DETAIL_TEXT_H);
-		}
-	}
+bool CInventory::drawItems() {
+  using namespace invinterface;
+  int init_x = items_r.x + (items_r.w - (ITEM_SIZE * row_items) - (buff_sp * (row_items - 1))) / 2;
+  int init_y = items_r.y + (items_r.h - (ITEM_SIZE * 2) - buff_sp) / 2;
+  SDL_Rect dest = {init_x, init_y, ITEM_SIZE, ITEM_SIZE};
+  for (int i = 0; i < items.size(); i++) {
+    // render item icon
+    if (!CSurface::OnDraw(itemsrc, items[i].spr, dest)) return false;
+    if (i == pos - equipment.size() && !drawCursor(dest)) return false;
+    if (((i + 1) % row_items == 0)) {
+      dest.x = init_x;
+      dest.y += buff_sp + ITEM_SIZE;
+    } else {
+      dest.x += buff_sp + ITEM_SIZE;
+    }
+  }
+  return true;
 }
 
-void CInventory::OnCleanup()
-{
-  if (Tex_Item)	SDL_DestroyTexture(Tex_Item);
-	Tex_Item = NULL;
+bool CInventory::drawCursor(const SDL_Rect& dest) {
+  using namespace invinterface;
+  return CAsset::drawBox(dest, *cursor_col, cursor_w);
+}
+
+void CInventory::drawInfo() {
+  using namespace invinterface;
+  std::string name, about;
+  if (pos < equipment.size()) {
+    fetchInfo(equipment[pos].ID, name, about);
+  } else {
+    fetchInfo(items[pos - equipment.size()].ID, name, about);
+  }
+  CType::CenterWrite(name.c_str(), title_r, f_col);
+  CType::CenterWrite(about.c_str(), about_r, f_col);
+}
+
+bool CInventory::drawMenu() {
+  using namespace invinterface::optmenu;
+  if (!CAsset::drawStrBox(menu_r, str_w, c_col, s_col)) return false;
+
+  SDL_Rect opt_r = {menu_r.x, menu_r.y, menu_r.w, opts_h};
+  for (int i = 0; i < num_options; i++) {
+    CType::CenterWrite(opt_list[i], opt_r, menuactive ? ((i == menupos) ? f_hov : f_col) : f_inactive);
+    opt_r.y += opts_h;
+  }
+  return true;
+}
+
+short CInventory::canAddItem(const short& ID) {
+  // using namespace items::adderrors;
+  // for (int i = 0; i < equipment.size(); i++) {
+  //   if (ID == equipment[i].ID) {
+  //     if (equipment[i].maxnum == 1) return ONLYONE;
+  //     if (equipment[i].num == equipment[i].maxnum) return TOOMANY;
+  //     return 0;
+  //   }
+  // }
+  //
+  // for (int i = 0; i < items.size(); i++) {
+  //   if (ID == items[i].ID) {
+  //     if (items[i].num == items[i].maxnum) return TOOMANY;
+  //   }
+  // }
+  // if (items.size() == items::max_items) return NOSPACE;
+  //
+  // return 0;
+}
+
+void CInventory::addItem(const short& ID) {
+  CItem newitem = fetchItem(ID);
+  if (newitem.equip) {
+    equipment.push_back(newitem);
+  } else {
+    items.push_back(newitem);
+  }
+}
+
+void CInventory::Cleanup() {
+  SDL_DestroyTexture(itemsrc);
 }

@@ -7,13 +7,11 @@ std::vector<int> CSceneryEdit::ScnID_List;
 std::vector<SDL_Texture*> CSceneryEdit::TexList;
 std::vector<int> CSceneryEdit::TexID_List;
 
-CSceneryEdit::CSceneryEdit()
-{
+CSceneryEdit::CSceneryEdit() {
   resetSettings();
 }
 
-void CSceneryEdit::resetSettings()
-{
+void CSceneryEdit::resetSettings() {
   scn_ID = 0;
   Z = 1.00f;
   Zl = 0.00f;
@@ -23,8 +21,7 @@ void CSceneryEdit::resetSettings()
   permanent = false;
 }
 
-void CSceneryEdit::resetAll()
-{
+void CSceneryEdit::resetAll() {
   resetSettings();
 
   for (int i = 0; i < SceneList.size(); i++) {
@@ -43,8 +40,7 @@ void CSceneryEdit::resetAll()
   TexID_List.clear();
 }
 
-bool CSceneryEdit::LoadScenery(char const* sceneryfile)
-{
+bool CSceneryEdit::LoadScenery(char const* sceneryfile) {
   // NOTE: The local texture ID, or the texture ID relative to the
   // Z position of groups of textures, is meaningless in the scenery editor.
   // Thus, number of textures at the start of the file, the paths to textures,
@@ -67,8 +63,7 @@ bool CSceneryEdit::LoadScenery(char const* sceneryfile)
 	fscanf(FileHandle, "%d\n", &num_tex);
 
   // A list of image paths follows the header. Scan all, but do nothing more.
-  for (int i = 0; i < num_tex; i++)
-  {
+  for (int i = 0; i < num_tex; i++) {
     char TexFile[255];
     fscanf(FileHandle, "%s\n", TexFile);
   }

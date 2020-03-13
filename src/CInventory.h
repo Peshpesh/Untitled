@@ -1,56 +1,123 @@
-#ifndef _CINVENTORY_H_
-#define _CINVENTORY_H_
+#ifndef _C_INVENTORY_H_
+#define _C_INVENTORY_H_
 
-#include "CMenu.h"
-#include "CItem.h"
-#include "CItemProcess.h"
+#include "CEvent.h"
+#include "CControls.h"
+#include "CInterrupt.h"
+#include "CAsset.h"
+#include "CType.h"
 #include "Define.h"
+#include <string>
+#include <vector>
 
-#include "IDebug.h"
+namespace items {
+  extern const short max_items;
+  enum {
+    MISSING = 0,
+    JOURNAL,
+    PEWPEW,
+    MEDIKIT,
+    WARMGLOVES,
+    ROOMKEY_RUINS,
+    TRANQUIL_STONE,
+  };
+  namespace adderrors {
+    enum {
+      ONLYONE = 1,
+      TOOMANY = 2,
+      NOSPACE = 3,
+    };
+  }
+}
 
-class CInventory
-{
+namespace invinterface {
+  extern const short row_items;
+  extern const short buff_sp;
+  extern const short canv_w;
+  extern const short canv_h;
+  extern const short menu_w;
+  extern const short str_w;
+  extern const SDL_Rect canvas_r;
+  extern const SDL_Rect equip_r;
+  extern const SDL_Rect items_r;
+  extern const SDL_Rect title_r;
+  extern const SDL_Rect about_r;
+  extern const SDL_Color* f_col;
+  extern const SDL_Point* c_col;
+  extern const SDL_Point* s_col;
+  extern const SDL_Color* cursor_col;
+  extern const short cursor_w;
+  namespace optmenu {
+    extern const SDL_Rect menu_r;
+    extern const SDL_Rect opts_r;
+    extern const SDL_Point* c_col;
+    extern const SDL_Color* f_inactive;
+    extern const SDL_Color* f_col;
+    extern const SDL_Color* f_hov;
+    extern const short str_w;
+    extern const SDL_Point* s_col;
+    extern const short num_options;
+    extern const short opts_h;
+    extern const char* const opt_list[];
+    enum decision {
+      USE_ITEM,
+      DROP_ITEM,
+      CANCEL,
+    };
+  }
+}
+
+struct CItem {
+  short ID;
+  bool equip;
+  unsigned short num;
+  unsigned short maxnum;
+  SDL_Rect spr;
+};
+
+class CInventory : public CEvent {
+  CInventory();
 public:
-	static CInventory    InvControl;
+  static CInventory control;
+  SDL_Texture* itemsrc;
+  std::vector<CItem> equipment;
+  std::vector<CItem> items;
+  short muns;
+  short pos;
+  bool menuactive;
+  short menupos;
 
 public:
-  bool active;
+  bool init();
+  void reinit();
 
 public:
-	SDL_Texture*			Tex_Item;				      // Item texture
+  void OnEvent(SDL_Event* Event);
+private:
+	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void handleNav(const Gamecon& action);
+  void handleMenu(const Gamecon& action);
+
+public:
+  bool OnRender();
+private:
+  bool drawFrame();
+  bool drawEquipment();
+  bool drawItems();
+  bool drawCursor(const SDL_Rect& dest);
+  void drawInfo();
+  bool drawMenu();
+
+public:
+  short canAddItem(const short& ID);
+  void addItem(const short& ID);
 
 private:
-	int TEX_WIDTH;		// in number of ICON_SIZE
-	int TEX_HEIGHT;		// in number of ICON_SIZE
-
-private:
-  unsigned short maxrow;
-  unsigned short maxcol;
-  unsigned short row;
-  unsigned short col;
- 	unsigned int MENU_W;
-	unsigned int INV_MENU_H;
-	unsigned int DETAIL_MENU_H;
-	unsigned int DETAIL_TEXT_W;
-	unsigned int DETAIL_TEXT_H;
-
-private:
-  CMenu* query;
+  CItem fetchItem(const short& ID);
+  void fetchInfo(const short& ID, std::string& name, std::string& about);
 
 public:
-	CInventory();
-
-public:
-	// static member function that loads the static member SDL_Texture*, Tex_Item
-	bool OnInit(SDL_Renderer* renderer);
-
-  bool OnEvent(SDL_Keycode sym);
-
-	bool OnLoop();
-
-	void OnRender(SDL_Renderer* renderer);
-
-	void OnCleanup();
+  void Cleanup();
 };
 
 #endif

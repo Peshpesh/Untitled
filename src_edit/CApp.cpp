@@ -6,10 +6,8 @@ CApp::CApp()
 	Map_Display = NULL;
 	mouseX = mouseY = 0;
 	mouse.x = mouse.y = 0;
-
 	active_mod = MODIFY_MAP;
-	intrpt = INTRPT_NONE;
-	tabl_name_W = 0;
+	pan_l = pan_r = pan_u = pan_d = false;
 }
 
 /* This is the executable member that contains the editor's
@@ -25,7 +23,7 @@ int CApp::OnExecute()
 	}
 
 	// state = keystate;
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	// const Uint8 *state = SDL_GetKeyboardState(NULL);
 	SDL_Event Event;
 	// This loop will run endlessly until something makes the Running
 	// flag false. That will happen, hopefully, by the user's decision.
@@ -37,7 +35,7 @@ int CApp::OnExecute()
 			OnEvent(&Event);
 		}
 		SDL_PumpEvents();
-		OnMotion(state);    // For repeating user input (i.e. holding directional button)
+		// OnMotion(state);    // For repeating user input (i.e. holding directional button)
 		OnLoop();      // Perform necessary manipulations
 		OnRender();    // Render updated info
 	}

@@ -73,8 +73,10 @@ void CEditMap::OnLButtonDown(int mX, int mY)
   if (handleGetTile(&mouse)) return;
   if (handleScroll_bg(&mouse, EditTile)) return;
   if (handleScroll_fg(&mouse, EditTile)) return;
-  if (handleScroll_ty(&mouse, EditTile)) return;
-  if (handleScroll_co(&mouse, EditTile)) return;
+  // if (handleScroll_ty(&mouse, EditTile)) return;
+  // if (handleScroll_co(&mouse, EditTile)) return;
+  if (handleType(&mouse, EditTile)) return;
+  if (handleColl(&mouse, EditTile)) return;
   if (handleTileReset(&mouse, EditTile)) return;
   if (handleOpac_ty(&mouse)) return;
   if (handleOpac_co(&mouse)) return;
@@ -84,8 +86,7 @@ void CEditMap::OnLButtonDown(int mX, int mY)
   if (handleQuadrant_lc(&mouse)) return;
 }
 
-void CEditMap::OnRButtonDown(int mX, int mY)
-{
+void CEditMap::OnRButtonDown(int mX, int mY) {
   if (!CInterrupt::isNone()) return;
 
   const SDL_Point mouse = {mX, mY};
@@ -95,13 +96,11 @@ void CEditMap::OnRButtonDown(int mX, int mY)
   if (handleQuadrant_rc(&mouse)) return;
 }
 
-bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
-{
+bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod) {
   if (!CInterrupt::isNone()) return false;
   bool retval = true;
 
-  switch (sym)
-  {
+  switch (sym) {
     case SDLK_d:  extendMap_R();  break;
     case SDLK_a:  extendMap_L();  break;
     case SDLK_s:  extendMap_D();  break;
@@ -115,8 +114,7 @@ bool CEditMap::handleAreaModify(SDL_Keycode sym, Uint16 mod)
   return retval;
 }
 
-bool CEditMap::handleAreaExtend(const SDL_Point* mouse)
-{
+bool CEditMap::handleAreaExtend(const SDL_Point* mouse) {
   using namespace mapEngine::but_quad_map;
 
   if (SDL_PointInRect(mouse, &buttons[LEFT])) {
@@ -162,73 +160,112 @@ bool CEditMap::handleAreaRemove(const SDL_Point* mouse)
 }
 
 void CEditMap::extendMap_R() {
-  CArea::AreaControl.OnExpandRight();
+  CArea::control.OnExpandRight();
 }
 
 void CEditMap::extendMap_L() {
-  CArea::AreaControl.OnExpandLeft();
+  CArea::control.OnExpandLeft();
 
-  // Keep camera focused on same spot (relative to the area prior to expansion)
-  CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);
-
-  // This loop updates the position of our entities
+  // This loop updates the position of our entities & scenery
   // to prevent unintended "movement" over the changed area
   for (int i = 0; i < CEntity::entityList.size(); i++) {
     CEntity::entityList[i].dstP.x += MAP_WIDTH * TILE_SIZE;
   }
+  for (int i = 0; i < CScenery::sceneryList.size(); i++) {
+    long double Z = CScenery::layerList[CScenery::sceneryList[i].layer];
+    long double rel_x = CCamera::CameraControl.trueXToRel(CScenery::sceneryList[i].true_x, Z);
+    long double win_x = rel_x - CCamera::CameraControl.GetX();
+
+    CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);
+    rel_x = win_x + CCamera::CameraControl.GetX();
+    CScenery::sceneryList[i].true_x = CCamera::CameraControl.relXToTrue(rel_x, Z);
+
+    CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
+  }
+  // Keep camera focused on same spot (relative to the area prior to expansion)
+  CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);
 }
 
 void CEditMap::extendMap_D() {
-  CArea::AreaControl.OnExpandDown();
+  CArea::control.OnExpandDown();
 }
 
 void CEditMap::extendMap_U() {
-  CArea::AreaControl.OnExpandUp();
-
-  // Keep camera focused on same spot
-  CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
+  CArea::control.OnExpandUp();
 
   // Update entity positions relative to new area size
   for (int i = 0; i < CEntity::entityList.size(); i++) {
     CEntity::entityList[i].dstP.y += MAP_HEIGHT * TILE_SIZE;
   }
+  for (int i = 0; i < CScenery::sceneryList.size(); i++) {
+    long double Z = CScenery::layerList[CScenery::sceneryList[i].layer];
+    long double rel_y = CCamera::CameraControl.trueYToRel(CScenery::sceneryList[i].true_y, Z);
+    long double win_y = rel_y - CCamera::CameraControl.GetY();
+
+    CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
+    rel_y = win_y + CCamera::CameraControl.GetY();
+    CScenery::sceneryList[i].true_y = CCamera::CameraControl.relYToTrue(rel_y, Z);
+
+    CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
+  }
+  // Keep camera focused on same spot
+  CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
 }
 
 void CEditMap::removeMap_R() {
-  CArea::AreaControl.OnReduceRight();
+  CArea::control.OnReduceRight();
 }
 
 void CEditMap::removeMap_L() {
   // adjustments to pre-existing objects on the map (e.g., entities)
   // are only necessary if a reduction in map area is possible
-  if (CArea::AreaControl.OnReduceLeft()) {
-    CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
-
+  if (CArea::control.OnReduceLeft()) {
     for (int i = 0; i < CEntity::entityList.size(); i++) {
       CEntity::entityList[i].dstP.x -= MAP_WIDTH * TILE_SIZE;
     }
+    for (int i = 0; i < CScenery::sceneryList.size(); i++) {
+      long double Z = CScenery::layerList[CScenery::sceneryList[i].layer];
+      long double rel_x = CCamera::CameraControl.trueXToRel(CScenery::sceneryList[i].true_x, Z);
+      long double win_x = rel_x - CCamera::CameraControl.GetX();
+
+      CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
+      rel_x = win_x + CCamera::CameraControl.GetX();
+      CScenery::sceneryList[i].true_x = CCamera::CameraControl.relXToTrue(rel_x, Z);
+
+      CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);
+    }
+    CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
   }
 }
 
 void CEditMap::removeMap_D() {
-  CArea::AreaControl.OnReduceDown();
+  CArea::control.OnReduceDown();
 }
 
 void CEditMap::removeMap_U() {
   // adjustments to pre-existing objects on the map (e.g., entities)
   // are only necessary if a reduction in map area is possible
-  if (CArea::AreaControl.OnReduceUp())
+  if (CArea::control.OnReduceUp())
   {
-    CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
-
     for (int i = 0; i < CEntity::entityList.size(); i++) {
       CEntity::entityList[i].dstP.y -= MAP_HEIGHT * TILE_SIZE;
     }
+    for (int i = 0; i < CScenery::sceneryList.size(); i++) {
+      long double Z = CScenery::layerList[CScenery::sceneryList[i].layer];
+      long double rel_y = CCamera::CameraControl.trueYToRel(CScenery::sceneryList[i].true_y, Z);
+      long double win_y = rel_y - CCamera::CameraControl.GetY();
+
+      CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
+      rel_y = win_y + CCamera::CameraControl.GetY();
+      CScenery::sceneryList[i].true_y = CCamera::CameraControl.relYToTrue(rel_y, Z);
+
+      CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
+    }
+    CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
   }
 }
 
-bool CEditMap::handleMakeDomain(const SDL_Point* mouse)
-{
+bool CEditMap::handleMakeDomain(const SDL_Point* mouse) {
   if (CAsset::inWorkspace(mouse))
   {
     if (rClickA == NULL)
@@ -252,8 +289,7 @@ bool CEditMap::handleMakeDomain(const SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handlePlaceDomain(const SDL_Point* mouse)
-{
+bool CEditMap::handlePlaceDomain(const SDL_Point* mouse) {
   bool retval = false;
   if (CAsset::inWorkspace(mouse))
   {
@@ -261,7 +297,7 @@ bool CEditMap::handlePlaceDomain(const SDL_Point* mouse)
     {
       retval = true;
       SDL_Rect dom = getTileDomain(rClickA, rClickB);
-      SDL_Point clickPos = CCamera::CameraControl.GetCamRelPoint(mouse);
+      SDL_Point clickPos = CCamera::CameraControl.GetCamRelPoint(*mouse);
 
       if (SDL_PointInRect(&clickPos, &dom))
       {
@@ -284,22 +320,18 @@ bool CEditMap::handlePlaceDomain(const SDL_Point* mouse)
   return retval;
 }
 
-void CEditMap::resetRClick()
-{
-  if (rClickA != NULL)
-  {
+void CEditMap::resetRClick() {
+  if (rClickA != NULL) {
     delete rClickA;
     rClickA = NULL;
   }
-  if (rClickB != NULL)
-  {
+  if (rClickB != NULL) {
     delete rClickB;
     rClickB = NULL;
   }
 }
 
-bool CEditMap::handleNewTile(const SDL_Point* mouse)
-{
+bool CEditMap::handleNewTile(const SDL_Point* mouse) {
   // Place new tiles, if click is in the workspace
   if (CAsset::inWorkspace(mouse))
   {
@@ -311,41 +343,35 @@ bool CEditMap::handleNewTile(const SDL_Point* mouse)
   return false;
 }
 
-void CEditMap::placeBlock(const int& x, const int& y)
-{
-  if (active_TL) CArea::AreaControl.ChangeTile(x, y, &TileTL, onTiles);
-  if (active_TR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y, &TileTR, onTiles);
-  if (active_BL) CArea::AreaControl.ChangeTile(x, y + TILE_SIZE, &TileBL, onTiles);
-  if (active_BR) CArea::AreaControl.ChangeTile(x + TILE_SIZE, y + TILE_SIZE, &TileBR, onTiles);
+void CEditMap::placeBlock(const int& x, const int& y) {
+  if (active_TL) CArea::control.ChangeTile(x, y, &TileTL, onTiles);
+  if (active_TR) CArea::control.ChangeTile(x + TILE_SIZE, y, &TileTR, onTiles);
+  if (active_BL) CArea::control.ChangeTile(x, y + TILE_SIZE, &TileBL, onTiles);
+  if (active_BR) CArea::control.ChangeTile(x + TILE_SIZE, y + TILE_SIZE, &TileBR, onTiles);
 }
 
-bool CEditMap::handleGetSet(const SDL_Point* mouse)
-{
+bool CEditMap::handleGetSet(const SDL_Point* mouse) {
   // Click on "Change Tileset" button. This displays a prompt to change tilesets,
   // and the function within the loop performs a change if requested.
 	using namespace mapEngine::but_tset;
-  if (SDL_PointInRect(mouse, &button))
-  {
+  if (SDL_PointInRect(mouse, &button)) {
     CInterrupt::appendFlag(INTRPT_CHANGE_TS);
     return true;
   }
   return false;
 }
 
-bool CEditMap::handleGetTile(const SDL_Point* mouse)
-{
+bool CEditMap::handleGetTile(const SDL_Point* mouse) {
   // Click on "Change Tile" buttons. A display of all tiles is rendered,
   // and clicking a tile will update the active tile to use the clicked tile.
   using namespace mapEngine::but_t;
 
-  if (SDL_PointInRect(mouse, &bg_button))
-  {
+  if (SDL_PointInRect(mouse, &bg_button)) {
       CChangeTile::PickTile.Init(CTileset::TSControl.ts_w, CTileset::TSControl.ts_h);
       CInterrupt::appendFlag(INTRPT_CHANGE_BG);
       return true;
   }
-  if (SDL_PointInRect(mouse, &fg_button))
-  {
+  if (SDL_PointInRect(mouse, &fg_button)) {
       CChangeTile::PickTile.Init(CTileset::TSControl.ts_w, CTileset::TSControl.ts_h);
       CInterrupt::appendFlag(INTRPT_CHANGE_FG);
       return true;
@@ -353,8 +379,7 @@ bool CEditMap::handleGetTile(const SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile)
-{
+bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile) {
   using namespace mapEngine::disp_t;
 
   // Check for click on arrow LEFT or RIGHT of active background tile.
@@ -363,24 +388,20 @@ bool CEditMap::handleScroll_bg(const SDL_Point* mouse, CTile* EditTile)
 
   if (arrDir == 'N') return false;
 
-  else if (arrDir == 'R')
-  {
+  else if (arrDir == 'R') {
     if (EditTile->bg_ID < (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1) EditTile->bg_ID += 1;
     else EditTile->bg_ID = 0;
     return true;
   }
-  else if (arrDir == 'L')
-  {
+  else if (arrDir == 'L') {
     if (EditTile->bg_ID > 0) EditTile->bg_ID -= 1;
     else EditTile->bg_ID = (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1;
     return true;
   }
-
   return false;
 }
 
-bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile)
-{
+bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile) {
   using namespace mapEngine::disp_t;
 
   // Click on arrow LEFT or RIGHT of active foreground tile.
@@ -390,78 +411,106 @@ bool CEditMap::handleScroll_fg(const SDL_Point* mouse, CTile* EditTile)
 
   if (arrDir == 'N') return false;
 
-  else if (arrDir == 'R')
-  {
+  else if (arrDir == 'R') {
     if (EditTile->fg_ID < (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1) EditTile->fg_ID += 1;
     else EditTile->fg_ID = 0;
     return true;
   }
-  else if (arrDir == 'L')
-  {
+  else if (arrDir == 'L') {
     if (EditTile->fg_ID > 0) EditTile->fg_ID -= 1;
     else EditTile->fg_ID = (CTileset::TSControl.ts_w * CTileset::TSControl.ts_h) - 1;
     return true;
   }
-
   return false;
 }
 
-bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile)
-{
+// bool CEditMap::handleScroll_ty(const SDL_Point* mouse, CTile* EditTile) {
+//   using namespace mapEngine::disp_t;
+//
+//   // Click on arrow LEFT or RIGHT of active tile type.
+//   // Changes the active tile type to previous or next type index.
+//
+//   const char arrDir = getScrollDir(&ty_pos, mouse);
+//
+//   if (arrDir == 'N') return false;
+//
+//   else if (arrDir == 'R') {
+//     if (EditTile->TypeID != TILE_TYPE_FIRE) EditTile->TypeID += 1;
+//     else EditTile->TypeID = 0;
+//     return true;
+//   }
+//   else if (arrDir == 'L') {
+//     if (EditTile->TypeID != 0) EditTile->TypeID -= 1;
+//     else EditTile->TypeID = TILE_TYPE_FIRE;
+//     return true;
+//   }
+//   return false;
+// }
+
+// bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile) {
+//   using namespace mapEngine::disp_t;
+//
+//   // Click on arrow LEFT or RIGHT of active collision.
+//   // Changes the active collision to previous or next collision index.
+//
+//   const char arrDir = getScrollDir(&co_pos, mouse);
+//
+//   if (arrDir == 'N') return false;
+//
+//   else if (arrDir == 'R') {
+//     if (EditTile->CollID != SOLID_A_ML_BR) EditTile->CollID += 1;
+//     else EditTile->CollID = 0;
+//     return true;
+//   }
+//   else if (arrDir == 'L') {
+//     if (EditTile->CollID != 0) EditTile->CollID -= 1;
+//     else EditTile->CollID = SOLID_A_ML_BR;
+//     return true;
+//   }
+//   return false;
+// }
+
+bool CEditMap::handleType(const SDL_Point* mouse, CTile* EditTile) {
+  if (!mouse || !EditTile) return false;
   using namespace mapEngine::disp_t;
 
-  // Click on arrow LEFT or RIGHT of active tile type.
-  // Changes the active tile type to previous or next type index.
-
-  const char arrDir = getScrollDir(&ty_pos, mouse);
-
-  if (arrDir == 'N') return false;
-
-  else if (arrDir == 'R')
-  {
-    if (EditTile->TypeID != TILE_TYPE_FIRE) EditTile->TypeID += 1;
-    else EditTile->TypeID = 0;
-    return true;
+  SDL_Rect targetR = {0, 0, ty_t_size, ty_t_size};
+  int k = 0;
+  for (int j = 0; j < type_h; j++) {
+    for (int i = 0; i < type_w; i++) {
+      targetR.x = ty_pos.x + ((k % ty_w) * (ty_t_size + co_spac));
+      targetR.y = ty_pos.y + ((k / ty_w) * (ty_t_size + co_spac));
+      if (SDL_PointInRect(mouse, &targetR)) {
+        EditTile->TypeID = k;
+        return true;
+      }
+      k++;
+    }
   }
-  else if (arrDir == 'L')
-  {
-    if (EditTile->TypeID != 0) EditTile->TypeID -= 1;
-    else EditTile->TypeID = TILE_TYPE_FIRE;
-    return true;
-  }
-
   return false;
 }
 
-bool CEditMap::handleScroll_co(const SDL_Point* mouse, CTile* EditTile)
-{
+bool CEditMap::handleColl(const SDL_Point* mouse, CTile* EditTile) {
+  if (!mouse || !EditTile) return false;
   using namespace mapEngine::disp_t;
 
-  // Click on arrow LEFT or RIGHT of active collision.
-  // Changes the active collision to previous or next collision index.
-
-  const char arrDir = getScrollDir(&co_pos, mouse);
-
-  if (arrDir == 'N') return false;
-
-  else if (arrDir == 'R')
-  {
-    if (EditTile->CollID != SOLID_A_ML_BR) EditTile->CollID += 1;
-    else EditTile->CollID = 0;
-    return true;
+  SDL_Rect targetR = {0, 0, co_t_size, co_t_size};
+  int k = 0;
+  for (int j = 0; j < coll_h; j++) {
+    for (int i = 0; i < coll_w; i++) {
+      targetR.x = co_pos.x + ((k % co_w) * (co_t_size + co_spac));
+      targetR.y = co_pos.y + ((k / co_w) * (co_t_size + co_spac));
+      if (SDL_PointInRect(mouse, &targetR)) {
+        EditTile->CollID = k;
+        return true;
+      }
+      k++;
+    }
   }
-  else if (arrDir == 'L')
-  {
-    if (EditTile->CollID != 0) EditTile->CollID -= 1;
-    else EditTile->CollID = SOLID_A_ML_BR;
-    return true;
-  }
-
   return false;
 }
 
-char CEditMap::getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse)
-{
+char CEditMap::getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse) {
 	using namespace mapEngine::disp_t;
 
   char retDir = 'N';
@@ -480,53 +529,45 @@ char CEditMap::getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse)
   return retDir;
 }
 
-bool CEditMap::handleTileReset(const SDL_Point* mouse, CTile* EditTile)
-{
+bool CEditMap::handleTileReset(const SDL_Point* mouse, CTile* EditTile) {
   using namespace mapEngine::disp_t;
 
 	SDL_Rect dstR;
 
   dstR = CAsset::getRect(bg_pos.x + rmOffset_x, bg_pos.y + rmOffset_y, rm_sz, rm_sz);
-  if (SDL_PointInRect(mouse, &dstR))
-  {
+  if (SDL_PointInRect(mouse, &dstR)) {
     EditTile->bg_ID = -1;
     return true;
   }
 
   dstR.x = fg_pos.x + rmOffset_x;
   dstR.y = fg_pos.y + rmOffset_y;
-  if (SDL_PointInRect(mouse, &dstR))
-  {
+  if (SDL_PointInRect(mouse, &dstR)) {
     EditTile->fg_ID = -1;
     return true;
   }
 
   dstR.x = ty_pos.x + rmOffset_x;
   dstR.y = ty_pos.y + rmOffset_y;
-  if (SDL_PointInRect(mouse, &dstR))
-  {
+  if (SDL_PointInRect(mouse, &dstR)) {
     EditTile->TypeID = TILE_TYPE_NORMAL;
     return true;
   }
 
   dstR.x = co_pos.x + rmOffset_x;
   dstR.y = co_pos.y + rmOffset_y;
-  if (SDL_PointInRect(mouse, &dstR))
-  {
+  if (SDL_PointInRect(mouse, &dstR)) {
     EditTile->CollID = SOLID_NONE;
     return true;
   }
-
   return false;
 }
 
-bool CEditMap::handleOpac_ty(const SDL_Point* mouse)
-{
+bool CEditMap::handleOpac_ty(const SDL_Point* mouse) {
   // Click on opacity bar for tile type overlay
   using namespace mapEngine::opac;
 
-  if (SDL_PointInRect(mouse, &typeBar))
-  {
+  if (SDL_PointInRect(mouse, &typeBar)) {
     double barfract = (double)(mouse->x - typeBar.x) / (double)(typeBar.w - 1);
     type_alpha = MAX_RGBA * barfract;
     SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
@@ -535,13 +576,11 @@ bool CEditMap::handleOpac_ty(const SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleOpac_co(const SDL_Point* mouse)
-{
+bool CEditMap::handleOpac_co(const SDL_Point* mouse) {
   // Click on opacity bar for tile collision overlay
   using namespace mapEngine::opac;
 
-  if (SDL_PointInRect(mouse, &collBar))
-  {
+  if (SDL_PointInRect(mouse, &collBar)) {
     double barfract = (double)(mouse->x - collBar.x) / (double)(collBar.w - 1);
     coll_alpha = MAX_RGBA * barfract;
     SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
@@ -550,8 +589,7 @@ bool CEditMap::handleOpac_co(const SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleLayers(const SDL_Point* mouse)
-{
+bool CEditMap::handleLayers(const SDL_Point* mouse) {
   // Click on View overlay buttons
   using namespace mapEngine::view_flip;
 
@@ -563,10 +601,8 @@ bool CEditMap::handleLayers(const SDL_Point* mouse)
 	};
 
 	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
-	for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
-	{
-    if (SDL_PointInRect(mouse, &dstR))
-    {
+	for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
+    if (SDL_PointInRect(mouse, &dstR)) {
       *flags[i] = !(*flags[i]);
       return true;
     }
@@ -575,8 +611,7 @@ bool CEditMap::handleLayers(const SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handlePlace(const SDL_Point* mouse)
-{
+bool CEditMap::handlePlace(const SDL_Point* mouse) {
   // Click on active tile attribute switches
   using namespace mapEngine::place_flip;
 
@@ -588,10 +623,8 @@ bool CEditMap::handlePlace(const SDL_Point* mouse)
 	};
 
 	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
-	for (int i = 0; i < sizeof(bits) / sizeof(bits[0]); i++)
-	{
-    if (SDL_PointInRect(mouse, &dstR))
-    {
+	for (int i = 0; i < sizeof(bits) / sizeof(bits[0]); i++) {
+    if (SDL_PointInRect(mouse, &dstR)) {
       if (onTiles & bits[i]) onTiles &= ~bits[i];
       else onTiles |= bits[i];
       return true;
@@ -601,8 +634,7 @@ bool CEditMap::handlePlace(const SDL_Point* mouse)
   return false;
 }
 
-bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active)
-{
+bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active) {
   using namespace mapEngine::but_act_t;
 
   if (!SDL_PointInRect(mouse, &button)) return false;
@@ -612,24 +644,19 @@ bool CEditMap::handleActTile(const SDL_Point* mouse, bool& active)
   return true;
 }
 
-bool CEditMap::handleQuadrant_lc(const SDL_Point* mouse)
-{
+bool CEditMap::handleQuadrant_lc(const SDL_Point* mouse) {
   using namespace mapEngine::but_quad_t;
 
-  for (int i = MODIFY_TILE_TL; i <= MODIFY_TILE_BR; i++)
-  {
-    if (SDL_PointInRect(mouse, &buttons[i]))
-    {
+  for (int i = MODIFY_TILE_TL; i <= MODIFY_TILE_BR; i++) {
+    if (SDL_PointInRect(mouse, &buttons[i])) {
       modifyTile = i;
       return true;
     }
   }
-
   return false;
 }
 
-bool CEditMap::handleQuadrant_rc(const SDL_Point* mouse)
-{
+bool CEditMap::handleQuadrant_rc(const SDL_Point* mouse) {
   using namespace mapEngine::but_quad_t;
 
   bool* flags[] = {
@@ -639,14 +666,11 @@ bool CEditMap::handleQuadrant_rc(const SDL_Point* mouse)
     &active_BR
   };
 
-  for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
-  {
-    if (SDL_PointInRect(mouse, &buttons[i]))
-    {
+  for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
+    if (SDL_PointInRect(mouse, &buttons[i])) {
       *flags[i] = !(*flags[i]);
       return true;
     }
   }
-
   return false;
 }

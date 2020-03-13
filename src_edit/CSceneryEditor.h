@@ -15,8 +15,7 @@
 #include "CAnchorScenery.h"
 #include "CLayerEditor.h"
 
-namespace sceneryEngine
-{
+namespace sceneryEngine {
   namespace buttons {
     namespace chScenery
     { // Change scenery button
@@ -112,6 +111,13 @@ namespace sceneryEngine
       extern const SDL_Point* offCol;
       extern const SDL_Point* onCol;
       extern const SDL_Point* hovCol;
+      extern const short pg_button_x;
+      extern const short pg_button_y;
+      extern const short pg_button_w;
+      extern const short pg_button_h;
+      extern const SDL_Rect prev_pg;
+      extern const SDL_Rect curr_pg;
+      extern const SDL_Rect next_pg;
       extern const short list_x;
       extern const short list_y;
       extern const short button_w;
@@ -163,6 +169,7 @@ class CSceneryEditor : public CEvent {
   bool render_active, has_rendered_active;
   short group_ID;
   short decor_ID;
+  short list_page;
   short placePos;
   bool use_anchor;
   bool show_anchor;

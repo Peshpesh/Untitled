@@ -2,8 +2,7 @@
 
 CFPS CFPS::FPSControl;
 
-CFPS::CFPS()
-{
+CFPS::CFPS() {
 	OldTime = 0;
 	LastTime = 0;
 	SpeedFactor = 0;
@@ -12,16 +11,14 @@ CFPS::CFPS()
 	TargetFPS = 32.0f;
 }
 
-void CFPS::OnLoop()
-{
+void CFPS::OnLoop() {
 	// This statement checks if a second (1000 ms) has passed
 	// since the last FPS tally. If a second has passed, we give
 	// our frame-per-second counter (Frames) to NumFrames for
 	// our use elsewhere. NumFrames is essentially our "FPS on
 	// record", while Frames is a running total of frames passed
 	// in the immediate 1000 ms.
-	if (OldTime + 1000 < SDL_GetTicks())
-	{
+	if (OldTime + 1000 < SDL_GetTicks()) {
 		OldTime = SDL_GetTicks();
 		NumFrames = Frames;
 		Frames = 0;
@@ -32,6 +29,7 @@ void CFPS::OnLoop()
 	// Ideally, the first term will be 1/32 or less, meaning the
 	// computer is running at a rate faster than our targeted FPS.
 	SpeedFactor = ((SDL_GetTicks() - LastTime) / 1000.0f) * TargetFPS;
+	// if (LastTime != 0 && SpeedFactor <= 0.0f) SDL_Delay(5000);
 
 	// It's possible that with very bad performance, a glitch,
 	// or "freezing" the program loop, the SpeedFactor will

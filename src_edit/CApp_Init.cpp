@@ -44,6 +44,8 @@ bool CApp::OnInit()
 		return false;
 	}
 
+	COptions::control.OnInit();
+
 	///////////////////////
 	// Debugging section //
 	///////////////////////

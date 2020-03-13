@@ -94,7 +94,7 @@ void CAnchorScenery::handleMakeAnchor(const SDL_Point* m) {
   // clicks are RELATIVE to a true x, y given some depth z.
   // We must convert these relative coordinates to true x, y and
   // store its associated z value
-  SDL_Point r_pos = CCamera::CameraControl.GetCamRelPoint(m);
+  SDL_Point r_pos = CCamera::CameraControl.GetCamRelPoint(*m);
   anch_x = CCamera::CameraControl.relXToTrue(r_pos.x, anch_z);
   anch_y = CCamera::CameraControl.relYToTrue(r_pos.y, anch_z);
   CInterrupt::removeFlag(INTRPT_MAKE_ANCH);

@@ -36,7 +36,7 @@ void CModel::OnInit() {
 
   aW = aH = 0;
   mW = mH = 0;
-  CArea::AreaControl.GetDims(aW, aH);
+  CArea::control.GetDims(aW, aH);
 
   mW = aW * MAP_WIDTH * mod_t_sz;
   mH = aH * MAP_HEIGHT * mod_t_sz;
@@ -118,7 +118,7 @@ bool CModel::renderArea() {
       ID = i + (j * aW);
       x_rel = i * mod_t_sz * MAP_WIDTH;
       y_rel = j * mod_t_sz * MAP_HEIGHT;
-      if (!renderMap(&CArea::AreaControl.MapList[ID], x_rel, y_rel)) return false;
+      if (!renderMap(&CArea::control.MapList[ID], x_rel, y_rel)) return false;
     }
   }
   return true;
@@ -251,6 +251,48 @@ bool CModel::drawCollTile(const int& x_rel, const int& y_rel, const int& collID)
       dstR.y = collCanvas.y + y_rel;
       dstR.w = mod_t_sz;
       dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_U_LT_MB: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz / 2;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_U_MT_RB: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_U_RT_MB: {
+      dstR.x = collCanvas.x + x_rel + (mod_t_sz / 2);
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz / 2;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_U_MT_LB: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz;
+      break;
+    }
+    case SOLID_HALF_TH: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel;
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz / 2;
+      break;
+    }
+    case SOLID_HALF_BH: {
+      dstR.x = collCanvas.x + x_rel;
+      dstR.y = collCanvas.y + y_rel + (mod_t_sz / 2);
+      dstR.w = mod_t_sz;
+      dstR.h = mod_t_sz / 2;
       break;
     }
     default: CInform::InfoControl.pushInform("---CMODEL draw---\nunknown collision"); break;

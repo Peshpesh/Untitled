@@ -1,24 +1,33 @@
 #ifndef _C_HUD_H_
 #define _C_HUD_H_
 
-#include "CPlayer.h"
-#include "Font.h"
+#include "CAsset.h"
+#include "CType.h"
 
-class CHUD
-{
+class CHud {
+  CHud();
+
+  int* hp;
+  int* maxhp;
+  int* en;
+  int* maxen;
+  int* sp;
+  int* maxsp;
+
 public:
-	static CHUD HUDControl;
-	SDL_Texture* Tex_HUD;
+  static CHud control;
 
 public:
-	CHUD();
+  void assignHp(int* hp, int* maxhp);
+  void assignEn(int* en, int* maxen);
+  void assignSp(int* sp, int* maxsp);
 
-	bool	OnInit(SDL_Renderer* renderer);
-
-	void	OnLoop(int HP, int MaxHP, int Purse);
-
-	void	OnRender(SDL_Renderer* renderer, const int &HP, const int &Max_HP, const int &Purse, const int &Weapon, const int &Arsenal);
-
-	Uint8	HealthBar(const int &HP, const int &MaxHP);
+public:
+  void OnRender();
+private:
+  void drawHp();
+  void drawEnergy();
+  void drawEquipment();
+  void drawAllyInfo();
 };
 #endif

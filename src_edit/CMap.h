@@ -12,7 +12,6 @@
 #include "CInform.h"
 
 class CMap {
-
 	std::vector<CTile> TileList;
 
 public:

@@ -148,11 +148,33 @@ bool CSceneryEditor::drawLayerBrief(const SDL_Point* m, const bool& hov) {
 }
 
 bool CSceneryEditor::drawSceneryList(const SDL_Point* m, const bool& hov) {
+  using namespace sceneryEngine::misc::sceneryButtons;
   std::string name;
-  for (int i = 0; i < sceneryButtons.size(); i++) {
+
+  int i = list_page * max_buttons;
+  while (i < sceneryButtons.size() && i < (list_page + 1) * max_buttons) {
     if (!sceneryButtons[i].OnRender(m, (hov && i != decor_ID), (i == decor_ID))) return false;
     name = CSceneryData::getDecorName(group_ID, i);
     Font::NewCenterWrite(name.c_str(), &sceneryButtons[i].dstR);
+    i++;
+  }
+
+  if (sceneryButtons.size() > max_buttons) {
+    bool prev_option = list_page; // true if "previous" button is valid
+    bool next_option = false;     // true if "next" button is valid
+
+    // how many buttons remain?
+    int butts_remain = sceneryButtons.size() - (list_page * max_buttons);
+    if (butts_remain > max_buttons) {
+      next_option = true;
+    }
+    CAsset::drawBoxFill(&prev_pg, prev_option ? (m && SDL_PointInRect(m, &prev_pg) ? hovCol : onCol) : offCol);
+    CAsset::drawBoxFill(&curr_pg, offCol);
+    CAsset::drawBoxFill(&next_pg, next_option ? (m && SDL_PointInRect(m, &next_pg) ? hovCol : onCol) : offCol);
+    std::string page_str = Font::intToStr(list_page);
+    Font::NewCenterWrite(page_str.c_str(), &curr_pg);
+    Font::NewCenterWrite("$L$L", &prev_pg);
+    Font::NewCenterWrite("$R$R", &next_pg);
   }
   return true;
 }

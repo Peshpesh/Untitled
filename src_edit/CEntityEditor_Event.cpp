@@ -182,7 +182,7 @@ void CEntityEditor::OnRButtonDown(int mX, int mY) {
 }
 
 bool CEntityEditor::handleRmEntity(const SDL_Point* m) {
-  const SDL_Point mAbs = CCamera::CameraControl.GetCamRelPoint(m);
+  const SDL_Point mAbs = CCamera::CameraControl.GetCamRelPoint(*m);
   for (int i = CEntity::entityList.size() - 1; i >= 0; i--) {
     const SDL_Rect dstR = { CEntity::entityList[i].dstP.x,
                             CEntity::entityList[i].dstP.y,

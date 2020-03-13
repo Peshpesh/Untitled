@@ -1,87 +1,82 @@
 #include "CHUD.h"
 
-CHUD CHUD::HUDControl;
+CHud CHud::control;
 
-CHUD::CHUD()
-{
-	Tex_HUD = NULL;
+namespace hud {
+  const short x = 24;
+  const short y_bf = 8;
+  const SDL_Rect c_equip  = {x, y_bf, 24, 24};
+  const SDL_Rect hp_bar   = {x, c_equip.y + c_equip.h + y_bf, 100, 8};
+  const SDL_Rect en_bar   = {x, hp_bar.y + hp_bar.h, 100, 8};
+  const SDL_Point p_s_hp  = {hp_bar.x + hp_bar.w, hp_bar.y};
+  const SDL_Point p_s_en  = {en_bar.x + en_bar.w, en_bar.y};
+  const SDL_Rect ally     = {x, en_bar.y + en_bar.h + y_bf, 24, 24};
+  const SDL_Color* hp_col = &rgb::red;
+  const SDL_Color* en_col = &rgb::cyan;
+  const SDL_Color* sp_col = &rgb::green;
+  const SDL_Color* no_col = &rgb::dark_gray;
 }
 
-bool CHUD::OnInit(SDL_Renderer* renderer)
-{
-	if ((Tex_HUD = CSurface::OnLoad("../res/HUD.png", renderer)) == NULL) return false;
-	return true;
+CHud::CHud() {
+  hp = maxhp = NULL;
+  en = maxen = NULL;
+  sp = maxsp = NULL;
 }
 
-void CHUD::OnLoop(int HP, int MaxHP, int Purse)
-{
-
+void CHud::assignHp(int* hp, int* maxhp) {
+  this->hp    = hp;
+  this->maxhp = maxhp;
 }
 
-void CHUD::OnRender(SDL_Renderer* renderer, const int &HP, const int &Max_HP, const int &Purse, const int &Weapon, const int &Arsenal)
-{
-	// Error check
-	if (Tex_HUD == NULL || renderer == NULL) return;
-
-	// Draw health bar
-	CSurface::OnDraw(renderer, Tex_HUD, 25, 50, 0, 0, 100, 10);
-	for (int i = 0; i < HealthBar(HP, Max_HP); i++)
-	{
-		CSurface::OnDraw(renderer, Tex_HUD, 25 + i, 50, 100, 0, 1, 10);
-	}
-
-	// Write how much is in purse
-	Font::Write(renderer, FONT_DEFAULT, Purse, WWIDTH-25, WHEIGHT-25);
-
-	// Write how much HP
-	// Font::Write(renderer, FONT_DEFAULT, HP, 260, 25);
-	// Font::Write(renderer, FONT_DEFAULT, Arsenal, 260, 25);
-
-	// Draw weapon selector
-	if (Weapon != UNARMED)
-	{
-		// This draws the SELECTED weapon.
-		CSurface::OnDraw(renderer, Tex_HUD, 45, 25, (CPlayer::ConvertBinary(Weapon) - 1) * 18, 10, 18, 18);
-		if (Arsenal != Weapon) // Do we have any other weapons?
-		{
-			// This draws the NEXT weapon.
-			int i = Weapon * 2;
-			bool found = false;
-			while (!found)
-			{
-				if (Arsenal & i)
-				{
-					found = true;
-					CSurface::OnDraw(renderer, Tex_HUD, 65, 25, (CPlayer::ConvertBinary(i) - 1) * 18, 10, 18, 18);
-				}
-				else if (i >= ARM_TEST_E)
-				{
-					i = 1;
-				}
-				else i *= 2;
-			}
-			// This draws the PREVIOUS weapon.
-			i = Weapon / 2;
-			found = false;
-			while (!found)
-			{
-				if (Arsenal & i)
-				{
-					found = true;
-					CSurface::OnDraw(renderer, Tex_HUD, 25, 25, (CPlayer::ConvertBinary(i) - 1) * 18, 10, 18, 18);
-				}
-				else if (i == 0)
-				{
-					i = ARM_TEST_E;
-				}
-				else i /= 2;
-			}
-		}
-	}
+void CHud::assignEn(int* en, int* maxen) {
+  this->en    = en;
+  this->maxen = maxen;
 }
 
-Uint8 CHUD::HealthBar(const int &HP, const int &MaxHP)
-{
-	Uint8 Health_W = (100 * HP) / MaxHP;
-	return Health_W;
+void CHud::assignSp(int* sp, int* maxsp) {
+  this->sp    = sp;
+  this->maxsp = maxsp;
+}
+
+void CHud::OnRender() {
+  drawHp();
+  drawEnergy();
+  drawEquipment();
+  drawAllyInfo();
+}
+
+void CHud::drawHp() {
+  using namespace hud;
+  if (hp == NULL || maxhp == NULL) return;
+
+  double hp_frac = (double)(*hp) / *maxhp;
+  SDL_Rect hp_fill = {hp_bar.x, hp_bar.y, hp_bar.w * hp_frac, hp_bar.h};
+  if (!CAsset::drawBoxFill(hp_bar, *no_col)) return;
+  if (!CAsset::drawBoxFill(hp_fill, *hp_col)) return;
+
+  std::string s_hp = CAsset::intToStr(*hp) + "$L" + CAsset::intToStr(*maxhp);
+  CType::Write(FONT_MINI, s_hp.c_str(), p_s_hp, hp_col);
+}
+
+void CHud::drawEnergy() {
+  using namespace hud;
+  if (en == NULL || maxen == NULL) return;
+
+  double en_frac = (double)(*en) / *maxen;
+  SDL_Rect en_fill = {en_bar.x, en_bar.y, en_bar.w * en_frac, en_bar.h};
+  if (!CAsset::drawBoxFill(en_bar, *no_col)) return;
+  if (!CAsset::drawBoxFill(en_fill, *en_col)) return;
+
+  std::string s_en = CAsset::intToStr(*en) + "$L" + CAsset::intToStr(*maxen);
+  CType::Write(FONT_MINI, s_en.c_str(), p_s_en, en_col);
+}
+
+void CHud::drawEquipment() {
+  using namespace hud;
+  if (!CAsset::drawBoxFill(c_equip, *no_col)) return;
+}
+
+void CHud::drawAllyInfo() {
+  using namespace hud;
+  if (!CAsset::drawBoxFill(ally, *no_col)) return;
 }

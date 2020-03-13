@@ -16,7 +16,7 @@ CScenery::CScenery(int group, int decor, const SDL_Point* p, unsigned short laye
   this->layer     = layer;
   srcR            = CSceneryData::getDecorDims(group, decor);
 
-  SDL_Point r_pos = CCamera::CameraControl.GetCamRelPoint(p);
+  SDL_Point r_pos = CCamera::CameraControl.GetCamRelPoint(*p);
   true_x          = CCamera::CameraControl.relXToTrue(r_pos.x, layerList[layer]);
   true_y          = CCamera::CameraControl.relYToTrue(r_pos.y, layerList[layer]);
 }
