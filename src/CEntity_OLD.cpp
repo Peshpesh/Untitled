@@ -4,6 +4,7 @@ std::vector<CEntity*> CEntity::EntityList;
 
 CEntity::CEntity()
 {
+	// this is only a test
 	Tex_Entity = NULL;
 	X = Y = 0.0f;
 	Xo = Yo = 0;
