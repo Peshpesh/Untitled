@@ -150,16 +150,6 @@ void CArea::ShowAreaMap() {
 
 }
 
-// void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles) {
-// 	if (X < 0 || Y < 0 || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE))
-// 		return;
-//
-// 	int mapWidth = MAP_WIDTH * TILE_SIZE;
-// 	int mapHeight = MAP_HEIGHT * TILE_SIZE;
-// 	int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
-// 	MapList[ID].ChangeTile(X % mapWidth, Y % mapHeight, NewTile, useTiles);
-// }
-
 void CArea::OnCleanup() {
 	MapList.clear();
 }

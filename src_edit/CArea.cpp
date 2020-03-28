@@ -6,8 +6,7 @@ CArea::CArea() {
 	OnInit();
 }
 
-void CArea::OnInit()
-{
+void CArea::OnInit()	{
 	MapList.clear();
 	AreaHeight = AreaWidth = 1;
 
@@ -17,8 +16,7 @@ void CArea::OnInit()
 	MapList.push_back(tempMap);
 }
 
-void CArea::GetDims(int& mW, int& mH)
-{
+void CArea::GetDims(int& mW, int& mH)	{
 	mW = AreaWidth;
 	mH = AreaHeight;
 }
@@ -50,8 +48,7 @@ CTile* CArea::GetTile(int X, int Y) {
 	return Map->GetTile(X, Y);
 }
 
-bool CArea::NewLoad(char const* File)
-{
+bool CArea::OnLoad(char const* File)	{
 	// try to load area/maps
   std::string fpath = "../data/maps/";
   std::string ext = ".area";
@@ -77,34 +74,12 @@ bool CArea::NewLoad(char const* File)
 		return false;
 	}
 
-	// char TilesetFile[255];
-	// fscanf(FileHandle, "%s\n", TilesetFile);
-	//
-	// if (!CTileset::TSControl.changeTileset(TilesetFile)) {
-	// 	CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
-	// 	return false;
-	// }
-	//
-	// fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
-	// fclose(FileHandle);
-	//
-	// ext = ".maps";
-	// fname = fpath + std::string(File) + ext;
-	//
-	// FILE* MapsHandle = fopen(fname.c_str(), "rb");
-	// if (MapsHandle == NULL) {
-	// 	CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open maps file");
-	// 	return false;
-	// }
-
 	MapList.clear();
 
-	for (int X = 0; X < AreaWidth; X++)
-	{
-		for (int Y = 0; Y < AreaHeight; Y++)
-		{
+	for (int X = 0; X < AreaWidth; X++) {
+		for (int Y = 0; Y < AreaHeight; Y++) {
 			CMap tempMap;
-			if (tempMap.NewLoad(FileHandle) == false) {
+			if (tempMap.OnLoad(FileHandle) == false) {
 				fclose(FileHandle);
 				return false;
 			}
@@ -115,8 +90,7 @@ bool CArea::NewLoad(char const* File)
 	return true;
 }
 
-bool CArea::NewSave(char const* File)
-{
+bool CArea::OnSave(char const* File) {
 	// try to save area/maps
 	std::string fpath = "../data/maps/";
 	std::string ext = ".area";
@@ -125,7 +99,7 @@ bool CArea::NewSave(char const* File)
 	FILE* FileHandle = fopen(fname.c_str(), "wb");
 
 	if (FileHandle == NULL)	{
-		CInform::InfoControl.pushInform("---CAREA.NewSave---\nfailed to open new area file");
+		CInform::InfoControl.pushInform("---CAREA.OnSave---\nfailed to open new area file");
 		return false;
 	}
 
@@ -138,87 +112,18 @@ bool CArea::NewSave(char const* File)
 	fwrite(&AreaHeight, sizeof(int), 1, FileHandle);
 
 	// Output map data to .area file
-	for (int Y = 0; Y < AreaHeight; Y++)
-	{
-		for (int X = 0; X < AreaWidth; X++)
-		{
+	for (int Y = 0; Y < AreaHeight; Y++) {
+		for (int X = 0; X < AreaWidth; X++) {
 			int ID = X + (Y * AreaWidth);
-			if (!MapList[ID].NewSave(FileHandle)) return false;
+			if (!MapList[ID].OnSave(FileHandle)) return false;
 		}
 	}
 
 	fclose(FileHandle);
 	return true;
-	// std::string setname = CTileset::TSControl.getFileName();
-
-	// Output the filename of the tileset for the area
-	// fprintf(FileHandle, setname.c_str());
-	// fprintf(FileHandle, "\n");
-
-	// Output AreaWidth & AreaHeight
-	// fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
-
-	// fclose(FileHandle);
-
-	// ext = ".maps";
-	// fname = fpath + std::string(File) + ext;
-	// FileHandle = fopen(fname.c_str(), "wb");
-
-	// if (FileHandle == NULL)	{
-		// CInform::InfoControl.pushInform("---CAREA.NewSave---\nfailed to open new maps file");
-		// return false;
-	// }
 }
 
-bool CArea::OnLoad(char const* File)
-{
-	// try to load area/maps
-  std::string fpath = "../data/maps/";
-  std::string ext = ".area";
-  std::string fname = fpath + std::string(File) + ext;
-
-	FILE* FileHandle = fopen(fname.c_str(), "r");
-	if (FileHandle == NULL) {
-		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open area file");
-		return false;
-	}
-
-	char TilesetFile[255];
-	fscanf(FileHandle, "%s\n", TilesetFile);
-
-	if (!CTileset::TSControl.changeTileset(TilesetFile)) {
-		CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
-		return false;
-	}
-
-	fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
-
-	MapList.clear();
-	for (int X = 0; X < AreaWidth; X++)
-	{
-		for (int Y = 0; Y < AreaHeight; Y++)
-		{
-			char MapFile[255];
-			fscanf(FileHandle, "%s ", MapFile);
-
-			CMap tempMap;
-			if (tempMap.OnLoad(MapFile) == false) {
-				fclose(FileHandle);
-				return false;
-			}
-
-			// tempMap.Tex_Tileset = Tex_Tileset;
-
-			MapList.push_back(tempMap);
-		}
-		fscanf(FileHandle, "\n");
-	}
-	fclose(FileHandle);
-	return true;
-}
-
-void CArea::OnRenderFill(int CameraX, int CameraY)
-{
+void CArea::OnRenderFill(int CameraX, int CameraY) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
 
@@ -228,8 +133,7 @@ void CArea::OnRenderFill(int CameraX, int CameraY)
 	int maxMaps = 4;
 	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
 
-	for (int i = 0; i < loopMax; i++)
-	{
+	for (int i = 0; i < loopMax; i++) {
 		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
 		if (ID < 0 || ID >= MapList.size()) continue;
 
@@ -240,8 +144,7 @@ void CArea::OnRenderFill(int CameraX, int CameraY)
 	}
 }
 
-void CArea::OnRender(int CameraX, int CameraY, bool bg)
-{
+void CArea::OnRender(int CameraX, int CameraY, bool bg) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
 
@@ -251,8 +154,7 @@ void CArea::OnRender(int CameraX, int CameraY, bool bg)
 	int maxMaps = 4;
 	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
 
-	for (int i = 0; i < loopMax; i++)
-	{
+	for (int i = 0; i < loopMax; i++) {
 		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
 		if (ID < 0 || ID >= MapList.size()) continue;
 
@@ -263,8 +165,7 @@ void CArea::OnRender(int CameraX, int CameraY, bool bg)
 	}
 }
 
-void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY)
-{
+void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
 
@@ -274,8 +175,7 @@ void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY)
 	int maxMaps = 4;
 	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
 
-	for (int i = 0; i < loopMax; i++)
-	{
+	for (int i = 0; i < loopMax; i++) {
 		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
 		if (ID < 0 || ID >= MapList.size()) continue;
 
@@ -286,8 +186,7 @@ void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY)
 	}
 }
 
-void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY)
-{
+void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
 
@@ -297,8 +196,7 @@ void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY)
 	int maxMaps = 4;
 	int loopMax = (maxMaps <= MapList.size()) ? maxMaps : MapList.size();
 
-	for (int i = 0; i < loopMax; i++)
-	{
+	for (int i = 0; i < loopMax; i++) {
 		int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
 		if (ID < 0 || ID >= MapList.size()) continue;
 
@@ -309,50 +207,7 @@ void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY)
 	}
 }
 
-void CArea::ViewArea(SDL_Texture* ui)
-{
-	// We will map our whole area by scanning every map,
-	// and plotting every tile as a 2 x 2 solid color proxy (blue).
-	// Think of it as plotting all the maps at once instead of just
-	// some, only the tiles are 2 x 2 in size and are restricted to
-	// certain colors. Shades of the map are determined by type
-	// and (sometimes) tile. First, we need to know how big of
-	// an area we need to render.
-	int VTileSize = 2;
-
-	int PixWidth = AreaWidth * MAP_WIDTH * VTileSize;
-	int PixHeight = AreaHeight * MAP_HEIGHT * VTileSize;
-
-	// Let's draw our area in the center of the workspace.
-	int Xo = (WWIDTH - PixWidth) / 2;
-	int Yo = (WHEIGHT - PixHeight) / 2;
-
-	// Cycle through all the maps, draw 'em...
-	for (int j = 0; j < AreaHeight; j++)
-	{
-		for (int i = 0; i < AreaWidth; i++)
-		{
-			int ID = i + j * AreaWidth;
-			// X and Y passes are modified so that the next map of each loop is either on the
-			// next row or right beside the current positioned map. The added (offset) term
-			// is just the dimension of a map in pixels using VTS px x VTS px tiles.
-			MapList[ID].ViewMap(ui, Xo + i * MAP_WIDTH * VTileSize, Yo + j * MAP_HEIGHT * VTileSize);
-		}
-	}
-	for (int X = Xo - VTileSize; X <= Xo + PixWidth; X += VTileSize)
-	{
-		CSurface::OnDraw(ui, X, Yo - VTileSize, 0, 352, VTileSize, VTileSize);
-		CSurface::OnDraw(ui, X, Yo + PixHeight, 0, 352, VTileSize, VTileSize);
-	}
-	for (int Y = Yo; Y < Yo + PixHeight; Y += VTileSize)
-	{
-		CSurface::OnDraw(ui, Xo - VTileSize, Y, 0, 352, VTileSize, VTileSize);
-		CSurface::OnDraw(ui, Xo + PixWidth, Y, 0, 352, VTileSize, VTileSize);
-	}
-}
-
-void CArea::OnExpandRight()
-{
+void CArea::OnExpandRight() {
 	// This resize will make the necessary amount of empty maps.
 	// When we expand one map in width, we need the number of ROWS (or height)
 	// of maps we are currently using. We make that amount of empty maps.
@@ -361,18 +216,15 @@ void CArea::OnExpandRight()
 
 	// Move (copy) our existing maps around, so that their
 	// orientation is preserved.
-	for (int Y = AreaHeight - 1; Y > 0; Y--)
-	{
-		for (int X = AreaWidth - 1; X >= 0; X--)
-		{
+	for (int Y = AreaHeight - 1; Y > 0; Y--) {
+		for (int X = AreaWidth - 1; X >= 0; X--) {
 			MapList[X + Y + Y * AreaWidth] = MapList[X + Y * AreaWidth];
 		}
 	}
 	AreaWidth++;	// We "officially" make our Area's width one map larger
 
 	// Empty out/refresh our new maps (rightmost column)
-	for (int i = 1; i <= AreaHeight; i++)
-	{
+	for (int i = 1; i <= AreaHeight; i++) {
 		CMap tempMap;
 		tempMap.OnLoad();
 		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
@@ -380,8 +232,7 @@ void CArea::OnExpandRight()
 	}
 }
 
-void CArea::OnExpandLeft()
-{
+void CArea::OnExpandLeft() {
 	// This resize will make the necessary amount of empty maps.
 	// When we expand one map in width, we need the number of ROWS (or height)
 	// of maps we are currently using. We make that amount of empty maps.
@@ -392,17 +243,14 @@ void CArea::OnExpandLeft()
 
 	// Move (copy) our existing maps around, so that their
 	// orientation is preserved.
-	for (int Y = AreaHeight - 1; Y >= 0; Y--)
-	{
-		for (int X = AreaWidth - 1; X > 0; X--)
-		{
+	for (int Y = AreaHeight - 1; Y >= 0; Y--) {
+		for (int X = AreaWidth - 1; X > 0; X--) {
 			int ID = X + Y * AreaWidth;
 			MapList[ID] = MapList[ID - (Y + 1)];
 		}
 	}
 	// Empty out/refresh our new maps (leftmost column)
-	for (int i = 0; i < AreaHeight; i++)
-	{
+	for (int i = 0; i < AreaHeight; i++) {
 		CMap tempMap;
 		tempMap.OnLoad();
 		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
@@ -410,8 +258,7 @@ void CArea::OnExpandLeft()
 	}
 }
 
-void CArea::OnExpandUp()
-{
+void CArea::OnExpandUp() {
 	// This resize will make the necessary amount of empty maps.
 	// When we expand one map in height, we need the number of COLUMNS (or width)
 	// of maps we are currently using. We make that amount of empty maps.
@@ -421,17 +268,14 @@ void CArea::OnExpandUp()
 
 	// Move (copy) our existing maps around, so that their
 	// orientation is preserved.
-	for (int Y = AreaHeight - 1; Y > 0; Y--)
-	{
-		for (int X = AreaWidth - 1; X >= 0; X--)
-		{
+	for (int Y = AreaHeight - 1; Y > 0; Y--) {
+		for (int X = AreaWidth - 1; X >= 0; X--) {
 			int ID = X + Y * AreaWidth;
 			MapList[ID] = MapList[ID - AreaWidth];
 		}
 	}
 	// Make our new maps (top row)
-	for (int i = 0; i < AreaWidth; i++)
-	{
+	for (int i = 0; i < AreaWidth; i++) {
 		CMap tempMap;
 		tempMap.OnLoad();
 		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
@@ -439,8 +283,7 @@ void CArea::OnExpandUp()
 	}
 }
 
-void CArea::OnExpandDown()
-{
+void CArea::OnExpandDown() {
 	// This resize will make the necessary amount of empty maps.
 	// When we expand one map in height, we need the number of COLUMNS (or width)
 	// of maps we are currently using. We make that amount of empty maps.
@@ -449,8 +292,7 @@ void CArea::OnExpandDown()
 
 	// No movement of maps is necessary! :D-\-<
 	// Make our new maps (bottom row)
-	for (int i = 0; i < AreaWidth; i++)
-	{
+	for (int i = 0; i < AreaWidth; i++) {
 		CMap tempMap;
 		tempMap.OnLoad();
 		// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
@@ -463,34 +305,28 @@ void CArea::OnExpandDown()
 								// It makes little difference, I think.
 }
 
-void CArea::OnReduceRight()
-{
+void CArea::OnReduceRight() {
 	if (AreaWidth <= 1) return;
 	AreaWidth--;	// We "officially" make our Area's width one map smaller
 
 	// Move (copy) our existing maps around, so that their
 	// orientation is preserved.
-	for (int Y = 1; Y < AreaHeight; Y++)
-	{
-		for (int X = 0; X < AreaWidth; X++)
-		{
+	for (int Y = 1; Y < AreaHeight; Y++) {
+		for (int X = 0; X < AreaWidth; X++) {
 			MapList[X + Y * AreaWidth] = MapList[X + Y + Y * AreaWidth];
 		}
 	}
 	MapList.resize(MapList.size() - AreaHeight);
 }
 
-bool CArea::OnReduceLeft()
-{
+bool CArea::OnReduceLeft() {
 	if (AreaWidth <= 1) return false;
 	AreaWidth--;	// We "officially" make our Area's width one map smaller
 
 	// Move (copy) our existing maps around, so that their
 	// orientation is preserved.
-	for (int Y = 0; Y < AreaHeight; Y++)
-	{
-		for (int X = 0; X < AreaWidth; X++)
-		{
+	for (int Y = 0; Y < AreaHeight; Y++) {
+		for (int X = 0; X < AreaWidth; X++) {
 			MapList[X + Y * AreaWidth] = MapList[X + 1 + Y * (1 + AreaWidth)];
 		}
 	}
@@ -498,16 +334,13 @@ bool CArea::OnReduceLeft()
 	return true;
 }
 
-bool CArea::OnReduceUp()
-{
+bool CArea::OnReduceUp() {
 	if (AreaHeight <= 1)	return false;
 
 	// Move (copy) our existing maps around, so that their
 	// orientation is preserved.
-	for (int Y = 0; Y < AreaHeight - 1; Y++)
-	{
-		for (int X = 0; X < AreaWidth; X++)
-		{
+	for (int Y = 0; Y < AreaHeight - 1; Y++) {
+		for (int X = 0; X < AreaWidth; X++) {
 			MapList[X + Y * AreaWidth] = MapList[X + (Y + 1) * AreaWidth];
 		}
 	}
@@ -516,8 +349,7 @@ bool CArea::OnReduceUp()
 	return true;
 }
 
-void CArea::OnReduceDown()
-{
+void CArea::OnReduceDown() {
 	if (AreaHeight <= 1)	return;
 
 	// Probably the simplest area adjustment.
@@ -531,19 +363,7 @@ void CArea::OnReduceDown()
 	MapList.resize(MapList.size() - AreaWidth);
 }
 
-void CArea::ChangeSet(SDL_Texture* newset)
-{
-	for (int X = 0; X < AreaWidth; X++)
-	{
-		for (int Y = 0; Y < AreaHeight; Y++)
-		{
-			// MapList[X + Y*AreaWidth].Tex_Tileset = newset;
-		}
-	}
-}
-
-void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
-{
+void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles) {
 	if (X < 0 || Y < 0 || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE))
 		return;
 
@@ -553,41 +373,128 @@ void CArea::ChangeTile(int X, int Y, CTile* NewTile, int useTiles)
 	MapList[ID].ChangeTile(X % mapWidth, Y % mapHeight, NewTile, useTiles);
 }
 
-bool CArea::SaveArea(char const* areaname)
-{
-	// try to save area/maps
-  std::string fpath = "../data/maps/";
-  std::string ext = ".area";
-  std::string fname = fpath + std::string(areaname) + ext;
-	FILE* FileHandle = fopen(fname.c_str(), "w");
-
-	if (FileHandle == NULL)	return false;
-
-	std::string setname = CTileset::TSControl.getFileName();
-
-	// Output the path to the tileset for the area
-	fprintf(FileHandle, setname.c_str());
-	fprintf(FileHandle, "\n");
-
-	// Output AreaWidth & AreaHeight
-	fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
-
-	for (int Y = 0; Y < AreaHeight; Y++)
-	{
-		for (int X = 0; X < AreaWidth; X++)
-		{
-			int ID = X + Y * AreaWidth;
-			if (!MapList[ID].SaveMap(ID, areaname)) return false;
-			fprintf(FileHandle, "%s%s%02d%s ", fpath.c_str(), areaname, ID, ".map");
-		}
-		fprintf(FileHandle, "\n");
-	}
-	fclose(FileHandle);
-	// delete filename;
-	return true;
-}
-
-void CArea::OnCleanup()
-{
+void CArea::OnCleanup() {
 	MapList.clear();
 }
+
+// bool CArea::OnLoad(char const* File) {
+// 	// try to load area/maps
+//   std::string fpath = "../data/maps/";
+//   std::string ext = ".area";
+//   std::string fname = fpath + std::string(File) + ext;
+//
+// 	FILE* FileHandle = fopen(fname.c_str(), "r");
+// 	if (FileHandle == NULL) {
+// 		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open area file");
+// 		return false;
+// 	}
+//
+// 	char TilesetFile[255];
+// 	fscanf(FileHandle, "%s\n", TilesetFile);
+//
+// 	if (!CTileset::TSControl.changeTileset(TilesetFile)) {
+// 		CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
+// 		return false;
+// 	}
+//
+// 	fscanf(FileHandle, "%d %d\n", &AreaWidth, &AreaHeight);
+//
+// 	MapList.clear();
+// 	for (int X = 0; X < AreaWidth; X++) {
+// 		for (int Y = 0; Y < AreaHeight; Y++) {
+// 			char MapFile[255];
+// 			fscanf(FileHandle, "%s ", MapFile);
+//
+// 			CMap tempMap;
+// 			if (tempMap.OnLoad(MapFile) == false) {
+// 				fclose(FileHandle);
+// 				return false;
+// 			}
+//
+// 			// tempMap.Tex_Tileset = Tex_Tileset;
+//
+// 			MapList.push_back(tempMap);
+// 		}
+// 		fscanf(FileHandle, "\n");
+// 	}
+// 	fclose(FileHandle);
+// 	return true;
+// }
+
+// void CArea::ChangeSet(SDL_Texture* newset)
+// {
+// 	for (int X = 0; X < AreaWidth; X++) {
+// 		for (int Y = 0; Y < AreaHeight; Y++) {
+// 			// MapList[X + Y*AreaWidth].Tex_Tileset = newset;
+// 		}
+// 	}
+// }
+
+
+// bool CArea::SaveArea(char const* areaname) {
+// 	// try to save area/maps
+//   std::string fpath = "../data/maps/";
+//   std::string ext = ".area";
+//   std::string fname = fpath + std::string(areaname) + ext;
+// 	FILE* FileHandle = fopen(fname.c_str(), "w");
+//
+// 	if (FileHandle == NULL)	return false;
+//
+// 	std::string setname = CTileset::TSControl.getFileName();
+//
+// 	// Output the path to the tileset for the area
+// 	fprintf(FileHandle, setname.c_str());
+// 	fprintf(FileHandle, "\n");
+//
+// 	// Output AreaWidth & AreaHeight
+// 	fprintf(FileHandle, "%d %d\n", AreaWidth, AreaHeight);
+//
+// 	for (int Y = 0; Y < AreaHeight; Y++) {
+// 		for (int X = 0; X < AreaWidth; X++) {
+// 			int ID = X + Y * AreaWidth;
+// 			if (!MapList[ID].SaveMap(ID, areaname)) return false;
+// 			fprintf(FileHandle, "%s%s%02d%s ", fpath.c_str(), areaname, ID, ".map");
+// 		}
+// 		fprintf(FileHandle, "\n");
+// 	}
+// 	fclose(FileHandle);
+// 	// delete filename;
+// 	return true;
+// }
+
+// void CArea::ViewArea(SDL_Texture* ui) {
+// 	// We will map our whole area by scanning every map,
+// 	// and plotting every tile as a 2 x 2 solid color proxy (blue).
+// 	// Think of it as plotting all the maps at once instead of just
+// 	// some, only the tiles are 2 x 2 in size and are restricted to
+// 	// certain colors. Shades of the map are determined by type
+// 	// and (sometimes) tile. First, we need to know how big of
+// 	// an area we need to render.
+// 	int VTileSize = 2;
+//
+// 	int PixWidth = AreaWidth * MAP_WIDTH * VTileSize;
+// 	int PixHeight = AreaHeight * MAP_HEIGHT * VTileSize;
+//
+// 	// Let's draw our area in the center of the workspace.
+// 	int Xo = (WWIDTH - PixWidth) / 2;
+// 	int Yo = (WHEIGHT - PixHeight) / 2;
+//
+// 	// Cycle through all the maps, draw 'em...
+// 	for (int j = 0; j < AreaHeight; j++) {
+// 		for (int i = 0; i < AreaWidth; i++) {
+// 			int ID = i + j * AreaWidth;
+// 			// X and Y passes are modified so that the next map of each loop is either on the
+// 			// next row or right beside the current positioned map. The added (offset) term
+// 			// is just the dimension of a map in pixels using VTS px x VTS px tiles.
+// 			MapList[ID].ViewMap(ui, Xo + i * MAP_WIDTH * VTileSize, Yo + j * MAP_HEIGHT * VTileSize);
+// 		}
+// 	}
+// 	for (int X = Xo - VTileSize; X <= Xo + PixWidth; X += VTileSize) {
+// 		CSurface::OnDraw(ui, X, Yo - VTileSize, 0, 352, VTileSize, VTileSize);
+// 		CSurface::OnDraw(ui, X, Yo + PixHeight, 0, 352, VTileSize, VTileSize);
+// 	}
+// 	for (int Y = Yo; Y < Yo + PixHeight; Y += VTileSize) {
+// 		CSurface::OnDraw(ui, Xo - VTileSize, Y, 0, 352, VTileSize, VTileSize);
+// 		CSurface::OnDraw(ui, Xo + PixWidth, Y, 0, 352, VTileSize, VTileSize);
+// 	}
+// }

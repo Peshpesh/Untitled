@@ -19,19 +19,18 @@ public:
 	CTile* GetTile(int X, int Y);
 
 public:
-	bool NewLoad(FILE* fhandle);
-	bool NewSave(FILE* fhandle);
-	bool OnLoad(char const* File);
 	void OnLoad();
+	bool OnLoad(FILE* fhandle);
+	bool OnSave(FILE* fhandle);
 
 	void OnRenderFill(int MapX, int MapY);
 	void OnRender(int MapX, int MapY, bool bg);
 	void OnRenderType(SDL_Texture* tileset, int MapX, int MapY);
 	void OnRenderColl(SDL_Texture* tileset, int MapX, int MapY);
-	void ViewMap(SDL_Texture* ui, int Xo, int Yo);
 
 	void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
-
-	bool SaveMap(int ID, char const* areaname);
+	// void ViewMap(SDL_Texture* ui, int Xo, int Yo);
+	// bool OnLoad(char const* File);
+	// bool SaveMap(int ID, char const* areaname);
 };
 #endif

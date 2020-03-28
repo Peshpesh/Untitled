@@ -5,10 +5,9 @@
 #include "CInform.h"
 #include <string>
 
-class CArea
-{
+class CArea {
 public:
-	static CArea	control;
+	static CArea control;
 
 public:
 	std::vector<CMap>	MapList;
@@ -32,15 +31,8 @@ public:
 			Renderer is used in a call to CSurface to load
 			a tileset, which needs the renderer in use.
 	*/
-	bool	OnLoad(char const* File);
-	bool 	NewLoad(char const* File);
-	bool	NewSave(char const* File);
-
-
-	/*	Loads an "empty" 1 x 1 map area.
-			param tileset : Tileset for the area.
-	*/
-	// bool	OnLoad(SDL_Texture* tileset);
+	bool 	OnLoad(char const* File);
+	bool	OnSave(char const* File);
 
 	/*	Renders the area, or set of maps, to our renderer.
 			It will only render the maps that could possibly be visible
@@ -54,7 +46,6 @@ public:
 	void	OnRender(int CameraX, int CameraY, bool bg);
 	void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
 	void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
-	void	ViewArea(SDL_Texture* ui);
 
 	/*	Intended only for map editing.
 			Expands the current area rightward by one map.
@@ -72,9 +63,12 @@ public:
 	bool	OnReduceUp();
 	void	OnReduceDown();
 
-	void	ChangeSet(SDL_Texture* newset);
 	void 	ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
-	bool	SaveArea(char const* areaname);
+
 	void	OnCleanup();
+	// bool	OnLoad(char const* File);
+	// void	ChangeSet(SDL_Texture* newset);
+	// bool	SaveArea(char const* areaname);
+	// void	ViewArea(SDL_Texture* ui);
 };
 #endif
