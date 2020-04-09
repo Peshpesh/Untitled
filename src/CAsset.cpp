@@ -31,6 +31,7 @@ bool CAsset::OnInit() {
   if ((crttex = CSurface::OnLoad("../res/carot.png")) == NULL) {
     return false;
   }
+
   SDL_SetTextureBlendMode(paltex, SDL_BLENDMODE_BLEND);
 	return true;
 }
@@ -562,6 +563,7 @@ double CAsset::strToDouble(const std::string& str) {
 void CAsset::OnCleanup() {
   SDL_DestroyTexture(paltex);
   SDL_DestroyTexture(arrtex);
+  SDL_DestroyTexture(crttex);
 }
 
 std::string CAsset::msToHHMMSS(const unsigned long& t) {

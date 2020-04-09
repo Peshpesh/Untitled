@@ -10,13 +10,16 @@ CSurface::CSurface()
 bool CSurface::OnInit(SDL_Window* window) {
 	if ((Win_Renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)) == NULL)
 	{
+		CError::handler.ReportErr("CSurface -> Renderer init failed.");
 		return false;
 	}
 	return true;
 }
 
 void CSurface::Clear() {
-	if (SDL_RenderClear(Win_Renderer) != 0) SDL_Delay(5000);
+	if (SDL_RenderClear(Win_Renderer) != 0) {
+		CError::handler.ReportSDLErr("SDL_RenderClear failed");
+	}
 }
 
 void CSurface::Present() {
@@ -41,11 +44,18 @@ SDL_Texture* CSurface::OnLoad(char const* File) {
 	SDL_Surface* Surf_Return = NULL;
 
 	// Try loading image
-	if ((Surf_Return = IMG_Load(File)) == NULL)	return NULL;
+	if ((Surf_Return = IMG_Load(File)) == NULL)	{
+		std::string tmp = "CSurface -> Failed to load: ";
+		tmp += File;
+		CError::handler.ReportErr(tmp.c_str());
+		return NULL;
+	}
 
 	// Load the image onto a SDL_Texture
-	if ((Surf_Text = SDL_CreateTextureFromSurface(Win_Renderer, Surf_Return)) == 0)
-	{
+	if ((Surf_Text = SDL_CreateTextureFromSurface(Win_Renderer, Surf_Return)) == 0) {
+		std::string tmp = "CSurface -> Failed to texturize: ";
+		tmp += File;
+		CError::handler.ReportErr(tmp.c_str());
 		return NULL;
 	}
 
@@ -96,8 +106,7 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int W
 }
 
 bool CSurface::OnDraw(SDL_Texture* Surf_Src, int X, int Y, int Xo, int Yo, int Wo, int Ho, int W, int H) {
-	if (Surf_Src == NULL)
-		return false;
+	if (Surf_Src == NULL) return false;
 
 	SDL_Rect DestR;
 

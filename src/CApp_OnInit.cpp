@@ -1,30 +1,58 @@
 #include "CApp.h"
 
-bool CApp::OnInit()
-{
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+bool CApp::OnInit() {
+	CError::handler.OnInit();
+
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		CError::handler.ReportSDLErr("FATAL => SDL_Init failed");
 		return false;
+	}
 
-	if ((Win_Display = SDL_CreateWindow("abc",
-																			SDL_WINDOWPOS_CENTERED,
-																			SDL_WINDOWPOS_CENTERED,
-																			WWIDTH,
-																			WHEIGHT,
-																			SDL_WINDOW_SHOWN)) == NULL) return false;
+	if ((Win_Display = SDL_CreateWindow(
+											"abc",
+											SDL_WINDOWPOS_CENTERED,
+											SDL_WINDOWPOS_CENTERED,
+											WWIDTH,
+											WHEIGHT,
+											SDL_WINDOW_SHOWN)) == NULL)
+	{
+		CError::handler.ReportErr("FATAL => SDL_CreateWindow failed.");
+		return false;
+	}
 
-	if (!CSurface::OnInit(Win_Display)) 		return false;
+	if (!CSurface::OnInit(Win_Display)) {
+		CError::handler.ReportErr("FATAL => CSurface failed to initialize.");
+		return false;
+	}
 
-	if (!CAsset::OnInit()) 									return false;
+	if (!CAsset::OnInit()) {
+		CError::handler.ReportErr("FATAL => CAsset failed to initialize.");
+		return false;
+	}
 
-	if (!CType::control.OnInit()) 					return false;
+	if (!CType::control.OnInit()) {
+		CError::handler.ReportErr("FATAL => CType failed to initialize.");
+		return false;
+	}
 
-	if (!CGameIO::control.init()) 					return false;
+	if (!CGameIO::control.init()) {
+		CError::handler.ReportErr("FATAL => CGameIO failed to initialize.");
+		return false;
+	}
 
-	if (!CEntityData::init()) 							return false;
+	if (!CEntityData::init()) {
+		CError::handler.ReportErr("FATAL => CEntityData failed to initialize.");
+		return false;
+	}
 
-	if (!CSceneryIO::init()) 								return false;
+	if (!CSceneryIO::init()) {
+		CError::handler.ReportErr("FATAL => CSceneryIO failed to initialize.");
+		return false;
+	}
 
-	if (!CInventory::control.init())				return false;
+	if (!CInventory::control.init()) {
+		return false;
+	}
 
  	// if (!Font::FontControl.OnInit()) 				return false;
 	// if (!CHUD::HUDControl.OnInit()) 				return false;

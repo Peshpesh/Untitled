@@ -9,6 +9,7 @@
 #include "CEvent.h"
 #include "CSurface.h"
 #include "CSound.h"
+#include "CError.h"
 
 // Utility dependencies
 #include "CAsset.h"

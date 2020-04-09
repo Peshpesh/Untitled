@@ -71,5 +71,4 @@ public:
 	// bool	SaveArea(char const* areaname);
 	// void	ViewArea(SDL_Texture* ui);
 };
-
 #endif

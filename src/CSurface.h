@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "CError.h"
 
 class CSurface {
 	public:

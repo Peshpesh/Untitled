@@ -3,15 +3,15 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 SET(title Untitled)
 project(devProj)
 
-set(SDL2_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/inc)
-set(SDL2_LIBRARY ${PROJECT_SOURCE_DIR}/lib/SDL2.lib)
-set(SDL2_MAIN ${PROJECT_SOURCE_DIR}/lib/SDL2main.lib)
-set(SDLIMG_LIBRARY ${PROJECT_SOURCE_DIR}/lib/SDL2_image.lib)
-set(SDLMIX_LIBRARY ${PROJECT_SOURCE_DIR}/lib/SDL2_mixer.lib)
+set(SDL2_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../inc)
+set(SDL2_LIBRARY ${PROJECT_SOURCE_DIR}/../lib/SDL2.lib)
+set(SDL2_MAIN ${PROJECT_SOURCE_DIR}/../lib/SDL2main.lib)
+set(SDLIMG_LIBRARY ${PROJECT_SOURCE_DIR}/../lib/SDL2_image.lib)
+set(SDLMIX_LIBRARY ${PROJECT_SOURCE_DIR}/../lib/SDL2_mixer.lib)
 
 include_directories(${SDL2_INCLUDE_DIR})
 
-set(SRCDIR ${PROJECT_SOURCE_DIR}/src)
+set(SRCDIR ${PROJECT_SOURCE_DIR})
 
 set(SOURCE_FILES
 ${SRCDIR}/CAnimation.cpp
@@ -36,6 +36,7 @@ ${SRCDIR}/CEntity.cpp
 ${SRCDIR}/CEntityCol.cpp
 ${SRCDIR}/CEntityData.cpp
 ${SRCDIR}/CEntityIO.cpp
+${SRCDIR}/CError.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFPS.cpp
 ${SRCDIR}/CGame.cpp
@@ -73,6 +74,7 @@ ${SRCDIR}/CTitle_Render.cpp
 ${SRCDIR}/CTransition.cpp
 ${SRCDIR}/CType.cpp
 ${SRCDIR}/CType_def.cpp
+${SRCDIR}/CUtil.cpp
 ${SRCDIR}/stage/CStage.cpp
 ${SRCDIR}/stage/CDebug.cpp
 ${SRCDIR}/stage/CYrai.cpp
@@ -91,6 +93,7 @@ ${SRCDIR}/CDifficulty.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityData.h
 ${SRCDIR}/CEntityIO.h
+${SRCDIR}/CError.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFPS.h
 ${SRCDIR}/CGame.h
@@ -118,6 +121,7 @@ ${SRCDIR}/CTile.h
 ${SRCDIR}/CTitle.h
 ${SRCDIR}/CTransition.h
 ${SRCDIR}/CType.h
+${SRCDIR}/CUtil.h
 ${SRCDIR}/Define.h
 ${SRCDIR}/stage/CStage.h
 ${SRCDIR}/stage/CDebug.h
