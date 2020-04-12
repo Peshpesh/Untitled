@@ -54,7 +54,7 @@ void CHud::drawHp() {
   if (!CAsset::drawBoxFill(hp_bar, *no_col)) return;
   if (!CAsset::drawBoxFill(hp_fill, *hp_col)) return;
 
-  std::string s_hp = CAsset::intToStr(*hp) + "$L" + CAsset::intToStr(*maxhp);
+  std::string s_hp = CUtil::intToStr(*hp) + "$L" + CUtil::intToStr(*maxhp);
   CType::Write(FONT_MINI, s_hp.c_str(), p_s_hp, hp_col);
 }
 
@@ -67,7 +67,7 @@ void CHud::drawEnergy() {
   if (!CAsset::drawBoxFill(en_bar, *no_col)) return;
   if (!CAsset::drawBoxFill(en_fill, *en_col)) return;
 
-  std::string s_en = CAsset::intToStr(*en) + "$L" + CAsset::intToStr(*maxen);
+  std::string s_en = CUtil::intToStr(*en) + "$L" + CUtil::intToStr(*maxen);
   CType::Write(FONT_MINI, s_en.c_str(), p_s_en, en_col);
 }
 

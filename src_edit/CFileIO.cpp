@@ -294,7 +294,7 @@ void CFileIO::newData()
 
 void CFileIO::loadData()
 {
-  if (!CArea::control.NewLoad(newName.c_str())) {
+  if (!CArea::control.OnLoad(newName.c_str())) {
     // problem loading the area
     newName.clear();
     return;
@@ -323,7 +323,7 @@ void CFileIO::loadData()
 
 void CFileIO::saveData()
 {
-  if (!CArea::control.NewSave(newName.c_str())) {
+  if (!CArea::control.OnSave(newName.c_str())) {
     pushInform(I_FAIL_SAVE);
     return;
   }

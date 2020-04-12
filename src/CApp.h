@@ -14,6 +14,7 @@
 // Utility dependencies
 #include "CAsset.h"
 #include "CType.h"
+#include "CUtil.h"
 
 // Mechanical dependencies
 #include "CControls.h"

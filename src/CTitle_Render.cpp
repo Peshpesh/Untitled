@@ -67,7 +67,7 @@ bool CTitle::drawGameSlot(const CGameinfo& info, const SDL_Rect& slot) {
   pos.x = slot.x + diff_pos.x; pos.y = slot.y + diff_pos.y;
   CType::CenterWrite(str.c_str(), pos);
 
-  str = CAsset::msToHHMMSS(info.time);
+  str = CUtil::msToHHMMSS(info.time);
   pos.x = slot.x + time_pos.x; pos.y = slot.y + time_pos.y;
   CType::CenterWrite(str.c_str(), pos);
   // CType::CenterWrite(str.c_str(), slot, (i != pos) ? f_def : f_hov);
@@ -173,7 +173,7 @@ bool CTitle::drawConfig() {
       double fill_fract = CConfig::control.getVolume(config_list[i]) / (double)(MAX_VOLUME);
       SDL_Rect bar_fill = {r_bar.x + stroke_w, r_bar.y + stroke_w, fill_fract * (r_bar.w - (stroke_w * 2)), r_bar.h - (stroke_w * 2)};
       if (!CAsset::drawBoxFill(bar_fill, fill_col)) return false;
-      val = CAsset::intToStr(CConfig::control.getVolume(config_list[i]));
+      val = CUtil::intToStr(CConfig::control.getVolume(config_list[i]));
     } else if (config_list[i] == CONFIG_AUDIOOUT) {
       if (CConfig::control.isStereo()) val = "Stereo";
       else val = "Mono";

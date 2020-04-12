@@ -5,6 +5,7 @@
 #include "CEvent.h"
 #include "CAsset.h"
 #include "CType.h"
+#include "CUtil.h"
 #include "CSound.h"
 
 #include "CControls.h"

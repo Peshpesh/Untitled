@@ -2,6 +2,7 @@
 #define _C_LAYEREDITOR_H_
 
 #include "CAsset.h"
+#include "CUtil.h"
 #include "CEvent.h"
 #include "CFont.h"
 #include "CInform.h"

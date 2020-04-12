@@ -7,6 +7,7 @@
 #include "CInterrupt.h"
 #include "CAsset.h"
 #include "CFont.h"
+#include "CUtil.h"
 #include "CSurface.h"
 
 enum simstate {INACTIVE, PLACE, ACTIVE, SUSPENDED};

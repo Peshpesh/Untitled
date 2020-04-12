@@ -306,7 +306,7 @@ void CLayerEditor::deleteLayer() {
 }
 
 void CLayerEditor::adjustLayer() {
-  q_layer = CScenery::adjustLayerDepth(q_layer, CAsset::strToDouble(z_string));
+  q_layer = CScenery::adjustLayerDepth(q_layer, CUtil::strToDouble(z_string));
   if (q_layer < 0) {
     // ERROR
     CInform::InfoControl.pushInform("Error in depth adjustment");
@@ -335,7 +335,7 @@ void CLayerEditor::makeNewLayer() {
   }
 
   // make new layer
-  q_layer = CScenery::addLayer(CAsset::strToDouble(z_string));
+  q_layer = CScenery::addLayer(CUtil::strToDouble(z_string));
   if (q_layer < 0) {
     // ERROR
     CInform::InfoControl.pushInform("Error in creating layer");

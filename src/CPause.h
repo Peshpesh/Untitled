@@ -3,6 +3,7 @@
 
 #include "CAsset.h"
 #include "CType.h"
+#include "CUtil.h"
 #include "CEvent.h"
 #include "CControls.h"
 #include "CConfig.h"

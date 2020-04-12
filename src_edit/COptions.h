@@ -3,6 +3,7 @@
 
 #include "CEvent.h"
 #include "CAsset.h"
+#include "CUtil.h"
 #include "CFont.h"
 #include "CSurface.h"
 #include "CCamera.h"

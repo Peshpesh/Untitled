@@ -18,8 +18,8 @@ void CApp::OnRender() {
 	}
 
 	if (DEBUG) {
-		std::string fps_str = CAsset::intToStr(CFPS::FPSControl.GetFPS()) + " fps";
-		std::string speedfactor_str = CAsset::doubleToStr(CFPS::FPSControl.GetSpeedFactor(),10) + " SF";
+		std::string fps_str = CUtil::intToStr(CFPS::FPSControl.GetFPS()) + " fps";
+		std::string speedfactor_str = CUtil::doubleToStr(CFPS::FPSControl.GetSpeedFactor(),10) + " SF";
 		const SDL_Point fps_pos = {1,1};
 		const SDL_Point sf_pos = {100,1};
 		CType::Write(FONT_MINI, fps_str.c_str(), fps_pos, &rgb::white);

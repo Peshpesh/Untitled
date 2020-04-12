@@ -95,7 +95,7 @@ void COptions::delFromEdit(){
 
 void COptions::applyEdit(){
   if (!edit_sval.empty()) {
-    int appl_val = CAsset::strToInt(edit_sval);
+    int appl_val = CUtil::strToInt(edit_sval);
     if (appl_val != *edit_target) {
       *edit_target = appl_val;
       checkCameraLims();

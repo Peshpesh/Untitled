@@ -3,6 +3,7 @@
 
 #include "CAsset.h"
 #include "CType.h"
+#include "CUtil.h"
 
 class CHud {
   CHud();

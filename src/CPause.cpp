@@ -242,7 +242,7 @@ bool CPause::drawVolume(const SDL_Rect& val_bar, const Configflag& vol_type, std
 	if (!CAsset::drawBoxFill(fill_bar, modify ?
 		pausemenu::audiomenu::mod_col :
 		pausemenu::audiomenu::fill_col)) return false;
-	val = CAsset::intToStr(vol);
+	val = CUtil::intToStr(vol);
 	CType::CenterWrite(val.c_str(), val_bar, pausemenu::audiomenu::ftex_col);
 	return true;
 }

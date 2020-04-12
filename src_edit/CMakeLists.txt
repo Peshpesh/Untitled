@@ -75,6 +75,7 @@ ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTerminate.cpp
 ${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTileset.cpp
+${SRCDIR}/CUtil.cpp
 )
 
 set(HEADER_FILES
@@ -114,6 +115,7 @@ ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTerminate.h
 ${SRCDIR}/CTile.h
 ${SRCDIR}/CTileset.h
+${SRCDIR}/CUtil.h
 ${SRCDIR}/Define.h
 )
 

@@ -168,7 +168,7 @@ void CSimulate::delFromEdit() {
 
 void CSimulate::applyEdit() {
   if (!edit_sval.empty()) {
-    int appl_val = CAsset::strToInt(edit_sval);
+    int appl_val = CUtil::strToInt(edit_sval);
     switch (edit_xywh) {
       case simulator::camera::EDIT_CAM_X: {
         if (cam_x != appl_val) {

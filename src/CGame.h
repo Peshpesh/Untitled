@@ -6,6 +6,7 @@
 #include "CConfig.h"
 #include "CGameIO.h"
 #include "CInterrupt.h"
+#include "CUtil.h"
 
 #include "CDifficulty.h"
 #include "CStages.h"
