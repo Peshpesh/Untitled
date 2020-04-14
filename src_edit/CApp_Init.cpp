@@ -13,34 +13,42 @@ bool CApp::OnInit()
 																			EHEIGHT,
 																			SDL_WINDOW_SHOWN)) == NULL)
 	{
+		CError::handler.ReportErr("FATAL => SDL_CreateWindow failed.");
 		return false;
 	}
 
 	if (!CSurface::OnInit(Map_Display)) {
+		CError::handler.ReportErr("FATAL => CSurface failed to initialize.");
 		return false;
 	}
 
 	if (!CAsset::OnInit()) {
+		CError::handler.ReportErr("FATAL => CAsset failed to initialize.");
 		return false;
 	}
 
 	if (!Font::FontControl.OnInit()) {
+		CError::handler.ReportErr("FATAL => CFont failed to initialize.");
 		return false;
 	}
 
   if (!CTileset::TSControl.OnInit()) {
+		CError::handler.ReportErr("FATAL => CTileset failed to initialize.");
 		return false;
 	}
 
 	if (CEditMap::MapEditor.OnInit() == false) {
+		CError::handler.ReportErr("FATAL => CEditMap failed to initialize.");
 		return false;
 	}
 
 	if (CEntityEditor::Control.OnInit() == false) {
+		CError::handler.ReportErr("FATAL => CEntityEditor failed to initialize.");
 		return false;
 	}
 
 	if (CSceneryEditor::control.OnInit() == false) {
+		CError::handler.ReportErr("FATAL => CSceneryEditor failed to initialize.");
 		return false;
 	}
 

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "CInterrupt.h"
+#include "CError.h"
 #include "CSurface.h"
 #include "CEvent.h"
 #include "CAsset.h"

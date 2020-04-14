@@ -175,14 +175,6 @@ class CAsset
     static bool drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb);
     static bool drawStrArrow(const SDL_Point* dstPos, const char& dir, const SDL_Color* rgb, const SDL_Color* str_rgb);
 
-// public:
-//     static bool isInt(const char& c);
-//     static int charToInt(const char& c);
-//     static double strToDouble(const std::string& str);
-//     static std::string msToHHMMSS(const unsigned long& t);  // convert milliseconds to hh:mm:ss timestamp
-//     static std::string intToStr(const int& val);
-//     static std::string doubleToStr(double val, const unsigned int& precision);
-
 public:
     static void debug_a();
 };
