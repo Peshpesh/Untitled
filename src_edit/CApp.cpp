@@ -1,7 +1,6 @@
 #include "CApp.h"
 
-CApp::CApp()
-{
+CApp::CApp() {
 	Running = true;
 	Map_Display = NULL;
 	mouseX = mouseY = 0;
@@ -14,28 +13,22 @@ CApp::CApp()
 * critical functions. Initialization, event handling, data manipulation,
 * rendering, and house keeping are done within this member.
 */
-int CApp::OnExecute()
-{
+int CApp::OnExecute() {
 	// If our initialization function fails, the program will end here.
-	if (OnInit() == false)
-	{
+	if (!OnInit()) {
 		return -1;
 	}
 
-	// state = keystate;
-	// const Uint8 *state = SDL_GetKeyboardState(NULL);
 	SDL_Event Event;
 	// This loop will run endlessly until something makes the Running
 	// flag false. That will happen, hopefully, by the user's decision.
 	while (Running)
 	{
 		// Check for pending events; handle them
-		while (SDL_PollEvent(&Event))
-		{
+		while (SDL_PollEvent(&Event)) {
 			OnEvent(&Event);
 		}
 		SDL_PumpEvents();
-		// OnMotion(state);    // For repeating user input (i.e. holding directional button)
 		OnLoop();      // Perform necessary manipulations
 		OnRender();    // Render updated info
 	}
@@ -44,8 +37,7 @@ int CApp::OnExecute()
 	return 0;
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 	CApp editor;
 	return editor.OnExecute();
 }

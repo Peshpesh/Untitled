@@ -44,7 +44,7 @@ bool CMap::OnLoad(FILE* fhandle)	{
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {
 			CTile tempTile;
-			if (fread(&tempTile, sizeof(class CTile), 1, fhandle) != 1) {
+			if (fread(&tempTile, sizeof(struct CTile), 1, fhandle) != 1) {
 				CInform::InfoControl.pushInform("---CMAP.NewLoad---\nfailed to load binary tile data");
 				return false;
 			}
@@ -63,7 +63,7 @@ bool CMap::OnSave(FILE* fhandle) {
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {
 			int ID = X + Y * MAP_WIDTH;
-			if (fwrite(&TileList[ID], sizeof(class CTile), 1, fhandle) != 1) {
+			if (fwrite(&TileList[ID], sizeof(struct CTile), 1, fhandle) != 1) {
 				CInform::InfoControl.pushInform("---CMAP.NewSave---\nfailed to write binary tile data");
 				return false;
 			}

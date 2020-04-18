@@ -37,8 +37,8 @@ bool CPlanMap::OnLoad(FILE* fhandle)	{
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {
 			CPlanTile tempTile;
-			if (fread(&tempTile, sizeof(class CPlanTile), 1, fhandle) != 1) {
-				CInform::InfoControl.pushInform("---CPlanMap.NewLoad---\nfailed to load binary tile data");
+			if (fread(&tempTile, sizeof(struct CPlanTile), 1, fhandle) != 1) {
+				CInform::InfoControl.pushInform("---CPlanMap.OnLoad---\nfailed to load tile data");
 				return false;
 			}
 			TileList.push_back(tempTile);
@@ -49,15 +49,15 @@ bool CPlanMap::OnLoad(FILE* fhandle)	{
 
 bool CPlanMap::OnSave(FILE* fhandle) {
 	if (fhandle == NULL) {
-		CInform::InfoControl.pushInform("---CPlanMap.NewSave---\nfailed to access maps handle");
+		CInform::InfoControl.pushInform("---CPlanMap.OnSave---\nfailed to access maps handle");
 		return false;
 	}
 
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {
 			int ID = X + Y * MAP_WIDTH;
-			if (fwrite(&TileList[ID], sizeof(class CPlanTile), 1, fhandle) != 1) {
-				CInform::InfoControl.pushInform("---CPlanMap.NewSave---\nfailed to write binary tile data");
+			if (fwrite(&TileList[ID], sizeof(struct CPlanTile), 1, fhandle) != 1) {
+				CInform::InfoControl.pushInform("---CPlanMap.OnSave---\nfailed to write tile data");
 				return false;
 			}
 		}
@@ -77,7 +77,7 @@ void CPlanMap::OnRender(int MapX, int MapY) {
 	int tset_w = CTileset::TSControl.ts_w; // tiles
 	int tset_h = CTileset::TSControl.ts_h; // tiles
 
-	// Render surface tiles, row by row.
+	// Render surface tiles, row by row
 	int ID = 0;
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {

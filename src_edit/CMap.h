@@ -29,8 +29,5 @@ public:
 	void OnRenderColl(SDL_Texture* tileset, int MapX, int MapY);
 
 	void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
-	// void ViewMap(SDL_Texture* ui, int Xo, int Yo);
-	// bool OnLoad(char const* File);
-	// bool SaveMap(int ID, char const* areaname);
 };
 #endif

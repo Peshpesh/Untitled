@@ -41,22 +41,18 @@ enum { // collision types (platform mode only)
   SOLID_HALF_BH,        // bottom-half of tile is solid
 };
 
-class CTile {
-public:
+struct CTile {
 	short		bg_ID;			// Background tile (ID) drawn
 	short		fg_ID;			// Foreground tile (ID) drawn
 	short		TypeID;			// Tile characteristics
 	short		CollID;		  // Collision characteristics
-
 	CTile();
 };
 
-class CPlanTile {
-public:
+struct CPlanTile {
 	short		ID;			    // ID for the tile drawn
 	short		type;			  // Tile characteristics
 	bool		solid;		  // in planview mode, a tile is either solid or not solid
-
 	CPlanTile();
 };
 
