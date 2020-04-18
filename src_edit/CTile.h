@@ -1,16 +1,14 @@
 #ifndef _C_TILE_H_
 #define _C_TILE_H_
 
-enum
-{
+enum { // tile types
   TILE_TYPE_NORMAL = 0,   // Nothing unusual about these tiles
   TILE_TYPE_WATER,        // reduced speed when colliding with these tiles
   TILE_TYPE_ICE,          // increased inertia when colliding with these tiles
   TILE_TYPE_FIRE,         // persistent damage when colliding with these tiles
 };
 
-enum
-{
+enum { // bitwise flags for tile placement in the map editor
   ENABLE_NONE 	 = 0,
 	ENABLE_BG	     = 0x00000001,		// Place background tiles
   ENABLE_FG 	   = 0x00000002,		// Place foreground tiles
@@ -18,8 +16,7 @@ enum
 	ENABLE_COLL 	 = 0x00000008,		// Place collision types
 };
 
-enum
-{
+enum { // collision types (platform mode only)
   SOLID_NONE = 0,       // tile is solid nowhere
   SOLID_ALL,            // tile is solid everywhere
 
@@ -44,16 +41,23 @@ enum
   SOLID_HALF_BH,        // bottom-half of tile is solid
 };
 
-class CTile
-{
+class CTile {
 public:
 	short		bg_ID;			// Background tile (ID) drawn
 	short		fg_ID;			// Foreground tile (ID) drawn
 	short		TypeID;			// Tile characteristics
 	short		CollID;		  // Collision characteristics
 
-public:
 	CTile();
+};
+
+class CPlanTile {
+public:
+	short		ID;			    // ID for the tile drawn
+	short		type;			  // Tile characteristics
+	bool		solid;		  // in planview mode, a tile is either solid or not solid
+
+	CPlanTile();
 };
 
 #endif

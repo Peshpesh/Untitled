@@ -1,17 +1,21 @@
-#ifndef _C_AREAALT_H_
-#define _C_AREAALT_H_
+#ifndef _C_PLANAREA_H_
+#define _C_PLANAREA_H_
 
-#include "CMapAlt.h"
+#include "CPlanMap.h"
 #include "CError.h"
 
-class CAreaAlt {
-  CAreaAlt();
+// NOTE: wall tiles should probably have Z equal to their top
+// (ex: a wall that appears to have a base at Z=0 and a top at Z=2
+//      should have Z=2).
+
+class CPlanArea {
+  CPlanArea();
 
 public:
-	static CAreaAlt control;
+	static CPlanArea control;
 
 public:
-	std::vector<CMapAlt>	MapList;
+	std::vector<CPlanMap>	MapList;
 
 private:
   std::vector<short>  DepthList;  // list of layer depths

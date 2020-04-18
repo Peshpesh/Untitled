@@ -1,12 +1,12 @@
-#include "CAreaAlt.h"
+#include "CPlanArea.h"
 
-CAreaAlt CAreaAlt::control;
+CPlanArea CPlanArea::control;
 
-CAreaAlt::CAreaAlt() {
+CPlanArea::CPlanArea() {
   //
 }
 
-void CAreaAlt::OnInit()	{
+void CPlanArea::OnInit()	{
 	MapList.clear();
   DepthList.clear();
 	AreaHeight = AreaWidth = 1;
@@ -17,12 +17,12 @@ void CAreaAlt::OnInit()	{
 	MapList.push_back(tempMap);
 }
 
-void CAreaAlt::GetDims(int& mW, int& mH)	{
+void CPlanArea::GetDims(int& mW, int& mH)	{
 	mW = AreaWidth;
 	mH = AreaHeight;
 }
 
-void CAreaAlt::OnRender(const int& CameraX, const int& CameraY, const int& Z) {
+void CPlanArea::OnRender(const int& CameraX, const int& CameraY, const int& Z) {
   // The area is layered vertically (Z).
   // Layers are rendered one at a time, with the
   // lowest Z (height) being rendered first.
@@ -39,7 +39,7 @@ void CAreaAlt::OnRender(const int& CameraX, const int& CameraY, const int& Z) {
   //        can't imagine an area requiring too much more than that.
 
   if (Z < 0 || Z >= DepthList.size()) {
-    CError::handler.ReportErr("CAreaAlt::OnRender -> Bad Z-layer request.");
+    CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
     return;
   }
 
@@ -53,9 +53,10 @@ void CAreaAlt::OnRender(const int& CameraX, const int& CameraY, const int& Z) {
   // rendered as if it was placed at Y=-32px, NOT Y=0px.
   int FirstID = -CameraX / MapW;
   FirstID += ((-CameraY + Yoffset) / MapH) * AreaWidth;
+	FirstID += Z * AreaWidth * AreaHeight;
 
   int maxMaps = 4;
-  int loopMax = (maxMaps <= MapList.size()) ? mapMaps : MapList.size();
+  int loopMax = (MapList.size() > maxMaps) ? maxMaps : MapList.size();
 
   for (int i = 0; i < loopMax; i++) {
     int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
@@ -68,7 +69,7 @@ void CAreaAlt::OnRender(const int& CameraX, const int& CameraY, const int& Z) {
   }
 }
 
-bool CAreaAlt::OnLoad(char const* File)	{
+bool CPlanArea::OnLoad(char const* File)	{
 	// try to load area/maps
   std::string fpath = "../data/maps/";
   std::string ext = ".area";
@@ -110,7 +111,7 @@ bool CAreaAlt::OnLoad(char const* File)	{
 	return true;
 }
 
-bool CAreaAlt::OnSave(char const* File) {
+bool CPlanArea::OnSave(char const* File) {
 	// try to save area/maps
 	std::string fpath = "../data/maps/";
 	std::string ext = ".area";
