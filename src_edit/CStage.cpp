@@ -7,7 +7,7 @@ CStage::CStage() {
 }
 
 void CStage::OnEvent(SDL_Event* Event) {
-  switch (active_mod) {
+  switch (CModule::control.active_mod) {
     case MODIFY_MAP: CEditMap::MapEditor.OnEvent(Event); break;
     case MODIFY_NPC: CEntityEditor::Control.OnEvent(Event); break;
     case MODIFY_SCENE: CSceneryEditor::control.OnEvent(Event); break;
@@ -42,12 +42,12 @@ void CStage::OnRender(const SDL_Point& m) {
     // Draw camera limits
     COptions::control.drawCameraLims();
 
-    switch (active_mod) {
-      case MODIFY_MAP:			CEditMap::MapEditor.OnRender(m); 		break;
-      case MODIFY_NPC:			CEntityEditor::Control.OnRender(m); 	break;
-      case MODIFY_SCENE:		CSceneryEditor::control.OnRender(m); break;
-      case MODIFY_SIM:			CSimulate::control.OnRender(m); 			break;
-      case MODIFY_OPTIONS:	COptions::control.OnRender(m);				break;
+    switch (CModule::control.active_mod) {
+      case MODIFY_MAP:			CEditMap::MapEditor.OnRender(&m); 		break;
+      case MODIFY_NPC:			CEntityEditor::Control.OnRender(&m); 	break;
+      case MODIFY_SCENE:		CSceneryEditor::control.OnRender(&m); break;
+      case MODIFY_SIM:			CSimulate::control.OnRender(&m); 			break;
+      case MODIFY_OPTIONS:	COptions::control.OnRender(&m);				break;
       default:							break;
     }
   } else {

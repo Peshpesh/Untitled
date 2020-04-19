@@ -42,6 +42,7 @@ ${SRCDIR}/CEntityEditor.cpp
 ${SRCDIR}/CEntityEditor_Event.cpp
 ${SRCDIR}/CEntityEditor_Ext.cpp
 ${SRCDIR}/CEntityEditor_Render.cpp
+${SRCDIR}/CError.cpp
 ${SRCDIR}/CEvent.cpp
 ${SRCDIR}/CFileIO.cpp
 ${SRCDIR}/CFont.cpp
@@ -54,8 +55,11 @@ ${SRCDIR}/CLayerEditor.cpp
 ${SRCDIR}/CMap.cpp
 ${SRCDIR}/CMeter.cpp
 ${SRCDIR}/CModel.cpp
+${SRCDIR}/CModule.cpp
 ${SRCDIR}/COptions.cpp
 ${SRCDIR}/COptions_Ext.cpp
+${SRCDIR}/CPlanArea.cpp
+${SRCDIR}/CPlanMap.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryData.cpp
 ${SRCDIR}/CSceneryEditor.cpp
@@ -71,6 +75,7 @@ ${SRCDIR}/CSimulate_Event.cpp
 ${SRCDIR}/CSimulate_Loop.cpp
 ${SRCDIR}/CSimulate_Render.cpp
 ${SRCDIR}/CSound.cpp
+${SRCDIR}/CStage.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTerminate.cpp
 ${SRCDIR}/CTile.cpp
@@ -93,6 +98,7 @@ ${SRCDIR}/CEditMap.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityData.h
 ${SRCDIR}/CEntityEditor.h
+${SRCDIR}/CError.h
 ${SRCDIR}/CEvent.h
 ${SRCDIR}/CFileIO.h
 ${SRCDIR}/CFont.h
@@ -104,13 +110,17 @@ ${SRCDIR}/CLayerEditor.h
 ${SRCDIR}/CMap.h
 ${SRCDIR}/CMeter.h
 ${SRCDIR}/CModel.h
+${SRCDIR}/CModule.h
 ${SRCDIR}/COptions.h
+${SRCDIR}/CPlanArea.h
+${SRCDIR}/CPlanMap.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryEditor.h
 ${SRCDIR}/CSimEntity.h
 ${SRCDIR}/CSimulate.h
 ${SRCDIR}/CSound.h
+${SRCDIR}/CStage.h
 ${SRCDIR}/CSurface.h
 ${SRCDIR}/CTerminate.h
 ${SRCDIR}/CTile.h

@@ -17,6 +17,9 @@
 #include "CTerminate.h"
 #include "Define.h"
 
+#include "CStage.h"
+#include "CModule.h"
+
 #include "CEditMap.h"
 #include "CEntityEditor.h"
 #include "CSceneryEditor.h"

@@ -49,7 +49,7 @@ bool CModule::handleSwitch(const SDL_Point& m) {
 
   // Clicks on a module button. Changes the active_mod "flag".
   for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
-    if (SDL_PointInRect(m, &engineButton[i])) {
+    if (SDL_PointInRect(&m, &engineButton[i])) {
       active_mod = i;
       if (active_mod != MODIFY_SIM) {
         CSimulate::control.resetxywh();

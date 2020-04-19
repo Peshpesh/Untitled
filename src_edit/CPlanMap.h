@@ -16,7 +16,7 @@ class CPlanMap {
 
 public:
 	CPlanMap();
-	CPLanTile* GetTile(int X, int Y);
+	CPlanTile* GetTile(int X, int Y);
 
 public:
 	void OnLoad();

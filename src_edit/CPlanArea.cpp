@@ -11,7 +11,7 @@ void CPlanArea::OnInit()	{
   DepthList.clear();
 	AreaHeight = AreaWidth = 1;
 
-	CMap tempMap;
+	CPlanMap tempMap;
 	tempMap.OnLoad();
 
 	MapList.push_back(tempMap);
@@ -99,7 +99,7 @@ bool CPlanArea::OnLoad(char const* File)	{
 
 	for (int X = 0; X < AreaWidth; X++) {
 		for (int Y = 0; Y < AreaHeight; Y++) {
-			CMap tempMap;
+			CPlanMap tempMap;
 			if (tempMap.OnLoad(FileHandle) == false) {
 				fclose(FileHandle);
 				return false;
