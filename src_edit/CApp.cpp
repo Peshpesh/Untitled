@@ -5,7 +5,6 @@ CApp::CApp() {
 	Map_Display = NULL;
 	mouseX = mouseY = 0;
 	mouse.x = mouse.y = 0;
-	active_mod = MODIFY_MAP;
 	pan_l = pan_r = pan_u = pan_d = false;
 }
 

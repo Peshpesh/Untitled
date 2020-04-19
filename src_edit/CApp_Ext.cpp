@@ -28,24 +28,24 @@ namespace modelSwitch
   const char* const label = "M\nO\nD\nE\nL";
 }
 
-namespace engineSwitch
-{
-  const char* engineName[] = {
-    "Map Editor",
-    "Npc Editor",
-    "Scn Editor",
-    "Simulate",
-    "Options"
-  };
-  const SDL_Rect engineButton[] = {
-    {525, 490, 70, 16},
-    {525, 506, 70, 16},
-    {525, 522, 70, 16},
-    {525, 538, 70, 16},
-    {525, 554, 70, 16}
-  };
-  const SDL_Point* engineOnCol = &palette::cyan;
-  const SDL_Point* engineOffCol = &palette::gray;
-  const SDL_Point* engineHvCol = &palette::light_violet;
-  const short bsiz = 2;
-}
+// namespace engineSwitch
+// {
+//   const char* engineName[] = {
+//     "Map Editor",
+//     "Npc Editor",
+//     "Scn Editor",
+//     "Simulate",
+//     "Options"
+//   };
+//   const SDL_Rect engineButton[] = {
+//     {525, 490, 70, 16},
+//     {525, 506, 70, 16},
+//     {525, 522, 70, 16},
+//     {525, 538, 70, 16},
+//     {525, 554, 70, 16}
+//   };
+//   const SDL_Point* engineOnCol = &palette::cyan;
+//   const SDL_Point* engineOffCol = &palette::gray;
+//   const SDL_Point* engineHvCol = &palette::light_violet;
+//   const short bsiz = 2;
+// }

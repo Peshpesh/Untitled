@@ -6,11 +6,12 @@ void CApp::OnEvent(SDL_Event* Event) {
 	} else {
 		if (handleInterr(Event)) return;
 	}
-	if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
-	if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
-	if (active_mod == MODIFY_SCENE) CSceneryEditor::control.OnEvent(Event);
-	if (active_mod == MODIFY_SIM) CSimulate::control.OnEvent(Event);
-	if (active_mod == MODIFY_OPTIONS) COptions::control.OnEvent(Event);
+	CStage::control.OnEvent(Event);
+	// if (active_mod == MODIFY_MAP) CEditMap::MapEditor.OnEvent(Event);
+	// if (active_mod == MODIFY_NPC) CEntityEditor::Control.OnEvent(Event);
+	// if (active_mod == MODIFY_SCENE) CSceneryEditor::control.OnEvent(Event);
+	// if (active_mod == MODIFY_SIM) CSimulate::control.OnEvent(Event);
+	// if (active_mod == MODIFY_OPTIONS) COptions::control.OnEvent(Event);
 }
 
 bool CApp::handleInterr(SDL_Event* Event) {
@@ -85,7 +86,8 @@ void CApp::OnLButtonDown(int mX, int mY) {
 	if (mX < 0 || mY < 0 || mX >= EWIDTH || mY >= EHEIGHT) return;
 
 	const SDL_Point m = {mX, mY};
-	if (handleEngSwitch(&m)) return;
+	if (CModule::control.handleSwitch(m)) return;
+	// if (handleEngSwitch(&m)) return;
 	if (handleModelSwitch(&m)) return;
 	if (handleIO(&m)) return;
 }
@@ -94,24 +96,24 @@ void CApp::OnRButtonDown(int mX, int mY) {
 	if (mX < 0 || mY < 0 || mX > EWIDTH || mY > EHEIGHT) return;
 }
 
-bool CApp::handleEngSwitch(const SDL_Point* m) {
-	using namespace engineSwitch;
-
-	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
-	for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
-		if (SDL_PointInRect(m, &engineButton[i])) {
-			active_mod = i;
-			if (active_mod != MODIFY_SIM) {
-				CSimulate::control.resetxywh();
-				if (CSimulate::control.getStatus() == PLACE) {
-					CSimulate::control.stopSim();
-				}
-			}
-			return true;
-		}
-	}
-	return false;
-}
+// bool CApp::handleEngSwitch(const SDL_Point* m) {
+// 	using namespace engineSwitch;
+//
+// 	// Clicks on a modify option button. Changes the MODIFY "flag" accordingly.
+// 	for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
+// 		if (SDL_PointInRect(m, &engineButton[i])) {
+// 			active_mod = i;
+// 			if (active_mod != MODIFY_SIM) {
+// 				CSimulate::control.resetxywh();
+// 				if (CSimulate::control.getStatus() == PLACE) {
+// 					CSimulate::control.stopSim();
+// 				}
+// 			}
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 
 bool CApp::handleModelSwitch(const SDL_Point* m) {
 	using namespace modelSwitch;

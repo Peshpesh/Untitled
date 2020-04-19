@@ -46,14 +46,14 @@ struct CTile {
 	short		fg_ID;			// Foreground tile (ID) drawn
 	short		TypeID;			// Tile characteristics
 	short		CollID;		  // Collision characteristics
-	CTile();
+	CTile(): bg_ID(-1), fg_ID(-1), TypeID(TILE_TYPE_NORMAL), CollID(SOLID_NONE) {};
 };
 
 struct CPlanTile {
 	short		ID;			    // ID for the tile drawn
 	short		type;			  // Tile characteristics
 	bool		solid;		  // in planview mode, a tile is either solid or not solid
-	CPlanTile();
+  CPlanTile(): ID(-1), type(TILE_TYPE_NORMAL), solid(false) {};
 };
 
 #endif

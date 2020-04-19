@@ -23,14 +23,6 @@
 #include "CSimulate.h"
 #include "COptions.h"
 
-enum {
-  MODIFY_MAP = 0,
-  MODIFY_NPC,
-  MODIFY_SCENE,
-  MODIFY_SIM,
-  MODIFY_OPTIONS,
-};
-
 namespace io_ui
 {
   // IO button info
@@ -59,15 +51,15 @@ namespace modelSwitch
   extern const char* const label;
 }
 
-namespace engineSwitch
-{
-  extern const char* engineName[];
-  extern const SDL_Rect engineButton[];
-  extern const SDL_Point* engineOnCol;
-  extern const SDL_Point* engineOffCol;
-  extern const SDL_Point* engineHvCol;
-  extern const short bsiz;
-}
+// namespace engineSwitch
+// {
+//   extern const char* engineName[];
+//   extern const SDL_Rect engineButton[];
+//   extern const SDL_Point* engineOnCol;
+//   extern const SDL_Point* engineOffCol;
+//   extern const SDL_Point* engineHvCol;
+//   extern const short bsiz;
+// }
 
 class CApp : public CEvent {
 private:
@@ -82,9 +74,6 @@ private:
   bool pan_l, pan_r, pan_u, pan_d;
 
 public:
-	int active_mod;
-
-public:
 	CApp();
 
 	int OnExecute();
@@ -92,7 +81,7 @@ public:
 	void OnEvent(SDL_Event* Event);
   bool handleInterr(SDL_Event* Event);
 
-	bool handleEngSwitch(const SDL_Point* m);
+	// bool handleEngSwitch(const SDL_Point* m);
   bool handleModelSwitch(const SDL_Point* m);
   bool handleIO(const SDL_Point* m);
 
@@ -107,7 +96,7 @@ public:
 
 	// Renders graphics
 	void OnRender();
-  bool renderEngSwitch();
+  // bool renderEngSwitch();
   bool renderModelButton();
   bool renderIOButtons();
 
