@@ -11,6 +11,7 @@
 #include "COptions.h"
 #include "CModule.h"
 #include "CEvent.h"
+#include <string>
 
 class CStage {
   CStage();
@@ -18,6 +19,7 @@ class CStage {
 public:
   static CStage control;
   bool planview;
+  std::string name;
 
   void OnEvent(SDL_Event* Event);
   void OnRender(const SDL_Point& m);

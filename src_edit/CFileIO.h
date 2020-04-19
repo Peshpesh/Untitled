@@ -10,6 +10,7 @@
 #include "CEntity.h"
 #include "CScenery.h"
 #include "CCamera.h"
+#include "CStage.h"
 
 class CFileIO : public CEvent {
 private:
@@ -32,8 +33,9 @@ private:
     const char* title;
     const char* prevTitle;
     const char* newTitle;
-    const char* okText;
-    const char* cancText;
+    const char* optAText;
+    const char* optBText;
+    const char* optCText;
 
     const char* info;
   } reset, load, save;
@@ -49,7 +51,7 @@ public:
 
   bool OnRender(const SDL_Point* m);
 
-  bool renderMenu(const prompt& menu, const SDL_Point* m);
+  void renderMenu(const prompt& menu, const SDL_Point* m);
 
   std::string getPrevName();
 

@@ -4,6 +4,7 @@ CStage CStage::control;
 
 CStage::CStage() {
   planview = false;
+  name = "new";
 }
 
 void CStage::OnEvent(SDL_Event* Event) {
