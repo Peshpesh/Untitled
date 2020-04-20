@@ -44,8 +44,8 @@ public:
 	*/
 	void 	OnRenderFill(int CameraX, int CameraY);
 	void	OnRender(int CameraX, int CameraY, bool bg);
-	void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
-	void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
+	void	OnRenderType(int CameraX, int CameraY);
+	void	OnRenderColl(int CameraX, int CameraY);
 
 	/*	Intended only for map editing.
 			Expands the current area rightward by one map.

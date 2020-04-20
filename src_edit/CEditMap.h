@@ -15,12 +15,158 @@
 #include "CTileset.h"
 #include "Define.h"
 
-enum
-{
+enum {
   MODIFY_TILE_TL = 0,
   MODIFY_TILE_TR,
   MODIFY_TILE_BL,
   MODIFY_TILE_BR,
+};
+
+class CEditMap : public CEvent {
+public:
+	static CEditMap	MapEditor;
+
+private:
+  // SDL_Texture* Type_Tileset;  // Tileset showing tile type
+  // SDL_Texture* Coll_Tileset;	// Tileset showing collision type
+
+private:
+  CTile TileTL;
+  CTile TileTR;
+  CTile TileBL;
+  CTile TileBR;
+  bool active_TL, active_TR, active_BL, active_BR;
+  int modifyTile;
+  const SDL_Point* shadowColor;
+  unsigned int shadow_w;
+
+private:
+  // int type_alpha;						// Current Opacity of the Type overlay
+  // int coll_alpha;						// Current Opacity of the Collision overlay
+
+  bool show_bg, show_fg, show_ty, show_co;
+
+  // int type_w, type_h;  	// Typeset texture dimension (tiles)
+  // int coll_w, coll_h; 	// Collset texture dimension (tiles)
+
+  int onTiles;          // bitwise flag for tiles to place
+
+private:
+  SDL_Point* rClickA;
+  SDL_Point* rClickB;
+  const SDL_Point* flexAreaColor;
+  const SDL_Point* fixAreaColor;
+  const SDL_Point* hoverAreaColor;
+  unsigned short rc_area_w;
+
+public:
+  CEditMap();
+
+  bool OnInit();
+
+  void OnTerminate();
+
+  bool RenderMap();
+
+public:
+  void OnEvent(SDL_Event* Event);
+
+private:
+  void extendMap_R();
+  void extendMap_L();
+  void extendMap_D();
+  void extendMap_U();
+  void removeMap_R();
+  void removeMap_L();
+  void removeMap_D();
+  void removeMap_U();
+
+private:
+  bool handleInterr(SDL_Event* Event);
+  void handleChangeTS(SDL_Event* Event);
+  void handleChangeTile(SDL_Event* Event, int intrpt);
+  CTile* getModTile();
+
+public:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+
+private:
+  bool handleAreaModify(SDL_Keycode sym, Uint16 mod);
+
+public:
+  void OnLButtonDown(int mX, int mY);
+
+private:
+  bool handleAreaExtend(const SDL_Point* mouse);
+  bool handlePlaceDomain(const SDL_Point* mouse);
+  bool handleNewTile(const SDL_Point* mouse);
+  bool handleGetSet(const SDL_Point* mouse);
+  bool handleGetTile(const SDL_Point* mouse);
+
+  bool handleScroll_bg(const SDL_Point* mouse, CTile* EditTile);
+  bool handleScroll_fg(const SDL_Point* mouse, CTile* EditTile);
+  // bool handleScroll_ty(const SDL_Point* mouse, CTile* EditTile);
+  // bool handleScroll_co(const SDL_Point* mouse, CTile* EditTile);
+  bool handleType(const SDL_Point* mouse, CTile* EditTile);
+  bool handleColl(const SDL_Point* mouse, CTile* EditTile);
+  char getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse);
+
+  bool handleTileReset(const SDL_Point* mouse, CTile* EditTile);
+
+  bool handleOpac_ty(const SDL_Point* mouse);
+  bool handleOpac_co(const SDL_Point* mouse);
+
+  bool handleLayers(const SDL_Point* mouse);
+  bool handlePlace(const SDL_Point* mouse);
+  bool handleActTile(const SDL_Point* mouse, bool& active);
+  bool handleQuadrant_lc(const SDL_Point* mouse);
+
+private:
+  void placeBlock(const int& x, const int& y);
+
+public:
+  void OnRButtonDown(int mX, int mY);
+
+private:
+  bool handleAreaRemove(const SDL_Point* mouse);
+  bool handleMakeDomain(const SDL_Point* mouse);
+  bool handleQuadrant_rc(const SDL_Point* mouse);
+  SDL_Rect getTileDomain(const SDL_Point* A, const SDL_Point* B);
+  void resetRClick();
+
+public:
+  bool OnRender(const SDL_Point* mouse);
+
+private:
+  bool RenderWkspc(const SDL_Point* mouse);
+  bool drawIntrpt(const SDL_Point* mouse);
+  bool drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos);
+  bool drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos);
+
+private:
+  bool RenderSidebar(const SDL_Point* mouse);
+  bool drawAreaExpand(const SDL_Point* mouse);
+  bool drawActiveTiles();
+  bool drawSampleTile(const CTile* ShowTile, const SDL_Rect* dstR);
+  bool drawActive_bg(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawActive_co(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawTypeTiles(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawCollTiles(const CTile* ShowTile, const SDL_Point* mouse);
+  bool drawTileButtons(const SDL_Point* tPos, const SDL_Point* mouse);
+  bool drawOpac_ty();
+  bool drawOpac_co();
+
+private:
+  bool RenderBottom(const SDL_Point* mouse);
+  bool drawButtonTileset(const SDL_Point* mouse);
+  bool drawButton_bg(const SDL_Point* mouse);
+  bool drawButton_fg(const SDL_Point* mouse);
+  bool drawOverlayList();
+  bool drawPlacementList();
+  bool drawButtonActive(const SDL_Point* mouse);
+  bool drawQuadrants(const SDL_Point* mouse);
 };
 
 // Map engine namespaces //
@@ -146,152 +292,5 @@ namespace mapEngine
     extern const char* labels[];
   }
 } // Map engine namespaces //
-
-class CEditMap : public CEvent {
-public:
-	static CEditMap	MapEditor;
-
-private:
-  SDL_Texture* Type_Tileset;  // Tileset showing tile type
-  SDL_Texture* Coll_Tileset;	// Tileset showing collision type
-
-private:
-  CTile TileTL;
-  CTile TileTR;
-  CTile TileBL;
-  CTile TileBR;
-  bool active_TL, active_TR, active_BL, active_BR;
-  int modifyTile;
-  const SDL_Point* shadowColor;
-  unsigned int shadow_w;
-
-private:
-  int type_alpha;						// Current Opacity of the Type overlay
-  int coll_alpha;						// Current Opacity of the Collision overlay
-
-  bool show_bg, show_fg, show_ty, show_co;
-
-  int type_w, type_h;  	// Typeset texture dimension (tiles)
-  int coll_w, coll_h; 	// Collset texture dimension (tiles)
-
-  int onTiles;          // bitwise flag for tiles to place
-
-private:
-  SDL_Point* rClickA;
-  SDL_Point* rClickB;
-  const SDL_Point* flexAreaColor;
-  const SDL_Point* fixAreaColor;
-  const SDL_Point* hoverAreaColor;
-  unsigned short rc_area_w;
-
-public:
-  CEditMap();
-
-  bool OnInit();
-
-  void OnTerminate();
-
-  bool RenderMap();
-
-public:
-  void OnEvent(SDL_Event* Event);
-
-private:
-  void extendMap_R();
-  void extendMap_L();
-  void extendMap_D();
-  void extendMap_U();
-  void removeMap_R();
-  void removeMap_L();
-  void removeMap_D();
-  void removeMap_U();
-
-private:
-  bool handleInterr(SDL_Event* Event);
-  void handleChangeTS(SDL_Event* Event);
-  void handleChangeTile(SDL_Event* Event, int intrpt);
-  CTile* getModTile();
-
-public:
-  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
-
-private:
-  bool handleAreaModify(SDL_Keycode sym, Uint16 mod);
-
-public:
-  void OnLButtonDown(int mX, int mY);
-
-private:
-  bool handleAreaExtend(const SDL_Point* mouse);
-  bool handlePlaceDomain(const SDL_Point* mouse);
-  bool handleNewTile(const SDL_Point* mouse);
-  bool handleGetSet(const SDL_Point* mouse);
-  bool handleGetTile(const SDL_Point* mouse);
-
-  bool handleScroll_bg(const SDL_Point* mouse, CTile* EditTile);
-  bool handleScroll_fg(const SDL_Point* mouse, CTile* EditTile);
-  // bool handleScroll_ty(const SDL_Point* mouse, CTile* EditTile);
-  // bool handleScroll_co(const SDL_Point* mouse, CTile* EditTile);
-  bool handleType(const SDL_Point* mouse, CTile* EditTile);
-  bool handleColl(const SDL_Point* mouse, CTile* EditTile);
-  char getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse);
-
-  bool handleTileReset(const SDL_Point* mouse, CTile* EditTile);
-
-  bool handleOpac_ty(const SDL_Point* mouse);
-  bool handleOpac_co(const SDL_Point* mouse);
-
-  bool handleLayers(const SDL_Point* mouse);
-  bool handlePlace(const SDL_Point* mouse);
-  bool handleActTile(const SDL_Point* mouse, bool& active);
-  bool handleQuadrant_lc(const SDL_Point* mouse);
-
-private:
-  void placeBlock(const int& x, const int& y);
-
-public:
-  void OnRButtonDown(int mX, int mY);
-
-private:
-  bool handleAreaRemove(const SDL_Point* mouse);
-  bool handleMakeDomain(const SDL_Point* mouse);
-  bool handleQuadrant_rc(const SDL_Point* mouse);
-  SDL_Rect getTileDomain(const SDL_Point* A, const SDL_Point* B);
-  void resetRClick();
-
-public:
-  bool OnRender(const SDL_Point* mouse);
-
-private:
-  bool RenderWkspc(const SDL_Point* mouse);
-  bool drawIntrpt(const SDL_Point* mouse);
-  bool drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos);
-  bool drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos);
-
-private:
-  bool RenderSidebar(const SDL_Point* mouse);
-  bool drawAreaExpand(const SDL_Point* mouse);
-  bool drawActiveTiles();
-  bool drawSampleTile(const CTile* ShowTile, const SDL_Rect* dstR);
-  bool drawActive_bg(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawActive_fg(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawActive_co(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawTypeTiles(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawCollTiles(const CTile* ShowTile, const SDL_Point* mouse);
-  bool drawTileButtons(const SDL_Point* tPos, const SDL_Point* mouse);
-  bool drawOpac_ty();
-  bool drawOpac_co();
-
-private:
-  bool RenderBottom(const SDL_Point* mouse);
-  bool drawButtonTileset(const SDL_Point* mouse);
-  bool drawButton_bg(const SDL_Point* mouse);
-  bool drawButton_fg(const SDL_Point* mouse);
-  bool drawOverlayList();
-  bool drawPlacementList();
-  bool drawButtonActive(const SDL_Point* mouse);
-  bool drawQuadrants(const SDL_Point* mouse);
-};
 
 #endif

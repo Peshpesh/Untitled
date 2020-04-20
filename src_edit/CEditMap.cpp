@@ -2,10 +2,9 @@
 
 CEditMap CEditMap::MapEditor;
 
-CEditMap::CEditMap()
-{
-  Type_Tileset = NULL;    // Tileset showing tile type
-  Coll_Tileset = NULL;    // Tileset showing collision type
+CEditMap::CEditMap() {
+  // Type_Tileset = NULL;    // Tileset showing tile type
+  // Coll_Tileset = NULL;    // Tileset showing collision type
 
   active_TL = true;
   active_TR = false;
@@ -24,40 +23,34 @@ CEditMap::CEditMap()
   rc_area_w = 2;
 
 	show_bg = show_fg = show_ty = show_co = true;
-	type_alpha = 215;
-	coll_alpha = 55;
-	coll_w = coll_h = type_w = type_h = 0;
+	// type_alpha = 215;
+	// coll_alpha = 55;
+	// coll_w = coll_h = type_w = type_h = 0;
   // tset_w = tset_h = 0;
 
   onTiles = 0;
 }
 
-bool CEditMap::OnInit()
-{
-  if ((Type_Tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL)
-  {
-    return false;
-  }
+bool CEditMap::OnInit() {
+  // if ((type_tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL) {
+  //   return false;
+  // }
 
-  SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
-  CAsset::queryTileDims(Type_Tileset, type_w, type_h);
+  // SDL_SetTextureAlphaMod(type_Tileset, type_alpha);
+  // CAsset::queryTileDims(type_Tileset, type_w, type_h);
 
-  if ((Coll_Tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL)
-  {
-    return false;
-  }
+  // if ((coll_tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL) {
+  //   return false;
+  // }
 
-  SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
-  CAsset::queryTileDims(Coll_Tileset, coll_w, coll_h);
-
+  // SDL_SetTextureAlphaMod(coll_Tileset, coll_alpha);
+  // CAsset::queryTileDims(coll_Tileset, coll_w, coll_h);
   return true;
 }
 
-CTile* CEditMap::getModTile()
-{
+CTile* CEditMap::getModTile() {
   CTile* modTile = NULL;
-  switch (modifyTile)
-  {
+  switch (modifyTile) {
     case MODIFY_TILE_TL: modTile = &TileTL; break;
     case MODIFY_TILE_TR: modTile = &TileTR; break;
     case MODIFY_TILE_BL: modTile = &TileBL; break;
@@ -67,8 +60,7 @@ CTile* CEditMap::getModTile()
   return modTile;
 }
 
-SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)
-{
+SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B) {
   // First, this takes in points A and B ("A" being the initial point,
   // "B" being the terminal) and fetches the smallest box that contains both
   // points AND has width and height that are multiples of TILE_SIZE.
@@ -103,9 +95,8 @@ SDL_Rect CEditMap::getTileDomain(const SDL_Point* A, const SDL_Point* B)
   return domain;
 }
 
-void CEditMap::OnTerminate()
-{
+void CEditMap::OnTerminate() {
   CTileset::TSControl.OnTerminate();
-  SDL_DestroyTexture(Type_Tileset);
-  SDL_DestroyTexture(Coll_Tileset);
+  // SDL_DestroyTexture(Type_Tileset);
+  // SDL_DestroyTexture(Coll_Tileset);
 }

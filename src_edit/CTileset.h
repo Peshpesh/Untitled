@@ -26,7 +26,13 @@ private:
 
 public:
   SDL_Texture* tileset;
+  SDL_Texture* type_tileset;
+  SDL_Texture* coll_tileset;
   int ts_w, ts_h;
+  int type_alpha;						// Current Opacity of the Type overlay
+  int coll_alpha;						// Current Opacity of the Collision overlay
+  int type_w, type_h;  	// Typeset texture dimension (tiles)
+  int coll_w, coll_h; 	// Collset texture dimension (tiles)
   bool succ;
 
 public:
@@ -41,6 +47,12 @@ public:
   bool changeTileset(const short& fID);
   bool changeTileset(const std::string& fname);
   void changeTileset();
+  void changeTypeAlpha(const int& a);
+  void changeCollAlpha(const int& a);
+  void maxTypeAlpha();
+  void maxCollAlpha();
+  void refreshTypeAlpha();
+  void refreshCollAlpha();
 
   void resetPath();
 

@@ -93,7 +93,7 @@ bool CModel::renderInfo() {
   Font::FontControl.SetFont(FONT_MINI);
 
   std::string info;
-  info += "Stage - " + CFileIO::IOhandle.getPrevName() + "\n\n";
+  info += "Stage - " + CStage::control.name + "\n\n";
   info += "Tileset - " + CTileset::TSControl.getFileName() + "\n\n";
   info += "Area Width - " + Font::intToStr(aW) + "\n\n";
   info += "Area Height - " + Font::intToStr(aH) + "\n\n";

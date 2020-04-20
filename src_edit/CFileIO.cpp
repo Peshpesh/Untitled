@@ -55,7 +55,7 @@ namespace {
 }
 
 CFileIO::CFileIO() {
-  prevName = "";
+  // prevName = "";
   newName = "";
   initMenus();
 }
@@ -204,8 +204,14 @@ void CFileIO::OnLButtonDown(int mX, int mY) {
   bool thirdOpt = !CInterrupt::isFlagOn(INTRPT_SAVE);
 
   if (thirdOpt) {
-    if (SDL_PointInRect(&mouse, &pfmButton)) handleIOrequest();
-    else if (SDL_PointInRect(&mouse, &pvmButton)) handleIOrequest();
+    if (SDL_PointInRect(&mouse, &pfmButton)) {
+      CStage::control.planview = false;
+      handleIOrequest();
+    }
+    else if (SDL_PointInRect(&mouse, &pvmButton)) {
+      CStage::control.planview = true;
+      handleIOrequest();
+    }
     else if (SDL_PointInRect(&mouse, &escLoadBut)) {
       pushInform(I_CANCEL);
       CInterrupt::removeFlag(INTRPT_NEW | INTRPT_LOAD | INTRPT_SAVE);
@@ -267,7 +273,8 @@ void CFileIO::renderMenu(const prompt& menu, const SDL_Point* m) {
   if (!CInterrupt::isFlagOn(INTRPT_NEW)) {
     Font::NewCenterWrite(menu.prevTitle, &prevTitleBox, menu.fnameCol);
     Font::NewCenterWrite(menu.newTitle, &newTitleBox, menu.fnameCol);
-    Font::NewCenterWrite(prevName.c_str(), &fprevBox, menu.fnameCol);
+    // Font::NewCenterWrite(prevName.c_str(), &fprevBox, menu.fnameCol);
+    Font::NewCenterWrite(CStage::control.name.c_str(), &fprevBox, menu.fnameCol);
 
     Font::FontControl.setDynamic();
     Font::NewCenterWrite(newName.c_str(), &fnewBox, menu.fnameCol);
@@ -276,9 +283,9 @@ void CFileIO::renderMenu(const prompt& menu, const SDL_Point* m) {
   Font::NewCenterWrite(menu.info, &infoBox, menu.textCol);
 }
 
-std::string CFileIO::getPrevName() {
-  return prevName;
-}
+// std::string CFileIO::getPrevName() {
+//   return prevName;
+// }
 
 void CFileIO::backPath() {
   if (newName.size() > 0) newName.erase(newName.end() - 1);
@@ -297,42 +304,44 @@ void CFileIO::newData() {
 
 	CCamera::CameraControl.SetPos(0, 0);
 
-  prevName = newName;
+  // prevName = newName;
+  CStage::control.name = "new";
   newName.clear();
 
   pushInform(I_MAKE_NEW);
 }
 
 void CFileIO::loadData() {
-  if (!CArea::control.OnLoad(newName.c_str())) {
-    // problem loading the area
-    newName.clear();
-    return;
+  if (!CStage::control.planview) {
+    if (!CArea::control.OnLoad(newName.c_str())) {
+      // problem loading the area
+      newName.clear();
+      return;
+    }
+    if (!CEntity::OnLoad(newName.c_str())) {
+      pushInform(I_FAIL_ENTITY);
+      newName.clear();
+      return;
+    }
+    if (!CScenery::OnLoad(newName.c_str())) {
+      // problem loading 2.5D elements
+      pushInform(I_FAIL_SCENERY);
+      newName.clear();
+      return;
+    }
+  } else {
+
   }
 
   CCamera::CameraControl.SetPos(0, 0);
-
-  if (!CEntity::OnLoad(newName.c_str())) {
-    pushInform(I_FAIL_ENTITY);
-    newName.clear();
-    return;
-  }
-
-  if (!CScenery::OnLoad(newName.c_str())) {
-    // problem loading 2.5D elements
-    pushInform(I_FAIL_SCENERY);
-    newName.clear();
-    return;
-  }
-
   pushInform(I_LOAD);
 
-  prevName = newName;
+  // prevName = newName;
+  CStage::control.name = newName;
   newName.clear();
 }
 
-void CFileIO::saveData()
-{
+void CFileIO::saveData() {
   if (!CArea::control.OnSave(newName.c_str())) {
     pushInform(I_FAIL_SAVE);
     return;
@@ -346,7 +355,8 @@ void CFileIO::saveData()
     return;
   }
 
-  prevName = newName;
+  // prevName = newName;
+  CStage::control.name = newName;
   newName.clear();
 
   pushInform(I_SAVE);

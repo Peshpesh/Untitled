@@ -165,7 +165,7 @@ void CArea::OnRender(int CameraX, int CameraY, bool bg) {
 	}
 }
 
-void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY) {
+void CArea::OnRenderType(int CameraX, int CameraY) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
 
@@ -182,11 +182,11 @@ void CArea::OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY) {
 		int X = ((ID % AreaWidth) * MapWidth) + CameraX;
 		int Y = ((ID / AreaWidth) * MapHeight) + CameraY;
 
-		MapList[ID].OnRenderType(tileset, X, Y);
+		MapList[ID].OnRenderType(X, Y);
 	}
 }
 
-void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY) {
+void CArea::OnRenderColl(int CameraX, int CameraY) {
 	int MapWidth = MAP_WIDTH * TILE_SIZE; // pixels
 	int MapHeight = MAP_HEIGHT * TILE_SIZE; // pixels
 
@@ -203,7 +203,7 @@ void CArea::OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY) {
 		int X = ((ID % AreaWidth) * MapWidth) + CameraX;
 		int Y = ((ID / AreaWidth) * MapHeight) + CameraY;
 
-		MapList[ID].OnRenderColl(tileset, X, Y);
+		MapList[ID].OnRenderColl(X, Y);
 	}
 }
 

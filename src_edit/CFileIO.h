@@ -15,7 +15,7 @@
 class CFileIO : public CEvent {
 private:
   CFileIO();
-  std::string prevName;
+  // std::string prevName;
   std::string newName;
   void initMenus();
 
@@ -53,7 +53,7 @@ public:
 
   void renderMenu(const prompt& menu, const SDL_Point* m);
 
-  std::string getPrevName();
+  // std::string getPrevName();
 
 private:
   void handleIOrequest();

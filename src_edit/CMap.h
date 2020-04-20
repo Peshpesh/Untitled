@@ -25,8 +25,8 @@ public:
 
 	void OnRenderFill(int MapX, int MapY);
 	void OnRender(int MapX, int MapY, bool bg);
-	void OnRenderType(SDL_Texture* tileset, int MapX, int MapY);
-	void OnRenderColl(SDL_Texture* tileset, int MapX, int MapY);
+	void OnRenderType(int MapX, int MapY);
+	void OnRenderColl(int MapX, int MapY);
 
 	void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
 };

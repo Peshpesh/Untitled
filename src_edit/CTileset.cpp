@@ -43,16 +43,32 @@ namespace {
 
 CTileset::CTileset() {
   succ = false;
-
-  tileset = NULL;
+  tileset = type_tileset = coll_tileset = NULL;
   ts_w = ts_h = 0;
-
+  type_w = type_h = 0;
+  coll_w = coll_h = 0;
+  type_alpha = 215;
+  coll_alpha = 55;
   file = "";
   newF = "";
 }
 
 bool CTileset::OnInit() {
   using namespace Tileset_ID;
+  if ((type_tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL) {
+    return false;
+  }
+
+  SDL_SetTextureAlphaMod(type_tileset, type_alpha);
+  CAsset::queryTileDims(type_tileset, type_w, type_h);
+
+  if ((coll_tileset = CSurface::OnLoad("../res_edit/slopes.png")) == NULL) {
+    return false;
+  }
+
+  SDL_SetTextureAlphaMod(coll_tileset, coll_alpha);
+  CAsset::queryTileDims(coll_tileset, coll_w, coll_h);
+
   return changeTileset(name[TS_DEFAULT]);
 }
 
@@ -245,8 +261,33 @@ void CTileset::changeTileset() {
     succ = false;
     pushInform(I_FAIL);
   }
-
   resetPath();
+}
+
+void CTileset::changeTypeAlpha(const int& a) {
+  type_alpha = a;
+  refreshTypeAlpha();
+}
+
+void CTileset::changeCollAlpha(const int& a) {
+  coll_alpha = a;
+  refreshCollAlpha();
+}
+
+void CTileset::maxTypeAlpha() {
+  SDL_SetTextureAlphaMod(type_tileset, MAX_RGBA);
+}
+
+void CTileset::maxCollAlpha() {
+  SDL_SetTextureAlphaMod(coll_tileset, MAX_RGBA);
+}
+
+void CTileset::refreshTypeAlpha() {
+  SDL_SetTextureAlphaMod(type_tileset, type_alpha);
+}
+
+void CTileset::refreshCollAlpha() {
+  SDL_SetTextureAlphaMod(coll_tileset, coll_alpha);
 }
 
 void CTileset::pushInform(const int& ID) {
@@ -256,4 +297,6 @@ void CTileset::pushInform(const int& ID) {
 
 void CTileset::OnTerminate() {
   SDL_DestroyTexture(tileset);
+  SDL_DestroyTexture(type_tileset);
+  SDL_DestroyTexture(coll_tileset);
 }

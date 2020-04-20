@@ -1,13 +1,11 @@
 #include "CEditMap.h"
 
-void CEditMap::OnEvent(SDL_Event* Event)
-{
+void CEditMap::OnEvent(SDL_Event* Event) {
   if (handleInterr(Event)) return;
   CEvent::OnEvent(Event);
 }
 
-bool CEditMap::handleInterr(SDL_Event* Event)
-{
+bool CEditMap::handleInterr(SDL_Event* Event) {
   if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
     handleChangeTS(Event);
     return true;
@@ -23,8 +21,7 @@ bool CEditMap::handleInterr(SDL_Event* Event)
   return false;
 }
 
-void CEditMap::handleChangeTS(SDL_Event* Event)
-{
+void CEditMap::handleChangeTS(SDL_Event* Event) {
   CTileset::TSControl.OnEvent(Event);
 
   if (CInterrupt::isFlagOff(INTRPT_CHANGE_TS) && CTileset::TSControl.wasSuccess()) {
@@ -35,30 +32,25 @@ void CEditMap::handleChangeTS(SDL_Event* Event)
   }
 }
 
-void CEditMap::handleChangeTile(SDL_Event* Event, int intrpt)
-{
+void CEditMap::handleChangeTile(SDL_Event* Event, int intrpt) {
   CChangeTile::PickTile.OnEvent(Event);
 
-  if (CInterrupt::isFlagOff(intrpt))
-  {
+  if (CInterrupt::isFlagOff(intrpt)) {
     CTile* EditTile = getModTile();
     CChangeTile::PickTile.reqChange((intrpt == INTRPT_CHANGE_BG) ? EditTile->bg_ID : EditTile->fg_ID);
   }
 }
 
-void CEditMap::OnKeyDown(SDL_Keycode sym, Uint16 mod)
-{
+void CEditMap::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   if (handleAreaModify(sym, mod)) return;
 }
 
-void CEditMap::OnLButtonDown(int mX, int mY)
-{
+void CEditMap::OnLButtonDown(int mX, int mY) {
   const SDL_Point mouse = {mX, mY};
 
   CTile* EditTile = getModTile();
   bool* active;
-  switch (modifyTile)
-  {
+  switch (modifyTile) {
     case MODIFY_TILE_TL: active = &active_TL; break;
     case MODIFY_TILE_TR: active = &active_TR; break;
     case MODIFY_TILE_BL: active = &active_BL; break;
@@ -333,8 +325,7 @@ void CEditMap::resetRClick() {
 
 bool CEditMap::handleNewTile(const SDL_Point* mouse) {
   // Place new tiles, if click is in the workspace
-  if (CAsset::inWorkspace(mouse))
-  {
+  if (CAsset::inWorkspace(mouse)) {
     int mX = CCamera::CameraControl.GetX() + mouse->x;
     int mY = CCamera::CameraControl.GetY() + mouse->y;
     placeBlock(mX, mY);
@@ -476,8 +467,8 @@ bool CEditMap::handleType(const SDL_Point* mouse, CTile* EditTile) {
 
   SDL_Rect targetR = {0, 0, ty_t_size, ty_t_size};
   int k = 0;
-  for (int j = 0; j < type_h; j++) {
-    for (int i = 0; i < type_w; i++) {
+  for (int j = 0; j < CTileset::TSControl.type_h; j++) {
+    for (int i = 0; i < CTileset::TSControl.type_w; i++) {
       targetR.x = ty_pos.x + ((k % ty_w) * (ty_t_size + co_spac));
       targetR.y = ty_pos.y + ((k / ty_w) * (ty_t_size + co_spac));
       if (SDL_PointInRect(mouse, &targetR)) {
@@ -496,8 +487,8 @@ bool CEditMap::handleColl(const SDL_Point* mouse, CTile* EditTile) {
 
   SDL_Rect targetR = {0, 0, co_t_size, co_t_size};
   int k = 0;
-  for (int j = 0; j < coll_h; j++) {
-    for (int i = 0; i < coll_w; i++) {
+  for (int j = 0; j < CTileset::TSControl.coll_h; j++) {
+    for (int i = 0; i < CTileset::TSControl.coll_w; i++) {
       targetR.x = co_pos.x + ((k % co_w) * (co_t_size + co_spac));
       targetR.y = co_pos.y + ((k / co_w) * (co_t_size + co_spac));
       if (SDL_PointInRect(mouse, &targetR)) {
@@ -569,8 +560,9 @@ bool CEditMap::handleOpac_ty(const SDL_Point* mouse) {
 
   if (SDL_PointInRect(mouse, &typeBar)) {
     double barfract = (double)(mouse->x - typeBar.x) / (double)(typeBar.w - 1);
-    type_alpha = MAX_RGBA * barfract;
-    SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
+    // type_alpha = MAX_RGBA * barfract;
+    // SDL_SetTextureAlphaMod(CTileset::TSControl.type_tileset, type_alpha);
+    CTileset::TSControl.changeTypeAlpha((int)(MAX_RGBA * barfract));
     return true;
   }
   return false;
@@ -582,8 +574,9 @@ bool CEditMap::handleOpac_co(const SDL_Point* mouse) {
 
   if (SDL_PointInRect(mouse, &collBar)) {
     double barfract = (double)(mouse->x - collBar.x) / (double)(collBar.w - 1);
-    coll_alpha = MAX_RGBA * barfract;
-    SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
+    // coll_alpha = MAX_RGBA * barfract;
+    // SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
+    CTileset::TSControl.changeCollAlpha((int)(MAX_RGBA * barfract));
     return true;
   }
   return false;

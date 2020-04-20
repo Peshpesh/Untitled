@@ -9,7 +9,8 @@
 #include "CAsset.h"
 #include "CFont.h"
 #include "CArea.h"
-#include "CFileIO.h"
+#include "CStage.h"
+// #include "CFileIO.h"
 
 namespace model {
   extern const short info_sz;

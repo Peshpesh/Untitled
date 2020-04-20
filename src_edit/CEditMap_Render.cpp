@@ -4,8 +4,8 @@ bool CEditMap::RenderMap() {
   // Draw the working area
 	if (show_bg) CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), true);
 	if (show_fg) CArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), false);
-	if (show_ty) CArea::control.OnRenderType(Type_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-	if (show_co) CArea::control.OnRenderColl(Coll_Tileset, -CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (show_ty) CArea::control.OnRenderType(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+	if (show_co) CArea::control.OnRenderColl(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
   return true;
 }
@@ -259,12 +259,10 @@ bool CEditMap::drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse) {
 	using namespace mapEngine::disp_t;
 
 	// Draws active tile type
-	{
-		int tX = (ShowTile->TypeID % type_w) * TILE_SIZE;
-		int tY = (ShowTile->TypeID / type_w) * TILE_SIZE;
-		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-		CSurface::OnDraw(Type_Tileset, &srcR, &ty_pos);
-	}
+	int tX = (ShowTile->TypeID % CTileset::TSControl.type_w) * TILE_SIZE;
+	int tY = (ShowTile->TypeID / CTileset::TSControl.type_w) * TILE_SIZE;
+	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+	CSurface::OnDraw(CTileset::TSControl.type_tileset, &srcR, &ty_pos);
 
 	// Draws tile type arrows
 	drawTileButtons(&ty_pos, mouse);
@@ -289,63 +287,65 @@ bool CEditMap::drawActive_ty(const CTile* ShowTile, const SDL_Point* mouse) {
 bool CEditMap::drawTypeTiles(const CTile* ShowTile, const SDL_Point* mouse) {
 	using namespace mapEngine::disp_t;
 
-	SDL_SetTextureAlphaMod(Type_Tileset, MAX_RGBA);
+	// SDL_SetTextureAlphaMod(CTileset::TSControl.type_tileset, MAX_RGBA);
+	CTileset::TSControl.maxTypeAlpha();
 
 	SDL_Rect dstR = {0, 0, ty_t_size, ty_t_size};
 	int k = 0;
-	for (int j = 0; j < type_h; j++) {
-		for (int i = 0; i < type_w; i++) {
+	for (int j = 0; j < CTileset::TSControl.type_h; j++) {
+		for (int i = 0; i < CTileset::TSControl.type_w; i++) {
 			int tX = i * TILE_SIZE;
 			int tY = j * TILE_SIZE;
 			SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
 			dstR.x = ty_pos.x + ((k % ty_w) * (ty_t_size + ty_spac));
 			dstR.y = ty_pos.y + ((k / ty_w) * (ty_t_size + ty_spac));
-			CSurface::OnDraw(Type_Tileset, &srcR, &dstR);
+			CSurface::OnDraw(CTileset::TSControl.type_tileset, &srcR, &dstR);
 			if (k == ShowTile->TypeID) {
 				CAsset::drawBox(&dstR, &palette::red);
 			}
 			k++;
 		}
 	}
-	SDL_SetTextureAlphaMod(Type_Tileset, type_alpha);
+	// SDL_SetTextureAlphaMod(CTileset::TSControl.type_tileset, type_alpha);
+	CTileset::TSControl.refreshTypeAlpha();
 	return true;
 }
 
 bool CEditMap::drawCollTiles(const CTile* ShowTile, const SDL_Point* mouse) {
 	using namespace mapEngine::disp_t;
 
-	SDL_SetTextureAlphaMod(Coll_Tileset, MAX_RGBA);
+	// SDL_SetTextureAlphaMod(CTileset::TSControl.coll_tileset, MAX_RGBA);
+	CTileset::TSControl.maxCollAlpha();
 
 	SDL_Rect dstR = {0, 0, co_t_size, co_t_size};
 	int k = 0;
-	for (int j = 0; j < coll_h; j++) {
-		for (int i = 0; i < coll_w; i++) {
+	for (int j = 0; j < CTileset::TSControl.coll_h; j++) {
+		for (int i = 0; i < CTileset::TSControl.coll_w; i++) {
 			int tX = i * TILE_SIZE;
 			int tY = j * TILE_SIZE;
 			SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
 			dstR.x = co_pos.x + ((k % co_w) * (co_t_size + co_spac));
 			dstR.y = co_pos.y + ((k / co_w) * (co_t_size + co_spac));
-			CSurface::OnDraw(Coll_Tileset, &srcR, &dstR);
+			CSurface::OnDraw(CTileset::TSControl.coll_tileset, &srcR, &dstR);
 			if (k == ShowTile->CollID) {
 				CAsset::drawBox(&dstR, &palette::red);
 			}
 			k++;
 		}
 	}
-	SDL_SetTextureAlphaMod(Coll_Tileset, coll_alpha);
+	// SDL_SetTextureAlphaMod(CTileset::TSControl.coll_tileset, coll_alpha);
+	CTileset::TSControl.refreshCollAlpha();
 	return true;
 }
 
 bool CEditMap::drawActive_co(const CTile* ShowTile, const SDL_Point* mouse) {
 	using namespace mapEngine::disp_t;
 
-	{
-		// Draws active collision tile
-		int tX = (ShowTile->CollID % coll_w) * TILE_SIZE;
-		int tY = (ShowTile->CollID / coll_w) * TILE_SIZE;
-		SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
-		CSurface::OnDraw(Coll_Tileset, &srcR, &co_pos);
-	}
+	// Draws active collision tile
+	int tX = (ShowTile->CollID % CTileset::TSControl.coll_w) * TILE_SIZE;
+	int tY = (ShowTile->CollID / CTileset::TSControl.coll_w) * TILE_SIZE;
+	SDL_Rect srcR = CAsset::getRect(tX, tY, TILE_SIZE, TILE_SIZE);
+	CSurface::OnDraw(CTileset::TSControl.coll_tileset, &srcR, &co_pos);
 
 	// Draws collision tile arrows
 	drawTileButtons(&co_pos, mouse);
@@ -398,7 +398,7 @@ bool CEditMap::drawTileButtons(const SDL_Point* tPos, const SDL_Point* mouse) {
 bool CEditMap::drawOpac_ty() {
 	using namespace mapEngine::opac;
 	// Draw an opacity meter for Type overlay
-	int opacity_W = typeBar.w * ((double)(type_alpha) / (double)(MAX_RGBA));
+	int opacity_W = typeBar.w * ((double)(CTileset::TSControl.type_alpha) / (double)(MAX_RGBA));
 	SDL_Rect fill = {typeBar.x, typeBar.y, opacity_W, typeBar.h};
 
 	CAsset::drawBoxFill(&typeBar, emptyCol);
@@ -411,7 +411,7 @@ bool CEditMap::drawOpac_ty() {
 bool CEditMap::drawOpac_co() {
 	using namespace mapEngine::opac;
 	// Draw an opacity meter for Collision overlay
-	int opacity_W = collBar.w * ((double)(coll_alpha) / (double)(MAX_RGBA));
+	int opacity_W = collBar.w * ((double)(CTileset::TSControl.coll_alpha) / (double)(MAX_RGBA));
 	SDL_Rect fill = {collBar.x, collBar.y, opacity_W, collBar.h};
 
 	CAsset::drawBoxFill(&collBar, emptyCol);

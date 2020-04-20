@@ -109,53 +109,33 @@ void CMap::OnRender(int MapX, int MapY, bool bg) {
 	}
 }
 
-void CMap::OnRenderType(SDL_Texture* tileset, int MapX, int MapY) {
-	if (tileset == NULL) return;
-
-	int PixWidth;
-	int PixHeight;
-
-	SDL_QueryTexture(tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	int tset_w = PixWidth / TILE_SIZE; // tiles
-	int tset_h = PixHeight / TILE_SIZE; // tiles
-
+void CMap::OnRenderType(int MapX, int MapY) {
 	int ID = 0;
-
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {
 			if (TileList[ID].TypeID != TILE_TYPE_NORMAL) {
 				int tX = MapX + (X * TILE_SIZE);
 				int tY = MapY + (Y * TILE_SIZE);
-				int TilesetX = (TileList[ID].TypeID % tset_w) * TILE_SIZE;
-				int TilesetY = (TileList[ID].TypeID / tset_w) * TILE_SIZE;
-				CSurface::OnDraw(tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+				int TilesetX = (TileList[ID].TypeID % CTileset::TSControl.type_w) * TILE_SIZE;
+				int TilesetY = (TileList[ID].TypeID / CTileset::TSControl.type_w) * TILE_SIZE;
+				CSurface::OnDraw(CTileset::TSControl.type_tileset,
+												tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			}
 			ID++;
 		}
 	}
 }
 
-void CMap::OnRenderColl(SDL_Texture* tileset, int MapX, int MapY) {
-	if (tileset == NULL) return;
-
-	int PixWidth;
-	int PixHeight;
-
-	SDL_QueryTexture(tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	int tset_w = PixWidth / TILE_SIZE; // tiles
-	int tset_h = PixHeight / TILE_SIZE; // tiles
-
+void CMap::OnRenderColl(int MapX, int MapY) {
 	int ID = 0;
-
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
-			int TilesetX = ((TileList[ID].CollID) % tset_w) * TILE_SIZE;
-			int TilesetY = ((TileList[ID].CollID) / tset_w) * TILE_SIZE;
-			CSurface::OnDraw(tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			int TilesetX = ((TileList[ID].CollID) % CTileset::TSControl.coll_w) * TILE_SIZE;
+			int TilesetY = ((TileList[ID].CollID) / CTileset::TSControl.coll_w) * TILE_SIZE;
+			CSurface::OnDraw(CTileset::TSControl.coll_tileset,
+											tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}
