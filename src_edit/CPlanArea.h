@@ -8,6 +8,11 @@
 // (ex: a wall that appears to have a base at Z=0 and a top at Z=2
 //      should have Z=2).
 
+struct CPlanLayer {
+  std::vector<CPlanMap> MapList;
+  short Z;
+};
+
 class CPlanArea {
   CPlanArea();
 
@@ -15,10 +20,12 @@ public:
 	static CPlanArea control;
 
 public:
-	std::vector<CPlanMap>	MapList;
+	// std::vector<CPlanMap> MapList;
+  // std::vector<std::vector<CPlanMap>> MapList;
+  std::vector<CPlanLayer> LayerList;
 
 private:
-  std::vector<short>  DepthList;  // list of layer depths
+  // std::vector<short>  DepthList;  // list of layer depths
 	int	AreaWidth;		// width in Maps
 	int	AreaHeight;		// height in Maps
 
@@ -37,7 +44,7 @@ private:
 			param bg			:	Flag to draw foreground or middleground
 	*/
 	// void 	OnRenderFill(int CameraX, int CameraY);
-	void	OnRender(const int& CameraX, const int& CameraY, const int& Z);
+	void	OnRender(const int& CameraX, const int& CameraY, const int& k);
 	// void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
 	// void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
 

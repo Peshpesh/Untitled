@@ -7,14 +7,18 @@ CPlanArea::CPlanArea() {
 }
 
 void CPlanArea::OnInit()	{
-	MapList.clear();
-  DepthList.clear();
+	// MapList.clear();
+  // DepthList.clear();
+	LayerList.clear();
 	AreaHeight = AreaWidth = 1;
 
 	CPlanMap tempMap;
 	tempMap.OnLoad();
 
-	MapList.push_back(tempMap);
+	CPlanLayer tempLayer;
+	tempLayer.MapList.push_back(tempMap);
+
+	LayerList.push_back(tempLayer);
 }
 
 void CPlanArea::GetDims(int& mW, int& mH)	{
@@ -22,10 +26,10 @@ void CPlanArea::GetDims(int& mW, int& mH)	{
 	mH = AreaHeight;
 }
 
-void CPlanArea::OnRender(const int& CameraX, const int& CameraY, const int& Z) {
-  // The area is layered vertically (Z).
+void CPlanArea::OnRender(const int& CameraX, const int& CameraY, const int& k) {
+  // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the
-  // lowest Z (height) being rendered first.
+  // lowest k-index (height) being rendered first.
   // For each layer, draw---in order:
   //  1) the static-size surface tiles (grass, dirt, etc.)
   //  2) shadows cast upon surface from objects and otherwise
@@ -38,34 +42,42 @@ void CPlanArea::OnRender(const int& CameraX, const int& CameraY, const int& Z) {
   //        A 20x20 (400 maps) area with 5 layers should require ~5MB of memory;
   //        can't imagine an area requiring too much more than that.
 
-  if (Z < 0 || Z >= DepthList.size()) {
-    CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
-    return;
-  }
+  // if (Z < 0 || Z >= DepthList.size()) {
+  //   CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
+  //   return;
+  // }
+
+	if (k < 0 || k >= LayerList.size()) {
+		CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
+		return;
+	}
 
   int MapW = MAP_WIDTH * TILE_SIZE;         // in px
   int MapH = MAP_HEIGHT * TILE_SIZE;        // in px
-  short Yoffset = DepthList[Z] * TILE_SIZE; // in px
+  // short Yoffset = DepthList[Z] * TILE_SIZE; // in px
+	short Yoffset = LayerList[k].Z * TILE_SIZE; // in px
 
-  // Offset is included to account for "vertical" displacement
+	// Offset is included to account for "vertical" displacement
   // of maps, which appears as a negative shift in Y
   // EX: A depth of 1 is a Yoffset of 32px; ID=0 for this depth should be
   // rendered as if it was placed at Y=-32px, NOT Y=0px.
   int FirstID = -CameraX / MapW;
   FirstID += ((-CameraY + Yoffset) / MapH) * AreaWidth;
-	FirstID += Z * AreaWidth * AreaHeight;
+	// FirstID += Z * AreaWidth * AreaHeight;
 
   int maxMaps = 4;
-  int loopMax = (MapList.size() > maxMaps) ? maxMaps : MapList.size();
+	int nMaps = AreaWidth * AreaHeight; // n of maps on a layer
+	int loopMax = (nMaps > maxMaps) ? maxMaps : nMaps;
+	// int loopMax = (MapList.size() > maxMaps) ? maxMaps : MapList.size();
 
   for (int i = 0; i < loopMax; i++) {
     int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
-    if (ID < 0 || ID >= MapList.size()) continue;
+    if (ID < 0 || ID >= LayerList[k].MapList.size()) continue;
 
     int X = ((ID % AreaWidth) * MapW) + CameraX;
     int Y = ((ID / AreaWidth) * MapH) + CameraY - Yoffset;
 
-    MapList[ID].OnRender(X, Y);
+    LayerList[k].MapList[ID].OnRender(X, Y);
   }
 }
 
@@ -95,7 +107,8 @@ bool CPlanArea::OnLoad(char const* File)	{
 		return false;
 	}
 
-	MapList.clear();
+	// MapList.clear();
+	LayerList.clear();
 
 	for (int X = 0; X < AreaWidth; X++) {
 		for (int Y = 0; Y < AreaHeight; Y++) {
@@ -104,7 +117,7 @@ bool CPlanArea::OnLoad(char const* File)	{
 				fclose(FileHandle);
 				return false;
 			}
-			MapList.push_back(tempMap);
+			// MapList.push_back(tempMap); <-- FIX THIS
 		}
 	}
 	fclose(FileHandle);
@@ -136,7 +149,7 @@ bool CPlanArea::OnSave(char const* File) {
 	for (int Y = 0; Y < AreaHeight; Y++) {
 		for (int X = 0; X < AreaWidth; X++) {
 			int ID = X + (Y * AreaWidth);
-			if (!MapList[ID].OnSave(FileHandle)) return false;
+			// if (!MapList[ID].OnSave(FileHandle)) return false; <--- FIX THIS
 		}
 	}
 

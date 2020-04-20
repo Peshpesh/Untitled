@@ -22,7 +22,24 @@ class CPlanEditor : public CEvent {
 public:
   static CPlanEditor control;
 
+  bool OnInit();
 
+  void OnTerminate();
+
+  void OnEvent(SDL_Event* Event);
+
+  bool OnRender(const SDL_Point* mouse);
+
+private:
+  void extendMap_R();
+  void extendMap_L();
+  void extendMap_D();
+  void extendMap_U();
+  void removeMap_R();
+  void removeMap_L();
+  void removeMap_D();
+  void removeMap_U();
+  
 };
 
 #endif
