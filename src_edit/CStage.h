@@ -2,6 +2,7 @@
 #define _C_STAGE_H_
 
 #include "CEditMap.h"
+#include "CPlanEditor.h"
 #include "CEntityEditor.h"
 #include "CSceneryEditor.h"
 #include "CArea.h"

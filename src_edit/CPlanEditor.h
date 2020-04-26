@@ -19,6 +19,8 @@
 class CPlanEditor : public CEvent {
   CPlanEditor();
 
+  short visflag;
+
 public:
   static CPlanEditor control;
 
@@ -28,7 +30,9 @@ public:
 
   void OnEvent(SDL_Event* Event);
 
-  bool OnRender(const SDL_Point* mouse);
+  bool OnRender(const SDL_Point& mouse);
+
+  void RenderMap();
 
 private:
   void extendMap_R();
@@ -39,7 +43,6 @@ private:
   void removeMap_L();
   void removeMap_D();
   void removeMap_U();
-  
 };
 
 #endif

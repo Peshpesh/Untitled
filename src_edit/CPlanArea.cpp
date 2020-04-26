@@ -7,8 +7,6 @@ CPlanArea::CPlanArea() {
 }
 
 void CPlanArea::OnInit()	{
-	// MapList.clear();
-  // DepthList.clear();
 	LayerList.clear();
 	AreaHeight = AreaWidth = 1;
 
@@ -26,7 +24,7 @@ void CPlanArea::GetDims(int& mW, int& mH)	{
 	mH = AreaHeight;
 }
 
-void CPlanArea::OnRender(const int& CameraX, const int& CameraY, const int& k) {
+void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag) {
   // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the
   // lowest k-index (height) being rendered first.
@@ -47,6 +45,7 @@ void CPlanArea::OnRender(const int& CameraX, const int& CameraY, const int& k) {
   //   return;
   // }
 
+	if (!visflag) return;
 	if (k < 0 || k >= LayerList.size()) {
 		CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
 		return;
@@ -61,23 +60,25 @@ void CPlanArea::OnRender(const int& CameraX, const int& CameraY, const int& k) {
   // of maps, which appears as a negative shift in Y
   // EX: A depth of 1 is a Yoffset of 32px; ID=0 for this depth should be
   // rendered as if it was placed at Y=-32px, NOT Y=0px.
-  int FirstID = -CameraX / MapW;
-  FirstID += ((-CameraY + Yoffset) / MapH) * AreaWidth;
+  int FirstID = -CamX / MapW;
+  FirstID += ((-CamY + Yoffset) / MapH) * AreaWidth;
 	// FirstID += Z * AreaWidth * AreaHeight;
 
   int maxMaps = 4;
 	int nMaps = AreaWidth * AreaHeight; // n of maps on a layer
 	int loopMax = (nMaps > maxMaps) ? maxMaps : nMaps;
-	// int loopMax = (MapList.size() > maxMaps) ? maxMaps : MapList.size();
 
   for (int i = 0; i < loopMax; i++) {
     int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
     if (ID < 0 || ID >= LayerList[k].MapList.size()) continue;
 
-    int X = ((ID % AreaWidth) * MapW) + CameraX;
-    int Y = ((ID / AreaWidth) * MapH) + CameraY - Yoffset;
+    int X = ((ID % AreaWidth) * MapW) + CamX;
+    int Y = ((ID / AreaWidth) * MapH) + CamY - Yoffset;
 
-    LayerList[k].MapList[ID].OnRender(X, Y);
+		// if (visflag & pvm_visflags::FILL)
+    if (visflag & pvm_visflags::MAP) LayerList[k].MapList[ID].OnRender(X, Y);
+		// if (visflag & pvm_visflags::SOLID)
+		// if (visflag & pvm_visflags::TYPE)
   }
 }
 

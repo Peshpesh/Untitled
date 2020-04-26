@@ -8,6 +8,15 @@
 // (ex: a wall that appears to have a base at Z=0 and a top at Z=2
 //      should have Z=2).
 
+namespace pvm_visflags {
+  enum {
+    MAP   = 0x01, //
+    SOLID = 0x02, //
+    TYPE  = 0x04, //
+    FILL  = 0x08, //
+  };
+}
+
 struct CPlanLayer {
   std::vector<CPlanMap> MapList;
   short Z;
@@ -29,6 +38,7 @@ private:
 	int	AreaWidth;		// width in Maps
 	int	AreaHeight;		// height in Maps
 
+public:
 	void OnInit();
 
 	void GetDims(int& mW, int& mH);
@@ -43,8 +53,8 @@ private:
 			param CameraY		:	Camera's Y position (increasing UP)
 			param bg			:	Flag to draw foreground or middleground
 	*/
-	// void 	OnRenderFill(int CameraX, int CameraY);
-	void	OnRender(const int& CameraX, const int& CameraY, const int& k);
+	// void 	OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
+	void	OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag);
 	// void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
 	// void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
 

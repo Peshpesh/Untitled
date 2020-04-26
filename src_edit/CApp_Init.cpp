@@ -42,6 +42,8 @@ bool CApp::OnInit()
 		return false;
 	}
 
+	CPlanArea::control.OnInit();
+
 	if (CEntityEditor::Control.OnInit() == false) {
 		CError::handler.ReportErr("FATAL => CEntityEditor failed to initialize.");
 		return false;

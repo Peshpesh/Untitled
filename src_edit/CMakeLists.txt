@@ -59,6 +59,10 @@ ${SRCDIR}/CModule.cpp
 ${SRCDIR}/COptions.cpp
 ${SRCDIR}/COptions_Ext.cpp
 ${SRCDIR}/CPlanArea.cpp
+${SRCDIR}/CPlanEditor.cpp
+${SRCDIR}/CPlanEditor_Event.cpp
+${SRCDIR}/CPlanEditor_Ext.cpp
+${SRCDIR}/CPlanEditor_Render.cpp
 ${SRCDIR}/CPlanMap.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryData.cpp
@@ -113,6 +117,7 @@ ${SRCDIR}/CModel.h
 ${SRCDIR}/CModule.h
 ${SRCDIR}/COptions.h
 ${SRCDIR}/CPlanArea.h
+${SRCDIR}/CPlanEditor.h
 ${SRCDIR}/CPlanMap.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h

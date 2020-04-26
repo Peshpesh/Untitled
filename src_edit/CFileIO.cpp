@@ -299,6 +299,7 @@ void CFileIO::addToPath(const char& addSym) {
 
 void CFileIO::newData() {
   CArea::control.OnInit();
+  CPlanArea::control.OnInit();
   CEntity::OnInit();
   CScenery::OnInit();
 
