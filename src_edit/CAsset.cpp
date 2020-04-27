@@ -136,8 +136,7 @@ SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 	return rect;
 }
 
-bool CAsset::drawAppFrame()
-{
+bool CAsset::drawAppFrame() {
   if (!CSurface::OnDraw(interface, WWIDTH, 0, WWIDTH, 0, EWIDTH - WWIDTH, EHEIGHT)) return false;
   if (!CSurface::OnDraw(interface, 0, WHEIGHT, 0, WHEIGHT, EWIDTH, EHEIGHT - WHEIGHT)) return false;
 

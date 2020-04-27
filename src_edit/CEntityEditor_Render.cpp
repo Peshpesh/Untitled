@@ -1,13 +1,15 @@
 #include "CEntityEditor.h"
 
 bool CEntityEditor::OnRender(const SDL_Point* m) {
-  bool no_intrpt = CInterrupt::isNone();
-
-  if (no_intrpt) {
+  if (CInterrupt::isNone()) {
     if (!drawWorkingEntity(m)) return false;
     if (!drawWorkingHitbox(m)) return false;
   }
-  if (!CAsset::drawAppFrame()) return false;
+  return true;
+}
+
+bool CEntityEditor::OnRenderSettings(const SDL_Point* m) {
+  bool no_intrpt = CInterrupt::isNone();
   if (!drawChEntity(m, no_intrpt)) return false;
   if (!drawEditHitbox(m, no_intrpt)) return false;
   if (!drawEntityList(m, no_intrpt)) return false;
@@ -16,9 +18,11 @@ bool CEntityEditor::OnRender(const SDL_Point* m) {
   if (!drawOpacHitbox()) return false;
   if (!drawSwitchView()) return false;
   if (!drawSwitchPlace()) return false;
+
   if (!no_intrpt) {
     if (!drawIntrpt(m)) return false;
   }
+
   return true;
 }
 

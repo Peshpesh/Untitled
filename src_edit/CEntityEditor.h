@@ -150,6 +150,7 @@ private:
 
 public:
   bool OnRender(const SDL_Point* m);
+  bool OnRenderSettings(const SDL_Point* m);
   bool drawEntities();
   bool drawWorkingEntity(const SDL_Point* m);
   bool drawWorkingHitbox(const SDL_Point* m);

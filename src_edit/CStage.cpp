@@ -44,12 +44,35 @@ void CStage::OnRender(const SDL_Point& m) {
     COptions::control.drawCameraLims();
 
     switch (CModule::control.active_mod) {
-      case MODIFY_MAP:			CEditMap::MapEditor.OnRender(&m); 		break;
-      case MODIFY_NPC:			CEntityEditor::Control.OnRender(&m); 	break;
-      case MODIFY_SCENE:		CSceneryEditor::control.OnRender(&m); break;
-      case MODIFY_SIM:			CSimulate::control.OnRender(&m); 			break;
-      case MODIFY_OPTIONS:	COptions::control.OnRender(&m);				break;
-      default:							break;
+      case MODIFY_MAP: {
+        CEditMap::MapEditor.OnRender(&m);
+        CAsset::drawAppFrame();
+        CEditMap::MapEditor.OnRenderSettings(&m);
+        break;
+      }
+      case MODIFY_NPC: {
+        CEntityEditor::Control.OnRender(&m);
+        CAsset::drawAppFrame();
+        CEntityEditor::Control.OnRenderSettings(&m);
+        break;
+      }
+      case MODIFY_SCENE: {
+        CSceneryEditor::control.OnRender(&m);
+        CAsset::drawAppFrame();
+        CSceneryEditor::control.OnRenderSettings(&m);
+        break;
+      }
+      case MODIFY_SIM: {
+        CAsset::drawAppFrame();
+        CSimulate::control.OnRender(&m);
+        break;
+      }
+      case MODIFY_OPTIONS: {
+        CAsset::drawAppFrame();
+        COptions::control.OnRender(&m);
+        break;
+      }
+      default: break;
     }
   } else {
 

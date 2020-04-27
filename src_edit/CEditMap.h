@@ -136,9 +136,10 @@ private:
 
 public:
   bool OnRender(const SDL_Point* mouse);
+  bool OnRenderSettings(const SDL_Point* mouse);
 
 private:
-  bool RenderWkspc(const SDL_Point* mouse);
+  // bool RenderWkspc(const SDL_Point* mouse);
   bool drawIntrpt(const SDL_Point* mouse);
   bool drawTileShadow(const SDL_Point* mouse, const SDL_Point* mapPos);
   bool drawPlaceDomain(const SDL_Point* mouse, const SDL_Point* mapPos);

@@ -65,12 +65,6 @@ bool CPlanMap::OnSave(FILE* fhandle) {
 	return true;
 }
 
-void CPlanMap::OnRenderFill(int MapX, int MapY) {
-	const SDL_Point* emptyCol = &palette::dark_gray;
-	SDL_Rect dstmap = {MapX, MapY, MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE};
-	CAsset::drawBoxFill(&dstmap, emptyCol);
-}
-
 void CPlanMap::OnRender(int MapX, int MapY) {
 	if (CTileset::TSControl.tileset == NULL) return;
 
@@ -92,6 +86,25 @@ void CPlanMap::OnRender(int MapX, int MapY) {
 			int tX = MapX + (X * TILE_SIZE);
 			int tY = MapY + (Y * TILE_SIZE);
 			CSurface::OnDraw(CTileset::TSControl.tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+			ID++;
+		}
+	}
+}
+
+void CPlanMap::OnRenderFill(int MapX, int MapY) {
+	if (CTileset::TSControl.grid_tileset == NULL) return;
+
+	int tset_w = CTileset::TSControl.grid_w; // tiles
+	int tset_h = CTileset::TSControl.grid_h; // tiles
+	int TilesetX = 0, TilesetY = 0;
+
+	// Render grid fill
+	int ID = 0;
+	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
+		for (int X = 0; X < MAP_WIDTH; X++) {
+			int tX = MapX + (X * TILE_SIZE);
+			int tY = MapY + (Y * TILE_SIZE);
+			CSurface::OnDraw(CTileset::TSControl.grid_tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
 			ID++;
 		}
 	}

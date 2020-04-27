@@ -11,22 +11,19 @@ bool CEditMap::RenderMap() {
 }
 
 bool CEditMap::OnRender(const SDL_Point* mouse) {
-	if (!RenderWkspc(mouse)) return false;
-	if (!CAsset::drawAppFrame()) return false;
-  if (!RenderSidebar(mouse)) return false;
-  if (!RenderBottom(mouse)) return false;
+	SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(*mouse);
+
+	if (!drawTileShadow(mouse, &mapPos)) return false;
+	if (!drawPlaceDomain(mouse, &mapPos)) return false;
+	if (!drawIntrpt(mouse)) return false;
 
   return true;
 }
 
-bool CEditMap::RenderWkspc(const SDL_Point* mouse) {
-	SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(*mouse);
-
-  if (!drawTileShadow(mouse, &mapPos)) return false;
-	if (!drawPlaceDomain(mouse, &mapPos)) return false;
-	if (!drawIntrpt(mouse)) return false;
-
-	return true;
+bool CEditMap::OnRenderSettings(const SDL_Point* mouse) {
+  if (!RenderSidebar(mouse)) return false;
+  if (!RenderBottom(mouse)) return false;
+  return true;
 }
 
 bool CEditMap::drawIntrpt(const SDL_Point* mouse) {

@@ -43,8 +43,9 @@ namespace {
 
 CTileset::CTileset() {
   succ = false;
-  tileset = type_tileset = coll_tileset = NULL;
+  tileset = grid_tileset = type_tileset = coll_tileset = NULL;
   ts_w = ts_h = 0;
+  grid_w = grid_h = 0;
   type_w = type_h = 0;
   coll_w = coll_h = 0;
   type_alpha = 215;
@@ -55,6 +56,13 @@ CTileset::CTileset() {
 
 bool CTileset::OnInit() {
   using namespace Tileset_ID;
+
+  if ((grid_tileset = CSurface::OnLoad("../res_edit/fillgrid.png")) == NULL) {
+    return false;
+  }
+
+  CAsset::queryTileDims(grid_tileset, grid_w, grid_h);
+
   if ((type_tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL) {
     return false;
   }

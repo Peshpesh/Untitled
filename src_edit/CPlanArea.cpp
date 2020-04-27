@@ -3,7 +3,7 @@
 CPlanArea CPlanArea::control;
 
 CPlanArea::CPlanArea() {
-  //
+  visflag = pvm_visflags::MAP | pvm_visflags::FILL;
 }
 
 void CPlanArea::OnInit()	{
@@ -24,7 +24,7 @@ void CPlanArea::GetDims(int& mW, int& mH)	{
 	mH = AreaHeight;
 }
 
-void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag) {
+void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k) {
   // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the
   // lowest k-index (height) being rendered first.
@@ -75,7 +75,7 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
     int X = ((ID % AreaWidth) * MapW) + CamX;
     int Y = ((ID / AreaWidth) * MapH) + CamY - Yoffset;
 
-		// if (visflag & pvm_visflags::FILL)
+		if (visflag & pvm_visflags::FILL) LayerList[k].MapList[ID].OnRenderFill(X, Y);
     if (visflag & pvm_visflags::MAP) LayerList[k].MapList[ID].OnRender(X, Y);
 		// if (visflag & pvm_visflags::SOLID)
 		// if (visflag & pvm_visflags::TYPE)

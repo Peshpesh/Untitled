@@ -19,8 +19,6 @@
 class CPlanEditor : public CEvent {
   CPlanEditor();
 
-  short visflag;
-
 public:
   static CPlanEditor control;
 

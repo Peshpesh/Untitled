@@ -107,8 +107,6 @@ void COptions::applyEdit(){
 bool COptions::OnRender(const SDL_Point* m){
   bool intrpt = !(CInterrupt::isNone());
 
-  if (!CAsset::drawAppFrame()) return false;
-
   if (!drawCameraOpts(intrpt ? NULL : m)) return false;
 
   if (intrpt && !drawIntrpt(m)) return false;

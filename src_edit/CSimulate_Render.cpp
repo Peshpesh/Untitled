@@ -3,8 +3,6 @@
 bool CSimulate::OnRender(const SDL_Point* m) {
   bool intrpt = !(CInterrupt::isNone());
 
-  if (!CAsset::drawAppFrame()) return false;
-
   if (!drawDebug()) return false;
   if (!drawMain(intrpt ? NULL : m)) return false;
   if (!drawCamera(intrpt ? NULL : m)) return false;

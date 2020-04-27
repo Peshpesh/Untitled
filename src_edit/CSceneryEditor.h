@@ -217,6 +217,7 @@ private:
 
 public:
   bool OnRender(const SDL_Point* m);
+  bool OnRenderSettings(const SDL_Point* m);
 
 private:
   bool drawWorkingScenery(const SDL_Point* m);

@@ -2,12 +2,16 @@
 
 bool CSceneryEditor::OnRender(const SDL_Point* m) {
   Font::FontControl.SetFont(FONT_MINI);
-  bool no_intrpt = CInterrupt::isNone();
-
-  if (no_intrpt) {
+  if (CInterrupt::isNone()) {
     if (!drawWorkingScenery(m)) return false;
   }
-  if (!CAsset::drawAppFrame()) return false;
+  return true;
+}
+
+bool CSceneryEditor::OnRenderSettings(const SDL_Point* m) {
+  Font::FontControl.SetFont(FONT_MINI);
+  bool no_intrpt = CInterrupt::isNone();
+
   if (!drawChScenery(no_intrpt ? m : NULL, no_intrpt)) return false;
   if (!drawChLayer(no_intrpt ? m : NULL, no_intrpt)) return false;
   if (!drawLayerBrief(no_intrpt ? m : NULL, no_intrpt)) return false;
@@ -19,6 +23,7 @@ bool CSceneryEditor::OnRender(const SDL_Point* m) {
   if (!drawSwitchPlace()) return false;
   if (!drawAnchor(no_intrpt ? m : NULL)) return false;
   if (!drawAnchDisplace(no_intrpt ? m : NULL)) return false;
+
   if (!no_intrpt) {
     if (!drawIntrpt(m)) return false;
   }
