@@ -53,7 +53,6 @@ public:
   void OnTerminate();
 
   bool changeTileset(const short& fID);
-  // bool changeTileset(const std::string& fname);
   bool changeTileset();
   void changeTypeAlpha(const int& a);
   void changeCollAlpha(const int& a);
@@ -61,8 +60,6 @@ public:
   void maxCollAlpha();
   void refreshTypeAlpha();
   void refreshCollAlpha();
-
-  // void resetPath();
 
   void OnEvent(SDL_Event* Event);
 
@@ -83,8 +80,6 @@ public:
   bool wasSuccess();
 
 private:
-  // void backPath();
-  // void addToPath(char addChar);
   void pushInform(const int& ID);
 };
 

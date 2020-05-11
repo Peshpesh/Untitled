@@ -59,29 +59,15 @@ namespace {
   const char* const oktext     = "OK";
   const char* const canceltext = "Cancel";
 
-  // const short title_w = canv_w - (cstrsiz * 2);
-  // const short title_h = 25;
-  // const short title_x = canv_x + cstrsiz;
-  // const short title_y = canv_y + cstrsiz;
-  // const SDL_Rect titleBox = {title_x,title_y,title_w,title_h};
-
-  // const SDL_Rect fnameBox       = {225,210,190,11};
-  // const SDL_Rect titleBox       = {225,193,190,16};
-  // const SDL_Rect infoBox        = {225,222,190,40};
-  // const SDL_Rect okButton       = {255,270,60,13};
-  // const SDL_Rect cancelButton   = {325,270,60,13};
   const SDL_Point* canvCol      = &palette::black;
-  const SDL_Point* fnameBoxCol  = &palette::white;
   const SDL_Point* optCol       = &palette::black;
   const SDL_Point* optHovCol    = &palette::light_indigo;
   const SDL_Point* activeCol    = &palette::dark_green;
   const SDL_Point* selectCol    = &palette::dark_red;
   const SDL_Point* bCol         = &palette::white;
   const SDL_Color* textCol      = &rgb::white;
-  const SDL_Color* fnameCol     = &rgb::dark_red;
   const char* const ts_path = "../res_edit/tile/";
   const char* const extension = ".png";
-  // const char* const title = "Change Tileset";
 
   const char* const inform[] = {
     "Cancelled.\nNo changes were made.",
@@ -110,8 +96,6 @@ CTileset::CTileset() {
   coll_w = coll_h = 0;
   type_alpha = 215;
   coll_alpha = 55;
-  // file = "";
-  // newF = "";
 }
 
 bool CTileset::OnInit() {
@@ -138,7 +122,6 @@ bool CTileset::OnInit() {
   CAsset::queryTileDims(coll_tileset, coll_w, coll_h);
 
   return changeTileset();
-  // return changeTileset(name[TS_DEFAULT]);
 }
 
 void CTileset::OnEvent(SDL_Event* Event) {
@@ -251,7 +234,6 @@ SDL_Rect CTileset::getTileSrcR(const int& ID) {
 }
 
 std::string CTileset::getFileName() {
-  // return file;
   return Tileset_ID::name[active_ID];
 }
 
@@ -296,7 +278,6 @@ bool CTileset::changeTileset(const short& ID) {
     tileset = try_surf;
     CAsset::queryTileDims(tileset, ts_w, ts_h);
     active_ID = select_ID = ID;
-    // file = name[ID];
   }
   else {
     succ = false;
@@ -304,24 +285,8 @@ bool CTileset::changeTileset(const short& ID) {
   return succ;
 }
 
-// bool CTileset::changeTileset(const std::string& fname) {
-//   return changeTileset(getFileID(fname));
-// }
-
 bool CTileset::changeTileset() {
   using namespace Tileset_ID;
-  // if (getFileID(newF) < 0) {
-  //   succ = false;
-  //   pushInform(I_NOTFOUND);
-  //   // resetPath();
-  //   return;
-  // }
-  // if (newF == file) {
-  //   succ = false;
-  //   pushInform(I_SAME);
-  //   // resetPath();
-  //   return;
-  // }
 
   if (select_ID < 0 || select_ID >= num) {
     succ = false;
@@ -344,7 +309,6 @@ bool CTileset::changeTileset() {
     tileset = try_surf;
     CAsset::queryTileDims(tileset, ts_w, ts_h);
     active_ID = select_ID;
-    // file = newF;
   }
   else {
     succ = false;
@@ -352,7 +316,6 @@ bool CTileset::changeTileset() {
     pushInform(I_FAIL);
   }
   return succ;
-  // resetPath();
 }
 
 void CTileset::changeTypeAlpha(const int& a) {
