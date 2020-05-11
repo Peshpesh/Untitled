@@ -3,27 +3,85 @@
 CTileset CTileset::TSControl;
 
 namespace {
-  const SDL_Rect canv           = {220,190,200,100};
-  const SDL_Rect fnameBox       = {225,210,190,11};
-  const SDL_Rect titleBox       = {225,193,190,16};
-  const SDL_Rect infoBox        = {225,222,190,40};
-  const SDL_Rect okButton       = {255,270,60,13};
-  const SDL_Rect cancelButton   = {325,270,60,13};
+  // full canvas dimensions
+  const short canv_w = 350;
+  const short canv_h = 200;
+  const short canv_x = (WWIDTH - canv_w) / 2;
+  const short canv_y = (WHEIGHT - canv_h) / 2;
+  const SDL_Rect canv = {canv_x,canv_y,canv_w,canv_h};
+
+  const short buff_w = 10;  // buffer width
+  const short buff_h = 10;  // buffer height
+  const short bstrsiz = 2;  // button stroke size
+  const short cstrsiz = 3;  // canvas stroke size
+
+  // information dimensions
+  const short info_w = 250;
+  const short info_h = 30;
+  const short info_x = canv_x + ((canv_w - info_w) / 2);
+  const short info_y = canv_y + buff_h;
+  const SDL_Rect infoBox = {info_x,info_y,info_w,info_h};
+  const char* const mainInfo = "NOTE\n\
+                                --------------------\n\
+                                Successfully changing the active \
+                                tileset will not reset the working area.\
+                                Old tile IDs will be carried over.";
+
+  // selected tileset fullname display dimensions
+  const short select_w = canv_w - (cstrsiz * 4);
+  const short select_h = 15;
+  const short select_x = canv_x + (cstrsiz * 2);
+  const short select_y = info_y + info_h + buff_h;
+  const SDL_Rect selectBox       = {select_x,select_y,select_w,select_h};
+  const SDL_Point* selectBoxCol  = &palette::white;
+  const SDL_Color* selectTextCol = &rgb::dark_red;
+
+  // option (and list) dimensions
+  const short opt_w = 80;
+  const short opt_h = 15;
+  const short opt_cols = 3;
+  const short opt_rows = 3;
+  const short optlist_w = (opt_w * opt_cols) + (buff_w * (opt_cols - 1));
+  const short optlist_h = (opt_h * opt_rows) + (buff_h * (opt_rows - 1));
+  const short optlist_x = canv_x + (canv_w - optlist_w) / 2;
+  const short optlist_y = select_y + select_h + (buff_h * 2);
+
+  // decision dimensions
+  const short dec_w         = 60;
+  const short dec_h         = 15;
+  const short n_dec         = 2;  // number of decisions
+  const short dec_buff      = (canv_w - (dec_w * n_dec)) / (n_dec + 1);
+  const short dec_y         = optlist_y + optlist_h + (buff_h * 2);
+  const short ok_x          = canv_x + dec_buff;
+  const short cancel_x      = ok_x + dec_w + dec_buff;
+  const SDL_Rect okBox      = {ok_x,dec_y,dec_w,dec_h};
+  const SDL_Rect cancelBox  = {cancel_x,dec_y,dec_w,dec_h};
+  const char* const oktext     = "OK";
+  const char* const canceltext = "Cancel";
+
+  // const short title_w = canv_w - (cstrsiz * 2);
+  // const short title_h = 25;
+  // const short title_x = canv_x + cstrsiz;
+  // const short title_y = canv_y + cstrsiz;
+  // const SDL_Rect titleBox = {title_x,title_y,title_w,title_h};
+
+  // const SDL_Rect fnameBox       = {225,210,190,11};
+  // const SDL_Rect titleBox       = {225,193,190,16};
+  // const SDL_Rect infoBox        = {225,222,190,40};
+  // const SDL_Rect okButton       = {255,270,60,13};
+  // const SDL_Rect cancelButton   = {325,270,60,13};
   const SDL_Point* canvCol      = &palette::black;
   const SDL_Point* fnameBoxCol  = &palette::white;
   const SDL_Point* optCol       = &palette::black;
   const SDL_Point* optHovCol    = &palette::light_indigo;
+  const SDL_Point* activeCol    = &palette::dark_green;
+  const SDL_Point* selectCol    = &palette::dark_red;
   const SDL_Point* bCol         = &palette::white;
   const SDL_Color* textCol      = &rgb::white;
   const SDL_Color* fnameCol     = &rgb::dark_red;
-  const short bstrsiz = 2;
-  const short cstrsiz = 3;
-  const char* const ts_path = "../res/tile/";
+  const char* const ts_path = "../res_edit/tile/";
   const char* const extension = ".png";
-  const char* const title = "Change Tileset";
-  const char* const mainInfo = "WARNING:\nSuccessfully changing the active tileset will reset the working Area and empty containers of entities and scenery.";
-  const char* const oktext = "OK";
-  const char* const canceltext = "Cancel";
+  // const char* const title = "Change Tileset";
 
   const char* const inform[] = {
     "Cancelled.\nNo changes were made.",
@@ -42,6 +100,8 @@ namespace {
 }
 
 CTileset::CTileset() {
+  active_ID = -1;
+  select_ID = Tileset_ID::TS_DEFAULT;
   succ = false;
   tileset = grid_tileset = type_tileset = coll_tileset = NULL;
   ts_w = ts_h = 0;
@@ -50,8 +110,8 @@ CTileset::CTileset() {
   coll_w = coll_h = 0;
   type_alpha = 215;
   coll_alpha = 55;
-  file = "";
-  newF = "";
+  // file = "";
+  // newF = "";
 }
 
 bool CTileset::OnInit() {
@@ -77,100 +137,106 @@ bool CTileset::OnInit() {
   SDL_SetTextureAlphaMod(coll_tileset, coll_alpha);
   CAsset::queryTileDims(coll_tileset, coll_w, coll_h);
 
-  return changeTileset(name[TS_DEFAULT]);
+  return changeTileset();
+  // return changeTileset(name[TS_DEFAULT]);
 }
 
 void CTileset::OnEvent(SDL_Event* Event) {
   CEvent::OnEvent(Event);
 }
 
-void CTileset::resetPath() {
-  newF.clear();
-}
-
-void CTileset::backPath() {
-  if (newF.size() > 0) newF.erase(newF.end()-1);
-}
-
-void CTileset::addToPath(char addChar) {
-  if (newF.size() < newF.max_size()) newF.push_back(addChar);
-}
-
 void CTileset::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   switch (sym) {
-    case SDLK_0:	addToPath('0');	break;
-    case SDLK_1:	addToPath('1');	break;
-    case SDLK_2:	addToPath('2');	break;
-    case SDLK_3:	addToPath('3');	break;
-    case SDLK_4:	addToPath('4');	break;
-    case SDLK_5:	addToPath('5');	break;
-    case SDLK_6:	addToPath('6');	break;
-    case SDLK_7:	addToPath('7');	break;
-    case SDLK_8:	addToPath('8');	break;
-    case SDLK_9:	addToPath('9');	break;
-    case SDLK_a:	addToPath('a');	break;
-    case SDLK_b:	addToPath('b');	break;
-    case SDLK_c:	addToPath('c');	break;
-    case SDLK_d:	addToPath('d');	break;
-    case SDLK_e:	addToPath('e');	break;
-    case SDLK_f:	addToPath('f');	break;
-    case SDLK_g:	addToPath('g');	break;
-    case SDLK_h:	addToPath('h');	break;
-    case SDLK_i:	addToPath('i');	break;
-    case SDLK_j:	addToPath('j');	break;
-    case SDLK_k:	addToPath('k');	break;
-    case SDLK_l:	addToPath('l');	break;
-    case SDLK_m:	addToPath('m');	break;
-    case SDLK_n:	addToPath('n');	break;
-    case SDLK_o:	addToPath('o');	break;
-    case SDLK_p:	addToPath('p');	break;
-    case SDLK_q:	addToPath('q');	break;
-    case SDLK_r:	addToPath('r');	break;
-    case SDLK_s:	addToPath('s');	break;
-    case SDLK_t:	addToPath('t');	break;
-    case SDLK_u:	addToPath('u');	break;
-    case SDLK_v:	addToPath('v');	break;
-    case SDLK_w:	addToPath('w');	break;
-    case SDLK_x:	addToPath('x');	break;
-    case SDLK_y:	addToPath('y');	break;
-    case SDLK_z:	addToPath('z');	break;
-    case SDLK_PERIOD: addToPath('.'); break;
-    case SDLK_MINUS: addToPath('-'); break;
-    case SDLK_UNDERSCORE: addToPath('_'); break;
-    case SDLK_BACKSPACE: backPath(); break;
-    case SDLK_RETURN: CInterrupt::removeFlag(INTRPT_CHANGE_TS); changeTileset(); break;
-    case SDLK_ESCAPE: CInterrupt::removeFlag(INTRPT_CHANGE_TS); succ = false; pushInform(I_CANCEL); resetPath(); break;
+    case SDLK_ESCAPE: {
+      CInterrupt::removeFlag(INTRPT_CHANGE_TS);
+      succ = false;
+      pushInform(I_CANCEL);
+      break;
+    }
     default: break;
   }
 }
 
 void CTileset::OnLButtonDown(int mX, int mY) {
   SDL_Point mouse = {mX, mY};
-  if (SDL_PointInRect(&mouse, &okButton)) {
+  if (pickTileset(mouse)) return;
+  if (SDL_PointInRect(&mouse, &okBox)) {
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
     changeTileset();
-  } else if (SDL_PointInRect(&mouse, &cancelButton)) {
+  } else if (SDL_PointInRect(&mouse, &cancelBox)) {
     succ = false;
     pushInform(I_CANCEL);
     CInterrupt::removeFlag(INTRPT_CHANGE_TS);
-    resetPath();
   }
 }
 
+bool CTileset::pickTileset(const SDL_Point& m) {
+  SDL_Rect optBox;
+  optBox.w = opt_w;
+  optBox.h = opt_h;
+
+  for (int j=0; j < opt_rows; j++) {
+    optBox.y = optlist_y + (j * (optBox.h + buff_h));
+    for (int i=0; i < opt_cols; i++) {
+      int ID = i + j * opt_cols;
+      if (ID < Tileset_ID::num) {
+        optBox.x = optlist_x + (i * (optBox.w + buff_w));
+        if (SDL_PointInRect(&m, &optBox)) {
+          select_ID = ID;
+          return true;
+        }
+      } else return false;
+    }
+  }
+  return false;
+}
+
 bool CTileset::OnRender(const SDL_Point* m) {
-  CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
-  CAsset::drawBoxFill(&fnameBox, fnameBoxCol);
-  CAsset::drawStrBox(&okButton, bstrsiz, SDL_PointInRect(m, &okButton) ? optHovCol : optCol, bCol);
-  CAsset::drawStrBox(&cancelButton, bstrsiz, SDL_PointInRect(m, &cancelButton) ? optHovCol : optCol, bCol);
+  using namespace Tileset_ID;
 
   Font::FontControl.SetFont(FONT_MINI);
-  Font::NewCenterWrite(title, &titleBox, textCol);
-  Font::NewCenterWrite(newF.c_str(), &fnameBox, fnameCol);
+  CAsset::drawStrBox(&canv, cstrsiz, canvCol, bCol);
   Font::NewCenterWrite(mainInfo, &infoBox, textCol);
-  Font::NewCenterWrite(oktext, &okButton, textCol);
-  Font::NewCenterWrite(canceltext, &cancelButton, textCol);
+
+  CAsset::drawBoxFill(&selectBox, selectBoxCol);
+  std::string selectLine = fullname[select_ID] + " map selected";
+  Font::NewCenterWrite(selectLine.c_str(), &selectBox, selectTextCol);
+
+  drawOptions(m);
+
+  CAsset::drawStrBox(&okBox, bstrsiz, SDL_PointInRect(m, &okBox) ? optHovCol : optCol, bCol);
+  Font::NewCenterWrite(oktext, &okBox, textCol);
+
+  CAsset::drawStrBox(&cancelBox, bstrsiz, SDL_PointInRect(m, &cancelBox) ? optHovCol : optCol, bCol);
+  Font::NewCenterWrite(canceltext, &cancelBox, textCol);
 
   return true;
+}
+
+void CTileset::drawOptions(const SDL_Point* m) {
+  using namespace Tileset_ID;
+
+  SDL_Rect optBox;
+  optBox.w = opt_w;
+  optBox.h = opt_h;
+
+  for (int j=0; j < opt_rows; j++) {
+    optBox.y = optlist_y + (j * (optBox.h + buff_h));
+    for (int i=0; i < opt_cols; i++) {
+      int ID = i + j * opt_cols;
+      if (ID < num) {
+        optBox.x = optlist_x + (i * (optBox.w + buff_w));
+
+        SDL_Point col = *optCol;
+        if (ID == active_ID) col = *activeCol;
+        else if (ID == select_ID) col = *selectCol;
+        else if (SDL_PointInRect(m, &optBox)) col = *optHovCol;
+
+        CAsset::drawStrBox(&optBox, bstrsiz, &col, bCol);
+        Font::NewCenterWrite(name[ID].c_str(), &optBox, textCol);
+      } else return;
+    }
+  }
 }
 
 SDL_Rect CTileset::getTileSrcR(const int& ID) {
@@ -185,11 +251,13 @@ SDL_Rect CTileset::getTileSrcR(const int& ID) {
 }
 
 std::string CTileset::getFileName() {
-  return file;
+  // return file;
+  return Tileset_ID::name[active_ID];
 }
 
 std::string CTileset::getFilePath() {
-  std::string filepath = ts_path + file + extension;
+  using namespace Tileset_ID;
+  std::string filepath = ts_path + name[active_ID] + extension;
   return filepath;
 }
 
@@ -205,57 +273,69 @@ short CTileset::getFileID(const std::string& fname) {
 }
 
 short CTileset::getFileID() {
-  return getFileID(file);
+  return getFileID(Tileset_ID::name[active_ID]);
 }
 
 bool CTileset::wasSuccess() {
   return succ;
 }
 
-bool CTileset::changeTileset(const short& fID) {
+bool CTileset::changeTileset(const short& ID) {
   using namespace Tileset_ID;
-  if (fID < 0 || fID >= num) {
+  if (ID < 0 || ID >= num) {
     succ = false;
     return succ;
   }
 
   SDL_Texture* try_surf = NULL;
-  std::string filepath = ts_path + name[fID] + extension;
+  std::string filepath = ts_path + name[ID] + extension;
 
   if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
     succ = true;
     SDL_DestroyTexture(tileset);
     tileset = try_surf;
     CAsset::queryTileDims(tileset, ts_w, ts_h);
-    file = name[fID];
+    active_ID = select_ID = ID;
+    // file = name[ID];
   }
   else {
     succ = false;
   }
-
   return succ;
 }
 
-bool CTileset::changeTileset(const std::string& fname) {
-  return changeTileset(getFileID(fname));
-}
+// bool CTileset::changeTileset(const std::string& fname) {
+//   return changeTileset(getFileID(fname));
+// }
 
-void CTileset::changeTileset() {
-  if (getFileID(newF) < 0) {
+bool CTileset::changeTileset() {
+  using namespace Tileset_ID;
+  // if (getFileID(newF) < 0) {
+  //   succ = false;
+  //   pushInform(I_NOTFOUND);
+  //   // resetPath();
+  //   return;
+  // }
+  // if (newF == file) {
+  //   succ = false;
+  //   pushInform(I_SAME);
+  //   // resetPath();
+  //   return;
+  // }
+
+  if (select_ID < 0 || select_ID >= num) {
     succ = false;
     pushInform(I_NOTFOUND);
-    resetPath();
-    return;
+    return succ;
   }
-  if (newF == file) {
+  if (active_ID == select_ID) {
     succ = false;
     pushInform(I_SAME);
-    resetPath();
-    return;
+    return succ;
   }
 
   SDL_Texture* try_surf = NULL;
-  std::string filepath = ts_path + newF + extension;
+  std::string filepath = ts_path + name[select_ID] + extension;
 
   if ((try_surf = CSurface::OnLoad(filepath.c_str())) != 0) {
     succ = true;
@@ -263,13 +343,16 @@ void CTileset::changeTileset() {
     SDL_DestroyTexture(tileset);
     tileset = try_surf;
     CAsset::queryTileDims(tileset, ts_w, ts_h);
-    file = newF;
+    active_ID = select_ID;
+    // file = newF;
   }
   else {
     succ = false;
+    select_ID = active_ID;
     pushInform(I_FAIL);
   }
-  resetPath();
+  return succ;
+  // resetPath();
 }
 
 void CTileset::changeTypeAlpha(const int& a) {
@@ -299,7 +382,7 @@ void CTileset::refreshCollAlpha() {
 }
 
 void CTileset::pushInform(const int& ID) {
-  if (ID < I_CANCEL || ID > I_FAIL) return;
+  if (ID < I_CANCEL || ID > I_NOTFOUND) return;
   CInform::InfoControl.pushInform(inform[ID]);
 }
 
