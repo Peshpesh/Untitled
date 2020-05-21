@@ -162,9 +162,9 @@ void CPlanMap::OnRenderColl(SDL_Texture* tileset, int MapX, int MapY) {
 	}
 }
 
-void CPlanMap::ChangeTile(int X, int Y, CPlanTile* NewTile, int useTiles) {
+void CPlanMap::changeTile(const int& X, const int& Y, const CPlanTile& tile, const int& useTiles) {
 	int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
-	if (useTiles & ENABLE_BG) 	TileList[ID].ID 		= NewTile->ID;
-	if (useTiles & ENABLE_TYPE)	TileList[ID].type 	= NewTile->type;
-	if (useTiles & ENABLE_COLL)	TileList[ID].solid 	= NewTile->solid;
+	if (useTiles & ENABLE_BG) 	TileList[ID].ID 		= tile.ID;
+	if (useTiles & ENABLE_TYPE)	TileList[ID].type 	= tile.type;
+	if (useTiles & ENABLE_COLL)	TileList[ID].solid 	= tile.solid;
 }

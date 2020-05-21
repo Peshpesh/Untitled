@@ -28,6 +28,6 @@ public:
 	void OnRenderType(SDL_Texture* tileset, int MapX, int MapY);
 	void OnRenderColl(SDL_Texture* tileset, int MapX, int MapY);
 
-	void ChangeTile(int X, int Y, CPlanTile* NewTile, int useTiles);
+	void changeTile(const int& X, const int& Y, const CPlanTile& tile, const int& useTiles);
 };
 #endif

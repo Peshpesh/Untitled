@@ -82,13 +82,24 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k) {
   }
 }
 
+void CPlanArea::changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles) {
+  if (X < 0 || Y < 0 || k < 0 \
+            || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
+            || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE) \
+            || k >= LayerList.size()) return;
+
+	int mapWidth = MAP_WIDTH * TILE_SIZE;
+	int mapHeight = MAP_HEIGHT * TILE_SIZE;
+	int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
+	LayerList[k].MapList[ID].changeTile(X % mapWidth, Y % mapHeight, tile, useTiles);
+}
+
 bool CPlanArea::OnLoad(char const* File)	{
 	// try to load area/maps
   std::string fpath = "../data/maps/";
   std::string ext = ".area";
   std::string fname = fpath + std::string(File) + ext;
 
-	// FILE* FileHandle = fopen(fname.c_str(), "r");
 	FILE* FileHandle = fopen(fname.c_str(), "rb");
 	if (FileHandle == NULL) {
 		CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open area file");

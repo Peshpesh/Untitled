@@ -23,7 +23,12 @@ public:
   std::string name;
 
   void OnEvent(SDL_Event* Event);
+  void OnEventPlatform(SDL_Event* Event);
+  void OnEventPlanview(SDL_Event* Event);
+
   void OnRender(const SDL_Point& m);
+  void OnRenderPlatform(const SDL_Point& m);
+  void OnRenderPlanview(const SDL_Point& m);
 };
 
 #endif

@@ -8,6 +8,11 @@ CStage::CStage() {
 }
 
 void CStage::OnEvent(SDL_Event* Event) {
+  if (!planview) OnEventPlatform(Event);
+  else OnEventPlanview(Event);
+}
+
+void CStage::OnEventPlatform(SDL_Event* Event) {
   switch (CModule::control.active_mod) {
     case MODIFY_MAP: CEditMap::MapEditor.OnEvent(Event); break;
     case MODIFY_NPC: CEntityEditor::Control.OnEvent(Event); break;
@@ -18,73 +23,81 @@ void CStage::OnEvent(SDL_Event* Event) {
   }
 }
 
+void CStage::OnEventPlanview(SDL_Event* Event) {
+  CPlanEditor::control.OnEvent(Event);
+}
+
 void CStage::OnRender(const SDL_Point& m) {
-  if (!planview) {
-    // Draw working background
-    CArea::control.OnRenderFill(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
+  if (!planview) OnRenderPlatform(m);
+  else OnRenderPlanview(m);
+}
 
-    int scn_N = CScenery::sceneryList.size();
+void CStage::OnRenderPlatform(const SDL_Point& m) {
+  // Draw working background
+  CArea::control.OnRenderFill(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
-    // Draw background scenery
-    CSceneryEditor::control.drawBackground(scn_N);
+  int scn_N = CScenery::sceneryList.size();
 
-    // Draw the working area
-    CEditMap::MapEditor.RenderMap();
+  // Draw background scenery
+  CSceneryEditor::control.drawBackground(scn_N);
 
-    // Draw the entities in the area
-    CEntityEditor::Control.drawEntities();
+  // Draw the working area
+  CEditMap::MapEditor.RenderMap();
 
-    // Draw simulation Entity
-    CSimulate::control.drawHero();
+  // Draw the entities in the area
+  CEntityEditor::Control.drawEntities();
 
-    // Draw foreground scenery
-    CSceneryEditor::control.drawForeground(scn_N);
+  // Draw simulation Entity
+  CSimulate::control.drawHero();
 
-    // Draw camera limits
-    COptions::control.drawCameraLims();
+  // Draw foreground scenery
+  CSceneryEditor::control.drawForeground(scn_N);
 
-    switch (CModule::control.active_mod) {
-      case MODIFY_MAP: {
-        CEditMap::MapEditor.OnRender(&m);
-        CAsset::drawAppFrame();
-        CEditMap::MapEditor.OnRenderSettings(&m);
-        break;
-      }
-      case MODIFY_NPC: {
-        CEntityEditor::Control.OnRender(&m);
-        CAsset::drawAppFrame();
-        CEntityEditor::Control.OnRenderSettings(&m);
-        break;
-      }
-      case MODIFY_SCENE: {
-        CSceneryEditor::control.OnRender(&m);
-        CAsset::drawAppFrame();
-        CSceneryEditor::control.OnRenderSettings(&m);
-        break;
-      }
-      case MODIFY_SIM: {
-        CAsset::drawAppFrame();
-        CSimulate::control.OnRender(&m);
-        break;
-      }
-      case MODIFY_OPTIONS: {
-        CAsset::drawAppFrame();
-        COptions::control.OnRender(&m);
-        break;
-      }
-      default: break;
+  // Draw camera limits
+  COptions::control.drawCameraLims();
+
+  switch (CModule::control.active_mod) {
+    case MODIFY_MAP: {
+      CEditMap::MapEditor.OnRender(&m);
+      CAsset::drawAppFrame();
+      CEditMap::MapEditor.OnRenderSettings(&m);
+      break;
     }
-  } else {
-
-    CPlanEditor::control.RenderMap();
-
-    switch (CModule::control.active_mod) {
-      case MODIFY_MAP:			CPlanEditor::control.OnRender(m);    break;
-      // case MODIFY_NPC:			CEntityEditor::Control.OnRender(&m); 	break;
-      // case MODIFY_SCENE:		CSceneryEditor::control.OnRender(&m); break;
-      // case MODIFY_SIM:			CSimulate::control.OnRender(&m); 			break;
-      // case MODIFY_OPTIONS:	COptions::control.OnRender(&m);				break;
-      default:							break;
+    case MODIFY_NPC: {
+      CEntityEditor::Control.OnRender(&m);
+      CAsset::drawAppFrame();
+      CEntityEditor::Control.OnRenderSettings(&m);
+      break;
     }
+    case MODIFY_SCENE: {
+      CSceneryEditor::control.OnRender(&m);
+      CAsset::drawAppFrame();
+      CSceneryEditor::control.OnRenderSettings(&m);
+      break;
+    }
+    case MODIFY_SIM: {
+      CAsset::drawAppFrame();
+      CSimulate::control.OnRender(&m);
+      break;
+    }
+    case MODIFY_OPTIONS: {
+      CAsset::drawAppFrame();
+      COptions::control.OnRender(&m);
+      break;
+    }
+    default: break;
+  }
+}
+
+void CStage::OnRenderPlanview(const SDL_Point& m) {
+  CPlanEditor::control.RenderMap();
+
+  switch (CModule::control.active_mod) {
+    case MODIFY_MAP:			CPlanEditor::control.OnRender(m);    break;
+    // case MODIFY_NPC:			CEntityEditor::Control.OnRender(&m); 	break;
+    // case MODIFY_SCENE:		CSceneryEditor::control.OnRender(&m); break;
+    // case MODIFY_SIM:			CSimulate::control.OnRender(&m); 			break;
+    // case MODIFY_OPTIONS:	COptions::control.OnRender(&m);				break;
+    default:							break;
   }
 }

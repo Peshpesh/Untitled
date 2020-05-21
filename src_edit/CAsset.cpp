@@ -148,6 +148,11 @@ bool CAsset::inWorkspace(const SDL_Point* pos)
   return (pos->x >= 0 && pos->x < WWIDTH && pos->y >= 0 && pos->y < WHEIGHT);
 }
 
+bool CAsset::inWorkspace(const SDL_Point& pos)
+{
+  return (pos.x >= 0 && pos.x < WWIDTH && pos.y >= 0 && pos.y < WHEIGHT);
+}
+
 bool CAsset::inWorkspace(const int& x, const int& y)
 {
   return (x >= 0 && x < WWIDTH && y >= 0 && y < WHEIGHT);

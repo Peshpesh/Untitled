@@ -10,16 +10,17 @@
 
 namespace pvm_visflags {
   enum {
-    MAP   = 0x01, //
-    SOLID = 0x02, //
-    TYPE  = 0x04, //
-    FILL  = 0x08, //
+    MAP   = 0x01, // show "visible" map tiles
+    SOLID = 0x02, // show whether tiles are solid or not
+    TYPE  = 0x04, // show tile types
+    FILL  = 0x08, // fill void tiles
   };
 }
 
 struct CPlanLayer {
   std::vector<CPlanMap> MapList;
   short Z;
+  CPlanLayer(): Z(0) {};
 };
 
 class CPlanArea {
@@ -75,14 +76,7 @@ public:
 	// bool	OnReduceUp();
 	// void	OnReduceDown();
 
-	// void 	ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
-
-  /*	Loads an area, or set of maps, from an existing area file.
-      param File			:	Area file name
-      param renderer	:	Renderer for the area.
-      Renderer is used in a call to CSurface to load
-      a tileset, which needs the renderer in use.
-  */
+	void 	changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles);
   bool 	OnLoad(char const* File);
   bool	OnSave(char const* File);
 
