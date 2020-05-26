@@ -469,8 +469,8 @@ bool CEditMap::handleType(const SDL_Point* mouse, CTile* EditTile) {
   int k = 0;
   for (int j = 0; j < CTileset::TSControl.type_h; j++) {
     for (int i = 0; i < CTileset::TSControl.type_w; i++) {
-      targetR.x = ty_pos.x + ((k % ty_w) * (ty_t_size + co_spac));
-      targetR.y = ty_pos.y + ((k / ty_w) * (ty_t_size + co_spac));
+      targetR.x = ty_pos.x + ((k % ty_w) * (ty_t_size + ty_spac));
+      targetR.y = ty_pos.y + ((k / ty_w) * (ty_t_size + ty_spac));
       if (SDL_PointInRect(mouse, &targetR)) {
         EditTile->TypeID = k;
         return true;

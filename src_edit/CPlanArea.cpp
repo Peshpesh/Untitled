@@ -3,7 +3,7 @@
 CPlanArea CPlanArea::control;
 
 CPlanArea::CPlanArea() {
-  visflag = pvm_visflags::MAP | pvm_visflags::FILL;
+  //
 }
 
 void CPlanArea::OnInit()	{
@@ -24,7 +24,7 @@ void CPlanArea::GetDims(int& mW, int& mH)	{
 	mH = AreaHeight;
 }
 
-void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k) {
+void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag) {
   // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the
   // lowest k-index (height) being rendered first.

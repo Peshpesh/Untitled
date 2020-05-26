@@ -38,7 +38,6 @@ private:
   // std::vector<short>  DepthList;  // list of layer depths
 	int	AreaWidth;		// width in Maps
 	int	AreaHeight;		// height in Maps
-  short visflag;    // bitwise flag for rendering map & its attributes
 
 public:
 	void OnInit();
@@ -56,7 +55,7 @@ public:
 			param bg			:	Flag to draw foreground or middleground
 	*/
 	// void 	OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
-	void	OnRender(const int& CamX, const int& CamY, const int& k);
+	void	OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag);
 	// void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
 	// void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
 

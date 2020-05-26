@@ -17,6 +17,11 @@ void CInterrupt::appendFlag(int flag)
   handle |= flag;
 }
 
+void CInterrupt::toggleFlag(int flag)
+{
+  handle ^= flag;
+}
+
 void CInterrupt::resetFlags()
 {
   handle = INTRPT_NONE;

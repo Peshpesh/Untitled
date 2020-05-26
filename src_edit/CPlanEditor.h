@@ -19,7 +19,8 @@
 class CPlanEditor : public CEvent {
   CPlanEditor();
 
-  int onTiles; // bitwise flag for tiles to place
+  short visflag;    // bitwise flag for rendering map & its attributes
+  int placeflag; // bitwise flag for tiles to place
   CPlanTile workTile;
   int Z;
 
@@ -41,6 +42,11 @@ private:
   bool handlePlaceTile(const SDL_Point& m);
   void placeTile(const int& x, const int& y);
 
+  bool handleVisOpts(const SDL_Point& m);
+  bool handlePlaceOpts(const SDL_Point& m);
+  bool handleSolidOpts(const SDL_Point& m);
+  bool handleTypeOpts(const SDL_Point& m);
+
 private:
   void extendMap_R();
   void extendMap_L();
@@ -52,7 +58,10 @@ private:
   void removeMap_U();
 
 private:
-  bool drawVisOpts(const SDL_Point& m);
+  bool drawVisOpts();
+  bool drawPlaceOpts();
+  bool drawSolidOpts();
+  bool drawTypeOpts();
 };
 
 namespace pvmEditor {
@@ -61,8 +70,10 @@ namespace pvmEditor {
   extern const SDL_Point* hov_col;
   extern const SDL_Point* on_col;
   extern const SDL_Point* off_col;
+  extern const SDL_Color* btn_fcol;
   namespace visOpts {
     extern const short nOpts;
+    extern const short opts[];
     extern const short w;
     extern const short h;
     extern const short opt_h;
@@ -70,18 +81,40 @@ namespace pvmEditor {
     extern const short y;
     extern const SDL_Rect title_r;
     extern const SDL_Rect buttons[];
+    extern const SDL_Color* title_fcol;
     extern const char* const title;
     extern const char* const labels[];
   }
-  // namespace placeOpts {
-  //   extern const short x;
-  //   extern const short y;
-  //   extern const short bw;
-  //   extern const short bh;
-  //   extern const short nOpts;
-  //   extern const SDL_Rect buttons[];
-  //   extern const char* const labels[];
-  // }
+  namespace placeOpts {
+    extern const short nOpts;
+    extern const short opts[];
+    extern const short w;
+    extern const short h;
+    extern const short opt_h;
+    extern const short x;
+    extern const short y;
+    extern const SDL_Rect title_r;
+    extern const SDL_Rect buttons[];
+    extern const SDL_Color* title_fcol;
+    extern const char* const title;
+    extern const char* const labels[];
+  }
+  namespace solidOpts {
+    extern const short w;
+    extern const short h;
+    extern const short x;
+    extern const short y;
+    extern const SDL_Rect button;
+    extern const char* const labels[];
+  }
+  namespace typeOpts {
+    extern const short type_sz;
+    extern const short cols;
+    extern const short spac;
+    // extern const short x;
+    // extern const short y;
+    extern const SDL_Point pos;
+  }
 } // planview map editor namespaces //
 
 #endif
