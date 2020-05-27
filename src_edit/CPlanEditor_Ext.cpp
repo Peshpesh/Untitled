@@ -7,6 +7,20 @@ namespace pvmEditor {
   const SDL_Point* on_col  = &palette::green;       // default button-on color
   const SDL_Point* off_col = &palette::red;         // default button-off color
   const SDL_Color* btn_fcol = &rgb::black;          // default button text color
+  namespace tileOpts {
+    const short w = 80;
+    const short tset_h = 32;  // height of change-tileset button
+    const short tile_h = 16;  // height of change-tile button
+    const short spac = 4; // spacing between buttons
+    const short x = 180;
+    const short tset_y = WHEIGHT + ((EHEIGHT - WHEIGHT) - (tset_h + tile_h + spac)) / 2;
+    const short tile_y = tset_y + tset_h + spac;
+    const SDL_Rect ts_button = CAsset::getRect(x, tset_y, w, tset_h);
+    const SDL_Rect tile_button = CAsset::getRect(x, tile_y, w, tile_h);
+    const SDL_Color* title_fcol = &rgb::black;
+    const char* const ts_title = "Change Tileset";
+    const char* const tile_title = "Select Tile";
+  }
   namespace visOpts {
     const short nOpts = 4;    // number of visible-module options
     const short opts[] = {
@@ -74,5 +88,6 @@ namespace pvmEditor {
     const short x = WWIDTH + ((EWIDTH - WWIDTH - (type_sz * cols) - (spac * (cols - 1))) / 2);
     const short y = WHEIGHT - 100;
     const SDL_Point pos = CAsset::getPos(x, y);
+    const SDL_Point* hl_col = &palette::red;
   }
 } // planview map editor namespaces //

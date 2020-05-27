@@ -42,10 +42,15 @@ private:
   bool handlePlaceTile(const SDL_Point& m);
   void placeTile(const int& x, const int& y);
 
+  bool handleTileOpts(const SDL_Point& m);
   bool handleVisOpts(const SDL_Point& m);
   bool handlePlaceOpts(const SDL_Point& m);
   bool handleSolidOpts(const SDL_Point& m);
   bool handleTypeOpts(const SDL_Point& m);
+
+  bool handleInterr(SDL_Event* Event);
+  void changeTileset(SDL_Event* Event);
+  void changeTile(SDL_Event* Event);
 
 private:
   void extendMap_R();
@@ -58,10 +63,12 @@ private:
   void removeMap_U();
 
 private:
+  bool drawTileOpts(const SDL_Point* m);
   bool drawVisOpts();
   bool drawPlaceOpts();
   bool drawSolidOpts();
   bool drawTypeOpts();
+  bool drawInterr(const SDL_Point& m);
 };
 
 namespace pvmEditor {
@@ -71,6 +78,13 @@ namespace pvmEditor {
   extern const SDL_Point* on_col;
   extern const SDL_Point* off_col;
   extern const SDL_Color* btn_fcol;
+  namespace tileOpts {
+    extern const SDL_Rect ts_button;
+    extern const SDL_Rect tile_button;
+    extern const SDL_Color* title_fcol;
+    extern const char* const ts_title;
+    extern const char* const tile_title;
+  }
   namespace visOpts {
     extern const short nOpts;
     extern const short opts[];
@@ -114,6 +128,7 @@ namespace pvmEditor {
     // extern const short x;
     // extern const short y;
     extern const SDL_Point pos;
+    extern const SDL_Point* hl_col;
   }
 } // planview map editor namespaces //
 

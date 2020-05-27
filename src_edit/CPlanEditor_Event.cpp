@@ -1,7 +1,7 @@
 #include "CPlanEditor.h"
 
 void CPlanEditor::OnEvent(SDL_Event* Event) {
-  // if (handleInterr(Event)) return;
+  if (handleInterr(Event)) return;
   CEvent::OnEvent(Event);
 }
 
@@ -10,10 +10,11 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
   if (CAsset::inWorkspace(m)) {
     if (handlePlaceTile(m)) return;
   } else {
+    if (handleTileOpts(m))  return;
     if (handleSolidOpts(m)) return;
-    if (handleTypeOpts(m)) return;
+    if (handleTypeOpts(m))  return;
     if (handlePlaceOpts(m)) return;
-    if (handleVisOpts(m)) return;
+    if (handleVisOpts(m))   return;
   }
 }
 
@@ -29,6 +30,26 @@ bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
 
 void CPlanEditor::placeTile(const int& x, const int &y) {
   CPlanArea::control.changeTile(x, y, Z, workTile, placeflag);
+}
+
+bool CPlanEditor::handleTileOpts(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace tileOpts;
+
+  // Click on "Change Tileset" button. This displays a prompt to change tilesets,
+  // and the function within the loop performs a change if requested.
+  if (SDL_PointInRect(&m, &ts_button)) {
+    CInterrupt::appendFlag(INTRPT_CHANGE_TS);
+    return true;
+  }
+  // Click on "Change Tile" button. A display of all tiles is rendered,
+  // and clicking a tile will update the active tile to use the clicked tile.
+  if (SDL_PointInRect(&m, &tile_button)) {
+      CChangeTile::PickTile.Init(CTileset::TSControl.ts_w, CTileset::TSControl.ts_h);
+      CInterrupt::appendFlag(INTRPT_CHANGE_BG);
+      return true;
+  }
+  return false;
 }
 
 bool CPlanEditor::handleVisOpts(const SDL_Point& m) {
@@ -118,4 +139,36 @@ void CPlanEditor::removeMap_D() {
 
 void CPlanEditor::removeMap_U() {
 
+}
+
+//=======================//
+// Interruption handling //
+//=======================//
+
+bool CPlanEditor::handleInterr(SDL_Event* Event) {
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG)) {
+    changeTile(Event);
+    return true;
+  }
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
+    changeTileset(Event);
+    return true;
+  }
+  return false;
+}
+
+void CPlanEditor::changeTileset(SDL_Event* Event) {
+  CTileset::TSControl.OnEvent(Event);
+
+  if (CInterrupt::isFlagOff(INTRPT_CHANGE_TS) && CTileset::TSControl.wasSuccess()) {
+    workTile.ID = -1;
+  }
+}
+
+void CPlanEditor::changeTile(SDL_Event* Event) {
+  CChangeTile::PickTile.OnEvent(Event);
+
+  if (CInterrupt::isFlagOff(INTRPT_CHANGE_BG)) {
+    CChangeTile::PickTile.reqChange(workTile.ID);
+  }
 }

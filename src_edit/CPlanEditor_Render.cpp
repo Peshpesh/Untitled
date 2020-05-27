@@ -5,11 +5,14 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
   if (!CAsset::drawAppFrame()) return false;
   // if (!RenderSidebar(mouse)) return false;
   // if (!RenderBottom(mouse)) return false;
-
-  if (!drawVisOpts()) return false;
+  bool interr = !(CInterrupt::isNone());
+  // if (!drawTileOpts(&m)) return false;
+  if (!drawTileOpts(interr ? NULL : &m)) return false;
+  if (!drawVisOpts())   return false;
   if (!drawPlaceOpts()) return false;
   if (!drawSolidOpts()) return false;
-  if (!drawTypeOpts()) return false;
+  if (!drawTypeOpts())  return false;
+  if (!drawInterr(m))   return false;
   return true;
 }
 
@@ -18,6 +21,31 @@ void CPlanEditor::RenderMap() {
   for (int k = 0; k < CPlanArea::control.LayerList.size(); k++) {
     CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(), k, visflag);
   }
+}
+
+bool CPlanEditor::drawTileOpts(const SDL_Point* m) {
+  using namespace pvmEditor;
+  using namespace tileOpts;
+  if (m) {
+    if (!CAsset::drawStrBox(&ts_button, stroke_sz,
+        CInterrupt::isFlagOn(INTRPT_CHANGE_TS) ? on_col :
+        SDL_PointInRect(m, &ts_button) ? hov_col : btn_col)) return false;
+
+    if (!CAsset::drawStrBox(&tile_button, stroke_sz,
+        CInterrupt::isFlagOn(INTRPT_CHANGE_BG) ? on_col :
+        SDL_PointInRect(m, &tile_button) ? hov_col : btn_col)) return false;
+  } else {
+    if (!CAsset::drawStrBox(&ts_button, stroke_sz,
+        CInterrupt::isFlagOn(INTRPT_CHANGE_TS) ? on_col : btn_col)) return false;
+
+    if (!CAsset::drawStrBox(&tile_button, stroke_sz,
+        CInterrupt::isFlagOn(INTRPT_CHANGE_BG) ? on_col : btn_col)) return false;
+  }
+
+  Font::NewCenterWrite(ts_title, &ts_button, title_fcol);
+  Font::NewCenterWrite(tile_title, &tile_button, title_fcol);
+
+  return true;
 }
 
 bool CPlanEditor::drawVisOpts() {
@@ -63,7 +91,6 @@ bool CPlanEditor::drawTypeOpts() {
   using namespace typeOpts;
 
   CTileset::TSControl.maxTypeAlpha();
-
   SDL_Rect dstR = {0, 0, type_sz, type_sz};
   int k = 0;
   for (int j = 0; j < CTileset::TSControl.type_h; j++) {
@@ -75,11 +102,25 @@ bool CPlanEditor::drawTypeOpts() {
       dstR.y = pos.y + ((k / cols) * (type_sz + spac));
       CSurface::OnDraw(CTileset::TSControl.type_tileset, &srcR, &dstR);
       if (k == workTile.type) {
-        CAsset::drawBox(&dstR, &palette::red);
+        CAsset::drawBox(&dstR, hl_col);
       }
       k++;
     }
   }
   CTileset::TSControl.refreshTypeAlpha();
   return true;
+}
+
+
+bool CPlanEditor::drawInterr(const SDL_Point& m) {
+	if (!CInterrupt::isNone()) {
+		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG)) {
+			if (!CChangeTile::PickTile.OnRender(&m)) return false;
+			// CChangeTile::PickTile.hilightID(TileTL.bg_ID, TileTR.bg_ID, TileBL.bg_ID, TileBR.bg_ID);
+		}
+		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
+			if (!CTileset::TSControl.OnRender(&m)) return false;
+		}
+	}
+	return true;
 }
