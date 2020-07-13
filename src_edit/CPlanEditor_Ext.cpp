@@ -12,14 +12,31 @@ namespace pvmEditor {
     const short tset_h = 32;  // height of change-tileset button
     const short tile_h = 16;  // height of change-tile button
     const short spac = 4; // spacing between buttons
-    const short x = 180;
-    const short tset_y = WHEIGHT + ((EHEIGHT - WHEIGHT) - (tset_h + tile_h + spac)) / 2;
+    // const short x = 180;
+    const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
+    // const short tset_y = WHEIGHT + ((EHEIGHT - WHEIGHT) - (tset_h + tile_h + spac)) / 2;
+    // const short tile_y = tset_y + tset_h + spac;
+    const short tset_y = 20;
     const short tile_y = tset_y + tset_h + spac;
     const SDL_Rect ts_button = CAsset::getRect(x, tset_y, w, tset_h);
     const SDL_Rect tile_button = CAsset::getRect(x, tile_y, w, tile_h);
     const SDL_Color* title_fcol = &rgb::black;
     const char* const ts_title = "Change Tileset";
     const char* const tile_title = "Select Tile";
+  }
+  namespace layerOpts {
+    const short w = 80;
+    const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
+    const short h = 32;
+    const short spac = 4;
+    const short add_y = 90;
+    const short del_y = add_y + h + spac;
+    const SDL_Rect add_button = CAsset::getRect(x, add_y, w, h);
+    const SDL_Rect del_button = CAsset::getRect(x, del_y, w, h);
+    // const SDL_Rect sel_button;
+    // const SDL_Rect edt_button;
+    const char* const add_str = "Create\nlayer";
+    const char* const del_str = "Delete\nLayer";
   }
   namespace visOpts {
     const short nOpts = 4;    // number of visible-module options
@@ -32,8 +49,10 @@ namespace pvmEditor {
     const short w = 64;      // visible-module width
     const short h = 80;
     const short opt_h = h / (nOpts + 1);
-    const short x = 20;
-    const short y = WHEIGHT + ((EHEIGHT - WHEIGHT) - h) / 2;
+    // const short x = 20;
+    // const short y = WHEIGHT + ((EHEIGHT - WHEIGHT) - h) / 2;
+    const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
+    const short y = 180;
     const SDL_Rect title_r = CAsset::getRect(x, y, w, opt_h);
     const SDL_Rect buttons[] = {
       CAsset::getRect(x, y + opt_h, w, opt_h),
@@ -57,8 +76,10 @@ namespace pvmEditor {
     const short w = 64;
     const short h = 64;
     const short opt_h = h / (nOpts + 1);
-    const short x = 100;
-    const short y = WHEIGHT + ((EHEIGHT - WHEIGHT) - h) / 2;
+    // const short x = 100;
+    // const short y = WHEIGHT + ((EHEIGHT - WHEIGHT) - h) / 2;
+    const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
+    const short y = 270;
     const SDL_Rect title_r = CAsset::getRect(x, y, w, opt_h);
     const SDL_Rect buttons[] = {
       CAsset::getRect(x, y + opt_h, w, opt_h),

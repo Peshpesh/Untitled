@@ -22,7 +22,7 @@ class CPlanEditor : public CEvent {
   short visflag;    // bitwise flag for rendering map & its attributes
   int placeflag; // bitwise flag for tiles to place
   CPlanTile workTile;
-  int Z;
+  int k;
 
 public:
   static CPlanEditor control;
@@ -43,6 +43,7 @@ private:
   void placeTile(const int& x, const int& y);
 
   bool handleTileOpts(const SDL_Point& m);
+  bool handleLayerOpts(const SDL_Point& m);
   bool handleVisOpts(const SDL_Point& m);
   bool handlePlaceOpts(const SDL_Point& m);
   bool handleSolidOpts(const SDL_Point& m);
@@ -51,6 +52,8 @@ private:
   bool handleInterr(SDL_Event* Event);
   void changeTileset(SDL_Event* Event);
   void changeTile(SDL_Event* Event);
+  void addLayer(SDL_Event* Event);
+  void deleteLayer(SDL_Event* Event);
 
 private:
   void extendMap_R();
@@ -64,11 +67,15 @@ private:
 
 private:
   bool drawTileOpts(const SDL_Point* m);
+  bool drawLayerOpts(const SDL_Point* m);
   bool drawVisOpts();
   bool drawPlaceOpts();
   bool drawSolidOpts();
   bool drawTypeOpts();
+
   bool drawInterr(const SDL_Point& m);
+  bool drawAddLayer(const SDL_Point& m);
+  bool drawDelLayer(const SDL_Point& m);
 };
 
 namespace pvmEditor {
@@ -84,6 +91,14 @@ namespace pvmEditor {
     extern const SDL_Color* title_fcol;
     extern const char* const ts_title;
     extern const char* const tile_title;
+  }
+  namespace layerOpts {
+    extern const SDL_Rect add_button;
+    extern const SDL_Rect del_button;
+    // extern const SDL_Rect sel_button;
+    // extern const SDL_Rect edt_button;
+    extern const char* const add_str;
+    extern const char* const del_str;
   }
   namespace visOpts {
     extern const short nOpts;

@@ -14,10 +14,12 @@ enum interrupts
   INTRPT_MODIFY_HB  = 0x00000080,   // modify primary hitbox within active entity group
   INTRPT_GRAB_ANCH  = 0x00000100,   // click on scenery (grab) to use as anchor for placement
   INTRPT_MAKE_ANCH  = 0x00000200,   // click on map, use point as anchor for placement
-  INTRPT_NEW        = 0x00000400,   // reset stage prompt
-  INTRPT_LOAD       = 0x00000800,   // load stage prompt
-  INTRPT_SAVE       = 0x00001000,   // save stage prompt
-  INTRPT_EXIT       = 0x00002000,   // escape program (exit)
+  INTRPT_ADD_LAYER  = 0x00000400,   // add planview map layer
+  INTRPT_DEL_LAYER  = 0x00000800,   // delete planview map layer
+  INTRPT_NEW        = 0x00001000,   // reset stage prompt
+  INTRPT_LOAD       = 0x00002000,   // load stage prompt
+  INTRPT_SAVE       = 0x00004000,   // save stage prompt
+  INTRPT_EXIT       = 0x00008000,   // escape program (exit)
 };
 
 class CInterrupt {

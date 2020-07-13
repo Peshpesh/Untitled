@@ -110,52 +110,63 @@ void CPlanMap::OnRenderFill(int MapX, int MapY) {
 	}
 }
 
-void CPlanMap::OnRenderType(SDL_Texture* tileset, int MapX, int MapY) {
-	if (tileset == NULL) return;
+void CPlanMap::OnRenderType(int MapX, int MapY) {
+	// if (CTileset::TSControl.grid_tileset == NULL) return;
+	//
+	// int tset_w = CTileset::TSControl.grid_w; // tiles
+	// int tset_h = CTileset::TSControl.grid_h; // tiles
+	// int TilesetX = 0, TilesetY = 0;
+	//
+	// // Render grid fill
+	// int ID = 0;
+	// for (int Y = 0; Y < MAP_HEIGHT; Y++) {
+	// 	for (int X = 0; X < MAP_WIDTH; X++) {
+	// 		int tX = MapX + (X * TILE_SIZE);
+	// 		int tY = MapY + (Y * TILE_SIZE);
+	// 		CSurface::OnDraw(CTileset::TSControl.grid_tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+	// 		ID++;
+	// 	}
+	// }
 
-	int PixWidth;
-	int PixHeight;
 
-	SDL_QueryTexture(tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	int tset_w = PixWidth / TILE_SIZE; // tiles
-	int tset_h = PixHeight / TILE_SIZE; // tiles
-
-	int ID = 0;
-
-	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
-		for (int X = 0; X < MAP_WIDTH; X++) {
-			if (TileList[ID].type != TILE_TYPE_NORMAL) {
-				int tX = MapX + (X * TILE_SIZE);
-				int tY = MapY + (Y * TILE_SIZE);
-				int TilesetX = (TileList[ID].type % tset_w) * TILE_SIZE;
-				int TilesetY = (TileList[ID].type / tset_w) * TILE_SIZE;
-				CSurface::OnDraw(tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
-			}
-			ID++;
-		}
-	}
+	// if (tileset == NULL) return;
+	//
+	// int PixWidth;
+	// int PixHeight;
+	//
+	// SDL_QueryTexture(tileset, NULL, NULL, &PixWidth, &PixHeight);
+	//
+	// int tset_w = PixWidth / TILE_SIZE; // tiles
+	// int tset_h = PixHeight / TILE_SIZE; // tiles
+	//
+	// int ID = 0;
+	//
+	// for (int Y = 0; Y < MAP_HEIGHT; Y++) {
+	// 	for (int X = 0; X < MAP_WIDTH; X++) {
+	// 		if (TileList[ID].type != TILE_TYPE_NORMAL) {
+	// 			int tX = MapX + (X * TILE_SIZE);
+	// 			int tY = MapY + (Y * TILE_SIZE);
+	// 			int TilesetX = (TileList[ID].type % tset_w) * TILE_SIZE;
+	// 			int TilesetY = (TileList[ID].type / tset_w) * TILE_SIZE;
+	// 			CSurface::OnDraw(tileset, tX, tY, TilesetX, TilesetY, TILE_SIZE, TILE_SIZE);
+	// 		}
+	// 		ID++;
+	// 	}
+	// }
 }
 
-void CPlanMap::OnRenderColl(SDL_Texture* tileset, int MapX, int MapY) {
-	if (tileset == NULL) return;
-
-	int PixWidth;
-	int PixHeight;
-
-	SDL_QueryTexture(tileset, NULL, NULL, &PixWidth, &PixHeight);
-
-	int tset_w = PixWidth / TILE_SIZE; // tiles
-	int tset_h = PixHeight / TILE_SIZE; // tiles
-
+void CPlanMap::OnRenderSolid(int MapX, int MapY) {
+	// Render mask for solid tiles
 	int ID = 0;
 	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
 		for (int X = 0; X < MAP_WIDTH; X++) {
 			if (TileList[ID].solid) {
 				int tX = MapX + (X * TILE_SIZE);
 				int tY = MapY + (Y * TILE_SIZE);
-				const SDL_Rect tmp = {tX, tY, TILE_SIZE, TILE_SIZE};
-				CAsset::drawBox(&tmp, &palette::red);
+				const SDL_Rect tmp_o = {tX++, tY++, TILE_SIZE, TILE_SIZE};
+				const SDL_Rect tmp_i = {tX, tY, TILE_SIZE - 2, TILE_SIZE - 2};
+				CAsset::drawBox(&tmp_o, &palette::white);
+				CAsset::drawBox(&tmp_i, &palette::black);
 			}
 			ID++;
 		}

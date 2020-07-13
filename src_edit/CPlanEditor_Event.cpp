@@ -11,6 +11,7 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
     if (handlePlaceTile(m)) return;
   } else {
     if (handleTileOpts(m))  return;
+    if (handleLayerOpts(m))  return;
     if (handleSolidOpts(m)) return;
     if (handleTypeOpts(m))  return;
     if (handlePlaceOpts(m)) return;
@@ -29,7 +30,7 @@ bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
 }
 
 void CPlanEditor::placeTile(const int& x, const int &y) {
-  CPlanArea::control.changeTile(x, y, Z, workTile, placeflag);
+  CPlanArea::control.changeTile(x, y, k, workTile, placeflag);
 }
 
 bool CPlanEditor::handleTileOpts(const SDL_Point& m) {
@@ -45,9 +46,28 @@ bool CPlanEditor::handleTileOpts(const SDL_Point& m) {
   // Click on "Change Tile" button. A display of all tiles is rendered,
   // and clicking a tile will update the active tile to use the clicked tile.
   if (SDL_PointInRect(&m, &tile_button)) {
-      CChangeTile::PickTile.Init(CTileset::TSControl.ts_w, CTileset::TSControl.ts_h);
-      CInterrupt::appendFlag(INTRPT_CHANGE_BG);
-      return true;
+    CChangeTile::PickTile.Init(CTileset::TSControl.ts_w, CTileset::TSControl.ts_h);
+    CInterrupt::appendFlag(INTRPT_CHANGE_BG);
+    return true;
+  }
+  return false;
+}
+
+bool CPlanEditor::handleLayerOpts(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace layerOpts;
+
+  // Click on "Create Layer" button. This displays options to add a new layer
+  // and includes info on existing layers.
+  if (SDL_PointInRect(&m, &add_button)) {
+    CInterrupt::appendFlag(INTRPT_ADD_LAYER);
+    return true;
+  }
+  // Click on "Delete Layer" button. This lists the available layers to delete
+  // (if any) and asks for confirmation.
+  if (SDL_PointInRect(&m, &del_button)) {
+    CInterrupt::appendFlag(INTRPT_DEL_LAYER);
+    return true;
   }
   return false;
 }
@@ -154,6 +174,14 @@ bool CPlanEditor::handleInterr(SDL_Event* Event) {
     changeTileset(Event);
     return true;
   }
+  if (CInterrupt::isFlagOn(INTRPT_ADD_LAYER)) {
+    addLayer(Event);
+    return true;
+  }
+  if (CInterrupt::isFlagOn(INTRPT_DEL_LAYER)) {
+    deleteLayer(Event);
+    return true;
+  }
   return false;
 }
 
@@ -171,4 +199,12 @@ void CPlanEditor::changeTile(SDL_Event* Event) {
   if (CInterrupt::isFlagOff(INTRPT_CHANGE_BG)) {
     CChangeTile::PickTile.reqChange(workTile.ID);
   }
+}
+
+void CPlanEditor::addLayer(SDL_Event* Event) {
+  CInterrupt::removeFlag(INTRPT_ADD_LAYER);
+}
+
+void CPlanEditor::deleteLayer(SDL_Event* Event) {
+  CInterrupt::removeFlag(INTRPT_DEL_LAYER);
 }

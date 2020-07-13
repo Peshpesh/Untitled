@@ -6,7 +6,7 @@ CPlanEditor::CPlanEditor() {
   workTile.ID = 1;
   visflag = pvm_visflags::MAP | pvm_visflags::FILL;
   placeflag = ENABLE_BG | ENABLE_TYPE | ENABLE_COLL;
-  Z = 0;
+  k = 0;
 }
 
 bool CPlanEditor::OnInit() {
