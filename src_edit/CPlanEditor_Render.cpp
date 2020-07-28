@@ -151,6 +151,44 @@ bool CPlanEditor::drawInterr(const SDL_Point& m) {
 }
 
 bool CPlanEditor::drawAddLayer(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace layerOpts::addOpts;
+  /*
+    Must display:
+      - All layers' k-index
+      - All layers' depth
+      - Options to create/cancel
+
+    Must inquire:
+      - New layer's k-index
+      - New layer's depth
+  */
+  if (!CAsset::drawStrBox(&window, stroke_sz, window_col, border_col)) return false;
+
+  SDL_Rect k_rec = k_title_r;
+  SDL_Rect z_rec = z_title_r;
+  Font::NewCenterWrite("K", &k_rec, title_fcol);
+  Font::NewCenterWrite("Z", &z_rec, title_fcol);
+
+  bool alt_col = false;
+  for (int i = 0; i < CPlanArea::control.LayerList.size(); i++) {
+    k_rec.y += k_rec.h;
+    z_rec.y += z_rec.h;
+
+    const SDL_Point* col = (i == k) ? active_col : (alt_col ? item_col_B : item_col_A);
+
+    if (!CAsset::drawBoxFill(&k_rec, col)) return false;
+    if (!CAsset::drawBoxFill(&z_rec, col)) return false;
+
+    std::string k_index = Font::intToStr(i);
+    std::string depth   = Font::intToStr(CPlanArea::control.LayerList[i].Z);
+
+    Font::NewCenterWrite(k_index.c_str(), &k_rec, btn_fcol);
+    Font::NewCenterWrite(depth.c_str(), &z_rec, btn_fcol);
+
+    alt_col = !alt_col;
+  }
+
   return true;
 }
 

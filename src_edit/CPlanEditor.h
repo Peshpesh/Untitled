@@ -99,6 +99,24 @@ namespace pvmEditor {
     // extern const SDL_Rect edt_button;
     extern const char* const add_str;
     extern const char* const del_str;
+    namespace addOpts {
+      extern const SDL_Rect window;
+      extern const SDL_Rect header;
+      extern const short list_x;
+      extern const short list_y;
+      extern const short k_w; // width of k-index column
+      extern const short z_w; // width of depth (z) column
+      extern const short list_item_w;
+      extern const short list_item_h;
+      extern const SDL_Rect k_title_r;
+      extern const SDL_Rect z_title_r;
+      extern const SDL_Point* window_col;
+      extern const SDL_Point* border_col;
+      extern const SDL_Point* item_col_A;
+      extern const SDL_Point* item_col_B;
+      extern const SDL_Point* active_col;
+      extern const SDL_Color* title_fcol;
+    }
   }
   namespace visOpts {
     extern const short nOpts;

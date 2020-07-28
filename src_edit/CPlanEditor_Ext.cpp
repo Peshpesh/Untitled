@@ -37,6 +37,40 @@ namespace pvmEditor {
     // const SDL_Rect edt_button;
     const char* const add_str = "Create\nlayer";
     const char* const del_str = "Delete\nLayer";
+    namespace addOpts {
+      /*
+        Must display:
+          - All layers' k-index
+          - All layers' depth
+          - Current active layer
+          - Options to create/cancel
+
+        Must inquire:
+          - New layer's k-index
+          - New layer's depth
+      */
+      const short w = 320;
+      const short h = 240;
+      const short x = (WWIDTH - w) / 2;
+      const short y = (WHEIGHT - h) / 2;
+      const SDL_Rect window = CAsset::getRect(x, y, w, h);
+      const short header_h  = 32;
+      const SDL_Rect header = CAsset::getRect(x, y, w, header_h);
+      const short list_x    = x + 32;
+      const short list_y    = y + header_h;
+      const short k_w       = 24; // width of k-index column
+      const short z_w       = 24; // width of depth (z) column
+      const short list_item_w   = k_w + z_w;
+      const short list_item_h   = 9;
+      const SDL_Rect k_title_r  = CAsset::getRect(list_x, list_y, k_w, list_item_h);
+      const SDL_Rect z_title_r  = CAsset::getRect(list_x + k_w, list_y, z_w, list_item_h);
+      const SDL_Point* window_col = &palette::black;
+      const SDL_Point* border_col = &palette::white;
+      const SDL_Point* item_col_A = &palette::gray;
+      const SDL_Point* item_col_B = &palette::silver;
+      const SDL_Point* active_col = &palette::green;
+      const SDL_Color* title_fcol = &rgb::white;  // title/info text color
+    }
   }
   namespace visOpts {
     const short nOpts = 4;    // number of visible-module options

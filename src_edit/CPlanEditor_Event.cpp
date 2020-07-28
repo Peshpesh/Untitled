@@ -202,6 +202,17 @@ void CPlanEditor::changeTile(SDL_Event* Event) {
 }
 
 void CPlanEditor::addLayer(SDL_Event* Event) {
+  /*
+    Must display:
+      - All layers' k-index
+      - All layers' depth
+      - Options to create/cancel
+
+    Must inquire:
+      - New layer's k-index
+      - New layer's depth
+  */
+
   CInterrupt::removeFlag(INTRPT_ADD_LAYER);
 }
 
