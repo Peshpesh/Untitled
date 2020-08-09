@@ -19,6 +19,26 @@ void CPlanArea::OnInit()	{
 	LayerList.push_back(tempLayer);
 }
 
+void CPlanArea::addLayer(const short& K, const short& Z) {
+	// load an empty map
+	CPlanMap tempMap;
+	tempMap.OnLoad();
+
+	if (Z < 0) {
+		// SDL_Delay(500)
+		for (int k = 0; k < LayerList.size(); k++) LayerList[k].Z -= Z;
+	}
+
+	// create new layer at target Z with W * H empty maps
+	CPlanLayer tempLayer;
+	tempLayer.Z = (Z >= 0) ? Z : 0;
+	for (int i = 0; i < AreaWidth * AreaHeight; i++) {
+		tempLayer.MapList.push_back(tempMap);
+	}
+	// insert the new layer into the LayerList vector
+	LayerList.insert(LayerList.begin() + K, tempLayer);
+}
+
 void CPlanArea::GetDims(int& mW, int& mH)	{
 	mW = AreaWidth;
 	mH = AreaHeight;

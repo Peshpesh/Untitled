@@ -20,9 +20,11 @@ class CPlanEditor : public CEvent {
   CPlanEditor();
 
   short visflag;    // bitwise flag for rendering map & its attributes
-  int placeflag; // bitwise flag for tiles to place
+  int placeflag;    // bitwise flag for tiles to place
   CPlanTile workTile;
   int k;
+  int new_k;
+  int new_z;
 
 public:
   static CPlanEditor control;
@@ -52,8 +54,8 @@ private:
   bool handleInterr(SDL_Event* Event);
   void changeTileset(SDL_Event* Event);
   void changeTile(SDL_Event* Event);
-  void addLayer(SDL_Event* Event);
-  void deleteLayer(SDL_Event* Event);
+  void addLayer(const SDL_Point& m);
+  void deleteLayer(const SDL_Point& m);
 
 private:
   void extendMap_R();
@@ -101,7 +103,19 @@ namespace pvmEditor {
     extern const char* const del_str;
     namespace addOpts {
       extern const SDL_Rect window;
-      extern const SDL_Rect header;
+      extern const SDL_Rect list_header;
+      extern const SDL_Rect work_header;
+      extern const SDL_Rect k_header;
+      extern const SDL_Rect z_header;
+      extern const SDL_Rect k_field;
+      extern const SDL_Rect z_field;
+      extern const short incr_size;
+      extern const char* const list_title;
+      extern const char* const info;
+      extern const char* const new_k_title;
+      extern const char* const new_z_title;
+      extern const char* const conf_title;
+      extern const char* const canc_title;
       extern const short list_x;
       extern const short list_y;
       extern const short k_w; // width of k-index column
@@ -110,11 +124,15 @@ namespace pvmEditor {
       extern const short list_item_h;
       extern const SDL_Rect k_title_r;
       extern const SDL_Rect z_title_r;
+      extern const SDL_Rect conf_btn;
+      extern const SDL_Rect canc_btn;
       extern const SDL_Point* window_col;
       extern const SDL_Point* border_col;
+      extern const SDL_Point* field_col;
       extern const SDL_Point* item_col_A;
       extern const SDL_Point* item_col_B;
       extern const SDL_Point* active_col;
+      extern const SDL_Point* new_col;
       extern const SDL_Color* title_fcol;
     }
   }

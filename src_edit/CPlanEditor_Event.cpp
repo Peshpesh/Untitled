@@ -7,22 +7,26 @@ void CPlanEditor::OnEvent(SDL_Event* Event) {
 
 void CPlanEditor::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
-  if (CAsset::inWorkspace(m)) {
-    if (handlePlaceTile(m)) return;
-  } else {
-    if (handleTileOpts(m))  return;
-    if (handleLayerOpts(m))  return;
-    if (handleSolidOpts(m)) return;
-    if (handleTypeOpts(m))  return;
-    if (handlePlaceOpts(m)) return;
-    if (handleVisOpts(m))   return;
+  if (CInterrupt::isFlagOn(INTRPT_ADD_LAYER)) addLayer(m);
+  else if (CInterrupt::isFlagOn(INTRPT_DEL_LAYER)) deleteLayer(m);
+  else {
+    if (CAsset::inWorkspace(m)) {
+      if (handlePlaceTile(m)) return;
+    } else {
+      if (handleTileOpts(m))  return;
+      if (handleLayerOpts(m))  return;
+      if (handleSolidOpts(m)) return;
+      if (handleTypeOpts(m))  return;
+      if (handlePlaceOpts(m)) return;
+      if (handleVisOpts(m))   return;
+    }
   }
 }
 
 bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
   if (CAsset::inWorkspace(m)) {
     int mX = CCamera::CameraControl.GetX() + m.x;
-    int mY = CCamera::CameraControl.GetY() + m.y;
+    int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
     placeTile(mX, mY);
     return true;
   }
@@ -174,14 +178,6 @@ bool CPlanEditor::handleInterr(SDL_Event* Event) {
     changeTileset(Event);
     return true;
   }
-  if (CInterrupt::isFlagOn(INTRPT_ADD_LAYER)) {
-    addLayer(Event);
-    return true;
-  }
-  if (CInterrupt::isFlagOn(INTRPT_DEL_LAYER)) {
-    deleteLayer(Event);
-    return true;
-  }
   return false;
 }
 
@@ -201,21 +197,46 @@ void CPlanEditor::changeTile(SDL_Event* Event) {
   }
 }
 
-void CPlanEditor::addLayer(SDL_Event* Event) {
-  /*
-    Must display:
-      - All layers' k-index
-      - All layers' depth
-      - Options to create/cancel
+void CPlanEditor::addLayer(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace layerOpts::addOpts;
 
-    Must inquire:
-      - New layer's k-index
-      - New layer's depth
-  */
+  // check adjustment to k
+  SDL_Rect mins_btn = CAsset::getRect(k_field.x - incr_size, k_field.y, incr_size, incr_size);
+  SDL_Rect plus_btn = CAsset::getRect(k_field.x + k_field.w, k_field.y, incr_size, incr_size);
 
-  CInterrupt::removeFlag(INTRPT_ADD_LAYER);
+  if (SDL_PointInRect(&m, &mins_btn)) {
+    if (new_k != 0) new_k--;
+    return;
+  }
+  if (SDL_PointInRect(&m, &plus_btn)) {
+    if (new_k != CPlanArea::control.LayerList.size()) new_k++;
+    return;
+  }
+  // check adjustment to z
+  mins_btn.y = z_field.y;
+  plus_btn.y = z_field.y;
+  if (SDL_PointInRect(&m, &mins_btn)) {
+    new_z--; return;
+  }
+  if (SDL_PointInRect(&m, &plus_btn)) {
+    new_z++; return;
+  }
+
+  if (SDL_PointInRect(&m, &conf_btn)) {
+    CPlanArea::control.addLayer(new_k, new_z);
+    CInterrupt::removeFlag(INTRPT_ADD_LAYER);
+    k = new_k;
+    new_k = new_z = 0;
+    return;
+  }
+  if (SDL_PointInRect(&m, &canc_btn)) {
+    CInterrupt::removeFlag(INTRPT_ADD_LAYER);
+    new_k = new_z = 0;
+    return;
+  }
 }
 
-void CPlanEditor::deleteLayer(SDL_Event* Event) {
+void CPlanEditor::deleteLayer(const SDL_Point& m) {
   CInterrupt::removeFlag(INTRPT_DEL_LAYER);
 }

@@ -42,6 +42,8 @@ private:
 public:
 	void OnInit();
 
+  void addLayer(const short& K, const short& Z);
+
 	void GetDims(int& mW, int& mH);
 	// CPlanMap* GetMap(int X, int Y);
 	// CPlanTile* GetTile(int X, int Y);
