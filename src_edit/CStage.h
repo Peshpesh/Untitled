@@ -21,10 +21,13 @@ public:
   static CStage control;
   bool planview;
   std::string name;
+  int k;  // active layer index, carried across modules for PVM stages
 
   void OnEvent(SDL_Event* Event);
   void OnEventPlatform(SDL_Event* Event);
   void OnEventPlanview(SDL_Event* Event);
+
+  void OnLoop();
 
   void OnRender(const SDL_Point& m);
   void OnRenderPlatform(const SDL_Point& m);

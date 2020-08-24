@@ -36,6 +36,7 @@ public:
   SDL_Texture* type_tileset;
   SDL_Texture* coll_tileset;
   int ts_w, ts_h;
+  int tile_alpha;           // Current Opacity of the tileset
   int type_alpha;						// Current Opacity of the Type overlay
   int coll_alpha;						// Current Opacity of the Collision overlay
   int grid_w, grid_h;       // Grid texture dimension (tiles)
@@ -54,10 +55,13 @@ public:
 
   bool changeTileset(const short& fID);
   bool changeTileset();
+  void changeTileAlpha(const int& a);
   void changeTypeAlpha(const int& a);
   void changeCollAlpha(const int& a);
+  void maxTileAlpha();
   void maxTypeAlpha();
   void maxCollAlpha();
+  void refreshTileAlpha();
   void refreshTypeAlpha();
   void refreshCollAlpha();
 

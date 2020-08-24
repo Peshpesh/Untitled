@@ -94,6 +94,7 @@ CTileset::CTileset() {
   grid_w = grid_h = 0;
   type_w = type_h = 0;
   coll_w = coll_h = 0;
+  tile_alpha = MAX_RGBA;
   type_alpha = 215;
   coll_alpha = 55;
 }
@@ -318,6 +319,11 @@ bool CTileset::changeTileset() {
   return succ;
 }
 
+void CTileset::changeTileAlpha(const int& a) {
+  tile_alpha = a;
+  refreshTileAlpha();
+}
+
 void CTileset::changeTypeAlpha(const int& a) {
   type_alpha = a;
   refreshTypeAlpha();
@@ -328,12 +334,20 @@ void CTileset::changeCollAlpha(const int& a) {
   refreshCollAlpha();
 }
 
+void CTileset::maxTileAlpha() {
+  SDL_SetTextureAlphaMod(tileset, MAX_RGBA);
+}
+
 void CTileset::maxTypeAlpha() {
   SDL_SetTextureAlphaMod(type_tileset, MAX_RGBA);
 }
 
 void CTileset::maxCollAlpha() {
   SDL_SetTextureAlphaMod(coll_tileset, MAX_RGBA);
+}
+
+void CTileset::refreshTileAlpha() {
+  SDL_SetTextureAlphaMod(tileset, tile_alpha);
 }
 
 void CTileset::refreshTypeAlpha() {

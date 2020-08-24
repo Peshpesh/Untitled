@@ -5,6 +5,7 @@ CStage CStage::control;
 CStage::CStage() {
   planview = false;
   name = "new";
+  k = 0;
 }
 
 void CStage::OnEvent(SDL_Event* Event) {
@@ -25,6 +26,15 @@ void CStage::OnEventPlatform(SDL_Event* Event) {
 
 void CStage::OnEventPlanview(SDL_Event* Event) {
   CPlanEditor::control.OnEvent(Event);
+}
+
+void CStage::OnLoop() {
+  if (planview) {
+    switch (CModule::control.active_mod) {
+      case MODIFY_MAP:			CPlanEditor::control.getK(k); break;
+      default:							break;
+    }
+  }
 }
 
 void CStage::OnRender(const SDL_Point& m) {

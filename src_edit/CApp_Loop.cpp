@@ -18,6 +18,8 @@ void CApp::OnLoop() {
 
 	CCamera::CameraControl.OnLoop();
 
+	CStage::control.OnLoop();
+
 	if (SDL_GetWindowFlags(Map_Display) & SDL_WINDOW_MINIMIZED) {
 		SDL_RestoreWindow(Map_Display);
 	}

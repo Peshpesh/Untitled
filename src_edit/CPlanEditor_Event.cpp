@@ -69,7 +69,7 @@ bool CPlanEditor::handleLayerOpts(const SDL_Point& m) {
   }
   // Click on "Delete Layer" button. This lists the available layers to delete
   // (if any) and asks for confirmation.
-  if (SDL_PointInRect(&m, &del_button)) {
+  if (CPlanArea::control.LayerList.size() > 1 && SDL_PointInRect(&m, &del_button)) {
     CInterrupt::appendFlag(INTRPT_DEL_LAYER);
     return true;
   }
@@ -206,37 +206,66 @@ void CPlanEditor::addLayer(const SDL_Point& m) {
   SDL_Rect plus_btn = CAsset::getRect(k_field.x + k_field.w, k_field.y, incr_size, incr_size);
 
   if (SDL_PointInRect(&m, &mins_btn)) {
-    if (new_k != 0) new_k--;
+    if (sel_k != 0) sel_k--;
     return;
   }
   if (SDL_PointInRect(&m, &plus_btn)) {
-    if (new_k != CPlanArea::control.LayerList.size()) new_k++;
+    if (sel_k != CPlanArea::control.LayerList.size()) sel_k++;
     return;
   }
   // check adjustment to z
   mins_btn.y = z_field.y;
   plus_btn.y = z_field.y;
   if (SDL_PointInRect(&m, &mins_btn)) {
-    new_z--; return;
+    sel_z--; return;
   }
   if (SDL_PointInRect(&m, &plus_btn)) {
-    new_z++; return;
+    sel_z++; return;
   }
 
   if (SDL_PointInRect(&m, &conf_btn)) {
-    CPlanArea::control.addLayer(new_k, new_z);
+    CPlanArea::control.addLayer(sel_k, sel_z);
     CInterrupt::removeFlag(INTRPT_ADD_LAYER);
-    k = new_k;
-    new_k = new_z = 0;
+    k = sel_k;
+    sel_k = sel_z = 0;
     return;
   }
   if (SDL_PointInRect(&m, &canc_btn)) {
     CInterrupt::removeFlag(INTRPT_ADD_LAYER);
-    new_k = new_z = 0;
+    sel_k = sel_z = 0;
     return;
   }
 }
 
 void CPlanEditor::deleteLayer(const SDL_Point& m) {
-  CInterrupt::removeFlag(INTRPT_DEL_LAYER);
+  using namespace pvmEditor;
+  using namespace layerOpts::delOpts;
+
+  SDL_Rect list_r = CAsset::getRect(list_x, list_y + list_item_h,
+                                    list_item_w,
+                                    list_item_h * CPlanArea::control.LayerList.size());
+  if (SDL_PointInRect(&m, &list_r)) {
+    SDL_Rect list_item_r = CAsset::getRect(list_x, list_y, list_item_w, list_item_h);
+    for (int i = CPlanArea::control.LayerList.size() - 1; i >= 0; i--) {
+      list_item_r.y += list_item_r.h;
+      if (SDL_PointInRect(&m, &list_item_r)) {
+        sel_k = i;
+        break;
+      }
+    }
+    return;
+  }
+
+  if (SDL_PointInRect(&m, &conf_btn)) {
+    CPlanArea::control.delLayer(sel_k);
+    CInterrupt::removeFlag(INTRPT_DEL_LAYER);
+    if (k >= CPlanArea::control.LayerList.size()) k = CPlanArea::control.LayerList.size() - 1;
+    sel_k = sel_z = 0;
+    return;
+  }
+  if (SDL_PointInRect(&m, &canc_btn)) {
+    CInterrupt::removeFlag(INTRPT_DEL_LAYER);
+    sel_k = sel_z = 0;
+    return;
+  }
 }

@@ -20,12 +20,14 @@ void CPlanArea::OnInit()	{
 }
 
 void CPlanArea::addLayer(const short& K, const short& Z) {
+	if (K < 0 || K > LayerList.size()) return; 	// second condition has no =
+																							// as we're adding a layer
+
 	// load an empty map
 	CPlanMap tempMap;
 	tempMap.OnLoad();
 
 	if (Z < 0) {
-		// SDL_Delay(500)
 		for (int k = 0; k < LayerList.size(); k++) LayerList[k].Z -= Z;
 	}
 
@@ -39,12 +41,19 @@ void CPlanArea::addLayer(const short& K, const short& Z) {
 	LayerList.insert(LayerList.begin() + K, tempLayer);
 }
 
+void CPlanArea::delLayer(const short& K) {
+	if (K < 0 || K >= LayerList.size()) return;
+	LayerList[K].MapList.clear();	// not sure if this is necessary to clear memory,
+	 															// but just in case...
+	LayerList.erase(LayerList.begin() + K);
+}
+
 void CPlanArea::GetDims(int& mW, int& mH)	{
 	mW = AreaWidth;
 	mH = AreaHeight;
 }
 
-void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag) {
+void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity) {
   // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the
   // lowest k-index (height) being rendered first.
@@ -65,7 +74,7 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
   //   return;
   // }
 
-	if (!visflag) return;
+	if (!visflag || (opacity == 0 && visflag == pvm_visflags::MAP)) return;
 	if (k < 0 || k >= LayerList.size()) {
 		CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
 		return;
@@ -87,6 +96,8 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
   int maxMaps = 4;
 	int nMaps = AreaWidth * AreaHeight; // n of maps on a layer
 	int loopMax = (nMaps > maxMaps) ? maxMaps : nMaps;
+
+	CTileset::TSControl.changeTileAlpha(LayerList[k].force_opacity ? LayerList[k].opacity : opacity);
 
   for (int i = 0; i < loopMax; i++) {
     int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);

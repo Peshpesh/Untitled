@@ -3,6 +3,7 @@
 
 #include "CPlanMap.h"
 #include "CError.h"
+#include "Define.h"
 
 // NOTE: wall tiles should probably have Z equal to their top
 // (ex: a wall that appears to have a base at Z=0 and a top at Z=2
@@ -20,7 +21,9 @@ namespace pvm_visflags {
 struct CPlanLayer {
   std::vector<CPlanMap> MapList;
   short Z;
-  CPlanLayer(): Z(0) {};
+  short opacity;      // opacity unique to this layer regardless of K or Z
+  bool force_opacity; // if true, use layer's unique opacity
+  CPlanLayer(): Z(0),opacity(MAX_RGBA),force_opacity(false){};
 };
 
 class CPlanArea {
@@ -43,7 +46,7 @@ public:
 	void OnInit();
 
   void addLayer(const short& K, const short& Z);
-
+  void delLayer(const short& K);
 	void GetDims(int& mW, int& mH);
 	// CPlanMap* GetMap(int X, int Y);
 	// CPlanTile* GetTile(int X, int Y);
@@ -57,7 +60,7 @@ public:
 			param bg			:	Flag to draw foreground or middleground
 	*/
 	// void 	OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
-	void	OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag);
+	void	OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity);
 	// void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
 	// void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
 

@@ -4,9 +4,12 @@ namespace pvmEditor {
   const short stroke_sz = 2;  // px thickness of common borders (e.g., for buttons)
   const SDL_Point* btn_col = &palette::cyan;        // default button color
   const SDL_Point* hov_col = &palette::light_cyan;  // default hover-over-button color
+  const SDL_Point* nul_col = &palette::gray;        // default inactive button color
   const SDL_Point* on_col  = &palette::green;       // default button-on color
   const SDL_Point* off_col = &palette::red;         // default button-off color
   const SDL_Color* btn_fcol = &rgb::black;          // default button text color
+  const short outline_sz = 2;
+  const SDL_Point* outline_col = &palette::light_cyan; // color of outline for placing tiles
   namespace tileOpts {
     const short w = 80;
     const short tset_h = 32;  // height of change-tileset button
@@ -38,17 +41,6 @@ namespace pvmEditor {
     const char* const add_str = "Create\nlayer";
     const char* const del_str = "Delete\nLayer";
     namespace addOpts {
-      /*
-        Must display:
-          - All layers' k-index
-          - All layers' depth
-          - Current active layer
-          - Options to create/cancel
-
-        Must inquire:
-          - New layer's k-index
-          - New layer's depth
-      */
       const short w = 320;
       const short h = 240;
       const short x = (WWIDTH - w) / 2;
@@ -105,6 +97,42 @@ namespace pvmEditor {
       const SDL_Point* item_col_B = &palette::silver;
       const SDL_Point* active_col = &palette::green;
       const SDL_Point* new_col    = &palette::yellow;
+      const SDL_Color* title_fcol = &rgb::white;  // title/info text color
+    }
+    namespace delOpts {
+      const short w = 180;
+      const short h = 240;
+      const short x = (WWIDTH - w) / 2;
+      const short y = (WHEIGHT - h) / 2;
+      const SDL_Rect window = CAsset::getRect(x, y, w, h);
+      const short list_header_h  = 32;
+      const SDL_Rect list_header = CAsset::getRect(x, y, w, list_header_h);
+      const short k_w       = 24; // width of k-index column
+      const short z_w       = 24; // width of depth (z) column
+      const short list_x    = x + (w - k_w - z_w) / 2;
+      const short list_y    = y + list_header_h;
+      const short list_item_w   = k_w + z_w;
+      const short list_item_h   = 9;
+      const SDL_Rect k_title_r  = CAsset::getRect(list_x, list_y, k_w, list_item_h);
+      const SDL_Rect z_title_r  = CAsset::getRect(list_x + k_w, list_y, z_w, list_item_h);
+
+      const short decide_w  = 64;
+      const short decide_h  = 16;
+      const short decide_y  = y + h - 32;
+      const short conf_x    = x + ((w / 2) - decide_w) / 2;
+      const short canc_x    = conf_x + (w / 2);
+      const SDL_Rect conf_btn = CAsset::getRect(conf_x, decide_y, decide_w, decide_h);
+      const SDL_Rect canc_btn = CAsset::getRect(canc_x, decide_y, decide_w, decide_h);
+
+      const char* const info = "Click the layer you would like to remove.\n\
+                                Click Delete to confirm.";
+      const char* const conf_title = "Delete";
+      const char* const canc_title = "Cancel";
+      const SDL_Point* window_col = &palette::black;
+      const SDL_Point* border_col = &palette::white;
+      const SDL_Point* item_col_A = &palette::light_gray;
+      const SDL_Point* item_col_B = &palette::silver;
+      const SDL_Point* active_col = &palette::light_red;
       const SDL_Color* title_fcol = &rgb::white;  // title/info text color
     }
   }

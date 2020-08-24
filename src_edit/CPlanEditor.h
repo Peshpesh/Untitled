@@ -23,13 +23,18 @@ class CPlanEditor : public CEvent {
   int placeflag;    // bitwise flag for tiles to place
   CPlanTile workTile;
   int k;
-  int new_k;
-  int new_z;
+  int sel_k;
+  int sel_z;
+  short active_opacity; // standard opacity of active layer
+  short over_opacity;   // standard opacity of layers above active layer
+  short under_opacity;  // standard opacity of layers below active layer
 
 public:
   static CPlanEditor control;
 
   bool OnInit();
+
+  void getK(int& k);
 
   void OnTerminate();
 
@@ -68,6 +73,7 @@ private:
   void removeMap_U();
 
 private:
+  bool drawTileOutline(const SDL_Point* m);
   bool drawTileOpts(const SDL_Point* m);
   bool drawLayerOpts(const SDL_Point* m);
   bool drawVisOpts();
@@ -84,9 +90,12 @@ namespace pvmEditor {
   extern const short stroke_sz;
   extern const SDL_Point* btn_col;
   extern const SDL_Point* hov_col;
+  extern const SDL_Point* nul_col;
   extern const SDL_Point* on_col;
   extern const SDL_Point* off_col;
   extern const SDL_Color* btn_fcol;
+  extern const short outline_sz;
+  extern const SDL_Point* outline_col;
   namespace tileOpts {
     extern const SDL_Rect ts_button;
     extern const SDL_Rect tile_button;
@@ -134,6 +143,29 @@ namespace pvmEditor {
       extern const SDL_Point* active_col;
       extern const SDL_Point* new_col;
       extern const SDL_Color* title_fcol;
+    }
+    namespace delOpts {
+      extern const SDL_Rect window;
+      extern const SDL_Rect list_header;
+      extern const short k_w; // width of k-index column
+      extern const short z_w; // width of depth (z) column
+      extern const short list_x;
+      extern const short list_y;
+      extern const short list_item_w;
+      extern const short list_item_h;
+      extern const SDL_Rect k_title_r;
+      extern const SDL_Rect z_title_r;
+      extern const SDL_Rect conf_btn;
+      extern const SDL_Rect canc_btn;
+      extern const char* const info;
+      extern const char* const conf_title;
+      extern const char* const canc_title;
+      extern const SDL_Point* window_col;
+      extern const SDL_Point* border_col;
+      extern const SDL_Point* item_col_A;
+      extern const SDL_Point* item_col_B;
+      extern const SDL_Point* active_col;
+      extern const SDL_Color* title_fcol;  // title/info text color
     }
   }
   namespace visOpts {
