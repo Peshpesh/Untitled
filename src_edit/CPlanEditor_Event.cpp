@@ -14,11 +14,12 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
       if (handlePlaceTile(m)) return;
     } else {
       if (handleTileOpts(m))  return;
-      if (handleLayerOpts(m))  return;
+      if (handleLayerOpts(m)) return;
       if (handleSolidOpts(m)) return;
       if (handleTypeOpts(m))  return;
       if (handlePlaceOpts(m)) return;
       if (handleVisOpts(m))   return;
+      if (handleOpacOpts(m))  return;
     }
   }
 }
@@ -130,6 +131,36 @@ bool CPlanEditor::handleTypeOpts(const SDL_Point& m) {
       k++;
     }
   }
+  return false;
+}
+
+bool CPlanEditor::handleOpacOpts(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace opacOpts;
+
+  short* opac[] = {
+    &active_opacity,
+    &over_opacity,
+    &under_opacity
+  };
+
+  for (int i = 0; i < nMeters; i++) {
+    if (SDL_PointInRect(&m, &meters[i])) {
+      SDL_Rect meter_fill = meters[i];
+      meter_fill.x += stroke_sz;
+      meter_fill.w -= stroke_sz * 2;
+      if (m.x < meter_fill.x) *opac[i] = 0;
+      else if (m.x > meter_fill.x + meter_fill.w) *opac[i] = MAX_RGBA;
+      else {
+        float new_opac = float(m.x - meter_fill.x) * MAX_RGBA / meter_fill.w;
+        if (new_opac < 0) new_opac = 0;
+        if (new_opac > MAX_RGBA) new_opac = MAX_RGBA;
+        *opac[i] = new_opac;
+      }
+      return true;
+    }
+  }
+
   return false;
 }
 

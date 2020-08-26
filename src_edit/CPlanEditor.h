@@ -55,6 +55,7 @@ private:
   bool handlePlaceOpts(const SDL_Point& m);
   bool handleSolidOpts(const SDL_Point& m);
   bool handleTypeOpts(const SDL_Point& m);
+  bool handleOpacOpts(const SDL_Point& m);
 
   bool handleInterr(SDL_Event* Event);
   void changeTileset(SDL_Event* Event);
@@ -80,6 +81,7 @@ private:
   bool drawPlaceOpts();
   bool drawSolidOpts();
   bool drawTypeOpts();
+  bool drawOpacOpts(const SDL_Point* m);
 
   bool drawInterr(const SDL_Point& m);
   bool drawAddLayer(const SDL_Point& m);
@@ -212,6 +214,12 @@ namespace pvmEditor {
     // extern const short y;
     extern const SDL_Point pos;
     extern const SDL_Point* hl_col;
+  }
+  namespace opacOpts {
+    extern const short nMeters;
+    extern const SDL_Rect r_titles[];
+    extern const SDL_Rect meters[];
+    extern const char* const titles[];
   }
 } // planview map editor namespaces //
 

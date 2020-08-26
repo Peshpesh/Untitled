@@ -12,6 +12,7 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
   if (!drawPlaceOpts()) return false;
   if (!drawSolidOpts()) return false;
   if (!drawTypeOpts())  return false;
+  if (!drawOpacOpts(interr ? NULL : &m)) return false;
   if (!drawInterr(m))   return false;
   return true;
 }
@@ -150,6 +151,37 @@ bool CPlanEditor::drawTypeOpts() {
     }
   }
   CTileset::TSControl.refreshTypeAlpha();
+  return true;
+}
+
+bool CPlanEditor::drawOpacOpts(const SDL_Point* m) {
+  using namespace pvmEditor;
+  using namespace opacOpts;
+
+  const short opac[] = {
+    active_opacity,
+    over_opacity,
+    under_opacity
+  };
+
+  for (int i = 0; i < nMeters; i++) {
+    Font::NewCenterWrite(titles[i], &r_titles[i], btn_fcol);
+    if (opac[i] == MAX_RGBA) {
+      if (!CAsset::drawStrBox(&meters[i], stroke_sz, on_col)) return false;
+    } else {
+      if (!CAsset::drawStrBox(&meters[i], stroke_sz, off_col)) return false;
+      if (opac[i] != 0) {
+        SDL_Rect meter_fill = meters[i];
+        meter_fill.x += stroke_sz;
+        meter_fill.y += stroke_sz;
+        meter_fill.h -= stroke_sz * 2;
+        meter_fill.w -= stroke_sz * 2;
+
+        meter_fill.w *= float(opac[i]) / MAX_RGBA;
+        if (!CAsset::drawBoxFill(&meter_fill, on_col)) return false;  
+      }
+    }
+  }
   return true;
 }
 

@@ -10,8 +10,8 @@ CPlanEditor::CPlanEditor() {
   sel_k = 0;
   sel_z = 0;
   active_opacity = MAX_RGBA;
-  over_opacity = 80;
-  under_opacity = 160;
+  over_opacity = 120;
+  under_opacity = 200;
 }
 
 bool CPlanEditor::OnInit() {

@@ -209,4 +209,29 @@ namespace pvmEditor {
     const SDL_Point pos = CAsset::getPos(x, y);
     const SDL_Point* hl_col = &palette::red;
   }
+  namespace opacOpts {
+    const short nMeters = 3;
+    const short meter_x = 20;
+    const short meter_w = ((MAX_RGBA + 1) / 2) + (stroke_sz * 2);
+    const short meter_h = 10;
+    const short title_h = 10;
+    const short opt_h   = meter_h + title_h;
+    const short title_y = WHEIGHT + 10;
+    const short meter_y = title_y + title_h;
+    const SDL_Rect r_titles[] = {
+      CAsset::getRect(meter_x, title_y, meter_w, meter_h),
+      CAsset::getRect(meter_x, title_y + opt_h, meter_w, meter_h),
+      CAsset::getRect(meter_x, title_y + (opt_h * 2), meter_w, meter_h)
+    };
+    const SDL_Rect meters[] = {
+      CAsset::getRect(meter_x, meter_y, meter_w, meter_h),
+      CAsset::getRect(meter_x, meter_y + opt_h, meter_w, meter_h),
+      CAsset::getRect(meter_x, meter_y + (opt_h * 2), meter_w, meter_h)
+    };
+    const char* const titles[] = {
+      "Active Opacity",
+      "Overlay Opacity",
+      "Underlay Opacity"
+    };
+  }
 } // planview map editor namespaces //
