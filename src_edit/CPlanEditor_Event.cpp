@@ -9,6 +9,7 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
   if (CInterrupt::isFlagOn(INTRPT_ADD_LAYER)) addLayer(m);
   else if (CInterrupt::isFlagOn(INTRPT_DEL_LAYER)) deleteLayer(m);
+  else if (CInterrupt::isFlagOn(INTRPT_ADJ_LAYOP)) adjustOpacity(m);
   else {
     if (CAsset::inWorkspace(m)) {
       if (handlePlaceTile(m)) return;
@@ -160,6 +161,16 @@ bool CPlanEditor::handleOpacOpts(const SDL_Point& m) {
       return true;
     }
   }
+  // Click on "Specify..." button. This displays options to manually adjust
+  // layer opacities.
+  if (SDL_PointInRect(&m, &more_button)) {
+    CInterrupt::appendFlag(INTRPT_ADJ_LAYOP);
+    for (int i = 0; i < CPlanArea::control.LayerList.size(); i++) {
+      temp_opac.push_back(CPlanArea::control.LayerList[i].opacity);
+      temp_force.push_back(CPlanArea::control.LayerList[i].force_opacity);
+    }
+    return true;
+  }
 
   return false;
 }
@@ -297,6 +308,62 @@ void CPlanEditor::deleteLayer(const SDL_Point& m) {
   if (SDL_PointInRect(&m, &canc_btn)) {
     CInterrupt::removeFlag(INTRPT_DEL_LAYER);
     sel_k = sel_z = 0;
+    return;
+  }
+}
+
+void CPlanEditor::adjustOpacity(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace opacOpts::adjOpts;
+
+  SDL_Rect meter_rec  = meter_r;
+  SDL_Rect off_opac_r = CAsset::getRect(meter_rec.x, meter_rec.y, stroke_sz, meter_rec.h);
+  meter_rec.x += stroke_sz;
+  meter_rec.w -= stroke_sz * 2;
+  SDL_Rect on_opac_r  = CAsset::getRect(meter_rec.x + meter_rec.w, meter_rec.y, stroke_sz, meter_rec.h);
+  SDL_Rect force_rec = force_r;
+
+  for (int i = CPlanArea::control.LayerList.size() - 1; i >= 0; i--) {
+    meter_rec.y   += meter_rec.h + spac_h;
+    off_opac_r.y  += off_opac_r.h + spac_h;
+    on_opac_r.y   += on_opac_r.h + spac_h;
+    force_rec.y   += force_rec.h + spac_h;
+
+    if (SDL_PointInRect(&m, &force_rec)) {
+      CPlanArea::control.LayerList[i].force_opacity = !CPlanArea::control.LayerList[i].force_opacity;
+      return;
+    }
+    if (SDL_PointInRect(&m, &meter_rec)) {
+      float new_opac = float(m.x - meter_rec.x) * MAX_RGBA / meter_rec.w;
+      if (new_opac < 0) new_opac = 0;
+      if (new_opac > MAX_RGBA) new_opac = MAX_RGBA;
+      CPlanArea::control.LayerList[i].opacity = new_opac;
+      return;
+    }
+    if (SDL_PointInRect(&m, &off_opac_r)) {
+      CPlanArea::control.LayerList[i].opacity = 0;
+      return;
+    }
+    if (SDL_PointInRect(&m, &on_opac_r)) {
+      CPlanArea::control.LayerList[i].opacity = MAX_RGBA;
+      return;
+    }
+  }
+
+  if (SDL_PointInRect(&m, &conf_btn)) {
+    temp_opac.clear();
+    temp_force.clear();
+    CInterrupt::removeFlag(INTRPT_ADJ_LAYOP);
+    return;
+  }
+  if (SDL_PointInRect(&m, &canc_btn)) {
+    for (int i = 0; i < CPlanArea::control.LayerList.size(); i++) {
+      CPlanArea::control.LayerList[i].opacity = temp_opac[i];
+      CPlanArea::control.LayerList[i].force_opacity = temp_force[i];
+    }
+    temp_opac.clear();
+    temp_force.clear();
+    CInterrupt::removeFlag(INTRPT_ADJ_LAYOP);
     return;
   }
 }

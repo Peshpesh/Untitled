@@ -28,6 +28,8 @@ class CPlanEditor : public CEvent {
   short active_opacity; // standard opacity of active layer
   short over_opacity;   // standard opacity of layers above active layer
   short under_opacity;  // standard opacity of layers below active layer
+  std::vector<short> temp_opac; // vector for temporarily storing old layer opacities
+  std::vector<bool> temp_force; // for temporarily storing old force-opacity flags
 
 public:
   static CPlanEditor control;
@@ -62,6 +64,7 @@ private:
   void changeTile(SDL_Event* Event);
   void addLayer(const SDL_Point& m);
   void deleteLayer(const SDL_Point& m);
+  void adjustOpacity(const SDL_Point& m);
 
 private:
   void extendMap_R();
@@ -86,6 +89,7 @@ private:
   bool drawInterr(const SDL_Point& m);
   bool drawAddLayer(const SDL_Point& m);
   bool drawDelLayer(const SDL_Point& m);
+  bool drawAdjustOpacity(const SDL_Point& m);
 };
 
 namespace pvmEditor {
@@ -220,6 +224,31 @@ namespace pvmEditor {
     extern const SDL_Rect r_titles[];
     extern const SDL_Rect meters[];
     extern const char* const titles[];
+    extern const SDL_Rect more_button;
+    extern const char* const more_title;
+    namespace adjOpts {
+      extern const SDL_Rect window;
+      extern const SDL_Rect header;
+      extern const short spac_h;
+      extern const SDL_Rect k_r;
+      extern const SDL_Rect z_r;
+      extern const SDL_Rect meter_r;
+      extern const SDL_Rect force_r;
+      extern const SDL_Rect conf_btn;
+      extern const SDL_Rect canc_btn;
+      extern const char* const info;
+      extern const char* const k_title;
+      extern const char* const z_title;
+      extern const char* const meter_title;
+      extern const char* const force_title;
+      extern const char* const conf_title;
+      extern const char* const canc_title;
+      extern const SDL_Point* window_col;
+      extern const SDL_Point* border_col;
+      extern const SDL_Point* item_col_A;
+      extern const SDL_Point* item_col_B;
+      extern const SDL_Color* title_fcol;
+    }
   }
 } // planview map editor namespaces //
 

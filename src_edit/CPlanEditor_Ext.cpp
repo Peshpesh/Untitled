@@ -233,5 +233,67 @@ namespace pvmEditor {
       "Overlay Opacity",
       "Underlay Opacity"
     };
+    const short button_h = 16;
+    const short button_y = title_y + (opt_h * 3) + ((opt_h - button_h) / 2);
+    const SDL_Rect more_button = CAsset::getRect(meter_x, button_y, meter_w, button_h);
+    const char* const more_title = "Specify ...";
+    namespace adjOpts {
+      const short w = 320;
+      const short h = 280;
+      const short x = (WWIDTH - w) / 2;
+      const short y = (WHEIGHT - h) / 2;
+      const SDL_Rect window = CAsset::getRect(x, y, w, h);
+      const short header_w = 280;
+      const short header_h = 32;
+      const SDL_Rect header = CAsset::getRect(x + ((w - header_w) / 2), y, header_w, header_h);
+
+      // for each layer, we need K, Z, opacity meter, and force switch.
+      const short layer_h = 9;
+      const short k_w = 24;
+      const short z_w = 24;
+      const short meter_w = ((MAX_RGBA + 1) / 2) + (stroke_sz * 2);
+      const short force_w = 32;
+      const short spac_w = 2;
+      const short total_w = k_w + z_w + meter_w + force_w + (spac_w * 3);
+
+      const short spac_h = 4;
+
+      const short k_x = x + (w - total_w) / 2;
+      const short z_x = k_x + k_w + spac_w;
+      const short meter_x = z_x + z_w + spac_w;
+      const short force_x = meter_x + meter_w + spac_w;
+
+      const SDL_Rect k_r = CAsset::getRect(k_x, y + header_h, k_w, layer_h);
+      const SDL_Rect z_r = CAsset::getRect(z_x, y + header_h, z_w, layer_h);
+      const SDL_Rect meter_r = CAsset::getRect(meter_x, y + header_h, meter_w, layer_h);
+      const SDL_Rect force_r = CAsset::getRect(force_x, y + header_h, force_w, layer_h);
+
+      const short footer_w  = 200;
+      const short footer_h  = 48;
+      const short footer_x  = x + ((w - footer_w) / 2);
+      const short footer_y  = (y + h - footer_h);
+      const short decide_w  = 64;
+      const short decide_h  = 16;
+      const short decide_y  = footer_y + ((footer_h - decide_h) / 2);
+      const short conf_x    = footer_x + (((footer_w / 2) - decide_w) / 2);
+      const short canc_x    = conf_x + (footer_w / 2);
+      const SDL_Rect conf_btn = CAsset::getRect(conf_x, decide_y, decide_w, decide_h);
+      const SDL_Rect canc_btn = CAsset::getRect(canc_x, decide_y, decide_w, decide_h);
+
+      const char* const info = "Adjust specific layer opacities,\n\
+                                and enable using force.\n\
+                                With force off, default opacities are used.";
+      const char* const k_title = "K";
+      const char* const z_title = "Z";
+      const char* const meter_title = "Opacity Meter";
+      const char* const force_title = "Force";
+      const char* const conf_title  = "Confirm";
+      const char* const canc_title  = "Cancel";
+      const SDL_Point* window_col = &palette::black;
+      const SDL_Point* border_col = &palette::white;
+      const SDL_Point* item_col_A = &palette::light_gray;
+      const SDL_Point* item_col_B = &palette::silver;
+      const SDL_Color* title_fcol = &rgb::white;  // title/info text color
+    }
   }
 } // planview map editor namespaces //

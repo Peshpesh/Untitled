@@ -16,10 +16,11 @@ enum interrupts
   INTRPT_MAKE_ANCH  = 0x00000200,   // click on map, use point as anchor for placement
   INTRPT_ADD_LAYER  = 0x00000400,   // add planview map layer
   INTRPT_DEL_LAYER  = 0x00000800,   // delete planview map layer
-  INTRPT_NEW        = 0x00001000,   // reset stage prompt
-  INTRPT_LOAD       = 0x00002000,   // load stage prompt
-  INTRPT_SAVE       = 0x00004000,   // save stage prompt
-  INTRPT_EXIT       = 0x00008000,   // escape program (exit)
+  INTRPT_ADJ_LAYOP  = 0x00001000,   // adjust planview layer opacity
+  INTRPT_NEW        = 0x00002000,   // reset stage prompt
+  INTRPT_LOAD       = 0x00004000,   // load stage prompt
+  INTRPT_SAVE       = 0x00008000,   // save stage prompt
+  INTRPT_EXIT       = 0x00010000,   // escape program (exit)
 };
 
 class CInterrupt {

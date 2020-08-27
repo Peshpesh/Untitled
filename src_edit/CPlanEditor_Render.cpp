@@ -178,13 +178,23 @@ bool CPlanEditor::drawOpacOpts(const SDL_Point* m) {
         meter_fill.w -= stroke_sz * 2;
 
         meter_fill.w *= float(opac[i]) / MAX_RGBA;
-        if (!CAsset::drawBoxFill(&meter_fill, on_col)) return false;  
+        if (!CAsset::drawBoxFill(&meter_fill, on_col)) return false;
       }
     }
   }
+
+  if (m) {
+    if (!CAsset::drawStrBox(&more_button, stroke_sz,
+        CInterrupt::isFlagOn(INTRPT_ADJ_LAYOP) ? on_col :
+        SDL_PointInRect(m, &more_button) ? hov_col : btn_col)) return false;
+  } else {
+    if (!CAsset::drawStrBox(&more_button, stroke_sz,
+        CInterrupt::isFlagOn(INTRPT_ADJ_LAYOP) ? on_col : btn_col)) return false;
+  }
+  Font::NewCenterWrite(more_title, &more_button, btn_fcol);
+
   return true;
 }
-
 
 bool CPlanEditor::drawInterr(const SDL_Point& m) {
 	if (!CInterrupt::isNone()) {
@@ -200,6 +210,9 @@ bool CPlanEditor::drawInterr(const SDL_Point& m) {
     }
     if (CInterrupt::isFlagOn(INTRPT_DEL_LAYER)) {
       if (!drawDelLayer(m)) return false;
+    }
+    if (CInterrupt::isFlagOn(INTRPT_ADJ_LAYOP)) {
+      if (!drawAdjustOpacity(m)) return false;
     }
 	}
 	return true;
@@ -346,6 +359,79 @@ bool CPlanEditor::drawDelLayer(const SDL_Point& m) {
     SDL_PointInRect(&m, &conf_btn) ? active_col : window_col, border_col)) return false;
   if (!CAsset::drawStrBox(&canc_btn, stroke_sz,
     SDL_PointInRect(&m, &canc_btn) ? active_col : window_col, border_col)) return false;
+
+  Font::NewCenterWrite(conf_title, &conf_btn, SDL_PointInRect(&m, &conf_btn) ? btn_fcol : title_fcol);
+  Font::NewCenterWrite(canc_title, &canc_btn, SDL_PointInRect(&m, &canc_btn) ? btn_fcol : title_fcol);
+
+  return true;
+}
+
+bool CPlanEditor::drawAdjustOpacity(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace opacOpts::adjOpts;
+
+  // draw window
+  if (!CAsset::drawStrBox(&window, stroke_sz, window_col, border_col)) return false;
+
+  // draw titles and info
+  Font::NewCenterWrite(info, &header, title_fcol);
+
+  SDL_Rect k_rec = k_r;
+  SDL_Rect z_rec = z_r;
+  SDL_Rect meter_rec = meter_r;
+  SDL_Rect force_rec = force_r;
+  Font::NewCenterWrite(k_title, &k_rec, title_fcol);
+  Font::NewCenterWrite(z_title, &z_rec, title_fcol);
+  Font::NewCenterWrite(meter_title, &meter_rec, title_fcol);
+  Font::NewCenterWrite(force_title, &force_rec, title_fcol);
+
+  // draw layer list
+  bool alt_col = false;
+  for (int i = CPlanArea::control.LayerList.size() - 1; i >= 0; i--) {
+    k_rec.y += k_rec.h + spac_h;
+    z_rec.y += z_rec.h + spac_h;
+    meter_rec.x = meter_r.x;
+    meter_rec.w = meter_r.w;
+    meter_rec.y += meter_rec.h + spac_h;
+    force_rec.y += force_rec.h + spac_h;
+
+    const SDL_Point* col = alt_col ? item_col_B : item_col_A;
+    if (!CAsset::drawBoxFill(&k_rec, col)) return false;
+    if (!CAsset::drawBoxFill(&z_rec, col)) return false;
+    std::string k_index = Font::intToStr(i);
+    std::string depth   = Font::intToStr(CPlanArea::control.LayerList[i].Z);
+    Font::NewCenterWrite(k_index.c_str(), &k_rec, btn_fcol);
+    Font::NewCenterWrite(depth.c_str(), &z_rec, btn_fcol);
+
+    if (!CAsset::drawBoxFill(&meter_rec, col)) return false;
+
+    meter_rec.w -= stroke_sz * 2;
+    meter_rec.x += stroke_sz;
+
+    if (CPlanArea::control.LayerList[i].opacity >= MAX_RGBA) {
+      if (!CAsset::drawBoxFill(&meter_rec, on_col)) return false;
+    } else {
+      if (!CAsset::drawBoxFill(&meter_rec, off_col)) return false;
+      if (CPlanArea::control.LayerList[i].opacity > 0) {
+        meter_rec.w *= float(CPlanArea::control.LayerList[i].opacity) / MAX_RGBA;
+        if (!CAsset::drawBoxFill(&meter_rec, on_col)) return false;
+      }
+    }
+    if (CPlanArea::control.LayerList[i].force_opacity) {
+      if (!CAsset::drawBoxFill(&force_rec, on_col)) return false;
+      Font::NewCenterWrite("ON", &force_rec, btn_fcol);
+    } else {
+      if (!CAsset::drawBoxFill(&force_rec, off_col)) return false;
+      Font::NewCenterWrite("OFF", &force_rec, btn_fcol);
+    }
+    alt_col = !alt_col;
+  }
+
+  // draw create & cancel buttons
+  if (!CAsset::drawStrBox(&conf_btn, stroke_sz,
+    SDL_PointInRect(&m, &conf_btn) ? on_col : window_col, border_col)) return false;
+  if (!CAsset::drawStrBox(&canc_btn, stroke_sz,
+    SDL_PointInRect(&m, &canc_btn) ? on_col : window_col, border_col)) return false;
 
   Font::NewCenterWrite(conf_title, &conf_btn, SDL_PointInRect(&m, &conf_btn) ? btn_fcol : title_fcol);
   Font::NewCenterWrite(canc_title, &canc_btn, SDL_PointInRect(&m, &canc_btn) ? btn_fcol : title_fcol);
