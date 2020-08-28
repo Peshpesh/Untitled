@@ -12,7 +12,8 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
   if (!drawPlaceOpts()) return false;
   if (!drawSolidOpts()) return false;
   if (!drawTypeOpts())  return false;
-  if (!drawOpacOpts(interr ? NULL : &m)) return false;
+  if (!drawOpacOpts(interr ? NULL : &m))  return false;
+  if (!drawLayerList(interr ? NULL : &m)) return false;
   if (!drawInterr(m))   return false;
   return true;
 }
@@ -193,6 +194,52 @@ bool CPlanEditor::drawOpacOpts(const SDL_Point* m) {
   }
   Font::NewCenterWrite(more_title, &more_button, btn_fcol);
 
+  return true;
+}
+
+bool CPlanEditor::drawLayerList(const SDL_Point* m) {
+  using namespace pvmEditor;
+  using namespace basicLayer;
+
+  SDL_Rect k_rec = k_r;
+  SDL_Rect z_rec = z_r;
+  Font::NewCenterWrite("K", &k_rec, btn_fcol);
+  Font::NewCenterWrite("Z", &z_rec, btn_fcol);
+
+  // draw layer list
+  bool alt_col = false;
+  short n_lists = 1;
+  for (int i = 0; i < CPlanArea::control.LayerList.size(); i++) {
+    if (i > 0 && i % items_per_list == 0) {
+      if (n_lists < max_num_lists) {
+        k_rec.x += k_r.w + z_r.w + spac_w;
+        z_rec.x = k_rec.x + k_rec.w;
+        k_rec.y = k_r.y;
+        z_rec.y = z_r.y;
+        Font::NewCenterWrite("K", &k_rec, btn_fcol);
+        Font::NewCenterWrite("Z", &z_rec, btn_fcol);
+        n_lists++;
+      } else break;
+    }
+    int ID = CPlanArea::control.LayerList.size() - 1 - i;
+    k_rec.y += k_rec.h;
+    z_rec.y += z_rec.h;
+
+    bool hov = false;
+    if (m && (SDL_PointInRect(m, &k_rec) || SDL_PointInRect(m, &z_rec))) hov = true;
+    const SDL_Point* col = (ID == k) ? active_col :
+                            (hov ? hover_col : (alt_col ? item_col_B : item_col_A));
+    if (!CAsset::drawBoxFill(&k_rec, col)) return false;
+    if (!CAsset::drawBoxFill(&z_rec, col)) return false;
+
+    std::string k_index = Font::intToStr(ID);
+    std::string depth   = Font::intToStr(CPlanArea::control.LayerList[ID].Z);
+
+    Font::NewCenterWrite(k_index.c_str(), &k_rec, btn_fcol);
+    Font::NewCenterWrite(depth.c_str(), &z_rec, btn_fcol);
+
+    alt_col = !alt_col;
+  }
   return true;
 }
 

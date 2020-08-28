@@ -21,6 +21,7 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
       if (handlePlaceOpts(m)) return;
       if (handleVisOpts(m))   return;
       if (handleOpacOpts(m))  return;
+      if (handleLayerList(m)) return;
     }
   }
 }
@@ -171,7 +172,34 @@ bool CPlanEditor::handleOpacOpts(const SDL_Point& m) {
     }
     return true;
   }
+  return false;
+}
 
+bool CPlanEditor::handleLayerList(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace basicLayer;
+
+  if (SDL_PointInRect(&m, &module_r)) {
+    SDL_Rect layer_rec = k_r;
+    layer_rec.w += z_r.w;
+    short n_lists = 1;
+    for (int i = 0; i < CPlanArea::control.LayerList.size(); i++) {
+      if (i > 0 && i % items_per_list == 0) {
+        if (n_lists < max_num_lists) {
+          layer_rec.x += layer_rec.w + spac_w;
+          layer_rec.y = k_r.y;
+          n_lists++;
+        } else break;
+      }
+      int ID = CPlanArea::control.LayerList.size() - 1 - i;
+      layer_rec.y += layer_rec.h;
+
+      if (SDL_PointInRect(&m, &layer_rec)) {
+        k = ID;
+      }
+    }
+    return true;
+  }
   return false;
 }
 

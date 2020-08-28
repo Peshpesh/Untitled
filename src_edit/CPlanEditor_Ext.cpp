@@ -296,4 +296,24 @@ namespace pvmEditor {
       const SDL_Color* title_fcol = &rgb::white;  // title/info text color
     }
   }
+  namespace basicLayer {
+    const short module_x = 200;
+    const short module_y = WHEIGHT + 10;
+    const short module_w = 200;
+    const short module_h = 80;
+    const SDL_Rect module_r = CAsset::getRect(module_x, module_y, module_w, module_h);
+    const short k_w = 24;
+    const short z_w = 24;
+    const short item_w = k_w + z_w;
+    const short item_h = 9;
+    const short max_num_lists = 3;
+    const short items_per_list = 7;
+    const short spac_w = (module_w - (item_w * max_num_lists)) / (max_num_lists + 1);
+    const SDL_Rect k_r = CAsset::getRect(module_x + spac_w, module_y, k_w, item_h);
+    const SDL_Rect z_r = CAsset::getRect(k_r.x + k_w, module_y, k_w, item_h);
+    const SDL_Point* item_col_A = &palette::white;
+    const SDL_Point* item_col_B = &palette::silver;
+    const SDL_Point* active_col = &palette::green;
+    const SDL_Point* hover_col  = &palette::yellow;
+  }
 } // planview map editor namespaces //
