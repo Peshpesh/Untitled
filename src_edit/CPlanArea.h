@@ -51,38 +51,26 @@ public:
 	// CPlanMap* GetMap(int X, int Y);
 	// CPlanTile* GetTile(int X, int Y);
 
-	/*	Renders the area, or set of maps, to our renderer.
-			It will only render the maps that could possibly be visible
-			in the window at any time, using CameraX and CameraY.
-			param renderer	:	Current renderer
-			param CameraX		:	Camera's X position (increasing LEFT)
-			param CameraY		:	Camera's Y position (increasing UP)
-			param bg			:	Flag to draw foreground or middleground
-	*/
 	// void 	OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
-	void	OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity);
+	void OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity);
 	// void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
 	// void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
 
-	/*	Intended only for map editing.
-			Expands the current area rightward by one map.
-			For example, a 2 map x 2 map area will turn to a
-			3 map x 2 map area upon this call. The added maps
-			are initialized as "empty."
-	*/
-	// void	OnExpandRight();
-	// void	OnExpandLeft();
-	// void	OnExpandUp();
-	// void	OnExpandDown();
-  //
-	// void	OnReduceRight();
-	// bool	OnReduceLeft();
-	// bool	OnReduceUp();
-	// void	OnReduceDown();
+	bool changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles);
 
-	void 	changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles);
-  bool 	OnLoad(char const* File);
-  bool	OnSave(char const* File);
+	void expandRight();
+	void expandLeft();
+	void expandUp();
+	void expandDown();
+
+	bool reduceRight();
+	bool reduceLeft();
+	bool reduceUp();
+	bool reduceDown();
+
+
+  bool OnLoad(char const* File);
+  bool OnSave(char const* File);
 
 	// void	OnCleanup();
 };

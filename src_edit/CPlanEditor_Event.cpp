@@ -5,6 +5,22 @@ void CPlanEditor::OnEvent(SDL_Event* Event) {
   CEvent::OnEvent(Event);
 }
 
+void CPlanEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
+  if (!CInterrupt::isNone()) return;
+
+  switch (sym) {
+    case SDLK_d:  extendMap_R();  break;
+    case SDLK_a:  extendMap_L();  break;
+    case SDLK_s:  extendMap_D();  break;
+    case SDLK_w:  extendMap_U();  break;
+    case SDLK_l:  removeMap_R();  break;
+    case SDLK_j:  removeMap_L();  break;
+    case SDLK_k:  removeMap_D();  break;
+    case SDLK_i:  removeMap_U();  break;
+    default: break;
+  }
+}
+
 void CPlanEditor::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
   if (CInterrupt::isFlagOn(INTRPT_ADD_LAYER)) addLayer(m);
@@ -13,6 +29,7 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
   else {
     if (CAsset::inWorkspace(m)) {
       if (handlePlaceTile(m)) return;
+      if (handleExtendMap(m)) return;
     } else {
       if (handleTileOpts(m))  return;
       if (handleLayerOpts(m)) return;
@@ -27,17 +44,43 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
 }
 
 bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
-  if (CAsset::inWorkspace(m)) {
-    int mX = CCamera::CameraControl.GetX() + m.x;
-    int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
-    placeTile(mX, mY);
-    return true;
-  }
-  return false;
+  int mX = CCamera::CameraControl.GetX() + m.x;
+  int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+  return placeTile(mX, mY);
 }
 
-void CPlanEditor::placeTile(const int& x, const int &y) {
-  CPlanArea::control.changeTile(x, y, k, workTile, placeflag);
+bool CPlanEditor::placeTile(const int& x, const int &y) {
+  return CPlanArea::control.changeTile(x, y, k, workTile, placeflag);
+}
+
+bool CPlanEditor::handleExtendMap(const SDL_Point& m) {
+  int W = 0;
+  int H = 0;
+  CPlanArea::control.GetDims(W, H);
+  W *= MAP_WIDTH * TILE_SIZE;
+  H *= MAP_HEIGHT * TILE_SIZE;
+
+  int mX = CCamera::CameraControl.GetX() + m.x;
+  int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+  if (mX >= 0 && mX < W) {
+    if (mY < 0 && mY >= -TILE_SIZE) {
+      extendMap_U();
+      return true;
+    } else if (mY >= H && mY < H + TILE_SIZE) {
+      extendMap_D();
+      return true;
+    }
+  }
+  if (mY >= 0 && mY < H) {
+    if (mX < 0 && mX >= -TILE_SIZE) {
+      extendMap_L();
+      return true;
+    } else if (mX >= W && mX < W + TILE_SIZE) {
+      extendMap_R();
+      return true;
+    }
+  }
+  return false;
 }
 
 bool CPlanEditor::handleTileOpts(const SDL_Point& m) {
@@ -204,35 +247,43 @@ bool CPlanEditor::handleLayerList(const SDL_Point& m) {
 }
 
 void CPlanEditor::extendMap_R() {
-
+  CPlanArea::control.expandRight();
 }
 
 void CPlanEditor::extendMap_L() {
-
+  CPlanArea::control.expandLeft();
+  // Keep camera focused on same spot (relative to the area prior to expansion)
+  CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);
 }
 
 void CPlanEditor::extendMap_D() {
-
+  CPlanArea::control.expandDown();
 }
 
 void CPlanEditor::extendMap_U() {
-
+  CPlanArea::control.expandUp();
+  // Keep camera focused on same spot
+  CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
 }
 
 void CPlanEditor::removeMap_R() {
-
+  CPlanArea::control.reduceRight();
 }
 
 void CPlanEditor::removeMap_L() {
-
+  if (CPlanArea::control.reduceLeft()) {
+    CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
+  }
 }
 
 void CPlanEditor::removeMap_D() {
-
+  CPlanArea::control.reduceDown();
 }
 
 void CPlanEditor::removeMap_U() {
-
+  if (CPlanArea::control.reduceUp()) {
+    CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
+  }
 }
 
 //=======================//

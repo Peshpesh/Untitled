@@ -113,16 +113,200 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
   }
 }
 
-void CPlanArea::changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles) {
+bool CPlanArea::changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles) {
   if (X < 0 || Y < 0 || k < 0 \
             || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
             || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE) \
-            || k >= LayerList.size()) return;
+            || k >= LayerList.size()) return false;
 
 	int mapWidth = MAP_WIDTH * TILE_SIZE;
 	int mapHeight = MAP_HEIGHT * TILE_SIZE;
 	int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
 	LayerList[k].MapList[ID].changeTile(X % mapWidth, Y % mapHeight, tile, useTiles);
+	return true;
+}
+
+
+// In principle, expanding/reducing maps horizontally should be the same as
+// is done for the platforming maps. All that should change is that
+// the expansion occurs across each layer.
+void CPlanArea::expandRight() {
+	// This resize will make the necessary amount of empty maps.
+	// When we expand one map in width, we need the number of ROWS (or height)
+	// of maps we are currently using. We make that amount of empty maps.
+	// Or, mathematically, 1 (# of new columns) x AreaHeight = # of new maps.
+	int init_mapsize = AreaWidth * AreaHeight;
+	for (int k = 0; k < LayerList.size(); k++) {
+		LayerList[k].MapList.resize(init_mapsize + AreaHeight);
+
+		// Move (copy) our existing maps around, so that their
+		// orientation is preserved.
+		for (int Y = AreaHeight - 1; Y > 0; Y--) {
+			for (int X = AreaWidth - 1; X >= 0; X--) {
+				LayerList[k].MapList[X + Y * (AreaWidth + 1)] = LayerList[k].MapList[X + Y * AreaWidth];
+			}
+		}
+	}
+
+	AreaWidth++;	// We "officially" make our Area's width one map larger
+
+	for (int k = 0; k < LayerList.size(); k++) {
+		// Empty out/refresh our new maps (rightmost column)
+		for (int i = 1; i <= AreaHeight; i++) {
+			CPlanMap tempMap;
+			tempMap.OnLoad();
+			LayerList[k].MapList[i*AreaWidth - 1] = tempMap;
+		}
+	}
+}
+
+void CPlanArea::expandLeft() {
+	// This resize will make the necessary amount of empty maps.
+	// When we expand one map in width, we need the number of ROWS (or height)
+	// of maps we are currently using. We make that amount of empty maps.
+	// Or, mathematically, 1 (# of new columns) x AreaHeight = # of new maps.
+	int init_mapsize = AreaWidth * AreaHeight;
+	for (int k = 0; k < LayerList.size(); k++) LayerList[k].MapList.resize(init_mapsize + AreaHeight);
+
+	AreaWidth++;
+
+	for (int k = 0; k < LayerList.size(); k++) {
+		// Move (copy) our existing maps around, so that their
+		// orientation is preserved.
+		for (int Y = AreaHeight - 1; Y >= 0; Y--) {
+			for (int X = AreaWidth - 1; X > 0; X--) {
+				int ID = X + Y * AreaWidth;
+				LayerList[k].MapList[ID] = LayerList[k].MapList[ID - (Y + 1)];
+			}
+		}
+		// Empty out/refresh our new maps (leftmost column)
+		for (int i = 0; i < AreaHeight; i++) {
+			CPlanMap tempMap;
+			tempMap.OnLoad();
+			LayerList[k].MapList[i*AreaWidth] = tempMap;
+		}
+	}
+}
+
+void CPlanArea::expandUp() {
+	// This resize will make the necessary amount of empty maps.
+	// When we expand one map in height, we need the number of COLUMNS (or width)
+	// of maps we are currently using. We make that amount of empty maps.
+	// Or, mathematically, 1 (# of new rows) x AreaWidth = # of new maps.
+	int init_mapsize = AreaWidth * AreaHeight;
+	for (int k = 0; k < LayerList.size(); k++) LayerList[k].MapList.resize(init_mapsize + AreaWidth);
+	AreaHeight++;	// We "officially" make our Area's height one map larger
+
+	for (int k = 0; k < LayerList.size(); k++) {
+		// Move (copy) our existing maps around, so that their
+		// orientation is preserved.
+		for (int Y = AreaHeight - 1; Y > 0; Y--) {
+			for (int X = AreaWidth - 1; X >= 0; X--) {
+				int ID = X + Y * AreaWidth;
+				LayerList[k].MapList[ID] = LayerList[k].MapList[ID - AreaWidth];
+			}
+		}
+		// Make our new maps (top row)
+		for (int i = 0; i < AreaWidth; i++) {
+			CPlanMap tempMap;
+			tempMap.OnLoad();
+			LayerList[k].MapList[i] = tempMap;
+		}
+	}
+}
+
+void CPlanArea::expandDown() {
+	// This resize will make the necessary amount of empty maps.
+	// When we expand one map in height, we need the number of COLUMNS (or width)
+	// of maps we are currently using. We make that amount of empty maps.
+	// Or, mathematically, 1 (# of new rows) x AreaWidth = # of new maps.
+	int init_mapsize = AreaWidth * AreaHeight;
+	for (int k = 0; k < LayerList.size(); k++) {
+		LayerList[k].MapList.resize(init_mapsize + AreaWidth);
+
+		// No movement of maps is necessary! :D-\-<
+		// Make our new maps (bottom row)
+		for (int i = 0; i < AreaWidth; i++) {
+			CPlanMap tempMap;
+			tempMap.OnLoad();
+			// tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
+			LayerList[k].MapList[i + AreaHeight * AreaWidth] = tempMap;
+		}
+	}
+	AreaHeight++;	// We "officially" make our Area's height one map larger
+								// We waited until after making new maps. Otherwise,
+								// we can just sub in (AreaHeight - 1) into the last
+								// statement in the "for" loop above.
+								// It makes little difference, I think.
+}
+
+bool CPlanArea::reduceRight() {
+	if (AreaWidth <= 1) return false;
+	int mapsize = AreaWidth * AreaHeight;
+	AreaWidth--;	// We "officially" make our Area's width one map smaller
+
+	for (int k = 0; k < LayerList.size(); k++) {
+		// Move (copy) our existing maps around, so that their
+		// orientation is preserved.
+		for (int Y = 1; Y < AreaHeight; Y++) {
+			for (int X = 0; X < AreaWidth; X++) {
+				LayerList[k].MapList[X + Y * AreaWidth] = LayerList[k].MapList[X + Y + Y * AreaWidth];
+			}
+		}
+		LayerList[k].MapList.resize(mapsize - AreaHeight);
+	}
+	return true;
+}
+
+bool CPlanArea::reduceLeft() {
+	if (AreaWidth <= 1) return false;
+	int mapsize = AreaWidth * AreaHeight;
+	AreaWidth--;	// We "officially" make our Area's width one map smaller
+
+	for (int k = 0; k < LayerList.size(); k++) {
+		// Move (copy) our existing maps around, so that their
+		// orientation is preserved.
+		for (int Y = 0; Y < AreaHeight; Y++) {
+			for (int X = 0; X < AreaWidth; X++) {
+				LayerList[k].MapList[X + Y * AreaWidth] = LayerList[k].MapList[X + 1 + Y * (1 + AreaWidth)];
+			}
+		}
+		LayerList[k].MapList.resize(mapsize - AreaHeight);
+	}
+	return true;
+}
+
+bool CPlanArea::reduceUp() {
+	if (AreaHeight <= 1) return false;
+	int mapsize = AreaWidth * AreaHeight;
+
+	for (int k = 0; k < LayerList.size(); k++) {
+		// Move (copy) our existing maps around, so that their
+		// orientation is preserved.
+		for (int Y = 0; Y < AreaHeight - 1; Y++) {
+			for (int X = 0; X < AreaWidth; X++) {
+				LayerList[k].MapList[X + Y * AreaWidth] = LayerList[k].MapList[X + (Y + 1) * AreaWidth];
+			}
+		}
+		LayerList[k].MapList.resize(mapsize - AreaWidth);
+	}
+	AreaHeight--;	// We "officially" make our Area's height one map smaller
+	return true;
+}
+
+bool CPlanArea::reduceDown() {
+	if (AreaHeight <= 1) return false;
+
+	// Probably the simplest area adjustment.
+	// We remove the bottom row of maps,
+	// which requires no rearranging of the
+	// MapList and no loading of blank maps.
+	// The camera position doesn't have to be
+	// changed, either!
+	int mapsize = AreaWidth * AreaHeight;
+	for (int k = 0; k < LayerList.size(); k++) LayerList[k].MapList.resize(mapsize - AreaWidth);
+	AreaHeight--;
+	return true;
 }
 
 bool CPlanArea::OnLoad(char const* File)	{

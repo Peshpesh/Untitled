@@ -47,9 +47,11 @@ public:
   void RenderMap();
 
 private:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void OnLButtonDown(int mX, int mY);
   bool handlePlaceTile(const SDL_Point& m);
-  void placeTile(const int& x, const int& y);
+  bool placeTile(const int& x, const int& y);
+  bool handleExtendMap(const SDL_Point& m);
 
   bool handleTileOpts(const SDL_Point& m);
   bool handleLayerOpts(const SDL_Point& m);
