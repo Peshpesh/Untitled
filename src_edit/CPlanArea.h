@@ -68,6 +68,10 @@ public:
 	bool reduceUp();
 	bool reduceDown();
 
+  bool isRightEmpty();
+  bool isLeftEmpty();
+  bool isUpEmpty();
+  bool isDownEmpty();
 
   bool OnLoad(char const* File);
   bool OnSave(char const* File);

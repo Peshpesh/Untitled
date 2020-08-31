@@ -3,7 +3,7 @@
 CPlanEditor CPlanEditor::control;
 
 CPlanEditor::CPlanEditor() {
-  workTile.ID = 1;
+  workTile.ID = 0;
   visflag = pvm_visflags::MAP | pvm_visflags::FILL;
   placeflag = ENABLE_BG | ENABLE_TYPE | ENABLE_COLL;
   k = 0;
@@ -12,6 +12,9 @@ CPlanEditor::CPlanEditor() {
   active_opacity = MAX_RGBA;
   over_opacity = 120;
   under_opacity = 200;
+  req_rm_side = NULL;
+  pDomain_A = NULL; // point A of domain to fill with tiles/pattern of tiles
+  pDomain_B = NULL; // point B of domain ...
 }
 
 bool CPlanEditor::OnInit() {

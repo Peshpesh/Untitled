@@ -309,6 +309,53 @@ bool CPlanArea::reduceDown() {
 	return true;
 }
 
+bool CPlanArea::isRightEmpty() {
+	// scan the right side of each layer's area
+	// for content.
+	for (int k = 0; k < LayerList.size(); k++) {
+		for (int Y = 0; Y < AreaHeight; Y++) {
+			int ID = (AreaWidth * (Y + 1)) - 1;
+			if (!LayerList[k].MapList[ID].isEmpty()) return false;
+		}
+	}
+	return true;
+}
+
+bool CPlanArea::isLeftEmpty() {
+	// scan the left side of each layer's area
+	// for content.
+	for (int k = 0; k < LayerList.size(); k++) {
+		for (int Y = 0; Y < AreaHeight; Y++) {
+			int ID = AreaWidth * Y;
+			if (!LayerList[k].MapList[ID].isEmpty()) return false;
+		}
+	}
+	return true;
+}
+
+bool CPlanArea::isUpEmpty() {
+	// scan the upper side of each layer's area
+	// for content.
+	for (int k = 0; k < LayerList.size(); k++) {
+		for (int ID = 0; ID < AreaWidth; ID++) {
+			if (!LayerList[k].MapList[ID].isEmpty()) return false;
+		}
+	}
+	return true;
+}
+
+bool CPlanArea::isDownEmpty() {
+	// scan the lower side of each layer's area
+	// for content.
+	for (int k = 0; k < LayerList.size(); k++) {
+		for (int ID = AreaWidth * (AreaHeight - 1); ID < AreaWidth * AreaHeight; ID++) {
+			if (!LayerList[k].MapList[ID].isEmpty()) return false;
+		}
+	}
+	return true;
+}
+
+
 bool CPlanArea::OnLoad(char const* File)	{
 	// try to load area/maps
   std::string fpath = "../data/maps/";

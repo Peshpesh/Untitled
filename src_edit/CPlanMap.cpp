@@ -179,3 +179,14 @@ void CPlanMap::changeTile(const int& X, const int& Y, const CPlanTile& tile, con
 	if (useTiles & ENABLE_TYPE)	TileList[ID].type 	= tile.type;
 	if (useTiles & ENABLE_COLL)	TileList[ID].solid 	= tile.solid;
 }
+
+bool CPlanMap::isEmpty() {
+	int ID = 0;
+	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
+		for (int X = 0; X < MAP_WIDTH; X++) {
+			if (TileList[ID].ID != -1) return false;
+			ID++;
+		}
+	}
+	return true;
+}

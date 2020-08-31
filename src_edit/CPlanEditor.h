@@ -25,11 +25,18 @@ class CPlanEditor : public CEvent {
   int k;
   int sel_k;
   int sel_z;
+
   short active_opacity; // standard opacity of active layer
   short over_opacity;   // standard opacity of layers above active layer
   short under_opacity;  // standard opacity of layers below active layer
   std::vector<short> temp_opac; // vector for temporarily storing old layer opacities
   std::vector<bool> temp_force; // for temporarily storing old force-opacity flags
+
+  char* req_rm_side;  // represents the side of maps to remove if confirmed
+                      // (acts as an interrupt)
+
+  SDL_Point* pDomain_A; // point A of domain to fill with tiles/pattern of tiles
+  SDL_Point* pDomain_B; // point B of domain ...
 
 public:
   static CPlanEditor control;
@@ -49,9 +56,13 @@ public:
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
   void OnLButtonDown(int mX, int mY);
+  void OnRButtonDown(int mX, int mY);
   bool handlePlaceTile(const SDL_Point& m);
   bool placeTile(const int& x, const int& y);
-  bool handleExtendMap(const SDL_Point& m);
+  bool handleMakeDomain(const SDL_Point& m);
+  bool handlePlaceDomain(const SDL_Point& m);
+  void resetDomain();
+  bool handleAdjustArea(const SDL_Point& m, bool extend);
 
   bool handleTileOpts(const SDL_Point& m);
   bool handleLayerOpts(const SDL_Point& m);
@@ -62,6 +73,7 @@ private:
   bool handleOpacOpts(const SDL_Point& m);
   bool handleLayerList(const SDL_Point& m);
 
+  void handleReqRm(const SDL_Point& m);
   bool handleInterr(SDL_Event* Event);
   void changeTileset(SDL_Event* Event);
   void changeTile(SDL_Event* Event);
@@ -80,6 +92,8 @@ private:
   void removeMap_U();
 
 private:
+  bool drawAdjustArea(const SDL_Point* m);
+  bool drawPlaceDomain(const SDL_Point* m);
   bool drawTileOutline(const SDL_Point* m);
   bool drawTileOpts(const SDL_Point* m);
   bool drawLayerOpts(const SDL_Point* m);
@@ -90,6 +104,7 @@ private:
   bool drawOpacOpts(const SDL_Point* m);
   bool drawLayerList(const SDL_Point* m);
 
+  bool drawConfRm(const SDL_Point& m);
   bool drawInterr(const SDL_Point& m);
   bool drawAddLayer(const SDL_Point& m);
   bool drawDelLayer(const SDL_Point& m);
@@ -106,6 +121,16 @@ namespace pvmEditor {
   extern const SDL_Color* btn_fcol;
   extern const short outline_sz;
   extern const SDL_Point* outline_col;
+  namespace adjArea {
+    extern const SDL_Rect window;
+    extern const SDL_Rect info_rec;
+    extern const SDL_Rect yes_btn;
+    extern const SDL_Rect no_btn;
+    extern const char* const info;
+    extern const SDL_Point* window_col;
+    extern const SDL_Point* border_col;
+    extern const SDL_Color* title_fcol;
+  }
   namespace tileOpts {
     extern const SDL_Rect ts_button;
     extern const SDL_Rect tile_button;

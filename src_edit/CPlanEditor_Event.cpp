@@ -5,20 +5,32 @@ void CPlanEditor::OnEvent(SDL_Event* Event) {
   CEvent::OnEvent(Event);
 }
 
+bool CPlanEditor::handleInterr(SDL_Event* Event) {
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG)) {
+    changeTile(Event);
+    return true;
+  }
+  if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
+    changeTileset(Event);
+    return true;
+  }
+  return false;
+}
+
 void CPlanEditor::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   if (!CInterrupt::isNone()) return;
 
-  switch (sym) {
-    case SDLK_d:  extendMap_R();  break;
-    case SDLK_a:  extendMap_L();  break;
-    case SDLK_s:  extendMap_D();  break;
-    case SDLK_w:  extendMap_U();  break;
-    case SDLK_l:  removeMap_R();  break;
-    case SDLK_j:  removeMap_L();  break;
-    case SDLK_k:  removeMap_D();  break;
-    case SDLK_i:  removeMap_U();  break;
-    default: break;
-  }
+  // switch (sym) {
+  //   case SDLK_d:  extendMap_R();  break;
+  //   case SDLK_a:  extendMap_L();  break;
+  //   case SDLK_s:  extendMap_D();  break;
+  //   case SDLK_w:  extendMap_U();  break;
+  //   case SDLK_l:  removeMap_R();  break;
+  //   case SDLK_j:  removeMap_L();  break;
+  //   case SDLK_k:  removeMap_D();  break;
+  //   case SDLK_i:  removeMap_U();  break;
+  //   default: break;
+  // }
 }
 
 void CPlanEditor::OnLButtonDown(int mX, int mY) {
@@ -26,20 +38,34 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
   if (CInterrupt::isFlagOn(INTRPT_ADD_LAYER)) addLayer(m);
   else if (CInterrupt::isFlagOn(INTRPT_DEL_LAYER)) deleteLayer(m);
   else if (CInterrupt::isFlagOn(INTRPT_ADJ_LAYOP)) adjustOpacity(m);
-  else {
-    if (CAsset::inWorkspace(m)) {
-      if (handlePlaceTile(m)) return;
-      if (handleExtendMap(m)) return;
+  else if (CInterrupt::isNone()) {
+    if (req_rm_side) {
+      handleReqRm(m);
     } else {
-      if (handleTileOpts(m))  return;
-      if (handleLayerOpts(m)) return;
-      if (handleSolidOpts(m)) return;
-      if (handleTypeOpts(m))  return;
-      if (handlePlaceOpts(m)) return;
-      if (handleVisOpts(m))   return;
-      if (handleOpacOpts(m))  return;
-      if (handleLayerList(m)) return;
+      if (CAsset::inWorkspace(m)) {
+        if (handlePlaceTile(m)) return;
+        if (handleAdjustArea(m, true)) return;
+      } else {
+        if (handleTileOpts(m))  return;
+        if (handleLayerOpts(m)) return;
+        if (handleSolidOpts(m)) return;
+        if (handleTypeOpts(m))  return;
+        if (handlePlaceOpts(m)) return;
+        if (handleVisOpts(m))   return;
+        if (handleOpacOpts(m))  return;
+        if (handleLayerList(m)) return;
+      }
     }
+  }
+}
+
+void CPlanEditor::OnRButtonDown(int mX, int mY) {
+  const SDL_Point m = {mX, mY};
+  if (CInterrupt::isNone() && !req_rm_side && CAsset::inWorkspace(m)) {
+    if (!pDomain_A) {
+      if (handleAdjustArea(m, false)) return;
+    }
+    if (handleMakeDomain(m)) return;
   }
 }
 
@@ -53,35 +79,148 @@ bool CPlanEditor::placeTile(const int& x, const int &y) {
   return CPlanArea::control.changeTile(x, y, k, workTile, placeflag);
 }
 
-bool CPlanEditor::handleExtendMap(const SDL_Point& m) {
+bool CPlanEditor::handleMakeDomain(const SDL_Point& m) {
+  if (CAsset::inWorkspace(m)) {
+    if (pDomain_A == NULL) {
+      pDomain_A = new SDL_Point;
+      pDomain_A->x = m.x + CCamera::CameraControl.GetX();
+      pDomain_A->y = m.y + CCamera::CameraControl.GetY();
+    }
+    else if (pDomain_B == NULL) {
+      pDomain_B = new SDL_Point;
+      pDomain_B->x = m.x + CCamera::CameraControl.GetX();
+      pDomain_B->y = m.y + CCamera::CameraControl.GetY();
+    }
+    else {
+      resetDomain();
+    }
+    return true;
+  }
+  return false;
+}
+
+bool CPlanEditor::handlePlaceDomain(const SDL_Point& m) {
+  bool retval = false;
+  // if (CAsset::inWorkspace(mouse))
+  // {
+  //   if (rClickA != NULL && rClickB != NULL)
+  //   {
+  //     retval = true;
+  //     SDL_Rect dom = getTileDomain(rClickA, rClickB);
+  //     SDL_Point clickPos = CCamera::CameraControl.GetCamRelPoint(*mouse);
+  //
+  //     if (SDL_PointInRect(&clickPos, &dom))
+  //     {
+  //       // update the highlighted region in the map
+  //       int tW = TILE_SIZE * (1 + (active_TR || active_BR));
+  //       int tH = TILE_SIZE * (1 + (active_BL || active_BR));
+  //       for (int tX = 0; tX < dom.w / tW; tX++)
+  //       {
+  //         for (int tY = 0; tY < dom.h / tH; tY++)
+  //         {
+  //           int mX = dom.x + (tX * tW);
+  //           int mY = dom.y + (tY * tH);
+  //           placeBlock(mX, mY);
+  //         }
+  //       }
+  //     }
+  //   }
+  //   resetRClick();
+  // }
+  return retval;
+}
+
+void CPlanEditor::resetDomain() {
+  if (pDomain_A != NULL) {
+    delete pDomain_A;
+    pDomain_A = NULL;
+  }
+  if (pDomain_B != NULL) {
+    delete pDomain_B;
+    pDomain_B = NULL;
+  }
+}
+
+bool CPlanEditor::handleAdjustArea(const SDL_Point& m, bool extend) {
   int W = 0;
   int H = 0;
   CPlanArea::control.GetDims(W, H);
-  W *= MAP_WIDTH * TILE_SIZE;
-  H *= MAP_HEIGHT * TILE_SIZE;
+  int px_W = W * MAP_WIDTH * TILE_SIZE;
+  int px_H = H * MAP_HEIGHT * TILE_SIZE;
 
   int mX = CCamera::CameraControl.GetX() + m.x;
   int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
-  if (mX >= 0 && mX < W) {
+  if (mX >= 0 && mX < px_W) {
     if (mY < 0 && mY >= -TILE_SIZE) {
-      extendMap_U();
+      if (extend) extendMap_U();
+      else if (H > 1) {
+        if (CPlanArea::control.isUpEmpty()) removeMap_U();
+        else {
+          req_rm_side   = new char;
+          *req_rm_side  = 'U';
+        }
+      }
       return true;
-    } else if (mY >= H && mY < H + TILE_SIZE) {
-      extendMap_D();
+    } else if (mY >= px_H && mY < px_H + TILE_SIZE) {
+      if (extend) extendMap_D();
+      else if (H > 1) {
+        if (CPlanArea::control.isDownEmpty()) removeMap_D();
+        else {
+          req_rm_side   = new char;
+          *req_rm_side  = 'D';
+        }
+      }
       return true;
     }
   }
-  if (mY >= 0 && mY < H) {
+
+  if (mY >= 0 && mY < px_H) {
     if (mX < 0 && mX >= -TILE_SIZE) {
-      extendMap_L();
+      if (extend) extendMap_L();
+      else if (W > 1) {
+        if (CPlanArea::control.isLeftEmpty()) removeMap_L();
+        else {
+          req_rm_side   = new char;
+          *req_rm_side  = 'L';
+        }
+      }
       return true;
-    } else if (mX >= W && mX < W + TILE_SIZE) {
-      extendMap_R();
+    } else if (mX >= px_W && mX < px_W + TILE_SIZE) {
+      if (extend) extendMap_R();
+      else if (W > 1) {
+        if (CPlanArea::control.isRightEmpty()) removeMap_R();
+        else {
+          req_rm_side   = new char;
+          *req_rm_side  = 'R';
+        }
+      }
       return true;
     }
   }
   return false;
 }
+
+void CPlanEditor::handleReqRm(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace adjArea;
+
+  if (SDL_PointInRect(&m, &yes_btn)) {
+    switch (*req_rm_side) {
+      case 'R': removeMap_R(); break;
+      case 'L': removeMap_L(); break;
+      case 'U': removeMap_U(); break;
+      case 'D': removeMap_D(); break;
+      default: break;
+    }
+    delete req_rm_side;
+    req_rm_side = NULL;
+  } else if (SDL_PointInRect(&m, &no_btn)) {
+    delete req_rm_side;
+    req_rm_side = NULL;
+  }
+}
+
+
 
 bool CPlanEditor::handleTileOpts(const SDL_Point& m) {
   using namespace pvmEditor;
@@ -289,18 +428,6 @@ void CPlanEditor::removeMap_U() {
 //=======================//
 // Interruption handling //
 //=======================//
-
-bool CPlanEditor::handleInterr(SDL_Event* Event) {
-  if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG)) {
-    changeTile(Event);
-    return true;
-  }
-  if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
-    changeTileset(Event);
-    return true;
-  }
-  return false;
-}
 
 void CPlanEditor::changeTileset(SDL_Event* Event) {
   CTileset::TSControl.OnEvent(Event);

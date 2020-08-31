@@ -10,6 +10,29 @@ namespace pvmEditor {
   const SDL_Color* btn_fcol = &rgb::black;          // default button text color
   const short outline_sz = 2;
   const SDL_Point* outline_col = &palette::light_cyan; // color of outline for placing tiles
+  namespace adjArea {
+    const short w = 160;
+    const short h = 80;
+    const short x = (WWIDTH - w) / 2;
+    const short y = (WHEIGHT - h) / 2;
+    const SDL_Rect window = CAsset::getRect(x,y,w,h);
+    const short info_w  = 130;
+    const short info_x  = x + ((w - info_w) / 2);
+    const short info_h  = 40;
+    const SDL_Rect info_rec = CAsset::getRect(info_x, y, info_w, info_h);
+    const short btn_w   = 40;
+    const short btn_h   = 16;
+    const short btn_y   = y + info_h;
+    const short spac_w  = 20;
+    const short yes_x   = x + ((w - (spac_w + (btn_w * 2))) / 2);
+    const short no_x    = yes_x + btn_w + spac_w;
+    const SDL_Rect yes_btn = CAsset::getRect(yes_x, btn_y, btn_w, btn_h);
+    const SDL_Rect no_btn  = CAsset::getRect(no_x, btn_y, btn_w, btn_h);
+    const char* const info = "Are you sure you want to remove these maps?";
+    const SDL_Point* window_col = &palette::black;
+    const SDL_Point* border_col = &palette::white;
+    const SDL_Color* title_fcol = &rgb::white;  // title/info text color
+  }
   namespace tileOpts {
     const short w = 80;
     const short tset_h = 32;  // height of change-tileset button

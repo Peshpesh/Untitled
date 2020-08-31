@@ -1,19 +1,25 @@
 #include "CPlanEditor.h"
 
 bool CPlanEditor::OnRender(const SDL_Point& m) {
+  bool interr = !(CInterrupt::isNone()) || req_rm_side;
+
+  if (!drawAdjustArea(interr ? NULL : &m))  return false;
+  if (!drawPlaceDomain(interr ? NULL : &m)) return false;
+  if (!drawTileOutline(interr ? NULL : &m)) return false;
+
   if (!CAsset::drawAppFrame()) return false;
 
-  bool interr = !(CInterrupt::isNone());
-
-  if (!drawTileOutline(interr ? NULL : &m)) return false;
-  if (!drawTileOpts(interr ? NULL : &m))    return false;
-  if (!drawLayerOpts(interr ? NULL : &m))   return false;
+  if (!drawTileOpts(interr ? NULL : &m))  return false;
+  if (!drawLayerOpts(interr ? NULL : &m)) return false;
   if (!drawVisOpts())   return false;
   if (!drawPlaceOpts()) return false;
   if (!drawSolidOpts()) return false;
   if (!drawTypeOpts())  return false;
   if (!drawOpacOpts(interr ? NULL : &m))  return false;
   if (!drawLayerList(interr ? NULL : &m)) return false;
+  if (req_rm_side) {
+    if (!drawConfRm(m)) return false;
+  }
   if (!drawInterr(m))   return false;
   return true;
 }
@@ -30,6 +36,54 @@ void CPlanEditor::RenderMap() {
     }
   }
   CTileset::TSControl.maxTileAlpha();
+}
+
+bool CPlanEditor::drawPlaceDomain(const SDL_Point* m) {
+	if (!m || !CInterrupt::isNone()) return true;
+  using namespace pvmEditor;
+
+  SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(*m);
+
+	if (pDomain_A != NULL) {
+
+		if (pDomain_B == NULL) {
+			// SDL_Rect box = getTileDomain(pDomain_A, mapPos);
+      SDL_Rect box = CAsset::getTileRect(pDomain_A, m);
+			CCamera::CameraControl.MakeWinRel(box.x, box.y);
+			if (!CAsset::drawBox(&box, &palette::red, stroke_sz)) return false;
+		} else {
+			// SDL_Rect box = getTileDomain(pDomain_A, pDomain_B);
+      SDL_Rect box = CAsset::getTileRect(pDomain_A, pDomain_B);
+			CCamera::CameraControl.MakeWinRel(box.x, box.y);
+			// const SDL_Point* color = SDL_PointInRect(&m, &box) ? hoverAreaColor : fixAreaColor;
+			if (!CAsset::drawBox(&box, &palette::red, stroke_sz)) return false;
+		}
+	}
+	return true;
+}
+
+bool CPlanEditor::drawAdjustArea(const SDL_Point* m) {
+  using namespace pvmEditor;
+
+  int W = 0;
+  int H = 0;
+  CPlanArea::control.GetDims(W, H);
+  W *= MAP_WIDTH * TILE_SIZE;
+  H *= MAP_HEIGHT * TILE_SIZE;
+  int cam_x = CCamera::CameraControl.GetX();
+  int cam_y = CCamera::CameraControl.GetY();
+
+  SDL_Rect upper_r  = CAsset::getRect(-cam_x, -TILE_SIZE-cam_y, W, TILE_SIZE);
+  SDL_Rect lower_r  = CAsset::getRect(-cam_x, H-cam_y, W, TILE_SIZE);
+  SDL_Rect left_r   = CAsset::getRect(-TILE_SIZE-cam_x, -cam_y, TILE_SIZE, H);
+  SDL_Rect right_r  = CAsset::getRect(W-cam_x, -cam_y, TILE_SIZE, H);
+
+  if (!CAsset::drawStrBox(&upper_r, stroke_sz, on_col)) return false;
+  if (!CAsset::drawStrBox(&lower_r, stroke_sz, on_col)) return false;
+  if (!CAsset::drawStrBox(&left_r, stroke_sz, on_col))  return false;
+  if (!CAsset::drawStrBox(&right_r, stroke_sz, on_col)) return false;
+
+  return true;
 }
 
 bool CPlanEditor::drawTileOutline(const SDL_Point* m) {
@@ -240,6 +294,26 @@ bool CPlanEditor::drawLayerList(const SDL_Point* m) {
 
     alt_col = !alt_col;
   }
+  return true;
+}
+
+bool CPlanEditor::drawConfRm(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace adjArea;
+
+  if (!CAsset::drawStrBox(&window, stroke_sz, window_col, border_col)) return false;
+
+  Font::NewCenterWrite(info, &info_rec, title_fcol);
+
+  // draw create & cancel buttons
+  if (!CAsset::drawStrBox(&yes_btn, stroke_sz,
+    SDL_PointInRect(&m, &yes_btn) ? on_col : window_col, border_col)) return false;
+  if (!CAsset::drawStrBox(&no_btn, stroke_sz,
+    SDL_PointInRect(&m, &no_btn) ? off_col : window_col, border_col)) return false;
+
+  Font::NewCenterWrite("YES", &yes_btn, SDL_PointInRect(&m, &yes_btn) ? btn_fcol : title_fcol);
+  Font::NewCenterWrite("NO", &no_btn, SDL_PointInRect(&m, &no_btn) ? btn_fcol : title_fcol);
+
   return true;
 }
 
