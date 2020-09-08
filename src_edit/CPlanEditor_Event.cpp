@@ -42,11 +42,13 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
     if (req_rm_side) {
       handleReqRm(m);
     } else {
+      if (handlePlaceDomain(m)) return;
       if (CAsset::inWorkspace(m)) {
         if (handlePlaceTile(m)) return;
         if (handleAdjustArea(m, true)) return;
       } else {
         if (handleTileOpts(m))  return;
+        if (handlePatternOpts(m)) return;
         if (handleLayerOpts(m)) return;
         if (handleSolidOpts(m)) return;
         if (handleTypeOpts(m))  return;
@@ -65,7 +67,11 @@ void CPlanEditor::OnRButtonDown(int mX, int mY) {
     if (!pDomain_A) {
       if (handleAdjustArea(m, false)) return;
     }
-    if (handleMakeDomain(m)) return;
+    if (!pDomain_B) {
+      if (handleMakeDomain(m)) return;
+    } else {
+      if (handlePlaceDomain(m)) return;
+    }
   }
 }
 
@@ -101,32 +107,30 @@ bool CPlanEditor::handleMakeDomain(const SDL_Point& m) {
 
 bool CPlanEditor::handlePlaceDomain(const SDL_Point& m) {
   bool retval = false;
-  // if (CAsset::inWorkspace(mouse))
-  // {
-  //   if (rClickA != NULL && rClickB != NULL)
-  //   {
-  //     retval = true;
-  //     SDL_Rect dom = getTileDomain(rClickA, rClickB);
-  //     SDL_Point clickPos = CCamera::CameraControl.GetCamRelPoint(*mouse);
-  //
-  //     if (SDL_PointInRect(&clickPos, &dom))
-  //     {
-  //       // update the highlighted region in the map
-  //       int tW = TILE_SIZE * (1 + (active_TR || active_BR));
-  //       int tH = TILE_SIZE * (1 + (active_BL || active_BR));
-  //       for (int tX = 0; tX < dom.w / tW; tX++)
-  //       {
-  //         for (int tY = 0; tY < dom.h / tH; tY++)
-  //         {
-  //           int mX = dom.x + (tX * tW);
-  //           int mY = dom.y + (tY * tH);
-  //           placeBlock(mX, mY);
-  //         }
-  //       }
-  //     }
-  //   }
-  //   resetRClick();
-  // }
+  if (!pDomain_A) return retval;
+  else if (!pDomain_B) {
+    resetDomain();
+    return retval;
+  }
+
+  SDL_Rect d = CAsset::getTileRect(pDomain_A, pDomain_B);
+  SDL_Point m_rel = CCamera::CameraControl.GetCamRelPoint(m);
+  if (SDL_PointInRect(&m_rel, &d)) {
+    retval = true;
+
+    // fill domain...
+    int tW = TILE_SIZE;
+    int tH = TILE_SIZE;
+    for (int tX = 0; tX < d.w / tW; tX++) {
+      for (int tY = 0; tY < d.h / tH; tY++) {
+        int mX = d.x + (tX * tW);
+        int mY = d.y + (tY * tH) + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+        placeTile(mX, mY);
+      }
+    }
+    resetDomain();
+  } else if (CAsset::inWorkspace(m)) resetDomain();
+
   return retval;
 }
 
@@ -239,6 +243,43 @@ bool CPlanEditor::handleTileOpts(const SDL_Point& m) {
     CInterrupt::appendFlag(INTRPT_CHANGE_BG);
     return true;
   }
+  return false;
+}
+
+
+bool CPlanEditor::handlePatternOpts(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace patternOpts;
+
+  // Click on Use/Free Pattern button.
+  if (workPattern.size()) {
+    if (SDL_PointInRect(&m, &button)) {
+      // free pattern
+      pattern_w = pattern_h = 0;
+      workPattern.clear();
+      return true;
+    }
+  } else if (pDomain_A && pDomain_B && SDL_PointInRect(&m, &button)) {
+    SDL_Rect box = CAsset::getTileRect(pDomain_A, pDomain_B);
+    int tW = box.w / TILE_SIZE;
+    int tH = box.h / TILE_SIZE;
+    if (tW <= MAX_PATTERN_W && tH <= MAX_PATTERN_H) {
+      // get pattern for use
+      for (int Y = 0; Y < tH; Y++) {
+        for (int X = 0; X < tW; X++) {
+          int mX = box.x + (X * TILE_SIZE);
+          int mY = box.y + (Y * TILE_SIZE) + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+          CPlanTile* tmp = CPlanArea::control.GetTile(mX, mY, k);
+          workPattern.push_back(*tmp);
+        }
+      }
+      pattern_w = tW;
+      pattern_h = tH;
+      resetDomain();
+    }
+    return true;
+  }
+
   return false;
 }
 

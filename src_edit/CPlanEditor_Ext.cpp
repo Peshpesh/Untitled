@@ -9,7 +9,10 @@ namespace pvmEditor {
   const SDL_Point* off_col = &palette::red;         // default button-off color
   const SDL_Color* btn_fcol = &rgb::black;          // default button text color
   const short outline_sz = 2;
-  const SDL_Point* outline_col = &palette::light_cyan; // color of outline for placing tiles
+  const SDL_Point* outline_col      = &palette::light_cyan; // color of outline for placing tiles
+  const SDL_Point* big_outline_col  = &palette::dark_cyan;  // color of outline if too large for patterns
+  const SDL_Point* domain_col       = &palette::yellow; // outline for created domain
+  const SDL_Point* conf_domain_col  = &palette::red;    // hover-over-domain color
   namespace adjArea {
     const short w = 160;
     const short h = 80;
@@ -50,12 +53,22 @@ namespace pvmEditor {
     const char* const ts_title = "Change Tileset";
     const char* const tile_title = "Select Tile";
   }
+  namespace patternOpts {
+    const short w = 80;
+    const short h = 24;
+    const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
+    const short y = 76;
+    const SDL_Rect button = CAsset::getRect(x, y, w, h);
+    const SDL_Color* title_fcol = &rgb::black;
+    const char* const off_title = "Use Pattern";
+    const char* const on_title  = "Free Pattern";
+  }
   namespace layerOpts {
     const short w = 80;
     const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
     const short h = 32;
     const short spac = 4;
-    const short add_y = 90;
+    const short add_y = 108;
     const short del_y = add_y + h + spac;
     const SDL_Rect add_button = CAsset::getRect(x, add_y, w, h);
     const SDL_Rect del_button = CAsset::getRect(x, del_y, w, h);

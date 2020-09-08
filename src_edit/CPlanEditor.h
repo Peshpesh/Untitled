@@ -21,7 +21,15 @@ class CPlanEditor : public CEvent {
 
   short visflag;    // bitwise flag for rendering map & its attributes
   int placeflag;    // bitwise flag for tiles to place
+
+  // single working tile
   CPlanTile workTile;
+
+  // array of working tiles (pattern)
+  std::vector<CPlanTile> workPattern;
+  short pattern_w;
+  short pattern_h;
+
   int k;
   int sel_k;
   int sel_z;
@@ -65,6 +73,7 @@ private:
   bool handleAdjustArea(const SDL_Point& m, bool extend);
 
   bool handleTileOpts(const SDL_Point& m);
+  bool handlePatternOpts(const SDL_Point& m);
   bool handleLayerOpts(const SDL_Point& m);
   bool handleVisOpts(const SDL_Point& m);
   bool handlePlaceOpts(const SDL_Point& m);
@@ -96,6 +105,7 @@ private:
   bool drawPlaceDomain(const SDL_Point* m);
   bool drawTileOutline(const SDL_Point* m);
   bool drawTileOpts(const SDL_Point* m);
+  bool drawPatternOpts(const SDL_Point* m);
   bool drawLayerOpts(const SDL_Point* m);
   bool drawVisOpts();
   bool drawPlaceOpts();
@@ -121,6 +131,9 @@ namespace pvmEditor {
   extern const SDL_Color* btn_fcol;
   extern const short outline_sz;
   extern const SDL_Point* outline_col;
+  extern const SDL_Point* big_outline_col;
+  extern const SDL_Point* domain_col;
+  extern const SDL_Point* conf_domain_col;
   namespace adjArea {
     extern const SDL_Rect window;
     extern const SDL_Rect info_rec;
@@ -138,11 +151,15 @@ namespace pvmEditor {
     extern const char* const ts_title;
     extern const char* const tile_title;
   }
+  namespace patternOpts {
+    extern const SDL_Rect button;
+    extern const SDL_Color* title_fcol;
+    extern const char* const off_title;
+    extern const char* const on_title;
+  }
   namespace layerOpts {
     extern const SDL_Rect add_button;
     extern const SDL_Rect del_button;
-    // extern const SDL_Rect sel_button;
-    // extern const SDL_Rect edt_button;
     extern const char* const add_str;
     extern const char* const del_str;
     namespace addOpts {

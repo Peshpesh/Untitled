@@ -15,6 +15,8 @@ CPlanEditor::CPlanEditor() {
   req_rm_side = NULL;
   pDomain_A = NULL; // point A of domain to fill with tiles/pattern of tiles
   pDomain_B = NULL; // point B of domain ...
+  pattern_w = 0;
+  pattern_h = 0;
 }
 
 bool CPlanEditor::OnInit() {

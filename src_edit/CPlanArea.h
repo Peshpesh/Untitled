@@ -49,7 +49,8 @@ public:
   void delLayer(const short& K);
 	void GetDims(int& mW, int& mH);
 	// CPlanMap* GetMap(int X, int Y);
-	// CPlanTile* GetTile(int X, int Y);
+	CPlanTile* GetTile(const int& X, const int& Y, const int& k); // get address to tile in map
+  // CPlanTile GetTileCopy(int X, int Y); // get copy of a tile in map
 
 	// void 	OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
 	void OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity);

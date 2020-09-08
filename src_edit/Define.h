@@ -3,6 +3,8 @@
 
 #define MAP_WIDTH 20	// tiles
 #define MAP_HEIGHT 20	// tiles
+#define MAX_PATTERN_W 12 // tiles
+#define MAX_PATTERN_H 12 // tiles
 
 #define TILE_SIZE 32	// pixels
 

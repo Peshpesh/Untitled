@@ -53,6 +53,37 @@ void CPlanArea::GetDims(int& mW, int& mH)	{
 	mH = AreaHeight;
 }
 
+// CPlanMap* CPlanArea::GetMap(int X, int Y, int k) {
+// 	// Note that X and Y .
+//
+// }
+//
+CPlanTile* CPlanArea::GetTile(const int& X, const int& Y, const int& k) {
+	if (X < 0 || Y < 0 || k < 0 \
+            || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
+            || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE) \
+            || k >= LayerList.size()) return NULL;
+
+	int mapWidth = MAP_WIDTH * TILE_SIZE;
+	int mapHeight = MAP_HEIGHT * TILE_SIZE;
+	int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
+	return LayerList[k].MapList[ID].GetTile(X % mapWidth, Y % mapHeight);
+}
+
+// CPlanTile* CPlanArea::GetTileCopy(const int& X, const int& Y, const int& k) {
+// 	if (X < 0 || Y < 0 || k < 0 \
+//             || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
+//             || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE) \
+//             || k >= LayerList.size()) return false;
+//
+// 	int mapWidth = MAP_WIDTH * TILE_SIZE;
+// 	int mapHeight = MAP_HEIGHT * TILE_SIZE;
+// 	int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
+// 	CPlanTile* tmp = LayerList[k].MapList[ID].GetTile(X % mapWidth, Y % mapHeight);
+// 	return true;
+// }
+
+
 void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity) {
   // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the

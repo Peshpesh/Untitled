@@ -5,16 +5,19 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
 
   if (!drawAdjustArea(interr ? NULL : &m))  return false;
   if (!drawPlaceDomain(interr ? NULL : &m)) return false;
-  if (!drawTileOutline(interr ? NULL : &m)) return false;
+  if (!drawTileOutline(interr || pDomain_A ? NULL : &m)) return false;
 
   if (!CAsset::drawAppFrame()) return false;
 
-  if (!drawTileOpts(interr ? NULL : &m))  return false;
-  if (!drawLayerOpts(interr ? NULL : &m)) return false;
+  if (!drawTileOpts(interr ? NULL : &m))    return false;
+  if (!drawPatternOpts(interr ? NULL : &m)) return false;
+  if (!drawLayerOpts(interr ? NULL : &m))   return false;
+
   if (!drawVisOpts())   return false;
   if (!drawPlaceOpts()) return false;
   if (!drawSolidOpts()) return false;
   if (!drawTypeOpts())  return false;
+
   if (!drawOpacOpts(interr ? NULL : &m))  return false;
   if (!drawLayerList(interr ? NULL : &m)) return false;
   if (req_rm_side) {
@@ -45,18 +48,18 @@ bool CPlanEditor::drawPlaceDomain(const SDL_Point* m) {
   SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(*m);
 
 	if (pDomain_A != NULL) {
-
 		if (pDomain_B == NULL) {
-			// SDL_Rect box = getTileDomain(pDomain_A, mapPos);
-      SDL_Rect box = CAsset::getTileRect(pDomain_A, m);
+      SDL_Rect box = CAsset::getTileRect(pDomain_A, &mapPos);
+      int tW = box.w / TILE_SIZE;
+      int tH = box.h / TILE_SIZE;
+      const SDL_Point* color = (tW > MAX_PATTERN_W || tH > MAX_PATTERN_H) ? big_outline_col : outline_col;
 			CCamera::CameraControl.MakeWinRel(box.x, box.y);
-			if (!CAsset::drawBox(&box, &palette::red, stroke_sz)) return false;
+			if (!CAsset::drawBox(&box, color, outline_sz)) return false;
 		} else {
-			// SDL_Rect box = getTileDomain(pDomain_A, pDomain_B);
       SDL_Rect box = CAsset::getTileRect(pDomain_A, pDomain_B);
 			CCamera::CameraControl.MakeWinRel(box.x, box.y);
-			// const SDL_Point* color = SDL_PointInRect(&m, &box) ? hoverAreaColor : fixAreaColor;
-			if (!CAsset::drawBox(&box, &palette::red, stroke_sz)) return false;
+			const SDL_Point* color = SDL_PointInRect(m, &box) ? conf_domain_col : domain_col;
+			if (!CAsset::drawBox(&box, color, outline_sz)) return false;
 		}
 	}
 	return true;
@@ -71,12 +74,13 @@ bool CPlanEditor::drawAdjustArea(const SDL_Point* m) {
   W *= MAP_WIDTH * TILE_SIZE;
   H *= MAP_HEIGHT * TILE_SIZE;
   int cam_x = CCamera::CameraControl.GetX();
-  int cam_y = CCamera::CameraControl.GetY();
+  int cam_y = CCamera::CameraControl.GetY(); // note: cam Y=0 at the upper edge of Z=0 area
+  int y_offset = CPlanArea::control.LayerList[k].Z * TILE_SIZE;
 
-  SDL_Rect upper_r  = CAsset::getRect(-cam_x, -TILE_SIZE-cam_y, W, TILE_SIZE);
-  SDL_Rect lower_r  = CAsset::getRect(-cam_x, H-cam_y, W, TILE_SIZE);
-  SDL_Rect left_r   = CAsset::getRect(-TILE_SIZE-cam_x, -cam_y, TILE_SIZE, H);
-  SDL_Rect right_r  = CAsset::getRect(W-cam_x, -cam_y, TILE_SIZE, H);
+  SDL_Rect upper_r  = CAsset::getRect(-cam_x,           -TILE_SIZE-cam_y-y_offset,  W, TILE_SIZE);
+  SDL_Rect lower_r  = CAsset::getRect(-cam_x,           H-cam_y-y_offset,           W, TILE_SIZE);
+  SDL_Rect left_r   = CAsset::getRect(-TILE_SIZE-cam_x, -cam_y-y_offset,            TILE_SIZE, H);
+  SDL_Rect right_r  = CAsset::getRect(W-cam_x,          -cam_y-y_offset,            TILE_SIZE, H);
 
   if (!CAsset::drawStrBox(&upper_r, stroke_sz, on_col)) return false;
   if (!CAsset::drawStrBox(&lower_r, stroke_sz, on_col)) return false;
@@ -121,6 +125,30 @@ bool CPlanEditor::drawTileOpts(const SDL_Point* m) {
   }
   Font::NewCenterWrite(ts_title, &ts_button, title_fcol);
   Font::NewCenterWrite(tile_title, &tile_button, title_fcol);
+  return true;
+}
+
+bool CPlanEditor::drawPatternOpts(const SDL_Point* m) {
+  using namespace pvmEditor;
+  using namespace patternOpts;
+
+  bool active = workPattern.size();
+  if (!active && (pDomain_A && pDomain_B)) {
+    SDL_Rect box = CAsset::getTileRect(pDomain_A, pDomain_B);
+    int tW = box.w / TILE_SIZE;
+    int tH = box.h / TILE_SIZE;
+    if (tW <= MAX_PATTERN_W && tH <= MAX_PATTERN_H) active = true;
+  }
+
+  if (m) {
+    if (!CAsset::drawStrBox(&button, stroke_sz,
+        active ? (SDL_PointInRect(m, &button) ? hov_col : btn_col) : nul_col)) return false;
+  } else {
+    if (!CAsset::drawStrBox(&button, stroke_sz,
+        active ? btn_col : nul_col)) return false;
+  }
+
+  Font::NewCenterWrite(workPattern.size() ? on_title : off_title, &button, title_fcol);
   return true;
 }
 
