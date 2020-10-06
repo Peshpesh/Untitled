@@ -74,6 +74,7 @@ public:
 
   bool OnRender(const SDL_Point* m);
   void drawOptions(const SDL_Point* m);
+  short drawTile(const int& ID, const int& X, const int& Y);
 
   std::string getFileName();
   std::string getFilePath();

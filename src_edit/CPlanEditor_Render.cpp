@@ -5,7 +5,7 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
 
   if (!drawAdjustArea(interr ? NULL : &m))  return false;
   if (!drawPlaceDomain(interr ? NULL : &m)) return false;
-  if (!drawTileOutline(interr || pDomain_A ? NULL : &m)) return false;
+  if (!drawPlacePreview(interr || pDomain_A ? NULL : &m)) return false;
 
   if (!CAsset::drawAppFrame()) return false;
 
@@ -90,7 +90,7 @@ bool CPlanEditor::drawAdjustArea(const SDL_Point* m) {
   return true;
 }
 
-bool CPlanEditor::drawTileOutline(const SDL_Point* m) {
+bool CPlanEditor::drawPlacePreview(const SDL_Point* m) {
   if (!m || !CAsset::inWorkspace(m)) return true;
 
   SDL_Point map_pos = CCamera::CameraControl.GetCamRelPoint(*m);
@@ -99,9 +99,31 @@ bool CPlanEditor::drawTileOutline(const SDL_Point* m) {
   if (map_pos.x < 0) tX -= TILE_SIZE;
   if (map_pos.y < 0) tY -= TILE_SIZE;
 
-  SDL_Rect dstR = {tX, tY, TILE_SIZE, TILE_SIZE};
+  SDL_Rect dstR;
+  dstR.x = tX;
+  dstR.y = tY;
+  dstR.w = workPattern.size() ? TILE_SIZE * pattern_w : TILE_SIZE;
+  dstR.h = workPattern.size() ? TILE_SIZE * pattern_h : TILE_SIZE;
 
-  return CAsset::drawBox(&dstR, pvmEditor::outline_col, pvmEditor::outline_sz);
+	CTileset::TSControl.changeTileAlpha(prev_opacity);
+
+  if (workPattern.size()) {
+    for (int j = 0; j < pattern_h; j++) {
+      int Y = tY + (j * TILE_SIZE);
+      for (int i = 0; i < pattern_w; i++) {
+        int X = tX + (i * TILE_SIZE);
+        if (CTileset::TSControl.drawTile(workPattern[i + (j * pattern_w)].ID, X, Y) > 0) return false;
+      }
+    }
+  } else {
+    if (CTileset::TSControl.drawTile(workTile.ID, tX, tY) > 0) return false;
+  }
+
+  CTileset::TSControl.maxTileAlpha();
+
+  if (!CAsset::drawBox(&dstR, pvmEditor::outline_col, pvmEditor::outline_sz)) return false;
+
+  return true;
 }
 
 bool CPlanEditor::drawTileOpts(const SDL_Point* m) {

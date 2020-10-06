@@ -37,6 +37,7 @@ class CPlanEditor : public CEvent {
   short active_opacity; // standard opacity of active layer
   short over_opacity;   // standard opacity of layers above active layer
   short under_opacity;  // standard opacity of layers below active layer
+  short prev_opacity;   // opacity of preview for working tile/pattern/domain
   std::vector<short> temp_opac; // vector for temporarily storing old layer opacities
   std::vector<bool> temp_force; // for temporarily storing old force-opacity flags
 
@@ -66,7 +67,9 @@ private:
   void OnLButtonDown(int mX, int mY);
   void OnRButtonDown(int mX, int mY);
   bool handlePlaceTile(const SDL_Point& m);
+  bool handlePlacePattern(const SDL_Point& m);
   bool placeTile(const int& x, const int& y);
+  bool placeTile(const int& x, const int& y, const CPlanTile& tile);
   bool handleMakeDomain(const SDL_Point& m);
   bool handlePlaceDomain(const SDL_Point& m);
   void resetDomain();
@@ -103,7 +106,7 @@ private:
 private:
   bool drawAdjustArea(const SDL_Point* m);
   bool drawPlaceDomain(const SDL_Point* m);
-  bool drawTileOutline(const SDL_Point* m);
+  bool drawPlacePreview(const SDL_Point* m);
   bool drawTileOpts(const SDL_Point* m);
   bool drawPatternOpts(const SDL_Point* m);
   bool drawLayerOpts(const SDL_Point* m);

@@ -223,6 +223,19 @@ void CTileset::drawOptions(const SDL_Point* m) {
   }
 }
 
+short CTileset::drawTile(const int& ID, const int& X, const int& Y) {
+  if (ID < 0)            return -1; // unspecified (null) tile ID
+  if (!tileset)          return 2;  // no tileset loaded to render
+  if (ID >= ts_w * ts_h) return 1;  // tile ID exceeds tileset's max ID
+
+  int ts_X = (ID % ts_w) * TILE_SIZE;
+  int ts_Y = (ID / ts_w) * TILE_SIZE;
+
+  CSurface::OnDraw(tileset, X, Y, ts_X, ts_Y, TILE_SIZE, TILE_SIZE);
+
+  return 0;
+}
+
 SDL_Rect CTileset::getTileSrcR(const int& ID) {
   SDL_Rect srcR = {0, 0, 0, 0};
   if (ID < 0) return srcR;

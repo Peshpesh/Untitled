@@ -44,18 +44,19 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
     } else {
       if (handlePlaceDomain(m)) return;
       if (CAsset::inWorkspace(m)) {
-        if (handlePlaceTile(m)) return;
+        if (handlePlacePattern(m))     return;
+        if (handlePlaceTile(m))        return;
         if (handleAdjustArea(m, true)) return;
       } else {
-        if (handleTileOpts(m))  return;
+        if (handleTileOpts(m))    return;
         if (handlePatternOpts(m)) return;
-        if (handleLayerOpts(m)) return;
-        if (handleSolidOpts(m)) return;
-        if (handleTypeOpts(m))  return;
-        if (handlePlaceOpts(m)) return;
-        if (handleVisOpts(m))   return;
-        if (handleOpacOpts(m))  return;
-        if (handleLayerList(m)) return;
+        if (handleLayerOpts(m))   return;
+        if (handleSolidOpts(m))   return;
+        if (handleTypeOpts(m))    return;
+        if (handlePlaceOpts(m))   return;
+        if (handleVisOpts(m))     return;
+        if (handleOpacOpts(m))    return;
+        if (handleLayerList(m))   return;
       }
     }
   }
@@ -81,8 +82,27 @@ bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
   return placeTile(mX, mY);
 }
 
-bool CPlanEditor::placeTile(const int& x, const int &y) {
+bool CPlanEditor::handlePlacePattern(const SDL_Point& m) {
+  if (!workPattern.size()) return false;
+  int refX = CCamera::CameraControl.GetX() + m.x;
+  int refY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+
+  for (int j = 0; j < pattern_h; j++) {
+    int Y = refY + (j * TILE_SIZE);
+    for (int i = 0; i < pattern_w; i++) {
+      int X = refX + (i * TILE_SIZE);
+      if (!placeTile(X, Y, workPattern[i + (j * pattern_w)])) return false;
+    }
+  }
+  return true;
+}
+
+bool CPlanEditor::placeTile(const int& x, const int& y) {
   return CPlanArea::control.changeTile(x, y, k, workTile, placeflag);
+}
+
+bool CPlanEditor::placeTile(const int& x, const int& y, const CPlanTile& tile) {
+  return CPlanArea::control.changeTile(x, y, k, tile, placeflag);
 }
 
 bool CPlanEditor::handleMakeDomain(const SDL_Point& m) {
