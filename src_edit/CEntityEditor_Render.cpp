@@ -187,10 +187,10 @@ bool CEntityEditor::drawSwitchPlace() {
 bool CEntityEditor::drawIntrpt(const SDL_Point* m)
 {
   if (CInterrupt::isFlagOn(INTRPT_CHANGE_EN)) {
-		if (!CChangeEntity::Control.OnRender(m)) return false;
-	}
+    if (!CChangeEntity::Control.OnRender(m)) return false;
+  }
   if (CInterrupt::isFlagOn(INTRPT_MODIFY_HB)) {
     if (!CHitboxEditor::Control.OnRender(m)) return false;
   }
-	return true;
+  return true;
 }

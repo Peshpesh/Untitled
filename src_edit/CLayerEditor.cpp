@@ -238,16 +238,16 @@ bool CLayerEditor::handleNewLayer(const SDL_Point* m) {
 
 void CLayerEditor::enterZval(SDL_Keycode sym) {
   switch (sym) {
-    case SDLK_0:	        addToZ('0');	      break;
-    case SDLK_1:	        addToZ('1');	      break;
-    case SDLK_2:	        addToZ('2');	      break;
-    case SDLK_3:	        addToZ('3');	      break;
-    case SDLK_4:	        addToZ('4');	      break;
-    case SDLK_5:	        addToZ('5');	      break;
-    case SDLK_6:	        addToZ('6');	      break;
-    case SDLK_7:	        addToZ('7');	      break;
-    case SDLK_8:	        addToZ('8');	      break;
-    case SDLK_9:	        addToZ('9');	      break;
+    case SDLK_0:          addToZ('0');        break;
+    case SDLK_1:          addToZ('1');        break;
+    case SDLK_2:          addToZ('2');        break;
+    case SDLK_3:          addToZ('3');        break;
+    case SDLK_4:          addToZ('4');        break;
+    case SDLK_5:          addToZ('5');        break;
+    case SDLK_6:          addToZ('6');        break;
+    case SDLK_7:          addToZ('7');        break;
+    case SDLK_8:          addToZ('8');        break;
+    case SDLK_9:          addToZ('9');        break;
     case SDLK_PERIOD:     addToZ('.');        break;
     case SDLK_BACKSPACE:  delFromZ();         break;
     case SDLK_ESCAPE:     resetNewLayer();    break;

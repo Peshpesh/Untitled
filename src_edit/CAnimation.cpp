@@ -1,52 +1,52 @@
 #include "CAnimation.h"
 
 CAnimation::CAnimation() {
-	CurrentFrame	= 0;
-	MaxFrames			= 0;
-	FrameInc			= 1;
-	FrameRate			= 100; //millsecs
-	OldTime				= 0;
-	Oscillate			= false;
+  CurrentFrame  = 0;
+  MaxFrames      = 0;
+  FrameInc      = 1;
+  FrameRate      = 100; //millsecs
+  OldTime        = 0;
+  Oscillate      = false;
 }
 
 void CAnimation::OnAnimate()
 {
-	if (OldTime + FrameRate > SDL_GetTicks())
-		return;
+  if (OldTime + FrameRate > SDL_GetTicks())
+    return;
 
-	OldTime = SDL_GetTicks();
+  OldTime = SDL_GetTicks();
 
-	CurrentFrame += FrameInc;
+  CurrentFrame += FrameInc;
 
-	if (Oscillate)
-	{
-		if (FrameInc > 0)
-		{
-			if (CurrentFrame >= MaxFrames) FrameInc = -FrameInc;
-		}
-		else
-		{
-			if (CurrentFrame <= 0) FrameInc = -FrameInc;
-		}
-	}
-	else
-	{
-		if (CurrentFrame >= MaxFrames) CurrentFrame = 0;
-	}
+  if (Oscillate)
+  {
+    if (FrameInc > 0)
+    {
+      if (CurrentFrame >= MaxFrames) FrameInc = -FrameInc;
+    }
+    else
+    {
+      if (CurrentFrame <= 0) FrameInc = -FrameInc;
+    }
+  }
+  else
+  {
+    if (CurrentFrame >= MaxFrames) CurrentFrame = 0;
+  }
 }
 
 void CAnimation::SetFrameRate(int Rate)
 {
-	FrameRate = Rate;
+  FrameRate = Rate;
 }
 
 void CAnimation::SetCurrentFrame(int Frame)
 {
-	if (Frame < 0 || Frame >= MaxFrames) return;
-	CurrentFrame = Frame;
+  if (Frame < 0 || Frame >= MaxFrames) return;
+  CurrentFrame = Frame;
 }
 
 int CAnimation::GetCurrentFrame()
 {
-	return CurrentFrame;
+  return CurrentFrame;
 }

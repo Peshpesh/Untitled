@@ -31,8 +31,8 @@ void CStage::OnEventPlanview(SDL_Event* Event) {
 void CStage::OnLoop() {
   if (planview) {
     switch (CModule::control.active_mod) {
-      case MODIFY_MAP:			CPlanEditor::control.getK(k); break;
-      default:							break;
+      case MODIFY_MAP:      CPlanEditor::control.getK(k); break;
+      default:              break;
     }
   }
 }
@@ -103,11 +103,11 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
   CPlanEditor::control.RenderMap();
 
   switch (CModule::control.active_mod) {
-    case MODIFY_MAP:			CPlanEditor::control.OnRender(m);    break;
-    // case MODIFY_NPC:			CEntityEditor::Control.OnRender(&m); 	break;
-    // case MODIFY_SCENE:		CSceneryEditor::control.OnRender(&m); break;
-    // case MODIFY_SIM:			CSimulate::control.OnRender(&m); 			break;
-    // case MODIFY_OPTIONS:	COptions::control.OnRender(&m);				break;
-    default:							break;
+    case MODIFY_MAP:      CPlanEditor::control.OnRender(m);    break;
+    // case MODIFY_NPC:      CEntityEditor::Control.OnRender(&m);   break;
+    // case MODIFY_SCENE:    CSceneryEditor::control.OnRender(&m); break;
+    // case MODIFY_SIM:      CSimulate::control.OnRender(&m);       break;
+    // case MODIFY_OPTIONS:  COptions::control.OnRender(&m);        break;
+    default:              break;
   }
 }

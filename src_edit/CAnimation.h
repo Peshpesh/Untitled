@@ -5,28 +5,28 @@
 
 class CAnimation {
 private:
-	int	CurrentFrame;
-	int	FrameInc;
+  int  CurrentFrame;
+  int  FrameInc;
 
 private:
-	int		FrameRate;
-	long	OldTime;
+  int    FrameRate;
+  long  OldTime;
 
 public:
-	int	MaxFrames;
-	int	Oscillate;
+  int  MaxFrames;
+  int  Oscillate;
 
 public:
-	CAnimation();
+  CAnimation();
 
-	void OnAnimate();
+  void OnAnimate();
 
 public:
-	void SetFrameRate(int Rate);
+  void SetFrameRate(int Rate);
 
-	void SetCurrentFrame(int Frame);
+  void SetCurrentFrame(int Frame);
 
-	int GetCurrentFrame();
+  int GetCurrentFrame();
 };
 
 #endif

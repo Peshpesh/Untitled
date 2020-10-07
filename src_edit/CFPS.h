@@ -6,28 +6,28 @@
 class CFPS
 {
 public:
-	static CFPS FPSControl;
+  static CFPS FPSControl;
 
 private:
-	int		OldTime;
-	int		LastTime;
+  int    OldTime;
+  int    LastTime;
 
-	float	SpeedFactor;
-	float TargetFPS;
+  float  SpeedFactor;
+  float TargetFPS;
 
-	int		NumFrames;
-	int		Frames;
-
-public:
-	CFPS();
-
-	void	OnLoop();
+  int    NumFrames;
+  int    Frames;
 
 public:
-	int		GetFPS();
+  CFPS();
 
-	float	GetSpeedFactor();
+  void  OnLoop();
 
-	float GetTargetFPS();
+public:
+  int    GetFPS();
+
+  float  GetSpeedFactor();
+
+  float GetTargetFPS();
 };
 #endif

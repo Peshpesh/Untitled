@@ -11,15 +11,15 @@ int CSimEntity::getVertDeflect(const double& NewX, const double& NewY) {
   // horizontally.
   int destXl = X + NewX + hitboxR.x;
   int destXr = destXl + hitboxR.w - 1;
-	int srcYt = Y + hitboxR.y;
-	int srcYb = srcYt + hitboxR.h - 1;
+  int srcYt = Y + hitboxR.y;
+  int srcYb = srcYt + hitboxR.h - 1;
 
   int push_Y = 0;
   CTile* Tile = NULL;
   int Y_offset = 0; // offset of a position from the top of the containing tile
                     // OR, "where on the tile (in Y, from 0 to 31) is this point?"
 
-  if (NewX > 0.0)	{ // Moving right
+  if (NewX > 0.0)  { // Moving right
     if ((Tile = CArea::control.GetTile(destXr, srcYb)) == NULL) return 0;
     Y_offset = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
     if (Tile->CollID == SOLID_U_BL_MR || (Tile->CollID == SOLID_U_ML_TR && Y_offset < TILE_SIZE / 2)) {
@@ -32,7 +32,7 @@ int CSimEntity::getVertDeflect(const double& NewX, const double& NewY) {
         push_Y = CollGround(Tile->CollID, destXr % TILE_SIZE, Y_offset);
       }
     }
-  } else if (NewX < 0.0) {	// Moving left
+  } else if (NewX < 0.0) {  // Moving left
     Y_offset = srcYb - ((srcYb / TILE_SIZE) * TILE_SIZE);
     if ((Tile = CArea::control.GetTile(destXl, srcYb)) == NULL) return 0;
     if (Tile->CollID == SOLID_U_ML_BR || (Tile->CollID == SOLID_U_TL_MR && Y_offset < TILE_SIZE / 2)) {
@@ -89,43 +89,43 @@ int CSimEntity::getHorzDeflect(const double& NewX, const double& NewY) {
 
 // Returns true (non-zero) if the queried tile-relative X, Y intersect solid ground.
 int CSimEntity::CollGround(const int& collID, const int& X_offset, const int& Y_offset) {
-	bool solidabove = false;
-	int Yo = 0;
-	double slope = 0.5;
+  bool solidabove = false;
+  int Yo = 0;
+  double slope = 0.5;
 
-	switch (collID) {
-		case SOLID_U_BL_MR:	Yo = TILE_SIZE - 1; 																				break;
-		case SOLID_U_ML_TR:	Yo = (TILE_SIZE / 2) - 1; 																	break;
-		case SOLID_U_TL_MR: 													slope = -0.5; 										break;
-		case SOLID_U_ML_BR: Yo = TILE_SIZE / 2; 			slope = -0.5; 										break;
-		case SOLID_A_BL_MR: Yo = TILE_SIZE - 1; 										solidabove = true; 	break;
-		case SOLID_A_ML_TR:	Yo = (TILE_SIZE / 2) - 1; 							solidabove = true; 	break;
-		case SOLID_A_TL_MR: 													slope = -0.5; solidabove = true; 	break;
-		case SOLID_A_ML_BR: Yo = TILE_SIZE / 2; 			slope = -0.5; solidabove = true; 	break;
-		default: break;
-	}
+  switch (collID) {
+    case SOLID_U_BL_MR:  Yo = TILE_SIZE - 1;                                         break;
+    case SOLID_U_ML_TR:  Yo = (TILE_SIZE / 2) - 1;                                   break;
+    case SOLID_U_TL_MR:                           slope = -0.5;                     break;
+    case SOLID_U_ML_BR: Yo = TILE_SIZE / 2;       slope = -0.5;                     break;
+    case SOLID_A_BL_MR: Yo = TILE_SIZE - 1;                     solidabove = true;   break;
+    case SOLID_A_ML_TR:  Yo = (TILE_SIZE / 2) - 1;               solidabove = true;   break;
+    case SOLID_A_TL_MR:                           slope = -0.5; solidabove = true;   break;
+    case SOLID_A_ML_BR: Yo = TILE_SIZE / 2;       slope = -0.5; solidabove = true;   break;
+    default: break;
+  }
 
-	int Yl = Yo - (int)(slope * X_offset);
-	int Ypush = 0;
-	if (!solidabove && Y_offset >= Yl) {
-		Ypush = Yl - Y_offset - 1;
-	}
-	else if (solidabove && Y_offset <= Yl) {
-		Ypush = Yl - Y_offset + 1;
-	}
-	return Ypush;
+  int Yl = Yo - (int)(slope * X_offset);
+  int Ypush = 0;
+  if (!solidabove && Y_offset >= Yl) {
+    Ypush = Yl - Y_offset - 1;
+  }
+  else if (solidabove && Y_offset <= Yl) {
+    Ypush = Yl - Y_offset + 1;
+  }
+  return Ypush;
 }
 
 int CSimEntity::CollWall(const int& collID, const int& X_offset, const int& Y_offset) {
-	int slope = 2;
+  int slope = 2;
   int Xo = 0;
-	switch (collID) {
-		case SOLID_U_LT_MB:	slope = -slope;                     break;
-		case SOLID_U_MT_RB: Xo = TILE_SIZE / 2; slope = -slope; break;
-		case SOLID_U_RT_MB: Xo = TILE_SIZE - 1;                 break;
-		case SOLID_U_MT_LB: Xo = (TILE_SIZE / 2) - 1;           break;
-		default: break;
-	}
+  switch (collID) {
+    case SOLID_U_LT_MB:  slope = -slope;                     break;
+    case SOLID_U_MT_RB: Xo = TILE_SIZE / 2; slope = -slope; break;
+    case SOLID_U_RT_MB: Xo = TILE_SIZE - 1;                 break;
+    case SOLID_U_MT_LB: Xo = (TILE_SIZE / 2) - 1;           break;
+    default: break;
+  }
 
   int X = Xo - (Y_offset / slope);
   int push_X = 0;
@@ -138,7 +138,7 @@ int CSimEntity::CollWall(const int& collID, const int& X_offset, const int& Y_of
       push_X = X - X_offset - 1;
     }
   }
-	return push_X;
+  return push_X;
 }
 
 bool CSimEntity::CollTile(const SDL_Point& tilepos, const SDL_Point& tl, const SDL_Point& br) {
@@ -156,13 +156,13 @@ bool CSimEntity::CollTile(const SDL_Point& tilepos, const SDL_Point& tl, const S
     // should prevent movement:
     // 1. The hitbox intersects with a half-filled tile (rectangle)
     // 2. The top of the hitbox intersects with the
-    // 		"lowest height" of a sloping roof, or the bottom of a sloping floor
+    //     "lowest height" of a sloping roof, or the bottom of a sloping floor
     // 3. The bottom of the hitbox intersects with the
-    //		"highest height" of a sloping floor, or the top of a sloping roof
-    // 4.	The left/right sides of the hitbox intersect with a
-    //		sloped floor or roof
+    //    "highest height" of a sloping floor, or the top of a sloping roof
+    // 4.  The left/right sides of the hitbox intersect with a
+    //    sloped floor or roof
     // 5. The internal hitbox (non-side) somehow negotiates
-    //		an intersection
+    //    an intersection
 
     bool l_side = (tilepos.x == tl.x / TILE_SIZE);
     bool r_side = (tilepos.x == br.x / TILE_SIZE);

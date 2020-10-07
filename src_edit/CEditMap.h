@@ -24,11 +24,11 @@ enum {
 
 class CEditMap : public CEvent {
 public:
-	static CEditMap	MapEditor;
+  static CEditMap  MapEditor;
 
 private:
   // SDL_Texture* Type_Tileset;  // Tileset showing tile type
-  // SDL_Texture* Coll_Tileset;	// Tileset showing collision type
+  // SDL_Texture* Coll_Tileset;  // Tileset showing collision type
 
 private:
   CTile TileTL;
@@ -41,13 +41,13 @@ private:
   unsigned int shadow_w;
 
 private:
-  // int type_alpha;						// Current Opacity of the Type overlay
-  // int coll_alpha;						// Current Opacity of the Collision overlay
+  // int type_alpha;            // Current Opacity of the Type overlay
+  // int coll_alpha;            // Current Opacity of the Collision overlay
 
   bool show_bg, show_fg, show_ty, show_co;
 
-  // int type_w, type_h;  	// Typeset texture dimension (tiles)
-  // int coll_w, coll_h; 	// Collset texture dimension (tiles)
+  // int type_w, type_h;    // Typeset texture dimension (tiles)
+  // int coll_w, coll_h;   // Collset texture dimension (tiles)
 
   int onTiles;          // bitwise flag for tiles to place
 

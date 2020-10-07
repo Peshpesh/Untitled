@@ -12,22 +12,22 @@
 #include "CInform.h"
 
 class CMap {
-	std::vector<CTile> TileList;
+  std::vector<CTile> TileList;
 
 public:
-	CMap();
-	CTile* GetTile(int X, int Y);
+  CMap();
+  CTile* GetTile(int X, int Y);
 
 public:
-	void OnLoad();
-	bool OnLoad(FILE* fhandle);
-	bool OnSave(FILE* fhandle);
+  void OnLoad();
+  bool OnLoad(FILE* fhandle);
+  bool OnSave(FILE* fhandle);
 
-	void OnRenderFill(int MapX, int MapY);
-	void OnRender(int MapX, int MapY, bool bg);
-	void OnRenderType(int MapX, int MapY);
-	void OnRenderColl(int MapX, int MapY);
+  void OnRenderFill(int MapX, int MapY);
+  void OnRender(int MapX, int MapY, bool bg);
+  void OnRenderType(int MapX, int MapY);
+  void OnRenderColl(int MapX, int MapY);
 
-	void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
+  void ChangeTile(int X, int Y, CTile* NewTile, int useTiles);
 };
 #endif

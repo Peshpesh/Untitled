@@ -10,7 +10,7 @@
 
 class CChangeScenery : public CEvent {
 public:
-	static CChangeScenery Control;
+  static CChangeScenery Control;
 
 private:
   std::vector<SDL_Rect> groupButtons;
@@ -18,12 +18,12 @@ private:
 
 private:
   SDL_Texture* Group_Tex;
-	bool succ;       // SUCC
+  bool succ;       // SUCC
   short group_ID;
   short decor_ID;
 
 public:
-	CChangeScenery();
+  CChangeScenery();
 
   void OnInit(const short& group_ID, const short& decor_ID);
   void handleChanges(short& group_ID, short& decor_ID);
@@ -32,21 +32,21 @@ public:
   void OnEvent(SDL_Event* Event);
 
 private:
-	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 
-	void OnLButtonDown(int mX, int mY);
+  void OnLButtonDown(int mX, int mY);
   bool handleConfirm(const SDL_Point* m);
   bool handleCancel(const SDL_Point* m);
   bool handleGroup(const SDL_Point* m);
   bool handleScenery(const SDL_Point* m);
 
 public:
-	bool OnRender(const SDL_Point* m);
+  bool OnRender(const SDL_Point* m);
   bool drawTitle();
   bool drawGroupButtons(const SDL_Point* m);
   bool drawSceneryButtons(const SDL_Point* m);
   bool drawConfirmButtons(const SDL_Point* m);
-	bool drawSampleScenery(const SDL_Point* m);
+  bool drawSampleScenery(const SDL_Point* m);
 
 private:
   SDL_Texture* updateTexture();

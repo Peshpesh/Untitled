@@ -1,16 +1,16 @@
 #ifndef _DEFINE_H_
 #define _DEFINE_H_
 
-#define MAP_WIDTH 20	// tiles
-#define MAP_HEIGHT 20	// tiles
+#define MAP_WIDTH 20  // tiles
+#define MAP_HEIGHT 20  // tiles
 #define MAX_PATTERN_W 12 // tiles
 #define MAX_PATTERN_H 12 // tiles
 
-#define TILE_SIZE 32	// pixels
+#define TILE_SIZE 32  // pixels
 
 //  Canvas size
-#define WWIDTH 640		// pixels
-#define WHEIGHT 480		// pixels
+#define WWIDTH 640    // pixels
+#define WHEIGHT 480    // pixels
 
 //  Application size
 #define EWIDTH 740      // pixels

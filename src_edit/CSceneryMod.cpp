@@ -28,14 +28,14 @@ bool CSceneryMod::ClearAll()
 
 bool CSceneryMod::LoadScenery(char const* sceneryfile)
 {
-	// Try to open the .scn file
-	FILE* FileHandle = fopen(sceneryfile, "r");
-	if (FileHandle == NULL) return false;
+  // Try to open the .scn file
+  FILE* FileHandle = fopen(sceneryfile, "r");
+  if (FileHandle == NULL) return false;
 
-	// The first entry in the data file is always the number of
+  // The first entry in the data file is always the number of
   // textures to load.
   int num_tex;
-	fscanf(FileHandle, "%d\n", &num_tex);
+  fscanf(FileHandle, "%d\n", &num_tex);
 
   // A list of image paths follows the header. Load all images.
   for (int i = 0; i < num_tex; i++)
@@ -65,8 +65,8 @@ bool CSceneryMod::LoadScenery(char const* sceneryfile)
   int tex_ID, scn_ID, X_loc, Y_loc;
   int Z_loc;
   int v_rep, h_rep, perm;
-	// while (fscanf(FileHandle, "%d:%d:%d:%d:%lf:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
-	while (fscanf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
+  // while (fscanf(FileHandle, "%d:%d:%d:%d:%lf:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
+  while (fscanf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", &tex_ID, &scn_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
   {
     if (tex_ID >= num_tex || tex_ID < 0) return false;
     if (scn_ID < 0) return false;

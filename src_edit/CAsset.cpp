@@ -34,19 +34,19 @@ CAsset::CAsset()
 bool CAsset::OnInit()
 {
   if ((paltex = CSurface::OnLoad("../res_edit/palette.png")) == NULL)
-	{
-		return false;
-	}
+  {
+    return false;
+  }
   if ((arrtex = CSurface::OnLoad("../res_edit/arrow.png")) == NULL)
-	{
-		return false;
-	}
+  {
+    return false;
+  }
   if ((interface = CSurface::OnLoad("../res_edit/interface_plain.png")) == NULL)
   {
     return false;
   }
   SDL_SetTextureBlendMode(paltex, SDL_BLENDMODE_BLEND);
-	return true;
+  return true;
 }
 
 void CAsset::queryTileDims(SDL_Texture* texture, int& w, int& h)
@@ -66,12 +66,12 @@ void CAsset::paletteAlpha(const short& a)
 
 SDL_Rect CAsset::getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H)
 {
-	SDL_Rect rect;
-	rect.x = X;
-	rect.y = Y;
-	rect.w = W;
-	rect.h = H;
-	return rect;
+  SDL_Rect rect;
+  rect.x = X;
+  rect.y = Y;
+  rect.w = W;
+  rect.h = H;
+  return rect;
 }
 
 SDL_Rect CAsset::getRect(const SDL_Point* A, const SDL_Point* B)
@@ -126,14 +126,14 @@ SDL_Point CAsset::getPos(int X, int Y)
 
 SDL_Rect CAsset::getPixel(const SDL_Point* pix)
 {
-	SDL_Rect rect;
+  SDL_Rect rect;
 
-	rect.x = pix->x;
-	rect.y = pix->y;
-	rect.w = 1;
-	rect.h = 1;
+  rect.x = pix->x;
+  rect.y = pix->y;
+  rect.w = 1;
+  rect.h = 1;
 
-	return rect;
+  return rect;
 }
 
 bool CAsset::drawAppFrame() {

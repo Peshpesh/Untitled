@@ -37,18 +37,18 @@ public:
   SDL_Texture* coll_tileset;
   int ts_w, ts_h;
   int tile_alpha;           // Current Opacity of the tileset
-  int type_alpha;						// Current Opacity of the Type overlay
-  int coll_alpha;						// Current Opacity of the Collision overlay
+  int type_alpha;            // Current Opacity of the Type overlay
+  int coll_alpha;            // Current Opacity of the Collision overlay
   int grid_w, grid_h;       // Grid texture dimension (tiles)
-  int type_w, type_h;  	    // Typeset texture dimension (tiles)
-  int coll_w, coll_h; 	    // Collset texture dimension (tiles)
+  int type_w, type_h;        // Typeset texture dimension (tiles)
+  int coll_w, coll_h;       // Collset texture dimension (tiles)
   bool succ;
 
 public:
   static CTileset TSControl;
 
 public:
-	CTileset();
+  CTileset();
 
   bool OnInit();
   void OnTerminate();
@@ -69,8 +69,8 @@ public:
 
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 
-	void OnLButtonDown(int mX, int mY);
-	bool pickTileset(const SDL_Point& m);
+  void OnLButtonDown(int mX, int mY);
+  bool pickTileset(const SDL_Point& m);
 
   bool OnRender(const SDL_Point* m);
   void drawOptions(const SDL_Point* m);

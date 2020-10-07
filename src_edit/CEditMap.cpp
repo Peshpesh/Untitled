@@ -22,10 +22,10 @@ CEditMap::CEditMap() {
   hoverAreaColor = &palette::light_red;
   rc_area_w = 2;
 
-	show_bg = show_fg = show_ty = show_co = true;
-	// type_alpha = 215;
-	// coll_alpha = 55;
-	// coll_w = coll_h = type_w = type_h = 0;
+  show_bg = show_fg = show_ty = show_co = true;
+  // type_alpha = 215;
+  // coll_alpha = 55;
+  // coll_w = coll_h = type_w = type_h = 0;
   // tset_w = tset_h = 0;
 
   onTiles = 0;

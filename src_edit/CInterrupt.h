@@ -4,8 +4,8 @@
 enum interrupts
 {
   INTRPT_NONE       = 0,
-  INTRPT_CHANGE_BG  = 0x00000001,		// intrpt via bg tile change
-  INTRPT_CHANGE_FG  = 0x00000002,		// intrpt via fg tile change
+  INTRPT_CHANGE_BG  = 0x00000001,    // intrpt via bg tile change
+  INTRPT_CHANGE_FG  = 0x00000002,    // intrpt via fg tile change
   INTRPT_MAP_MODEL  = 0x00000004,   // show a simple model of the area
   INTRPT_CHANGE_TS  = 0x00000008,   // change tileset
   INTRPT_CHANGE_EN  = 0x00000010,   // change/explore entity groups

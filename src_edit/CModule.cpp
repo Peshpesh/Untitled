@@ -32,16 +32,16 @@ CModule::CModule() {
 void CModule::renderSwitch(const SDL_Point& m) {
   using namespace engineSwitch;
 
-	bool canHilight = CInterrupt::isNone();
-	bool noHov;
+  bool canHilight = CInterrupt::isNone();
+  bool noHov;
 
-	const SDL_Point* color = NULL;
-	for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
-		noHov = (!canHilight || !SDL_PointInRect(&m, &engineButton[i]));
-		color = (active_mod == i) ? engineOnCol : (noHov ? engineOffCol : engineHvCol);
-		CAsset::drawStrBox(&engineButton[i], bsiz, color);
-		Font::NewCenterWrite(FONT_MINI, engineName[i], &engineButton[i]);
-	}
+  const SDL_Point* color = NULL;
+  for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
+    noHov = (!canHilight || !SDL_PointInRect(&m, &engineButton[i]));
+    color = (active_mod == i) ? engineOnCol : (noHov ? engineOffCol : engineHvCol);
+    CAsset::drawStrBox(&engineButton[i], bsiz, color);
+    Font::NewCenterWrite(FONT_MINI, engineName[i], &engineButton[i]);
+  }
 }
 
 bool CModule::handleSwitch(const SDL_Point& m) {

@@ -55,10 +55,10 @@ bool CEntity::OnLoad(const char* fname) {
   std::string filePath = io_path + fname + io_ext;
   FILE* FileHandle = fopen(filePath.c_str(), "rb");
 
-	if (FileHandle == NULL)	{
-		CInform::InfoControl.pushInform("---CENTITY.OnLoad---\nfailed to open file");
-		return false;
-	}
+  if (FileHandle == NULL)  {
+    CInform::InfoControl.pushInform("---CENTITY.OnLoad---\nfailed to open file");
+    return false;
+  }
 
   entityList.clear();
 
@@ -83,10 +83,10 @@ bool CEntity::OnSave(const char* fname) {
   std::string filePath = io_path + fname + io_ext;
   FILE* FileHandle = fopen(filePath.c_str(), "wb");
 
-	if (FileHandle == NULL)	{
-		CInform::InfoControl.pushInform("---CENTITY.OnSave---\nfailed to open new file");
-		return false;
-	}
+  if (FileHandle == NULL)  {
+    CInform::InfoControl.pushInform("---CENTITY.OnSave---\nfailed to open new file");
+    return false;
+  }
 
   const int N = entityList.size();
   fwrite(&N, sizeof(int), 1, FileHandle);
@@ -145,17 +145,17 @@ bool CEntity::Collides(const SDL_Point& oP, const SDL_Rect& oR)
   int oYb = oYt + oR.h - 1;
 
   // positions of sides of hitbox from THIS entity
-	int Xl = dstP.x + hitR.x;
+  int Xl = dstP.x + hitR.x;
   int Xr = Xl + hitR.w - 1;
-	int Yt = dstP.y + hitR.y;
+  int Yt = dstP.y + hitR.y;
   int Yb = Yt + hitR.h - 1;
 
-	if (Yb < oYt) return false;
-	if (oYb < Yt) return false;
-	if (Xr < oXl) return false;
-	if (oXr < Xl) return false;
+  if (Yb < oYt) return false;
+  if (oYb < Yt) return false;
+  if (Xr < oXl) return false;
+  if (oXr < Xl) return false;
 
-	return true;
+  return true;
 }
 
 SDL_Texture* CEntity::getSrcTexture(const int& group) {

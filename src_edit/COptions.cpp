@@ -62,16 +62,16 @@ bool COptions::handleCameraOpts(const SDL_Point* m) {
 void COptions::OnKeyDown(SDL_Keycode sym, Uint16 mod){
   if (edit_target) {
     switch (sym) {
-      case SDLK_0:	        addToEdit('0');	      break;
-      case SDLK_1:	        addToEdit('1');	      break;
-      case SDLK_2:	        addToEdit('2');	      break;
-      case SDLK_3:	        addToEdit('3');	      break;
-      case SDLK_4:	        addToEdit('4');	      break;
-      case SDLK_5:	        addToEdit('5');	      break;
-      case SDLK_6:	        addToEdit('6');	      break;
-      case SDLK_7:	        addToEdit('7');	      break;
-      case SDLK_8:	        addToEdit('8');	      break;
-      case SDLK_9:	        addToEdit('9');	      break;
+      case SDLK_0:          addToEdit('0');        break;
+      case SDLK_1:          addToEdit('1');        break;
+      case SDLK_2:          addToEdit('2');        break;
+      case SDLK_3:          addToEdit('3');        break;
+      case SDLK_4:          addToEdit('4');        break;
+      case SDLK_5:          addToEdit('5');        break;
+      case SDLK_6:          addToEdit('6');        break;
+      case SDLK_7:          addToEdit('7');        break;
+      case SDLK_8:          addToEdit('8');        break;
+      case SDLK_9:          addToEdit('9');        break;
       case SDLK_BACKSPACE:  delFromEdit();        break;
       case SDLK_ESCAPE:     cleartarget();          break;
       case SDLK_RETURN:     applyEdit();          break;

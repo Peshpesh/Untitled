@@ -27,7 +27,7 @@ bool CSimulate::drawDebug() {
 bool CSimulate::drawMain(const SDL_Point* m) {
   using namespace simulator;
 
-	CAsset::drawStrBox(&r_start, bsiz, (m && SDL_PointInRect(m, &r_start)) ?
+  CAsset::drawStrBox(&r_start, bsiz, (m && SDL_PointInRect(m, &r_start)) ?
     ((status == INACTIVE) ? start_hcol : reset_hcol) :
     ((status == INACTIVE) ? start_col : reset_col)
   );

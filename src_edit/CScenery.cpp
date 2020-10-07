@@ -55,10 +55,10 @@ bool CScenery::OnLoad(const char* fname) {
   std::string filePath = io_path + fname + io_ext;
   FILE* FileHandle = fopen(filePath.c_str(), "rb");
 
-	if (FileHandle == NULL)	{
-		CInform::InfoControl.pushInform("---CScenery.OnLoad---\nfailed to open file");
-		return false;
-	}
+  if (FileHandle == NULL)  {
+    CInform::InfoControl.pushInform("---CScenery.OnLoad---\nfailed to open file");
+    return false;
+  }
 
   sceneryList.clear();
   layerList.clear();

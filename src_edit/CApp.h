@@ -66,53 +66,53 @@ namespace modelSwitch
 
 class CApp : public CEvent {
 private:
-	SDL_Window* Map_Display;    // Edit Window
+  SDL_Window* Map_Display;    // Edit Window
 
-	bool Running;
+  bool Running;
 
   SDL_Point mouse;
-	int mouseX;
-	int mouseY;
+  int mouseX;
+  int mouseY;
 
   bool pan_l, pan_r, pan_u, pan_d;
 
 public:
-	CApp();
+  CApp();
 
-	int OnExecute();
+  int OnExecute();
 
-	void OnEvent(SDL_Event* Event);
+  void OnEvent(SDL_Event* Event);
   bool handleInterr(SDL_Event* Event);
 
-	// bool handleEngSwitch(const SDL_Point* m);
+  // bool handleEngSwitch(const SDL_Point* m);
   bool handleModelSwitch(const SDL_Point* m);
   bool handleIO(const SDL_Point* m);
 
-	bool OnInit();
-	void OnExit();
+  bool OnInit();
+  void OnExit();
 
-	// Handles looping calculations
-	void OnLoop();
+  // Handles looping calculations
+  void OnLoop();
 
-	// Uses keyboard state to detect directional input from user for moving camera
-	void OnMotion(const Uint8 *state);
+  // Uses keyboard state to detect directional input from user for moving camera
+  void OnMotion(const Uint8 *state);
 
-	// Renders graphics
-	void OnRender();
+  // Renders graphics
+  void OnRender();
   // bool renderEngSwitch();
   bool renderModelButton();
   bool renderIOButtons();
 
-	// Destroys all windows, textures, surfaces, renderers...
-	void OnTerminate();
+  // Destroys all windows, textures, surfaces, renderers...
+  void OnTerminate();
 
-	void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
 
-	void OnKeyUp(SDL_Keycode sym, Uint16 mod);
+  void OnKeyUp(SDL_Keycode sym, Uint16 mod);
 
-	void OnLButtonDown(int mX, int mY);
+  void OnLButtonDown(int mX, int mY);
 
-	void OnRButtonDown(int mX, int mY);
+  void OnRButtonDown(int mX, int mY);
 };
 
 #endif

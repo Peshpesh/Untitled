@@ -144,7 +144,7 @@ private:
   bool handlePlaceRelPos(const SDL_Point* m);
 
   void OnRButtonDown(int mX, int mY);
-	bool handleRmEntity(const SDL_Point* m);
+  bool handleRmEntity(const SDL_Point* m);
 
   bool handleInterr(SDL_Event* Event);
 

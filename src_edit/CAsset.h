@@ -87,14 +87,14 @@ namespace rgb
 
 class CAsset
 {
-	public:
-		CAsset();
-		static bool OnInit();         // Initialization function
-		static void OnCleanup();      // Termination function
+  public:
+    CAsset();
+    static bool OnInit();         // Initialization function
+    static void OnCleanup();      // Termination function
 
-	private:
-		static SDL_Texture* paltex;     // color palette
-		static SDL_Texture* arrtex;     // arrows texture
+  private:
+    static SDL_Texture* paltex;     // color palette
+    static SDL_Texture* arrtex;     // arrows texture
     static SDL_Texture* interface;  // base interface texture
 
   public:
@@ -112,7 +112,7 @@ class CAsset
 
   public:
     // returns a SDL_Rect struct for given X, Y, W, H. Ideal for drawing.
-  	static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
+    static SDL_Rect getRect(unsigned int X, unsigned int Y, unsigned int W, unsigned int H);
     static SDL_Rect getRect(const SDL_Point* A, const SDL_Point* B);
     static SDL_Rect getWinCentRect(const unsigned int& w, const unsigned int& h);
     static SDL_Rect getTileRect(const SDL_Point* A, const SDL_Point* B);
@@ -120,16 +120,16 @@ class CAsset
 
     // returns a SDL_Rect struct with W and H equal to 1, given (X, Y).
     // Good for grabbing a pixel of a particular color.
-		static SDL_Rect getPixel(const SDL_Point* pix);
+    static SDL_Rect getPixel(const SDL_Point* pix);
 
-	public:
+  public:
     static bool drawLine(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 
     static bool drawBox(const SDL_Rect* box, const SDL_Point* color);
     static bool drawBox(const SDL_Rect* box, const SDL_Point* color, const int& thick);
     static bool drawBox(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color, const int& thick);
 
-		static bool drawBoxFill(const SDL_Rect* box, const SDL_Point* color);
+    static bool drawBoxFill(const SDL_Rect* box, const SDL_Point* color);
     static bool drawBoxFill(const SDL_Point* A, const SDL_Point* B, const SDL_Point* color);
 
     static bool drawStrBox(const SDL_Rect* box, const int& str_w, const SDL_Point* color);

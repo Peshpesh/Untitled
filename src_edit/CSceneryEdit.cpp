@@ -52,15 +52,15 @@ bool CSceneryEdit::LoadScenery(char const* sceneryfile) {
   std::string fpath = "../data/maps/";
   std::string ext = ".scn";
   std::string fname = fpath + std::string(sceneryfile) + ext;
-	FILE* FileHandle = fopen(fname.c_str(), "r");
-	if (FileHandle == NULL) return false;
+  FILE* FileHandle = fopen(fname.c_str(), "r");
+  if (FileHandle == NULL) return false;
 
   resetAll();
 
-	// The first entry in the data file is always the number of
+  // The first entry in the data file is always the number of
   // textures to load.
   int num_tex;
-	fscanf(FileHandle, "%d\n", &num_tex);
+  fscanf(FileHandle, "%d\n", &num_tex);
 
   // A list of image paths follows the header. Scan all, but do nothing more.
   for (int i = 0; i < num_tex; i++) {
@@ -81,7 +81,7 @@ bool CSceneryEdit::LoadScenery(char const* sceneryfile) {
   int t_ID, s_ID, X_loc, Y_loc;
   int Z_loc;
   int v_rep, h_rep, perm;
-	while (fscanf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", &t_ID, &s_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
+  while (fscanf(FileHandle, "%d:%d:%d:%d:%d:%d:%d:%d\n", &t_ID, &s_ID, &X_loc, &Y_loc, &Z_loc, &v_rep, &h_rep, &perm) == 8)
   {
     if (s_ID < 0) return false;
     if (Z_loc < 0) return false;
@@ -354,7 +354,7 @@ bool CSceneryEdit::SaveScenery(char const* areaname)
   FILE* FileHandle = fopen(filename, "w");
   delete filename;
 
-  if (FileHandle == NULL)	{
+  if (FileHandle == NULL)  {
     return false;
   }
 
