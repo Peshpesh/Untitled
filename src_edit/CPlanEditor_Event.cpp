@@ -76,22 +76,23 @@ void CPlanEditor::OnRButtonDown(int mX, int mY) {
   }
 }
 
-bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
-  int mX = CCamera::CameraControl.GetX() + m.x;
-  int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
-  return placeTile(mX, mY);
+bool CPlanEditor::placePattern(const int& x, const int& y) {
+  // place the working pattern with the top-left at (x,y)
+  return placePattern(x, y, false, false);
 }
 
-bool CPlanEditor::handlePlacePattern(const SDL_Point& m) {
-  if (!workPattern.size()) return false;
-  int refX = CCamera::CameraControl.GetX() + m.x;
-  int refY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
-
+bool CPlanEditor::placePattern(const int& x, const int& y, const bool& flip_x, const bool& flip_y) {
+  // place the working pattern with the top-left at (x,y)
+  if (!workPattern.size()) return true;
   for (int j = 0; j < pattern_h; j++) {
-    int Y = refY + (j * TILE_SIZE);
+    int tY = y + (j * TILE_SIZE);
     for (int i = 0; i < pattern_w; i++) {
-      int X = refX + (i * TILE_SIZE);
-      if (!placeTile(X, Y, workPattern[i + (j * pattern_w)])) return false;
+      int tX = x + (i * TILE_SIZE);
+      int col = flip_x ? (pattern_w - (i+1)) : i;
+      int row = flip_y ? (pattern_h - (j+1)) : j;
+      int ID = col + (row * pattern_w);
+
+      if (!placeTile(tX, tY, workPattern[ID])) return false;
     }
   }
   return true;
@@ -103,6 +104,19 @@ bool CPlanEditor::placeTile(const int& x, const int& y) {
 
 bool CPlanEditor::placeTile(const int& x, const int& y, const CPlanTile& tile) {
   return CPlanArea::control.changeTile(x, y, k, tile, placeflag);
+}
+
+bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
+  int mX = CCamera::CameraControl.GetX() + m.x;
+  int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+  return placeTile(mX, mY);
+}
+
+bool CPlanEditor::handlePlacePattern(const SDL_Point& m) {
+  if (!workPattern.size()) return false;
+  int refX = CCamera::CameraControl.GetX() + m.x;
+  int refY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+  return placePattern(refX, refY);
 }
 
 bool CPlanEditor::handleMakeDomain(const SDL_Point& m) {
@@ -126,31 +140,54 @@ bool CPlanEditor::handleMakeDomain(const SDL_Point& m) {
 }
 
 bool CPlanEditor::handlePlaceDomain(const SDL_Point& m) {
-  bool retval = false;
-  if (!pDomain_A) return retval;
+  if (!pDomain_A) return false;
   else if (!pDomain_B) {
+    // effectively, a "cancel"
     resetDomain();
-    return retval;
+    return false;
   }
 
-  SDL_Rect d = CAsset::getTileRect(pDomain_A, pDomain_B);
+  bool retval = false;
   SDL_Point m_rel = CCamera::CameraControl.GetCamRelPoint(m);
-  if (SDL_PointInRect(&m_rel, &d)) {
-    retval = true;
+  SDL_Rect d = CAsset::getTileRect(pDomain_A, pDomain_B);
 
-    // fill domain...
-    int tW = TILE_SIZE;
-    int tH = TILE_SIZE;
-    for (int tX = 0; tX < d.w / tW; tX++) {
-      for (int tY = 0; tY < d.h / tH; tY++) {
-        int mX = d.x + (tX * tW);
-        int mY = d.y + (tY * tH) + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
-        placeTile(mX, mY);
+  if (CAsset::inWorkspace(m)) {
+    retval = true;
+    if (workPattern.size()) {
+      bool flip_x = (pDomain_A->x > pDomain_B->x);
+      bool flip_y = (pDomain_A->y > pDomain_B->y);
+      int tW = d.w / TILE_SIZE;
+      int tH = d.h / TILE_SIZE;
+
+      if (tW % pattern_w) tW += pattern_w - (tW % pattern_w);
+      if (tH % pattern_h) tH += pattern_h - (tH % pattern_h);
+      if (flip_x) d.x -= (tW * TILE_SIZE) - d.w;
+      if (flip_y) d.y -= (tH * TILE_SIZE) - d.h;
+      d.w = tW * TILE_SIZE;
+      d.h = tH * TILE_SIZE;
+
+      if (SDL_PointInRect(&m_rel, &d)) {
+        // fill domain with patterns
+        for (int pY = 0; pY < tH / pattern_h; pY++) {
+          int Y = d.y + (pY * pattern_h * TILE_SIZE) + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+          for (int pX = 0; pX < tW / pattern_w; pX++) {
+            int X = d.x + (pX * pattern_w * TILE_SIZE);
+            placePattern(X, Y, flip_x, flip_y);
+          }
+        }
+      }
+    } else if (SDL_PointInRect(&m_rel, &d)) {
+      // fill domain with tiles (no pattern)
+      for (int tY = 0; tY < d.h / TILE_SIZE; tY++) {
+        int Y = d.y + (tY * TILE_SIZE) + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
+        for (int tX = 0; tX < d.w / TILE_SIZE; tX++) {
+          int X = d.x + (tX * TILE_SIZE);
+          placeTile(X, Y);
+        }
       }
     }
     resetDomain();
-  } else if (CAsset::inWorkspace(m)) resetDomain();
-
+  }
   return retval;
 }
 

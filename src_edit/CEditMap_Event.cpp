@@ -344,7 +344,7 @@ void CEditMap::placeBlock(const int& x, const int& y) {
 bool CEditMap::handleGetSet(const SDL_Point* mouse) {
   // Click on "Change Tileset" button. This displays a prompt to change tilesets,
   // and the function within the loop performs a change if requested.
-	using namespace mapEngine::but_tset;
+  using namespace mapEngine::but_tset;
   if (SDL_PointInRect(mouse, &button)) {
     CInterrupt::appendFlag(INTRPT_CHANGE_TS);
     return true;
@@ -502,7 +502,7 @@ bool CEditMap::handleColl(const SDL_Point* mouse, CTile* EditTile) {
 }
 
 char CEditMap::getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse) {
-	using namespace mapEngine::disp_t;
+  using namespace mapEngine::disp_t;
 
   char retDir = 'N';
   if (tPos == NULL || mouse == NULL) return retDir;
@@ -523,7 +523,7 @@ char CEditMap::getScrollDir(const SDL_Point* tPos, const SDL_Point* mouse) {
 bool CEditMap::handleTileReset(const SDL_Point* mouse, CTile* EditTile) {
   using namespace mapEngine::disp_t;
 
-	SDL_Rect dstR;
+  SDL_Rect dstR;
 
   dstR = CAsset::getRect(bg_pos.x + rmOffset_x, bg_pos.y + rmOffset_y, rm_sz, rm_sz);
   if (SDL_PointInRect(mouse, &dstR)) {
@@ -588,19 +588,19 @@ bool CEditMap::handleLayers(const SDL_Point* mouse) {
 
   bool* flags[] = {
     &show_bg,
-		&show_fg,
-		&show_ty,
-		&show_co
-	};
+    &show_fg,
+    &show_ty,
+    &show_co
+  };
 
-	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
-	for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
+  SDL_Rect dstR = CAsset::getRect(x, y, w, h);
+  for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
     if (SDL_PointInRect(mouse, &dstR)) {
       *flags[i] = !(*flags[i]);
       return true;
     }
-		dstR.y += col_h;
-	}
+    dstR.y += col_h;
+  }
   return false;
 }
 
@@ -609,21 +609,21 @@ bool CEditMap::handlePlace(const SDL_Point* mouse) {
   using namespace mapEngine::place_flip;
 
   const int bits[] = {
-		ENABLE_BG,
-		ENABLE_FG,
-		ENABLE_TYPE,
-		ENABLE_COLL
-	};
+    ENABLE_BG,
+    ENABLE_FG,
+    ENABLE_TYPE,
+    ENABLE_COLL
+  };
 
-	SDL_Rect dstR = CAsset::getRect(x, y, w, h);
-	for (int i = 0; i < sizeof(bits) / sizeof(bits[0]); i++) {
+  SDL_Rect dstR = CAsset::getRect(x, y, w, h);
+  for (int i = 0; i < sizeof(bits) / sizeof(bits[0]); i++) {
     if (SDL_PointInRect(mouse, &dstR)) {
       if (onTiles & bits[i]) onTiles &= ~bits[i];
       else onTiles |= bits[i];
       return true;
     }
-		dstR.y += col_h;
-	}
+    dstR.y += col_h;
+  }
   return false;
 }
 

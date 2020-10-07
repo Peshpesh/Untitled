@@ -42,27 +42,48 @@ void CPlanEditor::RenderMap() {
 }
 
 bool CPlanEditor::drawPlaceDomain(const SDL_Point* m) {
-	if (!m || !CInterrupt::isNone()) return true;
+  if (!m || !CInterrupt::isNone()) return true;
   using namespace pvmEditor;
 
   SDL_Point mapPos = CCamera::CameraControl.GetCamRelPoint(*m);
 
-	if (pDomain_A != NULL) {
-		if (pDomain_B == NULL) {
-      SDL_Rect box = CAsset::getTileRect(pDomain_A, &mapPos);
-      int tW = box.w / TILE_SIZE;
-      int tH = box.h / TILE_SIZE;
-      const SDL_Point* color = (tW > MAX_PATTERN_W || tH > MAX_PATTERN_H) ? big_outline_col : outline_col;
-			CCamera::CameraControl.MakeWinRel(box.x, box.y);
-			if (!CAsset::drawBox(&box, color, outline_sz)) return false;
-		} else {
-      SDL_Rect box = CAsset::getTileRect(pDomain_A, pDomain_B);
-			CCamera::CameraControl.MakeWinRel(box.x, box.y);
-			const SDL_Point* color = SDL_PointInRect(m, &box) ? conf_domain_col : domain_col;
-			if (!CAsset::drawBox(&box, color, outline_sz)) return false;
-		}
-	}
-	return true;
+  if (pDomain_A) {
+    SDL_Rect box = {0,0,0,0};
+    const SDL_Point* color = outline_col;
+    int tW = 0;
+    int tH = 0;
+    bool flip_x = false;
+    bool flip_y = false;
+
+    if (pDomain_B) {
+      box = CAsset::getTileRect(pDomain_A, pDomain_B);
+      tW  = box.w / TILE_SIZE;
+      tH  = box.h / TILE_SIZE;
+      color = SDL_PointInRect(m, &box) ? conf_domain_col : domain_col;
+      if (pDomain_A->x > pDomain_B->x) flip_x = true;
+      if (pDomain_A->y > pDomain_B->y) flip_y = true;
+    } else {
+      box = CAsset::getTileRect(pDomain_A, &mapPos);
+      tW  = box.w / TILE_SIZE;
+      tH  = box.h / TILE_SIZE;
+      if (tW > MAX_PATTERN_W || tH > MAX_PATTERN_H) color = big_outline_col;
+      if (pDomain_A->x > mapPos.x) flip_x = true;
+      if (pDomain_A->y > mapPos.y) flip_y = true;
+    }
+
+    if (workPattern.size()) {
+      if (tW % pattern_w) tW += pattern_w - (tW % pattern_w);
+      if (tH % pattern_h) tH += pattern_h - (tH % pattern_h);
+      if (flip_x) box.x -= (tW * TILE_SIZE) - box.w;
+      if (flip_y) box.y -= (tH * TILE_SIZE) - box.h;
+      box.w = tW * TILE_SIZE;
+      box.h = tH * TILE_SIZE;
+    }
+    CCamera::CameraControl.MakeWinRel(box.x, box.y);
+
+    if (!CAsset::drawBox(&box, color, outline_sz)) return false;
+  }
+  return true;
 }
 
 bool CPlanEditor::drawAdjustArea(const SDL_Point* m) {
@@ -105,24 +126,49 @@ bool CPlanEditor::drawPlacePreview(const SDL_Point* m) {
   dstR.w = workPattern.size() ? TILE_SIZE * pattern_w : TILE_SIZE;
   dstR.h = workPattern.size() ? TILE_SIZE * pattern_h : TILE_SIZE;
 
-	CTileset::TSControl.changeTileAlpha(prev_opacity);
+  CTileset::TSControl.changeTileAlpha(prev_opacity);
 
   if (workPattern.size()) {
-    for (int j = 0; j < pattern_h; j++) {
-      int Y = tY + (j * TILE_SIZE);
-      for (int i = 0; i < pattern_w; i++) {
-        int X = tX + (i * TILE_SIZE);
-        if (CTileset::TSControl.drawTile(workPattern[i + (j * pattern_w)].ID, X, Y) > 0) return false;
-      }
-    }
+    if (!drawPattern(tX, tY)) return false;
   } else {
-    if (CTileset::TSControl.drawTile(workTile.ID, tX, tY) > 0) return false;
+    if (!drawTile(tX, tY)) return false;
   }
 
   CTileset::TSControl.maxTileAlpha();
 
   if (!CAsset::drawBox(&dstR, pvmEditor::outline_col, pvmEditor::outline_sz)) return false;
 
+  return true;
+}
+
+bool CPlanEditor::drawPattern(const int& x, const int& y) {
+  return drawPattern(x, y, false, false);
+}
+
+bool CPlanEditor::drawPattern(const int& x, const int& y, const bool& flip_x, const bool& flip_y) {
+  if (!workPattern.size()) return true;
+  for (int j = 0; j < pattern_h; j++) {
+    int tY = y + (j * TILE_SIZE);
+    for (int i = 0; i < pattern_w; i++) {
+      int tX = x + (i * TILE_SIZE);
+      int col = flip_x ? (pattern_w - (i+1)) : i;
+      int row = flip_y ? (pattern_h - (j+1)) : j;
+      int ID  = col + (row * pattern_w);
+      if (!drawTile(tX, tY, workPattern[ID])) return false;
+    }
+  }
+  return true;
+}
+
+bool CPlanEditor::drawTile(const int& x, const int& y) {
+  int rc = CTileset::TSControl.drawTile(workTile.ID, x, y);
+  if (rc > 0) return false;
+  return true;
+}
+
+bool CPlanEditor::drawTile(const int& x, const int& y, const CPlanTile& tile) {
+  int rc = CTileset::TSControl.drawTile(tile.ID, x, y);
+  if (rc > 0) return false;
   return true;
 }
 
@@ -368,14 +414,14 @@ bool CPlanEditor::drawConfRm(const SDL_Point& m) {
 }
 
 bool CPlanEditor::drawInterr(const SDL_Point& m) {
-	if (!CInterrupt::isNone()) {
-		if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG)) {
-			if (!CChangeTile::PickTile.OnRender(&m)) return false;
-			// CChangeTile::PickTile.hilightID(TileTL.bg_ID, TileTR.bg_ID, TileBL.bg_ID, TileBR.bg_ID);
-		}
-		if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
-			if (!CTileset::TSControl.OnRender(&m)) return false;
-		}
+  if (!CInterrupt::isNone()) {
+    if (CInterrupt::isFlagOn(INTRPT_CHANGE_BG)) {
+      if (!CChangeTile::PickTile.OnRender(&m)) return false;
+      // CChangeTile::PickTile.hilightID(TileTL.bg_ID, TileTR.bg_ID, TileBL.bg_ID, TileBR.bg_ID);
+    }
+    if (CInterrupt::isFlagOn(INTRPT_CHANGE_TS)) {
+      if (!CTileset::TSControl.OnRender(&m)) return false;
+    }
     if (CInterrupt::isFlagOn(INTRPT_ADD_LAYER)) {
       if (!drawAddLayer(m)) return false;
     }
@@ -385,8 +431,8 @@ bool CPlanEditor::drawInterr(const SDL_Point& m) {
     if (CInterrupt::isFlagOn(INTRPT_ADJ_LAYOP)) {
       if (!drawAdjustOpacity(m)) return false;
     }
-	}
-	return true;
+  }
+  return true;
 }
 
 bool CPlanEditor::drawAddLayer(const SDL_Point& m) {

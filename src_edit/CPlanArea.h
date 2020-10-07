@@ -30,44 +30,44 @@ class CPlanArea {
   CPlanArea();
 
 public:
-	static CPlanArea control;
+  static CPlanArea control;
 
 public:
-	// std::vector<CPlanMap> MapList;
+  // std::vector<CPlanMap> MapList;
   // std::vector<std::vector<CPlanMap>> MapList;
   std::vector<CPlanLayer> LayerList;
 
 private:
   // std::vector<short>  DepthList;  // list of layer depths
-	int	AreaWidth;		// width in Maps
-	int	AreaHeight;		// height in Maps
+  int  AreaWidth;    // width in Maps
+  int  AreaHeight;    // height in Maps
 
 public:
-	void OnInit();
+  void OnInit();
 
   void addLayer(const short& K, const short& Z);
   void delLayer(const short& K);
-	void GetDims(int& mW, int& mH);
-	// CPlanMap* GetMap(int X, int Y);
-	CPlanTile* GetTile(const int& X, const int& Y, const int& k); // get address to tile in map
+  void GetDims(int& mW, int& mH);
+  // CPlanMap* GetMap(int X, int Y);
+  CPlanTile* GetTile(const int& X, const int& Y, const int& k); // get address to tile in map
   // CPlanTile GetTileCopy(int X, int Y); // get copy of a tile in map
 
-	// void 	OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
-	void OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity);
-	// void	OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
-	// void	OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
+  // void   OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
+  void OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity);
+  // void  OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
+  // void  OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
 
-	bool changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles);
+  bool changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles);
 
-	void expandRight();
-	void expandLeft();
-	void expandUp();
-	void expandDown();
+  void expandRight();
+  void expandLeft();
+  void expandUp();
+  void expandDown();
 
-	bool reduceRight();
-	bool reduceLeft();
-	bool reduceUp();
-	bool reduceDown();
+  bool reduceRight();
+  bool reduceLeft();
+  bool reduceUp();
+  bool reduceDown();
 
   bool isRightEmpty();
   bool isLeftEmpty();
@@ -77,6 +77,6 @@ public:
   bool OnLoad(char const* File);
   bool OnSave(char const* File);
 
-	// void	OnCleanup();
+  // void  OnCleanup();
 };
 #endif

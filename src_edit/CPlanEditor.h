@@ -68,6 +68,8 @@ private:
   void OnRButtonDown(int mX, int mY);
   bool handlePlaceTile(const SDL_Point& m);
   bool handlePlacePattern(const SDL_Point& m);
+  bool placePattern(const int& x, const int& y);
+  bool placePattern(const int& x, const int& y, const bool& flip_x, const bool& flip_y);
   bool placeTile(const int& x, const int& y);
   bool placeTile(const int& x, const int& y, const CPlanTile& tile);
   bool handleMakeDomain(const SDL_Point& m);
@@ -104,6 +106,11 @@ private:
   void removeMap_U();
 
 private:
+  bool drawPattern(const int& x, const int& y);
+  bool drawPattern(const int& x, const int& y, const bool& flip_x, const bool& flip_y);
+  bool drawTile(const int& x, const int& y);
+  bool drawTile(const int& x, const int& y, const CPlanTile& tile);
+
   bool drawAdjustArea(const SDL_Point* m);
   bool drawPlaceDomain(const SDL_Point* m);
   bool drawPlacePreview(const SDL_Point* m);
