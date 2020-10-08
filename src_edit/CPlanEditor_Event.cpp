@@ -300,6 +300,12 @@ bool CPlanEditor::handleTileOpts(const SDL_Point& m) {
     CInterrupt::appendFlag(INTRPT_CHANGE_BG);
     return true;
   }
+  // Click on "Clear Tile" button.
+  if (SDL_PointInRect(&m, &clear_button)) {
+    workTile.ID = -1;
+    return true;
+  }
+
   return false;
 }
 

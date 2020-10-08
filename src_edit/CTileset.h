@@ -8,6 +8,7 @@
 #include "CSurface.h"
 #include "CFont.h"
 #include "CAsset.h"
+#include "CTile.h"
 
 namespace Tileset_ID {
   const short num = 2;
@@ -37,10 +38,11 @@ public:
   SDL_Texture* coll_tileset;
   int ts_w, ts_h;
   int tile_alpha;           // Current Opacity of the tileset
-  int type_alpha;            // Current Opacity of the Type overlay
-  int coll_alpha;            // Current Opacity of the Collision overlay
+  int type_alpha;           // Current Opacity of the Type overlay
+  int coll_alpha;           // Current Opacity of the Collision overlay
+  int grid_alpha;           // Current Opacity of grid (and solid PVM tile) overlay
   int grid_w, grid_h;       // Grid texture dimension (tiles)
-  int type_w, type_h;        // Typeset texture dimension (tiles)
+  int type_w, type_h;       // Typeset texture dimension (tiles)
   int coll_w, coll_h;       // Collset texture dimension (tiles)
   bool succ;
 
@@ -75,6 +77,9 @@ public:
   bool OnRender(const SDL_Point* m);
   void drawOptions(const SDL_Point* m);
   short drawTile(const int& ID, const int& X, const int& Y);
+  bool drawFill(const int& X, const int& Y);
+  bool drawSolid(const int& X, const int& Y);
+  short drawType(const short& tiletype, const int& X, const int& Y);
 
   std::string getFileName();
   std::string getFilePath();

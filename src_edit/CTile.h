@@ -10,7 +10,7 @@ enum { // tile types
 
 enum { // bitwise flags for tile placement in the map editor
   ENABLE_NONE    = 0,
-  ENABLE_BG       = 0x00000001,    // Place background tiles
+  ENABLE_BG      = 0x00000001,    // Place background tiles
   ENABLE_FG      = 0x00000002,    // Place foreground tiles
   ENABLE_TYPE    = 0x00000004,    // Place tile types
   ENABLE_COLL    = 0x00000008,    // Place collision types
@@ -44,15 +44,15 @@ enum { // collision types (platform mode only)
 struct CTile {
   short    bg_ID;      // Background tile (ID) drawn
   short    fg_ID;      // Foreground tile (ID) drawn
-  short    TypeID;      // Tile characteristics
-  short    CollID;      // Collision characteristics
+  short    TypeID;     // Tile characteristics
+  short    CollID;     // Collision characteristics
   CTile(): bg_ID(-1), fg_ID(-1), TypeID(TILE_TYPE_NORMAL), CollID(SOLID_NONE) {};
 };
 
 struct CPlanTile {
-  short    ID;          // ID for the tile drawn
-  short    type;        // Tile characteristics
-  bool    solid;      // in planview mode, a tile is either solid or not solid
+  short    ID;         // ID for the tile drawn
+  short    type;       // Tile characteristics
+  bool     solid;      // in planview mode, a tile is either solid or not solid
   CPlanTile(): ID(-1), type(TILE_TYPE_NORMAL), solid(false) {};
 };
 

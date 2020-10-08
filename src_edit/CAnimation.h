@@ -9,7 +9,7 @@ private:
   int  FrameInc;
 
 private:
-  int    FrameRate;
+  int   FrameRate;
   long  OldTime;
 
 public:

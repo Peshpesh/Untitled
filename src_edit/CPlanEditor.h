@@ -157,9 +157,11 @@ namespace pvmEditor {
   namespace tileOpts {
     extern const SDL_Rect ts_button;
     extern const SDL_Rect tile_button;
+    extern const SDL_Rect clear_button;
     extern const SDL_Color* title_fcol;
     extern const char* const ts_title;
     extern const char* const tile_title;
+    extern const char* const clear_title;
   }
   namespace patternOpts {
     extern const SDL_Rect button;

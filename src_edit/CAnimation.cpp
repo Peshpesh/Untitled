@@ -1,9 +1,9 @@
 #include "CAnimation.h"
 
 CAnimation::CAnimation() {
-  CurrentFrame  = 0;
+  CurrentFrame   = 0;
   MaxFrames      = 0;
-  FrameInc      = 1;
+  FrameInc       = 1;
   FrameRate      = 100; //millsecs
   OldTime        = 0;
   Oscillate      = false;

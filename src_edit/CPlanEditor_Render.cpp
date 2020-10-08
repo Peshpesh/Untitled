@@ -81,6 +81,30 @@ bool CPlanEditor::drawPlaceDomain(const SDL_Point* m) {
     }
     CCamera::CameraControl.MakeWinRel(box.x, box.y);
 
+    CTileset::TSControl.changeTileAlpha(prev_opacity);
+
+    if (!workPattern.size()) {
+      // draw domain full of working tile
+      for (int j = 0; j < tH; j++) {
+        int Y = box.y + (j * TILE_SIZE);
+        for (int i = 0; i < tW; i++) {
+          int X = box.x + (i * TILE_SIZE);
+          if (!drawTile(X, Y)) return false;
+        }
+      }
+    } else {
+      // draw domain full of working pattern
+      for (int j = 0; j < tH / pattern_h; j++) {
+        int Y = box.y + (j * pattern_h * TILE_SIZE);
+        for (int i = 0; i < tW / pattern_w; i++) {
+          int X = box.x + (i * pattern_w * TILE_SIZE);
+          if (!drawPattern(X, Y, flip_x, flip_y)) return false;
+        }
+      }
+    }
+
+    CTileset::TSControl.maxTileAlpha();
+
     if (!CAsset::drawBox(&box, color, outline_sz)) return false;
   }
   return true;
@@ -184,15 +208,21 @@ bool CPlanEditor::drawTileOpts(const SDL_Point* m) {
     if (!CAsset::drawStrBox(&tile_button, stroke_sz,
         CInterrupt::isFlagOn(INTRPT_CHANGE_BG) ? on_col :
         SDL_PointInRect(m, &tile_button) ? hov_col : btn_col)) return false;
+
+    if (!CAsset::drawStrBox(&clear_button, stroke_sz,
+        SDL_PointInRect(m, &clear_button) ? hov_col : btn_col)) return false;
   } else {
     if (!CAsset::drawStrBox(&ts_button, stroke_sz,
         CInterrupt::isFlagOn(INTRPT_CHANGE_TS) ? on_col : btn_col)) return false;
 
     if (!CAsset::drawStrBox(&tile_button, stroke_sz,
         CInterrupt::isFlagOn(INTRPT_CHANGE_BG) ? on_col : btn_col)) return false;
+
+    if (!CAsset::drawStrBox(&clear_button, stroke_sz, btn_col)) return false;
   }
   Font::NewCenterWrite(ts_title, &ts_button, title_fcol);
   Font::NewCenterWrite(tile_title, &tile_button, title_fcol);
+  Font::NewCenterWrite(clear_title, &clear_button, title_fcol);
   return true;
 }
 

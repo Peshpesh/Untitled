@@ -11,8 +11,8 @@ CPlanEditor::CPlanEditor() {
   sel_z = 0;
   active_opacity = MAX_RGBA;
   over_opacity = 120;
-  under_opacity = 200;
-  prev_opacity = 225;
+  under_opacity = MAX_RGBA;
+  prev_opacity = 155;
   req_rm_side = NULL;
   pDomain_A = NULL; // point A of domain to fill with tiles/pattern of tiles
   pDomain_B = NULL; // point B of domain ...

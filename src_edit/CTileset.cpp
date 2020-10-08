@@ -36,6 +36,17 @@ namespace {
   const SDL_Point* selectBoxCol  = &palette::white;
   const SDL_Color* selectTextCol = &rgb::dark_red;
 
+  // grid dimensions/coordinates
+  const short fill_x = 0;
+  const short fill_y = 0;
+  const short solid_x = TILE_SIZE;
+  const short solid_y = 0;
+
+  // type dimensions/coordinates
+  const SDL_Point water_tile = {TILE_SIZE, 0};
+  const SDL_Point ice_tile   = {0, TILE_SIZE};
+  const SDL_Point fire_tile  = {TILE_SIZE, TILE_SIZE};
+
   // option (and list) dimensions
   const short opt_w = 80;
   const short opt_h = 15;
@@ -97,15 +108,17 @@ CTileset::CTileset() {
   tile_alpha = MAX_RGBA;
   type_alpha = 215;
   coll_alpha = 55;
+  grid_alpha = MAX_RGBA * 0.33;
 }
 
 bool CTileset::OnInit() {
   using namespace Tileset_ID;
 
-  if ((grid_tileset = CSurface::OnLoad("../res_edit/fillgrid.png")) == NULL) {
+  if ((grid_tileset = CSurface::OnLoad("../res_edit/grid.png")) == NULL) {
     return false;
   }
 
+  SDL_SetTextureAlphaMod(grid_tileset, grid_alpha);
   CAsset::queryTileDims(grid_tileset, grid_w, grid_h);
 
   if ((type_tileset = CSurface::OnLoad("../res_edit/types.png")) == NULL) {
@@ -234,6 +247,32 @@ short CTileset::drawTile(const int& ID, const int& X, const int& Y) {
   CSurface::OnDraw(tileset, X, Y, ts_X, ts_Y, TILE_SIZE, TILE_SIZE);
 
   return 0;
+}
+
+bool CTileset::drawFill(const int& X, const int& Y) {
+  return CSurface::OnDraw(grid_tileset, X, Y, fill_x, fill_y, TILE_SIZE, TILE_SIZE);
+}
+
+bool CTileset::drawSolid(const int& X, const int& Y) {
+  return CSurface::OnDraw(grid_tileset, X, Y, solid_x, solid_y, TILE_SIZE, TILE_SIZE);
+}
+
+short CTileset::drawType(const short& tiletype, const int& X, const int& Y) {
+  short retval = 0;
+  SDL_Point type_pt = {0,0};
+  switch(tiletype) {
+    case TILE_TYPE_NORMAL: break;
+    case TILE_TYPE_WATER:  type_pt = water_tile; break;
+    case TILE_TYPE_ICE:    type_pt = ice_tile;   break;
+    case TILE_TYPE_FIRE:   type_pt = fire_tile;  break;
+    default: retval = -1;  break; // unknown type
+  }
+
+  if (retval == 0) {
+    retval = CSurface::OnDraw(type_tileset, X, Y, type_pt.x, type_pt.y, TILE_SIZE, TILE_SIZE);
+  }
+
+  return retval;
 }
 
 SDL_Rect CTileset::getTileSrcR(const int& ID) {
