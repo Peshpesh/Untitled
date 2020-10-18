@@ -53,6 +53,7 @@ public:
   bool OnInit();
 
   void getK(int& k);
+  void setK(const int& k);
 
   void OnTerminate();
 

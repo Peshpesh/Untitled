@@ -307,6 +307,7 @@ void CFileIO::newData() {
 
   // prevName = newName;
   CStage::control.name = "new";
+  CStage::control.resetK();
   newName.clear();
 
   pushInform(I_MAKE_NEW);
@@ -331,7 +332,11 @@ void CFileIO::loadData() {
       return;
     }
   } else {
-
+    if (!CPlanArea::control.OnLoad(newName.c_str())) {
+      // problem loading the area
+      newName.clear();
+      return;
+    }
   }
 
   CCamera::CameraControl.SetPos(0, 0);
@@ -339,21 +344,29 @@ void CFileIO::loadData() {
 
   // prevName = newName;
   CStage::control.name = newName;
+  CStage::control.resetK();
   newName.clear();
 }
 
 void CFileIO::saveData() {
-  if (!CArea::control.OnSave(newName.c_str())) {
-    pushInform(I_FAIL_SAVE);
-    return;
-  }
-  if (!CEntity::OnSave(newName.c_str())) {
-    pushInform(I_FAIL_SAVE);
-    return;
-  }
-  if (!CScenery::OnSave(newName.c_str())) {
-    pushInform(I_FAIL_SAVE);
-    return;
+  if (!CStage::control.planview) {
+    if (!CArea::control.OnSave(newName.c_str())) {
+      pushInform(I_FAIL_SAVE);
+      return;
+    }
+    if (!CEntity::OnSave(newName.c_str())) {
+      pushInform(I_FAIL_SAVE);
+      return;
+    }
+    if (!CScenery::OnSave(newName.c_str())) {
+      pushInform(I_FAIL_SAVE);
+      return;
+    }
+  } else {
+    if (!CPlanArea::control.OnSave(newName.c_str())) {
+      pushInform(I_FAIL_SAVE);
+      return;
+    }
   }
 
   // prevName = newName;

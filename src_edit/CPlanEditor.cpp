@@ -24,6 +24,10 @@ bool CPlanEditor::OnInit() {
   return true;
 }
 
+void CPlanEditor::setK(const int& k) {
+  this->k = k;
+}
+
 void CPlanEditor::getK(int& k) {
   k = this->k;
 }

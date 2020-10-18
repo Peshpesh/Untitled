@@ -28,7 +28,7 @@ void CPlanMap::OnLoad() {
 
 bool CPlanMap::OnLoad(FILE* fhandle)  {
   if (fhandle == NULL) {
-    CInform::InfoControl.pushInform("---CPlanMap.Onload---\nmaps file is NULL");
+    CInform::InfoControl.pushInform("---CPlanMap.OnLoad---\ninvalid file handle");
     return false;
   }
 
@@ -49,7 +49,7 @@ bool CPlanMap::OnLoad(FILE* fhandle)  {
 
 bool CPlanMap::OnSave(FILE* fhandle) {
   if (fhandle == NULL) {
-    CInform::InfoControl.pushInform("---CPlanMap.OnSave---\nfailed to access maps handle");
+    CInform::InfoControl.pushInform("---CPlanMap.OnSave---\ninvalid file handle");
     return false;
   }
 

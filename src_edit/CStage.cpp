@@ -25,7 +25,14 @@ void CStage::OnEventPlatform(SDL_Event* Event) {
 }
 
 void CStage::OnEventPlanview(SDL_Event* Event) {
-  CPlanEditor::control.OnEvent(Event);
+  switch (CModule::control.active_mod) {
+    case MODIFY_MAP: CPlanEditor::control.OnEvent(Event); break;
+    // case MODIFY_NPC: CPlanEntity::control.OnEvent(Event); break;
+    // case MODIFY_SCENE: CPlanScenery::control.OnEvent(Event); break;
+    // case MODIFY_SIM: CPlanSimulate::control.OnEvent(Event); break;
+    // case MODIFY_OPTIONS: CPlanOptions::control.OnEvent(Event); break;
+    default: break;
+  }
 }
 
 void CStage::OnLoop() {
@@ -110,4 +117,9 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
     // case MODIFY_OPTIONS:  COptions::control.OnRender(&m);        break;
     default:              break;
   }
+}
+
+void CStage::resetK() {
+  k = 0;
+  CPlanEditor::control.setK(k);
 }

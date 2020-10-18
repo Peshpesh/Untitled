@@ -2,6 +2,11 @@
 
 CPlanArea CPlanArea::control;
 
+namespace {
+  std::string FPATH = "../data/maps/";
+  std::string EXT = ".pvm";
+}
+
 CPlanArea::CPlanArea() {
   //
 }
@@ -21,12 +26,14 @@ void CPlanArea::OnInit()  {
 
 void CPlanArea::addLayer(const short& K, const short& Z) {
   if (K < 0 || K > LayerList.size()) return;   // second condition has no =
-                                              // as we're adding a layer
+                                               // as we're adding a layer
 
   // load an empty map
   CPlanMap tempMap;
   tempMap.OnLoad();
 
+  // if the requested Z is below all the existing layers,
+  // then "lift" them such that the new layer is the new 0-layer.
   if (Z < 0) {
     for (int k = 0; k < LayerList.size(); k++) LayerList[k].Z -= Z;
   }
@@ -389,13 +396,11 @@ bool CPlanArea::isDownEmpty() {
 
 bool CPlanArea::OnLoad(char const* File)  {
   // try to load area/maps
-  std::string fpath = "../data/maps/";
-  std::string ext = ".area";
-  std::string fname = fpath + std::string(File) + ext;
+  std::string fname = FPATH + std::string(File) + EXT;
 
   FILE* FileHandle = fopen(fname.c_str(), "rb");
   if (FileHandle == NULL) {
-    CInform::InfoControl.pushInform("---CAREA.Onload---\nfailed to open area file");
+    CInform::InfoControl.pushInform("---CPlanArea.Onload---\nfailed to open area file");
     return false;
   }
 
@@ -403,27 +408,38 @@ bool CPlanArea::OnLoad(char const* File)  {
   short setID;
   fread(&setID, sizeof(short), 1, FileHandle);
 
-  // Output AreaWidth & AreaHeight
+  // Get AreaWidth, AreaHeight and number of layers
+  int AreaDepth = LayerList.size();
   fread(&AreaWidth, sizeof(int), 1, FileHandle);
   fread(&AreaHeight, sizeof(int), 1, FileHandle);
+  fread(&AreaDepth, sizeof(int), 1, FileHandle);
 
   if (!CTileset::TSControl.changeTileset(setID)) {
-    CInform::InfoControl.pushInform("---CAREA.Onload---\ncould not load tileset");
+    CInform::InfoControl.pushInform("---CPlanArea.Onload---\ncould not load tileset");
+    fclose(FileHandle);
     return false;
   }
 
   // MapList.clear();
   LayerList.clear();
 
-  for (int X = 0; X < AreaWidth; X++) {
-    for (int Y = 0; Y < AreaHeight; Y++) {
+  // read map data
+  for (int k = 0; k < AreaDepth; k++) {
+    CPlanLayer tempLayer;
+
+    // get layer height
+    fread(&tempLayer.Z, sizeof(short), 1, FileHandle);
+
+    for (int i = 0; i < AreaWidth * AreaHeight; i++) {
       CPlanMap tempMap;
       if (tempMap.OnLoad(FileHandle) == false) {
         fclose(FileHandle);
         return false;
       }
-      // MapList.push_back(tempMap); <-- FIX THIS
+      tempLayer.MapList.push_back(tempMap);
     }
+    // insert the new layer into the LayerList vector
+    LayerList.push_back(tempLayer);
   }
   fclose(FileHandle);
   return true;
@@ -431,14 +447,12 @@ bool CPlanArea::OnLoad(char const* File)  {
 
 bool CPlanArea::OnSave(char const* File) {
   // try to save area/maps
-  std::string fpath = "../data/maps/";
-  std::string ext = ".area";
-  std::string fname = fpath + std::string(File) + ext;
+  std::string fname = FPATH + std::string(File) + EXT;
   // FILE* FileHandle = fopen(fname.c_str(), "w");
   FILE* FileHandle = fopen(fname.c_str(), "wb");
 
   if (FileHandle == NULL)  {
-    CInform::InfoControl.pushInform("---CAREA.OnSave---\nfailed to open new area file");
+    CInform::InfoControl.pushInform("---CPlanArea.OnSave---\nfailed to open new area file");
     return false;
   }
 
@@ -446,15 +460,20 @@ bool CPlanArea::OnSave(char const* File) {
   short setID = CTileset::TSControl.getFileID();
   fwrite(&setID, sizeof(short), 1, FileHandle);
 
-  // Output AreaWidth & AreaHeight
+  // Output AreaWidth, AreaHeight, number of layers
+  int AreaDepth = LayerList.size();
   fwrite(&AreaWidth, sizeof(int), 1, FileHandle);
   fwrite(&AreaHeight, sizeof(int), 1, FileHandle);
+  fwrite(&AreaDepth, sizeof(int), 1, FileHandle);
 
-  // Output map data to .area file
-  for (int Y = 0; Y < AreaHeight; Y++) {
-    for (int X = 0; X < AreaWidth; X++) {
-      int ID = X + (Y * AreaWidth);
-      // if (!MapList[ID].OnSave(FileHandle)) return false; <--- FIX THIS
+  // Output map data to .pvm file
+  for (int k = 0; k < AreaDepth; k++) {
+    fwrite(&LayerList[k].Z, sizeof(short), 1, FileHandle); // write layer height
+    for (int i = 0; i < AreaWidth * AreaHeight; i++) {
+      if (!LayerList[k].MapList[i].OnSave(FileHandle)) {
+        fclose(FileHandle);
+        return false;
+      }
     }
   }
 

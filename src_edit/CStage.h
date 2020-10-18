@@ -32,6 +32,8 @@ public:
   void OnRender(const SDL_Point& m);
   void OnRenderPlatform(const SDL_Point& m);
   void OnRenderPlanview(const SDL_Point& m);
+
+  void resetK();
 };
 
 #endif
