@@ -54,6 +54,11 @@ bool CApp::OnInit()
     return false;
   }
 
+  if (CPlanScnEdit::control.OnInit() == false) {
+    CError::handler.ReportErr("FATAL => CPlanScnEdit failed to initialize.");
+    return false;
+  }
+
   COptions::control.OnInit();
 
   ///////////////////////

@@ -22,7 +22,7 @@ CPlanScnEdit::CPlanScnEdit() {
   show_anchor = false;
 }
 
-void CPlanScnEdit::OnInit() {
+bool CPlanScnEdit::OnInit() {
   group_ID = Decorations::groups::GLOBAL;
   decor_ID = Decorations::global::NOTHING;
   list_page = 0;
@@ -31,9 +31,11 @@ void CPlanScnEdit::OnInit() {
   scenery_tex = CSceneryData::loadSrcTexture(group_ID);
 
   if (scenery_tex != NULL) img = scenery_tex;
+  else return false;
 
   scnList.clear();
   updateSceneryButtons();
+  return true;
 }
 
 void CPlanScnEdit::setK(const int& k) {

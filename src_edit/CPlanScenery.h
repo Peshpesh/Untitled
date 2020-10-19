@@ -59,7 +59,7 @@ public:
   static CPlanScnEdit control;
   static std::vector<CPlanScenery> scnList;    // contains placed scenery info
 
-  void OnInit();
+  bool OnInit();
 
   void getK(int& k);
   void setK(const int& k);

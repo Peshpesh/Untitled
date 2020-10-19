@@ -5,12 +5,18 @@ bool CPlanScnEdit::OnRender(const SDL_Point& m) {
   if (CInterrupt::isNone()) {
     if (!drawWorkingScenery(m)) return false;
   }
+  if (!OnRenderSettings(&m)) return false;
   return true;
 }
 
 bool CPlanScnEdit::OnRenderSettings(const SDL_Point* m) {
   Font::FontControl.SetFont(FONT_MINI);
   bool no_intrpt = CInterrupt::isNone();
+
+  if (!drawAnchor(no_intrpt ? m : NULL)) return false;
+  if (!drawAnchDisplace(no_intrpt ? m : NULL)) return false;
+
+  if (!CAsset::drawAppFrame()) return false;
 
   if (!drawChScenery(no_intrpt ? m : NULL, no_intrpt)) return false;
   // if (!drawChLayer(no_intrpt ? m : NULL, no_intrpt)) return false;
@@ -21,8 +27,6 @@ bool CPlanScnEdit::OnRenderSettings(const SDL_Point* m) {
   // if (!drawOpacOther()) return false;
   if (!drawSwitchView()) return false;
   if (!drawSwitchPlace()) return false;
-  if (!drawAnchor(no_intrpt ? m : NULL)) return false;
-  if (!drawAnchDisplace(no_intrpt ? m : NULL)) return false;
 
   if (!no_intrpt) {
     if (!drawIntrpt(m)) return false;

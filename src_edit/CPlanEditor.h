@@ -50,7 +50,7 @@ class CPlanEditor : public CEvent {
 public:
   static CPlanEditor control;
 
-  bool OnInit();
+  void OnInit();
 
   void getK(int& k);
   void setK(const int& k);

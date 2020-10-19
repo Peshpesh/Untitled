@@ -20,8 +20,8 @@ CPlanEditor::CPlanEditor() {
   pattern_h = 0;
 }
 
-bool CPlanEditor::OnInit() {
-  return true;
+void CPlanEditor::OnInit() {
+
 }
 
 void CPlanEditor::setK(const int& k) {
