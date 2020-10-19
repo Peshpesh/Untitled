@@ -28,7 +28,7 @@ void CStage::OnEventPlanview(SDL_Event* Event) {
   switch (CModule::control.active_mod) {
     case MODIFY_MAP: CPlanEditor::control.OnEvent(Event); break;
     // case MODIFY_NPC: CPlanEntity::control.OnEvent(Event); break;
-    // case MODIFY_SCENE: CPlanScenery::control.OnEvent(Event); break;
+    // case MODIFY_SCENE: CPlanScnEdit::control.OnEvent(Event); break;
     // case MODIFY_SIM: CPlanSimulate::control.OnEvent(Event); break;
     // case MODIFY_OPTIONS: CPlanOptions::control.OnEvent(Event); break;
     default: break;
@@ -38,9 +38,17 @@ void CStage::OnEventPlanview(SDL_Event* Event) {
 void CStage::OnLoop() {
   if (planview) {
     switch (CModule::control.active_mod) {
-      case MODIFY_MAP:      CPlanEditor::control.getK(k); break;
-      default:              break;
+      case MODIFY_MAP: {
+        CPlanEditor::control.getK(k);
+        break;
+      }
+      // case MODIFY_NPC: CPlanEntity::control.getK(k); break;
+      // case MODIFY_SCENE: CPlanScnEdit::control.getK(k); break;
+      default: break;
     }
+    if (CModule::control.active_mod != MODIFY_MAP) CPlanEditor::control.setK(k);
+    // if (CModule::control.active_mod != MODIFY_NPC) CPlanEntity::control.setK(k);
+    // if (CModule::control.active_mod != MODIFY_SCENE) CPlanScnEdit::control.setK(k);
   }
 }
 
@@ -111,10 +119,10 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
 
   switch (CModule::control.active_mod) {
     case MODIFY_MAP:      CPlanEditor::control.OnRender(m);    break;
-    // case MODIFY_NPC:      CEntityEditor::Control.OnRender(&m);   break;
-    // case MODIFY_SCENE:    CSceneryEditor::control.OnRender(&m); break;
-    // case MODIFY_SIM:      CSimulate::control.OnRender(&m);       break;
-    // case MODIFY_OPTIONS:  COptions::control.OnRender(&m);        break;
+    // case MODIFY_NPC:      CPlanEntity::control.OnRender(m);    break;
+    case MODIFY_SCENE:    CPlanScnEdit::control.OnRender(m);   break;
+    // case MODIFY_SIM: CPlanSimulate::control.OnRender(m); break;
+    // case MODIFY_OPTIONS: CPlanOptions::control.OnRender(m); break;
     default:              break;
   }
 }

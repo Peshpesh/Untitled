@@ -302,6 +302,7 @@ void CFileIO::newData() {
   CPlanArea::control.OnInit();
   CEntity::OnInit();
   CScenery::OnInit();
+  CAnchorScenery::Control.planview = CStage::control.planview;
 
   CCamera::CameraControl.SetPos(0, 0);
 
@@ -338,6 +339,8 @@ void CFileIO::loadData() {
       return;
     }
   }
+
+  CAnchorScenery::Control.planview = CStage::control.planview;
 
   CCamera::CameraControl.SetPos(0, 0);
   pushInform(I_LOAD);

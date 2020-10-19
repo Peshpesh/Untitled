@@ -216,20 +216,28 @@ bool CChangeScenery::drawSampleScenery(const SDL_Point* m) {
         tRec = CSceneryData::getDecorDims(group_ID, i);
       }
     }
-  }
-  else {
+  } else {
     tRec = CSceneryData::getDecorDims(group_ID, decor_ID);
   }
 
   dims = "Width - " + Font::intToStr(tRec.w); Font::NewCenterWrite(dims.c_str(), &sample_w);
   dims = "Height - " + Font::intToStr(tRec.h); Font::NewCenterWrite(dims.c_str(), &sample_h);
 
-  if (tRec.w > samp_sz) tRec.w = samp_sz;
-  if (tRec.h > samp_sz) tRec.h = samp_sz;
+  // if (tRec.w > samp_sz) tRec.w = samp_sz;
+  // if (tRec.h > samp_sz) tRec.h = samp_sz;
 
-  const SDL_Point dstP = {sampleCanv.x, sampleCanv.y};
+  int max_dim = (tRec.w > tRec.h) ? tRec.w : tRec.h;
+  int samp_w = tRec.w;
+  int samp_h = tRec.h;
+  if (max_dim > samp_sz) {
+    double reduce_frac = (double)(samp_sz) / (double)(max_dim);
+    samp_w *= reduce_frac;
+    samp_h *= reduce_frac;
+  }
 
-  return CSurface::OnDraw(Group_Tex, &tRec, &dstP);
+  const SDL_Rect dstR = {sampleCanv.x, sampleCanv.y, samp_w, samp_h};
+
+  return CSurface::OnDraw(Group_Tex, &tRec, &dstR);
 }
 
 SDL_Texture* CChangeScenery::updateTexture() {

@@ -15,6 +15,7 @@ public:
   double anch_x, anch_y, anch_z;
   int disp_x, disp_y;
   unsigned short layer;
+  bool planview;
 
 public:
   static CAnchorScenery Control;

@@ -12,11 +12,12 @@ CAnchorScenery::CAnchorScenery() {
   anch_z = 1.0;
   disp_x = disp_y = 10;
   layer = 0;
+  planview = false;
 }
 
 void CAnchorScenery::OnInit(const unsigned short& layer) {
   this->layer = layer;
-  anch_z = CScenery::layerList[layer];
+  if (!planview) anch_z = CScenery::layerList[layer];
 }
 
 void CAnchorScenery::OnEvent(SDL_Event* Event) {
@@ -27,8 +28,8 @@ bool CAnchorScenery::OnRender() {
   double rel_x, rel_y;
   SDL_Point p;
 
-  rel_x = CCamera::CameraControl.trueXToRel(anch_x, anch_z);
-  rel_y = CCamera::CameraControl.trueYToRel(anch_y, anch_z);
+  rel_x = planview ? anch_x : CCamera::CameraControl.trueXToRel(anch_x, anch_z);
+  rel_y = planview ? anch_y : CCamera::CameraControl.trueYToRel(anch_y, anch_z);
   p = CCamera::CameraControl.GetWinRelPoint(rel_x, rel_y);
   Font::NewCenterWrite(FONT_MINI, "X", &p, col_anch);
 
@@ -41,18 +42,23 @@ bool CAnchorScenery::OnRender() {
 }
 
 void CAnchorScenery::advanceAnchor() {
-  double rel_x = CCamera::CameraControl.trueXToRel(anch_x, anch_z) + disp_x;
-  double rel_y = CCamera::CameraControl.trueYToRel(anch_y, anch_z) + disp_y;
-  anch_x = CCamera::CameraControl.relXToTrue(rel_x, anch_z);
-  anch_y = CCamera::CameraControl.relYToTrue(rel_y, anch_z);
+  if (!planview) {
+    double rel_x = CCamera::CameraControl.trueXToRel(anch_x, anch_z) + disp_x;
+    double rel_y = CCamera::CameraControl.trueYToRel(anch_y, anch_z) + disp_y;
+    anch_x = CCamera::CameraControl.relXToTrue(rel_x, anch_z);
+    anch_y = CCamera::CameraControl.relYToTrue(rel_y, anch_z);
+  } else {
+    anch_x += disp_x;
+    anch_y += disp_y;
+  }
 }
 
 double CAnchorScenery::getRelX() {
-  return CCamera::CameraControl.trueXToRel(anch_x, anch_z);
+  return planview ? anch_x : CCamera::CameraControl.trueXToRel(anch_x, anch_z);
 }
 
 double CAnchorScenery::getRelY() {
-  return CCamera::CameraControl.trueYToRel(anch_y, anch_z);
+  return planview ? anch_y : CCamera::CameraControl.trueYToRel(anch_y, anch_z);
 }
 
 void CAnchorScenery::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
@@ -72,18 +78,20 @@ void CAnchorScenery::OnLButtonDown(int mX, int mY) {
 }
 
 void CAnchorScenery::handleGrabAnchor(const SDL_Point* m) {
-  for (int i = CScenery::sceneryList.size() - 1; i >= 0; i--) {
-    if (layer == CScenery::sceneryList[i].layer) {
-      double rel_x = CCamera::CameraControl.trueXToRel(CScenery::sceneryList[i].true_x, anch_z);
-      double rel_y = CCamera::CameraControl.trueYToRel(CScenery::sceneryList[i].true_y, anch_z);
-      int w = CScenery::sceneryList[i].srcR.w;
-      int h = CScenery::sceneryList[i].srcR.h;
-      SDL_Point w_pos = CCamera::CameraControl.GetWinRelPoint(rel_x, rel_y);
-      SDL_Rect w_rec = CAsset::getRect(w_pos.x, w_pos.y, w, h);
-      if (SDL_PointInRect(m, &w_rec)) {
-        anch_x = CScenery::sceneryList[i].true_x;
-        anch_y = CScenery::sceneryList[i].true_y;
-        break;
+  if (!planview) {
+    for (int i = CScenery::sceneryList.size() - 1; i >= 0; i--) {
+      if (layer == CScenery::sceneryList[i].layer) {
+        double rel_x = CCamera::CameraControl.trueXToRel(CScenery::sceneryList[i].true_x, anch_z);
+        double rel_y = CCamera::CameraControl.trueYToRel(CScenery::sceneryList[i].true_y, anch_z);
+        int w = CScenery::sceneryList[i].srcR.w;
+        int h = CScenery::sceneryList[i].srcR.h;
+        SDL_Point w_pos = CCamera::CameraControl.GetWinRelPoint(rel_x, rel_y);
+        SDL_Rect w_rec = CAsset::getRect(w_pos.x, w_pos.y, w, h);
+        if (SDL_PointInRect(m, &w_rec)) {
+          anch_x = CScenery::sceneryList[i].true_x;
+          anch_y = CScenery::sceneryList[i].true_y;
+          break;
+        }
       }
     }
   }
@@ -91,11 +99,16 @@ void CAnchorScenery::handleGrabAnchor(const SDL_Point* m) {
 }
 
 void CAnchorScenery::handleMakeAnchor(const SDL_Point* m) {
-  // clicks are RELATIVE to a true x, y given some depth z.
-  // We must convert these relative coordinates to true x, y and
-  // store its associated z value
   SDL_Point r_pos = CCamera::CameraControl.GetCamRelPoint(*m);
-  anch_x = CCamera::CameraControl.relXToTrue(r_pos.x, anch_z);
-  anch_y = CCamera::CameraControl.relYToTrue(r_pos.y, anch_z);
+  if (!planview) {
+    // clicks are RELATIVE to a true x, y given some depth z.
+    // We must convert these relative coordinates to true x, y and
+    // store its associated z value
+    anch_x = CCamera::CameraControl.relXToTrue(r_pos.x, anch_z);
+    anch_y = CCamera::CameraControl.relYToTrue(r_pos.y, anch_z);
+  } else {
+    anch_x = r_pos.x;
+    anch_y = r_pos.y;
+  }
   CInterrupt::removeFlag(INTRPT_MAKE_ANCH);
 }

@@ -5,6 +5,7 @@
 #include "CPlanEditor.h"
 #include "CEntityEditor.h"
 #include "CSceneryEditor.h"
+#include "CPlanScenery.h"
 #include "CArea.h"
 #include "CScenery.h"
 #include "CSimulate.h"
