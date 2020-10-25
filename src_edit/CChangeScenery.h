@@ -16,6 +16,9 @@ private:
   std::vector<SDL_Rect> groupButtons;
   std::vector<SDL_Rect> decorButtons;
 
+public:
+  bool planview;
+
 private:
   SDL_Texture* Group_Tex;
   bool succ;       // SUCC
@@ -26,6 +29,7 @@ public:
   CChangeScenery();
 
   void OnInit(const short& group_ID, const short& decor_ID);
+  void OnInit(const short& group_ID, const short& decor_ID, SDL_Texture* tex); // for pvm
   void handleChanges(short& group_ID, short& decor_ID);
 
 public:

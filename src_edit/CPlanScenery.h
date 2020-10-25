@@ -33,17 +33,28 @@ struct CPlanScenery {
   //     from an image file with all the stage's scenery.
   //     This requires a look-up table that tells where each
   //     scenery is on the image file.
+  //
+  // Rendering: For the purposes of rendering, the camera looks "from above".
+  //            Y-coordinate takes precedence (render lowest-Y scenery FIRST
+  //            so it appears "behind" high-Y objects) over the Z-coordinate
+  //            (for given Y, render lowest-Z FIRST so it's "underneath" layers
+  //            above)
   int ID;
-  int X;
-  int Y;
-  short Z;
-  CPlanScenery(): ID(0),X(0),Y(0),Z(0){};
+  int X; // left-right as seen in PVM camera
+  int Y; // up-down (on horizontal plane) as seen in PVM camera
+  int Y_base; // this is the Y used for rendering order
+  short Z; // toward-away (vertical plane)
+  CPlanScenery(): ID(0),X(0),Y(0),Y_base(0),Z(0){};
+  void OnRender(SDL_Texture* img, const short& group_ID);
 };
 
 class CPlanScnEdit : public CEvent {
   CPlanScnEdit();
 
   SDL_Texture* img;
+  bool render_with_map; // When true, added scenery will be pushed into scnList_back.
+                        // For a given layer, scenery in that vector is rendered immediately after
+                        // that layer's maps and shadows have been rendered.
   bool showScenery;
   bool showWorkScenery;
   int k;
@@ -57,7 +68,8 @@ class CPlanScnEdit : public CEvent {
 
 public:
   static CPlanScnEdit control;
-  static std::vector<CPlanScenery> scnList;    // contains placed scenery info
+  static std::vector<CPlanScenery> scnList_front; // scenery rendered after all maps and shadows are rendered
+  static std::vector<CPlanScenery> scnList_back;  // scenery that needs to be rendered behind map layers
 
   bool OnInit();
 
@@ -69,6 +81,8 @@ public:
   void OnEvent(SDL_Event* Event);
 
   bool OnRender(const SDL_Point& m);
+
+  void addScenery(const int& X, const int& Y, const int& Z);
 
 private:
   std::vector<CButton> sceneryButtons;

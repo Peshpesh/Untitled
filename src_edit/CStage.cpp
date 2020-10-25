@@ -28,7 +28,7 @@ void CStage::OnEventPlanview(SDL_Event* Event) {
   switch (CModule::control.active_mod) {
     case MODIFY_MAP: CPlanEditor::control.OnEvent(Event); break;
     // case MODIFY_NPC: CPlanEntity::control.OnEvent(Event); break;
-    // case MODIFY_SCENE: CPlanScnEdit::control.OnEvent(Event); break;
+    case MODIFY_SCENE: CPlanScnEdit::control.OnEvent(Event); break;
     // case MODIFY_SIM: CPlanSimulate::control.OnEvent(Event); break;
     // case MODIFY_OPTIONS: CPlanOptions::control.OnEvent(Event); break;
     default: break;

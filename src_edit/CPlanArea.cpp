@@ -90,6 +90,10 @@ CPlanTile* CPlanArea::GetTile(const int& X, const int& Y, const int& k) {
 //   return true;
 // }
 
+int CPlanArea::getZ(const int& k) {
+  if (k < 0 || k >= LayerList.size()) return 0;
+  return LayerList[k].Z;
+}
 
 void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity) {
   // The area is layered vertically (by k).

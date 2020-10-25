@@ -48,6 +48,7 @@ public:
   void addLayer(const short& K, const short& Z);
   void delLayer(const short& K);
   void GetDims(int& mW, int& mH);
+  int getZ(const int& k);
   // CPlanMap* GetMap(int X, int Y);
   CPlanTile* GetTile(const int& X, const int& Y, const int& k); // get address to tile in map
   // CPlanTile GetTileCopy(int X, int Y); // get copy of a tile in map

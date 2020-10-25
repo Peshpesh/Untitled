@@ -53,6 +53,7 @@ CChangeScenery::CChangeScenery() {
   succ        = false;
   group_ID    = 0;
   decor_ID    = 0;
+  planview    = false;
 }
 
 void CChangeScenery::OnInit(const short& group_ID, const short& decor_ID) {
@@ -68,14 +69,29 @@ void CChangeScenery::OnInit(const short& group_ID, const short& decor_ID) {
   }
 }
 
+// for planview maps
+void CChangeScenery::OnInit(const short& group_ID, const short& decor_ID, SDL_Texture* tex) {
+  if (tex == NULL) return;
+  Group_Tex = tex;
+  this->group_ID = group_ID;
+  updateSceneryButtons();
+  this->decor_ID = decor_ID;
+
+  if (groupButtons.empty()) {
+    for (int i = 0; i < CSceneryData::getNumGroups(); i++) {
+      groupButtons.push_back(CAsset::getRect(grList_x, grList_y + (i * but_h), but_w, but_h));
+    }
+  }
+}
+
 void CChangeScenery::handleChanges(short& group_ID, short& decor_ID) {
   if (!succ) {
-    if (!CScenery::isTextureLoaded(group_ID)) {
+    if (!planview && !CScenery::isTextureLoaded(group_ID)) {
       CScenery::loadTexInfo(group_ID);
     }
     return;
   }
-  group_ID  = this->group_ID;
+  group_ID = this->group_ID;
   decor_ID = this->decor_ID;
   succ = false;
 }
