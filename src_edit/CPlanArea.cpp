@@ -95,6 +95,13 @@ int CPlanArea::getZ(const int& k) {
   return LayerList[k].Z;
 }
 
+int CPlanArea::getMaxZ() {
+  if (LayerList.empty()) return 0;
+
+  int max_k = LayerList.size() - 1;
+  return LayerList[max_k].Z;
+}
+
 void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity) {
   // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the

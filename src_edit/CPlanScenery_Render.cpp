@@ -1,11 +1,10 @@
 #include "CPlanScenery.h"
 
-void CPlanScenery::OnRender(SDL_Texture* img, const short& group_ID) {
+void CPlanScenery::OnRender() {
   SDL_Point pos; // rendering position
   pos.x = X;
   pos.y = Y - (Z * TILE_SIZE);
   pos = CCamera::CameraControl.GetWinRelPoint(pos);
-  SDL_Rect srcR = CSceneryData::getDecorDims(group_ID, ID);
   CSurface::OnDraw(img, &srcR, &pos);
 }
 
@@ -16,15 +15,37 @@ bool CPlanScnEdit::OnRender(const SDL_Point& m) {
   }
 
   // testing
-  for (int i = 0; i < scnList_back.size(); i++) {
-    scnList_back[i].OnRender(img, group_ID);
-  }
-  for (int i = 0; i < scnList_front.size(); i++) {
-    scnList_front[i].OnRender(img, group_ID);
-  }
+  // for (int i = 0; i < scnList_back.size(); i++) {
+  //   scnList_back[i].OnRender(img, group_ID);
+  // }
+  // for (int i = 0; i < scnList_front.size(); i++) {
+  //   scnList_front[i].OnRender(img, group_ID);
+  // }
+
+  OnRenderYBase();
 
   if (!OnRenderSettings(&m)) return false;
   return true;
+}
+
+void CPlanScnEdit::OnRenderYBase() {
+  using namespace pvmScenery::ybase;
+  if (showYBase) {
+    for (int i = 0; i < scnList_back.size(); i++) {
+      SDL_Point pos; // rendering position
+      pos.x = scnList_back[i].X + (scnList_back[i].srcR.w / 2);
+      pos.y = scnList_back[i].Y_base - (scnList_back[i].Z * TILE_SIZE);
+      pos = CCamera::CameraControl.GetWinRelPoint(pos);
+      Font::NewCenterWrite(FONT_MINI, "X", &pos, back_col);
+    }
+    for (int i = 0; i < scnList_front.size(); i++) {
+      SDL_Point pos; // rendering position
+      pos.x = scnList_front[i].X + (scnList_front[i].srcR.w / 2);
+      pos.y = scnList_front[i].Y_base - (scnList_front[i].Z * TILE_SIZE);
+      pos = CCamera::CameraControl.GetWinRelPoint(pos);
+      Font::NewCenterWrite(FONT_MINI, "X", &pos, front_col);
+    }
+  }
 }
 
 bool CPlanScnEdit::OnRenderSettings(const SDL_Point* m) {
@@ -57,6 +78,7 @@ bool CPlanScnEdit::OnRenderSettings(const SDL_Point* m) {
 ///////////////////////////////////////////////////////////////////
 
 bool CPlanScnEdit::drawWorkingScenery(const SDL_Point& m) {
+  using namespace pvmScenery::ybase;
   if (!showWorkScenery) return true;
 
   SDL_Rect srcR = CSceneryData::getDecorDims(group_ID, decor_ID);
@@ -67,7 +89,17 @@ bool CPlanScnEdit::drawWorkingScenery(const SDL_Point& m) {
   getPosDisplace(X, Y, srcR);
   SDL_Rect dstR = {X, Y, srcR.w, srcR.h};
 
-  return CSurface::OnDraw(img, &srcR, &dstR);
+  if (!CSurface::OnDraw(img, &srcR, &dstR)) return false;
+
+  if (showYBase) {
+    int Y_base = CSceneryData::getYBase(group_ID, decor_ID, Y, srcR.h);
+    SDL_Point pos; // rendering position
+    pos.x = X + (srcR.w / 2);
+    pos.y = Y_base;
+    Font::NewCenterWrite(FONT_MINI, "X", &pos, work_col);
+  }
+
+  return true;
 }
 
 bool CPlanScnEdit::drawChScenery(const SDL_Point* m, const bool& hov) {

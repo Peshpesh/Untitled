@@ -62,6 +62,8 @@ public:
   bool OnRender(const SDL_Point& mouse);
 
   void RenderMap();
+  int RenderLayerZ(const int& z);
+  void RenderLayerK(const int& k);
 
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);

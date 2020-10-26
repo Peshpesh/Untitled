@@ -27,6 +27,39 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
   return true;
 }
 
+int CPlanEditor::RenderLayerZ(const int& z) {
+  // render all layers at depth z (can be multiple)
+  int i = 0;
+  while (i < CPlanArea::control.LayerList.size()) {
+    if (z == CPlanArea::control.LayerList[i].Z) {
+      // these blocks handle map opacity
+      if (i == this->k) {
+        CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
+                                    i, visflag, active_opacity);
+      } else {
+        CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
+                                    i, pvm_visflags::MAP, (i > this->k) ? over_opacity : under_opacity);
+      }
+    } else if (z < CPlanArea::control.LayerList[i].Z) break;
+    i++;
+  }
+  // if there are still maps above this z to render, return the next z to render.
+  // otherwise, return the current z (which is the MAX z) plus 1.
+  return (i < CPlanArea::control.LayerList.size()) ? CPlanArea::control.LayerList[i].Z : (z + 1);
+}
+
+void CPlanEditor::RenderLayerK(const int& k) {
+  // render layer with index k (only one layer)
+  // these blocks handle map opacity
+  if (k == this->k) {
+    CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
+                                k, visflag, active_opacity);
+  } else {
+    CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
+                                k, pvm_visflags::MAP, (k > this->k) ? over_opacity : under_opacity);
+  }
+}
+
 void CPlanEditor::RenderMap() {
   // render the area's layers in order from bottom to top
   for (int k = 0; k < CPlanArea::control.LayerList.size(); k++) {

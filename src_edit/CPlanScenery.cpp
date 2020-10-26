@@ -13,6 +13,7 @@ CPlanScnEdit::CPlanScnEdit() {
 
   showScenery     = true;
   showWorkScenery = true;
+  showYBase       = true;
 
   render_active   = false;
   has_rendered_active = false;
@@ -23,6 +24,15 @@ CPlanScnEdit::CPlanScnEdit() {
   placePos = pvmScenery::misc::placeRelPos::TOP_LEFT;
   use_anchor = false;
   show_anchor = false;
+}
+
+CPlanScenery::CPlanScenery() {
+  ID     = 0;
+  X      = 0;
+  Y      = 0;
+  Y_base = 0;
+  Z      = 0;
+  srcR.x = srcR.y = srcR.w = srcR.h = 0;
 }
 
 bool CPlanScnEdit::OnInit() {
@@ -48,25 +58,9 @@ void CPlanScnEdit::addScenery(const int& X, const int& Y, const int& Z) {
   tempScn.X = X;
   tempScn.Y = Y;
   tempScn.Z = Z;
-  SDL_Rect tmpR  = CSceneryData::getDecorDims(group_ID, decor_ID);
-  tempScn.Y_base = CSceneryData::getYBase(group_ID, decor_ID, Y, tmpR.h);
-
-  // if (layer >= layerList.size()) return false;
-  // double true_X = CCamera::CameraControl.relXToTrue(rel_X, layerList[layer]);
-  // double true_Y = CCamera::CameraControl.relYToTrue(rel_Y, layerList[layer]);
-  //
-  // CScenery newDecor(group, decor, true_X, true_Y, layer);
-  // if (newDecor.imgSrc == NULL) return false;
-  //
-  // // locate index destination in scenery container;
-  // // place new scenery object at the "end" of objects sharing the same layer
-  // int i = 0;
-  // while (i < sceneryList.size()) {
-  //   if (layer < sceneryList[i].layer) break;
-  //   i++;
-  // }
-  // sceneryList.insert(sceneryList.begin() + i, newDecor);
-  // return true;
+  tempScn.srcR = CSceneryData::getDecorDims(group_ID, decor_ID);
+  tempScn.Y_base = CSceneryData::getYBase(group_ID, decor_ID, Y, tempScn.srcR.h);
+  tempScn.img = img;
 
   if (render_with_map) {
     // For scenery rendered with each map layer, we must

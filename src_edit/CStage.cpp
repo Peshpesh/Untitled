@@ -115,7 +115,54 @@ void CStage::OnRenderPlatform(const SDL_Point& m) {
 }
 
 void CStage::OnRenderPlanview(const SDL_Point& m) {
-  CPlanEditor::control.RenderMap();
+  // #1: Render each map layer, starting with the lowest k (z)
+  //      and ending with the highest k (z).
+  // #2: After a map layer is rendered, render all shadows cast
+  //      by objects on the same z.
+  // #3: After all shadows are rendered on some depth z,
+  //      render all objects designated to render WITH the map.
+  //      These objects should be rendered by Y, from lowest to highest.
+  // #4: Once all map layers are rendered, including shadows and specified
+  //      objects, render all remaining objects that are NOT rendered with
+  //      the map. As in #3, these should be rendered by Y, from lowest to highest.
+
+  int z = 0;
+  int scn_i = 0;
+  int ent_i = 0;
+  int max_z = CPlanArea::control.getMaxZ();
+  int max_scn = CPlanScnEdit::scnList_back.size();
+  int max_ent = 0;
+
+  while (z <= max_z) {
+    // Handle step #1.
+    int next_z = CPlanEditor::control.RenderLayerZ(z);
+
+    // TODO: Handle step #2.
+    // .....................
+
+    // Handle step #3.
+    bool scn_valid = (scn_i < max_scn) && (CPlanScnEdit::scnList_back[scn_i].Z == z);
+    bool ent_valid = false; // ent not yet implmented
+    while (scn_valid || ent_valid) {
+      if (scn_valid && ent_valid) {
+        // compare the Y of the current scn and ent objects.
+        // render the object with the lowest Y.
+        // increment-up the index of the object type (scn or ent) rendered.
+      } else if (scn_valid) {
+        CPlanScnEdit::scnList_back[scn_i++].OnRender();
+      } else {
+        // render/increment index for entity vector
+      }
+
+      if (scn_valid && CPlanScnEdit::scnList_back[scn_i].Z >= next_z) scn_valid = false;
+      if (ent_valid) ent_valid = false;
+    }
+    z = next_z;
+  }
+  // Handle step #4. TODO: compare with front entities.
+  for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+    CPlanScnEdit::scnList_front[i].OnRender();
+  }
 
   switch (CModule::control.active_mod) {
     case MODIFY_MAP:      CPlanEditor::control.OnRender(m);    break;

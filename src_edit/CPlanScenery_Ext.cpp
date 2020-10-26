@@ -2,6 +2,11 @@
 
 namespace pvmScenery
 {
+  namespace ybase {
+    extern const SDL_Color* work_col = &rgb::light_green;
+    extern const SDL_Color* back_col = &rgb::light_blue;
+    extern const SDL_Color* front_col = &rgb::white;
+  }
   namespace buttons {
     namespace chScenery
     { // Change scenery button

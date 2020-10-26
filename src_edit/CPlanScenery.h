@@ -44,8 +44,10 @@ struct CPlanScenery {
   int Y; // up-down (on horizontal plane) as seen in PVM camera
   int Y_base; // this is the Y used for rendering order
   short Z; // toward-away (vertical plane)
-  CPlanScenery(): ID(0),X(0),Y(0),Y_base(0),Z(0){};
-  void OnRender(SDL_Texture* img, const short& group_ID);
+  SDL_Rect srcR;
+  SDL_Texture* img;
+  CPlanScenery();
+  void OnRender();
 };
 
 class CPlanScnEdit : public CEvent {
@@ -57,6 +59,7 @@ class CPlanScnEdit : public CEvent {
                         // that layer's maps and shadows have been rendered.
   bool showScenery;
   bool showWorkScenery;
+  bool showYBase;
   int k;
   bool render_active, has_rendered_active;
   short group_ID;
@@ -81,6 +84,7 @@ public:
   void OnEvent(SDL_Event* Event);
 
   bool OnRender(const SDL_Point& m);
+  void OnRenderYBase();
 
   void addScenery(const int& X, const int& Y, const int& Z);
 
@@ -134,6 +138,11 @@ private:
 };
 
 namespace pvmScenery {
+  namespace ybase {
+    extern const SDL_Color* work_col;
+    extern const SDL_Color* back_col;
+    extern const SDL_Color* front_col;
+  }
   namespace buttons {
     namespace chScenery
     { // Change scenery button
