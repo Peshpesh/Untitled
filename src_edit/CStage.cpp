@@ -137,8 +137,21 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
     // Handle step #1.
     int next_z = CPlanEditor::control.RenderLayerZ(z);
 
-    // TODO: Handle step #2.
-    // .....................
+    // Handle step #2.
+    // Note: this could probably be made more efficient...
+    //       but it's probably not an issue and shouldn't be one for gameplay
+    for (int i = 0; i < CPlanScnEdit::scnList_back.size(); i++) {
+      if (CPlanScnEdit::scnList_back[i].Z == z) {
+        CPlanScnEdit::scnList_back[i].OnRenderShadow();
+      } else if (CPlanScnEdit::scnList_back[i].Z > z) break;
+      // the above break is only possible with scenery rendered with the map layer
+      // due to the way these scenery are ordered (differs from scnList_front)
+    }
+    for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+      if (CPlanScnEdit::scnList_front[i].Z == z) {
+        CPlanScnEdit::scnList_front[i].OnRenderShadow();
+      }
+    }
 
     // Handle step #3.
     bool scn_valid = (scn_i < max_scn) && (CPlanScnEdit::scnList_back[scn_i].Z == z);

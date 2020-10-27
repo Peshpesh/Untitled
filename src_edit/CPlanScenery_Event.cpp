@@ -85,14 +85,14 @@ bool CPlanScnEdit::handleAddScenery(const SDL_Point* m) {
   int Y = use_anchor ? CAnchorScenery::Control.getRelY() : m->y;
   int Z = CPlanArea::control.getZ(k);
 
+  // correct for camera offset
+  X += CCamera::CameraControl.GetX();
+  Y += CCamera::CameraControl.GetY();
+
   getPosDisplace(X, Y, srcR);
 
   // correct for depth
   Y += Z * TILE_SIZE;
-
-  // correct for camera offset
-  X += CCamera::CameraControl.GetX();
-  Y += CCamera::CameraControl.GetY();
 
   addScenery(X, Y, Z);
   return true;
@@ -149,7 +149,7 @@ bool CPlanScnEdit::handleChScenery(const SDL_Point* m) {
 
 bool CPlanScnEdit::handleBriefChange(const SDL_Point* m) {
   using namespace pvmScenery::misc::layerBrief;
-  if (CScenery::layerList.size() <= 1) return false;
+  if (CPlanArea::control.LayerList.size() <= 1) return false;
 
   if (SDL_PointInRect(m, &l_button)) {
     if (k == 0) k = CPlanArea::control.LayerList.size() - 1;
@@ -206,6 +206,7 @@ bool CPlanScnEdit::handleSwitchPlace(const SDL_Point* m) {
   using namespace pvmScenery::switches::place;
 
   bool* flags[] = {
+    &lock_to_grid,
     &use_anchor,
     &show_anchor
   };

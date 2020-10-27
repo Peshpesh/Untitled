@@ -8,19 +8,21 @@ void CPlanScenery::OnRender() {
   CSurface::OnDraw(img, &srcR, &pos);
 }
 
+void CPlanScenery::OnRenderShadow() {
+  if (!has_shadow) return;
+
+  SDL_Point pos; // rendering position
+  pos.x = X;
+  pos.y = Y - (Z * TILE_SIZE);
+  pos = CCamera::CameraControl.GetWinRelPoint(pos);
+  CSurface::OnDraw(img_shd, &srcR, &pos);
+}
+
 bool CPlanScnEdit::OnRender(const SDL_Point& m) {
   Font::FontControl.SetFont(FONT_MINI);
   if (CInterrupt::isNone()) {
     if (!drawWorkingScenery(m)) return false;
   }
-
-  // testing
-  // for (int i = 0; i < scnList_back.size(); i++) {
-  //   scnList_back[i].OnRender(img, group_ID);
-  // }
-  // for (int i = 0; i < scnList_front.size(); i++) {
-  //   scnList_front[i].OnRender(img, group_ID);
-  // }
 
   OnRenderYBase();
 
@@ -86,7 +88,20 @@ bool CPlanScnEdit::drawWorkingScenery(const SDL_Point& m) {
   int X = m.x;
   int Y = m.y;
 
+  if (lock_to_grid) {
+    // correct for camera offset
+    X += CCamera::CameraControl.GetX();
+    Y += CCamera::CameraControl.GetY();
+  }
+
   getPosDisplace(X, Y, srcR);
+
+  if (lock_to_grid) {
+    // return to window-relative
+    X -= CCamera::CameraControl.GetX();
+    Y -= CCamera::CameraControl.GetY();
+  }
+
   SDL_Rect dstR = {X, Y, srcR.w, srcR.h};
 
   if (!CSurface::OnDraw(img, &srcR, &dstR)) return false;
@@ -226,6 +241,7 @@ bool CPlanScnEdit::drawSwitchPlace() {
   using namespace pvmScenery::switches::place;
 
   const bool flags[] = {
+    lock_to_grid,
     use_anchor,
     show_anchor
   };

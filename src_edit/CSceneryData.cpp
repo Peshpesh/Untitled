@@ -97,7 +97,35 @@ SDL_Texture* CSceneryData::loadSrcTexture(const int& group) {
     std::string filepath = dir + filename + imgtype;
     scenery_tex = CSurface::OnLoad(filepath.c_str());
   }
+
+  if (scenery_tex == NULL) {
+    CInform::InfoControl.pushInform("---CSceneryData---\ncould not load texture");
+  }
+
   return scenery_tex;
+}
+
+SDL_Texture* CSceneryData::loadSrcShadows(const int& group) {
+  using namespace Decorations::groups;
+
+  SDL_Texture* shadow_tex = NULL;
+  std::string filename;
+
+  if (group >= 0 && group < num) {
+    filename = name[group];
+  }
+
+  if (!filename.empty()) {
+    using namespace path;
+    std::string filepath = dir + filename + "_shade" + imgtype;
+    shadow_tex = CSurface::OnLoad(filepath.c_str());
+  }
+
+  if (shadow_tex == NULL) {
+    CInform::InfoControl.pushInform("---CSceneryData---\ncould not load shadows");
+  }
+
+  return shadow_tex;
 }
 
 SDL_Rect CSceneryData::getDecorDims(const int& group, const int& decor) {
@@ -146,6 +174,18 @@ int CSceneryData::getYBase(const int& group, const int& decor, const int& Y, con
     }
   }
   return retval;
+}
+
+bool CSceneryData::hasShadow(const int& group, const int& decor) {
+  using namespace Decorations::groups;
+  bool has_shadow = false;
+  if (!(group < 0 || group >= num || decor < 0)) {
+    switch (group) {
+      case NEWYRAI:   has_shadow = hasShadow_newyrai(decor); break;
+      default:        break;
+    }
+  }
+  return has_shadow;
 }
 
 void CSceneryData::getDims_global(const int& decor, SDL_Rect& srcRect) {
@@ -392,4 +432,101 @@ void CSceneryData::getYBase_newyrai(const int& decor, int& Y_base) {
     default:  break;
   }
   Y_base += offset;
+}
+
+bool CSceneryData::hasShadow_newyrai(const int& decor) {
+  using namespace Decorations::newyrai;
+
+  bool has_shadow = false;
+
+  switch (decor) {
+    case HEDGE:             break;
+    case HEDGE_S_EDGE_A:    break;
+    case HEDGE_S_EDGE_B:    break;
+    case HEDGE_N_EDGE_A:    break;
+    case HEDGE_N_EDGE_B:    break;
+    case HEDGE_W_EDGE_A:    break;
+    case HEDGE_W_EDGE_B:    break;
+    case HEDGE_E_EDGE_A:    break;
+    case HEDGE_E_EDGE_B:    break;
+    case HEDGE_NE_CORNER:   break;
+    case HEDGE_NW_CORNER:   break;
+    case HEDGE_SW_CORNER:   break;
+    case HEDGE_SE_CORNER:   break;
+    case HEDGE_NE_EDGE:     break;
+    case HEDGE_NW_EDGE:     break;
+    case HEDGE_SW_EDGE:     break;
+    case HEDGE_SE_EDGE:     break;
+    case SIGN_FRONT:        has_shadow = true; break;
+    case SIGN_BACK:         has_shadow = true; break;
+    case ROOT_LAMP:         has_shadow = true; break;
+    case BENCH_Y:           has_shadow = true; break;
+    case BENCH_X:           has_shadow = true; break;
+    case LO_FENCE_Y:        has_shadow = true; break;
+    case LO_FENCE_X_A:      has_shadow = true; break;
+    case LO_FENCE_X_B:      has_shadow = true; break;
+    case LO_FENCE_NW:       has_shadow = true; break;
+    case LO_FENCE_NE:       has_shadow = true; break;
+    case LO_FENCE_SW:       has_shadow = true; break;
+    case LO_FENCE_SE:       has_shadow = true; break;
+    case LO_FENCE_END_N:    has_shadow = true; break;
+    case LO_FENCE_END_S:    has_shadow = true; break;
+    case LO_FENCE_END_W_A:  has_shadow = true; break;
+    case LO_FENCE_END_W_B:  has_shadow = true; break;
+    case LO_FENCE_END_E_A:  has_shadow = true; break;
+    case LO_FENCE_END_E_B:  has_shadow = true; break;
+    case WOOD_FENCE_W:      has_shadow = true; break;
+    case WOOD_FENCE_E:      has_shadow = true; break;
+    case WOOD_FENCE_N:      break;
+    case WOOD_FENCE_S:      break;
+    case WOOD_FENCE_NW:     has_shadow = true; break;
+    case WOOD_FENCE_NE:     has_shadow = true; break;
+    case WOOD_FENCE_SW:     break;
+    case WOOD_FENCE_SE:     has_shadow = true; break;
+    case WOOD_FENCE_END_W:  has_shadow = true; break;
+    case WOOD_FENCE_DOOR_N: break;
+    case WOOD_FENCE_DOOR_S: break;
+    case HEDGETREE_A:       has_shadow = true; break;
+    case HEDGETREE_B:       has_shadow = true; break;
+    case HEDGETREE_C:       has_shadow = true; break;
+    case ROOTED_TREE:       has_shadow = true; break;
+    case BUSH:              has_shadow = true; break;
+    case BRIDGE:            has_shadow = true; break;
+    case BRIDGE_FRONT:      break;
+    case STUMP:             has_shadow = true; break;
+    case BLOODBLOSSOM_A:    break;
+    case BLOODBLOSSOM_B:    break;
+    case BLOODBLOSSOM_C:    break;
+    case MAGNOLIA_A:        break;
+    case MAGNOLIA_B:        break;
+    case MAGNOLIA_C:        break;
+    case EMBERFLOWER_A:     break;
+    case EMBERFLOWER_B:     break;
+    case EMBERFLOWER_C:     break;
+    case SOLARIS_A:         break;
+    case SOLARIS_B:         break;
+    case SOLARIS_C:         break;
+    case AMIRORA_A:         break;
+    case AMIRORA_B:         break;
+    case AMIRORA_C:         break;
+    case SPRINGSHERALD_A:   break;
+    case SPRINGSHERALD_B:   break;
+    case SPRINGSHERALD_C:   break;
+    case BLUE_HOUSE:        has_shadow = true; break;
+    case SILVER_HOUSE:      has_shadow = true; break;
+    case GREEN_HOUSE:       has_shadow = true; break;
+    case RED_HOUSE:         has_shadow = true; break;
+    case GOLD_HOUSE_W:      break;
+    case GOLD_HOUSE_E:      has_shadow = true; break;
+    case SHOP:              has_shadow = true; break;
+    case SHOP_AWNING:       break;
+    case SCHOOL:            has_shadow = true; break;
+    case INN:               has_shadow = true; break;
+    case BLU_PCKET_S:       has_shadow = true; break;
+    case BLU_PCKET_N:       has_shadow = true; break;
+    case HOSPITAL_SHOE:     has_shadow = true; break;
+    case HOSPITAL_ENTRY:    break;
+    default:  break;
+  }
+  return has_shadow;
 }

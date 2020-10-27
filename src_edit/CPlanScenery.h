@@ -45,15 +45,21 @@ struct CPlanScenery {
   int Y_base; // this is the Y used for rendering order
   short Z; // toward-away (vertical plane)
   SDL_Rect srcR;
-  SDL_Texture* img;
+  bool has_shadow;
+
   CPlanScenery();
   void OnRender();
+  void OnRenderShadow();
+
+  static SDL_Texture* img;
+  static SDL_Texture* img_shd;
 };
 
 class CPlanScnEdit : public CEvent {
   CPlanScnEdit();
 
   SDL_Texture* img;
+  SDL_Texture* img_shd;
   bool render_with_map; // When true, added scenery will be pushed into scnList_back.
                         // For a given layer, scenery in that vector is rendered immediately after
                         // that layer's maps and shadows have been rendered.
@@ -66,6 +72,7 @@ class CPlanScnEdit : public CEvent {
   short decor_ID;
   short list_page;
   short placePos;
+  bool lock_to_grid;
   bool use_anchor;
   bool show_anchor;
 

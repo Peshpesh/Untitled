@@ -60,12 +60,14 @@ namespace pvmScenery
       const SDL_Point* onCol  = &palette::green;
       const short x = 235;
       const char* const labels[] = {
+        "Lock To Grid",
         "Use Anchor",
         "Show Anchor",
       };
       CButton buttons[] = {
         CButton(CAsset::getRect(x, 500, sz, sz), offCol, onCol),
         CButton(CAsset::getRect(x, 515, sz, sz), offCol, onCol),
+        CButton(CAsset::getRect(x, 530, sz, sz), offCol, onCol),
       };
     }
   }

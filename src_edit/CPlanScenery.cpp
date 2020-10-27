@@ -1,13 +1,27 @@
 #include "CPlanScenery.h"
 
+SDL_Texture* CPlanScenery::img = NULL;
+SDL_Texture* CPlanScenery::img_shd = NULL;
+
 CPlanScnEdit CPlanScnEdit::control;
 std::vector<CPlanScenery> CPlanScnEdit::scnList_front;
 std::vector<CPlanScenery> CPlanScnEdit::scnList_back;
+
+CPlanScenery::CPlanScenery() {
+  ID     = 0;
+  X      = 0;
+  Y      = 0;
+  Y_base = 0;
+  Z      = 0;
+  srcR.x = srcR.y = srcR.w = srcR.h = 0;
+  has_shadow = false;
+}
 
 CPlanScnEdit::CPlanScnEdit() {
   k = 0; // working layer index
 
   img = NULL;
+  img_shd = NULL;
 
   render_with_map = false;
 
@@ -18,33 +32,34 @@ CPlanScnEdit::CPlanScnEdit() {
   render_active   = false;
   has_rendered_active = false;
 
-  group_ID = Decorations::groups::GLOBAL;
-  decor_ID = Decorations::global::NOTHING;
+  group_ID = Decorations::groups::NEWYRAI;
+  decor_ID = 0;
   list_page = 0;
   placePos = pvmScenery::misc::placeRelPos::TOP_LEFT;
-  use_anchor = false;
-  show_anchor = false;
-}
-
-CPlanScenery::CPlanScenery() {
-  ID     = 0;
-  X      = 0;
-  Y      = 0;
-  Y_base = 0;
-  Z      = 0;
-  srcR.x = srcR.y = srcR.w = srcR.h = 0;
+  lock_to_grid = false;
+  use_anchor   = false;
+  show_anchor  = false;
 }
 
 bool CPlanScnEdit::OnInit() {
-  group_ID = Decorations::groups::GLOBAL;
-  decor_ID = Decorations::global::NOTHING;
+  group_ID = Decorations::groups::NEWYRAI;
+  decor_ID = 0;
   list_page = 0;
 
   SDL_Texture* scenery_tex = NULL;
+  SDL_Texture* shadow_tex  = NULL;
   scenery_tex = CSceneryData::loadSrcTexture(group_ID);
+  shadow_tex  = CSceneryData::loadSrcShadows(group_ID);
 
-  if (scenery_tex != NULL) img = scenery_tex;
-  else return false;
+  if (scenery_tex != NULL) {
+    img = scenery_tex;
+    CPlanScenery::img = scenery_tex;
+  } else return false;
+
+  if (shadow_tex != NULL) {
+    img_shd = shadow_tex;
+    CPlanScenery::img_shd = shadow_tex;
+  }
 
   scnList_front.clear();
   scnList_back.clear();
@@ -60,7 +75,9 @@ void CPlanScnEdit::addScenery(const int& X, const int& Y, const int& Z) {
   tempScn.Z = Z;
   tempScn.srcR = CSceneryData::getDecorDims(group_ID, decor_ID);
   tempScn.Y_base = CSceneryData::getYBase(group_ID, decor_ID, Y, tempScn.srcR.h);
-  tempScn.img = img;
+  tempScn.has_shadow = CSceneryData::hasShadow(group_ID, decor_ID);
+  // tempScn.img = img;
+
 
   if (render_with_map) {
     // For scenery rendered with each map layer, we must
@@ -103,6 +120,7 @@ void CPlanScnEdit::OnTerminate() {
   scnList_front.clear();
   scnList_back.clear();
   SDL_DestroyTexture(img);
+  SDL_DestroyTexture(img_shd);
 }
 
 //////////////////////////////////////////
@@ -132,6 +150,20 @@ void CPlanScnEdit::getPosDisplace(int& dx, int& dy, const SDL_Rect& dstR) {
   int x_placeCell = placePos % numpos_x;
   int y_placeCell = placePos / numpos_x;
   if (y_placeCell >= numpos_y) return;
+
+  if (lock_to_grid) {
+    if (x_placeCell == 0) { // left-side placement
+      dx = (dx / TILE_SIZE) * TILE_SIZE;
+    } else if (x_placeCell == 2) { // right-side placement
+      dx = (1 + (dx / TILE_SIZE)) * TILE_SIZE - 1;
+    }
+
+    if (y_placeCell == 0) { // top-side placement
+      dy = (dy / TILE_SIZE) * TILE_SIZE;
+    } else if (y_placeCell == 2) { // bottom-side placement
+      dy = (1 + (dy / TILE_SIZE)) * TILE_SIZE - 1;
+    }
+  }
 
   dx += -(((x_placeCell * dstR.w) / 2) - (x_placeCell + 1 == numpos_x));
   dy += -(((y_placeCell * dstR.h) / 2) - (y_placeCell + 1 == numpos_y));

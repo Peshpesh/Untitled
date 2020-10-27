@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "CAsset.h"
 #include "CSurface.h"
+#include "CInform.h"
 
 namespace Decorations {
   namespace groups {
@@ -76,12 +77,14 @@ public:
 
 public:
   static SDL_Texture* loadSrcTexture(const int& group);
+  static SDL_Texture* loadSrcShadows(const int& group); // only for PV maps
 
 public:
   static SDL_Rect getDecorDims(const int& group, const int& decor);
   static std::string getGroupName(const int& group);
   static std::string getDecorName(const int& group, const int& decor);
   static int getYBase(const int& group, const int& decor, const int& Y, const int& W); // only for PV maps
+  static bool hasShadow(const int& group, const int& decor); // only for PV maps
 
 private:
   static void getDims_global(const int& decor, SDL_Rect& srcRect);
@@ -93,6 +96,8 @@ private:
   static void getName_newyrai(const int& decor, std::string& str);
 
   static void getYBase_newyrai(const int& decor, int& Y_base);
+
+  static bool hasShadow_newyrai(const int& decor);
 };
 
 #endif
