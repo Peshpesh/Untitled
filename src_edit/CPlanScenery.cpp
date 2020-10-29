@@ -39,6 +39,8 @@ CPlanScnEdit::CPlanScnEdit() {
   lock_to_grid = false;
   use_anchor   = false;
   show_anchor  = false;
+
+  base_shadow_opacity = MAX_RGBA * 0.22;
 }
 
 bool CPlanScnEdit::OnInit() {
@@ -59,12 +61,24 @@ bool CPlanScnEdit::OnInit() {
   if (shadow_tex != NULL) {
     img_shd = shadow_tex;
     CPlanScenery::img_shd = shadow_tex;
+    SDL_SetTextureAlphaMod(img_shd, base_shadow_opacity);
   }
 
   scnList_front.clear();
   scnList_back.clear();
   updateSceneryButtons();
   return true;
+}
+
+void CPlanScnEdit::setOpacity(const int& opac) {
+  if (opac < 0) return;
+  SDL_SetTextureAlphaMod(img, (opac > MAX_RGBA) ? MAX_RGBA : opac);
+  SDL_SetTextureAlphaMod(img_shd, (opac > MAX_RGBA) ? base_shadow_opacity : base_shadow_opacity * (float)(opac)/(float)(MAX_RGBA));
+}
+
+void CPlanScnEdit::resetOpacity() {
+  SDL_SetTextureAlphaMod(img, MAX_RGBA);
+  SDL_SetTextureAlphaMod(img_shd, base_shadow_opacity);
 }
 
 void CPlanScnEdit::addScenery(const int& X, const int& Y, const int& Z) {

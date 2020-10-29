@@ -43,12 +43,12 @@ void CStage::OnLoop() {
         break;
       }
       // case MODIFY_NPC: CPlanEntity::control.getK(k); break;
-      // case MODIFY_SCENE: CPlanScnEdit::control.getK(k); break;
+      case MODIFY_SCENE: CPlanScnEdit::control.getK(k); break;
       default: break;
     }
     if (CModule::control.active_mod != MODIFY_MAP) CPlanEditor::control.setK(k);
     // if (CModule::control.active_mod != MODIFY_NPC) CPlanEntity::control.setK(k);
-    // if (CModule::control.active_mod != MODIFY_SCENE) CPlanScnEdit::control.setK(k);
+    if (CModule::control.active_mod != MODIFY_SCENE) CPlanScnEdit::control.setK(k);
   }
 }
 
@@ -127,6 +127,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
   //      the map. As in #3, these should be rendered by Y, from lowest to highest.
 
   int z = 0;
+  int opac = 0;
   int scn_i = 0;
   int ent_i = 0;
   int max_z = CPlanArea::control.getMaxZ();
@@ -134,28 +135,33 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
   int max_ent = 0;
 
   while (z <= max_z) {
+    opac = CPlanEditor::control.getDefaultOpacityAtZ(z);
+    CPlanScnEdit::control.setOpacity(opac);
+
     // Handle step #1.
     int next_z = CPlanEditor::control.RenderLayerZ(z);
 
     // Handle step #2.
     // Note: this could probably be made more efficient...
     //       but it's probably not an issue and shouldn't be one for gameplay
-    for (int i = 0; i < CPlanScnEdit::scnList_back.size(); i++) {
-      if (CPlanScnEdit::scnList_back[i].Z == z) {
-        CPlanScnEdit::scnList_back[i].OnRenderShadow();
-      } else if (CPlanScnEdit::scnList_back[i].Z > z) break;
-      // the above break is only possible with scenery rendered with the map layer
-      // due to the way these scenery are ordered (differs from scnList_front)
-    }
-    for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
-      if (CPlanScnEdit::scnList_front[i].Z == z) {
-        CPlanScnEdit::scnList_front[i].OnRenderShadow();
+    if (CPlanScnEdit::control.showScenery) {
+      for (int i = 0; i < CPlanScnEdit::scnList_back.size(); i++) {
+        if (CPlanScnEdit::scnList_back[i].Z == z) {
+          CPlanScnEdit::scnList_back[i].OnRenderShadow();
+        } else if (CPlanScnEdit::scnList_back[i].Z > z) break;
+        // the above break is only possible with scenery rendered with the map layer
+        // due to the way these scenery are ordered (differs from scnList_front)
+      }
+      for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+        if (CPlanScnEdit::scnList_front[i].Z == z) {
+          CPlanScnEdit::scnList_front[i].OnRenderShadow();
+        }
       }
     }
 
     // Handle step #3.
-    bool scn_valid = (scn_i < max_scn) && (CPlanScnEdit::scnList_back[scn_i].Z == z);
-    bool ent_valid = false; // ent not yet implmented
+    bool scn_valid = CPlanScnEdit::control.showScenery && (scn_i < max_scn) && (CPlanScnEdit::scnList_back[scn_i].Z == z);
+    bool ent_valid = false; // ent not yet implemented
     while (scn_valid || ent_valid) {
       if (scn_valid && ent_valid) {
         // compare the Y of the current scn and ent objects.
@@ -173,9 +179,16 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
     z = next_z;
   }
   // Handle step #4. TODO: compare with front entities.
-  for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
-    CPlanScnEdit::scnList_front[i].OnRender();
+  if (CPlanScnEdit::control.showScenery) {
+    for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+      z = CPlanScnEdit::scnList_front[i].Z;
+      opac = CPlanEditor::control.getDefaultOpacityAtZ(z);
+      CPlanScnEdit::control.setOpacity(opac);
+      CPlanScnEdit::scnList_front[i].OnRender();
+    }
   }
+
+  CPlanScnEdit::control.resetOpacity();
 
   switch (CModule::control.active_mod) {
     case MODIFY_MAP:      CPlanEditor::control.OnRender(m);    break;

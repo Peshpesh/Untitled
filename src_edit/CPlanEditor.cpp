@@ -32,6 +32,21 @@ void CPlanEditor::getK(int& k) {
   k = this->k;
 }
 
+
+
+int CPlanEditor::getDefaultOpacityAtZ(const int& z) {
+  int opac = 0;
+  if (z < 0) return opac;
+
+  int current_z = CPlanArea::control.getZ(k);
+
+  if (z == current_z)     opac = active_opacity;
+  else if (z > current_z) opac = over_opacity;
+  else                    opac = under_opacity;
+
+  return opac;
+}
+
 void CPlanEditor::OnTerminate() {
 
 }

@@ -189,6 +189,7 @@ bool CPlanScnEdit::handleSwitchView(const SDL_Point* m) {
   using namespace pvmScenery::switches::view;
 
   bool* flags[] = {
+    &showYBase,
     &showScenery,
     &showWorkScenery
   };
@@ -206,6 +207,7 @@ bool CPlanScnEdit::handleSwitchPlace(const SDL_Point* m) {
   using namespace pvmScenery::switches::place;
 
   bool* flags[] = {
+    &render_with_map,
     &lock_to_grid,
     &use_anchor,
     &show_anchor

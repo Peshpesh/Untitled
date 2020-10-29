@@ -32,20 +32,29 @@ bool CPlanScnEdit::OnRender(const SDL_Point& m) {
 
 void CPlanScnEdit::OnRenderYBase() {
   using namespace pvmScenery::ybase;
+  SDL_Point pos; // rendering position
+  SDL_Rect lin;  // base-line
+  lin.h = 1;
   if (showYBase) {
     for (int i = 0; i < scnList_back.size(); i++) {
-      SDL_Point pos; // rendering position
       pos.x = scnList_back[i].X + (scnList_back[i].srcR.w / 2);
       pos.y = scnList_back[i].Y_base - (scnList_back[i].Z * TILE_SIZE);
       pos = CCamera::CameraControl.GetWinRelPoint(pos);
       Font::NewCenterWrite(FONT_MINI, "X", &pos, back_col);
+      lin.x = pos.x - (scnList_back[i].srcR.w / 2);
+      lin.y = pos.y;
+      lin.w = scnList_back[i].srcR.w;
+      CAsset::drawBoxFill(&lin, back_col_pt);
     }
     for (int i = 0; i < scnList_front.size(); i++) {
-      SDL_Point pos; // rendering position
       pos.x = scnList_front[i].X + (scnList_front[i].srcR.w / 2);
       pos.y = scnList_front[i].Y_base - (scnList_front[i].Z * TILE_SIZE);
       pos = CCamera::CameraControl.GetWinRelPoint(pos);
       Font::NewCenterWrite(FONT_MINI, "X", &pos, front_col);
+      lin.x = pos.x - (scnList_front[i].srcR.w / 2);
+      lin.y = pos.y;
+      lin.w = scnList_front[i].srcR.w;
+      CAsset::drawBoxFill(&lin, front_col_pt);
     }
   }
 }
@@ -223,6 +232,7 @@ bool CPlanScnEdit::drawSwitchView() {
   using namespace pvmScenery::switches::view;
 
   const bool flags[] = {
+    showYBase,
     showScenery,
     showWorkScenery
   };
@@ -241,6 +251,7 @@ bool CPlanScnEdit::drawSwitchPlace() {
   using namespace pvmScenery::switches::place;
 
   const bool flags[] = {
+    render_with_map,
     lock_to_grid,
     use_anchor,
     show_anchor

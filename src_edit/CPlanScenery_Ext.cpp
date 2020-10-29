@@ -6,6 +6,8 @@ namespace pvmScenery
     extern const SDL_Color* work_col = &rgb::light_green;
     extern const SDL_Color* back_col = &rgb::light_blue;
     extern const SDL_Color* front_col = &rgb::white;
+    extern const SDL_Point* back_col_pt = &palette::light_blue;
+    extern const SDL_Point* front_col_pt = &palette::white;
   }
   namespace buttons {
     namespace chScenery
@@ -47,12 +49,14 @@ namespace pvmScenery
       const SDL_Point* onCol  = &palette::green;
       const short x = 100;
       const char* const labels[] = {
+        "Show Y Base",
         "View Scenery",
         "Show Working Scenery",
       };
       CButton buttons[] = {
         CButton(CAsset::getRect(x, 500, sz, sz), offCol, onCol),
         CButton(CAsset::getRect(x, 515, sz, sz), offCol, onCol),
+        CButton(CAsset::getRect(x, 530, sz, sz), offCol, onCol),
       };
     }
     namespace place {
@@ -60,6 +64,7 @@ namespace pvmScenery
       const SDL_Point* onCol  = &palette::green;
       const short x = 235;
       const char* const labels[] = {
+        "Draw With Map",
         "Lock To Grid",
         "Use Anchor",
         "Show Anchor",
@@ -68,6 +73,7 @@ namespace pvmScenery
         CButton(CAsset::getRect(x, 500, sz, sz), offCol, onCol),
         CButton(CAsset::getRect(x, 515, sz, sz), offCol, onCol),
         CButton(CAsset::getRect(x, 530, sz, sz), offCol, onCol),
+        CButton(CAsset::getRect(x, 545, sz, sz), offCol, onCol),
       };
     }
   }

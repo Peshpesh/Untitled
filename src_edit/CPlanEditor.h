@@ -54,6 +54,7 @@ public:
 
   void getK(int& k);
   void setK(const int& k);
+  int getDefaultOpacityAtZ(const int& z);
 
   void OnTerminate();
 

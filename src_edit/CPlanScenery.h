@@ -63,7 +63,7 @@ class CPlanScnEdit : public CEvent {
   bool render_with_map; // When true, added scenery will be pushed into scnList_back.
                         // For a given layer, scenery in that vector is rendered immediately after
                         // that layer's maps and shadows have been rendered.
-  bool showScenery;
+
   bool showWorkScenery;
   bool showYBase;
   int k;
@@ -75,6 +75,10 @@ class CPlanScnEdit : public CEvent {
   bool lock_to_grid;
   bool use_anchor;
   bool show_anchor;
+  int base_shadow_opacity;
+
+public:
+  bool showScenery;
 
 public:
   static CPlanScnEdit control;
@@ -92,6 +96,9 @@ public:
 
   bool OnRender(const SDL_Point& m);
   void OnRenderYBase();
+
+  void setOpacity(const int& opac);
+  void resetOpacity();
 
   void addScenery(const int& X, const int& Y, const int& Z);
 
@@ -149,6 +156,8 @@ namespace pvmScenery {
     extern const SDL_Color* work_col;
     extern const SDL_Color* back_col;
     extern const SDL_Color* front_col;
+    extern const SDL_Point* back_col_pt;
+    extern const SDL_Point* front_col_pt;
   }
   namespace buttons {
     namespace chScenery

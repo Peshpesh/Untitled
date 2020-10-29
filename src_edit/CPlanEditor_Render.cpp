@@ -43,6 +43,7 @@ int CPlanEditor::RenderLayerZ(const int& z) {
     } else if (z < CPlanArea::control.LayerList[i].Z) break;
     i++;
   }
+  CTileset::TSControl.maxTileAlpha();
   // if there are still maps above this z to render, return the next z to render.
   // otherwise, return the current z (which is the MAX z) plus 1.
   return (i < CPlanArea::control.LayerList.size()) ? CPlanArea::control.LayerList[i].Z : (z + 1);
@@ -58,6 +59,7 @@ void CPlanEditor::RenderLayerK(const int& k) {
     CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
                                 k, pvm_visflags::MAP, (k > this->k) ? over_opacity : under_opacity);
   }
+  CTileset::TSControl.maxTileAlpha();
 }
 
 void CPlanEditor::RenderMap() {
