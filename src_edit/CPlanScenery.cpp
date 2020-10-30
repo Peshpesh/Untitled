@@ -22,6 +22,7 @@ CPlanScnEdit::CPlanScnEdit() {
 
   img = NULL;
   img_shd = NULL;
+  target_scn = NULL;
 
   render_with_map = false;
 

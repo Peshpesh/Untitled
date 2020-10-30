@@ -3,11 +3,13 @@
 namespace pvmScenery
 {
   namespace ybase {
-    extern const SDL_Color* work_col = &rgb::light_green;
-    extern const SDL_Color* back_col = &rgb::light_blue;
-    extern const SDL_Color* front_col = &rgb::white;
-    extern const SDL_Point* back_col_pt = &palette::light_blue;
-    extern const SDL_Point* front_col_pt = &palette::white;
+    const SDL_Color* work_col = &rgb::light_green;
+    const SDL_Color* back_col = &rgb::light_blue;
+    const SDL_Color* front_col = &rgb::white;
+    const SDL_Color* select_col = &rgb::red;
+    const SDL_Point* back_col_pt = &palette::light_blue;
+    const SDL_Point* front_col_pt = &palette::white;
+    const SDL_Point* select_col_pt = &palette::red;
   }
   namespace buttons {
     namespace chScenery

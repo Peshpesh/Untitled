@@ -77,6 +77,8 @@ class CPlanScnEdit : public CEvent {
   bool show_anchor;
   int base_shadow_opacity;
 
+  CPlanScenery* target_scn; // scenery targeted for removal/modification
+
 public:
   bool showScenery;
 
@@ -156,8 +158,10 @@ namespace pvmScenery {
     extern const SDL_Color* work_col;
     extern const SDL_Color* back_col;
     extern const SDL_Color* front_col;
+    extern const SDL_Color* select_col;
     extern const SDL_Point* back_col_pt;
     extern const SDL_Point* front_col_pt;
+    extern const SDL_Point* select_col_pt;
   }
   namespace buttons {
     namespace chScenery

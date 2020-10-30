@@ -37,24 +37,28 @@ void CPlanScnEdit::OnRenderYBase() {
   lin.h = 1;
   if (showYBase) {
     for (int i = 0; i < scnList_back.size(); i++) {
-      pos.x = scnList_back[i].X + (scnList_back[i].srcR.w / 2);
-      pos.y = scnList_back[i].Y_base - (scnList_back[i].Z * TILE_SIZE);
-      pos = CCamera::CameraControl.GetWinRelPoint(pos);
-      Font::NewCenterWrite(FONT_MINI, "X", &pos, back_col);
-      lin.x = pos.x - (scnList_back[i].srcR.w / 2);
-      lin.y = pos.y;
-      lin.w = scnList_back[i].srcR.w;
-      CAsset::drawBoxFill(&lin, back_col_pt);
+      if (CPlanArea::control.getZ(k) == scnList_back[i].Z) {
+        pos.x = scnList_back[i].X + (scnList_back[i].srcR.w / 2);
+        pos.y = scnList_back[i].Y_base - (scnList_back[i].Z * TILE_SIZE);
+        pos = CCamera::CameraControl.GetWinRelPoint(pos);
+        Font::NewCenterWrite(FONT_MINI, "X", &pos, target_scn == &scnList_back[i] ? select_col : back_col);
+        lin.x = pos.x - (scnList_back[i].srcR.w / 2);
+        lin.y = pos.y;
+        lin.w = scnList_back[i].srcR.w;
+        CAsset::drawBoxFill(&lin, target_scn == &scnList_back[i] ? select_col_pt : back_col_pt);
+      }
     }
     for (int i = 0; i < scnList_front.size(); i++) {
-      pos.x = scnList_front[i].X + (scnList_front[i].srcR.w / 2);
-      pos.y = scnList_front[i].Y_base - (scnList_front[i].Z * TILE_SIZE);
-      pos = CCamera::CameraControl.GetWinRelPoint(pos);
-      Font::NewCenterWrite(FONT_MINI, "X", &pos, front_col);
-      lin.x = pos.x - (scnList_front[i].srcR.w / 2);
-      lin.y = pos.y;
-      lin.w = scnList_front[i].srcR.w;
-      CAsset::drawBoxFill(&lin, front_col_pt);
+      if (CPlanArea::control.getZ(k) == scnList_front[i].Z) {
+        pos.x = scnList_front[i].X + (scnList_front[i].srcR.w / 2);
+        pos.y = scnList_front[i].Y_base - (scnList_front[i].Z * TILE_SIZE);
+        pos = CCamera::CameraControl.GetWinRelPoint(pos);
+        Font::NewCenterWrite(FONT_MINI, "X", &pos, target_scn == &scnList_front[i] ? select_col : front_col);
+        lin.x = pos.x - (scnList_front[i].srcR.w / 2);
+        lin.y = pos.y;
+        lin.w = scnList_front[i].srcR.w;
+        CAsset::drawBoxFill(&lin, target_scn == &scnList_front[i] ? select_col_pt : front_col_pt);
+      }
     }
   }
 }
