@@ -99,6 +99,9 @@ public:
   bool OnRender(const SDL_Point& m);
   void OnRenderYBase();
 
+  bool OnLoad(const char* fname);
+  bool OnSave(const char* fname);
+
   void setOpacity(const int& opac);
   void resetOpacity();
 
@@ -109,6 +112,7 @@ private:
   void updateSceneryButtons();
   void getPosDisplace(int& dx, int& dy, const SDL_Rect& dstR);
   void getPosDisplace(double& dx, double& dy, const SDL_Rect& dstR);
+  void changeGroup(const int& new_group);
 
 private:
   void OnKeyDown(SDL_Keycode sym, Uint16 mod);
@@ -154,6 +158,10 @@ private:
 };
 
 namespace pvmScenery {
+  namespace io {
+    extern const std::string path;
+    extern const std::string ext;
+  }
   namespace ybase {
     extern const SDL_Color* work_col;
     extern const SDL_Color* back_col;

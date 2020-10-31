@@ -194,3 +194,106 @@ void CPlanScnEdit::getPosDisplace(double& dx, double& dy, const SDL_Rect& dstR) 
   dx += -(((x_placeCell * dstR.w) / 2.0) - (x_placeCell + 1 == numpos_x));
   dy += -(((y_placeCell * dstR.h) / 2.0) - (y_placeCell + 1 == numpos_y));
 }
+
+void CPlanScnEdit::changeGroup(const int& new_group) {
+  if (new_group < 0 || new_group == group_ID) return;
+
+  // attempt to load the new scenery group
+  SDL_Texture* tmp_tex;
+  SDL_Texture* tmp_shd;
+  tmp_tex = CSceneryData::loadSrcTexture(new_group);
+  tmp_shd = CSceneryData::loadSrcShadows(new_group);
+
+  if (tmp_tex != NULL) {
+    // empty the vector of current scenery
+    scnList_back.clear();
+    scnList_front.clear();
+
+    // replace the old scenery texture with the new one
+    group_ID = new_group;
+    SDL_DestroyTexture(img);
+    SDL_DestroyTexture(img_shd);
+    img     = tmp_tex;
+    img_shd = tmp_shd;
+  }
+
+  updateSceneryButtons();
+}
+
+
+bool CPlanScnEdit::OnLoad(const char* fname) {
+  using namespace pvmScenery::io;
+
+  std::string filePath = path + fname + ext;
+  FILE* FileHandle = fopen(filePath.c_str(), "rb");
+
+  if (FileHandle == NULL)  {
+    CInform::InfoControl.pushInform("---CPlanScnEdit---\nfailed to open load file");
+    return false;
+  }
+
+  scnList_back.clear();
+  scnList_front.clear();
+
+  int N_back, N_front;
+  short group;
+
+  fread(&group,   sizeof(short), 1, FileHandle);
+  fread(&N_back,  sizeof(int),   1, FileHandle);
+  fread(&N_front, sizeof(int),   1, FileHandle);
+
+  changeGroup(group);
+
+  for (int i = 0; i < N_back + N_front; i++) {
+    CPlanScenery tempScn;
+    fread(&tempScn.ID, sizeof(int),   1, FileHandle);
+    fread(&tempScn.X,  sizeof(int),   1, FileHandle);
+    fread(&tempScn.Y,  sizeof(int),   1, FileHandle);
+    fread(&tempScn.Z,  sizeof(short), 1, FileHandle);
+    tempScn.srcR = CSceneryData::getDecorDims(group, tempScn.ID);
+    tempScn.Y_base = CSceneryData::getYBase(group, tempScn.ID, tempScn.Y, tempScn.srcR.h);
+    tempScn.has_shadow = CSceneryData::hasShadow(group, tempScn.ID);
+
+    if (i < N_back) scnList_back.push_back(tempScn);
+    else scnList_front.push_back(tempScn);
+  }
+
+  fclose(FileHandle);
+  return true;
+}
+
+bool CPlanScnEdit::OnSave(const char* fname) {
+  using namespace pvmScenery::io;
+
+  std::string filePath = path + fname + ext;
+  FILE* FileHandle = fopen(filePath.c_str(), "wb");
+
+  if (FileHandle == NULL) {
+    CInform::InfoControl.pushInform("---CPlanScnEdit---\nfailed to open save file");
+    return false;
+  }
+
+  const int N_back  = scnList_back.size();
+  const int N_front = scnList_front.size();
+
+  fwrite(&group_ID, sizeof(short), 1, FileHandle);
+  fwrite(&N_back,   sizeof(int),   1, FileHandle);
+  fwrite(&N_front,  sizeof(int),   1, FileHandle);
+
+  for (int i = 0; i < N_back; i++) {
+    fwrite(&scnList_back[i].ID, sizeof(int),   1, FileHandle);
+    fwrite(&scnList_back[i].X,  sizeof(int),   1, FileHandle);
+    fwrite(&scnList_back[i].Y,  sizeof(int),   1, FileHandle);
+    fwrite(&scnList_back[i].Z,  sizeof(short), 1, FileHandle);
+  }
+
+  for (int i = 0; i < N_front; i++) {
+    fwrite(&scnList_front[i].ID, sizeof(int),   1, FileHandle);
+    fwrite(&scnList_front[i].X,  sizeof(int),   1, FileHandle);
+    fwrite(&scnList_front[i].Y,  sizeof(int),   1, FileHandle);
+    fwrite(&scnList_front[i].Z,  sizeof(short), 1, FileHandle);
+  }
+
+  fclose(FileHandle);
+  return true;
+}

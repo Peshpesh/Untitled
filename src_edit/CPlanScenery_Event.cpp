@@ -12,24 +12,7 @@ bool CPlanScnEdit::handleInterr(SDL_Event* Event) {
     if (CInterrupt::isFlagOff(INTRPT_CHANGE_SC)) {
       short tmp_group = group_ID;
       CChangeScenery::Control.handleChanges(tmp_group, decor_ID);
-
-      // check if the scenery group has changed
-      if (tmp_group != group_ID) {
-        // attempt to load the new scenery group
-        SDL_Texture* tmp_tex;
-        tmp_tex = CSceneryData::loadSrcTexture(tmp_group);
-        if (tmp_tex != NULL) {
-          // empty the vector of current scenery
-          scnList_back.clear();
-          scnList_front.clear();
-
-          // replace the old scenery texture with the new one
-          group_ID = tmp_group;
-          SDL_DestroyTexture(img);
-          img = tmp_tex;
-        }
-      }
-      updateSceneryButtons();
+      changeGroup(tmp_group);
     }
     return true;
   }

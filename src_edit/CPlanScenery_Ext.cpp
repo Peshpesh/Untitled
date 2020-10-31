@@ -2,6 +2,10 @@
 
 namespace pvmScenery
 {
+  namespace io {
+    const std::string path = "../data/maps/";
+    const std::string ext = ".pvs";
+  }
   namespace ybase {
     const SDL_Color* work_col = &rgb::light_green;
     const SDL_Color* back_col = &rgb::light_blue;
