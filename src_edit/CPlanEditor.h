@@ -1,6 +1,8 @@
 #ifndef _C_PLANEDITOR_H_
 #define _C_PLANEDITOR_H_
 
+#include "CPlanScenery.h"
+
 #include "CPlanArea.h"
 #include "CSurface.h"
 #include "CEvent.h"

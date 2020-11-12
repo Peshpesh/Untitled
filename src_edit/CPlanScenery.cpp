@@ -297,3 +297,26 @@ bool CPlanScnEdit::OnSave(const char* fname) {
   fclose(FileHandle);
   return true;
 }
+
+void CPlanScnEdit::pushLayersUp(const short& z) {
+  // this function pushes all existing scenery "up" by increasing their
+  // Z, generally a response to a new layer being added below
+  // all existing layers
+  // Note: in the case where scenery is being pushed up, Z is negative
+  for (int i = 0; i < scnList_back.size(); i++) {
+    scnList_back[i].Z -= z;
+  }
+  for (int i = 0; i < scnList_front.size(); i++) {
+    scnList_front[i].Z -= z;
+  }
+}
+
+void CPlanScnEdit::deleteLayer(const short& z) {
+  // Remove all scenery at depth z
+  for (int i = scnList_back.size() - 1; i >= 0; i--) {
+    if (scnList_back[i].Z == z) scnList_back.erase(scnList_back.begin() + i);
+  }
+  for (int i = scnList_front.size() - 1; i >= 0; i--) {
+    if (scnList_front[i].Z == z) scnList_front.erase(scnList_front.begin() + i);
+  }
+}

@@ -102,6 +102,9 @@ public:
   bool OnLoad(const char* fname);
   bool OnSave(const char* fname);
 
+  void deleteLayer(const short& z);
+  void pushLayersUp(const short& z);
+
   void setOpacity(const int& opac);
   void resetOpacity();
 

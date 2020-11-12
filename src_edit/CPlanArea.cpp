@@ -102,6 +102,13 @@ int CPlanArea::getMaxZ() {
   return LayerList[max_k].Z;
 }
 
+bool CPlanArea::doesZexist(const int& z) {
+  for (int i = 0; i < LayerList.size(); i++) {
+    if (z == LayerList[i].Z) return true;
+  }
+  return false;
+}
+
 void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity) {
   // The area is layered vertically (by k).
   // Layers are rendered one at a time, with the

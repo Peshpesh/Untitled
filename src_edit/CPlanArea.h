@@ -49,6 +49,7 @@ public:
   void delLayer(const short& K);
   void GetDims(int& mW, int& mH);
   int getZ(const int& k);
+  bool doesZexist(const int& z);
   int getMaxZ();
   // CPlanMap* GetMap(int X, int Y);
   CPlanTile* GetTile(const int& X, const int& Y, const int& k); // get address to tile in map

@@ -577,6 +577,7 @@ void CPlanEditor::addLayer(const SDL_Point& m) {
 
   if (SDL_PointInRect(&m, &conf_btn)) {
     CPlanArea::control.addLayer(sel_k, sel_z);
+    if (sel_z < 0) CPlanScnEdit::control.pushLayersUp(sel_z);
     CInterrupt::removeFlag(INTRPT_ADD_LAYER);
     k = sel_k;
     sel_k = sel_z = 0;
@@ -602,6 +603,7 @@ void CPlanEditor::deleteLayer(const SDL_Point& m) {
       list_item_r.y += list_item_r.h;
       if (SDL_PointInRect(&m, &list_item_r)) {
         sel_k = i;
+        sel_z = CPlanArea::control.getZ(sel_k);
         break;
       }
     }
@@ -609,7 +611,11 @@ void CPlanEditor::deleteLayer(const SDL_Point& m) {
   }
 
   if (SDL_PointInRect(&m, &conf_btn)) {
-    CPlanArea::control.delLayer(sel_k);
+    CPlanArea::control.delLayer(sel_k); // delete map layer
+    if (!CPlanArea::control.doesZexist(sel_z)) {
+      // delete all entities and scenery on the same Z (which no longer exists)
+      CPlanScnEdit::control.deleteLayer(sel_z);
+    }
     CInterrupt::removeFlag(INTRPT_DEL_LAYER);
     if (k >= CPlanArea::control.LayerList.size()) k = CPlanArea::control.LayerList.size() - 1;
     sel_k = sel_z = 0;
