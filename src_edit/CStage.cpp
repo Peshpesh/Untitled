@@ -173,7 +173,10 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
         // render/increment index for entity vector
       }
 
-      if (scn_valid && CPlanScnEdit::scnList_back[scn_i].Z >= next_z) scn_valid = false;
+
+      if (scn_valid) {
+        if (scn_i >= max_scn || CPlanScnEdit::scnList_back[scn_i].Z >= next_z) scn_valid = false;
+      }
       if (ent_valid) ent_valid = false;
     }
     z = next_z;
