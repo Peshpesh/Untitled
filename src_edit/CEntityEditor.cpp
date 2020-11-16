@@ -4,18 +4,22 @@ CEntityEditor CEntityEditor::Control;
 
 CEntityEditor::CEntityEditor()
 {
-  showEntity = true;
-  showHitbox = true;
-  showWorkEntity = true;
-  showWorkHitbox = true;
-  entity_alpha = MAX_RGBA;
-  hitbox_alpha = MAX_RGBA;
+  showEntity      = true;
+  showHitbox      = true;
+  showWorkEntity  = true;
+  showWorkHitbox  = true;
+  entity_alpha    = MAX_RGBA;
+  hitbox_alpha    = MAX_RGBA;
 
-  group_ID  = Entities::groups::GLOBAL;
-  entity_ID = Entities::global::PLAYER;
-  placePos  = entityEngine::misc::placeRelPos::TOP_LEFT;
+  group_ID      = Entities::groups::GLOBAL;
+  entity_ID     = Entities::global::PLAYER;
+  placePos      = entityEngine::misc::placeRelPos::TOP_LEFT;
   place_hitbox  = false;
   snap_tile     = false;
+  list_page     = 0;
+
+  planview        = NULL;
+  render_with_map = false;
 }
 
 bool CEntityEditor::OnInit() {
@@ -27,6 +31,13 @@ bool CEntityEditor::OnInit() {
   return true;
 }
 
+bool CEntityEditor::reinit() {
+  if (!CEntity::OnInit()) return false;
+  group_ID  = Entities::groups::GLOBAL;
+  entity_ID = Entities::global::PLAYER;
+  updateEntityButtons();
+  return true;
+}
 
 void CEntityEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR) {
   using namespace entityEngine::misc::placeRelPos;

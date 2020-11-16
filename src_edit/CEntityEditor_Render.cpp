@@ -115,12 +115,33 @@ bool CEntityEditor::drawEditHitbox(const SDL_Point* m, const bool& hov) {
 }
 
 bool CEntityEditor::drawEntityList(const SDL_Point* m, const bool& hov) {
-  Font::FontControl.SetFont(FONT_MINI);
+  using namespace entityEngine::misc::entityButtons;
   std::string name;
-  for (int i = 0; i < entityButtons.size(); i++) {
+
+  int i = list_page * max_buttons;
+  while (i < entityButtons.size() && i < (list_page + 1) * max_buttons) {
     if (!entityButtons[i].OnRender(m, (hov && i != entity_ID), (i == entity_ID))) return false;
     name = CEntityData::getEntityName(group_ID, i);
     Font::NewCenterWrite(name.c_str(), &entityButtons[i].dstR);
+    i++;
+  }
+
+  if (entityButtons.size() > max_buttons) {
+    bool prev_option = list_page; // true if "previous" button is valid
+    bool next_option = false;     // true if "next" button is valid
+
+    // how many buttons remain?
+    int butts_remain = entityButtons.size() - (list_page * max_buttons);
+    if (butts_remain > max_buttons) {
+      next_option = true;
+    }
+    CAsset::drawBoxFill(&prev_pg, prev_option ? (m && SDL_PointInRect(m, &prev_pg) ? hovCol : onCol) : offCol);
+    CAsset::drawBoxFill(&curr_pg, offCol);
+    CAsset::drawBoxFill(&next_pg, next_option ? (m && SDL_PointInRect(m, &next_pg) ? hovCol : onCol) : offCol);
+    std::string page_str = Font::intToStr(list_page);
+    Font::NewCenterWrite(page_str.c_str(), &curr_pg);
+    Font::NewCenterWrite("$L$L", &prev_pg);
+    Font::NewCenterWrite("$R$R", &next_pg);
   }
   return true;
 }

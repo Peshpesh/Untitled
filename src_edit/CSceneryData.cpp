@@ -163,10 +163,10 @@ std::string CSceneryData::getDecorName(const int& group, const int& decor) {
   return retval;
 }
 
-int CSceneryData::getYBase(const int& group, const int& decor, const int& Y, const int& W) {
+int CSceneryData::getYBase(const int& group, const int& decor, const int& Y, const int& H) {
   using namespace Decorations::groups;
 
-  int retval = Y + W;
+  int retval = Y + H;
   if (!(group < 0 || group >= num || decor < 0)) {
     switch (group) {
       case NEWYRAI:   getYBase_newyrai(decor, retval); break;

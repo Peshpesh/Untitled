@@ -23,10 +23,50 @@ struct EntityTexInfo {
   SDL_Texture* img;
 };
 
+class CPlanEntity {
+  // Each entity has the following attributes:
+  //  - position (X, Y, Z)
+  //  - kind/ID
+  // ... And the ID is used to identify what to render
+  //     from an image file with all the stage's entities.
+  //     This requires a look-up table that tells where each
+  //     entity is on the image file.
+  //
+  // Rendering: For the purposes of rendering, the camera looks "from above".
+  //            Y-coordinate takes precedence (render lowest-Y scenery FIRST
+  //            so it appears "behind" high-Y objects) over the Z-coordinate
+  //            (for given Y, render lowest-Z FIRST so it's "underneath" layers
+  //            above)
+public:
+  int group_ID;
+  int ID;
+  int X; // left-right as seen in PVM camera
+  int Y; // up-down (on horizontal plane) as seen in PVM camera
+  int Y_base; // this is the Y used for rendering order
+  short Z; // toward-away (vertical plane)
+
+  SDL_Texture* sprtSrc;
+  SDL_Rect srcR;
+  SDL_Rect hitR;
+  bool coll;
+
+  CPlanEntity(int group, int entity, const int& X, const int& Y, const short& Z);
+
+  bool OnRender();
+
+  bool OnRenderHitbox();
+
+  bool Collides(const SDL_Point& oP, const SDL_Rect& oR);
+};
+
 class CEntity {
 public:
   static std::vector<EntityTexInfo> textureList;
   static std::vector<CEntity> entityList;
+  static std::vector<CPlanEntity> entList_back;
+  static std::vector<CPlanEntity> entList_front;
+  static const bool* planview;
+
   static bool OnInit();
   static void CheckCollide();
   static bool OnLoad(const char* fname);
@@ -56,5 +96,6 @@ public:
 
   bool Collides(const SDL_Point& oP, const SDL_Rect& oR);
 };
+
 
 #endif

@@ -48,6 +48,7 @@ public:
   void GetNormalXY(int& X, int& Y);
   SDL_Point GetWinRelPoint(const SDL_Point& absPos);
   SDL_Point GetWinRelPoint(const double& rel_x, const double& rel_y);
+  SDL_Point GetWinRelPoint(const int& rel_x, const int& rel_y);
   SDL_Point GetCamRelPoint(const SDL_Point& winPos);
   void MakeWinRel(int& X, int& Y);
 

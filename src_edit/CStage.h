@@ -24,6 +24,8 @@ public:
   std::string name;
   int k;  // active layer index, carried across modules for PVM stages
 
+  void OnInit();
+
   void OnEvent(SDL_Event* Event);
   void OnEventPlatform(SDL_Event* Event);
   void OnEventPlanview(SDL_Event* Event);

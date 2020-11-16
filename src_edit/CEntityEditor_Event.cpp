@@ -53,10 +53,55 @@ bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
   int Y = place_hitbox ? m->y - hitR.y : m->y;
 
   getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
-  const SDL_Point dstP = {X, Y};
-  CEntity newEntity(group_ID, entity_ID, &dstP);
-  CEntity::entityList.push_back(newEntity);
-  CEntity::CheckCollide();
+  if (!*planview) {
+    const SDL_Point dstP = {X, Y};
+    CEntity newEntity(group_ID, entity_ID, &dstP);
+    CEntity::entityList.push_back(newEntity);
+    CEntity::CheckCollide();
+  } else {
+    short Z = CPlanArea::control.getZ(*k);
+
+    // correct for camera offset
+    X += CCamera::CameraControl.GetX();
+    Y += CCamera::CameraControl.GetY();
+
+    // correct for depth
+    Y += Z * TILE_SIZE;
+
+    CPlanEntity newEntity(group_ID, entity_ID, X, Y, Z);
+
+    if (render_with_map) {
+      // For objects rendered with each map layer, we must
+      // place the new object in the correct spot based on Y_base AND Z.
+      // ... Group and order first by layer, then order each layer group by Y_base.
+      // Note: as i->size, Z increases. Y increases with i amongst objs with equal Z.
+      int i = 0;
+      while (i < CEntity::entList_back.size()) {
+        short cmp_Z    = CEntity::entList_back[i].Z;
+        int cmp_Y_base = CEntity::entList_back[i].Y_base;
+        // compared obj is at higher Z; place new obj at "end" of objs with equal Z
+        if (Z < cmp_Z) break;
+        // new obj Z exists; compared obj is at higher Y_base (in front of new obj)
+        if (Z == cmp_Z && newEntity.Y_base < cmp_Y_base) break;
+        i++;
+      }
+      CEntity::entList_back.insert(CEntity::entList_back.begin() + i, newEntity);
+    } else {
+      // For objects rendered after all maps and shadows are drawn, the ordering
+      // primarily depends on Y_base. On the rare instance that objects share Y_base,
+      // the object with lower Z is rendered first. If Y_base and Z are shared,
+      // no specific ordering is done (depends on when the objects were added).
+      int i = 0;
+      while (i < CEntity::entList_front.size()) {
+        short cmp_Z    = CEntity::entList_front[i].Z;
+        int cmp_Y_base = CEntity::entList_front[i].Y_base;
+        if (newEntity.Y_base < cmp_Y_base) break;
+        if (newEntity.Y_base == cmp_Y_base && Z < cmp_Z) break;
+        i++;
+      }
+      CEntity::entList_front.insert(CEntity::entList_front.begin() + i, newEntity);
+    }
+  }
 
   return true;
 }
@@ -91,15 +136,17 @@ bool CEntityEditor::handleEditHitbox(const SDL_Point* m) {
 bool CEntityEditor::handleEntityMeter(const SDL_Point* m) {
   using namespace entityEngine::meters::opacEntity;
 
-  if (SDL_PointInRect(m, &meter.dstR)) {
-    double fract = 0.0;
-    if (meter.clickPos(m, fract)) {
-      entity_alpha = fract * MAX_RGBA;
-      for (int i = 0; i < CEntity::textureList.size(); i++) {
-        SDL_SetTextureAlphaMod(CEntity::textureList[i].img, entity_alpha);
+  if (!*planview) {
+    if (SDL_PointInRect(m, &meter.dstR)) {
+      double fract = 0.0;
+      if (meter.clickPos(m, fract)) {
+        entity_alpha = fract * MAX_RGBA;
+        for (int i = 0; i < CEntity::textureList.size(); i++) {
+          SDL_SetTextureAlphaMod(CEntity::textureList[i].img, entity_alpha);
+        }
       }
+      return true;
     }
-    return true;
   }
   return false;
 }
@@ -107,12 +154,14 @@ bool CEntityEditor::handleEntityMeter(const SDL_Point* m) {
 bool CEntityEditor::handleHitboxMeter(const SDL_Point* m) {
   using namespace entityEngine::meters::opacHitbox;
 
-  if (SDL_PointInRect(m, &meter.dstR)) {
-    double fract = 0.0;
-    if (meter.clickPos(m, fract)) {
-      hitbox_alpha = fract * MAX_RGBA;
+  if (!*planview) {
+    if (SDL_PointInRect(m, &meter.dstR)) {
+      double fract = 0.0;
+      if (meter.clickPos(m, fract)) {
+        hitbox_alpha = fract * MAX_RGBA;
+      }
+      return true;
     }
-    return true;
   }
   return false;
 }
@@ -154,9 +203,28 @@ bool CEntityEditor::handleSwitchPlace(const SDL_Point* m) {
 }
 
 bool CEntityEditor::handleEntityList(const SDL_Point* m) {
-  for (int i = 0; i < entityButtons.size(); i++) {
+  using namespace entityEngine::misc::entityButtons;
+
+  int i = list_page * max_buttons;
+  while (i < entityButtons.size() && i < (list_page + 1) * max_buttons) {
     if (SDL_PointInRect(m, &entityButtons[i].dstR)) {
       entity_ID = i;
+      return true;
+    } i++;
+  }
+
+  if (entityButtons.size() > max_buttons) {
+    // true if "previous" button is valid
+    bool prev_option = list_page;
+
+    // true if "next" button is valid
+    bool next_option = (entityButtons.size() - (list_page * max_buttons)) > max_buttons;
+
+    if (prev_option && SDL_PointInRect(m, &prev_pg)) {
+      list_page--;
+      return true;
+    } else if (next_option && SDL_PointInRect(m, &next_pg)) {
+      list_page++;
       return true;
     }
   }
@@ -182,16 +250,18 @@ void CEntityEditor::OnRButtonDown(int mX, int mY) {
 }
 
 bool CEntityEditor::handleRmEntity(const SDL_Point* m) {
-  const SDL_Point mAbs = CCamera::CameraControl.GetCamRelPoint(*m);
-  for (int i = CEntity::entityList.size() - 1; i >= 0; i--) {
-    const SDL_Rect dstR = { CEntity::entityList[i].dstP.x,
-                            CEntity::entityList[i].dstP.y,
-                            CEntity::entityList[i].srcR.w,
-                            CEntity::entityList[i].srcR.h  };
-    if (SDL_PointInRect(&mAbs, &dstR)) {
-      CEntity::entityList.erase(CEntity::entityList.begin() + i);
-      CEntity::CheckCollide();
-      return true;
+  if (!*planview) {
+    const SDL_Point mAbs = CCamera::CameraControl.GetCamRelPoint(*m);
+    for (int i = CEntity::entityList.size() - 1; i >= 0; i--) {
+      const SDL_Rect dstR = { CEntity::entityList[i].dstP.x,
+                              CEntity::entityList[i].dstP.y,
+                              CEntity::entityList[i].srcR.w,
+                              CEntity::entityList[i].srcR.h  };
+      if (SDL_PointInRect(&mAbs, &dstR)) {
+        CEntity::entityList.erase(CEntity::entityList.begin() + i);
+        CEntity::CheckCollide();
+        return true;
+      }
     }
   }
   return false;

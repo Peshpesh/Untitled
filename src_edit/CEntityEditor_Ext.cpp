@@ -6,12 +6,14 @@ namespace entityEngine
     namespace chEntity
     { // Change entity button
       const char* const label = "Entity Menu";
-      CButton button(355, 510, 100, 24);
+      // CButton button(355, 510, 100, 24);
+      CButton button(645, 20, 90, 24);
     }
     namespace editHitbox
     { // edit hitbox button
       const char* const label = "Edit Hitbox";
-      CButton button(355, 534, 100, 24);
+      CButton button(645, 44, 90, 24);
+      // CButton button(355, 534, 100, 24);
     }
     namespace placeRelPos {
       const SDL_Point* offCol = &palette::silver;
@@ -72,24 +74,34 @@ namespace entityEngine
     namespace opacEntity
     {
       const char* const label = "Entity Opacity";
-      CMeter meter(645, 420, 90, 4);
+      CMeter meter(355, 510, 90, 4);
+      // CMeter meter(645, 420, 90, 4);
     }
     namespace opacHitbox
     {
       const char* const label = "Hitbox Opacity";
-      CMeter meter(645, 460, 90, 4);
+      CMeter meter(355, 550, 90, 4);
+      // CMeter meter(645, 460, 90, 4);
     }
   }
   namespace misc {
     namespace entityButtons {
       const SDL_Point* offCol = &palette::silver;
-      const SDL_Point* onCol = &palette::green;
+      const SDL_Point* onCol  = &palette::green;
       const SDL_Point* hovCol = &palette::light_yellow;
-      const short list_x = 645;
-      const short list_y = 20;
       const short button_w = 90;
       const short button_h = 20;
-      const short max_buttons = 20;
+      const short pg_button_x = 645;
+      const short pg_button_y = 90;
+      const short pg_button_w = button_w / 3;
+      const short pg_button_h = 1 + (button_h / 2);
+      const short list_x = pg_button_x;
+      const short list_y = pg_button_y + pg_button_h;
+      const short max_buttons = 16;
+
+      const SDL_Rect prev_pg = CAsset::getRect(pg_button_x, pg_button_y, pg_button_w, pg_button_h);
+      const SDL_Rect curr_pg = CAsset::getRect(prev_pg.x + pg_button_w, pg_button_y, pg_button_w, pg_button_h);
+      const SDL_Rect next_pg = CAsset::getRect(curr_pg.x + pg_button_w, pg_button_y, pg_button_w, pg_button_h);
     }
     namespace placeRelPos {
       const short numpos_x = 3;

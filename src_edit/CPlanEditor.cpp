@@ -32,8 +32,6 @@ void CPlanEditor::getK(int& k) {
   k = this->k;
 }
 
-
-
 int CPlanEditor::getDefaultOpacityAtZ(const int& z) {
   int opac = 0;
   if (z < 0) return opac;

@@ -191,6 +191,11 @@ SDL_Point CCamera::GetWinRelPoint(const double& rel_x, const double& rel_y) {
   return retval;
 }
 
+SDL_Point CCamera::GetWinRelPoint(const int& rel_x, const int& rel_y) {
+  SDL_Point retval = {rel_x - GetX(), rel_y - GetY()};
+  return retval;
+}
+
 SDL_Point CCamera::GetCamRelPoint(const SDL_Point& winPos) {
   SDL_Point retval = {winPos.x + GetX(), winPos.y + GetY()};
   return retval;

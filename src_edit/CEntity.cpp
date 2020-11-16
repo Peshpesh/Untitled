@@ -1,13 +1,17 @@
 #include "CEntity.h"
 
 std::vector<EntityTexInfo> CEntity::textureList;
-std::vector<CEntity> CEntity::entityList;
+std::vector<CEntity>       CEntity::entityList;
+std::vector<CPlanEntity>   CEntity::entList_back;
+std::vector<CPlanEntity>   CEntity::entList_front;
+const bool* CEntity::planview = NULL;
 
 namespace {
   const SDL_Point* hb_nocol = &palette::green;
   const SDL_Point* hb_col   = &palette::red;
   const std::string io_path = "../data/maps/";
   const std::string io_ext = ".ent";
+  const std::string io_ext_pv = ".pve";
 }
 
 CEntity::CEntity(int group, int entity, const SDL_Point* m) {
@@ -20,8 +24,100 @@ CEntity::CEntity(int group, int entity, const SDL_Point* m) {
   coll      = false;
 }
 
+bool CEntity::OnRender() {
+  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(dstP);
+  return CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
+}
+
+bool CEntity::OnRenderHitbox() {
+  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(dstP);
+  SDL_Rect dstR = {dstWinPos.x + hitR.x, dstWinPos.y + hitR.y, hitR.w, hitR.h};
+  return CAsset::drawBox(&dstR, coll ? hb_col : hb_nocol);
+}
+
+bool CEntity::Collides(const SDL_Point& oP, const SDL_Rect& oR) {
+  // positions of sides of hitbox passed into function
+  int oXl = oP.x + oR.x;
+  int oXr = oXl + oR.w - 1;
+  int oYt = oP.y + oR.y;
+  int oYb = oYt + oR.h - 1;
+
+  // positions of sides of hitbox from THIS entity
+  int Xl = dstP.x + hitR.x;
+  int Xr = Xl + hitR.w - 1;
+  int Yt = dstP.y + hitR.y;
+  int Yb = Yt + hitR.h - 1;
+
+  if (Yb < oYt) return false;
+  if (oYb < Yt) return false;
+  if (Xr < oXl) return false;
+  if (oXr < Xl) return false;
+
+  return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+CPlanEntity::CPlanEntity(int group, int entity, const int& X, const int& Y, const short& Z) {
+  sprtSrc   = CEntity::getSrcTexture(group);
+  group_ID  = group;
+  ID        = entity;
+  srcR      = CEntityData::getEntityDims(group, entity);
+  hitR      = CEntityData::getHitboxDims(group, entity);
+  coll      = false;
+  this->X   = X;
+  this->Y   = Y;
+  this->Z   = Z;
+
+  Y_base    = Y + srcR.h;
+  // SDL_Point dstP = CCamera::CameraControl.GetCamRelPoint(*m);
+  // Y_base = CEntityData::getYBase(group_ID, decor_ID, Y, tempScn.srcR.h);
+}
+
+bool CPlanEntity::OnRender() {
+  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(X, Y);
+  dstWinPos.y -= (Z * TILE_SIZE);
+  return CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
+}
+
+bool CPlanEntity::OnRenderHitbox() {
+  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(X, Y);
+  dstWinPos.y -= (Z * TILE_SIZE);
+  SDL_Rect dstR = {dstWinPos.x + hitR.x, dstWinPos.y + hitR.y, hitR.w, hitR.h};
+  return CAsset::drawBox(&dstR, coll ? hb_col : hb_nocol);
+}
+
+bool CPlanEntity::Collides(const SDL_Point& oP, const SDL_Rect& oR) {
+  // positions of sides of hitbox passed into function
+  int oXl = oP.x + oR.x;
+  int oXr = oXl  + oR.w - 1;
+  int oYt = oP.y + oR.y;
+  int oYb = oYt  + oR.h - 1;
+
+  // positions of sides of hitbox from THIS entity
+  int Xl = X  + hitR.x;
+  int Xr = Xl + hitR.w - 1;
+  int Yt = Y  + hitR.y;
+  int Yb = Yt + hitR.h - 1;
+
+  if (Yb < oYt) return false;
+  if (oYb < Yt) return false;
+  if (Xr < oXl) return false;
+  if (oXr < Xl) return false;
+
+  return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 bool CEntity::OnInit() {
   entityList.clear();
+  entList_back.clear();
+  entList_front.clear();
   purgeStaleTextures();
   textureList.clear();
 
@@ -123,39 +219,6 @@ bool CEntity::isTextureLoaded(const int& group) {
     if (group == textureList[i].group_ID) return true;
   }
   return false;
-}
-
-bool CEntity::OnRender() {
-  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(dstP);
-  return CSurface::OnDraw(sprtSrc, &srcR, &dstWinPos);
-}
-
-bool CEntity::OnRenderHitbox() {
-  SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(dstP);
-  SDL_Rect dstR = {dstWinPos.x + hitR.x, dstWinPos.y + hitR.y, hitR.w, hitR.h};
-  return CAsset::drawBox(&dstR, coll ? hb_col : hb_nocol);
-}
-
-bool CEntity::Collides(const SDL_Point& oP, const SDL_Rect& oR)
-{
-  // positions of sides of hitbox passed into function
-  int oXl = oP.x + oR.x;
-  int oXr = oXl + oR.w - 1;
-  int oYt = oP.y + oR.y;
-  int oYb = oYt + oR.h - 1;
-
-  // positions of sides of hitbox from THIS entity
-  int Xl = dstP.x + hitR.x;
-  int Xr = Xl + hitR.w - 1;
-  int Yt = dstP.y + hitR.y;
-  int Yb = Yt + hitR.h - 1;
-
-  if (Yb < oYt) return false;
-  if (oYb < Yt) return false;
-  if (Xr < oXl) return false;
-  if (oXr < Xl) return false;
-
-  return true;
 }
 
 SDL_Texture* CEntity::getSrcTexture(const int& group) {

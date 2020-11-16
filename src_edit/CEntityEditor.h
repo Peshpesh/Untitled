@@ -14,7 +14,93 @@
 #include "CInterrupt.h"
 #include "CInform.h"
 #include "CCamera.h"
+
+#include "CPlanArea.h"
+
 #include "Define.h"
+
+class CEntityEditor : public CEvent {
+private:
+  CEntityEditor();
+
+public:
+  bool showEntity;
+private:
+  bool showHitbox;
+  bool showWorkEntity;
+  bool showWorkHitbox;
+  unsigned short entity_alpha;
+  unsigned short hitbox_alpha;
+
+  short group_ID;
+  short entity_ID;
+  short placePos;
+  bool place_hitbox;
+  bool snap_tile;
+  short list_page;
+
+  // for PV stages only
+  bool render_with_map;
+public:
+  const bool* planview; // is this stage planview type?
+  int* k; // working layer k-index
+
+public:
+  static CEntityEditor Control;
+
+private:
+  std::vector<CButton> entityButtons;
+
+public:
+  bool OnInit();
+  bool reinit();
+  void OnTerminate();
+
+public:
+  void OnEvent(SDL_Event* Event);
+
+private:
+  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
+  void OnLButtonDown(int mX, int mY);
+
+  bool handleAddEntity(const SDL_Point* m);
+  bool handleChEntity(const SDL_Point* m);
+  bool handleEditHitbox(const SDL_Point* m);
+  bool handleEntityMeter(const SDL_Point* m);
+  bool handleHitboxMeter(const SDL_Point* m);
+  bool handleSwitchView(const SDL_Point* m);
+  bool handleSwitchPlace(const SDL_Point* m);
+  bool handleEntityList(const SDL_Point* m);
+  bool handlePlaceRelPos(const SDL_Point* m);
+
+  void OnRButtonDown(int mX, int mY);
+  bool handleRmEntity(const SDL_Point* m);
+
+  bool handleInterr(SDL_Event* Event);
+
+public:
+  bool OnRender(const SDL_Point* m);
+  bool OnRenderSettings(const SDL_Point* m);
+  bool drawEntities();
+  bool drawWorkingEntity(const SDL_Point* m);
+  bool drawWorkingHitbox(const SDL_Point* m);
+  bool drawHitboxes();
+
+private:
+  bool drawChEntity(const SDL_Point* m, const bool& hov);
+  bool drawEditHitbox(const SDL_Point* m, const bool& hov);
+  bool drawEntityList(const SDL_Point* m, const bool& hov);
+  bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
+  bool drawOpacEntity();
+  bool drawOpacHitbox();
+  bool drawSwitchView();
+  bool drawSwitchPlace();
+  bool drawIntrpt(const SDL_Point* m);
+
+private:
+  void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR);
+  void updateEntityButtons();
+};
 
 namespace entityEngine
 {
@@ -80,7 +166,11 @@ namespace entityEngine
       extern const short button_w;
       extern const short button_h;
       extern const short max_buttons;
+      extern const SDL_Rect prev_pg;
+      extern const SDL_Rect curr_pg;
+      extern const SDL_Rect next_pg;
     }
+
     namespace placeRelPos {
       extern const short numpos_x;
       extern const short numpos_y;
@@ -98,78 +188,5 @@ namespace entityEngine
     }
   }
 } // Entity engine namespaces //
-
-class CEntityEditor : public CEvent {
-private:
-  CEntityEditor();
-
-  bool showEntity;
-  bool showHitbox;
-  bool showWorkEntity;
-  bool showWorkHitbox;
-  unsigned short entity_alpha;
-  unsigned short hitbox_alpha;
-
-  short group_ID;
-  short entity_ID;
-  short placePos;
-  bool place_hitbox;
-  bool snap_tile;
-
-public:
-  static CEntityEditor Control;
-
-private:
-  std::vector<CButton> entityButtons;
-
-public:
-  bool OnInit();
-  void OnTerminate();
-
-public:
-  void OnEvent(SDL_Event* Event);
-
-private:
-  void OnKeyDown(SDL_Keycode sym, Uint16 mod);
-  void OnLButtonDown(int mX, int mY);
-
-  bool handleAddEntity(const SDL_Point* m);
-  bool handleChEntity(const SDL_Point* m);
-  bool handleEditHitbox(const SDL_Point* m);
-  bool handleEntityMeter(const SDL_Point* m);
-  bool handleHitboxMeter(const SDL_Point* m);
-  bool handleSwitchView(const SDL_Point* m);
-  bool handleSwitchPlace(const SDL_Point* m);
-  bool handleEntityList(const SDL_Point* m);
-  bool handlePlaceRelPos(const SDL_Point* m);
-
-  void OnRButtonDown(int mX, int mY);
-  bool handleRmEntity(const SDL_Point* m);
-
-  bool handleInterr(SDL_Event* Event);
-
-public:
-  bool OnRender(const SDL_Point* m);
-  bool OnRenderSettings(const SDL_Point* m);
-  bool drawEntities();
-  bool drawWorkingEntity(const SDL_Point* m);
-  bool drawWorkingHitbox(const SDL_Point* m);
-  bool drawHitboxes();
-
-private:
-  bool drawChEntity(const SDL_Point* m, const bool& hov);
-  bool drawEditHitbox(const SDL_Point* m, const bool& hov);
-  bool drawEntityList(const SDL_Point* m, const bool& hov);
-  bool drawPlaceRelPos(const SDL_Point* m, const bool& hov);
-  bool drawOpacEntity();
-  bool drawOpacHitbox();
-  bool drawSwitchView();
-  bool drawSwitchPlace();
-  bool drawIntrpt(const SDL_Point* m);
-
-private:
-  void getPosDisplace(int& dx, int& dy, const SDL_Point* m, const SDL_Rect& dstR);
-  void updateEntityButtons();
-};
 
 #endif

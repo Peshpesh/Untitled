@@ -37,6 +37,8 @@ bool CApp::OnInit()
     return false;
   }
 
+  CStage::control.OnInit();
+
   if (CEditMap::MapEditor.OnInit() == false) {
     CError::handler.ReportErr("FATAL => CEditMap failed to initialize.");
     return false;
@@ -58,6 +60,8 @@ bool CApp::OnInit()
     CError::handler.ReportErr("FATAL => CPlanScnEdit failed to initialize.");
     return false;
   }
+
+
 
   COptions::control.OnInit();
 

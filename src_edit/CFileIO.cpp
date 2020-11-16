@@ -300,7 +300,9 @@ void CFileIO::addToPath(const char& addSym) {
 void CFileIO::newData() {
   CArea::control.OnInit();
   CPlanArea::control.OnInit();
-  CEntity::OnInit();
+  if (!CEntityEditor::Control.reinit()) {
+    pushInform(I_FAIL_ENTITY);
+  }
   CScenery::OnInit();
   CAnchorScenery::Control.planview = CStage::control.planview;
   CChangeScenery::Control.planview = CStage::control.planview;

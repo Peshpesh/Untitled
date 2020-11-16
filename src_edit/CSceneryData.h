@@ -83,7 +83,7 @@ public:
   static SDL_Rect getDecorDims(const int& group, const int& decor);
   static std::string getGroupName(const int& group);
   static std::string getDecorName(const int& group, const int& decor);
-  static int getYBase(const int& group, const int& decor, const int& Y, const int& W); // only for PV maps
+  static int getYBase(const int& group, const int& decor, const int& Y, const int& H); // only for PV maps
   static bool hasShadow(const int& group, const int& decor); // only for PV maps
 
 private:
