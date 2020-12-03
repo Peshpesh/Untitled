@@ -35,6 +35,7 @@ void CEntityEditor::OnLButtonDown(int mX, int mY) {
   if (handleEditHitbox(&m)) return;
   if (handleEntityMeter(&m)) return;
   if (handleHitboxMeter(&m)) return;
+  if (handleBriefChange(&m)) return;
   if (handleSwitchView(&m)) return;
   if (handleSwitchPlace(&m)) return;
   if (handleEntityList(&m)) return;
@@ -57,7 +58,6 @@ bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
     const SDL_Point dstP = {X, Y};
     CEntity newEntity(group_ID, entity_ID, &dstP);
     CEntity::entityList.push_back(newEntity);
-    CEntity::CheckCollide();
   } else {
     short Z = CPlanArea::control.getZ(*k);
 
@@ -103,6 +103,7 @@ bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
     }
   }
 
+  CEntity::CheckCollide();
   return true;
 }
 
@@ -162,6 +163,24 @@ bool CEntityEditor::handleHitboxMeter(const SDL_Point* m) {
       }
       return true;
     }
+  }
+  return false;
+}
+
+bool CEntityEditor::handleBriefChange(const SDL_Point* m) {
+  using namespace entityEngine::misc::layerBrief;
+  if (!*planview) return false;
+  if (CPlanArea::control.LayerList.size() <= 1) return false;
+
+  // TODO: Fix this
+  if (SDL_PointInRect(m, &l_button)) {
+    if (*k == 0) *k = CPlanArea::control.LayerList.size() - 1;
+    else *k--;
+    return true;
+  }
+  if (SDL_PointInRect(m, &r_button)) {
+    if (++*k >= CPlanArea::control.LayerList.size()) *k = 0;
+    return true;
   }
   return false;
 }

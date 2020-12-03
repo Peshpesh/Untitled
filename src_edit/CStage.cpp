@@ -180,13 +180,17 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
         if (scn_Y < ent_Y) {
           CPlanScnEdit::scnList_back[scn_i++].OnRender();
         } else {
-          CEntity::entList_back[ent_i++].OnRender();
+          CEntity::entList_back[ent_i].OnRender();
+          CEntity::entList_back[ent_i].OnRenderHitbox();
+          ent_i++;
         }
       } else if (scn_valid) {
         CPlanScnEdit::scnList_back[scn_i++].OnRender();
       } else {
         // render/increment index for entity vector
-        CEntity::entList_back[ent_i++].OnRender();
+        CEntity::entList_back[ent_i].OnRender();
+        CEntity::entList_back[ent_i].OnRenderHitbox();
+        ent_i++;
       }
 
       if (scn_valid) {
@@ -215,10 +219,14 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
       CPlanScnEdit::control.setOpacity(opac);
       CPlanScnEdit::scnList_front[scn_i++].OnRender();
     } else if (!drawScn) { // only draw entities
-      CEntity::entList_front[ent_i++].OnRender();
+      CEntity::entList_front[ent_i].OnRender();
+      CEntity::entList_front[ent_i].OnRenderHitbox();
+      ent_i++;
     } else {
       if (scn_i >= max_scn) {
-        CEntity::entList_front[ent_i++].OnRender();
+        CEntity::entList_front[ent_i].OnRender();
+        CEntity::entList_front[ent_i].OnRenderHitbox();
+        ent_i++;
       } else if (ent_i >= max_ent) {
         z = CPlanScnEdit::scnList_front[scn_i].Z;
         opac = CPlanEditor::control.getDefaultOpacityAtZ(z);
@@ -230,7 +238,9 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
         if (scn_Y < ent_Y) {
           CPlanScnEdit::scnList_front[scn_i++].OnRender();
         } else {
-          CEntity::entList_front[ent_i++].OnRender();
+          CEntity::entList_front[ent_i].OnRender();
+          CEntity::entList_front[ent_i].OnRenderHitbox();
+          ent_i++;
         }
       }
     }

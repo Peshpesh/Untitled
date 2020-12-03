@@ -107,5 +107,29 @@ namespace entityEngine
       const short numpos_x = 3;
       const short numpos_y = 3;
     }
+    namespace layerBrief {
+      const SDL_Point* fieldCol = &palette::silver;
+      const SDL_Point* butCol = &palette::blue;
+      const SDL_Point* hovCol = &palette::light_blue;
+      const short list_x = 405;
+      const short list_y = 494;
+      const short field_w = 100;
+      const short field_h = 11;
+      const short buffer_h = 2;
+      const short num_fields = 3;
+      const short button_sz = field_h;
+      const SDL_Rect fields[] = {
+        CAsset::getRect(list_x, list_y                           , field_w, field_h),
+        CAsset::getRect(list_x, list_y + (field_h + buffer_h)    , field_w, field_h),
+        CAsset::getRect(list_x, list_y + (field_h + buffer_h) * 2, field_w, field_h),
+      };
+      const char* const labels[] = {
+        "Layers - ",
+        "Active - ",
+        "Z - ",
+      };
+      const SDL_Rect l_button = CAsset::getRect(fields[1].x, fields[1].y, button_sz, button_sz);
+      const SDL_Rect r_button = CAsset::getRect(fields[1].x + field_w - button_sz, fields[1].y, button_sz, button_sz);
+    }
   }
 } // Entity engine namespaces //

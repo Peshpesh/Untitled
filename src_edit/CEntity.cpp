@@ -129,18 +129,66 @@ bool CEntity::OnInit() {
 }
 
 void CEntity::CheckCollide() {
-  for (int i = 0; i < entityList.size(); i++) {
-    entityList[i].coll = false;
-  }
+  if (!*planview) {
+    for (int i = 0; i < entityList.size(); i++) entityList[i].coll = false;
 
-  for (int i = 0; i < entityList.size(); i++) {
-    if (!entityList[i].coll) {
-      for (int j = 0; j < entityList.size(); j++) {
-        if (i == j) continue;
-        if (entityList[i].Collides(entityList[j].dstP, entityList[j].hitR)) {
-          entityList[i].coll = true;
-          entityList[j].coll = true;
-          break;
+    for (int i = 0; i < entityList.size(); i++) {
+      if (!entityList[i].coll) {
+        for (int j = 0; j < entityList.size(); j++) {
+          if (i == j) continue;
+          if (entityList[i].Collides(entityList[j].dstP, entityList[j].hitR)) {
+            entityList[i].coll = true;
+            entityList[j].coll = true;
+            break;
+          }
+        }
+      }
+    }
+  } else {
+    for (int i = 0; i < entList_back.size(); i++)  entList_back[i].coll  = false;
+    for (int i = 0; i < entList_front.size(); i++) entList_front[i].coll = false;
+
+    // Check each background entity
+    for (int i = 0; i < entList_back.size(); i++) {
+      if (!entList_back[i].coll) {
+        for (int j = 0; j < entList_back.size(); j++) {
+          if (i == j) continue;
+          if (entList_back[i].Z != entList_back[j].Z) continue;
+          SDL_Point dstP;
+          dstP.x = entList_back[j].X;
+          dstP.y = entList_back[j].Y;
+          if (entList_back[i].Collides(dstP, entList_back[j].hitR)) {
+            entList_back[i].coll = true;
+            entList_back[j].coll = true;
+          }
+        }
+        // Check is background entities collide with foreground (prob shouldn't happen)
+        for (int j = 0; j < entList_front.size(); j++) {
+          if (entList_back[i].Z != entList_front[j].Z) continue;
+          SDL_Point dstP;
+          dstP.x = entList_front[j].X;
+          dstP.y = entList_front[j].Y;
+          if (entList_back[i].Collides(dstP, entList_front[j].hitR)) {
+            entList_back[i].coll  = true;
+            entList_front[j].coll = true;
+          }
+        }
+      }
+    }
+
+    // Check each foreground entity
+    for (int i = 0; i < entList_front.size(); i++) {
+      if (!entList_front[i].coll) {
+        for (int j = 0; j < entList_front.size(); j++) {
+          if (i == j) continue;
+          if (entList_front[i].Z != entList_front[j].Z) continue;
+          SDL_Point dstP;
+          dstP.x = entList_front[j].X;
+          dstP.y = entList_front[j].Y;
+          if (entList_front[i].Collides(dstP, entList_front[j].hitR)) {
+            entList_front[i].coll = true;
+            entList_front[j].coll = true;
+          }
         }
       }
     }

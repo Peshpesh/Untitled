@@ -68,6 +68,7 @@ private:
   bool handleEditHitbox(const SDL_Point* m);
   bool handleEntityMeter(const SDL_Point* m);
   bool handleHitboxMeter(const SDL_Point* m);
+  bool handleBriefChange(const SDL_Point* m); 
   bool handleSwitchView(const SDL_Point* m);
   bool handleSwitchPlace(const SDL_Point* m);
   bool handleEntityList(const SDL_Point* m);
@@ -95,6 +96,7 @@ private:
   bool drawOpacHitbox();
   bool drawSwitchView();
   bool drawSwitchPlace();
+  bool drawLayerBrief(const SDL_Point* m, const bool& hov);
   bool drawIntrpt(const SDL_Point* m);
 
 private:
@@ -170,7 +172,6 @@ namespace entityEngine
       extern const SDL_Rect curr_pg;
       extern const SDL_Rect next_pg;
     }
-
     namespace placeRelPos {
       extern const short numpos_x;
       extern const short numpos_y;
@@ -185,6 +186,22 @@ namespace entityEngine
         BOTTOM_CENTER,
         BOTTOM_RIGHT
       };
+    }
+    namespace layerBrief {
+      extern const SDL_Point* fieldCol;
+      extern const SDL_Point* butCol;
+      extern const SDL_Point* hovCol;
+      extern const short list_x;
+      extern const short list_y;
+      extern const short field_w;
+      extern const short field_h;
+      extern const short buffer_h;
+      extern const short num_fields;
+      extern const short button_sz;
+      extern const SDL_Rect fields[];
+      extern const char* const labels[];
+      extern const SDL_Rect l_button;
+      extern const SDL_Rect r_button;
     }
   }
 } // Entity engine namespaces //

@@ -18,6 +18,7 @@ bool CEntityEditor::OnRenderSettings(const SDL_Point* m) {
   if (!drawOpacHitbox()) return false;
   if (!drawSwitchView()) return false;
   if (!drawSwitchPlace()) return false;
+  if (!drawLayerBrief(m, no_intrpt)) return false;
 
   if (!no_intrpt) {
     if (!drawIntrpt(m)) return false;
@@ -85,7 +86,6 @@ bool CEntityEditor::drawHitboxes() {
 
   for (int i = 0; i < CEntity::entityList.size(); i++) {
     if (!CEntity::entityList[i].OnRenderHitbox()) {
-      CInform::InfoControl.pushInform("Problem rendering hitbox");
       retval = false;
       break;
     }
@@ -158,11 +158,13 @@ bool CEntityEditor::drawPlaceRelPos(const SDL_Point* m, const bool& hov) {
 }
 
 bool CEntityEditor::drawOpacEntity() {
+  if (*planview) return true;
   using namespace entityEngine::meters::opacEntity;
   return meter.OnRender((double)(entity_alpha) / MAX_RGBA, label);
 }
 
 bool CEntityEditor::drawOpacHitbox() {
+  if (*planview) return true;
   using namespace entityEngine::meters::opacHitbox;
   return meter.OnRender((double)(hitbox_alpha) / MAX_RGBA, label);
 }
@@ -202,6 +204,36 @@ bool CEntityEditor::drawSwitchPlace() {
     const SDL_Point tPos = {buttons[i].dstR.x + lab_x_offset, buttons[i].dstR.y + lab_y_offset};
     Font::Write(FONT_MINI, labels[i], &tPos);
   }
+  return true;
+}
+
+bool CEntityEditor::drawLayerBrief(const SDL_Point* m, const bool& hov) {
+  using namespace entityEngine::misc::layerBrief;
+  if (!*planview) return true;
+
+  std::string vals[] = {
+    Font::intToStr(CPlanArea::control.LayerList.size()),
+    Font::intToStr(*k),
+    Font::intToStr(CPlanArea::control.LayerList[*k].Z)
+  };
+
+  Font::FontControl.SetFont(FONT_MINI);
+  for (int i = 0; i < num_fields; i++) {
+    CAsset::drawBoxFill(&fields[i], fieldCol);
+    vals[i] = labels[i] + vals[i];
+    Font::NewCenterWrite(vals[i].c_str(), &fields[i]);
+  }
+
+  if (m) {
+    CAsset::drawBoxFill(&l_button, SDL_PointInRect(m, &l_button) ? hovCol : butCol);
+    CAsset::drawBoxFill(&r_button, SDL_PointInRect(m, &r_button) ? hovCol : butCol);
+  } else {
+    CAsset::drawBoxFill(&l_button, butCol);
+    CAsset::drawBoxFill(&r_button, butCol);
+  }
+  Font::NewCenterWrite("$L", &l_button);
+  Font::NewCenterWrite("$R", &r_button);
+
   return true;
 }
 
