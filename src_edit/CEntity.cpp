@@ -196,7 +196,10 @@ void CEntity::CheckCollide() {
 }
 
 bool CEntity::OnLoad(const char* fname) {
-  std::string filePath = io_path + fname + io_ext;
+  std::string filePath = "";
+  if (!*planview) filePath = io_path + fname + io_ext;
+  else /*......*/ filePath = io_path + fname + io_ext_pv;
+
   FILE* FileHandle = fopen(filePath.c_str(), "rb");
 
   if (FileHandle == NULL)  {
@@ -205,26 +208,54 @@ bool CEntity::OnLoad(const char* fname) {
   }
 
   entityList.clear();
+  entList_back.clear();
+  entList_front.clear();
 
-  int N;
-  fread(&N, sizeof(int), 1, FileHandle);
-  for (int i = 0; i < N; i++) {
-    // read entity info
-    int entry[4];
-    fread(entry, sizeof(int), sizeof(entry)/sizeof(entry[0]), FileHandle);
-    const int group_ID = entry[0];
-    if (!isTextureLoaded(group_ID)) loadTexInfo(group_ID);
-    const int entity_ID = entry[1];
-    const SDL_Point dstP = {entry[2], entry[3]};
-    CEntity newEntity(group_ID, entity_ID, &dstP);
-    entityList.push_back(newEntity);
+  if (!*planview) {
+    int N;
+    fread(&N, sizeof(int), 1, FileHandle);
+    for (int i = 0; i < N; i++) {
+      // read entity info
+      int entry[4];
+      fread(entry, sizeof(int), sizeof(entry)/sizeof(entry[0]), FileHandle);
+      const int group_ID = entry[0];
+      if (!isTextureLoaded(group_ID)) loadTexInfo(group_ID);
+      const int entity_ID = entry[1];
+      const SDL_Point dstP = {entry[2], entry[3]};
+      CEntity newEntity(group_ID, entity_ID, &dstP);
+      entityList.push_back(newEntity);
+    }
+  } else {
+    int N_back, N_front;
+    fread(&N_back,  sizeof(int), 1, FileHandle);
+    fread(&N_front, sizeof(int), 1, FileHandle);
+
+    for (int i = 0; i < N_back + N_front; i++) {
+      int group, ID, X, Y;
+      short Z;
+      fread(&group, sizeof(int),   1, FileHandle);
+      fread(&ID,    sizeof(int),   1, FileHandle);
+      fread(&X,     sizeof(int),   1, FileHandle);
+      fread(&Y,     sizeof(int),   1, FileHandle);
+      fread(&Z,     sizeof(short), 1, FileHandle);
+
+      if (!isTextureLoaded(group)) loadTexInfo(group);
+
+      CPlanEntity tempEnt(group, ID, X, Y, Z);
+
+      if (i < N_back) entList_back.push_back(tempEnt);
+      else entList_front.push_back(tempEnt);
+    }
   }
+
   fclose(FileHandle);
   return true;
 }
 
 bool CEntity::OnSave(const char* fname) {
-  std::string filePath = io_path + fname + io_ext;
+  std::string filePath = "";
+  if (!*planview) filePath = io_path + fname + io_ext;
+  else /*......*/ filePath = io_path + fname + io_ext_pv;
   FILE* FileHandle = fopen(filePath.c_str(), "wb");
 
   if (FileHandle == NULL)  {
@@ -232,18 +263,43 @@ bool CEntity::OnSave(const char* fname) {
     return false;
   }
 
-  const int N = entityList.size();
-  fwrite(&N, sizeof(int), 1, FileHandle);
-  for (int i = 0; i < entityList.size(); i++) {
-    // Output entity info
-    int entry[] = {
-      entityList[i].group_ID,
-      entityList[i].entity_ID,
-      entityList[i].dstP.x,
-      entityList[i].dstP.y
-    };
-    fwrite(entry, sizeof(int), sizeof(entry)/sizeof(entry[0]), FileHandle);
+  if (!*planview) {
+    const int N = entityList.size();
+    fwrite(&N, sizeof(int), 1, FileHandle);
+    for (int i = 0; i < entityList.size(); i++) {
+      // Output entity info
+      int entry[] = {
+        entityList[i].group_ID,
+        entityList[i].entity_ID,
+        entityList[i].dstP.x,
+        entityList[i].dstP.y
+      };
+      fwrite(entry, sizeof(int), sizeof(entry)/sizeof(entry[0]), FileHandle);
+    }
+  } else {
+    const int N_back  = entList_back.size();
+    const int N_front = entList_front.size();
+
+    fwrite(&N_back,  sizeof(int), 1, FileHandle);
+    fwrite(&N_front, sizeof(int), 1, FileHandle);
+
+    for (int i = 0; i < N_back; i++) {
+      fwrite(&entList_back[i].group_ID,  sizeof(int),   1, FileHandle);
+      fwrite(&entList_back[i].ID,        sizeof(int),   1, FileHandle);
+      fwrite(&entList_back[i].X,         sizeof(int),   1, FileHandle);
+      fwrite(&entList_back[i].Y,         sizeof(int),   1, FileHandle);
+      fwrite(&entList_back[i].Z,         sizeof(short), 1, FileHandle);
+    }
+
+    for (int i = 0; i < N_front; i++) {
+      fwrite(&entList_front[i].group_ID, sizeof(int),   1, FileHandle);
+      fwrite(&entList_front[i].ID,       sizeof(int),   1, FileHandle);
+      fwrite(&entList_front[i].X,        sizeof(int),   1, FileHandle);
+      fwrite(&entList_front[i].Y,        sizeof(int),   1, FileHandle);
+      fwrite(&entList_front[i].Z,        sizeof(short), 1, FileHandle);
+    }
   }
+
   fclose(FileHandle);
   return true;
 }

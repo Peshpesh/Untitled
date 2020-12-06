@@ -51,10 +51,10 @@ bool CEntityEditor::drawWorkingEntity(const SDL_Point* m) {
   SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
   SDL_Rect hitR = CEntityData::getHitboxDims(group_ID, entity_ID);
 
-  int X = place_hitbox ? m->x - hitR.x : m->x;
-  int Y = place_hitbox ? m->y - hitR.y : m->y;
+  int X = (*planview || place_hitbox) ? m->x - hitR.x : m->x;
+  int Y = (*planview || place_hitbox) ? m->y - hitR.y : m->y;
 
-  getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
+  getPosDisplace(X, Y, m, (*planview || place_hitbox) ? hitR : srcR);
   SDL_Rect dstR = {X, Y, srcR.w, srcR.h};
 
   return CSurface::OnDraw(CEntity::getSrcTexture(group_ID), &srcR, &dstR);
@@ -66,10 +66,10 @@ bool CEntityEditor::drawWorkingHitbox(const SDL_Point* m) {
   SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
   SDL_Rect hitR = CEntityData::getHitboxDims(group_ID, entity_ID);
 
-  int X = place_hitbox ? m->x : m->x + hitR.x;
-  int Y = place_hitbox ? m->y : m->y + hitR.y;
+  int X = (*planview || place_hitbox) ? m->x : m->x + hitR.x;
+  int Y = (*planview || place_hitbox) ? m->y : m->y + hitR.y;
 
-  getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
+  getPosDisplace(X, Y, m, (*planview || place_hitbox) ? hitR : srcR);
   SDL_Rect dstR = {X, Y, hitR.w, hitR.h};
 
   CAsset::paletteAlpha(hitbox_alpha);
@@ -190,6 +190,7 @@ bool CEntityEditor::drawSwitchView() {
 }
 
 bool CEntityEditor::drawSwitchPlace() {
+  if (*planview) return true;
   using namespace entityEngine::switches;
   using namespace entityEngine::switches::place;
 

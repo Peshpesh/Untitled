@@ -14,10 +14,11 @@ std::vector<HitboxData> CEntityData::hitboxList;
 
 namespace Entities {
   namespace groups {
-    const short num = 2;
+    const short num = 3;
     const char* const name[] = {
       "global",
-      "caves"
+      "caves",
+      "pv_global"
     };
   };  // namespace groups
   namespace global {
@@ -44,7 +45,15 @@ namespace Entities {
       "Wooden Sign"
     };
   }; // namespace caves
-}; // namespace Entity_ID
+  namespace pv_global {
+    const short num = 1;
+    const char* const name[] = {
+      "Player"
+    };
+  };  // namespace pv_global
+}; // namespace Entities
+/*============================================================================*/
+
 
 namespace path {
   const char* const dir = "../res/npc/";
@@ -162,11 +171,12 @@ short CEntityData::getNumGroups() {
 
 short CEntityData::getNumEntities(const int& group) {
   using namespace Entities::groups;
-
   short N = 0;
   switch (group) {
     case GLOBAL: N = Entities::global::num; break;
     case CAVES:  N = Entities::caves::num;  break;
+    case PV_GLOBAL:  N = Entities::pv_global::num;  break;
+
   }
   return N;
 }
@@ -198,6 +208,7 @@ SDL_Rect CEntityData::getEntityDims(const int& group, const int& entity) {
   switch (group) {
     case GLOBAL:  getDims_global(entity, srcRect);   break;
     case CAVES:   getDims_caves(entity, srcRect);    break;
+    case PV_GLOBAL:   getDims_pv_global(entity, srcRect);    break;
     default:      break;
   }
   return srcRect;
@@ -234,6 +245,7 @@ std::string CEntityData::getEntityName(const int& group, const int& entity) {
   switch (group) {
     case GLOBAL:  getName_global(entity, retval); break;
     case CAVES:   getName_caves(entity, retval);  break;
+    case PV_GLOBAL:  getName_pv_global(entity, retval); break;
     default:      break;
   }
   return retval;
@@ -269,6 +281,15 @@ void CEntityData::getDims_caves(const int& entity, SDL_Rect& srcRect) {
   }
 }
 
+void CEntityData::getDims_pv_global(const int& entity, SDL_Rect& srcRect) {
+  using namespace Entities::pv_global;
+
+  switch (entity) {
+    case PLAYER:      srcRect = CAsset::getRect(0, 0, 32, 32); break;
+    default:          break;
+  }
+}
+
 void CEntityData::getName_global(const int& entity, std::string& str) {
   if (entity < Entities::global::num) {
     str = Entities::global::name[entity];
@@ -278,5 +299,11 @@ void CEntityData::getName_global(const int& entity, std::string& str) {
 void CEntityData::getName_caves(const int& entity, std::string& str) {
   if (entity < Entities::caves::num) {
     str = Entities::caves::name[entity];
+  }
+}
+
+void CEntityData::getName_pv_global(const int& entity, std::string& str) {
+  if (entity < Entities::pv_global::num) {
+    str = Entities::pv_global::name[entity];
   }
 }

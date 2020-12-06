@@ -372,98 +372,132 @@ void CHitboxEditor::reposHitbox() {
 
 void CHitboxEditor::increaseX() {
   if (hAnchor == anchor::ANCHOR_NONE) {
-    if (hitboxList[entity_ID].x + hitboxList[entity_ID].w < spriteR.w) {
+    // if (hitboxList[entity_ID].x + hitboxList[entity_ID].w < spriteR.w) {
       hitboxList[entity_ID].x++;
-    }
+    // }
   }
 }
 
 void CHitboxEditor::increaseY() {
   if (vAnchor == anchor::ANCHOR_NONE) {
-    if (hitboxList[entity_ID].y + hitboxList[entity_ID].h < spriteR.h) {
+    // if (hitboxList[entity_ID].y + hitboxList[entity_ID].h < spriteR.h) {
       hitboxList[entity_ID].y++;
-    }
+    // }
   }
 }
 
 void CHitboxEditor::increaseW() {
-  if (hitboxList[entity_ID].w < spriteR.w) {
-    hitboxList[entity_ID].w++;
-    if (hAnchor == anchor::ANCHOR_CENTER) {
-      if ((spriteR.w - hitboxList[entity_ID].w) % 2) {
+  // if (hitboxList[entity_ID].w < spriteR.w) {
+    const bool* pv = CEntity::planview;
+    if (!pv || !(*pv)) {
+      hitboxList[entity_ID].w++;
+      if (hAnchor == anchor::ANCHOR_CENTER) {
+        if ((spriteR.w - hitboxList[entity_ID].w) % 2) {
+          hitboxList[entity_ID].x--;
+          hitboxList[entity_ID].w++;
+        }
+      }
+      else if (hAnchor == anchor::ANCHOR_RIGHT) {
         hitboxList[entity_ID].x--;
-        hitboxList[entity_ID].w++;
+      }
+    } else {
+      hitboxList[entity_ID].w += TILE_SIZE;
+      if (hitboxList[entity_ID].w % TILE_SIZE) {
+        hitboxList[entity_ID].w -= hitboxList[entity_ID].w % TILE_SIZE;
       }
     }
-    else if (hAnchor == anchor::ANCHOR_RIGHT) {
-      hitboxList[entity_ID].x--;
-    }
-    if (hitboxList[entity_ID].x + hitboxList[entity_ID].w > spriteR.w) {
-      hitboxList[entity_ID].x--;
-    }
-  }
+    // if (hitboxList[entity_ID].x + hitboxList[entity_ID].w > spriteR.w) {
+    //   hitboxList[entity_ID].x--;
+    // }
+  // }
 }
 
 void CHitboxEditor::increaseH() {
-  if (hitboxList[entity_ID].h < spriteR.h) {
-    hitboxList[entity_ID].h++;
-    if (vAnchor == anchor::ANCHOR_CENTER) {
-      if ((spriteR.h - hitboxList[entity_ID].h) % 2) {
+  // if (hitboxList[entity_ID].h < spriteR.h) {
+    const bool* pv = CEntity::planview;
+    if (!pv || !(*pv)) {
+      hitboxList[entity_ID].h++;
+      if (vAnchor == anchor::ANCHOR_CENTER) {
+        if ((spriteR.h - hitboxList[entity_ID].h) % 2) {
+          hitboxList[entity_ID].y--;
+          hitboxList[entity_ID].h++;
+        }
+      }
+      else if (vAnchor == anchor::ANCHOR_BOTTOM) {
         hitboxList[entity_ID].y--;
-        hitboxList[entity_ID].h++;
+      }
+    } else {
+      hitboxList[entity_ID].h += TILE_SIZE;
+      if (hitboxList[entity_ID].h % TILE_SIZE) {
+        hitboxList[entity_ID].h -= hitboxList[entity_ID].h % TILE_SIZE;
       }
     }
-    else if (vAnchor == anchor::ANCHOR_BOTTOM) {
-      hitboxList[entity_ID].y--;
-    }
-    if (hitboxList[entity_ID].y + hitboxList[entity_ID].h > spriteR.h) {
-      hitboxList[entity_ID].y--;
-    }
-  }
+    // if (hitboxList[entity_ID].y + hitboxList[entity_ID].h > spriteR.h) {
+    //   hitboxList[entity_ID].y--;
+    // }
+  // }
 }
 
 void CHitboxEditor::decreaseX() {
   if (hAnchor == anchor::ANCHOR_NONE) {
-    if (hitboxList[entity_ID].x > 0) {
+    // if (hitboxList[entity_ID].x > 0) {
       hitboxList[entity_ID].x--;
-    }
+    // }
   }
 }
 
 void CHitboxEditor::decreaseY() {
   if (vAnchor == anchor::ANCHOR_NONE) {
-    if (hitboxList[entity_ID].y > 0) {
+    // if (hitboxList[entity_ID].y > 0) {
       hitboxList[entity_ID].y--;
-    }
+    // }
   }
 }
 
 void CHitboxEditor::decreaseW() {
-  if (hitboxList[entity_ID].w > 0) {
-    hitboxList[entity_ID].w--;
-    if (hAnchor == anchor::ANCHOR_CENTER) {
-      if ((spriteR.w - hitboxList[entity_ID].w) % 2) {
+  const bool* pv = CEntity::planview;
+  if (!pv || !(*pv)) {
+    if (hitboxList[entity_ID].w > 0) {
+      hitboxList[entity_ID].w--;
+      if (hAnchor == anchor::ANCHOR_CENTER) {
+        if ((spriteR.w - hitboxList[entity_ID].w) % 2) {
+          hitboxList[entity_ID].x++;
+          hitboxList[entity_ID].w--;
+        }
+      }
+      else if (hAnchor == anchor::ANCHOR_RIGHT) {
         hitboxList[entity_ID].x++;
-        hitboxList[entity_ID].w--;
       }
     }
-    else if (hAnchor == anchor::ANCHOR_RIGHT) {
-      hitboxList[entity_ID].x++;
+  } else {
+    hitboxList[entity_ID].w -= TILE_SIZE;
+    if (hitboxList[entity_ID].w < 0) hitboxList[entity_ID].w = 0;
+    else if (hitboxList[entity_ID].w % TILE_SIZE) {
+      hitboxList[entity_ID].w += TILE_SIZE - (hitboxList[entity_ID].w % TILE_SIZE);
     }
   }
 }
 
 void CHitboxEditor::decreaseH() {
-  if (hitboxList[entity_ID].h > 0) {
-    hitboxList[entity_ID].h--;
-    if (vAnchor == anchor::ANCHOR_CENTER) {
-      if ((spriteR.h - hitboxList[entity_ID].h) % 2) {
+  const bool* pv = CEntity::planview;
+  if (!pv || !(*pv)) {
+    if (hitboxList[entity_ID].h > 0) {
+      hitboxList[entity_ID].h--;
+      if (vAnchor == anchor::ANCHOR_CENTER) {
+        if ((spriteR.h - hitboxList[entity_ID].h) % 2) {
+          hitboxList[entity_ID].y++;
+          hitboxList[entity_ID].h--;
+        }
+      }
+      else if (vAnchor == anchor::ANCHOR_BOTTOM) {
         hitboxList[entity_ID].y++;
-        hitboxList[entity_ID].h--;
       }
     }
-    else if (vAnchor == anchor::ANCHOR_BOTTOM) {
-      hitboxList[entity_ID].y++;
+  } else {
+    hitboxList[entity_ID].h -= TILE_SIZE;
+    if (hitboxList[entity_ID].h < 0) hitboxList[entity_ID].h = 0;
+    else if (hitboxList[entity_ID].h % TILE_SIZE) {
+      hitboxList[entity_ID].h += TILE_SIZE - (hitboxList[entity_ID].h % TILE_SIZE);
     }
   }
 }

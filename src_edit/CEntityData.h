@@ -13,6 +13,7 @@ namespace Entities {
     enum {
       GLOBAL      = 0,
       CAVES       = 1,
+      PV_GLOBAL   = 2,
     };
     extern const short num;
     extern const char* const name[];
@@ -51,7 +52,15 @@ namespace Entities {
     //   extern const SDL_Rect r[];
     // };
   }; // namespace caves
-}; // namespace Entity_ID
+  namespace pv_global {
+    enum {
+      PLAYER      = 0,
+    };
+    extern const short num;
+    extern const char* const name[];
+  };  // namespace pv_global
+}; // namespace Entities
+
 
 struct HitboxData {
   short group;
@@ -60,7 +69,6 @@ struct HitboxData {
 };
 
 class CEntityData {
-
   CEntityData();
   static std::vector<HitboxData> hitboxList;
 
@@ -84,10 +92,12 @@ public:
 private:
   static void getDims_global(const int& entity, SDL_Rect& srcRect);
   static void getDims_caves(const int& entity, SDL_Rect& srcRect);
+  static void getDims_pv_global(const int& entity, SDL_Rect& srcRect);
 
 private:
   static void getName_global(const int& entity, std::string& str);
   static void getName_caves(const int& entity, std::string& str);
+  static void getName_pv_global(const int& entity, std::string& str);
 };
 
 #endif

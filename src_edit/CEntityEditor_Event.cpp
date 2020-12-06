@@ -50,10 +50,10 @@ bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
   SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
   SDL_Rect hitR = CEntityData::getHitboxDims(group_ID, entity_ID);
 
-  int X = place_hitbox ? m->x - hitR.x : m->x;
-  int Y = place_hitbox ? m->y - hitR.y : m->y;
+  int X = (*planview || place_hitbox) ? m->x - hitR.x : m->x;
+  int Y = (*planview || place_hitbox) ? m->y - hitR.y : m->y;
 
-  getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
+  getPosDisplace(X, Y, m, (*planview || place_hitbox) ? hitR : srcR);
   if (!*planview) {
     const SDL_Point dstP = {X, Y};
     CEntity newEntity(group_ID, entity_ID, &dstP);
@@ -153,16 +153,15 @@ bool CEntityEditor::handleEntityMeter(const SDL_Point* m) {
 }
 
 bool CEntityEditor::handleHitboxMeter(const SDL_Point* m) {
+  if (*planview) return false;
   using namespace entityEngine::meters::opacHitbox;
 
-  if (!*planview) {
-    if (SDL_PointInRect(m, &meter.dstR)) {
-      double fract = 0.0;
-      if (meter.clickPos(m, fract)) {
-        hitbox_alpha = fract * MAX_RGBA;
-      }
-      return true;
+  if (SDL_PointInRect(m, &meter.dstR)) {
+    double fract = 0.0;
+    if (meter.clickPos(m, fract)) {
+      hitbox_alpha = fract * MAX_RGBA;
     }
+    return true;
   }
   return false;
 }
@@ -172,14 +171,13 @@ bool CEntityEditor::handleBriefChange(const SDL_Point* m) {
   if (!*planview) return false;
   if (CPlanArea::control.LayerList.size() <= 1) return false;
 
-  // TODO: Fix this
   if (SDL_PointInRect(m, &l_button)) {
     if (*k == 0) *k = CPlanArea::control.LayerList.size() - 1;
-    else *k--;
+    else (*k)--;
     return true;
   }
   if (SDL_PointInRect(m, &r_button)) {
-    if (++*k >= CPlanArea::control.LayerList.size()) *k = 0;
+    if (++(*k) >= CPlanArea::control.LayerList.size()) *k = 0;
     return true;
   }
   return false;
@@ -205,6 +203,7 @@ bool CEntityEditor::handleSwitchView(const SDL_Point* m) {
 }
 
 bool CEntityEditor::handleSwitchPlace(const SDL_Point* m) {
+  if (*planview) return false;
   using namespace entityEngine::switches::place;
 
   bool* flags[] = {

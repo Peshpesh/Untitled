@@ -324,11 +324,6 @@ void CFileIO::loadData() {
       newName.clear();
       return;
     }
-    if (!CEntity::OnLoad(newName.c_str())) {
-      pushInform(I_FAIL_ENTITY);
-      newName.clear();
-      return;
-    }
     if (!CScenery::OnLoad(newName.c_str())) {
       // problem loading 2.5D elements
       pushInform(I_FAIL_SCENERY);
@@ -341,6 +336,17 @@ void CFileIO::loadData() {
       newName.clear();
       return;
     }
+    if (!CPlanScnEdit::control.OnLoad(newName.c_str())) {
+      // problem loading the area's scenery
+      newName.clear();
+      return;
+    }
+  }
+
+  if (!CEntity::OnLoad(newName.c_str())) {
+    pushInform(I_FAIL_ENTITY);
+    newName.clear();
+    return;
   }
 
   CAnchorScenery::Control.planview = CStage::control.planview;
@@ -361,10 +367,6 @@ void CFileIO::saveData() {
       pushInform(I_FAIL_SAVE);
       return;
     }
-    if (!CEntity::OnSave(newName.c_str())) {
-      pushInform(I_FAIL_SAVE);
-      return;
-    }
     if (!CScenery::OnSave(newName.c_str())) {
       pushInform(I_FAIL_SAVE);
       return;
@@ -374,6 +376,15 @@ void CFileIO::saveData() {
       pushInform(I_FAIL_SAVE);
       return;
     }
+    if (!CPlanScnEdit::control.OnSave(newName.c_str())) {
+      pushInform(I_FAIL_SAVE);
+      return;
+    }
+  }
+
+  if (!CEntity::OnSave(newName.c_str())) {
+    pushInform(I_FAIL_SAVE);
+    return;
   }
 
   // prevName = newName;
