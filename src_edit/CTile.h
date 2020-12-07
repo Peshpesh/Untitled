@@ -14,6 +14,7 @@ enum { // bitwise flags for tile placement in the map editor
   ENABLE_FG      = 0x00000002,    // Place foreground tiles
   ENABLE_TYPE    = 0x00000004,    // Place tile types
   ENABLE_COLL    = 0x00000008,    // Place collision types
+  ENABLE_BARRIER = 0x00000010,    // place barrier types (planview mode only)
 };
 
 enum { // collision types (platform mode only)
@@ -41,6 +42,28 @@ enum { // collision types (platform mode only)
   SOLID_HALF_BH,        // bottom-half of tile is solid
 };
 
+enum { // bitwise flags for tile barriers/fences (planview mode only)
+  BAR_NONE = 0,
+
+  /*    TOTAL BARRIERS   */
+  BAR_L     = 0x00000001, // Block all movement across left side
+  BAR_R     = 0x00000002, // Block all movement across right side
+  BAR_U     = 0x00000004, // Block all movement across up side
+  BAR_D     = 0x00000008, // Block all movement across down side
+
+  /*  OUTGOING BARRIERS  */
+  BAR_OUT_L = 0x00000010, // Block outgoing movement across left side
+  BAR_OUT_R = 0x00000020, // Block outgoing movement across right side
+  BAR_OUT_U = 0x00000040, // Block outgoing movement across up side
+  BAR_OUT_D = 0x00000080, // Block outgoing movement across down side
+
+  /*  INCOMING BARRIERS  */
+  BAR_IN_L  = 0x00000100, // Block incoming movement across left side
+  BAR_IN_R  = 0x00000200, // Block incoming movement across right side
+  BAR_IN_U  = 0x00000400, // Block incoming movement across up side
+  BAR_IN_D  = 0x00000800, // Block incoming movement across down side
+};
+
 struct CTile {
   short    bg_ID;      // Background tile (ID) drawn
   short    fg_ID;      // Foreground tile (ID) drawn
@@ -53,7 +76,8 @@ struct CPlanTile {
   short    ID;         // ID for the tile drawn
   short    type;       // Tile characteristics
   bool     solid;      // in planview mode, a tile is either solid or not solid
-  CPlanTile(): ID(-1), type(TILE_TYPE_NORMAL), solid(false) {};
+  int      barrier;    // in planview mode, tiles can have barriers on any side
+  CPlanTile(): ID(-1), type(TILE_TYPE_NORMAL), solid(false), barrier(BAR_NONE) {};
 };
 
 #endif

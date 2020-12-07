@@ -422,6 +422,21 @@ bool CPlanEditor::handleTypeOpts(const SDL_Point& m) {
   return false;
 }
 
+// LEFT TODO
+// bool CPlanEditor::handleBarrierOpts(const SDL_Point& m) {
+//   using namespace pvmEditor;
+//   using namespace barrierOpts;
+//
+//   for (int i = 0; i < nOpts; i++) {
+//     if (SDL_PointInRect(&m, &buttons[i])) {
+//       // placeflag ^= opts[i]; // toggle flag (on -> off, off -> on)
+//       workTile.barrier ^=
+//       return true;
+//     }
+//   }
+//
+// }
+
 bool CPlanEditor::handleOpacOpts(const SDL_Point& m) {
   using namespace pvmEditor;
   using namespace opacOpts;

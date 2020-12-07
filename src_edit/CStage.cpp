@@ -2,6 +2,16 @@
 
 CStage CStage::control;
 
+namespace ui {
+  const short w = 152;
+  const short h = 7;
+  const SDL_Rect y_coord_box = CAsset::getRect(0, WHEIGHT - h, w, h);
+  const SDL_Rect x_coord_box = CAsset::getRect(0, WHEIGHT - (h * 2), w, h);
+  const SDL_Point* coord_box_col = &palette::silver;
+  const SDL_Color* coord_txt_col = &rgb::black;
+  const SDL_Color* coord_neg_col = &rgb::red;
+}
+
 CStage::CStage() {
   planview = false;
   name = "new";
@@ -59,8 +69,32 @@ void CStage::OnLoop() {
 }
 
 void CStage::OnRender(const SDL_Point& m) {
-  if (!planview) OnRenderPlatform(m);
-  else OnRenderPlanview(m);
+  using namespace ui;
+
+  int X  = -99;
+  int Y  = -99;
+  short Z  = -99;
+  int tX = -99;
+  int tY = -99;
+
+  if (!planview) {
+    OnRenderPlatform(m);
+  } else {
+    OnRenderPlanview(m);
+
+    // get current map coordinates for reporting
+    CPlanArea::control.getCoords(m.x, m.y, k, X, Y, Z);
+    CPlanArea::control.getTileCoords(m.x, m.y, k, tX, tY, Z);
+  }
+
+  CAsset::drawBoxFill(&x_coord_box, coord_box_col);
+  CAsset::drawBoxFill(&y_coord_box, coord_box_col);
+
+  std::string x_info = "X: " + CUtil::intToStr(X) + " - TX: " + CUtil::intToStr(tX);
+  std::string y_info = "Y: " + CUtil::intToStr(Y) + " - TY: " + CUtil::intToStr(tY);
+
+  Font::NewCenterWrite(FONT_MINI, x_info.c_str(), &x_coord_box, (X < 0) ? coord_neg_col : coord_txt_col);
+  Font::NewCenterWrite(FONT_MINI, y_info.c_str(), &y_coord_box, (Y < 0) ? coord_neg_col : coord_txt_col);
 }
 
 void CStage::OnRenderPlatform(const SDL_Point& m) {

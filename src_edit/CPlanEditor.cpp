@@ -4,8 +4,8 @@ CPlanEditor CPlanEditor::control;
 
 CPlanEditor::CPlanEditor() {
   workTile.ID = 0;
-  visflag = pvm_visflags::MAP | pvm_visflags::FILL;
-  placeflag = ENABLE_BG | ENABLE_TYPE | ENABLE_COLL;
+  visflag     = pvm_visflags::MAP | pvm_visflags::FILL;
+  placeflag   = ENABLE_BG | ENABLE_TYPE | ENABLE_COLL;
   k = 0;
   sel_k = 0;
   sel_z = 0;

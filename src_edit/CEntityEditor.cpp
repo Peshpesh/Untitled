@@ -50,6 +50,8 @@ void CEntityEditor::getPosDisplace(int& dx, int& dy, const SDL_Point* m, const S
     SDL_Point map_m = CCamera::CameraControl.GetCamRelPoint(*m);
     dx += (x_placeCell * TILE_SIZE / 2) - (x_placeCell + 1 == numpos_x) - (map_m.x % TILE_SIZE);
     dy += (y_placeCell * TILE_SIZE / 2) - (y_placeCell + 1 == numpos_y) - (map_m.y % TILE_SIZE);
+    if (map_m.x < 0) dx -= TILE_SIZE;
+    if (map_m.y < 0) dy -= TILE_SIZE;
   }
   dx += -(((x_placeCell * dstR.w) / 2) - (x_placeCell + 1 == numpos_x));
   dy += -(((y_placeCell * dstR.h) / 2) - (y_placeCell + 1 == numpos_y));

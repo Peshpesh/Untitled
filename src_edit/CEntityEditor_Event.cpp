@@ -50,23 +50,30 @@ bool CEntityEditor::handleAddEntity(const SDL_Point* m) {
   SDL_Rect srcR = CEntityData::getEntityDims(group_ID, entity_ID);
   SDL_Rect hitR = CEntityData::getHitboxDims(group_ID, entity_ID);
 
-  int X = (*planview || place_hitbox) ? m->x - hitR.x : m->x;
-  int Y = (*planview || place_hitbox) ? m->y - hitR.y : m->y;
-
-  getPosDisplace(X, Y, m, (*planview || place_hitbox) ? hitR : srcR);
   if (!*planview) {
-    const SDL_Point dstP = {X, Y};
-    CEntity newEntity(group_ID, entity_ID, &dstP);
-    CEntity::entityList.push_back(newEntity);
-  } else {
-    short Z = CPlanArea::control.getZ(*k);
+    int X = (*planview || place_hitbox) ? m->x - hitR.x : m->x;
+    int Y = (*planview || place_hitbox) ? m->y - hitR.y : m->y;
+    getPosDisplace(X, Y, m, place_hitbox ? hitR : srcR);
 
     // correct for camera offset
     X += CCamera::CameraControl.GetX();
     Y += CCamera::CameraControl.GetY();
 
+    const SDL_Point dstP = {X, Y};
+    CEntity newEntity(group_ID, entity_ID, &dstP);
+    CEntity::entityList.push_back(newEntity);
+  } else {
+    int X = m->x - hitR.x;
+    int Y = m->y - hitR.y;
+    short Z = CPlanArea::control.getZ(*k);
+    getPosDisplace(X, Y, m, hitR);
+
     // correct for depth
     Y += Z * TILE_SIZE;
+
+    // correct for camera offset
+    X += CCamera::CameraControl.GetX();
+    Y += CCamera::CameraControl.GetY();
 
     CPlanEntity newEntity(group_ID, entity_ID, X, Y, Z);
 

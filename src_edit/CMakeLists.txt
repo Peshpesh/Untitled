@@ -86,7 +86,6 @@ ${SRCDIR}/CSound.cpp
 ${SRCDIR}/CStage.cpp
 ${SRCDIR}/CSurface.cpp
 ${SRCDIR}/CTerminate.cpp
-${SRCDIR}/CTile.cpp
 ${SRCDIR}/CTileset.cpp
 ${SRCDIR}/CUtil.cpp
 )

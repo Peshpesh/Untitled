@@ -50,7 +50,11 @@ public:
   SDL_Point GetWinRelPoint(const double& rel_x, const double& rel_y);
   SDL_Point GetWinRelPoint(const int& rel_x, const int& rel_y);
   SDL_Point GetCamRelPoint(const SDL_Point& winPos);
+  SDL_Point GetCamRelPoint(const int& win_x, const int& win_y);
   void MakeWinRel(int& X, int& Y);
+  void MakeCamRel(int& X, int& Y);
+  int GetCamRelX(const int& X);
+  int GetCamRelY(const int& Y);
 
 private:
   void enforceLims();

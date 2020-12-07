@@ -20,7 +20,8 @@ CEntity::CEntity(int group, int entity, const SDL_Point* m) {
   entity_ID = entity;
   srcR      = CEntityData::getEntityDims(group, entity);
   hitR      = CEntityData::getHitboxDims(group, entity);
-  dstP      = CCamera::CameraControl.GetCamRelPoint(*m);
+  // dstP      = CCamera::CameraControl.GetCamRelPoint(*m);
+  dstP      = *m;
   coll      = false;
 }
 

@@ -201,9 +201,27 @@ SDL_Point CCamera::GetCamRelPoint(const SDL_Point& winPos) {
   return retval;
 }
 
+SDL_Point CCamera::GetCamRelPoint(const int& win_x, const int& win_y) {
+  SDL_Point retval = {win_x + GetX(), win_y + GetY()};
+  return retval;
+}
+
 void CCamera::MakeWinRel(int& X, int& Y) {
   X -= GetX();
   Y -= GetY();
+}
+
+void CCamera::MakeCamRel(int& X, int& Y) {
+  X += GetX();
+  Y += GetY();
+}
+
+int CCamera::GetCamRelX(const int& X) {
+  return X + GetX();
+}
+
+int CCamera::GetCamRelY(const int& Y) {
+  return Y + GetY();
 }
 
 SDL_Point CCamera::ConvertToRel(const SDL_Point& t_pos, const double& Z) {

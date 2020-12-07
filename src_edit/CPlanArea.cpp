@@ -60,6 +60,8 @@ void CPlanArea::GetDims(int& mW, int& mH)  {
   mH = AreaHeight;
 }
 
+
+
 // CPlanMap* CPlanArea::GetMap(int X, int Y, int k) {
 //   // Note that X and Y .
 //
@@ -107,6 +109,18 @@ bool CPlanArea::doesZexist(const int& z) {
     if (z == LayerList[i].Z) return true;
   }
   return false;
+}
+
+void CPlanArea::getCoords(const int& mX, const int& mY, const int& k, int& X, int& Y, short& Z) {
+  X = CCamera::CameraControl.GetCamRelX(mX);
+  Z = getZ(k);
+  Y = CCamera::CameraControl.GetCamRelY(mY) + (Z * TILE_SIZE);
+}
+
+void CPlanArea::getTileCoords(const int& mX, const int& mY, const int& k, int& X, int& Y, short& Z) {
+  getCoords(mX, mY, k, X, Y, Z);
+  X -= (X % TILE_SIZE) + (X < 0) * TILE_SIZE;
+  Y -= (Y % TILE_SIZE) + (Y < 0) * TILE_SIZE;
 }
 
 void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity) {

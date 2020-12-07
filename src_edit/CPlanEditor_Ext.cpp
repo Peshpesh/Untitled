@@ -59,7 +59,7 @@ namespace pvmEditor {
   }
   namespace patternOpts {
     const short w = 80;
-    const short h = 24;
+    const short h = 16;
     const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
     const short y = 96;
     const SDL_Rect button = CAsset::getRect(x, y, w, h);
@@ -72,7 +72,7 @@ namespace pvmEditor {
     const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
     const short h = 32;
     const short spac = 4;
-    const short add_y = 128;
+    const short add_y = 120;
     const short del_y = add_y + h + spac;
     const SDL_Rect add_button = CAsset::getRect(x, add_y, w, h);
     const SDL_Rect del_button = CAsset::getRect(x, del_y, w, h);
@@ -177,64 +177,67 @@ namespace pvmEditor {
     }
   }
   namespace visOpts {
-    const short nOpts = 4;    // number of visible-module options
+    const short nOpts = 5;    // number of visible-module options
     const short opts[] = {
       pvm_visflags::MAP,
       pvm_visflags::SOLID,
       pvm_visflags::TYPE,
+      pvm_visflags::BARRIER,
       pvm_visflags::FILL
     };
-    const short w = 64;      // visible-module width
-    const short h = 80;
-    const short opt_h = h / (nOpts + 1);
-    // const short x = 20;
-    // const short y = WHEIGHT + ((EHEIGHT - WHEIGHT) - h) / 2;
+    const short w = 80;      // visible-module width
+    const short h = 32;
+    const short opt_w = w / nOpts;
+    const short opt_h = h / 2;
     const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
-    const short y = 200;
+    const short y = 238;
     const SDL_Rect title_r = CAsset::getRect(x, y, w, opt_h);
     const SDL_Rect buttons[] = {
-      CAsset::getRect(x, y + opt_h, w, opt_h),
-      CAsset::getRect(x, y + opt_h * 2, w, opt_h),
-      CAsset::getRect(x, y + opt_h * 3, w, opt_h),
-      CAsset::getRect(x, y + opt_h * 4, w, opt_h)
+      CAsset::getRect(x,             y + opt_h, opt_w, opt_h),
+      CAsset::getRect(x + opt_w,     y + opt_h, opt_w, opt_h),
+      CAsset::getRect(x + opt_w * 2, y + opt_h, opt_w, opt_h),
+      CAsset::getRect(x + opt_w * 3, y + opt_h, opt_w, opt_h),
+      CAsset::getRect(x + opt_w * 4, y + opt_h, opt_w, opt_h)
     };
     const SDL_Color* title_fcol = &rgb::black;
     const char* const title = "Visibility";
     const char* const labels[] = {
-      "Tile", "Solid", "Type", "Fill"
+      // "Tile", "Solid", "Type", "Fill"
+      "M", "S", "T", "B", "G"
     };
   }
   namespace placeOpts {
-    const short nOpts = 3;    // number of placement-module options
+    const short nOpts = 4;    // number of placement-module options
     const short opts[] = {
       ENABLE_BG,
       ENABLE_COLL,
-      ENABLE_TYPE
+      ENABLE_TYPE,
+      ENABLE_BARRIER
     };
     const short w = 64;
-    const short h = 64;
-    const short opt_h = h / (nOpts + 1);
-    // const short x = 100;
-    // const short y = WHEIGHT + ((EHEIGHT - WHEIGHT) - h) / 2;
+    const short h = 32;
+    const short opt_w = w / nOpts;
+    const short opt_h = h / 2;
     const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
-    const short y = 290;
+    const short y = 272;
     const SDL_Rect title_r = CAsset::getRect(x, y, w, opt_h);
     const SDL_Rect buttons[] = {
-      CAsset::getRect(x, y + opt_h, w, opt_h),
-      CAsset::getRect(x, y + opt_h * 2, w, opt_h),
-      CAsset::getRect(x, y + opt_h * 3, w, opt_h)
+      CAsset::getRect(x,             y + opt_h, opt_w, opt_h),
+      CAsset::getRect(x + opt_w,     y + opt_h, opt_w, opt_h),
+      CAsset::getRect(x + opt_w * 2, y + opt_h, opt_w, opt_h),
+      CAsset::getRect(x + opt_w * 3, y + opt_h, opt_w, opt_h)
     };
     const SDL_Color* title_fcol = &rgb::black;
     const char* const title = "Placement";
     const char* const labels[] = {
-      "Tile", "Solid", "Type"
+      "M", "S", "T", "B"
     };
   }
   namespace solidOpts {
     const short w = 64;
     const short h = 16;
     const short x = WWIDTH + ((EWIDTH - WWIDTH - w) / 2);
-    const short y = WHEIGHT - 20 - h;
+    const short y = 194;
     const SDL_Rect button = CAsset::getRect(x, y, w, h);
     const char* const labels[] = {
       "Solid Off", "Solid On"
@@ -245,7 +248,7 @@ namespace pvmEditor {
     const short cols = 4;     // N of icons in a row (N of columns)
     const short spac = 2;     // spacing between icons
     const short x = WWIDTH + ((EWIDTH - WWIDTH - (type_sz * cols) - (spac * (cols - 1))) / 2);
-    const short y = WHEIGHT - 100;
+    const short y = 214;
     const SDL_Point pos = CAsset::getPos(x, y);
     const SDL_Point* hl_col = &palette::red;
   }
