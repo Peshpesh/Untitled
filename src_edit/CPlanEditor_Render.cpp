@@ -13,10 +13,11 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
   if (!drawPatternOpts(interr ? NULL : &m)) return false;
   if (!drawLayerOpts(interr ? NULL : &m))   return false;
 
-  if (!drawVisOpts())   return false;
-  if (!drawPlaceOpts()) return false;
-  if (!drawSolidOpts()) return false;
-  if (!drawTypeOpts())  return false;
+  if (!drawVisOpts())     return false;
+  if (!drawPlaceOpts())   return false;
+  if (!drawSolidOpts())   return false;
+  if (!drawTypeOpts())    return false;
+  if (!drawBarrierOpts()) return false;
 
   if (!drawOpacOpts(interr ? NULL : &m))  return false;
   if (!drawLayerList(interr ? NULL : &m)) return false;
@@ -367,6 +368,62 @@ bool CPlanEditor::drawTypeOpts() {
     }
   }
   CTileset::TSControl.refreshTypeAlpha();
+  return true;
+}
+
+bool CPlanEditor::drawBarrierOpts() {
+  using namespace pvmEditor;
+  using namespace barrierOpts;
+
+  /* draw title */
+  Font::NewCenterWrite(title, &r_title, btn_fcol);
+
+  /* draw labels */
+  for (int i = 0; i < num_labels; i++) {
+    Font::NewCenterWrite(labels[i], &r_labels[i], btn_fcol);
+  }
+
+  /* draw buttons with states */
+  bool active = workTile.barrier & (BAR_L | BAR_OUT_L | BAR_IN_L);
+  short opt   = 0;
+  if (!CAsset::drawStrBox(&left_opt,  stroke_sz, active ? on_col : off_col)) return false;
+  if (active) {
+    if (workTile.barrier & BAR_L)          opt = 1;
+    else if (workTile.barrier & BAR_OUT_L) opt = 2;
+    else /*.............................*/ opt = 3;
+  }
+  Font::NewCenterWrite(states[opt], &left_opt, btn_fcol);
+
+  active = workTile.barrier & (BAR_R | BAR_OUT_R | BAR_IN_R);
+  opt    = 0;
+  if (!CAsset::drawStrBox(&right_opt, stroke_sz, active ? on_col : off_col)) return false;
+  if (active) {
+    if (workTile.barrier & BAR_R)          opt = 1;
+    else if (workTile.barrier & BAR_OUT_R) opt = 2;
+    else /*.............................*/ opt = 3;
+  }
+  Font::NewCenterWrite(states[opt], &right_opt, btn_fcol);
+
+  active = workTile.barrier & (BAR_U | BAR_OUT_U | BAR_IN_U);
+  opt    = 0;
+  if (!CAsset::drawStrBox(&up_opt,    stroke_sz, active ? on_col : off_col)) return false;
+  if (active) {
+    if (workTile.barrier & BAR_U)          opt = 1;
+    else if (workTile.barrier & BAR_OUT_U) opt = 2;
+    else /*.............................*/ opt = 3;
+  }
+  Font::NewCenterWrite(states[opt], &up_opt, btn_fcol);
+
+  active = workTile.barrier & (BAR_D | BAR_OUT_D | BAR_IN_D);
+  opt    = 0;
+  if (!CAsset::drawStrBox(&down_opt,  stroke_sz, active ? on_col : off_col)) return false;
+  if (active) {
+    if (workTile.barrier & BAR_D)          opt = 1;
+    else if (workTile.barrier & BAR_OUT_D) opt = 2;
+    else /*.............................*/ opt = 3;
+  }
+  Font::NewCenterWrite(states[opt], &down_opt, btn_fcol);
+
   return true;
 }
 

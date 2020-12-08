@@ -53,6 +53,7 @@ void CPlanEditor::OnLButtonDown(int mX, int mY) {
         if (handleLayerOpts(m))   return;
         if (handleSolidOpts(m))   return;
         if (handleTypeOpts(m))    return;
+        if (handleBarrierOpts(m)) return;
         if (handlePlaceOpts(m))   return;
         if (handleVisOpts(m))     return;
         if (handleOpacOpts(m))    return;
@@ -422,20 +423,72 @@ bool CPlanEditor::handleTypeOpts(const SDL_Point& m) {
   return false;
 }
 
-// LEFT TODO
-// bool CPlanEditor::handleBarrierOpts(const SDL_Point& m) {
-//   using namespace pvmEditor;
-//   using namespace barrierOpts;
-//
-//   for (int i = 0; i < nOpts; i++) {
-//     if (SDL_PointInRect(&m, &buttons[i])) {
-//       // placeflag ^= opts[i]; // toggle flag (on -> off, off -> on)
-//       workTile.barrier ^=
-//       return true;
-//     }
-//   }
-//
-// }
+bool CPlanEditor::handleBarrierOpts(const SDL_Point& m) {
+  using namespace pvmEditor;
+  using namespace barrierOpts;
+
+  if (SDL_PointInRect(&m, &left_opt)) {
+    if (workTile.barrier & BAR_L) {
+      workTile.barrier ^= BAR_L;
+      workTile.barrier |= BAR_OUT_L;
+    } else if (workTile.barrier & BAR_OUT_L) {
+      workTile.barrier ^= BAR_OUT_L;
+      workTile.barrier |= BAR_IN_L;
+    } else if (workTile.barrier & BAR_IN_L) {
+      workTile.barrier ^= BAR_IN_L;
+    } else {
+      workTile.barrier |= BAR_L;
+    }
+    return true;
+  }
+
+  if (SDL_PointInRect(&m, &right_opt)) {
+    if (workTile.barrier & BAR_R) {
+      workTile.barrier ^= BAR_R;
+      workTile.barrier |= BAR_OUT_R;
+    } else if (workTile.barrier & BAR_OUT_R) {
+      workTile.barrier ^= BAR_OUT_R;
+      workTile.barrier |= BAR_IN_R;
+    } else if (workTile.barrier & BAR_IN_R) {
+      workTile.barrier ^= BAR_IN_R;
+    } else {
+      workTile.barrier |= BAR_R;
+    }
+    return true;
+  }
+
+  if (SDL_PointInRect(&m, &up_opt)) {
+    if (workTile.barrier & BAR_U) {
+      workTile.barrier ^= BAR_U;
+      workTile.barrier |= BAR_OUT_U;
+    } else if (workTile.barrier & BAR_OUT_U) {
+      workTile.barrier ^= BAR_OUT_U;
+      workTile.barrier |= BAR_IN_U;
+    } else if (workTile.barrier & BAR_IN_U) {
+      workTile.barrier ^= BAR_IN_U;
+    } else {
+      workTile.barrier |= BAR_U;
+    }
+    return true;
+  }
+
+  if (SDL_PointInRect(&m, &down_opt)) {
+    if (workTile.barrier & BAR_D) {
+      workTile.barrier ^= BAR_D;
+      workTile.barrier |= BAR_OUT_D;
+    } else if (workTile.barrier & BAR_OUT_D) {
+      workTile.barrier ^= BAR_OUT_D;
+      workTile.barrier |= BAR_IN_D;
+    } else if (workTile.barrier & BAR_IN_D) {
+      workTile.barrier ^= BAR_IN_D;
+    } else {
+      workTile.barrier |= BAR_D;
+    }
+    return true;
+  }
+
+  return false;
+}
 
 bool CPlanEditor::handleOpacOpts(const SDL_Point& m) {
   using namespace pvmEditor;

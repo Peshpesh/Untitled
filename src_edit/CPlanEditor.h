@@ -90,6 +90,7 @@ private:
   bool handlePlaceOpts(const SDL_Point& m);
   bool handleSolidOpts(const SDL_Point& m);
   bool handleTypeOpts(const SDL_Point& m);
+  bool handleBarrierOpts(const SDL_Point& m);
   bool handleOpacOpts(const SDL_Point& m);
   bool handleLayerList(const SDL_Point& m);
 
@@ -127,6 +128,7 @@ private:
   bool drawPlaceOpts();
   bool drawSolidOpts();
   bool drawTypeOpts();
+  bool drawBarrierOpts();
   bool drawOpacOpts(const SDL_Point* m);
   bool drawLayerList(const SDL_Point* m);
 
@@ -282,6 +284,18 @@ namespace pvmEditor {
     // extern const short y;
     extern const SDL_Point pos;
     extern const SDL_Point* hl_col;
+  }
+  namespace barrierOpts {
+    extern const SDL_Rect r_title;
+    extern const SDL_Rect r_labels[];
+    extern const SDL_Rect left_opt;
+    extern const SDL_Rect right_opt;
+    extern const SDL_Rect up_opt;
+    extern const SDL_Rect down_opt;
+    extern const char* const title;
+    extern const char* const labels[];
+    extern const char* const states[];
+    extern const short num_labels;
   }
   namespace opacOpts {
     extern const short nMeters;

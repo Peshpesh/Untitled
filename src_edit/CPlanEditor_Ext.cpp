@@ -252,6 +252,32 @@ namespace pvmEditor {
     const SDL_Point pos = CAsset::getPos(x, y);
     const SDL_Point* hl_col = &palette::red;
   }
+  namespace barrierOpts {
+    const short num_labels = 4;
+
+    const short opt_h = 16;
+    const short w = 64;
+    const short x = WWIDTH + (EWIDTH - WWIDTH - w) / 2;
+    const short y = 312;
+    const SDL_Rect r_title = CAsset::getRect(x, y, w, opt_h);
+    const SDL_Rect r_labels[] = {
+      CAsset::getRect(x, y + opt_h,     w / 2, opt_h),
+      CAsset::getRect(x, y + opt_h * 2, w / 2, opt_h),
+      CAsset::getRect(x, y + opt_h * 3, w / 2, opt_h),
+      CAsset::getRect(x, y + opt_h * 4, w / 2, opt_h)
+    };
+    const SDL_Rect left_opt  = CAsset::getRect(x + (w / 2), y + opt_h,     w / 2, opt_h);
+    const SDL_Rect right_opt = CAsset::getRect(x + (w / 2), y + opt_h * 2, w / 2, opt_h);
+    const SDL_Rect up_opt    = CAsset::getRect(x + (w / 2), y + opt_h * 3, w / 2, opt_h);
+    const SDL_Rect down_opt  = CAsset::getRect(x + (w / 2), y + opt_h * 4, w / 2, opt_h);
+    const char* const title = "Barriers";
+    const char* const labels[] = {
+      "L", "R", "U", "D"
+    };
+    const char* const states[] = {
+      "OFF", "ALL", "OUT", "IN"
+    };
+  }
   namespace opacOpts {
     const short nMeters = 3;
     const short meter_x = 20;
