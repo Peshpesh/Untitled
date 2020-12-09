@@ -176,10 +176,11 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
     int X = ((ID % AreaWidth) * MapW) + CamX;
     int Y = ((ID / AreaWidth) * MapH) + CamY - Yoffset;
 
-    if (visflag & pvm_visflags::FILL)   LayerList[k].MapList[ID].OnRenderFill(X, Y);
-    if (visflag & pvm_visflags::MAP)    LayerList[k].MapList[ID].OnRender(X, Y);
-    if (visflag & pvm_visflags::SOLID)  LayerList[k].MapList[ID].OnRenderSolid(X, Y);
-    if (visflag & pvm_visflags::TYPE)   LayerList[k].MapList[ID].OnRenderType(X, Y);
+    if (visflag & pvm_visflags::FILL)    LayerList[k].MapList[ID].OnRenderFill(X, Y);
+    if (visflag & pvm_visflags::MAP)     LayerList[k].MapList[ID].OnRender(X, Y);
+    if (visflag & pvm_visflags::SOLID)   LayerList[k].MapList[ID].OnRenderSolid(X, Y);
+    if (visflag & pvm_visflags::TYPE)    LayerList[k].MapList[ID].OnRenderType(X, Y);
+    if (visflag & pvm_visflags::BARRIER) LayerList[k].MapList[ID].OnRenderBarrier(X, Y);
   }
 }
 

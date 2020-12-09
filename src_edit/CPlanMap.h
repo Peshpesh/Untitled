@@ -27,6 +27,7 @@ public:
   void OnRender(int MapX, int MapY);
   void OnRenderType(int MapX, int MapY);
   void OnRenderSolid(int MapX, int MapY);
+  void OnRenderBarrier(int MapX, int MapY);
 
   void changeTile(const int& X, const int& Y, const CPlanTile& tile, const int& useTiles);
   bool isEmpty();

@@ -100,15 +100,17 @@ CTileset::CTileset() {
   active_ID = -1;
   select_ID = Tileset_ID::TS_DEFAULT;
   succ = false;
-  tileset = grid_tileset = type_tileset = coll_tileset = NULL;
+  tileset = grid_tileset = type_tileset = coll_tileset = barr_tileset = NULL;
   ts_w = ts_h = 0;
   grid_w = grid_h = 0;
   type_w = type_h = 0;
   coll_w = coll_h = 0;
+  barr_w = barr_h = 0;
   tile_alpha = MAX_RGBA;
   type_alpha = 215;
   coll_alpha = 55;
   grid_alpha = MAX_RGBA * 0.33;
+  barr_alpha = MAX_RGBA;
 }
 
 bool CTileset::OnInit() {
@@ -134,6 +136,13 @@ bool CTileset::OnInit() {
 
   SDL_SetTextureAlphaMod(coll_tileset, coll_alpha);
   CAsset::queryTileDims(coll_tileset, coll_w, coll_h);
+
+  if ((barr_tileset = CSurface::OnLoad("../res_edit/barriers.png")) == NULL) {
+    return false;
+  }
+
+  SDL_SetTextureAlphaMod(barr_tileset, barr_alpha);
+  CAsset::queryTileDims(barr_tileset, barr_w, barr_h);
 
   return changeTileset();
 }
@@ -273,6 +282,24 @@ short CTileset::drawType(const short& tiletype, const int& X, const int& Y) {
   }
 
   return retval;
+}
+
+bool CTileset::drawBarrier(const int& bars, const int& X, const int& Y) {
+  if (bars == BAR_NONE) return true;
+
+  // cycle through all bit flags 0x...001 = 1, 0x...002 = 2, 0x...04 = 4, etc.
+  int ID = 0;
+  for (int i = BAR_L; i <= BAR_IN_D; i *= 2) {
+    if (bars & i) {
+      int barr_x = (ID % barr_w) * TILE_SIZE;
+      int barr_y = (ID / barr_w) * TILE_SIZE;
+      if (!CSurface::OnDraw(barr_tileset, X, Y, barr_x, barr_y, TILE_SIZE, TILE_SIZE)) {
+        return false;
+      }
+    }
+    ID++;
+  }
+  return true;
 }
 
 SDL_Rect CTileset::getTileSrcR(const int& ID) {

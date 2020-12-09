@@ -138,11 +138,29 @@ void CPlanMap::OnRenderSolid(int MapX, int MapY) {
   }
 }
 
+void CPlanMap::OnRenderBarrier(int MapX, int MapY) {
+  if (CTileset::TSControl.barr_tileset == NULL) return;
+
+  // Render tile barriers
+  int ID = 0;
+  for (int Y = 0; Y < MAP_HEIGHT; Y++) {
+    for (int X = 0; X < MAP_WIDTH; X++) {
+      if (TileList[ID].barrier) {
+        int tX = MapX + (X * TILE_SIZE);
+        int tY = MapY + (Y * TILE_SIZE);
+        if (!CTileset::TSControl.drawBarrier(TileList[ID].barrier, tX, tY)) return;
+      }
+      ID++;
+    }
+  }
+}
+
 void CPlanMap::changeTile(const int& X, const int& Y, const CPlanTile& tile, const int& useTiles) {
   int ID = (X / TILE_SIZE) + (Y / TILE_SIZE) * MAP_WIDTH;
-  if (useTiles & ENABLE_BG)    TileList[ID].ID     = tile.ID;
-  if (useTiles & ENABLE_TYPE)  TileList[ID].type   = tile.type;
-  if (useTiles & ENABLE_COLL)  TileList[ID].solid  = tile.solid;
+  if (useTiles & ENABLE_BG)      TileList[ID].ID      = tile.ID;
+  if (useTiles & ENABLE_TYPE)    TileList[ID].type    = tile.type;
+  if (useTiles & ENABLE_COLL)    TileList[ID].solid   = tile.solid;
+  if (useTiles & ENABLE_BARRIER) TileList[ID].barrier = tile.barrier;
 }
 
 bool CPlanMap::isEmpty() {
