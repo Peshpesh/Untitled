@@ -23,6 +23,7 @@ void CStage::OnInit() {
   CEntityEditor::Control.k = &k;
   CEntity::planview = &planview;
   CDraft::control.OnLoad("newyrai");
+  CDraft::control.OnInit();
 }
 
 void CStage::OnEvent(SDL_Event* Event) {

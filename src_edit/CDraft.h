@@ -14,6 +14,8 @@ class CDraft {
   CDraft();
 
   SDL_Texture* img;
+  SDL_Texture* mask; // test masking
+  SDL_Texture* appl; // test masking
   SDL_Rect srcR;
 
   short alpha;
@@ -23,6 +25,8 @@ class CDraft {
 
 public:
   static CDraft control;
+
+  void OnInit();
 
   void OnLoad(const std::string& name);
 

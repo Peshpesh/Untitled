@@ -144,3 +144,38 @@ bool CSurface::OnDraw(SDL_Texture* Surf_Src, const SDL_Rect* srcrect, const SDL_
   SDL_RenderCopy(Win_Renderer, Surf_Src, srcrect, &DestR);
   return true;
 }
+
+SDL_Texture* CSurface::CreateTargetTexture(const int& W, const int& H) {
+  SDL_Texture* Surf_Src = NULL;
+  SDL_RendererInfo info;
+
+  SDL_GetRendererInfo(Win_Renderer, &info);
+  int renderer_has_target_texture_support = info.flags & SDL_RENDERER_TARGETTEXTURE;
+
+  if (!renderer_has_target_texture_support) {
+    // SDL_Delay(5000);
+  }
+
+  /* Creation of the target texture. */
+  Surf_Src = SDL_CreateTexture(Win_Renderer,
+                               SDL_PIXELFORMAT_ARGB8888,
+                               SDL_TEXTUREACCESS_TARGET,
+                               W, H);
+
+  /* Blend mode defaults to NONE, but we want it to blend it with the blue background */
+  // SDL_SetTextureBlendMode(Surf_Src, SDL_BLENDMODE_BLEND);
+  return Surf_Src;
+}
+
+void CSurface::SetTargetTexture(SDL_Texture* Surf_Src) {
+  /* Direct the draw commands to the target texture. */
+  SDL_SetRenderTarget(Win_Renderer, Surf_Src);
+
+  /* It's always a good idea to clear the whole thing first. */
+  SDL_SetRenderDrawColor(Win_Renderer, 0, 0, 0, 0);
+  Clear();
+}
+
+void CSurface::FreeTargetTexture() {
+  SDL_SetRenderTarget(Win_Renderer, NULL);
+}
