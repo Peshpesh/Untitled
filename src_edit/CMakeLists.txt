@@ -32,6 +32,7 @@ ${SRCDIR}/CCamera.cpp
 ${SRCDIR}/CChangeEntity.cpp
 ${SRCDIR}/CChangeScenery.cpp
 ${SRCDIR}/CChangeTile.cpp
+${SRCDIR}/CDraft.cpp
 ${SRCDIR}/CEditMap.cpp
 ${SRCDIR}/CEditMap_Event.cpp
 ${SRCDIR}/CEditMap_Ext.cpp
@@ -101,6 +102,7 @@ ${SRCDIR}/CCamera.h
 ${SRCDIR}/CChangeEntity.h
 ${SRCDIR}/CChangeScenery.h
 ${SRCDIR}/CChangeTile.h
+${SRCDIR}/CDraft.h
 ${SRCDIR}/CEditMap.h
 ${SRCDIR}/CEntity.h
 ${SRCDIR}/CEntityData.h

@@ -13,6 +13,7 @@
 #include "COptions.h"
 #include "CModule.h"
 #include "CEvent.h"
+#include "CDraft.h"
 #include <string>
 
 class CStage {

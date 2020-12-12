@@ -22,6 +22,7 @@ void CStage::OnInit() {
   CEntityEditor::Control.planview = &planview;
   CEntityEditor::Control.k = &k;
   CEntity::planview = &planview;
+  CDraft::control.OnLoad("newyrai");
 }
 
 void CStage::OnEvent(SDL_Event* Event) {
@@ -281,6 +282,8 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
   }
 
   CPlanScnEdit::control.resetOpacity();
+
+  CDraft::control.OnRender();
 
   switch (CModule::control.active_mod) {
     case MODIFY_MAP:      CPlanEditor::control.OnRender(m);    break;
