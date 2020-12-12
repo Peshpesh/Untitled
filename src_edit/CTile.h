@@ -43,7 +43,7 @@ enum { // collision types (platform mode only)
 };
 
 enum { // bitwise flags for tile barriers/fences (planview mode only)
-  BAR_NONE = 0,
+  BAR_NONE  = 0,
 
   /*    TOTAL BARRIERS   */
   BAR_L     = 0x00000001, // Block all movement across left side

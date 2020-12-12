@@ -563,6 +563,21 @@ void CPlanEditor::extendMap_R() {
 
 void CPlanEditor::extendMap_L() {
   CPlanArea::control.expandLeft();
+
+  for (int i = 0; i < CEntity::entList_back.size(); i++) {
+    CEntity::entList_back[i].X += MAP_WIDTH * TILE_SIZE;
+  }
+  for (int i = 0; i < CEntity::entList_front.size(); i++) {
+    CEntity::entList_front[i].X += MAP_WIDTH * TILE_SIZE;
+  }
+
+  for (int i = 0; i < CPlanScnEdit::scnList_back.size(); i++) {
+    CPlanScnEdit::scnList_back[i].X += MAP_WIDTH * TILE_SIZE;
+  }
+  for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+    CPlanScnEdit::scnList_front[i].X += MAP_WIDTH * TILE_SIZE;
+  }
+
   // Keep camera focused on same spot (relative to the area prior to expansion)
   CCamera::CameraControl.OnMove(MAP_WIDTH * TILE_SIZE, 0);
 }
@@ -573,6 +588,25 @@ void CPlanEditor::extendMap_D() {
 
 void CPlanEditor::extendMap_U() {
   CPlanArea::control.expandUp();
+
+  for (int i = 0; i < CEntity::entList_back.size(); i++) {
+    CEntity::entList_back[i].Y_base += MAP_HEIGHT * TILE_SIZE;
+    CEntity::entList_back[i].Y      += MAP_HEIGHT * TILE_SIZE;
+  }
+  for (int i = 0; i < CEntity::entList_front.size(); i++) {
+    CEntity::entList_front[i].Y_base += MAP_HEIGHT * TILE_SIZE;
+    CEntity::entList_front[i].Y      += MAP_HEIGHT * TILE_SIZE;
+  }
+
+  for (int i = 0; i < CPlanScnEdit::scnList_back.size(); i++) {
+    CPlanScnEdit::scnList_back[i].Y_base += MAP_HEIGHT * TILE_SIZE;
+    CPlanScnEdit::scnList_back[i].Y      += MAP_HEIGHT * TILE_SIZE;
+  }
+  for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+    CPlanScnEdit::scnList_front[i].Y_base += MAP_HEIGHT * TILE_SIZE;
+    CPlanScnEdit::scnList_front[i].Y      += MAP_HEIGHT * TILE_SIZE;
+  }
+
   // Keep camera focused on same spot
   CCamera::CameraControl.OnMove(0, MAP_HEIGHT * TILE_SIZE);
 }
@@ -583,6 +617,21 @@ void CPlanEditor::removeMap_R() {
 
 void CPlanEditor::removeMap_L() {
   if (CPlanArea::control.reduceLeft()) {
+
+    for (int i = 0; i < CEntity::entList_back.size(); i++) {
+      CEntity::entList_back[i].X -= MAP_WIDTH * TILE_SIZE;
+    }
+    for (int i = 0; i < CEntity::entList_front.size(); i++) {
+      CEntity::entList_front[i].X -= MAP_WIDTH * TILE_SIZE;
+    }
+
+    for (int i = 0; i < CPlanScnEdit::scnList_back.size(); i++) {
+      CPlanScnEdit::scnList_back[i].X -= MAP_WIDTH * TILE_SIZE;
+    }
+    for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+      CPlanScnEdit::scnList_front[i].X -= MAP_WIDTH * TILE_SIZE;
+    }
+
     CCamera::CameraControl.OnMove(-MAP_WIDTH * TILE_SIZE, 0);
   }
 }
@@ -593,6 +642,25 @@ void CPlanEditor::removeMap_D() {
 
 void CPlanEditor::removeMap_U() {
   if (CPlanArea::control.reduceUp()) {
+
+    for (int i = 0; i < CEntity::entList_back.size(); i++) {
+      CEntity::entList_back[i].Y_base -= MAP_HEIGHT * TILE_SIZE;
+      CEntity::entList_back[i].Y      -= MAP_HEIGHT * TILE_SIZE;
+    }
+    for (int i = 0; i < CEntity::entList_front.size(); i++) {
+      CEntity::entList_front[i].Y_base -= MAP_HEIGHT * TILE_SIZE;
+      CEntity::entList_front[i].Y      -= MAP_HEIGHT * TILE_SIZE;
+    }
+
+    for (int i = 0; i < CPlanScnEdit::scnList_back.size(); i++) {
+      CPlanScnEdit::scnList_back[i].Y_base -= MAP_HEIGHT * TILE_SIZE;
+      CPlanScnEdit::scnList_back[i].Y      -= MAP_HEIGHT * TILE_SIZE;
+    }
+    for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+      CPlanScnEdit::scnList_front[i].Y_base -= MAP_HEIGHT * TILE_SIZE;
+      CPlanScnEdit::scnList_front[i].Y      -= MAP_HEIGHT * TILE_SIZE;
+    }
+
     CCamera::CameraControl.OnMove(0, -MAP_HEIGHT * TILE_SIZE);
   }
 }
