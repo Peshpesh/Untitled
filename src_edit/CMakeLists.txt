@@ -54,6 +54,7 @@ ${SRCDIR}/CInform.cpp
 ${SRCDIR}/CInterrupt.cpp
 ${SRCDIR}/CLayerEditor.cpp
 ${SRCDIR}/CMap.cpp
+${SRCDIR}/CMask.cpp
 ${SRCDIR}/CMeter.cpp
 ${SRCDIR}/CModel.cpp
 ${SRCDIR}/CModule.cpp
@@ -117,6 +118,7 @@ ${SRCDIR}/CInform.h
 ${SRCDIR}/CInterrupt.h
 ${SRCDIR}/CLayerEditor.h
 ${SRCDIR}/CMap.h
+${SRCDIR}/CMask.h
 ${SRCDIR}/CMeter.h
 ${SRCDIR}/CModel.h
 ${SRCDIR}/CModule.h

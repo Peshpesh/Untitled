@@ -167,13 +167,22 @@ SDL_Texture* CSurface::CreateTargetTexture(const int& W, const int& H) {
   return Surf_Src;
 }
 
-void CSurface::SetTargetTexture(SDL_Texture* Surf_Src) {
+void CSurface::SetTargetTexture(SDL_Texture* Surf_Src, bool clear) {
+  if (Surf_Src == NULL) return;
   /* Direct the draw commands to the target texture. */
   SDL_SetRenderTarget(Win_Renderer, Surf_Src);
+  if (clear) {
+    SDL_SetRenderDrawColor(Win_Renderer, 0, 0, 0, 0);
+    Clear();
+  }
+}
 
-  /* It's always a good idea to clear the whole thing first. */
+void CSurface::ClearTargetTexture(SDL_Texture* Surf_Src) {
+  if (Surf_Src == NULL) return;
+  SDL_SetRenderTarget(Win_Renderer, Surf_Src);
   SDL_SetRenderDrawColor(Win_Renderer, 0, 0, 0, 0);
   Clear();
+  SDL_SetRenderTarget(Win_Renderer, NULL);
 }
 
 void CSurface::FreeTargetTexture() {

@@ -9,14 +9,14 @@
 #include "CCamera.h"
 #include "CSurface.h"
 #include "CInform.h"
+#include "CMask.h"
 
 class CDraft {
   CDraft();
 
   SDL_Texture* img;
-  SDL_Texture* mask; // test masking
-  SDL_Texture* appl; // test masking
   SDL_Rect srcR;
+  CMask test;
 
   short alpha;
   int X;
