@@ -16,7 +16,8 @@ class CDraft {
 
   SDL_Texture* img;
   SDL_Rect srcR;
-  CMask test;
+  // CMask test;
+  // SDL_Texture* test_compound;
 
   short alpha;
   int X;

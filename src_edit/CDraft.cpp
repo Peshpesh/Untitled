@@ -18,26 +18,29 @@ CDraft::CDraft() {
 }
 
 void CDraft::OnInit() {
-  std::string fname;
-  fname = "mask";
-  fname = basepath + fname + ext;
-
-  SDL_Texture* mask;
-  if ((mask = CSurface::OnLoad(fname.c_str())) == NULL) {
-    CInform::InfoControl.pushInform("Could not load mask image.");
-    return;
-  }
-
-  test.setMask(mask);
-
-  // int W, H;
-  // SDL_QueryTexture(mask, NULL, NULL, &W, &H);
-
-  /* Creation of the target texture. */
-  // appl = CSurface::CreateTargetTexture(W, H);
-  // SDL_SetTextureBlendMode(appl, SDL_BLENDMODE_BLEND);
-  // SDL_SetTextureBlendMode(mask, SDL_BLENDMODE_NONE);
-  // SDL_SetTextureBlendMode(img, SDL_BLENDMODE_ADD);
+  // std::string fname;
+  // fname = "mask";
+  // fname = basepath + fname + ext;
+  //
+  // SDL_Texture* mask;
+  // if ((mask = CSurface::OnLoad(fname.c_str())) == NULL) {
+  //   CInform::InfoControl.pushInform("Could not load mask image.");
+  //   return;
+  // }
+  //
+  // fname = "applmask";
+  // fname = basepath + fname + ext;
+  //
+  // SDL_Texture* appl;
+  // if ((appl = CSurface::OnLoad(fname.c_str())) == NULL) {
+  //   CInform::InfoControl.pushInform("Could not load appl image.");
+  //   return;
+  // }
+  //
+  // if ((test_compound = CMask::createCompound(appl, mask)) == NULL) {
+  //   CInform::InfoControl.pushInform("Could not load compound image.");
+  //   return;
+  // }
 }
 
 void CDraft::OnLoad(const std::string& name) {
@@ -61,14 +64,21 @@ void CDraft::OnRender() {
 
   SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(X, Y);
   dstWinPos.y -= (Z * TILE_SIZE);
+  CSurface::OnDraw(img, &srcR, &dstWinPos);
 
-  test.resetCanvas();
-  for (int i = 0; i < 1; i++) {
-    test.drawToCanvas(img, srcR, dstWinPos);
-  }
-  test.render(0, 0);
-
-  // CSurface::OnDraw(img, &srcR, &dstWinPos);
+  // // test.clearCanvas();
+  // // test.beginDrawing();
+  // SDL_Point origin;
+  // origin.x = 0;
+  // origin.y = 0;
+  //
+  // SDL_Rect testR = srcR;
+  // testR.x = 0; //dstWinPos.x;
+  // testR.y = 0; //dstWinPos.y;
+  // testR.w = 200;
+  // testR.h = 200;
+  //
+  // CSurface::OnDraw(test_compound, &testR, &origin);
 }
 
 void CDraft::OnCleanup() {
