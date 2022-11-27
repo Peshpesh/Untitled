@@ -63,7 +63,9 @@ namespace Decorations {
       GOLD_HOUSE_W, GOLD_HOUSE_E,                                                // 76-77
       SHOP, SHOP_AWNING, SCHOOL, INN, BLU_PCKET_S, BLU_PCKET_N,                  // 78-83
       HOSPITAL_SHOE, HOSPITAL_ENTRY,                                             // 84-85
-      // ----------------------------------------------------------------------- // N = 86
+      // -----LATE ADDITIONS/MISC----------------------------------------------- // N = 86
+      HEDGE_NW_CURVE, HEDGE_NE_CURVE, HEDGE_SW_CURVE, HEDGE_SE_CURVE,            // 86-89
+      // ----------------------------------------------------------------------- // N = 90
     };
   };
 };

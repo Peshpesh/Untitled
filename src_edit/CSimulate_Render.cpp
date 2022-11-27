@@ -3,8 +3,12 @@
 bool CSimulate::OnRender(const SDL_Point* m) {
   bool intrpt = !(CInterrupt::isNone());
 
+  CAsset::drawAppFrame();
+
   if (!drawDebug()) return false;
   if (!drawMain(intrpt ? NULL : m)) return false;
+  if (!drawDraftInfo(intrpt ? NULL : m)) return false;
+  if (!drawDraftOpts(intrpt ? NULL : m)) return false;
   if (!drawCamera(intrpt ? NULL : m)) return false;
   if (!drawManualCam(intrpt ? NULL : m)) return false;
   if (!drawFollowCam(intrpt ? NULL : m)) return false;
@@ -45,6 +49,51 @@ bool CSimulate::drawMain(const SDL_Point* m) {
   Font::NewCenterWrite(stop_lab, &r_stop);
 
   return true;
+}
+
+bool CSimulate::drawDraftInfo(const SDL_Point* m) {
+  using namespace simulator::draft;
+
+  bool retval = true;
+  Font::NewCenterWrite(draftname_title, &p_draftname_title);
+  if (CDraft::control.name.empty()) {
+    retval *= CAsset::drawStrBox(&r_draftname, bsiz, in_col);
+  } else {
+    retval *= CAsset::drawStrBox(&r_draftname, bsiz, on_col);
+    Font::NewCenterWrite(CDraft::control.name.c_str(), &r_draftname);
+  }
+
+  Font::NewCenterWrite(newdraft_title, &p_newdraft_title);
+  if (edit_draft) {
+    retval *= CAsset::drawStrBox(&r_newdraft, bsiz, on_col);
+  } else {
+    retval *= CAsset::drawStrBox(&r_newdraft, bsiz,
+                                (m && SDL_PointInRect(m, &r_newdraft)) ? off_hcol : off_col);
+  }
+  if (!draft_s.empty()) Font::NewCenterWrite(draft_s.c_str(), &r_newdraft);
+
+  return retval;
+}
+
+bool CSimulate::drawDraftOpts(const SDL_Point* m) {
+  using namespace simulator::draft;
+
+  bool retval = true;
+  Font::NewCenterWrite(opts_title, &p_opts_title);
+  if (CDraft::control.name.empty()) {
+    retval *= CAsset::drawStrBox(&r_clear, bsiz, in_col);
+    retval *= CAsset::drawStrBox(&r_show, bsiz, in_col);
+    retval *= CAsset::drawStrBox(&r_zpos, bsiz, in_col);
+  } else {
+    retval *= CAsset::drawStrBox(&r_clear, bsiz, (m && SDL_PointInRect(m, &r_clear)) ? off_hcol : off_col);
+    retval *= CAsset::drawStrBox(&r_show, bsiz, (m && SDL_PointInRect(m, &r_show)) ? off_hcol : off_col);
+    retval *= CAsset::drawStrBox(&r_zpos, bsiz, (m && SDL_PointInRect(m, &r_zpos)) ? off_hcol : off_col);
+  }
+  Font::NewCenterWrite("Clear", &r_clear);
+  Font::NewCenterWrite(CDraft::control.hidden ? "Show" : "Hide", &r_show);
+  Font::NewCenterWrite(CDraft::control.draw_on_top ? "Put below" : "Put on top", &r_zpos);
+
+  return retval;
 }
 
 bool CSimulate::drawCamera(const SDL_Point* m) {
@@ -88,8 +137,8 @@ bool CSimulate::drawManualCam(const SDL_Point* m) {
 
   std::string x_s = "X " + Font::intToStr(cam_x);
   std::string y_s = "Y " + Font::intToStr(cam_y);
-  Font::NewCenterWrite(edit_x ? edit_sval.c_str() : x_s.c_str(), &r_cam_x);
-  Font::NewCenterWrite(edit_y ? edit_sval.c_str() : y_s.c_str(), &r_cam_y);
+  Font::NewCenterWrite(edit_x ? xywh_sval.c_str() : x_s.c_str(), &r_cam_x);
+  Font::NewCenterWrite(edit_y ? xywh_sval.c_str() : y_s.c_str(), &r_cam_y);
   return retval;
 }
 
@@ -113,8 +162,8 @@ bool CSimulate::drawFollowCam(const SDL_Point* m) {
 
   std::string w_s = "W " + Font::intToStr(follow_w);
   std::string h_s = "H " + Font::intToStr(follow_h);
-  Font::NewCenterWrite(edit_w ? edit_sval.c_str() : w_s.c_str(), &r_follow_w);
-  Font::NewCenterWrite(edit_h ? edit_sval.c_str() : h_s.c_str(), &r_follow_h);
+  Font::NewCenterWrite(edit_w ? xywh_sval.c_str() : w_s.c_str(), &r_follow_w);
+  Font::NewCenterWrite(edit_h ? xywh_sval.c_str() : h_s.c_str(), &r_follow_h);
 
   return retval;
 }

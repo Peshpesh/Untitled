@@ -25,7 +25,13 @@ class CDraft {
   short Z;
 
 public:
+
   static CDraft control;
+
+  bool hidden;
+  bool draw_on_top;
+
+  std::string name;
 
   void OnInit();
 
@@ -34,5 +40,6 @@ public:
   void OnRender();
 
   void OnCleanup();
+
 };
 #endif

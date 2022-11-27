@@ -170,9 +170,12 @@ namespace pvmScenery {
     extern const SDL_Color* back_col;
     extern const SDL_Color* front_col;
     extern const SDL_Color* select_col;
+    // extern const SDL_Color* inact_col;
+
     extern const SDL_Point* back_col_pt;
     extern const SDL_Point* front_col_pt;
     extern const SDL_Point* select_col_pt;
+    // extern const SDL_Point* inact_col_pt;
   }
   namespace buttons {
     namespace chScenery

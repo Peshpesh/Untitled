@@ -27,7 +27,7 @@ namespace Decorations {
     };
   };
   namespace newyrai {
-    const short num = 86;
+    const short num = 90;
     const char* const name[] = {
       "HEDGE", "HDG S EDGE A", "HDG S EDGE B", "HDG N EDGE A", "HDG N EDGE B",  // 0-4
       "HDG W EDGE A", "HDG W EDGE B", "HDG E EDGE A", "HDG E EDGE B",           // 5-8
@@ -53,6 +53,7 @@ namespace Decorations {
       "GOLD HOUSE W", "GOLD HOUSE E",                                           // 76-77
       "SHOP", "SHOP AWNING", "SCHOOL", "INN", "BLU PCKET S", "BLU PCKET N",     // 78-83
       "HOSPTAL SHOE", "HOSPTAL ENTY",                                           // 84-85
+      "HDG NW CURVE", "HDG NE CURVE", "HDG SW CURVE", "HDG SE CURVE",           // 86-89
     };
   };
 };
@@ -314,6 +315,10 @@ void CSceneryData::getDims_newyrai(const int& decor, SDL_Rect& srcRect) {
     case BLU_PCKET_N:       srcRect = CAsset::getRect(1056, 1312, 320, 32); break;
     case HOSPITAL_SHOE:     srcRect = CAsset::getRect(448, 1696, 800, 704); break;
     case HOSPITAL_ENTRY:    srcRect = CAsset::getRect(0, 1696, 256, 432); break;
+    case HEDGE_NW_CURVE:    srcRect = CAsset::getRect(288, 480, 64, 64); break;
+    case HEDGE_NE_CURVE:    srcRect = CAsset::getRect(352, 480, 64, 64); break;
+    case HEDGE_SW_CURVE:    srcRect = CAsset::getRect(288, 544, 64, 64); break;
+    case HEDGE_SE_CURVE:    srcRect = CAsset::getRect(352, 544, 64, 64); break;
     default:  break;
   }
 }
@@ -429,6 +434,10 @@ void CSceneryData::getYBase_newyrai(const int& decor, int& Y_base) {
     case BLU_PCKET_N:       break;
     case HOSPITAL_SHOE:     offset = -32; break;
     case HOSPITAL_ENTRY:    offset = -48; break;
+    case HEDGE_NW_CURVE:    break;
+    case HEDGE_NE_CURVE:    break;
+    case HEDGE_SW_CURVE:    break;
+    case HEDGE_SE_CURVE:    break;
     default:  break;
   }
   Y_base += offset;
@@ -526,6 +535,10 @@ bool CSceneryData::hasShadow_newyrai(const int& decor) {
     case BLU_PCKET_N:       has_shadow = true; break;
     case HOSPITAL_SHOE:     has_shadow = true; break;
     case HOSPITAL_ENTRY:    break;
+    case HEDGE_NW_CURVE:    break;
+    case HEDGE_NE_CURVE:    break;
+    case HEDGE_SW_CURVE:    break;
+    case HEDGE_SE_CURVE:    break;
     default:  break;
   }
   return has_shadow;

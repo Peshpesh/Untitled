@@ -10,11 +10,13 @@ CDraft CDraft::control;
 CDraft::CDraft() {
   img = NULL;
   srcR.x = srcR.y = srcR.w = srcR.h = 0;
-  alpha = MAX_RGBA * 0.4;
+  alpha = MAX_RGBA * 0.5;
 
-  X = 0;
-  Y = 0;
-  Z = 0;
+  X = Y = Z = 0;
+  name = "";
+
+  hidden = false;
+  draw_on_top = true;
 }
 
 void CDraft::OnInit() {
@@ -47,20 +49,28 @@ void CDraft::OnLoad(const std::string& name) {
   if (name == "") {
     CInform::InfoControl.pushInform("No draft filename given.");
     return;
+  } else if (name == this->name) {
+    CInform::InfoControl.pushInform("Draft file is already loaded.");
+    return;
   }
 
   std::string fname = basepath + name + ext;
 
-  if ((img = CSurface::OnLoad(fname.c_str())) == NULL) {
+  SDL_Texture* tmptxt = NULL;
+  if ((tmptxt = CSurface::OnLoad(fname.c_str())) == NULL) {
     CInform::InfoControl.pushInform("Could not load draft image.");
-    return;
+  } else {
+    CInform::InfoControl.pushInform("Requested draft loaded.");
+    SDL_DestroyTexture(img);
+    img = tmptxt;
+    this->name = name;
+    SDL_SetTextureAlphaMod(img, alpha);
+    SDL_QueryTexture(img, NULL, NULL, &srcR.w, &srcR.h);
   }
-
-  SDL_QueryTexture(img, NULL, NULL, &srcR.w, &srcR.h);
 }
 
 void CDraft::OnRender() {
-  if (img == NULL) return;
+  if (img == NULL || hidden) return;
 
   SDL_Point dstWinPos = CCamera::CameraControl.GetWinRelPoint(X, Y);
   dstWinPos.y -= (Z * TILE_SIZE);
@@ -82,5 +92,6 @@ void CDraft::OnRender() {
 }
 
 void CDraft::OnCleanup() {
+  name.clear();
   SDL_DestroyTexture(img);
 }

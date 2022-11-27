@@ -22,9 +22,6 @@ void CStage::OnInit() {
   CEntityEditor::Control.planview = &planview;
   CEntityEditor::Control.k = &k;
   CEntity::planview = &planview;
-  CDraft::control.OnLoad("newyrai");
-  // CDraft::control.OnLoad("applmask");
-  // CDraft::control.OnInit();
 }
 
 void CStage::OnEvent(SDL_Event* Event) {
@@ -48,7 +45,7 @@ void CStage::OnEventPlanview(SDL_Event* Event) {
     case MODIFY_MAP: CPlanEditor::control.OnEvent(Event); break;
     case MODIFY_NPC: CEntityEditor::Control.OnEvent(Event); break;
     case MODIFY_SCENE: CPlanScnEdit::control.OnEvent(Event); break;
-    // case MODIFY_SIM: CPlanSimulate::control.OnEvent(Event); break;
+    case MODIFY_SIM: CSimulate::control.OnEvent(Event); break;
     // case MODIFY_OPTIONS: CPlanOptions::control.OnEvent(Event); break;
     default: break;
   }
@@ -101,6 +98,9 @@ void CStage::OnRender(const SDL_Point& m) {
 }
 
 void CStage::OnRenderPlatform(const SDL_Point& m) {
+
+  if (!CDraft::control.draw_on_top) CDraft::control.OnRender();
+
   // Draw working background
   CArea::control.OnRenderFill(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
 
@@ -124,6 +124,8 @@ void CStage::OnRenderPlatform(const SDL_Point& m) {
   // Draw camera limits
   COptions::control.drawCameraLims();
 
+  if (CDraft::control.draw_on_top) CDraft::control.OnRender();
+
   switch (CModule::control.active_mod) {
     case MODIFY_MAP: {
       CEditMap::MapEditor.OnRender(&m);
@@ -144,7 +146,6 @@ void CStage::OnRenderPlatform(const SDL_Point& m) {
       break;
     }
     case MODIFY_SIM: {
-      CAsset::drawAppFrame();
       CSimulate::control.OnRender(&m);
       break;
     }
@@ -178,6 +179,8 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
   int max_ent = CEntity::entList_back.size();
   bool drawScn = CPlanScnEdit::control.showScenery * (bool)(max_scn);
   bool drawEnt = CEntityEditor::Control.showEntity * (bool)(max_ent);
+
+  if (!CDraft::control.draw_on_top) CDraft::control.OnRender();
 
   while (z <= max_z) {
     opac = CPlanEditor::control.getDefaultOpacityAtZ(z);
@@ -285,7 +288,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
 
   CPlanScnEdit::control.resetOpacity();
 
-  CDraft::control.OnRender();
+  if (CDraft::control.draw_on_top) CDraft::control.OnRender();
 
   switch (CModule::control.active_mod) {
     case MODIFY_MAP:      CPlanEditor::control.OnRender(m);    break;
@@ -296,7 +299,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
       break;
     }
     case MODIFY_SCENE:    CPlanScnEdit::control.OnRender(m);   break;
-    // case MODIFY_SIM: CPlanSimulate::control.OnRender(m); break;
+    case MODIFY_SIM:      CSimulate::control.OnRender(&m); break;
     // case MODIFY_OPTIONS: CPlanOptions::control.OnRender(m); break;
     default:              break;
   }

@@ -9,6 +9,7 @@
 #include "CFont.h"
 #include "CUtil.h"
 #include "CSurface.h"
+#include "CDraft.h"
 
 enum simstate {INACTIVE, PLACE, ACTIVE, SUSPENDED};
 
@@ -34,6 +35,27 @@ namespace simulator {
   extern const SDL_Point* suspend_hcol;
   extern const SDL_Point* stop_col;
   extern const SDL_Point* stop_hcol;
+  namespace draft {
+    extern const SDL_Point p_draftname_title;
+    extern const char* const draftname_title;
+    extern const SDL_Rect r_draftname;
+
+    extern const SDL_Point p_newdraft_title;
+    extern const char* const newdraft_title;
+    extern const SDL_Rect r_newdraft;
+
+    extern const char* const opts_title;
+    extern const SDL_Point p_opts_title;
+    extern const SDL_Rect r_clear;
+    extern const SDL_Rect r_show;
+    extern const SDL_Rect r_zpos;
+
+    extern const short bsiz;
+    extern const SDL_Point* in_col;
+    extern const SDL_Point* off_col;
+    extern const SDL_Point* off_hcol;
+    extern const SDL_Point* on_col;
+  }
   namespace camera {
     enum edit_cam {EDIT_NONE = 0, EDIT_CAM_X, EDIT_CAM_Y, EDIT_FOLLOW_W, EDIT_FOLLOW_H};
     extern const short max_edit_dig;
@@ -87,13 +109,15 @@ public:
   CSimEntity hero;
 
 private:
+  std::string draft_s; // working string for loading draft files
   simstate status;
   short cam_option;
   unsigned int follow_w;
   unsigned int follow_h;
   int cam_x, cam_y;
   short edit_xywh;
-  std::string edit_sval;
+  bool edit_draft;
+  std::string xywh_sval;
   bool did_edit_xywh;
 
 public:
@@ -117,6 +141,8 @@ private:
   bool handleSuspendSim(const SDL_Point* m);
   bool handleStopSim(const SDL_Point* m);
 
+  bool handleDraftEntry(const SDL_Point* m);
+  bool handleDraftOpts(const SDL_Point* m);
   bool handleCameraOption(const SDL_Point* m);
   bool handleManualCam(const SDL_Point* m);
   bool handleFollowCam(const SDL_Point* m);
@@ -127,6 +153,9 @@ private:
   void addToEdit(const char& c);
   void delFromEdit();
   void applyEdit();
+  void addToDraft(const char& c);
+  void delFromDraft();
+  void loadDraft();
 
 public:
   bool OnRender(const SDL_Point* m);
@@ -135,6 +164,8 @@ public:
 private:
   bool drawDebug();
   bool drawMain(const SDL_Point* m);
+  bool drawDraftInfo(const SDL_Point* m);
+  bool drawDraftOpts(const SDL_Point* m);
   bool drawCamera(const SDL_Point* m);
   bool drawManualCam(const SDL_Point* m);
   bool drawFollowCam(const SDL_Point* m);
@@ -146,6 +177,7 @@ public:
   void stopSim();
   void clearxywh();
   void resetxywh();
+  void clearDraftEntry();
 
 private:
   void updateCamera();

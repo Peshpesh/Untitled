@@ -10,8 +10,10 @@ CSimulate::CSimulate() {
   cam_x = 0;
   cam_y = 0;
   edit_xywh = 0;
-  edit_sval = "";
+  xywh_sval = "";
   did_edit_xywh = false;
+  edit_draft = false;
+  draft_s = "";
 }
 
 simstate CSimulate::getStatus() {
@@ -25,11 +27,12 @@ void CSimulate::stopSim() {
   CCamera::CameraControl.FreeTarget();
   status = INACTIVE;
   clearxywh();
+  clearDraftEntry();
 }
 
 void CSimulate::clearxywh() {
   edit_xywh = 0;
-  edit_sval.clear();
+  xywh_sval.clear();
 }
 
 void CSimulate::resetxywh() {
@@ -37,6 +40,11 @@ void CSimulate::resetxywh() {
   CCamera::CameraControl.GetNormalXY(cam_x, cam_y);
   CCamera::CameraControl.GetFollowDims(follow_w, follow_h);
   did_edit_xywh = false;
+}
+
+void CSimulate::clearDraftEntry() {
+  edit_draft = false;
+  draft_s.clear();
 }
 
 void CSimulate::updateCamera() {
@@ -51,5 +59,6 @@ void CSimulate::updateCamera() {
 }
 
 void CSimulate::OnTerminate() {
-  //
+  clearxywh();
+  clearDraftEntry();
 }
