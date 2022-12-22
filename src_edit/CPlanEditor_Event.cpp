@@ -94,6 +94,7 @@ bool CPlanEditor::placePattern(const int& x, const int& y, const bool& flip_x, c
       int ID = col + (row * pattern_w);
 
       if (!placeTile(tX, tY, workPattern[ID])) return false;
+      if (!placeTileAtt(tX, tY, workAttPattern[ID])) return false;
     }
   }
   return true;
@@ -107,10 +108,18 @@ bool CPlanEditor::placeTile(const int& x, const int& y, const CPlanTile& tile) {
   return CPlanArea::control.changeTile(x, y, k, tile, placeflag);
 }
 
+bool CPlanEditor::placeTileAtt(const int& x, const int& y) {
+  return CPlanArea::control.changeTileAttK(x, y, k, workTileAtt, placeflag);
+}
+
+bool CPlanEditor::placeTileAtt(const int& x, const int& y, const CPlanTileAtt& tile) {
+  return CPlanArea::control.changeTileAttK(x, y, k, tile, placeflag);
+}
+
 bool CPlanEditor::handlePlaceTile(const SDL_Point& m) {
   int mX = CCamera::CameraControl.GetX() + m.x;
   int mY = CCamera::CameraControl.GetY() + m.y + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
-  return placeTile(mX, mY);
+  return (placeTile(mX, mY) && placeTileAtt(mX, mY));
 }
 
 bool CPlanEditor::handlePlacePattern(const SDL_Point& m) {
@@ -184,6 +193,7 @@ bool CPlanEditor::handlePlaceDomain(const SDL_Point& m) {
         for (int tX = 0; tX < d.w / TILE_SIZE; tX++) {
           int X = d.x + (tX * TILE_SIZE);
           placeTile(X, Y);
+          placeTileAtt(X, Y);
         }
       }
     }
@@ -318,9 +328,10 @@ bool CPlanEditor::handlePatternOpts(const SDL_Point& m) {
   // Click on Use/Free Pattern button.
   if (workPattern.size()) {
     if (SDL_PointInRect(&m, &button)) {
-      // free pattern
+      // free patterns
       pattern_w = pattern_h = 0;
       workPattern.clear();
+      workAttPattern.clear();
       return true;
     }
   } else if (pDomain_A && pDomain_B && SDL_PointInRect(&m, &button)) {
@@ -334,7 +345,9 @@ bool CPlanEditor::handlePatternOpts(const SDL_Point& m) {
           int mX = box.x + (X * TILE_SIZE);
           int mY = box.y + (Y * TILE_SIZE) + (CPlanArea::control.LayerList[k].Z * TILE_SIZE);
           CPlanTile* tmp = CPlanArea::control.GetTile(mX, mY, k);
+          CPlanTileAtt* tmpatt = CPlanArea::control.GetTileAttK(mX, mY, k);
           workPattern.push_back(*tmp);
+          workAttPattern.push_back(*tmpatt);
         }
       }
       pattern_w = tW;
@@ -397,7 +410,7 @@ bool CPlanEditor::handleSolidOpts(const SDL_Point& m) {
   using namespace solidOpts;
 
   if (SDL_PointInRect(&m, &button)) {
-    workTile.solid = !(workTile.solid);
+    workTileAtt.solid = !(workTileAtt.solid);
     return true;
   }
   return false;
@@ -414,7 +427,7 @@ bool CPlanEditor::handleTypeOpts(const SDL_Point& m) {
       targetR.x = pos.x + ((k % cols) * (type_sz + spac));
       targetR.y = pos.y + ((k / cols) * (type_sz + spac));
       if (SDL_PointInRect(&m, &targetR)) {
-        workTile.type = k;
+        workTileAtt.type = k;
         return true;
       }
       k++;
@@ -428,61 +441,61 @@ bool CPlanEditor::handleBarrierOpts(const SDL_Point& m) {
   using namespace barrierOpts;
 
   if (SDL_PointInRect(&m, &left_opt)) {
-    if (workTile.barrier & BAR_L) {
-      workTile.barrier ^= BAR_L;
-      workTile.barrier |= BAR_OUT_L;
-    } else if (workTile.barrier & BAR_OUT_L) {
-      workTile.barrier ^= BAR_OUT_L;
-      workTile.barrier |= BAR_IN_L;
-    } else if (workTile.barrier & BAR_IN_L) {
-      workTile.barrier ^= BAR_IN_L;
+    if (workTileAtt.barrier & BAR_L) {
+      workTileAtt.barrier ^= BAR_L;
+      workTileAtt.barrier |= BAR_OUT_L;
+    } else if (workTileAtt.barrier & BAR_OUT_L) {
+      workTileAtt.barrier ^= BAR_OUT_L;
+      workTileAtt.barrier |= BAR_IN_L;
+    } else if (workTileAtt.barrier & BAR_IN_L) {
+      workTileAtt.barrier ^= BAR_IN_L;
     } else {
-      workTile.barrier |= BAR_L;
+      workTileAtt.barrier |= BAR_L;
     }
     return true;
   }
 
   if (SDL_PointInRect(&m, &right_opt)) {
-    if (workTile.barrier & BAR_R) {
-      workTile.barrier ^= BAR_R;
-      workTile.barrier |= BAR_OUT_R;
-    } else if (workTile.barrier & BAR_OUT_R) {
-      workTile.barrier ^= BAR_OUT_R;
-      workTile.barrier |= BAR_IN_R;
-    } else if (workTile.barrier & BAR_IN_R) {
-      workTile.barrier ^= BAR_IN_R;
+    if (workTileAtt.barrier & BAR_R) {
+      workTileAtt.barrier ^= BAR_R;
+      workTileAtt.barrier |= BAR_OUT_R;
+    } else if (workTileAtt.barrier & BAR_OUT_R) {
+      workTileAtt.barrier ^= BAR_OUT_R;
+      workTileAtt.barrier |= BAR_IN_R;
+    } else if (workTileAtt.barrier & BAR_IN_R) {
+      workTileAtt.barrier ^= BAR_IN_R;
     } else {
-      workTile.barrier |= BAR_R;
+      workTileAtt.barrier |= BAR_R;
     }
     return true;
   }
 
   if (SDL_PointInRect(&m, &up_opt)) {
-    if (workTile.barrier & BAR_U) {
-      workTile.barrier ^= BAR_U;
-      workTile.barrier |= BAR_OUT_U;
-    } else if (workTile.barrier & BAR_OUT_U) {
-      workTile.barrier ^= BAR_OUT_U;
-      workTile.barrier |= BAR_IN_U;
-    } else if (workTile.barrier & BAR_IN_U) {
-      workTile.barrier ^= BAR_IN_U;
+    if (workTileAtt.barrier & BAR_U) {
+      workTileAtt.barrier ^= BAR_U;
+      workTileAtt.barrier |= BAR_OUT_U;
+    } else if (workTileAtt.barrier & BAR_OUT_U) {
+      workTileAtt.barrier ^= BAR_OUT_U;
+      workTileAtt.barrier |= BAR_IN_U;
+    } else if (workTileAtt.barrier & BAR_IN_U) {
+      workTileAtt.barrier ^= BAR_IN_U;
     } else {
-      workTile.barrier |= BAR_U;
+      workTileAtt.barrier |= BAR_U;
     }
     return true;
   }
 
   if (SDL_PointInRect(&m, &down_opt)) {
-    if (workTile.barrier & BAR_D) {
-      workTile.barrier ^= BAR_D;
-      workTile.barrier |= BAR_OUT_D;
-    } else if (workTile.barrier & BAR_OUT_D) {
-      workTile.barrier ^= BAR_OUT_D;
-      workTile.barrier |= BAR_IN_D;
-    } else if (workTile.barrier & BAR_IN_D) {
-      workTile.barrier ^= BAR_IN_D;
+    if (workTileAtt.barrier & BAR_D) {
+      workTileAtt.barrier ^= BAR_D;
+      workTileAtt.barrier |= BAR_OUT_D;
+    } else if (workTileAtt.barrier & BAR_OUT_D) {
+      workTileAtt.barrier ^= BAR_OUT_D;
+      workTileAtt.barrier |= BAR_IN_D;
+    } else if (workTileAtt.barrier & BAR_IN_D) {
+      workTileAtt.barrier ^= BAR_IN_D;
     } else {
-      workTile.barrier |= BAR_D;
+      workTileAtt.barrier |= BAR_D;
     }
     return true;
   }

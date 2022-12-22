@@ -28,23 +28,26 @@ bool CPlanEditor::OnRender(const SDL_Point& m) {
   return true;
 }
 
-int CPlanEditor::RenderLayerZ(const int& z) {
-  // render all layers at depth z (can be multiple)
+int CPlanEditor::RenderLevelZ(const int& z) {
+  // render all game-visible layers at depth z (can be multiple)
   int i = 0;
   while (i < CPlanArea::control.LayerList.size()) {
-    if (z == CPlanArea::control.LayerList[i].Z) {
-      // these blocks handle map opacity
-      if (i == this->k) {
-        CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
-                                    i, visflag, active_opacity);
-      } else {
-        CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
-                                    i, pvm_visflags::MAP, (i > this->k) ? over_opacity : under_opacity);
-      }
-    } else if (z < CPlanArea::control.LayerList[i].Z) break;
+    // render the layer if it's on the requested z
+    if (z == CPlanArea::control.LayerList[i].Z) RenderLayerK(i);
+    // if the requested z is less than the layer, then there
+    // should be no more layers left in the vector with requested z
+    else if (z < CPlanArea::control.LayerList[i].Z) break;
     i++;
   }
-  CTileset::TSControl.maxTileAlpha();
+
+  // if the active layer (this->k) coincides with this rendered level (z),
+  // then this level is active; we should then render the map/tile attributes
+  // for this level. Otherwise, don't render attributes.
+  if (z == CPlanArea::control.LayerList[k].Z) {
+    CPlanArea::control.OnRenderAtt(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
+                                    z, visflag, active_opacity);
+  }
+
   // if there are still maps above this z to render, return the next z to render.
   // otherwise, return the current z (which is the MAX z) plus 1.
   return (i < CPlanArea::control.LayerList.size()) ? CPlanArea::control.LayerList[i].Z : (z + 1);
@@ -53,28 +56,13 @@ int CPlanEditor::RenderLayerZ(const int& z) {
 void CPlanEditor::RenderLayerK(const int& k) {
   // render layer with index k (only one layer)
   // these blocks handle map opacity
-  if (k == this->k) {
+  if (k == this->k) { // the layer requested is the active layer
     CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
                                 k, visflag, active_opacity);
-  } else {
+  } else if (visflag & pvm_visflags::MAP) { // only render game-visible tiles if necessary
     CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
                                 k, pvm_visflags::MAP, (k > this->k) ? over_opacity : under_opacity);
   }
-  CTileset::TSControl.maxTileAlpha();
-}
-
-void CPlanEditor::RenderMap() {
-  // render the area's layers in order from bottom to top
-  for (int k = 0; k < CPlanArea::control.LayerList.size(); k++) {
-    if (k == this->k) {
-      CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
-                                  k, visflag, active_opacity);
-    } else {
-      CPlanArea::control.OnRender(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY(),
-                                  k, pvm_visflags::MAP, (k > this->k) ? over_opacity : under_opacity);
-    }
-  }
-  CTileset::TSControl.maxTileAlpha();
 }
 
 bool CPlanEditor::drawPlaceDomain(const SDL_Point* m) {
@@ -338,10 +326,10 @@ bool CPlanEditor::drawSolidOpts() {
   using namespace pvmEditor;
   using namespace solidOpts;
 
-  if (!CAsset::drawStrBox(&button, stroke_sz, workTile.solid ? on_col : off_col)) return false;
+  if (!CAsset::drawStrBox(&button, stroke_sz, workTileAtt.solid ? on_col : off_col)) return false;
   // label[false] = label[0] = "Solid Off"
   // label[true]  = label[1] = "Solid On"
-  Font::NewCenterWrite(labels[workTile.solid], &button, btn_fcol);
+  Font::NewCenterWrite(labels[workTileAtt.solid], &button, btn_fcol);
 
   return true;
 }
@@ -361,7 +349,7 @@ bool CPlanEditor::drawTypeOpts() {
       dstR.x = pos.x + ((k % cols) * (type_sz + spac));
       dstR.y = pos.y + ((k / cols) * (type_sz + spac));
       CSurface::OnDraw(CTileset::TSControl.type_tileset, &srcR, &dstR);
-      if (k == workTile.type) {
+      if (k == workTileAtt.type) {
         CAsset::drawBox(&dstR, hl_col);
       }
       k++;
@@ -384,43 +372,43 @@ bool CPlanEditor::drawBarrierOpts() {
   }
 
   /* draw buttons with states */
-  bool active = workTile.barrier & (BAR_L | BAR_OUT_L | BAR_IN_L);
+  bool active = workTileAtt.barrier & (BAR_L | BAR_OUT_L | BAR_IN_L);
   short opt   = 0;
   if (!CAsset::drawStrBox(&left_opt,  stroke_sz, active ? on_col : off_col)) return false;
   if (active) {
-    if (workTile.barrier & BAR_L)          opt = 1;
-    else if (workTile.barrier & BAR_OUT_L) opt = 2;
-    else /*.............................*/ opt = 3;
+    if (workTileAtt.barrier & BAR_L)          opt = 1;
+    else if (workTileAtt.barrier & BAR_OUT_L) opt = 2;
+    else /*................................*/ opt = 3;
   }
   Font::NewCenterWrite(states[opt], &left_opt, btn_fcol);
 
-  active = workTile.barrier & (BAR_R | BAR_OUT_R | BAR_IN_R);
+  active = workTileAtt.barrier & (BAR_R | BAR_OUT_R | BAR_IN_R);
   opt    = 0;
   if (!CAsset::drawStrBox(&right_opt, stroke_sz, active ? on_col : off_col)) return false;
   if (active) {
-    if (workTile.barrier & BAR_R)          opt = 1;
-    else if (workTile.barrier & BAR_OUT_R) opt = 2;
-    else /*.............................*/ opt = 3;
+    if (workTileAtt.barrier & BAR_R)          opt = 1;
+    else if (workTileAtt.barrier & BAR_OUT_R) opt = 2;
+    else /*................................*/ opt = 3;
   }
   Font::NewCenterWrite(states[opt], &right_opt, btn_fcol);
 
-  active = workTile.barrier & (BAR_U | BAR_OUT_U | BAR_IN_U);
+  active = workTileAtt.barrier & (BAR_U | BAR_OUT_U | BAR_IN_U);
   opt    = 0;
   if (!CAsset::drawStrBox(&up_opt,    stroke_sz, active ? on_col : off_col)) return false;
   if (active) {
-    if (workTile.barrier & BAR_U)          opt = 1;
-    else if (workTile.barrier & BAR_OUT_U) opt = 2;
-    else /*.............................*/ opt = 3;
+    if (workTileAtt.barrier & BAR_U)          opt = 1;
+    else if (workTileAtt.barrier & BAR_OUT_U) opt = 2;
+    else /*................................*/ opt = 3;
   }
   Font::NewCenterWrite(states[opt], &up_opt, btn_fcol);
 
-  active = workTile.barrier & (BAR_D | BAR_OUT_D | BAR_IN_D);
+  active = workTileAtt.barrier & (BAR_D | BAR_OUT_D | BAR_IN_D);
   opt    = 0;
   if (!CAsset::drawStrBox(&down_opt,  stroke_sz, active ? on_col : off_col)) return false;
   if (active) {
-    if (workTile.barrier & BAR_D)          opt = 1;
-    else if (workTile.barrier & BAR_OUT_D) opt = 2;
-    else /*.............................*/ opt = 3;
+    if (workTileAtt.barrier & BAR_D)          opt = 1;
+    else if (workTileAtt.barrier & BAR_OUT_D) opt = 2;
+    else /*................................*/ opt = 3;
   }
   Font::NewCenterWrite(states[opt], &down_opt, btn_fcol);
 

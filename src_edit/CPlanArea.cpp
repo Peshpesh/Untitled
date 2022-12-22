@@ -13,15 +13,19 @@ CPlanArea::CPlanArea() {
 
 void CPlanArea::OnInit()  {
   LayerList.clear();
+  LevelAttList.clear();
+
   AreaHeight = AreaWidth = 1;
 
-  CPlanMap tempMap;
-  tempMap.OnLoad();
-
-  CPlanLayer tempLayer;
-  tempLayer.MapList.push_back(tempMap);
-
+  CPlanMap tempMap;     tempMap.OnLoad();
+  CPlanLayer tempLayer; tempLayer.MapList.push_back(tempMap);
   LayerList.push_back(tempLayer);
+
+  CPlanMapAtt tempMapAtt;   tempMapAtt.OnLoad();
+  CPlanLevelAtt tempLevel;  tempLevel.MapAttList.push_back(tempMapAtt);
+  tempLevel.Z = 0;
+  LevelAttList.push_back(tempLevel);
+
 }
 
 void CPlanArea::addLayer(const short& K, const short& Z) {
@@ -60,13 +64,6 @@ void CPlanArea::GetDims(int& mW, int& mH)  {
   mH = AreaHeight;
 }
 
-
-
-// CPlanMap* CPlanArea::GetMap(int X, int Y, int k) {
-//   // Note that X and Y .
-//
-// }
-//
 CPlanTile* CPlanArea::GetTile(const int& X, const int& Y, const int& k) {
   if (X < 0 || Y < 0 || k < 0 \
             || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
@@ -79,34 +76,46 @@ CPlanTile* CPlanArea::GetTile(const int& X, const int& Y, const int& k) {
   return LayerList[k].MapList[ID].GetTile(X % mapWidth, Y % mapHeight);
 }
 
-// CPlanTile* CPlanArea::GetTileCopy(const int& X, const int& Y, const int& k) {
-//   if (X < 0 || Y < 0 || k < 0 \
-//             || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
-//             || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE) \
-//             || k >= LayerList.size()) return false;
-//
-//   int mapWidth = MAP_WIDTH * TILE_SIZE;
-//   int mapHeight = MAP_HEIGHT * TILE_SIZE;
-//   int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
-//   CPlanTile* tmp = LayerList[k].MapList[ID].GetTile(X % mapWidth, Y % mapHeight);
-//   return true;
-// }
+CPlanTileAtt* CPlanArea::GetTileAttZ(const int& X, const int& Y, const int& Z) {
+  if (X < 0 || Y < 0 || Z < 0 \
+            || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
+            || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE)) return NULL;
+
+  int mapWidth = MAP_WIDTH * TILE_SIZE;
+  int mapHeight = MAP_HEIGHT * TILE_SIZE;
+  int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
+
+  // get the level index associated with Z
+  int i = getLevel(Z);
+  return (i < 0) ? NULL : LevelAttList[i].MapAttList[ID].GetTileAtt(X % mapWidth, Y % mapHeight);
+}
+
+CPlanTileAtt* CPlanArea::GetTileAttK(const int& X, const int& Y, const int& k) {
+  return GetTileAttZ(X, Y, getZ(k));
+}
+
+int CPlanArea::getLevel(const int& Z) {
+  for (int i = 0; i < LevelAttList.size(); i++) {
+    if (LevelAttList[i].Z == Z) return i;
+  }
+  return -1;
+}
 
 int CPlanArea::getZ(const int& k) {
-  if (k < 0 || k >= LayerList.size()) return 0;
+  if (k < 0 || k >= LayerList.size()) return -1;
   return LayerList[k].Z;
 }
 
 int CPlanArea::getMaxZ() {
-  if (LayerList.empty()) return 0;
+  if (LevelAttList.empty()) return 0;
 
-  int max_k = LayerList.size() - 1;
-  return LayerList[max_k].Z;
+  int max_idx = LevelAttList.size() - 1;
+  return LevelAttList[max_idx].Z;
 }
 
 bool CPlanArea::doesZexist(const int& z) {
-  for (int i = 0; i < LayerList.size(); i++) {
-    if (z == LayerList[i].Z) return true;
+  for (int i = 0; i < LevelAttList.size(); i++) {
+    if (z == LevelAttList[i].Z) return true;
   }
   return false;
 }
@@ -139,20 +148,15 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
   //        A 20x20 (400 maps) area with 5 layers should require ~5MB of memory;
   //        can't imagine an area requiring too much more than that.
 
-  // if (Z < 0 || Z >= DepthList.size()) {
-  //   CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
-  //   return;
-  // }
-
   if (!visflag || (opacity == 0 && visflag == pvm_visflags::MAP)) return;
   if (k < 0 || k >= LayerList.size()) {
-    CError::handler.ReportErr("CPlanArea::OnRender -> Bad Z-layer request.");
+    CError::handler.ReportErr("CPlanArea::OnRender -> Bad k-layer request.");
     return;
   }
 
   int MapW = MAP_WIDTH * TILE_SIZE;         // in px
   int MapH = MAP_HEIGHT * TILE_SIZE;        // in px
-  // short Yoffset = DepthList[Z] * TILE_SIZE; // in px
+
   short Yoffset = LayerList[k].Z * TILE_SIZE; // in px
 
   // Offset is included to account for "vertical" displacement
@@ -161,7 +165,6 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
   // rendered as if it was placed at Y=-32px, NOT Y=0px.
   int FirstID = -CamX / MapW;
   FirstID += ((-CamY + Yoffset) / MapH) * AreaWidth;
-  // FirstID += Z * AreaWidth * AreaHeight;
 
   int maxMaps = 4;
   int nMaps = AreaWidth * AreaHeight; // n of maps on a layer
@@ -178,11 +181,45 @@ void CPlanArea::OnRender(const int& CamX, const int& CamY, const int& k, const s
 
     if (visflag & pvm_visflags::FILL)    LayerList[k].MapList[ID].OnRenderFill(X, Y);
     if (visflag & pvm_visflags::MAP)     LayerList[k].MapList[ID].OnRender(X, Y);
-    if (visflag & pvm_visflags::SOLID)   LayerList[k].MapList[ID].OnRenderSolid(X, Y);
-    if (visflag & pvm_visflags::TYPE)    LayerList[k].MapList[ID].OnRenderType(X, Y);
-    if (visflag & pvm_visflags::BARRIER) LayerList[k].MapList[ID].OnRenderBarrier(X, Y);
   }
 }
+
+
+void CPlanArea::OnRenderAtt(const int& CamX, const int& CamY, const int& z, const short& visflag, const short& opacity) {
+  if (!visflag) return;
+
+  int L = getLevel(z); // level index
+  if (L < 0) {
+    CError::handler.ReportErr("CPlanArea::OnRenderAtt -> Bad z-level request.");
+    return;
+  }
+
+  int MapW = MAP_WIDTH * TILE_SIZE;   // in px
+  int MapH = MAP_HEIGHT * TILE_SIZE;  // in px
+  int Yoffset = L * TILE_SIZE;      // in px
+
+  int FirstID = -CamX / MapW;
+  FirstID += ((-CamY + Yoffset) / MapH) * AreaWidth;
+
+  int maxMaps = 4;
+  int nMaps = AreaWidth * AreaHeight; // n of maps on a layer
+  int loopMax = (nMaps > maxMaps) ? maxMaps : nMaps;
+
+  CTileset::TSControl.changeTileAlpha(opacity);
+
+  for (int i = 0; i < loopMax; i++) {
+    int ID = FirstID + ((i / 2) * AreaWidth) + (i % 2);
+    if (ID < 0 || ID >= LevelAttList[L].MapAttList.size()) continue;
+
+    int X = ((ID % AreaWidth) * MapW) + CamX;
+    int Y = ((ID / AreaWidth) * MapH) + CamY - Yoffset;
+
+    if (visflag & pvm_visflags::SOLID)   LevelAttList[L].MapAttList[ID].OnRenderSolid(X, Y);
+    if (visflag & pvm_visflags::TYPE)    LevelAttList[L].MapAttList[ID].OnRenderType(X, Y);
+    if (visflag & pvm_visflags::BARRIER) LevelAttList[L].MapAttList[ID].OnRenderBarrier(X, Y);
+  }
+}
+
 
 bool CPlanArea::changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles) {
   if (X < 0 || Y < 0 || k < 0 \
@@ -193,40 +230,95 @@ bool CPlanArea::changeTile(const int& X, const int& Y, const int& k, const CPlan
   int mapWidth = MAP_WIDTH * TILE_SIZE;
   int mapHeight = MAP_HEIGHT * TILE_SIZE;
   int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
+
+  if (ID >= LayerList[k].MapList.size()) {
+    CError::handler.ReportErr("CPlanArea::changeTile -> Map ID out of range.");
+    return false;
+  }
+
   LayerList[k].MapList[ID].changeTile(X % mapWidth, Y % mapHeight, tile, useTiles);
   return true;
 }
 
+bool CPlanArea::changeTileAttZ(const int& X, const int& Y, const int& Z, const CPlanTileAtt& tile, const int& useTiles) {
+  if (X < 0 || Y < 0 || Z < 0 \
+            || X >= (AreaWidth * MAP_WIDTH * TILE_SIZE) \
+            || Y >= (AreaHeight * MAP_HEIGHT * TILE_SIZE)) return false;
+
+  // get the level index associated with Z
+  int i = getLevel(Z);
+  if (i < 0) {
+    CError::handler.ReportErr("CPlanArea::changeTileAttZ -> Failed to find level at Z.");
+    return false;
+  }
+
+  int mapWidth = MAP_WIDTH * TILE_SIZE;
+  int mapHeight = MAP_HEIGHT * TILE_SIZE;
+  int ID = (X / mapWidth) + (Y / mapHeight) * AreaWidth;
+
+  if (ID >= LevelAttList[i].MapAttList.size()) {
+    CError::handler.ReportErr("CPlanArea::changeTileAttZ -> Map ID out of range.");
+    return false;
+  }
+
+  LevelAttList[i].MapAttList[ID].changeTileAtt(X % mapWidth, Y % mapHeight, tile, useTiles);
+  return true;
+}
+
+bool CPlanArea::changeTileAttK(const int& X, const int& Y, const int& k, const CPlanTileAtt& tile, const int& useTiles) {
+  return changeTileAttZ(X, Y, getZ(k), tile, useTiles);
+}
+
+
 
 // In principle, expanding/reducing maps horizontally should be the same as
 // is done for the platforming maps. All that should change is that
-// the expansion occurs across each layer.
+// the expansion occurs across each layer andlevel.
 void CPlanArea::expandRight() {
   // This resize will make the necessary amount of empty maps.
   // When we expand one map in width, we need the number of ROWS (or height)
   // of maps we are currently using. We make that amount of empty maps.
-  // Or, mathematically, 1 (# of new columns) x AreaHeight = # of new maps.
+  // Or, 1 (# of new columns) x AreaHeight = # of new maps.
   int init_mapsize = AreaWidth * AreaHeight;
+
+  // Resize graphics layers.
   for (int k = 0; k < LayerList.size(); k++) {
     LayerList[k].MapList.resize(init_mapsize + AreaHeight);
-
     // Move (copy) our existing maps around, so that their
     // orientation is preserved.
     for (int Y = AreaHeight - 1; Y > 0; Y--) {
       for (int X = AreaWidth - 1; X >= 0; X--) {
-        LayerList[k].MapList[X + Y * (AreaWidth + 1)] = LayerList[k].MapList[X + Y * AreaWidth];
+        int dstID = X + Y * (AreaWidth + 1);
+        int srcID = X + Y * AreaWidth;
+        LayerList[k].MapList[dstID] = LayerList[k].MapList[srcID];
+      }
+    }
+  }
+  // Resize level attributes areas.
+  for (int k = 0; k < LevelAttList.size(); k++) {
+    LevelAttList[k].MapAttList.resize(init_mapsize + AreaHeight);
+    for (int Y = AreaHeight - 1; Y > 0; Y--) {
+      for (int X = AreaWidth - 1; X >= 0; X--) {
+        int dstID = X + Y * (AreaWidth + 1);
+        int srcID = X + Y * AreaWidth;
+        LevelAttList[k].MapAttList[dstID] = LevelAttList[k].MapAttList[srcID];
       }
     }
   }
 
   AreaWidth++;  // We "officially" make our Area's width one map larger
 
-  for (int k = 0; k < LayerList.size(); k++) {
-    // Empty out/refresh our new maps (rightmost column)
-    for (int i = 1; i <= AreaHeight; i++) {
-      CPlanMap tempMap;
-      tempMap.OnLoad();
+  // Empty out/refresh our new maps (rightmost columns)
+  CPlanMap tempMap;
+  CPlanMapAtt tempMapAtt;
+  tempMap.OnLoad();
+  tempMapAtt.OnLoad();
+  for (int i = 1; i <= AreaHeight; i++) {
+    for (int k = 0; k < LayerList.size(); k++) {
       LayerList[k].MapList[i*AreaWidth - 1] = tempMap;
+    }
+    for (int k = 0; k < LevelAttList.size(); k++) {
+      LevelAttList[k].MapAttList[i*AreaWidth - 1] = tempMapAtt;
     }
   }
 }
@@ -235,26 +327,40 @@ void CPlanArea::expandLeft() {
   // This resize will make the necessary amount of empty maps.
   // When we expand one map in width, we need the number of ROWS (or height)
   // of maps we are currently using. We make that amount of empty maps.
-  // Or, mathematically, 1 (# of new columns) x AreaHeight = # of new maps.
+  // Or, 1 (# of new columns) x AreaHeight = # of new maps.
   int init_mapsize = AreaWidth * AreaHeight;
-  for (int k = 0; k < LayerList.size(); k++) LayerList[k].MapList.resize(init_mapsize + AreaHeight);
+  for (int k = 0; k < LayerList.size(); k++)
+      LayerList[k].MapList.resize(init_mapsize + AreaHeight);
+  for (int k = 0; k < LevelAttList.size(); k++)
+      LevelAttList[k].MapAttList.resize(init_mapsize + AreaHeight);
 
   AreaWidth++;
 
-  for (int k = 0; k < LayerList.size(); k++) {
-    // Move (copy) our existing maps around, so that their
-    // orientation is preserved.
-    for (int Y = AreaHeight - 1; Y >= 0; Y--) {
-      for (int X = AreaWidth - 1; X > 0; X--) {
-        int ID = X + Y * AreaWidth;
+  // Move (copy) our existing maps around, so that their
+  // orientation is preserved.
+  for (int Y = AreaHeight - 1; Y >= 0; Y--) {
+    for (int X = AreaWidth - 1; X > 0; X--) {
+      int ID = X + Y * AreaWidth;
+      for (int k = 0; k < LayerList.size(); k++) {
         LayerList[k].MapList[ID] = LayerList[k].MapList[ID - (Y + 1)];
       }
+      for (int k = 0; k < LevelAttList.size(); k++) {
+        LevelAttList[k].MapAttList[ID] = LevelAttList[k].MapAttList[ID - (Y + 1)];
+      }
     }
-    // Empty out/refresh our new maps (leftmost column)
-    for (int i = 0; i < AreaHeight; i++) {
-      CPlanMap tempMap;
-      tempMap.OnLoad();
+  }
+
+  // Empty out/refresh our new maps (leftmost column)
+  CPlanMap tempMap;
+  CPlanMapAtt tempMapAtt;
+  tempMap.OnLoad();
+  tempMapAtt.OnLoad();
+  for (int i = 0; i < AreaHeight; i++) {
+    for (int k = 0; k < LayerList.size(); k++) {
       LayerList[k].MapList[i*AreaWidth] = tempMap;
+    }
+    for (int k = 0; k < LevelAttList.size(); k++) {
+      LevelAttList[k].MapAttList[i*AreaWidth] = tempMapAtt;
     }
   }
 }
@@ -263,25 +369,40 @@ void CPlanArea::expandUp() {
   // This resize will make the necessary amount of empty maps.
   // When we expand one map in height, we need the number of COLUMNS (or width)
   // of maps we are currently using. We make that amount of empty maps.
-  // Or, mathematically, 1 (# of new rows) x AreaWidth = # of new maps.
+  // Or, 1 (# of new rows) x AreaWidth = # of new maps.
   int init_mapsize = AreaWidth * AreaHeight;
-  for (int k = 0; k < LayerList.size(); k++) LayerList[k].MapList.resize(init_mapsize + AreaWidth);
+  for (int k = 0; k < LayerList.size(); k++)
+      LayerList[k].MapList.resize(init_mapsize + AreaWidth);
+  for (int k = 0; k < LevelAttList.size(); k++)
+      LevelAttList[k].MapAttList.resize(init_mapsize + AreaWidth);
+
   AreaHeight++;  // We "officially" make our Area's height one map larger
 
-  for (int k = 0; k < LayerList.size(); k++) {
-    // Move (copy) our existing maps around, so that their
-    // orientation is preserved.
-    for (int Y = AreaHeight - 1; Y > 0; Y--) {
-      for (int X = AreaWidth - 1; X >= 0; X--) {
-        int ID = X + Y * AreaWidth;
+  // Move (copy) our existing maps around, so that their
+  // orientation is preserved.
+  for (int Y = AreaHeight - 1; Y > 0; Y--) {
+    for (int X = AreaWidth - 1; X >= 0; X--) {
+      int ID = X + Y * AreaWidth;
+      for (int k = 0; k < LayerList.size(); k++) {
         LayerList[k].MapList[ID] = LayerList[k].MapList[ID - AreaWidth];
       }
+      for (int k = 0; k < LevelAttList.size(); k++) {
+        LevelAttList[k].MapAttList[ID] = LevelAttList[k].MapAttList[ID - AreaWidth];
+      }
     }
-    // Make our new maps (top row)
-    for (int i = 0; i < AreaWidth; i++) {
-      CPlanMap tempMap;
-      tempMap.OnLoad();
+  }
+
+  // Make our new maps (top row)
+  CPlanMap tempMap;
+  CPlanMapAtt tempMapAtt;
+  tempMap.OnLoad();
+  tempMapAtt.OnLoad();
+  for (int i = 0; i < AreaWidth; i++) {
+    for (int k = 0; k < LayerList.size(); k++) {
       LayerList[k].MapList[i] = tempMap;
+    }
+    for (int k = 0; k < LevelAttList.size(); k++) {
+      LevelAttList[k].MapAttList[i] = tempMapAtt;
     }
   }
 }
@@ -290,21 +411,31 @@ void CPlanArea::expandDown() {
   // This resize will make the necessary amount of empty maps.
   // When we expand one map in height, we need the number of COLUMNS (or width)
   // of maps we are currently using. We make that amount of empty maps.
-  // Or, mathematically, 1 (# of new rows) x AreaWidth = # of new maps.
+  // Or, 1 (# of new rows) x AreaWidth = # of new maps.
   int init_mapsize = AreaWidth * AreaHeight;
-  for (int k = 0; k < LayerList.size(); k++) {
-    LayerList[k].MapList.resize(init_mapsize + AreaWidth);
 
-    // No movement of maps is necessary! :D-\-<
-    // Make our new maps (bottom row)
-    for (int i = 0; i < AreaWidth; i++) {
-      CPlanMap tempMap;
-      tempMap.OnLoad();
-      // tempMap.Tex_Tileset = MapList[0].Tex_Tileset;
+  for (int k = 0; k < LayerList.size(); k++)
+      LayerList[k].MapList.resize(init_mapsize + AreaWidth);
+  for (int k = 0; k < LevelAttList.size(); k++)
+      LevelAttList[k].MapAttList.resize(init_mapsize + AreaWidth);
+
+
+  // No movement of maps is necessary! :D-\-<
+  // Make our new maps (bottom row)
+  CPlanMap tempMap;
+  CPlanMapAtt tempMapAtt;
+  tempMap.OnLoad();
+  tempMapAtt.OnLoad();
+  for (int i = 0; i < AreaWidth; i++) {
+    for (int k = 0; k < LayerList.size(); k++) {
       LayerList[k].MapList[i + AreaHeight * AreaWidth] = tempMap;
     }
+    for (int k = 0; k < LevelAttList.size(); k++) {
+      LevelAttList[k].MapAttList[i + AreaHeight * AreaWidth] = tempMapAtt;
+    }
   }
-  AreaHeight++;  // We "officially" make our Area's height one map larger
+
+  AreaHeight++; // We "officially" make our Area's height one map larger
                 // We waited until after making new maps. Otherwise,
                 // we can just sub in (AreaHeight - 1) into the last
                 // statement in the "for" loop above.
@@ -316,16 +447,28 @@ bool CPlanArea::reduceRight() {
   int mapsize = AreaWidth * AreaHeight;
   AreaWidth--;  // We "officially" make our Area's width one map smaller
 
-  for (int k = 0; k < LayerList.size(); k++) {
-    // Move (copy) our existing maps around, so that their
-    // orientation is preserved.
-    for (int Y = 1; Y < AreaHeight; Y++) {
-      for (int X = 0; X < AreaWidth; X++) {
-        LayerList[k].MapList[X + Y * AreaWidth] = LayerList[k].MapList[X + Y + Y * AreaWidth];
+  // move around the maps to preserve orientation
+  for (int Y = 1; Y < AreaHeight; Y++) {
+    for (int X = 0; X < AreaWidth; X++) {
+      int dstID = X + Y * AreaWidth;
+      int srcID = X + Y + Y * AreaWidth;
+      for (int k = 0; k < LayerList.size(); k++) {
+        LayerList[k].MapList[dstID] = LayerList[k].MapList[srcID];
+      }
+      for (int k = 0; k < LevelAttList.size(); k++) {
+        LevelAttList[k].MapAttList[dstID] = LevelAttList[k].MapAttList[srcID];
       }
     }
+  }
+
+  // size down the vectors...
+  for (int k = 0; k < LayerList.size(); k++) {
     LayerList[k].MapList.resize(mapsize - AreaHeight);
   }
+  for (int k = 0; k < LevelAttList.size(); k++) {
+    LevelAttList[k].MapAttList.resize(mapsize - AreaHeight);
+  }
+
   return true;
 }
 
@@ -334,15 +477,25 @@ bool CPlanArea::reduceLeft() {
   int mapsize = AreaWidth * AreaHeight;
   AreaWidth--;  // We "officially" make our Area's width one map smaller
 
-  for (int k = 0; k < LayerList.size(); k++) {
-    // Move (copy) our existing maps around, so that their
-    // orientation is preserved.
-    for (int Y = 0; Y < AreaHeight; Y++) {
-      for (int X = 0; X < AreaWidth; X++) {
-        LayerList[k].MapList[X + Y * AreaWidth] = LayerList[k].MapList[X + 1 + Y * (1 + AreaWidth)];
+  for (int Y = 0; Y < AreaHeight; Y++) {
+    for (int X = 0; X < AreaWidth; X++) {
+      int dstID = X + Y * AreaWidth;
+      int srcID = X + 1 + Y * (1 + AreaWidth);
+      for (int k = 0; k < LayerList.size(); k++) {
+        LayerList[k].MapList[dstID] = LayerList[k].MapList[srcID];
+      }
+      for (int k = 0; k < LevelAttList.size(); k++) {
+        LevelAttList[k].MapAttList[dstID] = LevelAttList[k].MapAttList[srcID];
       }
     }
+  }
+
+  // size down the vectors...
+  for (int k = 0; k < LayerList.size(); k++) {
     LayerList[k].MapList.resize(mapsize - AreaHeight);
+  }
+  for (int k = 0; k < LevelAttList.size(); k++) {
+    LevelAttList[k].MapAttList.resize(mapsize - AreaHeight);
   }
   return true;
 }
@@ -351,16 +504,27 @@ bool CPlanArea::reduceUp() {
   if (AreaHeight <= 1) return false;
   int mapsize = AreaWidth * AreaHeight;
 
-  for (int k = 0; k < LayerList.size(); k++) {
-    // Move (copy) our existing maps around, so that their
-    // orientation is preserved.
-    for (int Y = 0; Y < AreaHeight - 1; Y++) {
-      for (int X = 0; X < AreaWidth; X++) {
-        LayerList[k].MapList[X + Y * AreaWidth] = LayerList[k].MapList[X + (Y + 1) * AreaWidth];
+  for (int Y = 0; Y < AreaHeight - 1; Y++) {
+    for (int X = 0; X < AreaWidth; X++) {
+      int dstID = X + Y * AreaWidth;
+      int srcID = X + (Y + 1) * AreaWidth;
+      for (int k = 0; k < LayerList.size(); k++) {
+        LayerList[k].MapList[dstID] = LayerList[k].MapList[srcID];
+      }
+      for (int k = 0; k < LevelAttList.size(); k++) {
+        LevelAttList[k].MapAttList[dstID] = LevelAttList[k].MapAttList[srcID];
       }
     }
+  }
+
+  // size down the vectors...
+  for (int k = 0; k < LayerList.size(); k++) {
     LayerList[k].MapList.resize(mapsize - AreaWidth);
   }
+  for (int k = 0; k < LevelAttList.size(); k++) {
+    LevelAttList[k].MapAttList.resize(mapsize - AreaWidth);
+  }
+
   AreaHeight--;  // We "officially" make our Area's height one map smaller
   return true;
 }
@@ -375,7 +539,11 @@ bool CPlanArea::reduceDown() {
   // The camera position doesn't have to be
   // changed, either!
   int mapsize = AreaWidth * AreaHeight;
-  for (int k = 0; k < LayerList.size(); k++) LayerList[k].MapList.resize(mapsize - AreaWidth);
+  for (int k = 0; k < LayerList.size(); k++)
+      LayerList[k].MapList.resize(mapsize - AreaWidth);
+  for (int k = 0; k < LevelAttList.size(); k++)
+      LevelAttList[k].MapAttList.resize(mapsize - AreaWidth);
+
   AreaHeight--;
   return true;
 }

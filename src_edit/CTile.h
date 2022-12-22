@@ -74,10 +74,18 @@ struct CTile {
 
 struct CPlanTile {
   short    ID;         // ID for the tile drawn
-  short    type;       // Tile characteristics
+  CPlanTile(): ID(-1) {};
+  // short    type;       // Tile characteristics
+  // bool     solid;      // in planview mode, a tile is either solid or not solid
+  // short    barrier;    // in planview mode, tiles can have barriers on any side
+  // CPlanTile(): ID(-1), type(TILE_TYPE_NORMAL), solid(false), barrier(BAR_NONE) {};
+};
+
+struct CPlanTileAtt {
+  short    type;       // Tile characteristics (water, ice, etc.)
   bool     solid;      // in planview mode, a tile is either solid or not solid
-  int      barrier;    // in planview mode, tiles can have barriers on any side
-  CPlanTile(): ID(-1), type(TILE_TYPE_NORMAL), solid(false), barrier(BAR_NONE) {};
+  short    barrier;    // in planview mode, tiles can have barriers on any side
+  CPlanTileAtt(): type(TILE_TYPE_NORMAL), solid(false), barrier(BAR_NONE) {};
 };
 
 #endif

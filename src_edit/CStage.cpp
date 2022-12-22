@@ -187,7 +187,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
     CPlanScnEdit::control.setOpacity(opac);
 
     // Handle step #1.
-    int next_z = CPlanEditor::control.RenderLayerZ(z);
+    int next_z = CPlanEditor::control.RenderLevelZ(z);
 
     // Handle step #2.
     // Note: this could probably be made more efficient...

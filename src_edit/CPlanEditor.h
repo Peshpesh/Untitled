@@ -24,11 +24,13 @@ class CPlanEditor : public CEvent {
   short visflag;    // bitwise flag for rendering map & its attributes
   int placeflag;    // bitwise flag for tiles to place
 
-  // single working tile
+  // single working tile & attributes
   CPlanTile workTile;
+  CPlanTileAtt workTileAtt;
 
   // array of working tiles (pattern)
   std::vector<CPlanTile> workPattern;
+  std::vector<CPlanTileAtt> workAttPattern;
   short pattern_w;
   short pattern_h;
 
@@ -64,8 +66,7 @@ public:
 
   bool OnRender(const SDL_Point& mouse);
 
-  void RenderMap();
-  int RenderLayerZ(const int& z);
+  int RenderLevelZ(const int& z);
   void RenderLayerK(const int& k);
 
 private:
@@ -78,6 +79,8 @@ private:
   bool placePattern(const int& x, const int& y, const bool& flip_x, const bool& flip_y);
   bool placeTile(const int& x, const int& y);
   bool placeTile(const int& x, const int& y, const CPlanTile& tile);
+  bool placeTileAtt(const int& x, const int& y);
+  bool placeTileAtt(const int& x, const int& y, const CPlanTileAtt& tile);
   bool handleMakeDomain(const SDL_Point& m);
   bool handlePlaceDomain(const SDL_Point& m);
   void resetDomain();

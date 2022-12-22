@@ -66,6 +66,7 @@ ${SRCDIR}/CPlanEditor_Event.cpp
 ${SRCDIR}/CPlanEditor_Ext.cpp
 ${SRCDIR}/CPlanEditor_Render.cpp
 ${SRCDIR}/CPlanMap.cpp
+${SRCDIR}/CPlanMapAtt.cpp
 ${SRCDIR}/CPlanScenery.cpp
 ${SRCDIR}/CPlanScenery_Event.cpp
 ${SRCDIR}/CPlanScenery_Ext.cpp

@@ -35,10 +35,12 @@ bool CError::OnInit() {
 
 void CError::ReportSDLErr(const char* preinfo) {
   printf("%s -> %s\n", preinfo, SDL_GetError());
+  fflush(stdout);
 
   // record error to log for review
   FILE* ef = fopen(errFile.c_str(), "a");
   fprintf(ef, "%s -> %s\n", preinfo, SDL_GetError());
+  fflush(ef);
   fclose(ef);
 
   SDL_ClearError();
@@ -46,9 +48,11 @@ void CError::ReportSDLErr(const char* preinfo) {
 
 void CError::ReportErr(const char* info) {
   printf("%s\n", info);
+  fflush(stdout);
 
   // record error to log for review
   FILE* ef = fopen(errFile.c_str(), "a");
   fprintf(ef, "%s\n", info);
+  fflush(stdout);
   fclose(ef);
 }

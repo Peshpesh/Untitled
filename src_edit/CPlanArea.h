@@ -28,6 +28,12 @@ struct CPlanLayer {
   CPlanLayer(): Z(0),opacity(MAX_RGBA),force_opacity(false){};
 };
 
+struct CPlanLevelAtt {
+  std::vector<CPlanMapAtt> MapAttList;
+  short Z;
+  CPlanLevelAtt(): Z(-1){};
+};
+
 class CPlanArea {
   CPlanArea();
 
@@ -37,10 +43,14 @@ public:
 public:
   // std::vector<CPlanMap> MapList;
   // std::vector<std::vector<CPlanMap>> MapList;
-  std::vector<CPlanLayer> LayerList;
+  std::vector<CPlanLayer> LayerList;        // size of max k (cell visual layers only)
+                                            // layers can share Z values
+                                            // (multiple layers per level possible)
+  std::vector<CPlanLevelAtt> LevelAttList;  // size of max Z (cell attributes only)
+                                            // levels should NOT share Z values
+                                            // each Z is represented as only one level
 
 private:
-  // std::vector<short>  DepthList;  // list of layer depths
   int  AreaWidth;    // width in Maps
   int  AreaHeight;    // height in Maps
 
@@ -50,6 +60,7 @@ public:
   void addLayer(const short& K, const short& Z);
   void delLayer(const short& K);
   void GetDims(int& mW, int& mH);
+  int getLevel(const int& Z);
   int getZ(const int& k);
   bool doesZexist(const int& z);
   int getMaxZ();
@@ -60,14 +71,17 @@ public:
 
   // CPlanMap* GetMap(int X, int Y);
   CPlanTile* GetTile(const int& X, const int& Y, const int& k); // get address to tile in map
+  CPlanTileAtt* GetTileAttZ(const int& X, const int& Y, const int& Z); // get address to tileatt in map given Z
+  CPlanTileAtt* GetTileAttK(const int& X, const int& Y, const int& k); // get address to tileatt in map given k
+
   // CPlanTile GetTileCopy(int X, int Y); // get copy of a tile in map
 
-  // void   OnRenderFill(const int& CameraX, const int& CameraY, const int& k);
   void OnRender(const int& CamX, const int& CamY, const int& k, const short& visflag, const short& opacity);
-  // void  OnRenderType(SDL_Texture* tileset, int CameraX, int CameraY);
-  // void  OnRenderColl(SDL_Texture* tileset, int CameraX, int CameraY);
+  void OnRenderAtt(const int& CamX, const int& CamY, const int& z, const short& visflag, const short& opacity);
 
   bool changeTile(const int& X, const int& Y, const int& k, const CPlanTile& tile, const int& useTiles);
+  bool changeTileAttZ(const int& X, const int& Y, const int& Z, const CPlanTileAtt& tile, const int& useTiles);
+  bool changeTileAttK(const int& X, const int& Y, const int& k, const CPlanTileAtt& tile, const int& useTiles);
 
   void expandRight();
   void expandLeft();
