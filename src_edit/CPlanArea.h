@@ -59,6 +59,9 @@ public:
 
   void addLayer(const short& K, const short& Z);
   void delLayer(const short& K);
+  void addLevel(const short& Z);
+  void delLevel(const short& Z);
+
   void GetDims(int& mW, int& mH);
   int getLevel(const int& Z);
   int getZ(const int& k);

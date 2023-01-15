@@ -32,31 +32,105 @@ void CPlanArea::addLayer(const short& K, const short& Z) {
   if (K < 0 || K > LayerList.size()) return;   // second condition has no =
                                                // as we're adding a layer
 
-  // load an empty map
-  CPlanMap tempMap;
-  tempMap.OnLoad();
-
   // if the requested Z is below all the existing layers,
   // then "lift" them such that the new layer is the new 0-layer.
+  // Do the same for level-attribute objects, and then add a new one.
   if (Z < 0) {
     for (int k = 0; k < LayerList.size(); k++) LayerList[k].Z -= Z;
+    for (int k = 0; k < LevelAttList.size(); k++) LevelAttList[k].Z -= Z;
+    addLevel(Z);
+  } else if (!doesZexist(Z)) {
+    // if Z >= 0, it's possible that a level at Z already exists.
+    // If it doesn't, we need to add a new level-attribute object.
+    addLevel(Z);
   }
 
   // create new layer at target Z with W * H empty maps
   CPlanLayer tempLayer;
   tempLayer.Z = (Z >= 0) ? Z : 0;
+
+  // load an empty map
+  CPlanMap tempMap;
+  tempMap.OnLoad();
+
+  // fill the new layer with empty maps
   for (int i = 0; i < AreaWidth * AreaHeight; i++) {
     tempLayer.MapList.push_back(tempMap);
   }
-  // insert the new layer into the LayerList vector
+
+  // insert the new layer into the LayerList vector at K
   LayerList.insert(LayerList.begin() + K, tempLayer);
 }
 
 void CPlanArea::delLayer(const short& K) {
   if (K < 0 || K >= LayerList.size()) return;
+
+  int Z = LayerList[K].Z;
+
+  // delete layer k
   LayerList[K].MapList.clear();  // not sure if this is necessary to clear memory,
                                  // but just in case...
   LayerList.erase(LayerList.begin() + K);
+
+  // check if the deleted layer's Z
+  // exists in any remaining layers.
+  // if not, delete the level attribute object
+  // at Z (no layers exist at Z anymore).
+  bool zExists = false;
+  for (int i = 0; i < LayerList.size(); i++) {
+    if (Z == LayerList[i].Z) {
+      zExists = true;
+      break;
+    }
+  }
+  // delete level attributes at z
+  if (!zExists) delLevel(Z);
+}
+
+void CPlanArea::addLevel(const short& Z) {
+  // notes: this add function assumes that:
+  //        1.  if Z < 0, then all existing levels
+  //            have been forced to have Z > 0
+  //            and the new level will have Z = 0
+  //        2.  a check has already been done
+  //            to ensure that the new level's Z
+  //            is not equal to an existing level
+
+  // create new attributes level at Z with W * H empty maps
+  CPlanLevelAtt tempLevel;
+  tempLevel.Z = (Z < 0) ? 0 : Z;
+
+  // load an empty attributes map
+  CPlanMapAtt tempMap;
+  tempMap.OnLoad();
+
+  // fill the new level with empty maps
+  for (int i = 0; i < AreaWidth * AreaHeight; i++) {
+    tempLevel.MapAttList.push_back(tempMap);
+  }
+
+  // we need to find out where to insert this new level
+  // in the level attributes list
+  // the k that comes from this loop represents
+  // the number of levels that are below
+  // the new level
+  int k = 0; while (k < LevelAttList.size()) {
+    // if the level already at k is at a greater Z,
+    // we can stop scanning
+    if (tempLevel.Z < LevelAttList[k].Z) break;
+    k++;
+  }
+
+  // insert the new level into the LevelAttList vector
+  LevelAttList.insert(LevelAttList.begin() + k, tempLevel);
+}
+
+void CPlanArea::delLevel(const short& Z) {
+  int i = getLevel(Z);
+  if (i < 0) return;
+
+  LevelAttList[i].MapAttList.clear(); // just in case...
+  LevelAttList.erase(LevelAttList.begin() + i);
 }
 
 void CPlanArea::GetDims(int& mW, int& mH)  {
@@ -196,7 +270,7 @@ void CPlanArea::OnRenderAtt(const int& CamX, const int& CamY, const int& z, cons
 
   int MapW = MAP_WIDTH * TILE_SIZE;   // in px
   int MapH = MAP_HEIGHT * TILE_SIZE;  // in px
-  int Yoffset = L * TILE_SIZE;      // in px
+  int Yoffset = z * TILE_SIZE;      // in px
 
   int FirstID = -CamX / MapW;
   FirstID += ((-CamY + Yoffset) / MapH) * AreaWidth;
@@ -248,7 +322,11 @@ bool CPlanArea::changeTileAttZ(const int& X, const int& Y, const int& Z, const C
   // get the level index associated with Z
   int i = getLevel(Z);
   if (i < 0) {
-    CError::handler.ReportErr("CPlanArea::changeTileAttZ -> Failed to find level at Z.");
+    std::string t = "CPlanArea::changeTileAttZ -> Failed to find level at Z=" + CUtil::intToStr(Z);
+    t += " result=" + CUtil::intToStr(i);
+    int numZ = LevelAttList.size();
+    t += " levels=" + CUtil::intToStr(numZ);
+    CError::handler.ReportErr(t.c_str());
     return false;
   }
 
@@ -609,11 +687,13 @@ bool CPlanArea::OnLoad(char const* File)  {
   short setID;
   fread(&setID, sizeof(short), 1, FileHandle);
 
-  // Get AreaWidth, AreaHeight and number of layers
-  int AreaDepth = LayerList.size();
+  // Get AreaWidth, AreaHeight, number of layers (num k), number of levels (num z)
+  short AreaLayers = 0;
+  short AreaLevels = 0;
   fread(&AreaWidth, sizeof(int), 1, FileHandle);
   fread(&AreaHeight, sizeof(int), 1, FileHandle);
-  fread(&AreaDepth, sizeof(int), 1, FileHandle);
+  fread(&AreaLayers, sizeof(short), 1, FileHandle);
+  fread(&AreaLevels, sizeof(short), 1, FileHandle);
 
   if (!CTileset::TSControl.changeTileset(setID)) {
     CInform::InfoControl.pushInform("---CPlanArea.Onload---\ncould not load tileset");
@@ -621,11 +701,11 @@ bool CPlanArea::OnLoad(char const* File)  {
     return false;
   }
 
-  // MapList.clear();
   LayerList.clear();
+  LevelAttList.clear();
 
   // read map data
-  for (int k = 0; k < AreaDepth; k++) {
+  for (int k = 0; k < AreaLayers; k++) {
     CPlanLayer tempLayer;
 
     // get layer height
@@ -642,6 +722,27 @@ bool CPlanArea::OnLoad(char const* File)  {
     // insert the new layer into the LayerList vector
     LayerList.push_back(tempLayer);
   }
+
+  // read map data
+  for (int k = 0; k < AreaLevels; k++) {
+    CPlanLevelAtt tempLevel;
+
+    // get level height
+    fread(&tempLevel.Z, sizeof(short), 1, FileHandle);
+
+    // load map attributes
+    for (int i = 0; i < AreaWidth * AreaHeight; i++) {
+      CPlanMapAtt tempMap;
+      if (tempMap.OnLoad(FileHandle) == false) {
+        fclose(FileHandle);
+        return false;
+      }
+      tempLevel.MapAttList.push_back(tempMap);
+    }
+    // insert the new level attributes into the LevelAttList vector
+    LevelAttList.push_back(tempLevel);
+  }
+
   fclose(FileHandle);
   return true;
 }
@@ -661,17 +762,30 @@ bool CPlanArea::OnSave(char const* File) {
   short setID = CTileset::TSControl.getFileID();
   fwrite(&setID, sizeof(short), 1, FileHandle);
 
-  // Output AreaWidth, AreaHeight, number of layers
-  int AreaDepth = LayerList.size();
+  // Output AreaWidth, AreaHeight, number of layers, number of levels
+  short AreaLayers = LayerList.size();
+  short AreaLevels = LevelAttList.size();
   fwrite(&AreaWidth, sizeof(int), 1, FileHandle);
   fwrite(&AreaHeight, sizeof(int), 1, FileHandle);
-  fwrite(&AreaDepth, sizeof(int), 1, FileHandle);
+  fwrite(&AreaLayers, sizeof(short), 1, FileHandle);
+  fwrite(&AreaLevels, sizeof(short), 1, FileHandle);
 
   // Output map data to .pvm file
-  for (int k = 0; k < AreaDepth; k++) {
+  for (int k = 0; k < AreaLayers; k++) {
     fwrite(&LayerList[k].Z, sizeof(short), 1, FileHandle); // write layer height
     for (int i = 0; i < AreaWidth * AreaHeight; i++) {
       if (!LayerList[k].MapList[i].OnSave(FileHandle)) {
+        fclose(FileHandle);
+        return false;
+      }
+    }
+  }
+
+  // Output level attribute data to .pvm
+  for (int k = 0; k < AreaLevels; k++) {
+    fwrite(&LevelAttList[k].Z, sizeof(short), 1, FileHandle); // write level height
+    for (int i = 0; i < AreaWidth * AreaHeight; i++) {
+      if (!LevelAttList[k].MapAttList[i].OnSave(FileHandle)) {
         fclose(FileHandle);
         return false;
       }
