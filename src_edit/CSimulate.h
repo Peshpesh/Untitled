@@ -2,6 +2,7 @@
 #define _C_SIMULATE_H_
 
 #include "CSimEntity.h"
+#include "CSimPlanEntity.h"
 #include "CEvent.h"
 #include "CInform.h"
 #include "CInterrupt.h"
@@ -107,6 +108,7 @@ class CSimulate : public CEvent {
 public:
   static CSimulate control;
   CSimEntity hero;
+  CSimPlanEntity phero;
 
 private:
   std::string draft_s; // working string for loading draft files

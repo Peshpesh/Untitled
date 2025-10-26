@@ -200,11 +200,12 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
         // the above break is only possible with scenery rendered with the map layer
         // due to the way these scenery are ordered (differs from scnList_front)
       }
-      for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
-        if (CPlanScnEdit::scnList_front[i].Z == z) {
-          CPlanScnEdit::scnList_front[i].OnRenderShadow();
-        }
-      }
+      // NOTE / TODO: MOVING THIS TO STEP 4
+      // for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+      //   if (CPlanScnEdit::scnList_front[i].Z == z) {
+      //     CPlanScnEdit::scnList_front[i].OnRenderShadow();
+      //   }
+      // }
     }
 
     // Handle step #3.
@@ -250,6 +251,11 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
   max_ent = CEntity::entList_front.size();
   drawScn = CPlanScnEdit::control.showScenery * (bool)(max_scn);
   drawEnt = CEntityEditor::Control.showEntity * (bool)(max_ent);
+
+  // TODO: TESTING THIS (MOVED FROM STEP 2)
+  for (int i = 0; i < CPlanScnEdit::scnList_front.size(); i++) {
+    CPlanScnEdit::scnList_front[i].OnRenderShadow();
+  }
 
   int total_obj = (drawScn * max_scn) + (drawEnt * max_ent);
   while (scn_i + ent_i < total_obj) {

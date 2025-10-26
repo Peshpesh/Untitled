@@ -94,4 +94,5 @@ void CDraft::OnRender() {
 void CDraft::OnCleanup() {
   name.clear();
   SDL_DestroyTexture(img);
+  img = NULL;
 }

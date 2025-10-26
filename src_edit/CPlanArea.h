@@ -41,8 +41,6 @@ public:
   static CPlanArea control;
 
 public:
-  // std::vector<CPlanMap> MapList;
-  // std::vector<std::vector<CPlanMap>> MapList;
   std::vector<CPlanLayer> LayerList;        // size of max k (cell visual layers only)
                                             // layers can share Z values
                                             // (multiple layers per level possible)

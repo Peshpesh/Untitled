@@ -1,19 +1,18 @@
-#ifndef _C_SIMENTITY_H_
-#define _C_SIMENTITY_H_
+#ifndef _C_SIMPLANENTITY_H_
+#define _C_SIMPLANENTITY_H_
 
 #include "CArea.h"
 #include "CEntity.h"
 
-namespace Entityflags {
+namespace PlanEntityflags {
   enum {
     NONE    = 0,
-    GRAVITY = 0x00000001,  // Entity subject to gravity
-    GHOST   = 0x00000002,  // Entity can translate thru walls
-    HOLLOW  = 0x00000004,  // Entity allows other entities to translate thru it (collisions ON)
+    GHOST   = 0x00000001,  // Entity can translate thru walls
+    HOLLOW  = 0x00000002,  // Entity allows other entities to translate thru it (collisions ON)
   };
 };
 
-class CSimEntity {
+class CSimPlanEntity {
 
 public:
   SDL_Texture* sprtSrc;
@@ -21,32 +20,21 @@ public:
   float  Y;  // sprite y-position
   SDL_Rect spriteR;  // sprite position & size on texture
   SDL_Rect hitboxR;  // X and Y are offset values relative to sprite
-  bool  move_left;
-  bool  move_right;
+  char direction; // facing up 'U', down 'D', left 'L', or right 'R'
+  bool ismoving; // is the entity currently moving?
 
 public:
   int   Flags;
-  bool  Dead;    // is Entity dead
 
 protected:
   float  SpeedX; // pixels / idealframe
   float  SpeedY; // pixels / idealframe
-  float  AccelX; // pixels / idealframe^2
-  float  AccelY; // pixels / idealframe^2
-  short jump_timer;
-  short jump_timer_init;
-  short jump_timer_max;
-  bool Jumper;
-  bool Grounded;
 
 public:
-  float  MaxSpeedX; // pixels / idealframe
-  float  MaxSpeedY; // pixels / idealframe
-  float  MaxAccelX; // pixels / idealframe^2
-  float  MaxAccelY; // pixels / idealframe^2
+  float  MaxSpeed; // pixels / idealframe
 
 public:
-  CSimEntity();
+  CSimPlanEntity();
 
 public:
   void OnLoad();
@@ -60,11 +48,6 @@ public:
 
 protected:
   void OnMove(float MoveX, float MoveY);
-  void stopMove();
-
-public:
-  bool Jump();
-  void JumpRelease();
 
 protected:
   void Translate(double NewX, double NewY);
