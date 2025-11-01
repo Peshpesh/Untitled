@@ -112,7 +112,7 @@ bool CPlanScnEdit::handleRemoveScenery(const SDL_Point* m) {
     if (scnList_back[i].Z == CPlanArea::control.getZ(k)) {
       SDL_Rect dstR;
       dstR.x = scnList_back[i].X;
-      dstR.y = scnList_back[i].Y - (scnList_front[i].Z * TILE_SIZE);
+      dstR.y = scnList_back[i].Y - (scnList_back[i].Z * TILE_SIZE);
       dstR.w = scnList_back[i].srcR.w;
       dstR.h = scnList_back[i].srcR.h;
       CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
