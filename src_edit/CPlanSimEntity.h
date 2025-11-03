@@ -1,5 +1,5 @@
-#ifndef _C_SIMPLANENTITY_H_
-#define _C_SIMPLANENTITY_H_
+#ifndef _C_PLANSIMENTITY_H_
+#define _C_PLANSIMENTITY_H_
 
 #include "CArea.h"
 #include "CEntity.h"
@@ -12,7 +12,7 @@ namespace PlanEntityflags {
   };
 };
 
-class CSimPlanEntity {
+class CPlanSimEntity {
 
 public:
   SDL_Texture* sprtSrc;
@@ -21,7 +21,7 @@ public:
   SDL_Rect spriteR;  // sprite position & size on texture
   SDL_Rect hitboxR;  // X and Y are offset values relative to sprite
   char direction; // facing up 'U', down 'D', left 'L', or right 'R'
-  bool ismoving; // is the entity currently moving?
+  bool idle; // is the entity idle?
 
 public:
   int   Flags;
@@ -34,7 +34,7 @@ public:
   float  MaxSpeed; // pixels / idealframe
 
 public:
-  CSimPlanEntity();
+  CPlanSimEntity();
 
 public:
   void OnLoad();
@@ -51,8 +51,6 @@ protected:
 
 protected:
   void Translate(double NewX, double NewY);
-  int getVertDeflect(const double& NewX, const double& NewY);
-  int getHorzDeflect(const double& NewX, const double& NewY);
   int CollGround(const int& collID, const int& X_offset, const int& Y_offset);
   int CollWall(const int& collID, const int& X_offset, const int& Y_offset);
   bool CheckPathXY(const int& destXl, const int& destXr, const int& destYt, const int& destYb);

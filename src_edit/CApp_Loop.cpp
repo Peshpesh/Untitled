@@ -1,7 +1,7 @@
 #include "CApp.h"
 
 void CApp::OnLoop() {
-  if (CInterrupt::isNone() && (CSimulate::control.getStatus() == INACTIVE || CSimulate::control.getStatus() == PLACE)) {
+  if (CInterrupt::isNone() && (CSimulate::control.getStatus() == pfmsimulator::INACTIVE || CSimulate::control.getStatus() == pfmsimulator::PLACE)) {
     if (pan_l) CCamera::CameraControl.OnMove(-6, 0);
     if (pan_r) CCamera::CameraControl.OnMove(6, 0);
     if (pan_u) CCamera::CameraControl.OnMove(0, -6);

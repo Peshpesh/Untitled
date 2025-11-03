@@ -18,7 +18,7 @@ bool CSimulate::OnRender(const SDL_Point* m) {
   return true;
 }
 
-bool CSimulate::drawDebug() {
+bool CPlanSimulate::drawDebug() {
   SDL_Rect follow_dom = CCamera::CameraControl.GetFollow();
   SDL_Point follow_p = CCamera::CameraControl.GetWinRelPoint(follow_dom.x, follow_dom.y);
   follow_dom.x = follow_p.x;
@@ -28,8 +28,8 @@ bool CSimulate::drawDebug() {
   return true;
 }
 
-bool CSimulate::drawMain(const SDL_Point* m) {
-  using namespace pfmsimulator;
+bool CPlanSimulate::drawMain(const SDL_Point* m) {
+  using namespace pvmsimulator;
 
   CAsset::drawStrBox(&r_start, bsiz, (m && SDL_PointInRect(m, &r_start)) ?
     ((status == INACTIVE) ? start_hcol : reset_hcol) :
@@ -51,8 +51,8 @@ bool CSimulate::drawMain(const SDL_Point* m) {
   return true;
 }
 
-bool CSimulate::drawDraftInfo(const SDL_Point* m) {
-  using namespace pfmsimulator::draft;
+bool CPlanSimulate::drawDraftInfo(const SDL_Point* m) {
+  using namespace pvmsimulator::draft;
 
   bool retval = true;
   Font::NewCenterWrite(draftname_title, &p_draftname_title);
@@ -75,8 +75,8 @@ bool CSimulate::drawDraftInfo(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::drawDraftOpts(const SDL_Point* m) {
-  using namespace pfmsimulator::draft;
+bool CPlanSimulate::drawDraftOpts(const SDL_Point* m) {
+  using namespace pvmsimulator::draft;
 
   bool retval = true;
   Font::NewCenterWrite(opts_title, &p_opts_title);
@@ -96,13 +96,13 @@ bool CSimulate::drawDraftOpts(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::drawCamera(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::drawCamera(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   bool retval = true;
 
   Font::NewCenterWrite(modes_title, &p_modes_title);
 
-  if (status == pfmsimulator::ACTIVE || status == pfmsimulator::SUSPENDED) {
+  if (status == ACTIVE || status == SUSPENDED) {
     for (int i = 0; i <= TARGET_MODE_FOLLOW; i++) {
       retval *= CAsset::drawStrBox(&r_modes[i], bsiz, (i == cam_option) ? on_col :
         ((m && SDL_PointInRect(m, &r_modes[i])) ? off_hcol : off_col)
@@ -118,14 +118,14 @@ bool CSimulate::drawCamera(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::drawManualCam(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::drawManualCam(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   bool retval = true;
   bool edit_x = (edit_xywh == EDIT_CAM_X);
   bool edit_y = (edit_xywh == EDIT_CAM_Y);
   Font::NewCenterWrite(manual_title, &p_manual_title);
 
-  if (status == pfmsimulator::ACTIVE || status == pfmsimulator::SUSPENDED) {
+  if (status == ACTIVE || status == SUSPENDED) {
     retval *= CAsset::drawStrBox(&r_cam_x, bsiz, edit_x ?
       on_col : (m && SDL_PointInRect(m, &r_cam_x)) ? off_hcol : off_col);
     retval *= CAsset::drawStrBox(&r_cam_y, bsiz, edit_y ?
@@ -142,15 +142,15 @@ bool CSimulate::drawManualCam(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::drawFollowCam(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::drawFollowCam(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   bool retval = true;
   bool edit_w = (edit_xywh == EDIT_FOLLOW_W);
   bool edit_h = (edit_xywh == EDIT_FOLLOW_H);
 
   Font::NewCenterWrite(follow_title, &p_follow_title);
 
-  if (status == pfmsimulator::ACTIVE || status == pfmsimulator::SUSPENDED) {
+  if (status == ACTIVE || status == SUSPENDED) {
     retval *= CAsset::drawStrBox(&r_follow_w, bsiz, edit_w ?
       on_col : (m && SDL_PointInRect(m, &r_follow_w)) ? off_hcol : off_col);
     retval *= CAsset::drawStrBox(&r_follow_h, bsiz, edit_h ?
@@ -168,11 +168,11 @@ bool CSimulate::drawFollowCam(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::drawApplyCam(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::drawApplyCam(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   bool retval = true;
 
-  if ((status == pfmsimulator::ACTIVE || status == pfmsimulator::SUSPENDED) && did_edit_xywh) {
+  if ((status == ACTIVE || status == SUSPENDED) && did_edit_xywh) {
     retval *= CAsset::drawStrBox(&r_app_mf, bsiz,
       (m && SDL_PointInRect(m, &r_app_mf)) ? off_hcol : off_col);
   } else {
@@ -184,12 +184,12 @@ bool CSimulate::drawApplyCam(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::drawHero() {
-  if (status != pfmsimulator::INACTIVE) {
+bool CPlanSimulate::drawHero() {
+  if (status != INACTIVE) {
     return hero.OnRender();
   } return true;
 }
 
-bool CSimulate::drawIntrpt(const SDL_Point* m) {
+bool CPlanSimulate::drawIntrpt(const SDL_Point* m) {
   return true;
 }

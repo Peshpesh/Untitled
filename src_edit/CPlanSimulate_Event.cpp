@@ -1,16 +1,16 @@
-#include "CSimulate.h"
+#include "CPlanSimulate.h"
 
-void CSimulate::OnEvent(SDL_Event* Event) {
+void CPlanSimulate::OnEvent(SDL_Event* Event) {
   if (handleInterr(Event)) return;
 
   CEvent::OnEvent(Event);
 }
 
-bool CSimulate::handleInterr(SDL_Event* Event) {
+bool CPlanSimulate::handleInterr(SDL_Event* Event) {
   return false;
 }
 
-void CSimulate::OnLButtonDown(int mX, int mY) {
+void CPlanSimulate::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
 
   if (handleStartSim(&m))   return;
@@ -18,7 +18,7 @@ void CSimulate::OnLButtonDown(int mX, int mY) {
   if (handleStopSim(&m))    return;
   if (handleDraftEntry(&m)) return;
   if (handleDraftOpts(&m))  return;
-  if (status == pfmsimulator::ACTIVE || status == pfmsimulator::SUSPENDED) {
+  if (status == ACTIVE || status == SUSPENDED) {
     if (edit_xywh) clearxywh();
     if (handleCameraOption(&m)) return;
     if (handleManualCam(&m))    return;
@@ -27,7 +27,7 @@ void CSimulate::OnLButtonDown(int mX, int mY) {
   }
 }
 
-void CSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
+void CPlanSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
   if (edit_xywh) {
     switch (sym) {
       case SDLK_0:          addToEdit('0');        break;
@@ -92,60 +92,58 @@ void CSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
     switch (sym) {
       case SDLK_LEFT:  moveLeft(); break;
       case SDLK_RIGHT: moveRight(); break;
-      case SDLK_SPACE: jump(); break;
       case SDLK_p:     {
-        if (status == pfmsimulator::ACTIVE)         status = pfmsimulator::SUSPENDED;
-        else if (status == pfmsimulator::SUSPENDED) status = pfmsimulator::ACTIVE;
+        if (status == ACTIVE)         status = SUSPENDED;
+        else if (status == SUSPENDED) status = ACTIVE;
         break;
       }
     }
   }
 }
 
-void CSimulate::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
+void CPlanSimulate::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
   switch (sym) {
     case SDLK_LEFT:  stopMoveLeft(); break;
     case SDLK_RIGHT: stopMoveRight(); break;
-    case SDLK_SPACE: jumpRelease(); break;
     default: break;
   }
 }
 
-bool CSimulate::handleStartSim(const SDL_Point* m) {
-  if (status != pfmsimulator::PLACE) {
-    if (SDL_PointInRect(m, &pfmsimulator::r_start)) {
-      if (status == pfmsimulator::ACTIVE || status == pfmsimulator::SUSPENDED) stopSim();
+bool CPlanSimulate::handleStartSim(const SDL_Point* m) {
+  if (status != PLACE) {
+    if (SDL_PointInRect(m, &pvmsimulator::r_start)) {
+      if (status == ACTIVE || status == SUSPENDED) stopSim();
       hero.OnLoad();
-      status = pfmsimulator::PLACE;
+      status = PLACE;
       return true;
     }
   } else if (CAsset::inWorkspace(m)) {
     updateCamera();
-    status = pfmsimulator::ACTIVE;
+    status = ACTIVE;
     return true;
   }
   return false;
 }
 
-bool CSimulate::handleSuspendSim(const SDL_Point* m) {
-  if (SDL_PointInRect(m, &pfmsimulator::r_suspend)) {
-    if      (status == pfmsimulator::ACTIVE)    status = pfmsimulator::SUSPENDED;
-    else if (status == pfmsimulator::SUSPENDED) status = pfmsimulator::ACTIVE;
+bool CPlanSimulate::handleSuspendSim(const SDL_Point* m) {
+  if (SDL_PointInRect(m, &pvmsimulator::r_suspend)) {
+    if      (status == ACTIVE)    status = SUSPENDED;
+    else if (status == SUSPENDED) status = ACTIVE;
     return true;
   }
   return false;
 }
 
-bool CSimulate::handleStopSim(const SDL_Point* m) {
-  if (status != pfmsimulator::INACTIVE && SDL_PointInRect(m, &pfmsimulator::r_stop)) {
+bool CPlanSimulate::handleStopSim(const SDL_Point* m) {
+  if (status != INACTIVE && SDL_PointInRect(m, &pvmsimulator::r_stop)) {
     stopSim();
     return true;
   }
   return false;
 }
 
-bool CSimulate::handleDraftEntry(const SDL_Point* m) {
-  using namespace pfmsimulator::draft;
+bool CPlanSimulate::handleDraftEntry(const SDL_Point* m) {
+  using namespace pvmsimulator::draft;
 
   if (SDL_PointInRect(m, &r_newdraft)) {
     if (!edit_draft) {
@@ -158,8 +156,8 @@ bool CSimulate::handleDraftEntry(const SDL_Point* m) {
   return false;
 }
 
-bool CSimulate::handleDraftOpts(const SDL_Point* m) {
-  using namespace pfmsimulator::draft;
+bool CPlanSimulate::handleDraftOpts(const SDL_Point* m) {
+  using namespace pvmsimulator::draft;
 
   if (SDL_PointInRect(m, &r_clear)) {
     CDraft::control.OnCleanup();
@@ -179,8 +177,8 @@ bool CSimulate::handleDraftOpts(const SDL_Point* m) {
   return false;
 }
 
-bool CSimulate::handleCameraOption(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::handleCameraOption(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   for (int i = 0; i <= TARGET_MODE_FOLLOW; i++) {
     if (i != cam_option && SDL_PointInRect(m, &r_modes[i])) {
       cam_option = i;
@@ -191,8 +189,8 @@ bool CSimulate::handleCameraOption(const SDL_Point* m) {
   return false;
 }
 
-bool CSimulate::handleManualCam(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::handleManualCam(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   bool retval = false;
   if (SDL_PointInRect(m, &r_cam_x)) {
     edit_xywh = EDIT_CAM_X;
@@ -204,8 +202,8 @@ bool CSimulate::handleManualCam(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::handleFollowCam(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::handleFollowCam(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   bool retval = false;
   if (SDL_PointInRect(m, &r_follow_w)) {
     edit_xywh = EDIT_FOLLOW_W;
@@ -217,8 +215,8 @@ bool CSimulate::handleFollowCam(const SDL_Point* m) {
   return retval;
 }
 
-bool CSimulate::handleApplyCam(const SDL_Point* m) {
-  using namespace pfmsimulator::camera;
+bool CPlanSimulate::handleApplyCam(const SDL_Point* m) {
+  using namespace pvmsimulator::camera;
   if (did_edit_xywh && SDL_PointInRect(m, &r_app_mf)) {
     updateCamera();
     did_edit_xywh = false;
@@ -226,8 +224,8 @@ bool CSimulate::handleApplyCam(const SDL_Point* m) {
   } return false;
 }
 
-void CSimulate::addToEdit(const char& c) {
-  if (xywh_sval.size() >= pfmsimulator::camera::max_edit_dig) return;
+void CPlanSimulate::addToEdit(const char& c) {
+  if (xywh_sval.size() >= pvmsimulator::camera::max_edit_dig) return;
   if (xywh_sval == "0") {
     if (c != '0') xywh_sval[0] = c;
   } else {
@@ -235,33 +233,33 @@ void CSimulate::addToEdit(const char& c) {
   }
 }
 
-void CSimulate::delFromEdit() {
+void CPlanSimulate::delFromEdit() {
   if (xywh_sval.size() > 0) xywh_sval.erase(xywh_sval.end() - 1);
 }
 
-void CSimulate::applyEdit() {
+void CPlanSimulate::applyEdit() {
   if (!xywh_sval.empty()) {
     int appl_val = CUtil::strToInt(xywh_sval);
     switch (edit_xywh) {
-      case pfmsimulator::camera::EDIT_CAM_X: {
+      case pvmsimulator::camera::EDIT_CAM_X: {
         if (cam_x != appl_val) {
           cam_x = appl_val;
           did_edit_xywh = true;
         } break;
       }
-      case pfmsimulator::camera::EDIT_CAM_Y: {
+      case pvmsimulator::camera::EDIT_CAM_Y: {
         if (cam_y != appl_val) {
           cam_y = appl_val;
           did_edit_xywh = true;
         } break;
       }
-      case pfmsimulator::camera::EDIT_FOLLOW_W: {
+      case pvmsimulator::camera::EDIT_FOLLOW_W: {
         if (follow_w != appl_val) {
           follow_w = appl_val;
           did_edit_xywh = true;
         } break;
       }
-      case pfmsimulator::camera::EDIT_FOLLOW_H: {
+      case pvmsimulator::camera::EDIT_FOLLOW_H: {
         if (follow_h != appl_val) {
           follow_h = appl_val;
           did_edit_xywh = true;
@@ -273,41 +271,33 @@ void CSimulate::applyEdit() {
   clearxywh();
 }
 
-void CSimulate::addToDraft(const char& c) {
+void CPlanSimulate::addToDraft(const char& c) {
   static short draft_charmax = 16;
   if (draft_s.size() >= draft_charmax) return;
   draft_s.push_back(c);
 }
 
-void CSimulate::delFromDraft() {
+void CPlanSimulate::delFromDraft() {
   if (draft_s.size() > 0) draft_s.erase(draft_s.end() - 1);
 }
 
-void CSimulate::loadDraft() {
+void CPlanSimulate::loadDraft() {
   CDraft::control.OnLoad(draft_s);
   clearDraftEntry();
 }
 
-void CSimulate::moveLeft() {
+void CPlanSimulate::moveLeft() {
   hero.move_left = true;
 }
 
-void CSimulate::moveRight() {
+void CPlanSimulate::moveRight() {
   hero.move_right = true;
 }
 
-void CSimulate::stopMoveLeft() {
+void CPlanSimulate::stopMoveLeft() {
   hero.move_left = false;
 }
 
-void CSimulate::stopMoveRight() {
+void CPlanSimulate::stopMoveRight() {
   hero.move_right = false;
-}
-
-void CSimulate::jump() {
-  hero.Jump();
-}
-
-void CSimulate::jumpRelease() {
-  hero.JumpRelease();
 }

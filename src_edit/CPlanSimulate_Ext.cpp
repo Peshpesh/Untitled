@@ -1,6 +1,6 @@
-#include "CSimulate.h"
+#include "CPlanSimulate.h"
 
-namespace pfmsimulator {
+namespace pvmsimulator {
   const char* const start_lab   = "Start";
   const char* const reset_lab   = "Reset";
   const char* const suspend_lab = "Suspend";

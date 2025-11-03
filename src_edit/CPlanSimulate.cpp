@@ -1,9 +1,9 @@
-#include "CSimulate.h"
+#include "CPlanSimulate.h"
 
-CSimulate CSimulate::control;
+CPlanSimulate CPlanSimulate::control;
 
-CSimulate::CSimulate() {
-  status = pfmsimulator::INACTIVE;
+CPlanSimulate::CPlanSimulate() {
+  status = INACTIVE;
   cam_option = TARGET_MODE_NORMAL;
   follow_w = 60;
   follow_h = 50;
@@ -16,38 +16,38 @@ CSimulate::CSimulate() {
   draft_s = "";
 }
 
-short CSimulate::getStatus() {
+simstate CPlanSimulate::getStatus() {
   return status;
 }
 
-void CSimulate::stopSim() {
+void CPlanSimulate::stopSim() {
   // hero.Flags &= ~Entityflags::GRAVITY;
   // CCamera::CameraControl.ApplyTargetToStatic();
   CCamera::CameraControl.TargetMode = TARGET_MODE_NORMAL;
   CCamera::CameraControl.FreeTarget();
-  status = pfmsimulator::INACTIVE;
+  status = INACTIVE;
   clearxywh();
   clearDraftEntry();
 }
 
-void CSimulate::clearxywh() {
+void CPlanSimulate::clearxywh() {
   edit_xywh = 0;
   xywh_sval.clear();
 }
 
-void CSimulate::resetxywh() {
+void CPlanSimulate::resetxywh() {
   clearxywh();
   CCamera::CameraControl.GetNormalXY(cam_x, cam_y);
   CCamera::CameraControl.GetFollowDims(follow_w, follow_h);
   did_edit_xywh = false;
 }
 
-void CSimulate::clearDraftEntry() {
+void CPlanSimulate::clearDraftEntry() {
   edit_draft = false;
   draft_s.clear();
 }
 
-void CSimulate::updateCamera() {
+void CPlanSimulate::updateCamera() {
   CCamera::CameraControl.TargetMode = cam_option;
   CCamera::CameraControl.SetPos(cam_x, cam_y);
   CCamera::CameraControl.SetFollowDims(follow_w, follow_h);
@@ -58,7 +58,7 @@ void CSimulate::updateCamera() {
   }
 }
 
-void CSimulate::OnTerminate() {
+void CPlanSimulate::OnTerminate() {
   clearxywh();
   clearDraftEntry();
 }

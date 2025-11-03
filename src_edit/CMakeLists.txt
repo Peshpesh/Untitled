@@ -80,7 +80,6 @@ ${SRCDIR}/CSceneryEditor_Render.cpp
 ${SRCDIR}/CSimEntity.cpp
 ${SRCDIR}/CSimEntity_Coll.cpp
 ${SRCDIR}/CSimEntity_Move.cpp
-${SRCDIR}/CSimPlanEntity.cpp
 ${SRCDIR}/CSimulate.cpp
 ${SRCDIR}/CSimulate_Ext.cpp
 ${SRCDIR}/CSimulate_Event.cpp
@@ -133,7 +132,6 @@ ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryEditor.h
 ${SRCDIR}/CSimEntity.h
-${SRCDIR}/CSimPlanEntity.h
 ${SRCDIR}/CSimulate.h
 ${SRCDIR}/CSound.h
 ${SRCDIR}/CStage.h

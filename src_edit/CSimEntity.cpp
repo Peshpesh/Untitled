@@ -68,7 +68,7 @@ bool CSimEntity::Jump() {
 }
 
 void CSimEntity::JumpRelease() {
-  jump_timer_init = false;
+  jump_timer_init = 0;
 }
 
 void CSimEntity::stopMove() {

@@ -53,7 +53,7 @@ bool CModule::handleSwitch(const SDL_Point& m) {
       active_mod = i;
       if (active_mod != MODIFY_SIM) {
         CSimulate::control.resetxywh();
-        if (CSimulate::control.getStatus() == PLACE) {
+        if (CSimulate::control.getStatus() == pfmsimulator::PLACE) {
           CSimulate::control.stopSim();
         }
       }

@@ -1,7 +1,7 @@
-#ifndef _C_SIMULATE_H_
-#define _C_SIMULATE_H_
+#ifndef _C_PLANSIMULATE_H_
+#define _C_PLANSIMULATE_H_
 
-#include "CSimEntity.h"
+#include "CPlanSimEntity.h"
 #include "CEvent.h"
 #include "CInform.h"
 #include "CInterrupt.h"
@@ -11,16 +11,18 @@
 #include "CSurface.h"
 #include "CDraft.h"
 
-class CSimulate : public CEvent {
-  CSimulate();
+enum simstate {INACTIVE, PLACE, ACTIVE, SUSPENDED};
+
+class CPlanSimulate : public CEvent {
+  CPlanSimulate();
 
 public:
-  static CSimulate control;
-  CSimEntity hero;
+  static CPlanSimulate control;
+  CPlanSimEntity hero;
 
 private:
   std::string draft_s; // working string for loading draft files
-  short status;
+  simstate status;
   short cam_option;
   unsigned int follow_w;
   unsigned int follow_h;
@@ -65,8 +67,6 @@ private:
   void moveRight();
   void stopMoveLeft();
   void stopMoveRight();
-  void jump();
-  void jumpRelease();
 
 public:
   bool OnRender(const SDL_Point* m);
@@ -84,7 +84,7 @@ private:
   bool drawIntrpt(const SDL_Point* m);
 
 public:
-  short getStatus();
+  simstate getStatus();
   void stopSim();
   void clearxywh();
   void resetxywh();
@@ -94,8 +94,8 @@ private:
   void updateCamera();
 };
 
-namespace pfmsimulator {
-  enum {INACTIVE, PLACE, ACTIVE, SUSPENDED};
+namespace pvmsimulator {
+  enum simstate {INACTIVE, PLACE, ACTIVE, SUSPENDED};
   extern const char* const start_lab;
   extern const char* const reset_lab;
   extern const char* const suspend_lab;
