@@ -71,6 +71,12 @@ ${SRCDIR}/CPlanScenery.cpp
 ${SRCDIR}/CPlanScenery_Event.cpp
 ${SRCDIR}/CPlanScenery_Ext.cpp
 ${SRCDIR}/CPlanScenery_Render.cpp
+${SRCDIR}/CPlanSimEntity.cpp
+${SRCDIR}/CPlanSimulate.cpp
+${SRCDIR}/CPlanSimulate_Event.cpp
+${SRCDIR}/CPlanSimulate_Ext.cpp
+${SRCDIR}/CPlanSimulate_Loop.cpp
+${SRCDIR}/CPlanSimulate_Render.cpp
 ${SRCDIR}/CScenery.cpp
 ${SRCDIR}/CSceneryData.cpp
 ${SRCDIR}/CSceneryEditor.cpp
@@ -128,6 +134,8 @@ ${SRCDIR}/CPlanArea.h
 ${SRCDIR}/CPlanEditor.h
 ${SRCDIR}/CPlanMap.h
 ${SRCDIR}/CPlanScenery.h
+${SRCDIR}/CPlanSimEntity.h
+${SRCDIR}/CPlanSimulate.h
 ${SRCDIR}/CScenery.h
 ${SRCDIR}/CSceneryData.h
 ${SRCDIR}/CSceneryEditor.h

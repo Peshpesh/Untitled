@@ -11,7 +11,7 @@
 #include "CSurface.h"
 #include "CDraft.h"
 
-enum simstate {INACTIVE, PLACE, ACTIVE, SUSPENDED};
+// enum simstate {INACTIVE, PLACE, ACTIVE, SUSPENDED};
 
 class CPlanSimulate : public CEvent {
   CPlanSimulate();
@@ -22,7 +22,7 @@ public:
 
 private:
   std::string draft_s; // working string for loading draft files
-  simstate status;
+  short status;
   short cam_option;
   unsigned int follow_w;
   unsigned int follow_h;
@@ -63,10 +63,7 @@ private:
   void addToDraft(const char& c);
   void delFromDraft();
   void loadDraft();
-  void moveLeft();
-  void moveRight();
-  void stopMoveLeft();
-  void stopMoveRight();
+  void startMove(const char& c);
 
 public:
   bool OnRender(const SDL_Point* m);
@@ -84,7 +81,7 @@ private:
   bool drawIntrpt(const SDL_Point* m);
 
 public:
-  simstate getStatus();
+  short getStatus();
   void stopSim();
   void clearxywh();
   void resetxywh();
@@ -95,7 +92,7 @@ private:
 };
 
 namespace pvmsimulator {
-  enum simstate {INACTIVE, PLACE, ACTIVE, SUSPENDED};
+  enum {INACTIVE, PLACE, ACTIVE, SUSPENDED};
   extern const char* const start_lab;
   extern const char* const reset_lab;
   extern const char* const suspend_lab;

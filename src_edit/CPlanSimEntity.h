@@ -1,7 +1,7 @@
 #ifndef _C_PLANSIMENTITY_H_
 #define _C_PLANSIMENTITY_H_
 
-#include "CArea.h"
+#include "CPlanArea.h"
 #include "CEntity.h"
 
 namespace PlanEntityflags {
@@ -16,22 +16,24 @@ class CPlanSimEntity {
 
 public:
   SDL_Texture* sprtSrc;
-  float  X;  // sprite x-position
-  float  Y;  // sprite y-position
+  float X;  // sprite x-position
+  float Y;  // sprite y-position
+  float Z;  // sprite z-position
   SDL_Rect spriteR;  // sprite position & size on texture
   SDL_Rect hitboxR;  // X and Y are offset values relative to sprite
-  char direction; // facing up 'U', down 'D', left 'L', or right 'R'
-  bool idle; // is the entity idle?
+  char movedir; // moving/facing up 'U', down 'D', left 'L', or right 'R'
+  char intentdir; // try to move 'U', down 'D', left 'L', or right 'R'
+  bool ismoving;    // is the entity moving or idle?
+  bool intentmove; // is the entity trying to advance in a direction?
 
 public:
   int   Flags;
 
 protected:
-  float  SpeedX; // pixels / idealframe
-  float  SpeedY; // pixels / idealframe
+  float  Move; // pixels / idealframe
 
 public:
-  float  MaxSpeed; // pixels / idealframe
+  float  MaxMove; // pixels / idealframe
 
 public:
   CPlanSimEntity();
@@ -47,7 +49,7 @@ public:
   void OnCleanup();
 
 protected:
-  void OnMove(float MoveX, float MoveY);
+  void OnMove();
 
 protected:
   void Translate(double NewX, double NewY);

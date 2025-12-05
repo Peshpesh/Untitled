@@ -1,6 +1,6 @@
-#include "CSimulate.h"
+#include "CPlanSimulate.h"
 
-bool CSimulate::OnRender(const SDL_Point* m) {
+bool CPlanSimulate::OnRender(const SDL_Point* m) {
   bool intrpt = !(CInterrupt::isNone());
 
   CAsset::drawAppFrame();
@@ -102,7 +102,7 @@ bool CPlanSimulate::drawCamera(const SDL_Point* m) {
 
   Font::NewCenterWrite(modes_title, &p_modes_title);
 
-  if (status == ACTIVE || status == SUSPENDED) {
+  if (status == pvmsimulator::ACTIVE || status == pvmsimulator::SUSPENDED) {
     for (int i = 0; i <= TARGET_MODE_FOLLOW; i++) {
       retval *= CAsset::drawStrBox(&r_modes[i], bsiz, (i == cam_option) ? on_col :
         ((m && SDL_PointInRect(m, &r_modes[i])) ? off_hcol : off_col)
@@ -125,7 +125,7 @@ bool CPlanSimulate::drawManualCam(const SDL_Point* m) {
   bool edit_y = (edit_xywh == EDIT_CAM_Y);
   Font::NewCenterWrite(manual_title, &p_manual_title);
 
-  if (status == ACTIVE || status == SUSPENDED) {
+  if (status == pvmsimulator::ACTIVE || status == pvmsimulator::SUSPENDED) {
     retval *= CAsset::drawStrBox(&r_cam_x, bsiz, edit_x ?
       on_col : (m && SDL_PointInRect(m, &r_cam_x)) ? off_hcol : off_col);
     retval *= CAsset::drawStrBox(&r_cam_y, bsiz, edit_y ?
@@ -150,7 +150,7 @@ bool CPlanSimulate::drawFollowCam(const SDL_Point* m) {
 
   Font::NewCenterWrite(follow_title, &p_follow_title);
 
-  if (status == ACTIVE || status == SUSPENDED) {
+  if (status == pvmsimulator::ACTIVE || status == pvmsimulator::SUSPENDED) {
     retval *= CAsset::drawStrBox(&r_follow_w, bsiz, edit_w ?
       on_col : (m && SDL_PointInRect(m, &r_follow_w)) ? off_hcol : off_col);
     retval *= CAsset::drawStrBox(&r_follow_h, bsiz, edit_h ?
@@ -172,7 +172,7 @@ bool CPlanSimulate::drawApplyCam(const SDL_Point* m) {
   using namespace pvmsimulator::camera;
   bool retval = true;
 
-  if ((status == ACTIVE || status == SUSPENDED) && did_edit_xywh) {
+  if ((status == pvmsimulator::ACTIVE || status == pvmsimulator::SUSPENDED) && did_edit_xywh) {
     retval *= CAsset::drawStrBox(&r_app_mf, bsiz,
       (m && SDL_PointInRect(m, &r_app_mf)) ? off_hcol : off_col);
   } else {
@@ -185,7 +185,7 @@ bool CPlanSimulate::drawApplyCam(const SDL_Point* m) {
 }
 
 bool CPlanSimulate::drawHero() {
-  if (status != INACTIVE) {
+  if (status != pvmsimulator::INACTIVE) {
     return hero.OnRender();
   } return true;
 }

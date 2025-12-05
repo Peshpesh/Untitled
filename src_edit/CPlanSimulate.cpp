@@ -3,7 +3,7 @@
 CPlanSimulate CPlanSimulate::control;
 
 CPlanSimulate::CPlanSimulate() {
-  status = INACTIVE;
+  status = pvmsimulator::INACTIVE;
   cam_option = TARGET_MODE_NORMAL;
   follow_w = 60;
   follow_h = 50;
@@ -16,7 +16,7 @@ CPlanSimulate::CPlanSimulate() {
   draft_s = "";
 }
 
-simstate CPlanSimulate::getStatus() {
+short CPlanSimulate::getStatus() {
   return status;
 }
 
@@ -25,7 +25,7 @@ void CPlanSimulate::stopSim() {
   // CCamera::CameraControl.ApplyTargetToStatic();
   CCamera::CameraControl.TargetMode = TARGET_MODE_NORMAL;
   CCamera::CameraControl.FreeTarget();
-  status = INACTIVE;
+  status = pvmsimulator::INACTIVE;
   clearxywh();
   clearDraftEntry();
 }

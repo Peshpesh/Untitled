@@ -18,7 +18,7 @@ void CPlanSimulate::OnLButtonDown(int mX, int mY) {
   if (handleStopSim(&m))    return;
   if (handleDraftEntry(&m)) return;
   if (handleDraftOpts(&m))  return;
-  if (status == ACTIVE || status == SUSPENDED) {
+  if (status == pvmsimulator::ACTIVE || status == pvmsimulator::SUSPENDED) {
     if (edit_xywh) clearxywh();
     if (handleCameraOption(&m)) return;
     if (handleManualCam(&m))    return;
@@ -90,11 +90,13 @@ void CPlanSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
     }
   } else {
     switch (sym) {
-      case SDLK_LEFT:  moveLeft(); break;
-      case SDLK_RIGHT: moveRight(); break;
+      case SDLK_UP:    startMove('U'); break;
+      case SDLK_DOWN:  startMove('D'); break;
+      case SDLK_LEFT:  startMove('L'); break;
+      case SDLK_RIGHT: startMove('R'); break;
       case SDLK_p:     {
-        if (status == ACTIVE)         status = SUSPENDED;
-        else if (status == SUSPENDED) status = ACTIVE;
+        if (status == pvmsimulator::ACTIVE)         status = pvmsimulator::SUSPENDED;
+        else if (status == pvmsimulator::SUSPENDED) status = pvmsimulator::ACTIVE;
         break;
       }
     }
@@ -103,23 +105,21 @@ void CPlanSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
 void CPlanSimulate::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
   switch (sym) {
-    case SDLK_LEFT:  stopMoveLeft(); break;
-    case SDLK_RIGHT: stopMoveRight(); break;
     default: break;
   }
 }
 
 bool CPlanSimulate::handleStartSim(const SDL_Point* m) {
-  if (status != PLACE) {
+  if (status != pvmsimulator::PLACE) {
     if (SDL_PointInRect(m, &pvmsimulator::r_start)) {
-      if (status == ACTIVE || status == SUSPENDED) stopSim();
+      if (status == pvmsimulator::ACTIVE || status == pvmsimulator::SUSPENDED) stopSim();
       hero.OnLoad();
-      status = PLACE;
+      status = pvmsimulator::PLACE;
       return true;
     }
   } else if (CAsset::inWorkspace(m)) {
     updateCamera();
-    status = ACTIVE;
+    status = pvmsimulator::ACTIVE;
     return true;
   }
   return false;
@@ -127,15 +127,15 @@ bool CPlanSimulate::handleStartSim(const SDL_Point* m) {
 
 bool CPlanSimulate::handleSuspendSim(const SDL_Point* m) {
   if (SDL_PointInRect(m, &pvmsimulator::r_suspend)) {
-    if      (status == ACTIVE)    status = SUSPENDED;
-    else if (status == SUSPENDED) status = ACTIVE;
+    if      (status == pvmsimulator::ACTIVE)    status = pvmsimulator::SUSPENDED;
+    else if (status == pvmsimulator::SUSPENDED) status = pvmsimulator::ACTIVE;
     return true;
   }
   return false;
 }
 
 bool CPlanSimulate::handleStopSim(const SDL_Point* m) {
-  if (status != INACTIVE && SDL_PointInRect(m, &pvmsimulator::r_stop)) {
+  if (status != pvmsimulator::INACTIVE && SDL_PointInRect(m, &pvmsimulator::r_stop)) {
     stopSim();
     return true;
   }
@@ -286,18 +286,7 @@ void CPlanSimulate::loadDraft() {
   clearDraftEntry();
 }
 
-void CPlanSimulate::moveLeft() {
-  hero.move_left = true;
-}
-
-void CPlanSimulate::moveRight() {
-  hero.move_right = true;
-}
-
-void CPlanSimulate::stopMoveLeft() {
-  hero.move_left = false;
-}
-
-void CPlanSimulate::stopMoveRight() {
-  hero.move_right = false;
+void CPlanSimulate::startMove(const char& c) {
+  hero.intentdir = c;
+  hero.intentmove = true;
 }
