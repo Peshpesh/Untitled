@@ -14,16 +14,13 @@ void CApp::OnLoop() {
   mouse.x = mouseX;
   mouse.y = mouseY;
 
-  CSimulate::control.OnLoop(&mouse);
-
   CCamera::CameraControl.OnLoop();
 
-  CStage::control.OnLoop();
+  CStage::control.OnLoop(mouse);
 
   if (SDL_GetWindowFlags(Map_Display) & SDL_WINDOW_MINIMIZED) {
     SDL_RestoreWindow(Map_Display);
   }
 
   CFPS::FPSControl.OnLoop();
-  return;
 }

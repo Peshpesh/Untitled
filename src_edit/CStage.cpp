@@ -45,19 +45,16 @@ void CStage::OnEventPlanview(SDL_Event* Event) {
     case MODIFY_MAP: CPlanEditor::control.OnEvent(Event); break;
     case MODIFY_NPC: CEntityEditor::Control.OnEvent(Event); break;
     case MODIFY_SCENE: CPlanScnEdit::control.OnEvent(Event); break;
-    // case MODIFY_SIM: CPlanSimulate::control.OnEvent(Event); break;
+    case MODIFY_SIM: CPlanSimulate::control.OnEvent(Event); break;
     // case MODIFY_OPTIONS: CPlanOptions::control.OnEvent(Event); break;
     default: break;
   }
 }
 
-void CStage::OnLoop() {
+void CStage::OnLoop(const SDL_Point& m) {
   if (planview) {
     switch (CModule::control.active_mod) {
-      case MODIFY_MAP: {
-        CPlanEditor::control.getK(k);
-        break;
-      }
+      case MODIFY_MAP: CPlanEditor::control.getK(k); break;
       // case MODIFY_NPC: CPlanEntity::control.getK(k); break;
       case MODIFY_SCENE: CPlanScnEdit::control.getK(k); break;
       default: break;
@@ -65,6 +62,9 @@ void CStage::OnLoop() {
     if (CModule::control.active_mod != MODIFY_MAP) CPlanEditor::control.setK(k);
     // if (CModule::control.active_mod != MODIFY_NPC) CPlanEntity::control.setK(k);
     if (CModule::control.active_mod != MODIFY_SCENE) CPlanScnEdit::control.setK(k);
+    CPlanSimulate::control.OnLoop(m);
+  } else {
+    CSimulate::control.OnLoop(m);
   }
 }
 
@@ -211,6 +211,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
     // Handle step #3.
     bool scn_valid = drawScn && (scn_i < max_scn) && (CPlanScnEdit::scnList_back[scn_i].Z == z);
     bool ent_valid = drawEnt && (ent_i < max_ent) && (CEntity::entList_back[ent_i].Z == z);
+    bool drawHero = (bool)(CPlanSimulate::control.getStatus()) && ((int)(CPlanSimulate::control.hero.Z) == z);
     while (scn_valid || ent_valid) {
       if (scn_valid && ent_valid) {
         // compare the Y of the current scn and ent objects.
@@ -219,19 +220,40 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
         int scn_Y = CPlanScnEdit::scnList_back[scn_i].Y_base;
         int ent_Y = CEntity::entList_back[ent_i].Y_base;
         if (scn_Y < ent_Y) {
+          if (!drawHero || scn_Y < CPlanSimulate::control.hero.Y + TILE_SIZE) {
+            CPlanScnEdit::scnList_back[scn_i++].OnRender();
+          } else {
+            CPlanSimulate::control.drawHero();
+            drawHero = false;
+          }
+        } else {
+          if (!drawHero || ent_Y < CPlanSimulate::control.hero.Y + TILE_SIZE) {
+            CEntity::entList_back[ent_i].OnRender();
+            CEntity::entList_back[ent_i].OnRenderHitbox();
+            ent_i++;
+          } else {
+            CPlanSimulate::control.drawHero();
+            drawHero = false;
+          }
+        }
+      } else if (scn_valid) {
+        int scn_Y = CPlanScnEdit::scnList_back[scn_i].Y_base;
+        if (!drawHero || scn_Y < CPlanSimulate::control.hero.Y + TILE_SIZE) {
           CPlanScnEdit::scnList_back[scn_i++].OnRender();
         } else {
+          CPlanSimulate::control.drawHero();
+          drawHero = false;
+        }
+      } else {
+        int ent_Y = CEntity::entList_back[ent_i].Y_base;
+        if (!drawHero || ent_Y < CPlanSimulate::control.hero.Y + TILE_SIZE) {
           CEntity::entList_back[ent_i].OnRender();
           CEntity::entList_back[ent_i].OnRenderHitbox();
           ent_i++;
+        } else {
+          CPlanSimulate::control.drawHero();
+          drawHero = false;
         }
-      } else if (scn_valid) {
-        CPlanScnEdit::scnList_back[scn_i++].OnRender();
-      } else {
-        // render/increment index for entity vector
-        CEntity::entList_back[ent_i].OnRender();
-        CEntity::entList_back[ent_i].OnRenderHitbox();
-        ent_i++;
       }
 
       if (scn_valid) {
@@ -240,6 +262,10 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
       if (ent_valid) {
         if (ent_i >= max_ent || CEntity::entList_back[ent_i].Z >= next_z) ent_valid = false;
       }
+    }
+    if (drawHero) {
+      CPlanSimulate::control.drawHero();
+      drawHero = false;
     }
     z = next_z;
   }
@@ -259,7 +285,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
 
   int total_obj = (drawScn * max_scn) + (drawEnt * max_ent);
   while (scn_i + ent_i < total_obj) {
-    if (!drawEnt) { // only draw scenery
+    if (!drawEnt) { // only draw sceneryList
       z = CPlanScnEdit::scnList_front[scn_i].Z;
       opac = CPlanEditor::control.getDefaultOpacityAtZ(z);
       CPlanScnEdit::control.setOpacity(opac);
@@ -268,7 +294,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
       CEntity::entList_front[ent_i].OnRender();
       CEntity::entList_front[ent_i].OnRenderHitbox();
       ent_i++;
-    } else {
+    } else { // draw entities & scenery
       if (scn_i >= max_scn) {
         CEntity::entList_front[ent_i].OnRender();
         CEntity::entList_front[ent_i].OnRenderHitbox();
@@ -282,6 +308,9 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
         int scn_Y = CPlanScnEdit::scnList_front[scn_i].Y_base;
         int ent_Y = CEntity::entList_front[ent_i].Y_base;
         if (scn_Y < ent_Y) {
+          z = CPlanScnEdit::scnList_front[scn_i].Z;
+          opac = CPlanEditor::control.getDefaultOpacityAtZ(z);
+          CPlanScnEdit::control.setOpacity(opac);
           CPlanScnEdit::scnList_front[scn_i++].OnRender();
         } else {
           CEntity::entList_front[ent_i].OnRender();
@@ -305,7 +334,7 @@ void CStage::OnRenderPlanview(const SDL_Point& m) {
       break;
     }
     case MODIFY_SCENE:    CPlanScnEdit::control.OnRender(m);   break;
-    case MODIFY_SIM:      CSimulate::control.OnRender(&m); break;
+    case MODIFY_SIM:      CPlanSimulate::control.OnRender(&m); break;
     // case MODIFY_OPTIONS: CPlanOptions::control.OnRender(m); break;
     default:              break;
   }

@@ -31,7 +31,7 @@ private:
   bool did_edit_xywh;
 
 public:
-  void OnLoop(const SDL_Point* m);
+  void OnLoop(const SDL_Point& m);
   void OnTerminate();
 
 public:

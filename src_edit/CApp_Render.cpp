@@ -5,42 +5,6 @@ void CApp::OnRender() {
 
   CSurface::Clear();
 
-  // if (!planview) {
-  //   // Draw working background
-  //   CArea::control.OnRenderFill(-CCamera::CameraControl.GetX(), -CCamera::CameraControl.GetY());
-  //
-  //   int scn_N = CScenery::sceneryList.size();
-  //
-  //   // Draw background scenery
-  //   CSceneryEditor::control.drawBackground(scn_N);
-  //
-  //   // Draw the working area
-  //   CEditMap::MapEditor.RenderMap();
-  //
-  //   // Draw the entities in the area
-  //   CEntityEditor::Control.drawEntities();
-  //
-  //   // Draw simulation Entity
-  //   CSimulate::control.drawHero();
-  //
-  //   // Draw foreground scenery
-  //   CSceneryEditor::control.drawForeground(scn_N);
-  //
-  //   // Draw camera limits
-  //   COptions::control.drawCameraLims();
-  //
-  //   switch (active_mod) {
-  //     case MODIFY_MAP:      CEditMap::MapEditor.OnRender(&mouse);     break;
-  //     case MODIFY_NPC:      CEntityEditor::Control.OnRender(&mouse);   break;
-  //     case MODIFY_SCENE:    CSceneryEditor::control.OnRender(&mouse); break;
-  //     case MODIFY_SIM:      CSimulate::control.OnRender(&mouse);       break;
-  //     case MODIFY_OPTIONS:  COptions::control.OnRender(&mouse);        break;
-  //     default:              break;
-  //   }
-  // } else {
-  //
-  // }
-
   CStage::control.OnRender(mouse);
 
   CModule::control.renderSwitch(mouse);
@@ -69,23 +33,6 @@ void CApp::OnRender() {
   }
   CSurface::Present();
 }
-
-// bool CApp::renderEngSwitch() {
-//   using namespace engineSwitch;
-//
-//   bool canHilight = CInterrupt::isNone();
-//   bool noHov;
-//
-//   const SDL_Point* color = NULL;
-//   for (int i = MODIFY_MAP; i <= MODIFY_OPTIONS; i++) {
-//     noHov = (!canHilight || !SDL_PointInRect(&mouse, &engineButton[i]));
-//     color = (active_mod == i) ? engineOnCol : (noHov ? engineOffCol : engineHvCol);
-//     CAsset::drawStrBox(&engineButton[i], bsiz, color);
-//     Font::NewCenterWrite(FONT_MINI, engineName[i], &engineButton[i]);
-//   }
-//
-//   return true;
-// }
 
 bool CApp::renderModelButton() {
   using namespace modelSwitch;

@@ -49,7 +49,7 @@ public:
   void OnCleanup();
 
 protected:
-  void OnMove();
+  void OnMove(const float& destX, const float& destY);
 
 protected:
   void Translate(double NewX, double NewY);

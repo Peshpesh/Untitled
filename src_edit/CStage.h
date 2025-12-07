@@ -9,6 +9,7 @@
 #include "CArea.h"
 #include "CScenery.h"
 #include "CSimulate.h"
+#include "CPlanSimulate.h"
 #include "CCamera.h"
 #include "COptions.h"
 #include "CModule.h"
@@ -31,7 +32,7 @@ public:
   void OnEventPlatform(SDL_Event* Event);
   void OnEventPlanview(SDL_Event* Event);
 
-  void OnLoop();
+  void OnLoop(const SDL_Point& m);
 
   void OnRender(const SDL_Point& m);
   void OnRenderPlatform(const SDL_Point& m);

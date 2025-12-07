@@ -90,10 +90,10 @@ void CPlanSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
     }
   } else {
     switch (sym) {
-      case SDLK_UP:    startMove('U'); break;
-      case SDLK_DOWN:  startMove('D'); break;
-      case SDLK_LEFT:  startMove('L'); break;
-      case SDLK_RIGHT: startMove('R'); break;
+      case SDLK_UP:    hero.intentdir = 'U'; hero.intentmove = true; break;
+      case SDLK_DOWN:  hero.intentdir = 'D'; hero.intentmove = true; break;
+      case SDLK_LEFT:  hero.intentdir = 'L'; hero.intentmove = true; break;
+      case SDLK_RIGHT: hero.intentdir = 'R'; hero.intentmove = true; break;
       case SDLK_p:     {
         if (status == pvmsimulator::ACTIVE)         status = pvmsimulator::SUSPENDED;
         else if (status == pvmsimulator::SUSPENDED) status = pvmsimulator::ACTIVE;
@@ -105,6 +105,10 @@ void CPlanSimulate::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
 
 void CPlanSimulate::OnKeyUp(SDL_Keycode sym, Uint16 mod) {
   switch (sym) {
+    case SDLK_UP:    if (hero.intentdir == 'U') hero.intentmove = false; break;
+    case SDLK_DOWN:  if (hero.intentdir == 'D') hero.intentmove = false; break;
+    case SDLK_LEFT:  if (hero.intentdir == 'L') hero.intentmove = false; break;
+    case SDLK_RIGHT: if (hero.intentdir == 'R') hero.intentmove = false; break;
     default: break;
   }
 }
@@ -284,9 +288,4 @@ void CPlanSimulate::delFromDraft() {
 void CPlanSimulate::loadDraft() {
   CDraft::control.OnLoad(draft_s);
   clearDraftEntry();
-}
-
-void CPlanSimulate::startMove(const char& c) {
-  hero.intentdir = c;
-  hero.intentmove = true;
 }

@@ -33,7 +33,7 @@ private:
   bool did_edit_xywh;
 
 public:
-  void OnLoop(const SDL_Point* m);
+  void OnLoop(const SDL_Point& m);
   void OnTerminate();
 
 public:
@@ -63,7 +63,6 @@ private:
   void addToDraft(const char& c);
   void delFromDraft();
   void loadDraft();
-  void startMove(const char& c);
 
 public:
   bool OnRender(const SDL_Point* m);
