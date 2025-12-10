@@ -207,13 +207,13 @@ bool CEntityEditor::drawSwitchView() {
 }
 
 bool CEntityEditor::drawSwitchPlace() {
-  if (*planview) return true;
   using namespace entityEngine::switches;
   using namespace entityEngine::switches::place;
 
   const bool flags[] = {
     place_hitbox,
-    snap_tile
+    snap_tile,
+    render_with_map
   };
 
   for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {

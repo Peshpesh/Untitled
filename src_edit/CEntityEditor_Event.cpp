@@ -210,12 +210,12 @@ bool CEntityEditor::handleSwitchView(const SDL_Point* m) {
 }
 
 bool CEntityEditor::handleSwitchPlace(const SDL_Point* m) {
-  if (*planview) return false;
   using namespace entityEngine::switches::place;
 
   bool* flags[] = {
     &place_hitbox,
-    &snap_tile
+    &snap_tile,
+    &render_with_map
   };
 
   for (int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
@@ -275,6 +275,8 @@ void CEntityEditor::OnRButtonDown(int mX, int mY) {
 }
 
 bool CEntityEditor::handleRmEntity(const SDL_Point* m) {
+  if (!CAsset::inWorkspace(m)) return false;
+
   if (!*planview) {
     const SDL_Point mAbs = CCamera::CameraControl.GetCamRelPoint(*m);
     for (int i = CEntity::entityList.size() - 1; i >= 0; i--) {
@@ -286,6 +288,49 @@ bool CEntityEditor::handleRmEntity(const SDL_Point* m) {
         CEntity::entityList.erase(CEntity::entityList.begin() + i);
         CEntity::CheckCollide();
         return true;
+      }
+    }
+  } else {
+    for (int i = CEntity::entList_front.size() - 1; i >= 0; i--) {
+      if (CEntity::entList_front[i].Z == CPlanArea::control.getZ(*k)) {
+        SDL_Rect dstR;
+        dstR.x = CEntity::entList_front[i].X;
+        dstR.y = CEntity::entList_front[i].Y - (CEntity::entList_front[i].Z * TILE_SIZE);
+        dstR.w = CEntity::entList_front[i].srcR.w;
+        dstR.h = CEntity::entList_front[i].srcR.h;
+        CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
+        if (SDL_PointInRect(m, &dstR)) {
+          // we clicked on this entity on the working layer
+          if (target_ent == &CEntity::entList_front[i]) {
+            target_ent = NULL;
+            CEntity::entList_front.erase(CEntity::entList_front.begin() + i);
+            CEntity::CheckCollide();
+          } else {
+            target_ent = &CEntity::entList_front[i];
+          }
+          return true;
+        }
+      }
+    }
+
+    for (int i = CEntity::entList_back.size() - 1; i >= 0; i--) {
+      if (CEntity::entList_back[i].Z == CPlanArea::control.getZ(*k)) {
+        SDL_Rect dstR;
+        dstR.x = CEntity::entList_back[i].X;
+        dstR.y = CEntity::entList_back[i].Y - (CEntity::entList_back[i].Z * TILE_SIZE);
+        dstR.w = CEntity::entList_back[i].srcR.w;
+        dstR.h = CEntity::entList_back[i].srcR.h;
+        CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
+        if (SDL_PointInRect(m, &dstR)) {
+          if (target_ent == &CEntity::entList_back[i]) {
+            target_ent = NULL;
+            CEntity::entList_back.erase(CEntity::entList_back.begin() + i);
+            CEntity::CheckCollide();
+          } else {
+            target_ent = &CEntity::entList_back[i];
+          }
+          return true;
+        }
       }
     }
   }

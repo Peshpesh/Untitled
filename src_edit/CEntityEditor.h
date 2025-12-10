@@ -41,6 +41,7 @@ private:
 
   // for PV stages only
   bool render_with_map;
+  CPlanEntity* target_ent; // targeted for removal/modification
 public:
   const bool* planview; // is this stage planview type?
   int* k; // working layer k-index
@@ -68,7 +69,7 @@ private:
   bool handleEditHitbox(const SDL_Point* m);
   bool handleEntityMeter(const SDL_Point* m);
   bool handleHitboxMeter(const SDL_Point* m);
-  bool handleBriefChange(const SDL_Point* m); 
+  bool handleBriefChange(const SDL_Point* m);
   bool handleSwitchView(const SDL_Point* m);
   bool handleSwitchPlace(const SDL_Point* m);
   bool handleEntityList(const SDL_Point* m);
