@@ -307,7 +307,7 @@ void CSceneryData::getDims_newyrai(const int& decor, SDL_Rect& srcRect) {
     case RED_HOUSE:         srcRect = CAsset::getRect(928, 224, 320, 224); break;
     case GOLD_HOUSE_W:      srcRect = CAsset::getRect(448, 352, 120, 224); break;
     case GOLD_HOUSE_E:      srcRect = CAsset::getRect(568, 320, 200, 352); break;
-    case SHOP:              srcRect = CAsset::getRect(768, 448, 416, 288); break;
+    case SHOP:              srcRect = CAsset::getRect(800, 449, 384, 256); break;
     case SHOP_AWNING:       srcRect = CAsset::getRect(448, 672, 224, 128); break;
     case SCHOOL:            srcRect = CAsset::getRect(448, 800, 736, 480); break;
     case INN:               srcRect = CAsset::getRect(448, 1280, 608, 416); break;

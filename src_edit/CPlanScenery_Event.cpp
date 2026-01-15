@@ -53,7 +53,7 @@ void CPlanScnEdit::OnLButtonDown(int mX, int mY) {
 void CPlanScnEdit::OnRButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
 
-  if (handleRemoveScenery(&m)) return;
+  if (handleTargetScenery(&m)) return;
 }
 
 bool CPlanScnEdit::handleAddScenery(const SDL_Point* m) {
@@ -83,10 +83,17 @@ bool CPlanScnEdit::handleAddScenery(const SDL_Point* m) {
   return true;
 }
 
-bool CPlanScnEdit::handleRemoveScenery(const SDL_Point* m) {
+bool CPlanScnEdit::handleTargetScenery(const SDL_Point* m) {
   if (!CAsset::inWorkspace(m)) return false;
 
-  bool reset_ptr = (target_scn != NULL);
+  // if there's already scenery targeted,
+  // then untarget it
+  if (target != NULL) {
+    delete target;
+    target = NULL;
+    target_scn = NULL;
+    return true;
+  }
 
   for (int i = scnList_front.size() - 1; i >= 0; i--) {
     if (scnList_front[i].Z == CPlanArea::control.getZ(k)) {
@@ -97,12 +104,10 @@ bool CPlanScnEdit::handleRemoveScenery(const SDL_Point* m) {
       dstR.h = scnList_front[i].srcR.h;
       CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
       if (SDL_PointInRect(m, &dstR)) {
-        if (target_scn == &scnList_front[i]) {
-          target_scn = NULL;
-          scnList_front.erase(scnList_front.begin() + i);
-        } else {
-          target_scn = &scnList_front[i];
-        }
+        target = new SDL_Point;
+        target->x = m->x;
+        target->y = m->y;
+        target_scn = &scnList_front[i];
         return true;
       }
     }
@@ -117,20 +122,61 @@ bool CPlanScnEdit::handleRemoveScenery(const SDL_Point* m) {
       dstR.h = scnList_back[i].srcR.h;
       CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
       if (SDL_PointInRect(m, &dstR)) {
-        if (target_scn == &scnList_back[i]) {
-          target_scn = NULL;
-          scnList_back.erase(scnList_back.begin() + i);
-        } else {
-          target_scn = &scnList_back[i];
-        }
+        target = new SDL_Point;
+        target->x = m->x;
+        target->y = m->y;
+        target_scn = &scnList_back[i];
         return true;
       }
     }
   }
-
-  if (reset_ptr) target_scn = NULL;
-
   return true;
+
+  // bool reset_ptr = (target_scn != NULL);
+  //
+  // for (int i = scnList_front.size() - 1; i >= 0; i--) {
+  //   if (scnList_front[i].Z == CPlanArea::control.getZ(k)) {
+  //     SDL_Rect dstR;
+  //     dstR.x = scnList_front[i].X;
+  //     dstR.y = scnList_front[i].Y - (scnList_front[i].Z * TILE_SIZE);
+  //     dstR.w = scnList_front[i].srcR.w;
+  //     dstR.h = scnList_front[i].srcR.h;
+  //     CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
+  //     if (SDL_PointInRect(m, &dstR)) {
+  //       if (target_scn == &scnList_front[i]) {
+  //         target_scn = NULL;
+  //         scnList_front.erase(scnList_front.begin() + i);
+  //       } else {
+  //         target_scn = &scnList_front[i];
+  //       }
+  //       return true;
+  //     }
+  //   }
+  // }
+  //
+  // for (int i = scnList_back.size() - 1; i >= 0; i--) {
+  //   if (scnList_back[i].Z == CPlanArea::control.getZ(k)) {
+  //     SDL_Rect dstR;
+  //     dstR.x = scnList_back[i].X;
+  //     dstR.y = scnList_back[i].Y - (scnList_back[i].Z * TILE_SIZE);
+  //     dstR.w = scnList_back[i].srcR.w;
+  //     dstR.h = scnList_back[i].srcR.h;
+  //     CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
+  //     if (SDL_PointInRect(m, &dstR)) {
+  //       if (target_scn == &scnList_back[i]) {
+  //         target_scn = NULL;
+  //         scnList_back.erase(scnList_back.begin() + i);
+  //       } else {
+  //         target_scn = &scnList_back[i];
+  //       }
+  //       return true;
+  //     }
+  //   }
+  // }
+  //
+  // if (reset_ptr) target_scn = NULL;
+
+  // return true;
 }
 
 bool CPlanScnEdit::handleChScenery(const SDL_Point* m) {

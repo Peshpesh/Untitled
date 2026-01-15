@@ -136,6 +136,12 @@ namespace pvmScenery
       CMeter meter(645, 460, 90, 4);
     }
   }
+  namespace dropmenu {
+    const SDL_Point* offCol = &palette::silver;
+    const SDL_Point* hovCol = &palette::light_yellow;
+    const short button_w = 90;
+    const short button_h = 20;
+  }
   namespace misc {
     namespace sceneryButtons {
       const SDL_Point* offCol = &palette::silver;

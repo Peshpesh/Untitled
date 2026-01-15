@@ -5,7 +5,12 @@ void CPlanScenery::OnRender() {
   pos.x = X;
   pos.y = Y - (Z * TILE_SIZE);
   pos = CCamera::CameraControl.GetWinRelPoint(pos);
+
   CSurface::OnDraw(img, &srcR, &pos);
+
+  // for debugging
+  // SDL_Rect destR = {pos.x, pos.y, srcR.w, srcR.h};
+  // CAsset::drawBox(&destR, &palette::red);
 }
 
 void CPlanScenery::OnRenderShadow() {
@@ -27,6 +32,9 @@ bool CPlanScnEdit::OnRender(const SDL_Point& m) {
   OnRenderYBase();
 
   if (!OnRenderSettings(&m)) return false;
+  if (target_scn != NULL) {
+    if (!OnRenderDropmenu(&m)) return false;
+  }
   return true;
 }
 
@@ -85,6 +93,34 @@ bool CPlanScnEdit::OnRenderSettings(const SDL_Point* m) {
   if (!no_intrpt) {
     if (!drawIntrpt(m)) return false;
   }
+  return true;
+}
+
+bool CPlanScnEdit::OnRenderDropmenu(const SDL_Point* m) {
+  using namespace pvmScenery::dropmenu;
+
+  std::string opts[] = {
+    "Move",
+    "Delete",
+  };
+  short nopts = 2;
+
+  SDL_Point pos;
+  pos.x = target_scn->X;
+  pos.y = target_scn->Y - (target_scn->Z * TILE_SIZE);
+  pos = CCamera::CameraControl.GetWinRelPoint(pos);
+  SDL_Rect destR = {pos.x, pos.y, target_scn->srcR.w, target_scn->srcR.h};
+  CAsset::drawBox(&destR, &palette::red);
+
+  SDL_Rect menuR = {target->x, target->y, button_w, button_h*nopts};
+  CAsset::drawBoxFill(&menuR, offCol);
+  for (int i = 0; i < nopts; i++) {
+    SDL_Rect b = {target->x, target->y + button_h*i, button_w, button_h};
+    if (SDL_PointInRect(m, &b)) CAsset::drawBoxFill(&b, hovCol);
+    Font::NewCenterWrite(opts[i].c_str(), &b);
+  }
+  CAsset::drawBox(&menuR, &palette::black);
+
   return true;
 }
 

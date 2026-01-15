@@ -78,6 +78,7 @@ class CPlanScnEdit : public CEvent {
   int base_shadow_opacity;
 
   CPlanScenery* target_scn; // scenery targeted for removal/modification
+  SDL_Point* target; // position of click for targeting scenery
 
 public:
   bool showScenery;
@@ -125,7 +126,7 @@ private:
 private:
   bool handleInterr(SDL_Event* Event);
   bool handleAddScenery(const SDL_Point* m);
-  bool handleRemoveScenery(const SDL_Point* m);
+  bool handleTargetScenery(const SDL_Point* m);
   bool handleChScenery(const SDL_Point* m);
   // bool handleChLayer(const SDL_Point* m);
   bool handleBriefChange(const SDL_Point* m);
@@ -142,6 +143,7 @@ private:
 
 public:
   bool OnRenderSettings(const SDL_Point* m);
+  bool OnRenderDropmenu(const SDL_Point* m);
 
 private:
   bool drawWorkingScenery(const SDL_Point& m);
@@ -266,6 +268,12 @@ namespace pvmScenery {
       extern const char* const label;
       extern CMeter meter;
     }
+  }
+  namespace dropmenu {
+    extern const SDL_Point* offCol;
+    extern const SDL_Point* hovCol;
+    extern const short button_w;
+    extern const short button_h;
   }
   namespace misc {
     namespace sceneryButtons {
