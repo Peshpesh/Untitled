@@ -127,6 +127,7 @@ private:
   bool handleInterr(SDL_Event* Event);
   bool handleAddScenery(const SDL_Point* m);
   bool handleTargetScenery(const SDL_Point* m);
+  void handleTargetMenu(const SDL_Point* m);
   bool handleChScenery(const SDL_Point* m);
   // bool handleChLayer(const SDL_Point* m);
   bool handleBriefChange(const SDL_Point* m);
@@ -143,7 +144,7 @@ private:
 
 public:
   bool OnRenderSettings(const SDL_Point* m);
-  bool OnRenderDropmenu(const SDL_Point* m);
+
 
 private:
   bool drawWorkingScenery(const SDL_Point& m);
@@ -158,6 +159,7 @@ private:
   bool drawSwitchPlace();
   bool drawAnchor(const SDL_Point* m);
   bool drawAnchDisplace(const SDL_Point* m);
+  bool drawTargetMenu(const SDL_Point* m);
   bool drawIntrpt(const SDL_Point* m);
 
 };
@@ -274,6 +276,8 @@ namespace pvmScenery {
     extern const SDL_Point* hovCol;
     extern const short button_w;
     extern const short button_h;
+    extern const char* const labels[];
+    extern const short nopts;
   }
   namespace misc {
     namespace sceneryButtons {

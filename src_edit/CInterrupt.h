@@ -4,8 +4,8 @@
 enum interrupts
 {
   INTRPT_NONE       = 0,
-  INTRPT_CHANGE_BG  = 0x00000001,    // intrpt via bg tile change
-  INTRPT_CHANGE_FG  = 0x00000002,    // intrpt via fg tile change
+  INTRPT_CHANGE_BG  = 0x00000001,   // intrpt via bg tile change
+  INTRPT_CHANGE_FG  = 0x00000002,   // intrpt via fg tile change
   INTRPT_MAP_MODEL  = 0x00000004,   // show a simple model of the area
   INTRPT_CHANGE_TS  = 0x00000008,   // change tileset
   INTRPT_CHANGE_EN  = 0x00000010,   // change/explore entity groups
@@ -17,10 +17,11 @@ enum interrupts
   INTRPT_ADD_LAYER  = 0x00000400,   // add planview map layer
   INTRPT_DEL_LAYER  = 0x00000800,   // delete planview map layer
   INTRPT_ADJ_LAYOP  = 0x00001000,   // adjust planview layer opacity
-  INTRPT_NEW        = 0x00002000,   // reset stage prompt
-  INTRPT_LOAD       = 0x00004000,   // load stage prompt
-  INTRPT_SAVE       = 0x00008000,   // save stage prompt
-  INTRPT_EXIT       = 0x00010000,   // escape program (exit)
+  INTRPT_ADJ_PVSCN  = 0x00002000,   // adjust planview scenery object
+  INTRPT_NEW        = 0x00004000,   // reset stage prompt
+  INTRPT_LOAD       = 0x00008000,   // load stage prompt
+  INTRPT_SAVE       = 0x00010000,   // save stage prompt
+  INTRPT_EXIT       = 0x00020000,   // escape program (exit)
 };
 
 class CInterrupt {

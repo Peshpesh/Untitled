@@ -20,39 +20,74 @@ bool CPlanScnEdit::handleInterr(SDL_Event* Event) {
     CAnchorScenery::Control.OnEvent(Event);
     return true;
   }
+  if (CInterrupt::isFlagOn(INTRPT_ADJ_PVSCN)) {
+    if (target == NULL) {
+      // ...
+    }
+  }
   return false;
 }
 
 void CPlanScnEdit::OnKeyDown(SDL_Keycode sym, Uint16 mod) {
-  switch (sym) {
-    default: break;
+  if (CInterrupt::isFlagOn(INTRPT_ADJ_PVSCN)) {
+    if (sym == SDLK_ESCAPE || sym == SDLK_RETURN) {
+      if (target != NULL) {
+        delete target;
+        target = NULL;
+      }
+      target_scn = NULL;
+      CInterrupt::removeFlag(INTRPT_ADJ_PVSCN);
+    } else if (target == NULL) {
+      switch (sym) {
+        case SDLK_LEFT:   target_scn->X--; break;
+        case SDLK_RIGHT:  target_scn->X++; break;
+        case SDLK_UP:     target_scn->Y--; target_scn->Y_base--; break;
+        case SDLK_DOWN:   target_scn->Y++; target_scn->Y_base++; break;
+        default: break;
+      }
+    }
   }
 }
 
 void CPlanScnEdit::OnLButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
+  if (CInterrupt::isFlagOn(INTRPT_ADJ_PVSCN)) {
+    // if we're here, then that must mean a
+    // target dropdown menu is open or a move is underway
+    if (target != NULL) handleTargetMenu(&m);
+    else {
+      // left-click during a move will stop the move
+      target_scn = NULL;
+      CInterrupt::removeFlag(INTRPT_ADJ_PVSCN);
+    }
+  } else {
+    // if (target_scn != NULL && CAsset::inWorkspace(&m)) target_scn = NULL;
 
-  if (target_scn && CAsset::inWorkspace(&m)) target_scn = NULL;
-
-  if (handleChScenery(&m)) return;
-  // if (handleChLayer(&m)) return;
-  if (handleBriefChange(&m)) return;
-  // if (handleLayerMeter(&m)) return;
-  // if (handleOtherMeter(&m)) return;
-  if (handleSwitchView(&m)) return;
-  if (handleSwitchPlace(&m)) return;
-  if (handleSceneryList(&m)) return;
-  if (handlePlaceRelPos(&m)) return;
-  if (handleGrabAnchor(&m)) return;
-  if (handleMakeAnchor(&m)) return;
-  if (handleAdvAnchor(&m)) return;
-  if (handleArchDisplace(&m)) return;
-  if (handleAddScenery(&m)) return;
+    if (handleChScenery(&m)) return;
+    // if (handleChLayer(&m)) return;
+    if (handleBriefChange(&m)) return;
+    // if (handleLayerMeter(&m)) return;
+    // if (handleOtherMeter(&m)) return;
+    if (handleSwitchView(&m)) return;
+    if (handleSwitchPlace(&m)) return;
+    if (handleSceneryList(&m)) return;
+    if (handlePlaceRelPos(&m)) return;
+    if (handleGrabAnchor(&m)) return;
+    if (handleMakeAnchor(&m)) return;
+    if (handleAdvAnchor(&m)) return;
+    if (handleArchDisplace(&m)) return;
+    if (handleAddScenery(&m)) return;
+  }
 }
 
 void CPlanScnEdit::OnRButtonDown(int mX, int mY) {
   const SDL_Point m = {mX, mY};
-
+  if (CInterrupt::isFlagOn(INTRPT_ADJ_PVSCN)) {
+    delete target;
+    target = NULL;
+    target_scn = NULL;
+    CInterrupt::removeFlag(INTRPT_ADJ_PVSCN);
+  }
   if (handleTargetScenery(&m)) return;
 }
 
@@ -86,15 +121,6 @@ bool CPlanScnEdit::handleAddScenery(const SDL_Point* m) {
 bool CPlanScnEdit::handleTargetScenery(const SDL_Point* m) {
   if (!CAsset::inWorkspace(m)) return false;
 
-  // if there's already scenery targeted,
-  // then untarget it
-  if (target != NULL) {
-    delete target;
-    target = NULL;
-    target_scn = NULL;
-    return true;
-  }
-
   for (int i = scnList_front.size() - 1; i >= 0; i--) {
     if (scnList_front[i].Z == CPlanArea::control.getZ(k)) {
       SDL_Rect dstR;
@@ -108,6 +134,7 @@ bool CPlanScnEdit::handleTargetScenery(const SDL_Point* m) {
         target->x = m->x;
         target->y = m->y;
         target_scn = &scnList_front[i];
+        CInterrupt::appendFlag(INTRPT_ADJ_PVSCN);
         return true;
       }
     }
@@ -126,57 +153,62 @@ bool CPlanScnEdit::handleTargetScenery(const SDL_Point* m) {
         target->x = m->x;
         target->y = m->y;
         target_scn = &scnList_back[i];
+        CInterrupt::appendFlag(INTRPT_ADJ_PVSCN);
         return true;
       }
     }
   }
-  return true;
+  return false;
+}
 
-  // bool reset_ptr = (target_scn != NULL);
-  //
-  // for (int i = scnList_front.size() - 1; i >= 0; i--) {
-  //   if (scnList_front[i].Z == CPlanArea::control.getZ(k)) {
-  //     SDL_Rect dstR;
-  //     dstR.x = scnList_front[i].X;
-  //     dstR.y = scnList_front[i].Y - (scnList_front[i].Z * TILE_SIZE);
-  //     dstR.w = scnList_front[i].srcR.w;
-  //     dstR.h = scnList_front[i].srcR.h;
-  //     CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
-  //     if (SDL_PointInRect(m, &dstR)) {
-  //       if (target_scn == &scnList_front[i]) {
-  //         target_scn = NULL;
-  //         scnList_front.erase(scnList_front.begin() + i);
-  //       } else {
-  //         target_scn = &scnList_front[i];
-  //       }
-  //       return true;
-  //     }
-  //   }
-  // }
-  //
-  // for (int i = scnList_back.size() - 1; i >= 0; i--) {
-  //   if (scnList_back[i].Z == CPlanArea::control.getZ(k)) {
-  //     SDL_Rect dstR;
-  //     dstR.x = scnList_back[i].X;
-  //     dstR.y = scnList_back[i].Y - (scnList_back[i].Z * TILE_SIZE);
-  //     dstR.w = scnList_back[i].srcR.w;
-  //     dstR.h = scnList_back[i].srcR.h;
-  //     CCamera::CameraControl.MakeWinRel(dstR.x, dstR.y);
-  //     if (SDL_PointInRect(m, &dstR)) {
-  //       if (target_scn == &scnList_back[i]) {
-  //         target_scn = NULL;
-  //         scnList_back.erase(scnList_back.begin() + i);
-  //       } else {
-  //         target_scn = &scnList_back[i];
-  //       }
-  //       return true;
-  //     }
-  //   }
-  // }
-  //
-  // if (reset_ptr) target_scn = NULL;
+void CPlanScnEdit::handleTargetMenu(const SDL_Point* m) {
+  using namespace pvmScenery::dropmenu;
 
-  // return true;
+  enum {
+    TARGET_MOVE = 0,
+    TARGET_DEL
+  };
+
+  for (int j = 0; j < nopts; j++) {
+    SDL_Rect b = {target->x, target->y + button_h*j, button_w, button_h};
+    if (SDL_PointInRect(m, &b)) {
+      switch (j) {
+        case TARGET_MOVE: {
+          // close the menu but keep the interrupt active
+          delete target;
+          target = NULL;
+          return;
+          break;
+        }
+        case TARGET_DEL: {
+          delete target;
+          target = NULL;
+          CInterrupt::removeFlag(INTRPT_ADJ_PVSCN);
+          // find and delete the targeted scenery
+          for (int i = scnList_front.size() - 1; i >= 0; i--) {
+            if (target_scn == &scnList_front[i]) {
+              target_scn = NULL;
+              scnList_front.erase(scnList_front.begin() + i);
+              return;
+            }
+          }
+          for (int i = scnList_back.size() - 1; i >= 0; i--) {
+            if (target_scn == &scnList_back[i]) {
+              target_scn = NULL;
+              scnList_back.erase(scnList_back.begin() + i);
+              return;
+            }
+          }
+          break;
+        }
+        default: break;
+      }
+    }
+  }
+  delete target;
+  target = NULL;
+  target_scn = NULL;
+  CInterrupt::removeFlag(INTRPT_ADJ_PVSCN);
 }
 
 bool CPlanScnEdit::handleChScenery(const SDL_Point* m) {

@@ -32,8 +32,8 @@ bool CPlanScnEdit::OnRender(const SDL_Point& m) {
   OnRenderYBase();
 
   if (!OnRenderSettings(&m)) return false;
-  if (target_scn != NULL) {
-    if (!OnRenderDropmenu(&m)) return false;
+  if (target != NULL) {
+    if (!drawTargetMenu(&m)) return false;
   }
   return true;
 }
@@ -96,14 +96,8 @@ bool CPlanScnEdit::OnRenderSettings(const SDL_Point* m) {
   return true;
 }
 
-bool CPlanScnEdit::OnRenderDropmenu(const SDL_Point* m) {
+bool CPlanScnEdit::drawTargetMenu(const SDL_Point* m) {
   using namespace pvmScenery::dropmenu;
-
-  std::string opts[] = {
-    "Move",
-    "Delete",
-  };
-  short nopts = 2;
 
   SDL_Point pos;
   pos.x = target_scn->X;
@@ -117,7 +111,7 @@ bool CPlanScnEdit::OnRenderDropmenu(const SDL_Point* m) {
   for (int i = 0; i < nopts; i++) {
     SDL_Rect b = {target->x, target->y + button_h*i, button_w, button_h};
     if (SDL_PointInRect(m, &b)) CAsset::drawBoxFill(&b, hovCol);
-    Font::NewCenterWrite(opts[i].c_str(), &b);
+    Font::NewCenterWrite(labels[i], &b);
   }
   CAsset::drawBox(&menuR, &palette::black);
 

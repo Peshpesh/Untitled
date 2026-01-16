@@ -141,6 +141,11 @@ namespace pvmScenery
     const SDL_Point* hovCol = &palette::light_yellow;
     const short button_w = 90;
     const short button_h = 20;
+    const char* const labels[] = {
+      "Move",
+      "Delete",
+    };
+    const short nopts = 2;
   }
   namespace misc {
     namespace sceneryButtons {
